@@ -1,0 +1,106 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Appendix&nbsp;G.&nbsp;Scheduler Reference</title><link rel="stylesheet" type="text/css" href="css/coredoc.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><link rel="home" href="OpenIDM-Integrators-Guide.html" title="OpenIDM 2.0.2 Integrator's Guide"><link rel="up" href="OpenIDM-Integrators-Guide.html" title="OpenIDM 2.0.2 Integrator's Guide"><link rel="prev" href="appendix-scripting.html" title="Appendix&nbsp;F.&nbsp;Scripting Reference"><link rel="next" href="appendix-router.html" title="Appendix&nbsp;H.&nbsp;Router Service Reference"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script src="http://code.jquery.com/jquery.min.js"></script>
+<script>
+// On double-click, reformat <div class="screen"> for easy copying.
+$(document).ready(function() {
+  $(".screen").attr("title", "Double-click [-] to flatten lines.");
+  $(".screen").prepend('<img src="../images/minus.png" class="toggle">');
+});
+$(".screen").live("dblclick", function() {
+  $(this).replaceWith(
+    "<div class=\"flat\" title=\"Double-click [+] to wrap long lines.\">" +
+    $(this).html().replace(/minus\.png/,"plus.png").replace(/\n /g," ") + "\n<!--" + $(this).html() + "-->" +
+    "</div>");
+});
+$(".flat").live("dblclick", function() {
+  $(this).replaceWith(
+    "<div class=\"screen\" title=\"Double-click [-] to flatten lines.\">" +
+    $(this).html().replace(/(.|\n)+<!\-\-/m,"").replace(/\-\-\>/,"").replace(/plus\.png/,"minus.png") +
+    "</div>");
+});
+</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head ><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Appendix&nbsp;G.&nbsp;Scheduler Reference</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="appendix-scripting.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="appendix-router.html">Next</a></td></tr></table><hr></div><div lang="en" class="appendix" title="Appendix&nbsp;G.&nbsp;Scheduler Reference"><div class="titlepage"><div><div><h2 class="title"><a name="appendix-scheduling"></a>Appendix&nbsp;G.&nbsp;Scheduler Reference</h2></div></div></div><a class="indexterm" name="d155e8784"></a><p>OpenIDM lets you schedule many tasks and events including reconciliation
+ and synchronization, but also arbitrary events by use of scheduler
+ objects.</p><p>OpenIDM supports <span class="command"><strong>cron</strong></span>-like syntax to schedule events
+ and tasks, based on expressions supported by the Quartz Scheduler that OpenIDM
+ bundles.</p><p>If you use configuration files to schedule tasks and events, then the
+ scheduler files are located in the <code class="filename">openidm/conf</code> directory.
+ By convention, OpenIDM uses file names of the form
+ <code class="filename">scheduler-<em class="replaceable"><code>schedule-name</code></em>.json</code>.
+ OpenIDM dynamically picks up changes to scheduled tasks and events both,
+ during initialization and also during runtime.</p><div class="variablelist" title="Scheduler Configuration Objects"><a name="scheduler-configuration-objects"></a><div class="variablelist-title">Scheduler Configuration Objects</div><p>Scheduler configuration objects take the following form.</p><div class="programlisting">
+{
+ <strong class="hl-string"><em style="color: #f58220">"enabled"</em></strong>       : true,
+ <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>          : <strong class="hl-string"><em style="color: #f58220">"cron"</em></strong>,
+ <strong class="hl-string"><em style="color: #f58220">"startTime"</em></strong>     : <strong class="hl-string"><em style="color: #f58220">"</em></strong><em class="replaceable"><code>optional time</code></em><strong class="hl-string"><em style="color: #f58220">",
+</em></strong> <strong class="hl-string"><em style="color: #f58220">"endTime"</em></strong>       : <strong class="hl-string"><em style="color: #f58220">"</em></strong><em class="replaceable"><code>optional time</code></em><strong class="hl-string"><em style="color: #f58220">",
+</em></strong> <strong class="hl-string"><em style="color: #f58220">"schedule"</em></strong>      : <strong class="hl-string"><em style="color: #f58220">"</em></strong><em class="replaceable"><code>cron expression</code></em><strong class="hl-string"><em style="color: #f58220">",
+</em></strong> <strong class="hl-string"><em style="color: #f58220">"timeZone"</em></strong>      : <strong class="hl-string"><em style="color: #f58220">"</em></strong><em class="replaceable"><code>optional time zone</code></em><strong class="hl-string"><em style="color: #f58220">",
+</em></strong> <strong class="hl-string"><em style="color: #f58220">"invokeService"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"</em></strong><em class="replaceable"><code>service identifier</code></em><strong class="hl-string"><em style="color: #f58220">",
+</em></strong> <strong class="hl-string"><em style="color: #f58220">"invokeContext"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"</em></strong><em class="replaceable"><code>service specific context info</code></em><strong class="hl-string"><em style="color: #f58220">"
+</em></strong>}</div><p>The following simple example prints <code class="literal">Hello World</code> to
+  the OpenIDM log, <code class="filename">/openidm/logs/openidm0.log.X</code>,
+  each minute.</p><div class="programlisting">
+{
+    <strong class="hl-string"><em style="color: #f58220">"enabled"</em></strong>: true,
+    <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"cron"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"schedule"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"0 0/1 * * * ?"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"invokeService"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"script"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"invokeContext"</em></strong>: {
+        <strong class="hl-string"><em style="color: #f58220">"script"</em></strong>: {
+            <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"text/javascript"</em></strong>,
+            <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"java.lang.System.out.println('Hello World&#8217;);"</em></strong>
+        },
+        <strong class="hl-string"><em style="color: #f58220">"input"</em></strong>: {
+            <strong class="hl-string"><em style="color: #f58220">"edit"</em></strong>: <span class="hl-number">26</span>
+        }
+    }
+}</div><p>Scheduler configuration objects take the following properties.</p><dl><dt><span class="term">enabled</span></dt><dd><p>Set to <code class="literal">true</code> to enable the scheduler. When set to
+    <code class="literal">false</code>, OpenIDM considers the scheduler configuration
+    object dormant, and therefore does not let it be triggered or
+    executed.</p><p>Rather than change the configuration or <span class="command"><strong>cron</strong></span>
+    expressions, set <code class="literal">enabled</code> to <code class="literal">false</code>
+    for task and event schedulers when you want to retain their configuration,
+    but do not want them used.</p></dd><dt><span class="term">type</span></dt><dd><p>Currently OpenIDM supports only <code class="literal">cron</code>.</p></dd><dt><span class="term">startTime (optional)</span></dt><dd><p>Used to start the schedule some time in the future. If omitted or
+    set to a time in the past, the task or event is scheduled starting
+    immediately.</p></dd><dt><span class="term">endTime (optional)</span></dt><dd><p>Used to plan the end of scheduling.</p></dd><dt><span class="term">schedule</span></dt><dd><p>Takes <span class="command"><strong>cron</strong></span> expression syntax.</p></dd><dt><span class="term">timeZone (optional)</span></dt><dd><p>If not set, OpenIDM uses the system time zone.</p></dd><dt><span class="term">invokeService</span></dt><dd><p>Defines the type of scheduled event or action. OpenIDM accepts the
+    following values.</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">provisioner</code></p></li><li class="listitem"><p><code class="literal">script</code></p></li><li class="listitem"><p><code class="literal">sync</code></p></li></ul></div></dd><dt><span class="term">invokeContext</span></dt><dd><p>Specifies contextual information, such as the JavaScript to invoke.
+    The discovery engine provides two mechanisms, reconciliation and
+    synchronization. Both require that you specify the
+    <code class="literal">invokeContext</code>.</p><p>The following example invokes reconciliation.</p><div class="programlisting">
+{
+    <strong class="hl-string"><em style="color: #f58220">"enabled"</em></strong>: true,
+    <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"cron"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"schedule"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"0 0/1 * * * ?"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"invokeService"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"sync"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"invokeContext"</em></strong>: {
+        <strong class="hl-string"><em style="color: #f58220">"action"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"reconcile"</em></strong>,
+        <strong class="hl-string"><em style="color: #f58220">"mapping"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"systemLdapAccount_managedUser"</em></strong>
+    }
+}</div><p>For reconciliation tasks, you can add the mapping definition inline
+    rather than define it in <code class="filename">openidm/conf/sync.json</code>.</p><p>The following example shows a scheduler for LiveSync.</p><div class="programlisting">
+{
+    <strong class="hl-string"><em style="color: #f58220">"enabled"</em></strong>: true,
+    <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"cron"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"schedule"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"0 0/1 * * * ?"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"invokeService"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"provisioner"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"invokeContext"</em></strong>: {
+        <strong class="hl-string"><em style="color: #f58220">"action"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"liveSync"</em></strong>,
+        <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"system/OpenDJ/__ACCOUNT__"</em></strong>
+    }
+}</div><p>Actual configuration differs from these examples depending on your
+    configuration.</p></dd></dl></div><div class="section" title="G.1.&nbsp;Scheduled Task Use Cases"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scheduled-task-use-cases"></a>G.1.&nbsp;Scheduled Task Use Cases</h2></div></div></div><p>OpenIDM lets you schedule not only reconciliation and synchronization,
+  but also lets you use scheduling to trigger scripts, collect and run reports,
+  trigger workflows, perform custom logging, and so forth. You can find a
+  set of samples in the <code class="filename">openidm/samples/schedules</code>
+  directory.</p></div><div class="section" title="G.2.&nbsp;Cron Expressions"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="cron-expressions"></a>G.2.&nbsp;Cron Expressions</h2></div></div></div><p>The Quartz Scheduler accepts expressions like those of the UNIX
+  <span class="command"><strong>cron</strong></span> command. The syntax is documented extensively in
+  the online Quartz <a class="link" href="http://www.quartz-scheduler.org/documentation/quartz-1.x/tutorials/crontrigger" target="_blank"><em class="citetitle">CronTrigger Tutorial</em></a>.</p></div><div class="section" title="G.3.&nbsp;Checking For Quartz Updates"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="check-quartz-updates"></a>G.3.&nbsp;Checking For Quartz Updates</h2></div></div></div><p>The Quartz Scheduler can check for updates over the Internet on the
+  Quartz project website, and report available updates in the OpenIDM log.
+  The option is set in <code class="filename">openidm/conf/system.properties</code>
+  By default, this option is turned off, and should remain off in
+  production.</p><pre class="literallayout">system.properties:org.quartz.scheduler.skipUpdateCheck = true</pre></div><div class="section" title="G.4.&nbsp;Service Implementer Notes"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scheduler-service-implementations"></a>G.4.&nbsp;Service Implementer Notes</h2></div></div></div><p>Services that can be scheduled implement
+  <code class="literal">ScheduledService</code>. The service PID is used as a basis for
+  the service identifier in schedule definitions.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="appendix-scripting.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="appendix-router.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Appendix&nbsp;F.&nbsp;Scripting Reference&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="OpenIDM-Integrators-Guide.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Appendix&nbsp;H.&nbsp;Router Service Reference</td></tr></table></div></body></html>

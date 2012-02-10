@@ -1,0 +1,659 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;6.&nbsp;Configuring Synchronization</title><link rel="stylesheet" type="text/css" href="css/coredoc.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><link rel="home" href="OpenIDM-Integrators-Guide.html" title="OpenIDM 2.0.2 Integrator's Guide"><link rel="up" href="OpenIDM-Integrators-Guide.html" title="OpenIDM 2.0.2 Integrator's Guide"><link rel="prev" href="chap-resource-conf.html" title="Chapter&nbsp;5.&nbsp;Connecting to External Resources"><link rel="next" href="chap-scheduler-conf.html" title="Chapter&nbsp;7.&nbsp;Scheduling Synchronization"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script src="http://code.jquery.com/jquery.min.js"></script>
+<script>
+// On double-click, reformat <div class="screen"> for easy copying.
+$(document).ready(function() {
+  $(".screen").attr("title", "Double-click [-] to flatten lines.");
+  $(".screen").prepend('<img src="../images/minus.png" class="toggle">');
+});
+$(".screen").live("dblclick", function() {
+  $(this).replaceWith(
+    "<div class=\"flat\" title=\"Double-click [+] to wrap long lines.\">" +
+    $(this).html().replace(/minus\.png/,"plus.png").replace(/\n /g," ") + "\n<!--" + $(this).html() + "-->" +
+    "</div>");
+});
+$(".flat").live("dblclick", function() {
+  $(this).replaceWith(
+    "<div class=\"screen\" title=\"Double-click [-] to flatten lines.\">" +
+    $(this).html().replace(/(.|\n)+<!\-\-/m,"").replace(/\-\-\>/,"").replace(/plus\.png/,"minus.png") +
+    "</div>");
+});
+</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head ><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;6.&nbsp;Configuring Synchronization</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-resource-conf.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-scheduler-conf.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;6.&nbsp;Configuring Synchronization"><div class="titlepage"><div><div><h2 class="title"><a name="chap-synchronization"></a>Chapter&nbsp;6.&nbsp;Configuring Synchronization</h2></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="section"><a href="chap-synchronization.html#sync-types">6.1. Types of Synchronization</a></span></dt><dt><span class="section"><a href="chap-synchronization.html#sync-flexible-data">6.2. Flexible Data Model</a></span></dt><dt><span class="section"><a href="chap-synchronization.html#basic-flow">6.3. Basic Data Flow Configuration</a></span></dt><dt><span class="section"><a href="chap-synchronization.html#handling-sync">6.4. Synchronization Situations &amp; Actions</a></span></dt><dt><span class="section"><a href="chap-synchronization.html#correlation">6.5. Correlation Queries</a></span></dt><dt><span class="section"><a href="chap-synchronization.html#advanced-dataflow">6.6. Advanced Data Flow Configuration</a></span></dt><dt><span class="section"><a href="chap-synchronization.html#alternative-mapping">6.7. Alternative Mappings</a></span></dt></dl></div><a class="indexterm" name="d155e2097"></a><p>One of the core services of OpenIDM is synchronizing identity data from
+ different resources. This chapter explains what you must know to get started
+ configuring OpenIDM's flexible synchronization mechanism, and illustrates the
+ concepts with examples.</p><div class="section" title="6.1.&nbsp;Types of Synchronization"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="sync-types"></a>6.1.&nbsp;Types of Synchronization</h2></div></div></div><a class="indexterm" name="d155e2105"></a><p>Synchronization happens either when OpenIDM receives a change directly,
+  or when OpenIDM discovers a change on an external resource.</p><p>For direct changes to OpenIDM, OpenIDM immediately pushes updates to
+  all external resources configured to receive the updates. A direct change
+  can originate not only as a write request through the REST interface, but
+  also as an update resulting from reconciliation with another resource.</p><div class="variablelist"><p>OpenIDM discovers changes on external resources through reconciliation,
+   and through LiveSync.</p><dl><dt><span class="term">Reconciliation</span></dt><dd><a class="indexterm" name="d155e2121"></a><p>In identity management, <em class="firstterm">reconciliation</em> is the
+     process of bidirectional synchronization of objects between different data
+     stores. Reconciliation applies mainly to user objects, though OpenIDM
+     can reconcile any objects, including groups and roles.</p><p>To perform reconciliation, OpenIDM analyzes both source and target
+     systems to uncover the differences that it must reconcile. Reconciliation
+     can therefore be a heavyweight process. When working with large data sets,
+     finding all changes can be more work than processing the changes.</p><p>Reconciliation is, however, thorough. It recognizes system error
+     conditions and catches changes that might be missed by the more
+     lightweight LiveSync mechanism. Reconciliation therefore serves as the
+     basis for compliance and reporting functionality.</p></dd><dt><span class="term">LiveSync</span></dt><dd><a class="indexterm" name="d155e2137"></a><p><em class="firstterm">LiveSync</em> performs the same job as
+     reconciliation. LiveSync relies on a change log on the external resource
+     to determine which objects have changed.</p><p>LiveSync is intended to react quickly to changes as they happen.
+     LiveSync is however a best effort mechanism that in some cases can miss
+     changes.</p><p>Furthermore, not all resources provide the change log mechanism
+     that LiveSync requires. The change long provides OpenIDM with a list of
+     objects changed since the last request such that OpenIDM does not need to
+     scan all objects for changes. OpenDJ provides an external change log.
+     Active Directory also provides a change log.</p></dd></dl></div><p>In all cases, OpenIDM relies on mappings that you configure to
+  determine what to synchronize and how to carry out synchronization.
+  LiveSync relies on the set of mappings that you configure once per OpenIDM
+  server, whereas reconciliation also allows you to configure specific mappings
+  for a particular reconciliation job.</p><p>You must trigger OpenIDM to poll for changes on external resources,
+  usually by scheduling reconciliation or LiveSync as described in the chapter
+  on <span class="olink"><em class="citetitle">Scheduling
+  Synchronization</em></span>. Alternatively, you can start
+  reconciliation through the REST interface.</p><div class="screen" width="91">$ curl
+ --header "X-OpenIDM-Username: openidm-admin"
+ --header "X-OpenIDM-Password: openidm-admin"
+ --request POST
+ "http://localhost:8080/openidm/sync?_action=recon&amp;mapping=systemLdapAccounts_managedUser"</div></div><div class="section" title="6.2.&nbsp;Flexible Data Model"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="sync-flexible-data"></a>6.2.&nbsp;Flexible Data Model</h2></div></div></div><a class="indexterm" name="d155e2162"></a><p>Identity management software tends to favor either a meta-directory
+  data model, where all data are mirrored in a central repository, or a
+  virtual data model, where only a minimum set of attributes are stored
+  centrally, and most are loaded on demand from the external resources
+  on which they are stored. The meta-directory model offers fast access at
+  the risk of getting out-of-date data. The virtual model guarantees fresh
+  data, but pays for that guarantee in terms of performance.</p><p>OpenIDM leaves the data model choice with you. You determine the right
+  trade offs for a particular deployment. OpenIDM does not hard code any
+  particular schema or set of attributes stored in the repository. Instead,
+  you define how external system objects map onto managed objects, and OpenIDM
+  dynamically updates the repository to store the managed object attributes
+  that you configure.</p><p>You can, for example, choose to follow the data model defined in the
+  Simple Cloud Identity Management (<a class="link" href="http://www.simplecloud.info/specs/draft-scim-core-schema-00.html" target="_blank">SCIM</a>) specification. The following object represents a SCIM
+  user.</p><div class="programlisting">
+{
+    <strong class="hl-string"><em style="color: #f58220">"userName"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"james1"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"familyName"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"Berg"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"givenName"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"James"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"email"</em></strong>: [
+        <strong class="hl-string"><em style="color: #f58220">"james1@example.com"</em></strong>
+    ],
+    <strong class="hl-string"><em style="color: #f58220">"description"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"Created by OpenIDM REST."</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"password"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"asdfkj23"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"displayName"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"James Berg"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"phoneNumber"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"12345"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"employeeNumber"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"12345"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"userType"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"Contractor"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"title"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"Vice President"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"active"</em></strong>: true
+}</div><div class="note" title="Note" style="font-style: italic;"><h3 class="title">Note</h3><p>Avoid using the dash character ( <code class="literal">-</code> ) in property
+   names, like <code class="literal">last-name</code>, as dashes in names make
+   JavaScript syntax more complex. If you cannot avoid the dash, then write
+   <code class="literal">source['last-name']</code> instead of
+   <code class="literal">source.last-name</code> in java script.</p></div></div><div class="section" title="6.3.&nbsp;Basic Data Flow Configuration"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="basic-flow"></a>6.3.&nbsp;Basic Data Flow Configuration</h2></div></div></div><p>Data flow for synchronization involves three types of configuration
+  files, two of which you typically edit, and also a links table that OpenIDM
+  maintains in its repository, as well as scripts needed to check objects and
+  manipulate attributes. The two types of configuration files you edit are the
+  connector configuration files, with one file per external resource, and the
+  synchronization mappings file, with one file per OpenIDM instance.</p><div class="variablelist"><dl><dt><span class="term">Connector configuration files</span></dt><dd><a class="indexterm" name="d155e2203"></a><p>Connector configuration files are described in the chapter on <span class="olink"><em class="citetitle">Connecting to
+     External Resources</em></span>. Connector configuration files are
+     named <code class="filename">openidm/conf/provisioner.<em class="replaceable"><code>resource-name</code></em>.json</code>,
+     where <em class="replaceable"><code>resource-name</code></em> reflects the connector
+     technology and external resource, such as
+     <code class="literal">openicf-xml</code>.</p><p>An excerpt from an example connector configuration follows. The
+     example shows the name for the connector and two attributes of an account
+     object type. In the attribute mapping definitions, the attribute name is
+     mapped from the <code class="literal">nativeName</code>, the attribute name used on
+     the external resource, to the attribute name used in OpenIDM. Thus the
+     example shows that <code class="literal">sn</code> from LDAP is mapped to
+     <code class="literal">lastName</code> in OpenIDM. The <code class="literal">homePhone</code>
+     attribute can have multiple values.</p><div class="programlisting">
+{
+    <strong class="hl-string"><em style="color: #f58220">"name"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"MyLDAP"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"objectTypes"</em></strong>: {
+        <strong class="hl-string"><em style="color: #f58220">"account"</em></strong>: {
+            <strong class="hl-string"><em style="color: #f58220">"lastName"</em></strong>: {
+                <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"string"</em></strong>,
+                <strong class="hl-string"><em style="color: #f58220">"required"</em></strong>: true,
+                <strong class="hl-string"><em style="color: #f58220">"nativeName"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"sn"</em></strong>,
+                <strong class="hl-string"><em style="color: #f58220">"nativeType"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"string"</em></strong>
+            },
+            <strong class="hl-string"><em style="color: #f58220">"homePhone"</em></strong>: {
+                <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"array"</em></strong>,
+                <strong class="hl-string"><em style="color: #f58220">"items"</em></strong>: {
+                    <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"string"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"nativeType"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"string"</em></strong>
+                },
+                <strong class="hl-string"><em style="color: #f58220">"nativeName"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"homePhone"</em></strong>,
+                <strong class="hl-string"><em style="color: #f58220">"nativeType"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"string"</em></strong>
+            }
+        }
+    }
+}</div><p>In order for OpenIDM to access external resource objects and
+     attributes, the object and its attributes must match the connector
+     configuration. Also, the connector file strictly maps external resource
+     objects to OpenIDM objects. To construct attributes and to manipulate
+     their values, you use the synchronization mappings file.</p></dd><dt><span class="term">Synchronization mappings file</span></dt><dd><a class="indexterm" name="d155e2248"></a><a class="indexterm" name="d155e2253"></a><p>The synchronization mappings file is
+     <code class="filename">openidm/conf/sync.json</code>. The synchronization mappings
+     represent the core configuration for OpenIDM synchronization.</p><p>The <code class="filename">sync.json</code> file describes a set of mappings.
+     Each mapping specifies how attributes from source objects correspond to
+     attributes on target objects. The source and target indicate the direction
+     for the data flow, so you must define a mapping for each data flow. For
+     example, if you want data flows from an LDAP server to the repository
+     and also from the repository to the LDAP server, you must define two
+     separate mappings.</p><p>You identify external resource sources and targets as
+     <code class="literal">system/<em class="replaceable"><code>name</code></em>/<em class="replaceable"><code>object-type</code></em></code>, where
+     <em class="replaceable"><code>name</code></em> is the name used in the connector
+     configuration file, and <em class="replaceable"><code>object-type</code></em> is the
+     object defined in the connector configuration file list of object types.
+     For objects in OpenIDM's internal repository, you use
+     <code class="literal">managed/<em class="replaceable"><code>object-type</code></em></code>, where
+     <em class="replaceable"><code>object-type</code></em> is defined in
+     <code class="filename">openidm/conf/managed.json</code>. The name for the mapping
+     by convention is set to a string of the form
+     <code class="literal"><em class="replaceable"><code>source</code></em>_<em class="replaceable"><code>target</code></em></code>, as shown in the following example.</p><a name="basic-ldap-mapping"></a><div class="programlisting">
+{
+    <strong class="hl-string"><em style="color: #f58220">"mappings"</em></strong>: [
+        {
+            <strong class="hl-string"><em style="color: #f58220">"name"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"systemLdapAccounts_managedUser"</em></strong>,
+            <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"system/MyLDAP/account"</em></strong>,
+            <strong class="hl-string"><em style="color: #f58220">"target"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"managed/user"</em></strong>,
+            <strong class="hl-string"><em style="color: #f58220">"properties"</em></strong>: [
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"target"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"familyName"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"lastName"</em></strong>
+                },
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"target"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"homePhone"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"homePhone"</em></strong>
+                },
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"target"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"phoneExtension"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"default"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"0047"</em></strong>
+                },
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"target"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"mail"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"comment"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"Set mail if non-empty."</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"email"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"condition"</em></strong>: {
+                        <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"text/javascript"</em></strong>,
+                        <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"(source.email != null)"</em></strong>
+                    }
+                },
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"target"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"displayName"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">""</em></strong>;
+                    <strong class="hl-string"><em style="color: #f58220">"transform"</em></strong>: {
+                        <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"text/javascript"</em></strong>,
+                        <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"(source.lastName +', ' + source.firstName;)"</em></strong>
+                    }
+                }
+            ]
+        }
+    ]
+}</div><p>In this example, the source is the external resource,
+     <code class="literal">MyLDAP</code>, and the target is OpenIDM's repository,
+     specifically the managed user objects. The <code class="literal">properties</code>
+     reflect OpenIDM attribute names. For example, the mapping has the
+     attribute <code class="literal">lastName</code> defined in the
+     <code class="literal">MyLDAP</code> connector configuration file mapped to
+     <code class="literal">familyName</code> in the OpenIDM managed user object. Notice
+     that the attribute names come from the connector configuration, rather
+     than the external resource itself.</p><a class="indexterm" name="d155e2319"></a><p>You can create attributes on the target as part of the
+     mapping. In the example, OpenIDM creates a
+     <code class="literal">phoneExtension</code> attribute with a default value of
+     <code class="literal">0047</code>.</p><a class="indexterm" name="d155e2332"></a><p>You can also set up conditions under which OpenIDM maps attributes
+     as shown for the email attribute in the example. By default, OpenIDM
+     synchronizes all attributes. In the example, the mail attribute is set
+     only if the script for the condition returns
+     <code class="literal">true</code>.</p><a class="indexterm" name="d155e2342"></a><p>OpenIDM lets you transform attributes as well. In the example, the
+     <code class="literal">displayName</code> attribute is set using a combination of
+     the <code class="literal">lastName</code> and <code class="literal">firstName</code> attribute
+     values from the source. For transformations, the <code class="literal">source</code>
+     property is optional. However, the source object is only available
+     when you specify the <code class="literal">source</code> property. Therefore, in
+     order to use <code class="literal">source.lastName</code> and
+     <code class="literal">source.firstName</code> to calculate the
+     <code class="literal">displayName</code>, the example specifies <code class="literal">"source" :
+     ""</code>.</p><p>To add a flow from the repository to <code class="literal">MyLDAP</code>,
+     you would define a mapping with source <code class="literal">managed/user</code>
+     and target <code class="literal">system/MyLDAP/account</code>, named for example
+     <code class="literal">managedUser_systemLdapAccounts</code>.</p><div class="mediaobject" title="OpenIDM name space and object paths"><a name="figure-service-tree"></a><img src="images/ServiceTree.png" longdesc="/Users/mark/Documents/workspace/openidm/target/docbkx/html/integrators-guide/OpenIDM-Integrators-Guide/figure-service-tree.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-service-tree.html" target="longdesc">D</a>]</span></div><div class="caption"><p>OpenIDM stores managed objects in the repository, and exposes
+       them under <code class="literal">/openidm/managed</code>. System objects on
+       external resources are exposed under
+       <code class="literal">/openidm/system</code>.</p></div></div><div class="variablelist"><a class="indexterm" name="d155e2409"></a><p>By default, OpenIDM synchronizes all objects matching those defined
+      in the connector configuration for the resource. Many connectors let you
+      limit the scope of objects the connector accesses. For example, the LDAP
+      connector lets you specify base DNs and LDAP filters so you need not
+      access every entry in the directory. Yet, OpenIDM also lets you filter
+      what is considered a valid source or valid target for synchronization by
+      using JavaScript code. To apply these filters, use the
+      <code class="literal">validSource</code>, and <code class="literal">validTarget</code>
+      properties in your mapping.</p><dl><dt><span class="term">validSource</span></dt><dd><p>A script that determines if a source object is valid to be
+         mapped. The script yields a boolean value: <code class="literal">true</code>
+         indicates the source object is valid; <code class="literal">false</code> can be
+         used to defer mapping until some condition is met. In the root scope,
+         the source object is provided in the <code class="literal">"source"</code>
+         property. If the script is not specified, then all source objects are
+         considered valid.</p><div class="programlisting">
+{
+    <strong class="hl-string"><em style="color: #f58220">"validTarget"</em></strong>: {
+        <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"text/javascript"</em></strong>,
+        <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"target.employeeType == 'internal'"</em></strong>
+    }
+}</div></dd><dt><span class="term">validTarget</span></dt><dd><p>A script used during reconciliation's second phase, that determines if a target
+         object is valid to be mapped. The script yields a boolean value:
+         <code class="literal">true</code> indicates the target object is valid;
+         <code class="literal">false</code> indicates that the target object should not be
+         included in reconciliation. In the root scope, the source object is
+         provided in the <code class="literal">"target"</code> property. If the script is
+         not specified, then all target objects are considered valid for
+         mapping.</p><div class="programlisting">
+{
+    <strong class="hl-string"><em style="color: #f58220">"validSource"</em></strong>: {
+        <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"text/javascript"</em></strong>,
+        <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"source.ldapPassword != null"</em></strong>
+    }
+}</div></dd></dl></div><p>During synchronization, your scripts always have access to a
+     <code class="literal">source</code> object and a <code class="literal">target</code> object.
+     Examples already shown in this section use <code class="literal">source.<em class="replaceable"><code>attributeName</code></em></code> to retrieve attributes from the
+     source objects. Your scripts can also write to target attributes using
+     <code class="literal">target.<em class="replaceable"><code>attributeName</code></em></code>
+     syntax.</p><div class="programlisting">
+{
+    <strong class="hl-string"><em style="color: #f58220">"onUpdate"</em></strong>: {
+        <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"text/javascript"</em></strong>,
+        <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"if ((source.email != null) {target.mail = source.email;}"</em></strong>
+    }
+}</div><p>See the <span class="olink"><em class="citetitle">Scripting
+     Reference</em></span> appendix for more on scripting.</p></dd></dl></div><div class="section" title="6.3.1.&nbsp;Using Encrypted Values"><div class="titlepage"><div><div><h3 class="title"><a name="sync-encrypted-values"></a>6.3.1.&nbsp;Using Encrypted Values</h3></div></div></div><a class="indexterm" name="d155e2485"></a><p>OpenIDM supports reversible encryption of attribute values for
+   managed objects. Attribute values to encrypt include passwords (if passwords
+   are not already encrypted on the external resource, which would usually exclude them from the synchronization process, see the chapter about <span class="olink">
+  <em class="citetitle">Passwords</em>
+</span>), and also authentication
+   questions, credit card numbers, and social security numbers.</p><p>You configure encryption in the managed object configuration. The file
+   to edit is <code class="filename">openidm/conf/managed.json</code>. The following
+   example shows a managed object configuration that encrypts and decrypts
+   <code class="literal">securityAnswer</code>, <code class="literal">ssn</code>, and
+   <code class="literal">password</code> attributes using the default symmetric
+   key, and additional scripts for extra passwords.</p><div class="programlisting">
+{
+    <strong class="hl-string"><em style="color: #f58220">"objects"</em></strong>: [
+        {
+            <strong class="hl-string"><em style="color: #f58220">"name"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"user"</em></strong>,
+            <strong class="hl-string"><em style="color: #f58220">"properties"</em></strong>: [
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"name"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"securityAnswer"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"encryption"</em></strong>: {
+                        <strong class="hl-string"><em style="color: #f58220">"key"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"openidm-sym-default"</em></strong>
+                    }
+                },
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"name"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"ssn"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"encryption"</em></strong>: {
+                        <strong class="hl-string"><em style="color: #f58220">"key"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"openidm-sym-default"</em></strong>
+                    }
+                },
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"name"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"password"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"encryption"</em></strong>: {
+                        <strong class="hl-string"><em style="color: #f58220">"key"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"openidm-sym-default"</em></strong>
+                    }
+                }
+            ],
+            <strong class="hl-string"><em style="color: #f58220">"onStore"</em></strong>: {
+                <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"text/javascript"</em></strong>,
+                <strong class="hl-string"><em style="color: #f58220">"file"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"script/encryptExtraPassword.js"</em></strong>
+            },
+            <strong class="hl-string"><em style="color: #f58220">"onRetrieve"</em></strong>: {
+                <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"text/javascript"</em></strong>,
+                <strong class="hl-string"><em style="color: #f58220">"file"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"script/decryptExtraPassword.js"</em></strong>
+            }
+        }
+    ]
+}</div><p>Do not use the default symmetric key,
+   <code class="literal">openidm-sym-default</code>, in production. See the chapter on
+   <span class="olink"><em class="citetitle">Securing
+   &amp; Hardening OpenIDM</em></span> for instructions on adding your
+   own symmetric key.</p></div><div class="section" title="6.3.2.&nbsp;Constructing &amp; Manipulating Attributes"><div class="titlepage"><div><div><h3 class="title"><a name="constructing-attributes"></a>6.3.2.&nbsp;Constructing &amp; Manipulating Attributes</h3></div></div></div><a class="indexterm" name="d155e2526"></a><p>OpenIDM lets you construct and manipulate attributes using scripts
+   triggered when an object is created (onCreate), updated (onUpdate), or
+   deleted (onDelete), or when a link is created (onLink), or removed
+   (onUnlink).</p><p>The following example derives a DN for an LDAP entry when the entry
+   is created in the internal repository.</p><div class="programlisting">
+{
+    <strong class="hl-string"><em style="color: #f58220">"onCreate"</em></strong>: {
+        <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"text/javascript"</em></strong>,
+        <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>:
+            <strong class="hl-string"><em style="color: #f58220">"target.dn = 'uid=' + source.uid + ',ou=people,dc=example,dc=com'"</em></strong>
+    }
+}</div></div><div class="section" title="6.3.3.&nbsp;Reusing Links"><div class="titlepage"><div><div><h3 class="title"><a name="reusing-links"></a>6.3.3.&nbsp;Reusing Links</h3></div></div></div><a class="indexterm" name="d155e2540"></a><p>When two mappings exist to sync the same objects bidirectionally,
+   you can use the <code class="literal">links</code> property in one mapping to have
+   OpenIDM use the same internally managed link for both mappings. Otherwise,
+   if no <code class="literal">links</code> property is specified, OpenIDM maintains a
+   link for each mapping.</p><p>The following excerpt shows two mappings, one from MyLDAP accounts
+   to managed users, and another from managed users to MyLDAP accounts. In
+   the second mapping, the <code class="literal">link</code> property tells OpenIDM
+   to reuse the links created in the first mapping, rather than create new
+   links.</p><div class="programlisting">
+{
+    <strong class="hl-string"><em style="color: #f58220">"mappings"</em></strong>: [
+        {
+            <strong class="hl-string"><em style="color: #f58220">"name"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"systemMyLDAPAccounts_managedUser"</em></strong>,
+            <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"system/MyLDAP/account"</em></strong>,
+            <strong class="hl-string"><em style="color: #f58220">"target"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"managed/user"</em></strong>
+        },
+        {
+            <strong class="hl-string"><em style="color: #f58220">"name"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"managedUser_systemMyLDAPAccounts"</em></strong>,
+            <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"managed/user"</em></strong>,
+            <strong class="hl-string"><em style="color: #f58220">"target"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"system/MyLDAP/account"</em></strong>,
+            <strong class="hl-string"><em style="color: #f58220">"links"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"systemMyLDAPAccounts_managedUser"</em></strong>
+        }
+    ]
+}</div></div></div><div class="section" title="6.4.&nbsp;Synchronization Situations &amp; Actions"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="handling-sync"></a>6.4.&nbsp;Synchronization Situations &amp; Actions</h2></div></div></div><a class="indexterm" name="d155e2563"></a><a class="indexterm" name="d155e2568"></a><p>During synchronization, OpenIDM categorizes objects by situation.
+  Situations are characterized by whether an object exists on a source or
+  target system, whether OpenIDM has registered a link between the source
+  object and the target object, and whether the object is considered valid.
+  OpenIDM takes action depending on the situation.</p><p>You can define actions for particular situations in the
+  <code class="literal">policies</code> section of a synchronization mapping, as
+  shown in the following excerpt.</p><div class="programlisting">
+{
+    <strong class="hl-string"><em style="color: #f58220">"policies"</em></strong>: [
+        {
+            <strong class="hl-string"><em style="color: #f58220">"situation"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"CONFIRMED"</em></strong>,
+            <strong class="hl-string"><em style="color: #f58220">"action"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"UPDATE"</em></strong>
+        },
+        {
+            <strong class="hl-string"><em style="color: #f58220">"situation"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"FOUND"</em></strong>,
+            <strong class="hl-string"><em style="color: #f58220">"action"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"IGNORE"</em></strong>
+        },
+        {
+            <strong class="hl-string"><em style="color: #f58220">"situation"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"ABSENT"</em></strong>,
+            <strong class="hl-string"><em style="color: #f58220">"action"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"CREATE"</em></strong>
+        },
+        {
+            <strong class="hl-string"><em style="color: #f58220">"situation"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"AMBIGUOUS"</em></strong>,
+            <strong class="hl-string"><em style="color: #f58220">"action"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"IGNORE"</em></strong>
+        },
+        {
+            <strong class="hl-string"><em style="color: #f58220">"situation"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"MISSING"</em></strong>,
+            <strong class="hl-string"><em style="color: #f58220">"action"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"IGNORE"</em></strong>
+        },
+        {
+            <strong class="hl-string"><em style="color: #f58220">"situation"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"UNQUALIFIED"</em></strong>,
+            <strong class="hl-string"><em style="color: #f58220">"action"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"IGNORE"</em></strong>
+        },
+        {
+            <strong class="hl-string"><em style="color: #f58220">"situation"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"UNASSIGNED"</em></strong>,
+            <strong class="hl-string"><em style="color: #f58220">"action"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"IGNORE"</em></strong>
+        }
+    ]
+}</div><p>If you do not define a policy for a particular situation, OpenIDM
+  takes the default action for the situation.</p><p>The situations and their corresponding actions are described in the
+  sections below.</p><div class="section" title="6.4.1.&nbsp;Synchronization Situations"><div class="titlepage"><div><div><h3 class="title"><a name="sync-situations"></a>6.4.1.&nbsp;Synchronization Situations</h3></div></div></div><p>OpenIDM performs synchronization action in two phases. First, OpenIDM
+   performs the so called source reconciliation, where OpenIDM accounts for source objects
+   and associated links based on the mapping configured. Second, OpenIDM runs
+   the target reconciliation, where OpenIDM iterates over the target objects not
+   processed in the first phase.</p><div class="orderedlist"><p>During reconciliation OpenIDM builds three lists, assigning values
+    to the objects to reconcile.</p><ol class="orderedlist" type="1"><li class="listitem"><p>All valid objects from the source</p><p>OpenIDM assigns valid source objects <code class="literal">qualifies=1</code>.
+     Invalid objects, including those not found in the source system, and those
+     filtered out by the script specified in the <code class="literal">validSource</code>
+     property get <code class="literal">qualifies=0</code>.</p></li><li class="listitem"><p>All records from the appropriate link table</p><p>Objects with corresponding links in the link table of the repository
+     get <code class="literal">link=1</code>. Objects without corresponding links get
+     <code class="literal">link=0</code>.</p></li><li class="listitem"><p>All valid objects on the target system</p><p>Object found in the target system get <code class="literal">target=1</code>.
+     Objects not found in the target system get
+     <code class="literal">target=0</code>.</p></li></ol></div><div class="variablelist"><p>Based on the values assigned to objects during source reconciliation,
+    OpenIDM assigns situations, listed here with their default actions.</p><dl><dt><span class="term">"CONFIRMED" (qualifies=1, link=1, target=1)</span></dt><dd><p>The mapping qualifies for a target object, and a link to an existing target
+      object was found. Detected during change events and reconciliation. Default action: "UPDATE".</p></dd><dt><span class="term">"FOUND" (qualifies=1, link=0, target=1)</span></dt><dd><p>The mapping qualifies for a target object, there is no link to a
+      target object, and there is a single target object, correlated by the logic found in the correlationQuery.
+      Detected during change events and reconciliation. Default action:
+      "UPDATE".</p></dd><dt><span class="term">"ABSENT" (qualifies=1, link=0, target=0)</span></dt><dd><p>The mapping qualifies for a target object, there is no link to a
+      target object, and there is no correlated target object found.
+      Detected during change events and reconciliation. Default action:
+      "CREATE".</p></dd><dt><span class="term">"AMBIGUOUS" (qualifies=1, link=0, target&gt;1)</span></dt><dd><p>The mapping qualifies for a target object, there is no link to a
+      target object, but there is more than one correlated target object. Detected during source object changes and reconciliation. Default
+      action: "EXCEPTION".</p></dd><dt><span class="term">"MISSING" (qualifies=1, link=1, target=0)</span></dt><dd><p>The mapping is qualified for a target object, and there is a
+      qualified link to a target object, but the target object is missing.
+      Only detected during reconciliation and source object changes in synchronous mappings.
+      Default action: "EXCEPTION".</p></dd><dt><span class="term">"UNQUALIFIED" (qualifies=0, link=0 or 1, target=1 or &gt;1)</span></dt><dd><p>The mapping is not qualified for a source object. There is one or more targets found through the correlation logic. Detected during change events and
+      reconciliation. Default action: "DELETE".</p></dd><dt><span class="term">"SOURCE_IGNORED" (qualifies=0, link=0, target=0)</span></dt><dd><p>The source object is unqualified (by validSource), no link, no target is found. Detected during source object changes and reconciliation. Default action: "IGNORE".</p></dd></dl></div><p>Based on the values assigned to objects during target reconciliation,
+    OpenIDM assigns situations, listed here with their default actions.</p><div class="variablelist"><dl><dt><span class="term">"TARGET_IGNORED" (qualifies=0)</span></dt><dd><p>During target reconciliation the target becomes unqualified by the "validTagrt" script. Only detected during reconciliation. Default action: "IGNORE"</p></dd><dt><span class="term">"UNASSIGNED" (qualifies=1, link=0)</span></dt><dd><p>A target object exists for which there is no link. Only detected
+      during reconciliation. Default action: "EXCEPTION".</p></dd><dt><span class="term">"CONFIRMED" (qualifies=1, link=1, source=1)</span></dt><dd><p>The mapping qualifies for a target object, and a link to a
+      source object exists. Detected only during reconciliation. Default
+      action: "UPDATE".</p></dd><dt><span class="term">"UNQUALIFIED" (qualifies=0, link=1, source=1, but source does not qualify)</span></dt><dd><p>The mapping is not qualified (by validTarget) for a target object, and there is a
+      link from an existing source object where the source exists. Detected during change events and
+      reconciliation. Default action: "DELETE".</p></dd><dt><span class="term">SOURCE_MISSING (qualifies=1, link=1, source=0)</span></dt><dd><p>The target qualifies and a link is found. But the source object is missing. Only detected during reconciliation. Default action: "EXCEPTION".</p></dd></dl></div><p>The following sections reiterate in detail how OpenIDM assigns
+   situations during each of the two synchronization phases.</p></div><div class="section" title="6.4.2.&nbsp;Source Reconciliation"><div class="titlepage"><div><div><h3 class="title"><a name="source-reconciliation"></a>6.4.2.&nbsp;Source Reconciliation</h3></div></div></div><p>OpenIDM starts reconciliation and LiveSync by reading a list of
+   objects from the resource. For reconciliation, the list includes all
+   objects available through the connector. For LiveSync, the list contains
+   only changed objects. The connector can filter objects out of the list, too.
+   You can filter objects out of the list by using the
+   <code class="literal">validSource</code> property.</p><p>OpenIDM then iterates over the list, checking each entry against the
+   <code class="literal">validSource</code> filter, classifying objects according to
+   their situations as described in <a class="xref" href="chap-synchronization.html#sync-situations" title="6.4.1.&nbsp;Synchronization Situations">Section&nbsp;6.4.1, &#8220;Synchronization Situations&#8221;</a>. OpenIDM
+   uses the list of links for the current mapping to classify objects. Finally,
+   OpenIDM executes the action configured for the situation.</p><p>The following table shows how OpenIDM assigns the appropriate
+   situation during source reconciliation, depending on whether a valid
+   source exists (Source Qualifies), whether a link with the appropriate type
+   exists in the repository (Link Exists), and how many target objects are
+   found either based on links or correlation results.</p><div class="table"><a name="d155e2727"></a><div class="table-title">Table&nbsp;6.1.&nbsp;Resolving Source Reconciliation Situations</div><div class="table-contents"><table summary="Resolving Source Reconciliation Situations" width="100%" border="0"><colgroup><col class="c1"><col class="c2"><col class="c3"><col class="c4"><col class="c5"><col class="c6"><col class="c7"><col class="c8"></colgroup><thead><tr><th colspan="2" align="left">Source Qualifies?</th><th colspan="2" align="left">Link Exists?</th><th colspan="3" align="left">Target Objects
+       Found<sup>[<a name="d155e2747" href="#ftn.d155e2747" class="footnote">a</a>]</sup></th><th rowspan="2" align="left" valign="top">Situation</th></tr><tr><th>Yes</th><th>No</th><th>Yes</th><th>No</th><th>0</th><th>1</th><th>&gt; 1</th></tr></thead><tbody><tr><td>&nbsp;</td><td>X</td><td>&nbsp;</td><td>X</td><td>X</td><td>&nbsp;</td><td>&nbsp;</td><td>SOURCE_IGNORED</td></tr><tr><td>&nbsp;</td><td>X</td><td>&nbsp;</td><td>X</td><td>&nbsp;</td><td>X</td><td>&nbsp;</td><td>UNQUALIFIED</td></tr><tr><td>&nbsp;</td><td>X</td><td>&nbsp;</td><td>X</td><td>&nbsp;</td><td>&nbsp;</td><td>X</td><td>UNQUALIFIED</td></tr><tr><td>&nbsp;</td><td>X</td><td>X</td><td>&nbsp;</td><td>X</td><td>&nbsp;</td><td>&nbsp;</td><td>UNQUALIFIED</td></tr><tr><td>&nbsp;</td><td>X</td><td>X</td><td>&nbsp;</td><td>&nbsp;</td><td>X</td><td>&nbsp;</td><td>UNQUALIFIED</td></tr><tr><td>&nbsp;</td><td>X</td><td>X</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>X</td><td>UNQUALIFIED</td></tr><tr><td>X</td><td>&nbsp;</td><td>&nbsp;</td><td>X</td><td>X</td><td>&nbsp;</td><td>&nbsp;</td><td>ABSENT</td></tr><tr><td>X</td><td>&nbsp;</td><td>&nbsp;</td><td>X</td><td>&nbsp;</td><td>X</td><td>&nbsp;</td><td>FOUND</td></tr><tr><td>X</td><td>&nbsp;</td><td>&nbsp;</td><td>X</td><td>&nbsp;</td><td>&nbsp;</td><td>X</td><td>AMBIGUOUS</td></tr><tr><td>X</td><td>&nbsp;</td><td>X</td><td>&nbsp;</td><td>X</td><td>&nbsp;</td><td>&nbsp;</td><td>MISSING</td></tr><tr><td>X</td><td>&nbsp;</td><td>X</td><td>&nbsp;</td><td>&nbsp;</td><td>X</td><td>&nbsp;</td><td>CONFIRMED</td></tr></tbody><tbody class="footnotes"><tr><td colspan="8"><div class="footnote"><p><sup>[<a id="ftn.d155e2747" href="#d155e2747" class="para">a</a>] </sup>If no link exists for the source object, then
+       OpenIDM executes a correlation query.</p></div></td></tr></tbody></table></div></div><br class="table-break"></div><div class="section" title="6.4.3.&nbsp;Target Reconciliation"><div class="titlepage"><div><div><h3 class="title"><a name="target-reconciliation"></a>6.4.3.&nbsp;Target Reconciliation</h3></div></div></div><p>During source reconciliation, OpenIDM cannot detect situations where
+   no source object exists, such as the UNASSIGNED situation. When no source
+   object exists, OpenIDM detects the situation during the second
+   reconciliation phase, target reconciliation. During target reconciliation,
+   OpenIDM iterates over all target objects that do not have a representation
+   on the source, checking each object against the
+   <code class="literal">validTarget</code> filter, determining the appropriate situation,
+   and executing the action configured for the situation.</p><p>The following table shows how OpenIDM assigns the appropriate
+   situation during target reconciliation, depending on whether a valid target
+   exists (Target Qualifies), whether a link with an appropriate type exists
+   in the repository (Link Exists), whether a source object exists
+   (Source Exists), and whether the source object qualifies (Source Qualifies).
+   Not all situations assigned during source reconciliation are assigned
+   during target reconciliation.</p><div class="table"><a name="d155e2965"></a><div class="table-title">Table&nbsp;6.2.&nbsp;Resolving Target Reconciliation Situations</div><div class="table-contents"><table summary="Resolving Target Reconciliation Situations" width="100%" border="0"><colgroup><col class="c1"><col class="c2"><col class="c3"><col class="c4"><col class="c5"><col class="c6"><col class="c7"><col class="c8"><col class="c9"></colgroup><thead><tr><th colspan="2" align="left">Target Qualifies?</th><th colspan="2" align="left">Link Exists?</th><th colspan="2" align="left">Source Exists?</th><th colspan="2" align="left">Source Qualifies?</th><th rowspan="2" align="left" valign="top">Situation</th></tr><tr><th>Yes</th><th>No</th><th>Yes</th><th>No</th><th>Yes</th><th>No</th><th>Yes</th><th>No</th></tr></thead><tbody><tr><td>&nbsp;</td><td>X</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>TARGET_IGNORED</td></tr><tr><td>X</td><td>&nbsp;</td><td>&nbsp;</td><td>X</td><td>&nbsp;</td><td>X</td><td>&nbsp;</td><td>&nbsp;</td><td>UNASSIGNED</td></tr><tr><td>X</td><td>&nbsp;</td><td>X</td><td>&nbsp;</td><td>X</td><td>&nbsp;</td><td>X</td><td>&nbsp;</td><td>CONFIRMED</td></tr><tr><td>X</td><td>&nbsp;</td><td>X</td><td>&nbsp;</td><td>X</td><td>&nbsp;</td><td>&nbsp;</td><td>X</td><td>UNQUALIFIED</td></tr><tr><td>X</td><td>&nbsp;</td><td>X</td><td>&nbsp;</td><td>&nbsp;</td><td>X</td><td>&nbsp;</td><td>&nbsp;</td><td>SOURCE_MISSING</td></tr></tbody></table></div></div><br class="table-break"></div><div class="section" title="6.4.4.&nbsp;Synchronization Actions"><div class="titlepage"><div><div><h3 class="title"><a name="sync-actions"></a>6.4.4.&nbsp;Synchronization Actions</h3></div></div></div><div class="variablelist"><p>Once OpenIDM has assigned a situation to an object, OpenIDM takes
+    the actions configured in the mapping. If no action is configured, then
+    OpenIDM takes the default action for the situation. OpenIDM supports the
+    following actions.</p><dl><dt><span class="term">"CREATE"</span></dt><dd><p>Create and link a target object.</p></dd><dt><span class="term">"UPDATE"</span></dt><dd><p>Link and update a target object.</p></dd><dt><span class="term">"DELETE"</span></dt><dd><p>Delete and unlink the target object.</p></dd><dt><span class="term">"LINK"</span></dt><dd><p>Link the correlated target object.</p></dd><dt><span class="term">"UNLINK"</span></dt><dd><p>Unlink the linked target object.</p></dd><dt><span class="term">"EXCEPTION"</span></dt><dd><p>Flag the link situation as an exception.</p></dd><dt><span class="term">"IGNORE"</span></dt><dd><p>Do not change the link or target object state.</p></dd></dl></div></div></div><div class="section" title="6.5.&nbsp;Correlation Queries"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="correlation"></a>6.5.&nbsp;Correlation Queries</h2></div></div></div><a class="indexterm" name="d155e3154"></a><a class="indexterm" name="d155e3159"></a><p>Every time OpenIDM creates an object through synchronization, it
+  creates a link between the source and target objects. OpenIDM then uses the
+  link to determine the object's situation during later synchronization
+  operations.</p><p>Initial, bulk synchronization operations can involve correlating
+  many objects that exist both on source and target systems. In this case,
+  OpenIDM uses correlation queries to find target objects that already exist,
+  and that correspond to source objects. For the target objects that match
+  a correlation query, OpenIDM needs only to create a link, rather than a
+  new target object.</p><p>Correlation queries run against target resources. The query syntax
+  therefore depends on the target system, and is either specific to the data
+  store underlying the OpenIDM repository, or to OpenICF query
+  capabilities.</p><div class="section" title="6.5.1.&nbsp;Managed Object as Correlation Query Target"><div class="titlepage"><div><div><h3 class="title"><a name="correlation-query-managed-object"></a>6.5.1.&nbsp;Managed Object as Correlation Query Target</h3></div></div></div><p>Queries on managed objects in the repository must be defined in the
+   configuration file for the repository, which is either
+   <code class="filename">openidm/conf/repo.orientdb.json</code>, or
+   <code class="filename">openidm/conf/repo.jdbc.json</code>.</p><p>The following example shows a correlation query defined in
+   <code class="filename">openidm/conf/repo.orientdb.json</code>.</p><div class="programlisting">
+<strong class="hl-string"><em style="color: #f58220">"for-userName"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"SELECT * FROM ${_resource} WHERE userName = '${uid}'"</em></strong></div><p>The following correlation query example shows the JavaScript to call
+   the query defined for OrientDB. The <code class="literal">_query-id</code> property
+   value matches the name of the query specified in
+   <code class="filename">openidm/conf/repo.orientdb.json</code>,
+   <code class="literal">for-userName</code>. The <code class="literal">source.name</code> value
+   replaces <code class="literal">${uid}</code> in the query. OpenIDM replaces
+   <code class="literal">${_resource}</code> in the query with the name of table that
+   holds managed objects.</p><div class="programlisting">
+{
+  <strong class="hl-string"><em style="color: #f58220">"correlationQuery"</em></strong>: {
+    <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"text/javascript"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>:
+      <strong class="hl-string"><em style="color: #f58220">"var query = {'_query-id' : 'for-userName', 'uid' : source.name}; query;"</em></strong>
+  }
+}</div><p>The query can return zero or more objects, so the situation OpenIDM
+   assigns to the source object depends on the number of target objects
+   returned.</p><p>With a JDBC-based repository, the query defined in
+   <code class="filename">openidm/conf/repo.jdbc.json</code> is more complex due
+   to how the tables are indexed. The correlation query you define in
+   <code class="filename">openidm/conf/sync.json</code> is the same, however.</p></div><div class="section" title="6.5.2.&nbsp;System Object as Correlation Query Target"><div class="titlepage"><div><div><h3 class="title"><a name="correlation-query-system-object"></a>6.5.2.&nbsp;System Object as Correlation Query Target</h3></div></div></div><p>Correlation queries on system objects access the connector. The
+   connector then executes the query on the external resource.</p><p>Your correlation query JavaScript must return a map holding a generic
+   query with the following elements.</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>A condition such as "Equals"</p></li><li class="listitem"><p>The naming attribute to compare on the system object. In the example
+     that follows, the naming attribute is <code class="literal">uid</code>.</p></li><li class="listitem"><p>The value from the source object to use in the search filter. You
+     set this as the value of the <code class="literal">value</code> property, which
+     takes an array. In the example that follows, the value to use in the
+     search filter is <code class="literal">source.userName</code>.</p></li></ul></div><div class="programlisting">
+varmap={<strong class="hl-string"><em style="color: #f58220">"query"</em></strong>: {<strong class="hl-string"><em style="color: #f58220">"Equals"</em></strong>: {<strong class="hl-string"><em style="color: #f58220">"field"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"uid"</em></strong>, <strong class="hl-string"><em style="color: #f58220">"values"</em></strong>: [ source.userName ]}}};
+map;</div></div></div><div class="section" title="6.6.&nbsp;Advanced Data Flow Configuration"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="advanced-dataflow"></a>6.6.&nbsp;Advanced Data Flow Configuration</h2></div></div></div><a class="indexterm" name="d155e3249"></a><p><a class="xref" href="chap-synchronization.html#basic-flow" title="6.3.&nbsp;Basic Data Flow Configuration">Section&nbsp;6.3, &#8220;Basic Data Flow Configuration&#8221;</a> shows how to trigger scripts when objects
+  are created and updated. Other situations require you to trigger scripts
+  in response to other synchronization actions. For example, you might not
+  want OpenIDM to delete a managed user directly when an external account is
+  deleted, but instead unlink the objects and deactivate the user in another
+  resource. (Alternatively, you might delete the object in OpenIDM but
+  nevertheless execute a script.) The following example shows a more advanced
+  mapping configuration.</p><div class="programlisting">
+{
+    <strong class="hl-string"><em style="color: #f58220">"mappings"</em></strong>: [
+        {
+            <strong class="hl-string"><em style="color: #f58220">"name"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"systemLdapAccount_managedUser"</em></strong>,
+            <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"system/ldap/account"</em></strong>,
+            <strong class="hl-string"><em style="color: #f58220">"target"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"managed/user"</em></strong>,
+            <strong class="hl-string"><em style="color: #f58220">"validSource"</em></strong>: {
+                <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"text/javascript"</em></strong>,
+                <strong class="hl-string"><em style="color: #f58220">"file"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"script/isValid.js"</em></strong>
+            },
+            <strong class="hl-string"><em style="color: #f58220">"correlationQuery"</em></strong>: {
+                <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"text/javascript"</em></strong>,
+                <strong class="hl-string"><em style="color: #f58220">"file"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"script/ldapCorrelationQuery.js"</em></strong>
+            },
+            <strong class="hl-string"><em style="color: #f58220">"properties"</em></strong>: [
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"uid"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"transform"</em></strong>: {
+                        <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"text/javascript"</em></strong>,
+                        <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"source.toLowerCase()"</em></strong>
+                    },
+                    <strong class="hl-string"><em style="color: #f58220">"target"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"userName"</em></strong>
+                },
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">""</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"transform"</em></strong>: {
+                        <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"text/javascript"</em></strong>,
+                        <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"if (source.myGivenName)
+</em></strong>                            {source.myGivenName;} <strong class="hl-keyword">else</strong> {source.givenName;}<strong class="hl-string"><em style="color: #f58220">"
+</em></strong>                    },
+                    <strong class="hl-string"><em style="color: #f58220">"target"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"givenName"</em></strong>
+                },
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">""</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"transform"</em></strong>: {
+                        <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"text/javascript"</em></strong>,
+                        <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"if (source.mySn)
+</em></strong>                            {source.mySn;} <strong class="hl-keyword">else</strong> {source.sn;}<strong class="hl-string"><em style="color: #f58220">"
+</em></strong>                    },
+                    <strong class="hl-string"><em style="color: #f58220">"target"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"familyName"</em></strong>
+                },
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"cn"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"target"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"fullname"</em></strong>
+                },
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"comment"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"Multi-valued in LDAP, single-valued in AD.
+</em></strong>                        Retrieve first non-empty value.<strong class="hl-string"><em style="color: #f58220">",
+</em></strong>                    <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"title"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"transform"</em></strong>: {
+                        <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"text/javascript"</em></strong>,
+                        <strong class="hl-string"><em style="color: #f58220">"file"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"script/getFirstNonEmpty.js"</em></strong>
+                    },
+                    <strong class="hl-string"><em style="color: #f58220">"target"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"title"</em></strong>
+                },
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"condition"</em></strong>: {
+                        <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"text/javascript"</em></strong>,
+                        <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"var clearObj = openidm.decrypt(object);
+</em></strong>                            ((clearObj.password != null) &amp;&amp;
+                            (clearObj.ldapPassword != clearObj.password))<strong class="hl-string"><em style="color: #f58220">"
+</em></strong>                    },
+                    <strong class="hl-string"><em style="color: #f58220">"transform"</em></strong>: {
+                        <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"text/javascript"</em></strong>,
+                        <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"source.password"</em></strong>
+                    },
+                    <strong class="hl-string"><em style="color: #f58220">"target"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"__PASSWORD__"</em></strong>
+                }
+            ],
+            <strong class="hl-string"><em style="color: #f58220">"onCreate"</em></strong>: {
+                <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"text/javascript"</em></strong>,
+                <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"target.ldapPassword = null;
+</em></strong>                    target.adPassword = null;
+                    target.password = null;
+                    target.ldapStatus = <strong class="hl-string"><em style="color: #f58220">'New Account'</em></strong><strong class="hl-string"><em style="color: #f58220">"
+</em></strong>            },
+            <strong class="hl-string"><em style="color: #f58220">"onUpdate"</em></strong>: {
+                <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"text/javascript"</em></strong>,
+                <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"target.ldapStatus = 'OLD'"</em></strong>
+            },
+            <strong class="hl-string"><em style="color: #f58220">"onUnlink"</em></strong>: {
+                <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"text/javascript"</em></strong>,
+                <strong class="hl-string"><em style="color: #f58220">"file"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"script/triggerAdDisable.js"</em></strong>
+            },
+            <strong class="hl-string"><em style="color: #f58220">"policies"</em></strong>: [
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"situation"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"CONFIRMED"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"action"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"UPDATE"</em></strong>
+                },
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"situation"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"FOUND"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"action"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"UPDATE"</em></strong>
+                },
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"situation"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"ABSENT"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"action"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"CREATE"</em></strong>
+                },
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"situation"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"AMBIGUOUS"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"action"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"EXCEPTION"</em></strong>
+                },
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"situation"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"MISSING"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"action"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"EXCEPTION"</em></strong>
+                },
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"situation"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"UNQUALIFIED"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"action"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"UNLINK"</em></strong>
+                },
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"situation"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"UNASSIGNED"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"action"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"EXCEPTION"</em></strong>
+                }
+            ]
+        }
+    ]
+}</div><div class="variablelist"><p>Here is the complete list of properties you can use as hooks in
+    mapping configurations to call scripts.
+   </p><dl><dt><span class="term">Triggered by Situation</span></dt><dd><p>onCreate, onUpdate, onDelete, onLink, onUnlink</p></dd><dt><span class="term">Object Filter</span></dt><dd><p>vaildSource, validTarget</p></dd><dt><span class="term">Correlating Objects</span></dt><dd><p>correlationQuery</p></dd><dt><span class="term">Triggered on Reconciliation</span></dt><dd><p>result</p></dd><dt><span class="term">Scripts Inside Properties</span></dt><dd><p>condition, transform</p></dd></dl></div><p>Your scripts can get data from any connected system at any time by
+  using the <code class="literal">openidm.read(id)</code> function, where
+  <code class="literal">id</code> is the identifier of the object to read.</p><p>The following example reads a managed user object from the
+  repository.</p><div class="programlisting">
+repoUser = openidm.read(<strong class="hl-string"><em style="color: #f58220">"managed/user/ddoe);</em></strong></div><p>The following example reads an account from an external LDAP
+  resource.</p><div class="programlisting">
+externalAccount = openidm.read(<strong class="hl-string"><em style="color: #f58220">"system/ldap/account/ddoe"</em></strong>);</div></div><div class="section" title="6.7.&nbsp;Alternative Mappings"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="alternative-mapping"></a>6.7.&nbsp;Alternative Mappings</h2></div></div></div><a class="indexterm" name="d155e3311"></a><p>Mappings for synchronization are usually stored in
+  <code class="filename">openidm/conf/sync.json</code> for reconciliation, LiveSync,
+  and for pushing changes made to managed objects to external resources.
+  You can, however, provide alternative mappings for scheduled reconciliation
+  by adding the mapping to the scheduler configuration instead of referencing
+  the <code class="filename">sync.json</code> mapping.</p><div class="programlisting">
+{
+    <strong class="hl-string"><em style="color: #f58220">"enabled"</em></strong>: true,
+    <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"cron"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"schedule"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"0 08 16 * * ?"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"invokeService"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"sync"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"invokeContext"</em></strong>: {
+        <strong class="hl-string"><em style="color: #f58220">"action"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"reconcile"</em></strong>,
+        <span class="bold"><strong>"mapping": {
+            "name": "CSV_XML",
+            "source": "system/Ldap/account",
+            "target": "managed/user",
+            "properties": [
+                {
+                    "source": "firstname",
+                    "target": "firstname"
+                },
+                ...
+            ],
+            "policies": [...]
+        }</strong></span>
+    }
+}</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-resource-conf.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-scheduler-conf.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;5.&nbsp;Connecting to External Resources&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="OpenIDM-Integrators-Guide.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;7.&nbsp;Scheduling Synchronization</td></tr></table></div></body></html>

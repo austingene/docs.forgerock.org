@@ -1,0 +1,92 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Appendix&nbsp;H.&nbsp;Router Service Reference</title><link rel="stylesheet" type="text/css" href="css/coredoc.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><link rel="home" href="OpenIDM-Integrators-Guide.html" title="OpenIDM 2.0.2 Integrator's Guide"><link rel="up" href="OpenIDM-Integrators-Guide.html" title="OpenIDM 2.0.2 Integrator's Guide"><link rel="prev" href="appendix-scheduling.html" title="Appendix&nbsp;G.&nbsp;Scheduler Reference"><link rel="next" href="appendix-jetty.html" title="Appendix&nbsp;I.&nbsp;Embedded Jetty Configuration"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script src="http://code.jquery.com/jquery.min.js"></script>
+<script>
+// On double-click, reformat <div class="screen"> for easy copying.
+$(document).ready(function() {
+  $(".screen").attr("title", "Double-click [-] to flatten lines.");
+  $(".screen").prepend('<img src="../images/minus.png" class="toggle">');
+});
+$(".screen").live("dblclick", function() {
+  $(this).replaceWith(
+    "<div class=\"flat\" title=\"Double-click [+] to wrap long lines.\">" +
+    $(this).html().replace(/minus\.png/,"plus.png").replace(/\n /g," ") + "\n<!--" + $(this).html() + "-->" +
+    "</div>");
+});
+$(".flat").live("dblclick", function() {
+  $(this).replaceWith(
+    "<div class=\"screen\" title=\"Double-click [-] to flatten lines.\">" +
+    $(this).html().replace(/(.|\n)+<!\-\-/m,"").replace(/\-\-\>/,"").replace(/plus\.png/,"minus.png") +
+    "</div>");
+});
+</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head ><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Appendix&nbsp;H.&nbsp;Router Service Reference</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="appendix-scheduling.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="appendix-jetty.html">Next</a></td></tr></table><hr></div><div lang="en" class="appendix" title="Appendix&nbsp;H.&nbsp;Router Service Reference"><div class="titlepage"><div><div><h2 class="title"><a name="appendix-router"></a>Appendix&nbsp;H.&nbsp;Router Service Reference</h2></div></div></div><a class="indexterm" name="d155e8986"></a><p>The OpenIDM router service provides the uniform interface to all
+  objects in OpenIDM: managed objects, system objects, configuration
+  objects, and so on.</p><div class="section" title="H.1.&nbsp;Configuration"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="router-configuration"></a>H.1.&nbsp;Configuration</h2></div></div></div><p>The router object as shown in <code class="filename">conf/router.json</code>
+  defines an array of filter objects.</p><div class="programlisting">
+{
+  <strong class="hl-string"><em style="color: #f58220">"filters"</em></strong>: [ <em class="replaceable"><code>filter object</code></em>, ... ]
+}</div><p>The required filters array defines a list of filters to be processed
+  on each router request. Filters are processed in the order they are
+  specified in this array.</p><div class="section" title="H.1.1.&nbsp;Filter Objects"><div class="titlepage"><div><div><h3 class="title"><a name="filter-object"></a>H.1.1.&nbsp;Filter Objects</h3></div></div></div><p>Filter objects are defined as follows.</p><div class="programlisting">
+{
+  <strong class="hl-string"><em style="color: #f58220">"pattern"</em></strong>: <em class="replaceable"><code>string</code></em>,
+  <strong class="hl-string"><em style="color: #f58220">"methods"</em></strong>: [ <em class="replaceable"><code>string</code></em>, ... ],
+  <strong class="hl-string"><em style="color: #f58220">"condition"</em></strong>: <em class="replaceable"><code>script object</code></em>,
+  <strong class="hl-string"><em style="color: #f58220">"onRequest"</em></strong>: <em class="replaceable"><code>script object</code></em>,
+  <strong class="hl-string"><em style="color: #f58220">"onResponse"</em></strong>: <em class="replaceable"><code>script object</code></em>,
+  <strong class="hl-string"><em style="color: #f58220">"onFailure"</em></strong>: <em class="replaceable"><code>script object</code></em>
+}</div><div class="variablelist"><dl><dt><span class="term">"pattern"</span></dt><dd><p>string, optional</p><p>Specifies a regular expression pattern matching the JSON pointer of
+      the object to trigger scripts. If not specified, all identifiers
+      (including <code class="literal">null</code>) match.</p></dd><dt><span class="term">"methods"</span></dt><dd><p>array of strings, optional</p><p>One or more methods for which the script(s) should be triggered.
+      Supported methods are: <code class="literal">"create"</code>,
+      <code class="literal">"read"</code>, <code class="literal">"update"</code>,
+      <code class="literal">"delete"</code>, <code class="literal">"patch"</code>,
+      <code class="literal">"query"</code>, <code class="literal">"action"</code>. If not specified,
+      then all methods are matched.</p></dd><dt><span class="term">"condition"</span></dt><dd><p>script object, optional</p><p>Specifies a script that is called first to determine if the script
+      should be triggered. If the condition yields <code class="literal">"true"</code>,
+      then the other script(s) are executed. If not specified, the script(s)
+      are called unconditionally.</p></dd><dt><span class="term">"onRequest"</span></dt><dd><p>script object, optional</p><p>Specifies a script to execute before the request is dispatched to
+      the resource. If the script throws an exception, the method is is not
+      performed, and a client error response is provided.</p></dd><dt><span class="term">"onResponse"</span></dt><dd><p>script object, optional</p><p>Specifies a script to execute after the request is successfully
+      dispatched to the resource and a response is returned. Throwing an
+      exception from this script does not undo the method already
+      performed.</p></dd><dt><span class="term">"onFailure"</span></dt><dd><p>script object, optional</p><p>Specifies a script to execute if the request resulted in an
+      exception being thrown. Throwing an exception from this script does not
+      undo the method already performed.</p></dd></dl></div></div><div class="section" title="H.1.2.&nbsp;Script Scope"><div class="titlepage"><div><div><h3 class="title"><a name="filter-script-scope"></a>H.1.2.&nbsp;Script Scope</h3></div></div></div><p>Scripts are provided with the following scope.</p><div class="programlisting">
+{
+  <strong class="hl-string"><em style="color: #f58220">"openidm"</em></strong>: openidm-functions object,
+  <strong class="hl-string"><em style="color: #f58220">"request"</em></strong>: resource-request object,
+  <strong class="hl-string"><em style="color: #f58220">"response"</em></strong>: resource-response object,
+  <strong class="hl-string"><em style="color: #f58220">"exception"</em></strong>: exception object
+}</div><div class="variablelist"><dl><dt><span class="term">"openidm"</span></dt><dd><p><span class="olink">openidm-functions</span>
+      object</p><p>Provides access to OpenIDM resources.</p></dd><dt><span class="term">"request"</span></dt><dd><p><a class="link" href="https://wikis.forgerock.org/confluence/display/json/resource-request" target="_blank">resource-request</a> object</p><p>The resource-request context, which has one or more parent context.
+      Provided in scope of <code class="literal">"condition"</code>,
+      <code class="literal">"onRequest"</code>, <code class="literal">"onResponse"</code> and
+      <code class="literal">"onException"</code> scripts.</p></dd><dt><span class="term">"response"</span></dt><dd><p><span class="olink">openidm-functions</span>
+      object</p><p>The response to the resource-request. Only provided in the scope of
+      the <code class="literal">"onResponse"</code> script.</p></dd><dt><span class="term">"exception"</span></dt><dd><p>exception object</p><p>The exception value that was thrown as a result of processing the
+      request. Only provided in the scope of the
+      <code class="literal">"onException"</code> script.</p></dd></dl></div><p>An exception object is defined as follows.</p><div class="programlisting">
+{
+  <strong class="hl-string"><em style="color: #f58220">"error"</em></strong>: integer,
+  <strong class="hl-string"><em style="color: #f58220">"reason"</em></strong>: string,
+  <strong class="hl-string"><em style="color: #f58220">"detail"</em></strong>: string
+}</div><div class="variablelist"><dl><dt><span class="term">"error"</span></dt><dd><p>integer</p><p>The numeric code of the exception.</p></dd><dt><span class="term">"reason"</span></dt><dd><p>string</p><p>The short reason phrase of the exception.</p></dd><dt><span class="term">"detail"</span></dt><dd><p>string</p><p>The detailed message for the exception.</p></dd></dl></div></div></div><div class="section" title="H.2.&nbsp;Example"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="router-example"></a>H.2.&nbsp;Example</h2></div></div></div><p>The following example executes a script after a managed user object is
+  created or updated.</p><div class="programlisting">
+{
+    <strong class="hl-string"><em style="color: #f58220">"filters"</em></strong>: [
+        {
+            <strong class="hl-string"><em style="color: #f58220">"pattern"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"^managed/user/.*"</em></strong>,
+            <strong class="hl-string"><em style="color: #f58220">"methods"</em></strong>: [
+                <strong class="hl-string"><em style="color: #f58220">"create"</em></strong>,
+                <strong class="hl-string"><em style="color: #f58220">"update"</em></strong>
+            ],
+            <strong class="hl-string"><em style="color: #f58220">"onResponse"</em></strong>: {
+                <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"text/javascript"</em></strong>,
+                <strong class="hl-string"><em style="color: #f58220">"file"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"scripts/afterUpdateUser.js"</em></strong>
+            }
+        }
+    ]
+}</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="appendix-scheduling.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="appendix-jetty.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Appendix&nbsp;G.&nbsp;Scheduler Reference&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="OpenIDM-Integrators-Guide.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Appendix&nbsp;I.&nbsp;Embedded Jetty Configuration</td></tr></table></div></body></html>

@@ -1,0 +1,88 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;1.&nbsp;Architectural Overview</title><link rel="stylesheet" type="text/css" href="css/coredoc.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><link rel="home" href="OpenIDM-Integrators-Guide.html" title="OpenIDM 2.0.2 Integrator's Guide"><link rel="up" href="OpenIDM-Integrators-Guide.html" title="OpenIDM 2.0.2 Integrator's Guide"><link rel="prev" href="preface.html" title="Preface"><link rel="next" href="chap-services.html" title="Chapter&nbsp;2.&nbsp;Starting &amp; Stopping OpenIDM"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script src="http://code.jquery.com/jquery.min.js"></script>
+<script>
+// On double-click, reformat <div class="screen"> for easy copying.
+$(document).ready(function() {
+  $(".screen").attr("title", "Double-click [-] to flatten lines.");
+  $(".screen").prepend('<img src="../images/minus.png" class="toggle">');
+});
+$(".screen").live("dblclick", function() {
+  $(this).replaceWith(
+    "<div class=\"flat\" title=\"Double-click [+] to wrap long lines.\">" +
+    $(this).html().replace(/minus\.png/,"plus.png").replace(/\n /g," ") + "\n<!--" + $(this).html() + "-->" +
+    "</div>");
+});
+$(".flat").live("dblclick", function() {
+  $(this).replaceWith(
+    "<div class=\"screen\" title=\"Double-click [-] to flatten lines.\">" +
+    $(this).html().replace(/(.|\n)+<!\-\-/m,"").replace(/\-\-\>/,"").replace(/plus\.png/,"minus.png") +
+    "</div>");
+});
+</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head ><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;1.&nbsp;Architectural Overview</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="preface.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-services.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;1.&nbsp;Architectural Overview"><div class="titlepage"><div><div><h2 class="title"><a name="chap-overview"></a>Chapter&nbsp;1.&nbsp;Architectural Overview</h2></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="section"><a href="chap-overview.html#openidm-modular-framework">1.1. OpenIDM Modular Framework</a></span></dt><dt><span class="section"><a href="chap-overview.html#openidm-infrastructure-modules">1.2. Infrastructure Modules</a></span></dt><dt><span class="section"><a href="chap-overview.html#openidm-core-services">1.3. Core Services</a></span></dt><dt><span class="section"><a href="chap-overview.html#openidm-access-layer">1.4. Access Layer</a></span></dt></dl></div><a class="indexterm" name="d155e218"></a><p>The following figure provides an overview of the OpenIDM architecture,
+  which is covered in more detail in subsequent sections of this chapter.</p><div class="mediaobject" title="OpenIDM architecture"><a name="figure-openidm2-architecture"></a><img src="images/openidm2-architecture.png" longdesc="/Users/mark/Documents/workspace/openidm/target/docbkx/html/integrators-guide/OpenIDM-Integrators-Guide/figure-openidm2-architecture.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-openidm2-architecture.html" target="longdesc">D</a>]</span></div></div><div class="section" title="1.1.&nbsp;OpenIDM Modular Framework"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="openidm-modular-framework"></a>1.1.&nbsp;OpenIDM Modular Framework</h2></div></div></div><div class="variablelist"><p>The OpenIDM framework is based on OSGi.</p><dl><dt><span class="term">OSGi</span></dt><dd><p>OSGi is a module system and service platform for the Java
+       programming language that implements a complete and dynamic component
+       model. For a good introduction, see the <a class="link" href="http://www.osgi.org/About/WhyOSGi" target="_blank">OSGi</a> site.
+       While OpenIDM services are designed to run in any OSGi container,
+       OpenIDM currently runs in <a class="link" href="http://felix.apache.org/site/index.html" target="_blank">Apache
+       Felix</a>.</p></dd><dt><span class="term">Servlet</span></dt><dd><p>The optional Servlet layer provides RESTful HTTP access to the
+       managed objects and services. While the Servlet layer can be provided by
+       many different engines, OpenIDM embeds Jetty by default.</p></dd></dl></div></div><div class="section" title="1.2.&nbsp;Infrastructure Modules"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="openidm-infrastructure-modules"></a>1.2.&nbsp;Infrastructure Modules</h2></div></div></div><div class="variablelist"><p>OpenIDM infrastructure modules provide the underlying features
+     needed for core services.</p><dl><dt><span class="term">Scheduler</span></dt><dd><p>The scheduler provides a <span class="command"><strong>cron</strong></span>-like scheduling
+       component implemented using the <a class="link" href="http://www.quartz-scheduler.org" target="_blank">Quartz library</a>. Use
+       the scheduler, for example, to enable regular synchronizations and
+       reconciliations.</p><p>See the <span class="olink"><em class="citetitle">Scheduling Synchronization</em></span> chapter
+       for details.</p></dd><dt><span class="term">Script Engine</span></dt><dd><p>The script engine is a pluggable module that provides the triggers
+       and plugin points for OpenIDM. OpenIDM currently implements a JavaScript
+       engine.</p></dd><dt><span class="term">Audit Logging</span></dt><dd><p>Auditing logs all relevant system activity to the configured
+       log stores. This includes the data from reconciliation as a basis for
+       reporting, as well as detailed activity logs to capture operations on
+       the internal (managed) and external (system) objects.</p><p>See the <span class="olink"><em class="citetitle">Using Audit
+       Logs</em></span> chapter for details.</p></dd><dt><span class="term">Repository</span></dt><dd><p>The repository provides a common abstraction for a pluggable
+       persistence layer. OpenIDM 2.0.2 supports use
+       of MySQL to back the repository. Yet, plugin repositories can include
+       NoSQL and relational databases, LDAP, and even flat files. The
+       repository API operates using a JSON-based object model with RESTful
+       principles consistent with the other OpenIDM services. The default,
+       embedded implementation for the repository is the NoSQL database
+       OrientDB, making it easy to evaluate OpenIDM out of the box before
+       using MySQL in your production environment.</p></dd></dl></div></div><div class="section" title="1.3.&nbsp;Core Services"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="openidm-core-services"></a>1.3.&nbsp;Core Services</h2></div></div></div><div class="variablelist"><p>The core services are the heart of the OpenIDM resource oriented
+     unified object model and architecture.</p><dl><dt><span class="term">Object Model</span></dt><dd><p>Artifacts handled by OpenIDM are Java object representations of
+       the JavaScript object model as defined by JSON. The object model supports
+       interoperability and potential integration with many applications,
+       services and programming languages. As OpenIDM is a Java-based product,
+       these representations are instances of classes: <code class="literal">Map</code>,
+       <code class="literal">List</code>, <code class="literal">String</code>,
+       <code class="literal">Number</code>, <code class="literal">Boolean</code>, and
+       <code class="literal">null</code>.</p><p>OpenIDM can serialize and deserialize these structures to and from
+       JSON as required. OpenIDM also exposes a set of triggers and functions
+       that system administrators can define in JavaScript which can natively
+       read and modify these JSON-based object model structures. OpenIDM is
+       designed to support other scripting and programming languages.</p></dd><dt><span class="term">Managed Objects</span></dt><dd><a class="indexterm" name="d155e339"></a><p>A <em class="firstterm">managed object</em> is an object that
+       represents the identity-related data managed by OpenIDM. Managed objects
+       are configurable, JSON-based data structures OpenIDM stores in its
+       pluggable repository. While the default configuration of managed objects
+       is that of a user, any object may be defined through
+       configuration.</p></dd><dt><span class="term">System Objects</span></dt><dd><a class="indexterm" name="d155e353"></a><p><em class="firstterm">System objects</em> are pluggable representations
+       of objects on external systems. They follow the same RESTful resource
+       based design principles as managed objects. There is a default
+       implementation for the OpenICF framework, which allows any connector
+       object to be represented as a system object.</p></dd><dt><span class="term">Mappings</span></dt><dd><a class="indexterm" name="d155e366"></a><p><em class="firstterm">Mappings</em>
+       define policies between source and target objects and their attributes
+       during synchronization and reconciliation. Mappings can also define
+       triggers for validation, customization, filtering, and transformation
+       of source and target objects.</p><p>See the <span class="olink"><em class="citetitle">Configuring Synchronization</em></span> chapter for
+       details.</p></dd><dt><span class="term">Synchronization &amp; Reconciliation</span></dt><dd><a class="indexterm" name="d155e383"></a><a class="indexterm" name="d155e386"></a><p><em class="firstterm">Reconciliation</em> provides for on-demand and
+       scheduled resource comparisons between the OpenIDM managed object
+       repository and source or target systems. Comparisons can result in
+       different actions depending on the mappings defined between the
+       systems.</p><p>Synchronization provides for creating, updating, and deleting
+       resources from a source to a target system either on demand or according
+       to a schedule.</p><p>See the <span class="olink"><em class="citetitle">Configuring Synchronization</em></span> chapter for
+       details.</p></dd></dl></div></div><div class="section" title="1.4.&nbsp;Access Layer"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="openidm-access-layer"></a>1.4.&nbsp;Access Layer</h2></div></div></div><div class="variablelist"><p>The access layer provides the user interfaces and public APIs for
+     accessing and managing the OpenIDM repository and its functions.</p><dl><dt><span class="term">RESTful Interfaces</span></dt><dd><p>OpenIDM provides REST APIs for CRUD operations and invoking
+       synchronization and reconciliation for both HTTP and Java.</p><p>See the <span class="olink"><em class="citetitle">REST
+       API Reference</em></span> appendix for details.</p></dd><dt><span class="term">User Interfaces</span></dt><dd><p>User interfaces provide password management, registration,
+       self-service, and workflow services.</p></dd></dl></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="preface.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-services.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Preface&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="OpenIDM-Integrators-Guide.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;2.&nbsp;Starting &amp; Stopping OpenIDM</td></tr></table></div></body></html>

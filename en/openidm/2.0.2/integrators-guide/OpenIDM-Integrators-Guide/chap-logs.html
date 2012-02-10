@@ -1,0 +1,39 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;4.&nbsp;Configuring Server Logs</title><link rel="stylesheet" type="text/css" href="css/coredoc.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><link rel="home" href="OpenIDM-Integrators-Guide.html" title="OpenIDM 2.0.2 Integrator's Guide"><link rel="up" href="OpenIDM-Integrators-Guide.html" title="OpenIDM 2.0.2 Integrator's Guide"><link rel="prev" href="chap-configuration.html" title="Chapter&nbsp;3.&nbsp;Configuration Options"><link rel="next" href="chap-resource-conf.html" title="Chapter&nbsp;5.&nbsp;Connecting to External Resources"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script src="http://code.jquery.com/jquery.min.js"></script>
+<script>
+// On double-click, reformat <div class="screen"> for easy copying.
+$(document).ready(function() {
+  $(".screen").attr("title", "Double-click [-] to flatten lines.");
+  $(".screen").prepend('<img src="../images/minus.png" class="toggle">');
+});
+$(".screen").live("dblclick", function() {
+  $(this).replaceWith(
+    "<div class=\"flat\" title=\"Double-click [+] to wrap long lines.\">" +
+    $(this).html().replace(/minus\.png/,"plus.png").replace(/\n /g," ") + "\n<!--" + $(this).html() + "-->" +
+    "</div>");
+});
+$(".flat").live("dblclick", function() {
+  $(this).replaceWith(
+    "<div class=\"screen\" title=\"Double-click [-] to flatten lines.\">" +
+    $(this).html().replace(/(.|\n)+<!\-\-/m,"").replace(/\-\-\>/,"").replace(/plus\.png/,"minus.png") +
+    "</div>");
+});
+</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head ><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;4.&nbsp;Configuring Server Logs</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-configuration.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-resource-conf.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;4.&nbsp;Configuring Server Logs"><div class="titlepage"><div><div><h2 class="title"><a name="chap-logs"></a>Chapter&nbsp;4.&nbsp;Configuring Server Logs</h2></div></div></div><a class="indexterm" name="d155e811"></a><p>This chapter briefly describes server logging. For audit information,
+ see the chapter on <span class="olink"><em class="citetitle">Using Audit
+ Logs</em></span>.</p><p>You can configure logging by editing the
+ <code class="filename">openidm/conf/logging.properties</code> file in
+ OpenIDM.</p><p>The default configuration writes log messages in simple format to
+ <code class="filename">openidm/logs/openidm*.log</code> files, rotating files when
+ the size reaches 5 MB, and retaining up to 5 files. Also by default,
+ OpenIDM writes all system and custom log messages to the files.</p><p>You can update the configuration to attach loggers to individual
+ packages, setting the log level to using the following values.</p><div class="programlisting">
+SEVERE (highest value)
+WARNING
+INFO
+CONFIG
+FINE
+FINER
+FINEST (lowest value)</div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-configuration.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-resource-conf.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;3.&nbsp;Configuration Options&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="OpenIDM-Integrators-Guide.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;5.&nbsp;Connecting to External Resources</td></tr></table></div></body></html>

@@ -1,0 +1,69 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;13.&nbsp;Sending Email</title><link rel="stylesheet" type="text/css" href="css/coredoc.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><link rel="home" href="OpenIDM-Integrators-Guide.html" title="OpenIDM 2.0.2 Integrator's Guide"><link rel="up" href="OpenIDM-Integrators-Guide.html" title="OpenIDM 2.0.2 Integrator's Guide"><link rel="prev" href="chap-auditing.html" title="Chapter&nbsp;12.&nbsp;Using Audit Logs"><link rel="next" href="chap-best-practices.html" title="Chapter&nbsp;14.&nbsp;OpenIDM Project Best Practices"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script src="http://code.jquery.com/jquery.min.js"></script>
+<script>
+// On double-click, reformat <div class="screen"> for easy copying.
+$(document).ready(function() {
+  $(".screen").attr("title", "Double-click [-] to flatten lines.");
+  $(".screen").prepend('<img src="../images/minus.png" class="toggle">');
+});
+$(".screen").live("dblclick", function() {
+  $(this).replaceWith(
+    "<div class=\"flat\" title=\"Double-click [+] to wrap long lines.\">" +
+    $(this).html().replace(/minus\.png/,"plus.png").replace(/\n /g," ") + "\n<!--" + $(this).html() + "-->" +
+    "</div>");
+});
+$(".flat").live("dblclick", function() {
+  $(this).replaceWith(
+    "<div class=\"screen\" title=\"Double-click [-] to flatten lines.\">" +
+    $(this).html().replace(/(.|\n)+<!\-\-/m,"").replace(/\-\-\>/,"").replace(/plus\.png/,"minus.png") +
+    "</div>");
+});
+</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head ><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;13.&nbsp;Sending Email</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-auditing.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-best-practices.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;13.&nbsp;Sending Email"><div class="titlepage"><div><div><h2 class="title"><a name="chap-mail"></a>Chapter&nbsp;13.&nbsp;Sending Email</h2></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="section"><a href="chap-mail.html#send-mail-rest">13.1. Sending Mail Over REST</a></span></dt><dt><span class="section"><a href="chap-mail.html#send-mail-script">13.2. Sending Mail From a Script</a></span></dt></dl></div><a class="indexterm" name="d155e5427"></a><a class="indexterm" name="d155e5432"></a><p>This chapter shows you how to configure the outbound email service, so
+ that you can send email through OpenIDM either by script or through the REST
+ API.</p><div class="procedure" title="Procedure&nbsp;13.1.&nbsp;To Set Up Outbound Email"><a name="setup-outbound-email"></a><div class="procedure-title">Procedure&nbsp;13.1.&nbsp;To Set Up Outbound Email</div><p>The outbound email service relies on a configuration object to identify
+  the email account used to send messages.</p><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Shut down OpenIDM.</p></li><li class="step" title="Step 2"><p>Copy the sample configuration to
+   <code class="filename">openidm/conf</code>.</p><div class="screen">$ cd /path/to/openidm/
+$ cp samples/misc/external.email.json conf/</div></li><li class="step" title="Step 3"><p>Edit <code class="filename">external.email.json</code> to reflect the
+   account used to send messages.</p><div class="programlisting">
+{
+        <strong class="hl-string"><em style="color: #f58220">"host"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"smtp.example.com"</em></strong>,
+        <strong class="hl-string"><em style="color: #f58220">"port"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"25"</em></strong>,
+        <strong class="hl-string"><em style="color: #f58220">"username"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"openidm"</em></strong>,
+        <strong class="hl-string"><em style="color: #f58220">"password"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"secret12"</em></strong>,
+        <strong class="hl-string"><em style="color: #f58220">"mail.smtp.auth"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"true"</em></strong>,
+        <strong class="hl-string"><em style="color: #f58220">"mail.smtp.starttls.enable"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"true"</em></strong>
+}</div><p>OpenIDM encrypts the password you provide.</p><div class="variablelist"><p>Follow these hints when editing the configuration.</p><dl><dt><span class="term"><code class="literal">"host"</code></span></dt><dd><p>SMTP server host name or IP address. This can be
+      <code class="literal">"localhost"</code> if the server is on the same system as
+      OpenIDM.</p></dd><dt><span class="term"><code class="literal">"port"</code></span></dt><dd><p>SMTP server port number such as 25, or 587</p></dd><dt><span class="term"><code class="literal">"username"</code></span></dt><dd><p>Mail account user name needed when <code class="literal">"mail.smtp.auth" :
+      "true"</code></p></dd><dt><span class="term"><code class="literal">"password"</code></span></dt><dd><p>Mail account user password needed when <code class="literal">"mail.smtp.auth" :
+      "true"</code></p></dd><dt><span class="term"><code class="literal">"mail.smtp.auth"</code></span></dt><dd><p>If <code class="literal">"true"</code>, use SMTP authentication</p></dd><dt><span class="term"><code class="literal">"mail.smtp.starttls.enable"</code></span></dt><dd><p>If <code class="literal">"true"</code>, use TLS</p></dd><dt><span class="term"><code class="literal">"from"</code></span></dt><dd><p>Optional default <code class="literal">From:</code> address</p></dd></dl></div></li><li class="step" title="Step 4"><p>Start up OpenIDM.</p></li><li class="step" title="Step 5"><p>Check that the email service is active.</p><div class="screen">-&gt; scr list
+...
+[   6] [active       ] org.forgerock.openidm.external.email
+...</div></li></ol></div><div class="section" title="13.1.&nbsp;Sending Mail Over REST"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="send-mail-rest"></a>13.1.&nbsp;Sending Mail Over REST</h2></div></div></div><p>Although you are more likely to send mail from a script in production,
+  you can send email using the REST API by sending an HTTP POST to
+  <code class="literal">/openam/external/email</code> in order to test that your
+  configuration works. You pass the message parameters as POST parameters,
+  URL encoding the content as necessary.</p><p>The following example sends a test email using the REST API.</p><div class="screen">$ curl
+ --header "X-OpenIDM-Username: openidm-admin"
+ --header "X-OpenIDM-Password: openidm-admin"
+ --request POST
+ "http://localhost:8080/openidm/external/email?
+ _from=openidm@example.com&amp;_to=admin@example.com&amp;
+ _subject=Test&amp;_body=Test"</div></div><div class="section" title="13.2.&nbsp;Sending Mail From a Script"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="send-mail-script"></a>13.2.&nbsp;Sending Mail From a Script</h2></div></div></div><p>You can send email from using the resource API <span class="olink">functions</span> with
+  the <code class="literal">external/email</code> context, as in the following
+  example, where <code class="literal">params</code> is an object containing the
+  POST parameters.</p><div class="programlisting">
+<strong class="hl-keyword">var</strong> params =  <strong class="hl-keyword">new</strong> <strong class="hl-keyword">Object</strong>();
+params._from = <strong class="hl-string"><em style="color: #f58220">"openidm@example.com"</em></strong>;
+params._to = <strong class="hl-string"><em style="color: #f58220">"admin@example.com"</em></strong>;
+params._cc = <strong class="hl-string"><em style="color: #f58220">"wally@example.com,dilbert@example.com"</em></strong>;
+params._subject = <strong class="hl-string"><em style="color: #f58220">"OpenIDM recon report"</em></strong>;
+params._type = <strong class="hl-string"><em style="color: #f58220">"text/html"</em></strong>;
+params._body = <strong class="hl-string"><em style="color: #f58220">"&lt;html&gt;&lt;body&gt;&lt;p&gt;Recon report follows...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;"</em></strong>;
+
+openidm.action(<strong class="hl-string"><em style="color: #f58220">"external/email"</em></strong>, params);</div><div class="variablelist"><p>OpenIDM supports the following POST parameters.</p><dl><dt><span class="term"><code class="literal">_from</code></span></dt><dd><p>Sender mail address</p></dd><dt><span class="term"><code class="literal">_to</code></span></dt><dd><p>Comma-separated list of recipient mail addresses</p></dd><dt><span class="term"><code class="literal">_cc</code></span></dt><dd><p>Optional comma-separated list of copy recipient mail addresses</p></dd><dt><span class="term"><code class="literal">_bcc</code></span></dt><dd><p>Optional comma-separated list of blind copy recipient mail
+     addresses</p></dd><dt><span class="term"><code class="literal">_subject</code></span></dt><dd><p>Email subject</p></dd><dt><span class="term"><code class="literal">_body</code></span></dt><dd><p>Email body text</p></dd><dt><span class="term"><code class="literal">_type</code></span></dt><dd><p>Optional MIME type. One of <code class="literal">"text/plain"</code>,
+     <code class="literal">"text/html"</code>, or <code class="literal">"text/xml"</code>.</p></dd></dl></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-auditing.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-best-practices.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;12.&nbsp;Using Audit Logs&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="OpenIDM-Integrators-Guide.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;14.&nbsp;OpenIDM Project Best Practices</td></tr></table></div></body></html>

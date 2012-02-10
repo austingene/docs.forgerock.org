@@ -1,0 +1,31 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Appendix&nbsp;B.&nbsp;Ports Used</title><link rel="stylesheet" type="text/css" href="css/coredoc.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><link rel="home" href="OpenIDM-Integrators-Guide.html" title="OpenIDM 2.0.2 Integrator's Guide"><link rel="up" href="OpenIDM-Integrators-Guide.html" title="OpenIDM 2.0.2 Integrator's Guide"><link rel="prev" href="appendix-file-layout.html" title="Appendix&nbsp;A.&nbsp;File Layout"><link rel="next" href="appendix-objects.html" title="Appendix&nbsp;C.&nbsp;Data Models &amp; Objects Reference"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script src="http://code.jquery.com/jquery.min.js"></script>
+<script>
+// On double-click, reformat <div class="screen"> for easy copying.
+$(document).ready(function() {
+  $(".screen").attr("title", "Double-click [-] to flatten lines.");
+  $(".screen").prepend('<img src="../images/minus.png" class="toggle">');
+});
+$(".screen").live("dblclick", function() {
+  $(this).replaceWith(
+    "<div class=\"flat\" title=\"Double-click [+] to wrap long lines.\">" +
+    $(this).html().replace(/minus\.png/,"plus.png").replace(/\n /g," ") + "\n<!--" + $(this).html() + "-->" +
+    "</div>");
+});
+$(".flat").live("dblclick", function() {
+  $(this).replaceWith(
+    "<div class=\"screen\" title=\"Double-click [-] to flatten lines.\">" +
+    $(this).html().replace(/(.|\n)+<!\-\-/m,"").replace(/\-\-\>/,"").replace(/plus\.png/,"minus.png") +
+    "</div>");
+});
+</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head ><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Appendix&nbsp;B.&nbsp;Ports Used</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="appendix-file-layout.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="appendix-objects.html">Next</a></td></tr></table><hr></div><div lang="en" class="appendix" title="Appendix&nbsp;B.&nbsp;Ports Used"><div class="titlepage"><div><div><h2 class="title"><a name="appendix-ports-used"></a>Appendix&nbsp;B.&nbsp;Ports Used</h2></div></div></div><div class="variablelist"><p>By default the OpenIDM 2.0.2 Jetty configuration
+  in <code class="filename">openidm/conf/jetty.xml</code> specifies the following
+  ports.</p><dl><dt><span class="term"><code class="literal">8080</code></span></dt><dd><a class="indexterm" name="d155e6245"></a><p>HTTP access to the REST API, requiring OpenIDM authentication. This
+    port is not secure, exposing clear text passwords and all data that is not
+    encrypted. This port is therefore not suitable for production use.</p></dd><dt><span class="term"><code class="literal">8443</code></span></dt><dd><a class="indexterm" name="d155e6257"></a><p>HTTPS access to the REST API, requiring OpenIDM authentication</p></dd><dt><span class="term"><code class="literal">8444</code></span></dt><dd><a class="indexterm" name="d155e6269"></a><p>HTTPS access to the REST API, requiring SSL mutual authentication.
+    Clients presenting certificates found in the trust store under
+    <code class="filename">openidm/security/</code> are granted access to the
+    system.</p></dd></dl></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="appendix-file-layout.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="appendix-objects.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Appendix&nbsp;A.&nbsp;File Layout&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="OpenIDM-Integrators-Guide.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Appendix&nbsp;C.&nbsp;Data Models &amp; Objects Reference</td></tr></table></div></body></html>

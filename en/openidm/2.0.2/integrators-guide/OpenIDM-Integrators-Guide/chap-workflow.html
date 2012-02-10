@@ -1,0 +1,395 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;11.&nbsp;Integrating Business Processes &amp; Workflow</title><link rel="stylesheet" type="text/css" href="css/coredoc.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><link rel="home" href="OpenIDM-Integrators-Guide.html" title="OpenIDM 2.0.2 Integrator's Guide"><link rel="up" href="OpenIDM-Integrators-Guide.html" title="OpenIDM 2.0.2 Integrator's Guide"><link rel="prev" href="chap-security.html" title="Chapter&nbsp;10.&nbsp;Securing &amp; Hardening OpenIDM"><link rel="next" href="chap-auditing.html" title="Chapter&nbsp;12.&nbsp;Using Audit Logs"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script src="http://code.jquery.com/jquery.min.js"></script>
+<script>
+// On double-click, reformat <div class="screen"> for easy copying.
+$(document).ready(function() {
+  $(".screen").attr("title", "Double-click [-] to flatten lines.");
+  $(".screen").prepend('<img src="../images/minus.png" class="toggle">');
+});
+$(".screen").live("dblclick", function() {
+  $(this).replaceWith(
+    "<div class=\"flat\" title=\"Double-click [+] to wrap long lines.\">" +
+    $(this).html().replace(/minus\.png/,"plus.png").replace(/\n /g," ") + "\n<!--" + $(this).html() + "-->" +
+    "</div>");
+});
+$(".flat").live("dblclick", function() {
+  $(this).replaceWith(
+    "<div class=\"screen\" title=\"Double-click [-] to flatten lines.\">" +
+    $(this).html().replace(/(.|\n)+<!\-\-/m,"").replace(/\-\-\>/,"").replace(/plus\.png/,"minus.png") +
+    "</div>");
+});
+</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head ><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;11.&nbsp;Integrating Business Processes &amp; Workflow</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-security.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-auditing.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;11.&nbsp;Integrating Business Processes &amp; Workflow"><div class="titlepage"><div><div><h2 class="title"><a name="chap-workflow"></a>Chapter&nbsp;11.&nbsp;Integrating Business Processes &amp; Workflow</h2></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="section"><a href="chap-workflow.html#about-bmpm-2-activiti">11.1. About BPMN 2.0 &amp; Activity Tools</a></span></dt><dt><span class="section"><a href="chap-workflow.html#openidm-activity-limitations">11.2. Known Issues &amp; Limitations</a></span></dt><dt><span class="section"><a href="chap-workflow.html#invoking-activiti-workflows">11.3. Invoking Activiti Workflows</a></span></dt><dt><span class="section"><a href="chap-workflow.html#sample-activiti-workflows">11.4. Example Activiti Workflows With OpenIDM</a></span></dt></dl></div><a class="indexterm" name="d155e4612"></a><a class="indexterm" name="d155e4615"></a><p>Key to any identity management solution is the ability to provide
+ workflow driven provisioning activities, whether for self-service actions
+ such as request for entitlements, roles or resources, running sunrise or
+ sunset processes, handling approvals with escalations, or performing
+ maintenance.</p><p>OpenIDM provides an embedded workflow and business process engine
+ based on Activiti and the Business Process Model and Notation (BPMN) 2.0
+ standard.</p><div class="note" title="Note" style="font-style: italic;"><h3 class="title">Note</h3><p>The embedded workflow and business process engine is currently
+  provided as part of a separate, experimental download, the OpenIDM
+  2.1.0-SNAPSHOT Experimental Nightly build available
+  from the <a class="link" href="http://www.forgerock.org/openidm.html" target="_blank">download page</a>.</p><p>You install the experimental download in the same way as standard
+  OpenIDM. See the <span class="olink"><em class="citetitle">Installation
+  Guide</em></span> for instructions. After starting OpenIDM, run
+  the <span class="command"><strong>scr list</strong></span> command at the console, and check that the 
+  bundle is active.</p><div class="screen">-&gt; scr list
+...
+[  14] [active       ] org.forgerock.openidm.workflow.activiti
+...</div><p>Contact ForgeRock at <a class="link" href="mailto:info@forgerock.com" target="_top">info@forgerock.com</a> for details on support for the experimental
+  embedded workflow and business process engine.</p></div><p>More information about Activiti and the Activiti project can be found
+ at <a class="link" href="http://www.activiti.org" target="_blank">http://www.activiti.org</a>.</p><div class="section" title="11.1.&nbsp;About BPMN 2.0 &amp; Activity Tools"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="about-bmpm-2-activiti"></a>11.1.&nbsp;About BPMN 2.0 &amp; Activity Tools</h2></div></div></div><p>Business Process Model and Notation 2.0 is the result of consensus
+  among Business Process Management (BPM) system vendors. The <a class="link" href="http://omg.org/" target="_blank">Object Management Group</a>
+  (OMG) has developed and maintained the <a class="link" href="http://www.omg.org/spec/BPMN/" target="_blank">BPMN</a> standard since
+  2004.</p><p>The first version of the BPMN specification focused only on graphical
+  notation, and quickly became popular with the business analyst audience.
+  BPMN 1.x defines how constructs such as human tasks, executable scripts, and
+  automated decisions are visualized in a vendor-neutral, standard way. The
+  second version of BPMN extends that focus to include execution semantics,
+  and a common exchange format. Thus, BPMN 2.0 process definition models
+  can be exchanged not only between different graphical editors, but also
+  can be executed as is on any BPMN 2.0-compliant engine, such as the engine
+  embedded in OpenIDM.</p><p>Using BMPN 2.0, you can add artifacts describing workflow and business
+  process behavior to OpenIDM for provisioning and other purposes. For example,
+  you can craft the actual artifacts defining business processes and workflow
+  in a text editor such as <span class="command"><strong>vi</strong></span>, or using a special Eclipse
+  plugin. The Eclipse plugin provides visual design capabilities, simplifying
+  packaging and deployment of the artifact to OpenIDM. See the <a class="link" href="http://docs.codehaus.org/display/ACT/Activiti+BPMN+2.0+Eclipse+Plugin" target="_blank">Activiti BPMN 2.0 Eclipse Plugin</a> documentation for
+  instructions on installing Activiti Eclipse BPMN 2.0 Designer.</p><p>Also read the Activiti <em class="citetitle">User Guide</em> section
+  covering <a class="link" href="http://www.activiti.org/userguide/#bpmnConstructs" target="_blank"><em class="citetitle">BPMN 2.0 Constructs</em></a>, which
+  describes in detail the graphical notations and XML representations for
+  events, flows, gateways, tasks, and process constructs.</p></div><div class="section" title="11.2.&nbsp;Known Issues &amp; Limitations"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="openidm-activity-limitations"></a>11.2.&nbsp;Known Issues &amp; Limitations</h2></div></div></div><div class="itemizedlist"><p>The following are known issues and limitation for the experimental
+   embedded workflow and business process engine.</p><ul class="itemizedlist" type="disc"><li class="listitem"><p>OpenIDM does not include a form generator, making it difficult to
+    include embedded forms (OPENIDM-468).</p></li><li class="listitem"><p>Error handling needs improvement.</p></li><li class="listitem"><p>This version depends on Activiti 5.8, which does not have the fix
+    for <a class="link" href="http://jira.codehaus.org/browse/ACT-583" target="_blank">ACT-583</a>: Processes are not found in the .bar file
+    if they are below root.</p><p>To work around this issue, create a directory inside the .bar, and
+    put the BPMN XML artifact in the directory so that it is properly picked up
+    by the Process Engine.</p></li></ul></div></div><div class="section" title="11.3.&nbsp;Invoking Activiti Workflows"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="invoking-activiti-workflows"></a>11.3.&nbsp;Invoking Activiti Workflows</h2></div></div></div><p>You can invoke workflows and business processes from any trigger point
+  OpenIDM offers, including reacting to situations discovered during
+  reconciliation. Invocation relies on the <code class="literal">openidm.action()</code>
+  function.</p><div class="programlisting">
+<em class="hl-comment" style="color: #868686">/*
+ * Calling 'myWorkflow' workflow
+ */</em>
+<strong class="hl-keyword">var</strong> map = {    
+ <strong class="hl-string"><em style="color: #f58220">"_action"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"myWorkflow"</em></strong>,
+ <strong class="hl-string"><em style="color: #f58220">"_workflowParams"</em></strong> : {
+    <strong class="hl-string"><em style="color: #f58220">"foo"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"bar"</em></strong>
+  }
+};
+
+openidm.action(<strong class="hl-string"><em style="color: #f58220">"workflow/activiti"</em></strong>, map);</div></div><div class="section" title="11.4.&nbsp;Example Activiti Workflows With OpenIDM"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="sample-activiti-workflows"></a>11.4.&nbsp;Example Activiti Workflows With OpenIDM</h2></div></div></div><p>This section describes two example workflows, one using email
+  notification, the other involving a sunset process triggered during
+  reconciliation.</p><div class="section" title="11.4.1.&nbsp;Example Email Notification Workflow"><div class="titlepage"><div><div><h3 class="title"><a name="example-activiti-email-notification-flow"></a>11.4.1.&nbsp;Example Email Notification Workflow</h3></div></div></div><p>This example uses the Activiti Eclipse BPMN 2.0 Designer to set up an
+   email notification business process. The example relies on an SMTP server
+   listening on <code class="literal">localhost</code>, port 25.</p><div class="variablelist"><p>The example sets up a workflow that can accept parameters used to
+    specify the sender and recipient of the mail.</p><dl><dt><span class="term"><code class="literal">${fromSender}</code></span></dt><dd><p>Used to specify the sender</p></dd><dt><span class="term"><code class="literal">${toEmail}</code></span></dt><dd><p>Used to specify the recipient</p></dd></dl></div><p>Once you have defined the workflow, drag and drop components to create
+   the workflow. This simple example uses only a
+   <code class="literal">StartEvent</code>, <code class="literal">MailTask</code>, and
+   <code class="literal">EndEvent</code>.</p><div class="mediaobject" title="Email notification process"><a name="figure-bpmn-email-notification"></a><img src="images/bpmn-email-notification.png" longdesc="/Users/mark/Documents/workspace/openidm/target/docbkx/html/integrators-guide/OpenIDM-Integrators-Guide/figure-bpmn-email-notification.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-bpmn-email-notification.html" target="longdesc">D</a>]</span></div></div><p>After creating the workflow, adjust the generated XML source code to
+   use the variables inside the <code class="literal">&lt;serviceTask&gt;</code>
+   tag shown in the following listing.</p><div class="programlisting">
+<span class="hl-directive" style="color: #868686">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<strong class="hl-tag" style="color: #f58220">&lt;definitions</strong>
+ <span class="hl-attribute" style="color: #868686">xmlns</span>=<span class="hl-value" style="color: #333">"http://www.omg.org/spec/BPMN/20100524/MODEL"</span>
+ <span class="hl-attribute" style="color: #868686">xmlns:xsi</span>=<span class="hl-value" style="color: #333">"http://www.w3.org/2001/XMLSchema-instance"</span>
+ <span class="hl-attribute" style="color: #868686">xmlns:activiti</span>=<span class="hl-value" style="color: #333">"http://activiti.org/bpmn"</span>
+ <span class="hl-attribute" style="color: #868686">xmlns:bpmndi</span>=<span class="hl-value" style="color: #333">"http://www.omg.org/spec/BPMN/20100524/DI"</span>
+ <span class="hl-attribute" style="color: #868686">xmlns:omgdc</span>=<span class="hl-value" style="color: #333">"http://www.omg.org/spec/DD/20100524/DC"</span>
+ <span class="hl-attribute" style="color: #868686">xmlns:omgdi</span>=<span class="hl-value" style="color: #333">"http://www.omg.org/spec/DD/20100524/DI"</span>
+ <span class="hl-attribute" style="color: #868686">typeLanguage</span>=<span class="hl-value" style="color: #333">"http://www.w3.org/2001/XMLSchema"</span>
+ <span class="hl-attribute" style="color: #868686">expressionLanguage</span>=<span class="hl-value" style="color: #333">"http://www.w3.org/1999/XPath"</span>
+ <span class="hl-attribute" style="color: #868686">targetNamespace</span>=<span class="hl-value" style="color: #333">"http://www.activiti.org/test"</span><strong class="hl-tag" style="color: #f58220">&gt;</strong>
+ <strong class="hl-tag" style="color: #f58220">&lt;process</strong> <span class="hl-attribute" style="color: #868686">id</span>=<span class="hl-value" style="color: #333">"EmailNotification"</span> <span class="hl-attribute" style="color: #868686">name</span>=<span class="hl-value" style="color: #333">"emailNotification"</span><strong class="hl-tag" style="color: #f58220">&gt;</strong>
+   <strong class="hl-tag" style="color: #f58220">&lt;documentation&gt;</strong>Simple Email Notification Task<strong class="hl-tag" style="color: #f58220">&lt;/documentation&gt;</strong>
+   <strong class="hl-tag" style="color: #f58220">&lt;startEvent</strong> <span class="hl-attribute" style="color: #868686">id</span>=<span class="hl-value" style="color: #333">"startevent1"</span> <span class="hl-attribute" style="color: #868686">name</span>=<span class="hl-value" style="color: #333">"Start"</span><strong class="hl-tag" style="color: #f58220">&gt;</strong><strong class="hl-tag" style="color: #f58220">&lt;/startEvent&gt;</strong>
+   <strong class="hl-tag" style="color: #f58220">&lt;sequenceFlow</strong> <span class="hl-attribute" style="color: #868686">id</span>=<span class="hl-value" style="color: #333">"flow1"</span> <span class="hl-attribute" style="color: #868686">name</span>=<span class="hl-value" style="color: #333">""</span> <span class="hl-attribute" style="color: #868686">sourceRef</span>=<span class="hl-value" style="color: #333">"startevent1"</span>
+     <span class="hl-attribute" style="color: #868686">targetRef</span>=<span class="hl-value" style="color: #333">"mailtask1"</span><strong class="hl-tag" style="color: #f58220">&gt;</strong><strong class="hl-tag" style="color: #f58220">&lt;/sequenceFlow&gt;</strong>
+   <strong class="hl-tag" style="color: #f58220">&lt;endEvent</strong> <span class="hl-attribute" style="color: #868686">id</span>=<span class="hl-value" style="color: #333">"endevent1"</span> <span class="hl-attribute" style="color: #868686">name</span>=<span class="hl-value" style="color: #333">"End"</span><strong class="hl-tag" style="color: #f58220">&gt;</strong><strong class="hl-tag" style="color: #f58220">&lt;/endEvent&gt;</strong>
+   <strong class="hl-tag" style="color: #f58220">&lt;sequenceFlow</strong> <span class="hl-attribute" style="color: #868686">id</span>=<span class="hl-value" style="color: #333">"flow2"</span> <span class="hl-attribute" style="color: #868686">name</span>=<span class="hl-value" style="color: #333">""</span> <span class="hl-attribute" style="color: #868686">sourceRef</span>=<span class="hl-value" style="color: #333">"mailtask1"</span>
+     <span class="hl-attribute" style="color: #868686">targetRef</span>=<span class="hl-value" style="color: #333">"endevent1"</span><strong class="hl-tag" style="color: #f58220">&gt;</strong><strong class="hl-tag" style="color: #f58220">&lt;/sequenceFlow&gt;</strong>
+   <strong class="hl-tag" style="color: #f58220">&lt;serviceTask</strong> <span class="hl-attribute" style="color: #868686">id</span>=<span class="hl-value" style="color: #333">"mailtask1"</span> <span class="hl-attribute" style="color: #868686">name</span>=<span class="hl-value" style="color: #333">"Email Notification"</span>
+     <span class="hl-attribute" style="color: #868686">activiti:type</span>=<span class="hl-value" style="color: #333">"mail"</span><strong class="hl-tag" style="color: #f58220">&gt;</strong>
+     <strong class="hl-tag" style="color: #f58220">&lt;extensionElements&gt;</strong>
+       <strong class="hl-tag" style="color: #f58220">&lt;activiti:field</strong> <span class="hl-attribute" style="color: #868686">name</span>=<span class="hl-value" style="color: #333">"to"</span> <span class="hl-attribute" style="color: #868686">expression</span>=<span class="hl-value" style="color: #333">"${toEmail}"</span><strong class="hl-tag" style="color: #f58220">
+       &gt;</strong><strong class="hl-tag" style="color: #f58220">&lt;/activiti:field&gt;</strong>
+       <strong class="hl-tag" style="color: #f58220">&lt;activiti:field</strong> <span class="hl-attribute" style="color: #868686">name</span>=<span class="hl-value" style="color: #333">"from"</span> <span class="hl-attribute" style="color: #868686">expression</span>=<span class="hl-value" style="color: #333">"no-reply@forgerock.com"</span><strong class="hl-tag" style="color: #f58220">
+       &gt;</strong><strong class="hl-tag" style="color: #f58220">&lt;/activiti:field&gt;</strong>
+       <strong class="hl-tag" style="color: #f58220">&lt;activiti:field</strong> <span class="hl-attribute" style="color: #868686">name</span>=<span class="hl-value" style="color: #333">"subject"</span> <span class="hl-attribute" style="color: #868686">expression</span>=<span class="hl-value" style="color: #333">"Simple Email Notification"</span><strong class="hl-tag" style="color: #f58220">
+       &gt;</strong><strong class="hl-tag" style="color: #f58220">&lt;/activiti:field&gt;</strong>
+       <strong class="hl-tag" style="color: #f58220">&lt;activiti:field</strong> <span class="hl-attribute" style="color: #868686">name</span>=<span class="hl-value" style="color: #333">"html"</span><strong class="hl-tag" style="color: #f58220">&gt;</strong>
+         <strong class="hl-tag" style="color: #f58220">&lt;activiti:expression&gt;</strong><strong class="hl-tag" style="color: #f58220">&lt;![CDATA[</strong>Here is a simple Email Notification
+         from ${fromSender}.<strong class="hl-tag" style="color: #f58220">]]&gt;</strong><strong class="hl-tag" style="color: #f58220">&lt;/activiti:expression&gt;</strong>
+       <strong class="hl-tag" style="color: #f58220">&lt;/activiti:field&gt;</strong>
+     <strong class="hl-tag" style="color: #f58220">&lt;/extensionElements&gt;</strong>
+   <strong class="hl-tag" style="color: #f58220">&lt;/serviceTask&gt;</strong>
+ <strong class="hl-tag" style="color: #f58220">&lt;/process&gt;</strong>
+ <strong class="hl-tag" style="color: #f58220">&lt;bpmndi:BPMNDiagram</strong> <span class="hl-attribute" style="color: #868686">id</span>=<span class="hl-value" style="color: #333">"BPMNDiagram_EmailNotification"</span><strong class="hl-tag" style="color: #f58220">&gt;</strong>
+   <strong class="hl-tag" style="color: #f58220">&lt;bpmndi:BPMNPlane</strong> <span class="hl-attribute" style="color: #868686">bpmnElement</span>=<span class="hl-value" style="color: #333">"EmailNotification"</span>
+     <span class="hl-attribute" style="color: #868686">id</span>=<span class="hl-value" style="color: #333">"BPMNPlane_EmailNotification"</span><strong class="hl-tag" style="color: #f58220">&gt;</strong>
+     <strong class="hl-tag" style="color: #f58220">&lt;bpmndi:BPMNShape</strong> <span class="hl-attribute" style="color: #868686">bpmnElement</span>=<span class="hl-value" style="color: #333">"startevent1"</span> <span class="hl-attribute" style="color: #868686">id</span>=<span class="hl-value" style="color: #333">"BPMNShape_startevent1"</span><strong class="hl-tag" style="color: #f58220">&gt;</strong>
+       <strong class="hl-tag" style="color: #f58220">&lt;omgdc:Bounds</strong> <span class="hl-attribute" style="color: #868686">height</span>=<span class="hl-value" style="color: #333">"35"</span> <span class="hl-attribute" style="color: #868686">width</span>=<span class="hl-value" style="color: #333">"35"</span> <span class="hl-attribute" style="color: #868686">x</span>=<span class="hl-value" style="color: #333">"170"</span> <span class="hl-attribute" style="color: #868686">y</span>=<span class="hl-value" style="color: #333">"250"</span><strong class="hl-tag" style="color: #f58220">&gt;</strong><strong class="hl-tag" style="color: #f58220">&lt;/omgdc:Bounds&gt;</strong>
+     <strong class="hl-tag" style="color: #f58220">&lt;/bpmndi:BPMNShape&gt;</strong>
+     <strong class="hl-tag" style="color: #f58220">&lt;bpmndi:BPMNShape</strong> <span class="hl-attribute" style="color: #868686">bpmnElement</span>=<span class="hl-value" style="color: #333">"endevent1"</span> <span class="hl-attribute" style="color: #868686">id</span>=<span class="hl-value" style="color: #333">"BPMNShape_endevent1"</span><strong class="hl-tag" style="color: #f58220">&gt;</strong>
+       <strong class="hl-tag" style="color: #f58220">&lt;omgdc:Bounds</strong> <span class="hl-attribute" style="color: #868686">height</span>=<span class="hl-value" style="color: #333">"35"</span> <span class="hl-attribute" style="color: #868686">width</span>=<span class="hl-value" style="color: #333">"35"</span> <span class="hl-attribute" style="color: #868686">x</span>=<span class="hl-value" style="color: #333">"410"</span> <span class="hl-attribute" style="color: #868686">y</span>=<span class="hl-value" style="color: #333">"250"</span><strong class="hl-tag" style="color: #f58220">&gt;</strong><strong class="hl-tag" style="color: #f58220">&lt;/omgdc:Bounds&gt;</strong>
+     <strong class="hl-tag" style="color: #f58220">&lt;/bpmndi:BPMNShape&gt;</strong>
+     <strong class="hl-tag" style="color: #f58220">&lt;bpmndi:BPMNShape</strong> <span class="hl-attribute" style="color: #868686">bpmnElement</span>=<span class="hl-value" style="color: #333">"mailtask1"</span> <span class="hl-attribute" style="color: #868686">id</span>=<span class="hl-value" style="color: #333">"BPMNShape_mailtask1"</span><strong class="hl-tag" style="color: #f58220">&gt;</strong>
+       <strong class="hl-tag" style="color: #f58220">&lt;omgdc:Bounds</strong> <span class="hl-attribute" style="color: #868686">height</span>=<span class="hl-value" style="color: #333">"55"</span> <span class="hl-attribute" style="color: #868686">width</span>=<span class="hl-value" style="color: #333">"105"</span> <span class="hl-attribute" style="color: #868686">x</span>=<span class="hl-value" style="color: #333">"250"</span> <span class="hl-attribute" style="color: #868686">y</span>=<span class="hl-value" style="color: #333">"240"</span><strong class="hl-tag" style="color: #f58220">&gt;</strong><strong class="hl-tag" style="color: #f58220">&lt;/omgdc:Bounds&gt;</strong>
+     <strong class="hl-tag" style="color: #f58220">&lt;/bpmndi:BPMNShape&gt;</strong>
+     <strong class="hl-tag" style="color: #f58220">&lt;bpmndi:BPMNEdge</strong> <span class="hl-attribute" style="color: #868686">bpmnElement</span>=<span class="hl-value" style="color: #333">"flow1"</span> <span class="hl-attribute" style="color: #868686">id</span>=<span class="hl-value" style="color: #333">"BPMNEdge_flow1"</span><strong class="hl-tag" style="color: #f58220">&gt;</strong>
+       <strong class="hl-tag" style="color: #f58220">&lt;omgdi:waypoint</strong> <span class="hl-attribute" style="color: #868686">x</span>=<span class="hl-value" style="color: #333">"205"</span> <span class="hl-attribute" style="color: #868686">y</span>=<span class="hl-value" style="color: #333">"267"</span><strong class="hl-tag" style="color: #f58220">&gt;</strong><strong class="hl-tag" style="color: #f58220">&lt;/omgdi:waypoint&gt;</strong>
+       <strong class="hl-tag" style="color: #f58220">&lt;omgdi:waypoint</strong> <span class="hl-attribute" style="color: #868686">x</span>=<span class="hl-value" style="color: #333">"250"</span> <span class="hl-attribute" style="color: #868686">y</span>=<span class="hl-value" style="color: #333">"267"</span><strong class="hl-tag" style="color: #f58220">&gt;</strong><strong class="hl-tag" style="color: #f58220">&lt;/omgdi:waypoint&gt;</strong>
+     <strong class="hl-tag" style="color: #f58220">&lt;/bpmndi:BPMNEdge&gt;</strong>
+     <strong class="hl-tag" style="color: #f58220">&lt;bpmndi:BPMNEdge</strong> <span class="hl-attribute" style="color: #868686">bpmnElement</span>=<span class="hl-value" style="color: #333">"flow2"</span> <span class="hl-attribute" style="color: #868686">id</span>=<span class="hl-value" style="color: #333">"BPMNEdge_flow2"</span><strong class="hl-tag" style="color: #f58220">&gt;</strong>
+       <strong class="hl-tag" style="color: #f58220">&lt;omgdi:waypoint</strong> <span class="hl-attribute" style="color: #868686">x</span>=<span class="hl-value" style="color: #333">"355"</span> <span class="hl-attribute" style="color: #868686">y</span>=<span class="hl-value" style="color: #333">"267"</span><strong class="hl-tag" style="color: #f58220">&gt;</strong><strong class="hl-tag" style="color: #f58220">&lt;/omgdi:waypoint&gt;</strong>
+       <strong class="hl-tag" style="color: #f58220">&lt;omgdi:waypoint</strong> <span class="hl-attribute" style="color: #868686">x</span>=<span class="hl-value" style="color: #333">"410"</span> <span class="hl-attribute" style="color: #868686">y</span>=<span class="hl-value" style="color: #333">"267"</span><strong class="hl-tag" style="color: #f58220">&gt;</strong><strong class="hl-tag" style="color: #f58220">&lt;/omgdi:waypoint&gt;</strong>
+     <strong class="hl-tag" style="color: #f58220">&lt;/bpmndi:BPMNEdge&gt;</strong>
+   <strong class="hl-tag" style="color: #f58220">&lt;/bpmndi:BPMNPlane&gt;</strong>
+ <strong class="hl-tag" style="color: #f58220">&lt;/bpmndi:BPMNDiagram&gt;</strong>
+<strong class="hl-tag" style="color: #f58220">&lt;/definitions&gt;</strong></div><p>In Eclipse, select the project, then right click and select
+   Create deployment artifacts to generate the components and package them
+   in a .bar file for deployment in the <code class="filename">openidm/workflow</code>
+   directory.</p><p>Before you deploy the .bar, work around the issue mentioned above
+   by adding the XML artifact in the right place in the .bar, for example by
+   expanding the .bar, moving the
+   <code class="filename">EmailNotification.bpmn20.xml</code> file inside a directory,
+   and recreating the .bar.</p><p>After you deploy the .bar, create a script in
+   <code class="filename">openidm/script/invokeEmailNotification.js</code>. The script
+   invokes the workflow.</p><div class="programlisting">
+<em class="hl-comment" style="color: #868686">/*
+ * Calling 'EmailNotification' workflow
+ */</em>
+<strong class="hl-keyword">var</strong> map = {    
+ <strong class="hl-string"><em style="color: #f58220">"_action"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"emailNotification"</em></strong>,
+ <strong class="hl-string"><em style="color: #f58220">"_workflowParams"</em></strong> : {
+    <strong class="hl-string"><em style="color: #f58220">"fromSender"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"noreply@openidm"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"toEmail"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"john.doe@corp.com"</em></strong>
+  }
+};
+
+openidm.action(<strong class="hl-string"><em style="color: #f58220">"workflow/activiti"</em></strong>, map);</div><p>Also, create a schedule configuration object in
+   <code class="filename">openidm/conf/schedule-EmailNotification.json</code>. The
+   following schedule invokes the workflow once per minute.</p><div class="programlisting">
+{
+   <strong class="hl-string"><em style="color: #f58220">"enabled"</em></strong> : true,
+   <strong class="hl-string"><em style="color: #f58220">"type"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"cron"</em></strong>,
+   <strong class="hl-string"><em style="color: #f58220">"schedule"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"0 0/1 * * * ?"</em></strong>,
+   <strong class="hl-string"><em style="color: #f58220">"invokeService"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"script"</em></strong>,
+   <strong class="hl-string"><em style="color: #f58220">"invokeContext"</em></strong> : {
+       <strong class="hl-string"><em style="color: #f58220">"script"</em></strong> : {
+           <strong class="hl-string"><em style="color: #f58220">"type"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"text/javascript"</em></strong>,
+           <strong class="hl-string"><em style="color: #f58220">"file"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"script/invokeEmailNotification.js"</em></strong>
+       },
+   }
+}</div></div><div class="section" title="11.4.2.&nbsp;Example Sunset Workflow Triggered By Reconciliation"><div class="titlepage"><div><div><h3 class="title"><a name="example-activiti-recon-sunset-flow"></a>11.4.2.&nbsp;Example Sunset Workflow Triggered By Reconciliation</h3></div></div></div><p>OpenIDM can allow deferred deprovisioning and disabling, such as
+   needed when an external consultant's contract expires or is up for
+   renewal. This example shows how OpenIDM can be used to handle such
+   scenarios.</p><p>To understand the scenario, consider the target resource and the
+   authoritative source.</p><p>Set up a CSV file connector to connect to an authoritative source
+   file containing the following.</p><div class="programlisting" width="92">
+firstName,uid,"lastName","email","employeeNumber",password,"sunrise","sunset","active"
+"Darth","DDOE","Doe","doe@...","123456","Z29vZA==","2011-11-30T...","2011-12-23T...","TRUE"</div><p>The authoritative source contains the field, <code class="literal">sunset</code>,
+   containing a time and date string referring to a time in the future.</p><p>Set up a simple XML connector to replicate fields in the authoritative
+   CSV source on a 1-to-1 basis.</p><p>Define a Sunset Workflow using Activiti Eclipse BPMN 2.0
+   Designer.</p><div class="mediaobject" title="Sunset workflow process"><a name="figure-bpmn-sunset-flow"></a><img src="images/bpmn-sunset-flow.png" longdesc="/Users/mark/Documents/workspace/openidm/target/docbkx/html/integrators-guide/OpenIDM-Integrators-Guide/figure-bpmn-sunset-flow.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-bpmn-sunset-flow.html" target="longdesc">D</a>]</span></div></div><p>Use the following XML artifact.</p><div class="programlisting">
+<span class="hl-directive" style="color: #868686">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+
+<strong class="hl-tag" style="color: #f58220">&lt;definitions</strong> <span class="hl-attribute" style="color: #868686">id</span>=<span class="hl-value" style="color: #333">"definitions"</span>
+            <span class="hl-attribute" style="color: #868686">xmlns</span>=<span class="hl-value" style="color: #333">"http://www.omg.org/spec/BPMN/20100524/MODEL"</span>
+            <span class="hl-attribute" style="color: #868686">xmlns:activiti</span>=<span class="hl-value" style="color: #333">"http://activiti.org/bpmn"</span>
+            <span class="hl-attribute" style="color: #868686">targetNamespace</span>=<span class="hl-value" style="color: #333">"Examples"</span>
+            <span class="hl-attribute" style="color: #868686">xmlns:xsi</span>=<span class="hl-value" style="color: #333">"http://www.w3.org/2001/XMLSchema-instance"</span>
+            <span class="hl-attribute" style="color: #868686">xsi:schemaLocation</span>=<span class="hl-value" style="color: #333">"http://www.omg.org/spec/BPMN/20100524/MODEL
+              http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd"</span><strong class="hl-tag" style="color: #f58220">&gt;</strong>
+
+    <strong class="hl-tag" style="color: #f58220">&lt;process</strong> <span class="hl-attribute" style="color: #868686">id</span>=<span class="hl-value" style="color: #333">"sunset"</span> <span class="hl-attribute" style="color: #868686">name</span>=<span class="hl-value" style="color: #333">"sunset usecase"</span><strong class="hl-tag" style="color: #f58220">&gt;</strong>
+       <strong class="hl-tag" style="color: #f58220">&lt;startEvent</strong> <span class="hl-attribute" style="color: #868686">id</span>=<span class="hl-value" style="color: #333">"start"</span><strong class="hl-tag" style="color: #f58220"> /&gt;</strong>
+       <strong class="hl-tag" style="color: #f58220">&lt;sequenceFlow</strong> <span class="hl-attribute" style="color: #868686">sourceRef</span>=<span class="hl-value" style="color: #333">"start"</span> <span class="hl-attribute" style="color: #868686">targetRef</span>=<span class="hl-value" style="color: #333">"saveInvokeContext"</span><strong class="hl-tag" style="color: #f58220">/&gt;</strong>
+       <strong class="hl-tag" style="color: #f58220">&lt;scriptTask</strong> <span class="hl-attribute" style="color: #868686">id</span>=<span class="hl-value" style="color: #333">"saveInvokeContext"</span> <span class="hl-attribute" style="color: #868686">scriptFormat</span>=<span class="hl-value" style="color: #333">"groovy"</span>
+         <span class="hl-attribute" style="color: #868686">activiti:returnVariable</span>=<span class="hl-value" style="color: #333">"invokecontext"</span><strong class="hl-tag" style="color: #f58220">&gt;</strong>
+           <strong class="hl-tag" style="color: #f58220">&lt;script&gt;</strong>
+               <strong class="hl-tag" style="color: #f58220">&lt;![CDATA[</strong>
+               invokecontext =
+                       org.forgerock.openidm.context.InvokeContext.getContext()
+              <strong class="hl-tag" style="color: #f58220">]]&gt;</strong>
+           <strong class="hl-tag" style="color: #f58220">&lt;/script&gt;</strong>
+       <strong class="hl-tag" style="color: #f58220">&lt;/scriptTask&gt;</strong>
+       <strong class="hl-tag" style="color: #f58220">&lt;sequenceFlow</strong> <span class="hl-attribute" style="color: #868686">sourceRef</span>=<span class="hl-value" style="color: #333">"saveInvokeContext"</span>
+         <span class="hl-attribute" style="color: #868686">targetRef</span>=<span class="hl-value" style="color: #333">"timerintermediatecatchevent1"</span><strong class="hl-tag" style="color: #f58220">/&gt;</strong>
+       
+       <strong class="hl-tag" style="color: #f58220">&lt;intermediateCatchEvent</strong> <span class="hl-attribute" style="color: #868686">id</span>=<span class="hl-value" style="color: #333">"timerintermediatecatchevent1"</span>
+         <span class="hl-attribute" style="color: #868686">name</span>=<span class="hl-value" style="color: #333">"TimerCatchEvent"</span><strong class="hl-tag" style="color: #f58220">&gt;</strong>
+           <strong class="hl-tag" style="color: #f58220">&lt;extensionElements&gt;</strong>
+               <strong class="hl-tag" style="color: #f58220">&lt;activiti:field</strong> <span class="hl-attribute" style="color: #868686">name</span>=<span class="hl-value" style="color: #333">"t"</span> <span class="hl-attribute" style="color: #868686">expression</span>=<span class="hl-value" style="color: #333">"${time}"</span><strong class="hl-tag" style="color: #f58220">
+               &gt;</strong><strong class="hl-tag" style="color: #f58220">&lt;/activiti:field&gt;</strong>
+           <strong class="hl-tag" style="color: #f58220">&lt;/extensionElements&gt;</strong>
+           <strong class="hl-tag" style="color: #f58220">&lt;timerEventDefinition&gt;</strong>
+               <strong class="hl-tag" style="color: #f58220">&lt;timeDate &gt;</strong>${time}<strong class="hl-tag" style="color: #f58220">&lt;/timeDate&gt;</strong>
+           <strong class="hl-tag" style="color: #f58220">&lt;/timerEventDefinition&gt;</strong>
+       <strong class="hl-tag" style="color: #f58220">&lt;/intermediateCatchEvent&gt;</strong>
+       
+       <strong class="hl-tag" style="color: #f58220">&lt;sequenceFlow</strong> <span class="hl-attribute" style="color: #868686">sourceRef</span>=<span class="hl-value" style="color: #333">"timerintermediatecatchevent1"</span>
+         <span class="hl-attribute" style="color: #868686">targetRef</span>=<span class="hl-value" style="color: #333">"idmCall"</span><strong class="hl-tag" style="color: #f58220">/&gt;</strong>
+       
+       
+       <strong class="hl-tag" style="color: #f58220">&lt;serviceTask</strong> <span class="hl-attribute" style="color: #868686">id</span>=<span class="hl-value" style="color: #333">"idmCall"</span> <span class="hl-attribute" style="color: #868686">activiti:delegateExpression</span>=<span class="hl-value" style="color: #333">"${openidm}"</span>
+         <span class="hl-attribute" style="color: #868686">activiti:async</span>=<span class="hl-value" style="color: #333">"true"</span><strong class="hl-tag" style="color: #f58220">&gt;</strong>
+           <strong class="hl-tag" style="color: #f58220">&lt;extensionElements&gt;</strong>
+               <strong class="hl-tag" style="color: #f58220">&lt;activiti:field</strong> <span class="hl-attribute" style="color: #868686">name</span>=<span class="hl-value" style="color: #333">"userName"</span> <span class="hl-attribute" style="color: #868686">expression</span>=<span class="hl-value" style="color: #333">"${userName}"</span><strong class="hl-tag" style="color: #f58220">
+               &gt;</strong><strong class="hl-tag" style="color: #f58220">&lt;/activiti:field&gt;</strong>
+               <strong class="hl-tag" style="color: #f58220">&lt;activiti:field</strong> <span class="hl-attribute" style="color: #868686">name</span>=<span class="hl-value" style="color: #333">"system"</span> <span class="hl-attribute" style="color: #868686">expression</span>=<span class="hl-value" style="color: #333">"${system}"</span><strong class="hl-tag" style="color: #f58220">
+               &gt;</strong><strong class="hl-tag" style="color: #f58220">&lt;/activiti:field&gt;</strong>
+           <strong class="hl-tag" style="color: #f58220">&lt;/extensionElements&gt;</strong>
+       <strong class="hl-tag" style="color: #f58220">&lt;/serviceTask&gt;</strong>
+       
+       <strong class="hl-tag" style="color: #f58220">&lt;sequenceFlow</strong> <span class="hl-attribute" style="color: #868686">sourceRef</span>=<span class="hl-value" style="color: #333">"idmCall"</span> <span class="hl-attribute" style="color: #868686">targetRef</span>=<span class="hl-value" style="color: #333">"readUserAccount"</span><strong class="hl-tag" style="color: #f58220">/&gt;</strong>
+       <strong class="hl-tag" style="color: #f58220">&lt;scriptTask</strong> <span class="hl-attribute" style="color: #868686">id</span>=<span class="hl-value" style="color: #333">"readUserAccount"</span> <span class="hl-attribute" style="color: #868686">scriptFormat</span>=<span class="hl-value" style="color: #333">"groovy"</span>
+         <span class="hl-attribute" style="color: #868686">activiti:returnVariable</span>=<span class="hl-value" style="color: #333">"user"</span><strong class="hl-tag" style="color: #f58220"> &gt;</strong>
+           <strong class="hl-tag" style="color: #f58220">&lt;script&gt;</strong>
+               <strong class="hl-tag" style="color: #f58220">&lt;![CDATA[</strong>
+               out:println '********Sunset date for user ' + userName
+               org.forgerock.openidm.context.InvokeContext.getContext().
+                       putApprover(invokecontext.getApprover())
+               org.forgerock.openidm.context.InvokeContext.getContext().
+                       putRequester(invokecontext.getRequester())
+               org.forgerock.openidm.context.InvokeContext.getContext().
+                       pushActivityId(invokecontext.popActivityId())
+
+               user = openidm.read(system + userName);
+               <strong class="hl-tag" style="color: #f58220">]]&gt;</strong>
+           <strong class="hl-tag" style="color: #f58220">&lt;/script&gt;</strong>
+       <strong class="hl-tag" style="color: #f58220">&lt;/scriptTask&gt;</strong>
+       <strong class="hl-tag" style="color: #f58220">&lt;sequenceFlow</strong> <span class="hl-attribute" style="color: #868686">sourceRef</span>=<span class="hl-value" style="color: #333">"readUserAccount"</span> <span class="hl-attribute" style="color: #868686">targetRef</span>=<span class="hl-value" style="color: #333">"sendMail"</span><strong class="hl-tag" style="color: #f58220">/&gt;</strong>
+
+       <strong class="hl-tag" style="color: #f58220">&lt;serviceTask</strong> <span class="hl-attribute" style="color: #868686">id</span>=<span class="hl-value" style="color: #333">"sendMail"</span> <span class="hl-attribute" style="color: #868686">name</span>=<span class="hl-value" style="color: #333">"Email Notification"</span>
+         <span class="hl-attribute" style="color: #868686">activiti:type</span>=<span class="hl-value" style="color: #333">"mail"</span><strong class="hl-tag" style="color: #f58220">&gt;</strong>
+           <strong class="hl-tag" style="color: #f58220">&lt;extensionElements&gt;</strong>
+               <strong class="hl-tag" style="color: #f58220">&lt;activiti:field</strong> <span class="hl-attribute" style="color: #868686">name</span>=<span class="hl-value" style="color: #333">"to"</span> <span class="hl-attribute" style="color: #868686">expression</span>=<span class="hl-value" style="color: #333">"${toEmail}"</span><strong class="hl-tag" style="color: #f58220">
+               &gt;</strong><strong class="hl-tag" style="color: #f58220">&lt;/activiti:field&gt;</strong>
+               <strong class="hl-tag" style="color: #f58220">&lt;activiti:field</strong> <span class="hl-attribute" style="color: #868686">name</span>=<span class="hl-value" style="color: #333">"from"</span> <span class="hl-attribute" style="color: #868686">expression</span>=<span class="hl-value" style="color: #333">"no-reply@forgerock.com"</span><strong class="hl-tag" style="color: #f58220">
+               &gt;</strong><strong class="hl-tag" style="color: #f58220">&lt;/activiti:field&gt;</strong>
+               <strong class="hl-tag" style="color: #f58220">&lt;activiti:field</strong> <span class="hl-attribute" style="color: #868686">name</span>=<span class="hl-value" style="color: #333">"subject"</span> <span class="hl-attribute" style="color: #868686">expression</span>=<span class="hl-value" style="color: #333">"Disabling User"</span><strong class="hl-tag" style="color: #f58220">
+               &gt;</strong><strong class="hl-tag" style="color: #f58220">&lt;/activiti:field&gt;</strong>
+               <strong class="hl-tag" style="color: #f58220">&lt;activiti:field</strong> <span class="hl-attribute" style="color: #868686">name</span>=<span class="hl-value" style="color: #333">"text"</span><strong class="hl-tag" style="color: #f58220">&gt;</strong>
+                   <strong class="hl-tag" style="color: #f58220">&lt;activiti:expression&gt;</strong><strong class="hl-tag" style="color: #f58220">&lt;![CDATA[</strong>
+                   The following user has been disabled:
+                   ${user}<strong class="hl-tag" style="color: #f58220">]]&gt;</strong>
+                   <strong class="hl-tag" style="color: #f58220">&lt;/activiti:expression&gt;</strong>
+               <strong class="hl-tag" style="color: #f58220">&lt;/activiti:field&gt;</strong>
+           <strong class="hl-tag" style="color: #f58220">&lt;/extensionElements&gt;</strong>
+       <strong class="hl-tag" style="color: #f58220">&lt;/serviceTask&gt;</strong>
+
+       <strong class="hl-tag" style="color: #f58220">&lt;sequenceFlow</strong> <span class="hl-attribute" style="color: #868686">sourceRef</span>=<span class="hl-value" style="color: #333">"sendMail"</span> <span class="hl-attribute" style="color: #868686">targetRef</span>=<span class="hl-value" style="color: #333">"disableAccount"</span><strong class="hl-tag" style="color: #f58220">/&gt;</strong>
+       <strong class="hl-tag" style="color: #f58220">&lt;scriptTask</strong> <span class="hl-attribute" style="color: #868686">id</span>=<span class="hl-value" style="color: #333">"disableAccount"</span> <span class="hl-attribute" style="color: #868686">scriptFormat</span>=<span class="hl-value" style="color: #333">"groovy"</span><strong class="hl-tag" style="color: #f58220">&gt;</strong>
+           <strong class="hl-tag" style="color: #f58220">&lt;script&gt;</strong>
+               <strong class="hl-tag" style="color: #f58220">&lt;![CDATA[</strong>
+               out:println '********Disabling user account ' + userName
+               user['__ENABLE__'] = false
+               openidm.update(system + userName, null, user)
+               <strong class="hl-tag" style="color: #f58220">]]&gt;</strong>
+           <strong class="hl-tag" style="color: #f58220">&lt;/script&gt;</strong>
+       <strong class="hl-tag" style="color: #f58220">&lt;/scriptTask&gt;</strong>
+       <strong class="hl-tag" style="color: #f58220">&lt;sequenceFlow</strong> <span class="hl-attribute" style="color: #868686">sourceRef</span>=<span class="hl-value" style="color: #333">"disableAccount"</span> <span class="hl-attribute" style="color: #868686">targetRef</span>=<span class="hl-value" style="color: #333">"end"</span><strong class="hl-tag" style="color: #f58220">/&gt;</strong>
+       <strong class="hl-tag" style="color: #f58220">&lt;endEvent</strong> <span class="hl-attribute" style="color: #868686">id</span>=<span class="hl-value" style="color: #333">"end"</span><strong class="hl-tag" style="color: #f58220">/&gt;</strong>
+
+    <strong class="hl-tag" style="color: #f58220">&lt;/process&gt;</strong>
+<strong class="hl-tag" style="color: #f58220">&lt;/definitions&gt;</strong></div><p>Set up a deferred action during reconciliation by reacting to a
+   <code class="literal">FOUND</code> situation. When called, the script invoked must
+   return the proper action to the found situation, which in the case of this
+   example is <code class="literal">LINK</code>.</p><p>Add the following script to
+   <code class="filename">script/triggerSunset.js</code> where you installed OpenIDM,
+   invoked when reconciliation encounters a <code class="literal">FOUND</code>
+   situation.</p><div class="programlisting">
+<em class="hl-comment" style="color: #868686">/*
+ * Calling 'sunrise' workflow
+ */</em>
+<strong class="hl-keyword">var</strong> map = {    
+ <strong class="hl-string"><em style="color: #f58220">"_action"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"sunrise"</em></strong>,
+ <strong class="hl-string"><em style="color: #f58220">"_workflowParams"</em></strong> : {
+    <strong class="hl-string"><em style="color: #f58220">"userName"</em></strong> : target.__UID__,
+    <strong class="hl-string"><em style="color: #f58220">"system"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"system/xmlfile/account/"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"time"</em></strong> : source.sunset,
+    <strong class="hl-string"><em style="color: #f58220">"toEmail"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"manager@corp.org"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"fromSender"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"noreply@openidm"</em></strong>
+ }
+};
+
+openidm.action(<strong class="hl-string"><em style="color: #f58220">"workflow/activiti"</em></strong>, map);
+
+<strong class="hl-string"><em style="color: #f58220">"LINK"</em></strong></div><p>Add the following schedule to
+   <code class="filename">conf/scheduler-reconcile_HR_XML.json</code> where you
+   installed OpenIDM to invoke the script.</p><div class="programlisting">
+{
+    <strong class="hl-string"><em style="color: #f58220">"enabled"</em></strong> : true,
+    <strong class="hl-string"><em style="color: #f58220">"type"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"cron"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"schedule"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"0 08 16 * * ?"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"invokeService"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"sync"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"invokeContext"</em></strong> : {
+       <strong class="hl-string"><em style="color: #f58220">"action"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"reconcile"</em></strong>,
+       <strong class="hl-string"><em style="color: #f58220">"mapping"</em></strong> : {
+           <strong class="hl-string"><em style="color: #f58220">"name"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"CSV_XML"</em></strong>,
+           <strong class="hl-string"><em style="color: #f58220">"source"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"system/CSV/persons"</em></strong>,
+           <strong class="hl-string"><em style="color: #f58220">"target"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"system/xmlfile/account"</em></strong>,
+           <strong class="hl-string"><em style="color: #f58220">"correlationQuery"</em></strong> : {
+               <strong class="hl-string"><em style="color: #f58220">"type"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"text/javascript"</em></strong>,
+               <strong class="hl-string"><em style="color: #f58220">"source"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"var myarray = [source.uid];var map = {
+</em></strong>                   <strong class="hl-string"><em style="color: #f58220">'query'</em></strong> : {
+                       <strong class="hl-string"><em style="color: #f58220">'Equals'</em></strong>: {<strong class="hl-string"><em style="color: #f58220">'field'</em></strong> : <strong class="hl-string"><em style="color: #f58220">'name'</em></strong>,<strong class="hl-string"><em style="color: #f58220">'values'</em></strong> : myarray}
+                   }
+               };map;<strong class="hl-string"><em style="color: #f58220">"
+</em></strong>           },
+           <strong class="hl-string"><em style="color: #f58220">"properties"</em></strong> : [
+               {
+                   <strong class="hl-string"><em style="color: #f58220">"source"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"firstname"</em></strong>,
+                   <strong class="hl-string"><em style="color: #f58220">"target"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"firstname"</em></strong>
+               },
+               {
+                   <strong class="hl-string"><em style="color: #f58220">"source"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"uid"</em></strong>,
+                   <strong class="hl-string"><em style="color: #f58220">"target"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"name"</em></strong>
+               },
+               {
+                   <strong class="hl-string"><em style="color: #f58220">"source"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"lastname"</em></strong>,
+                   <strong class="hl-string"><em style="color: #f58220">"target"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"lastname"</em></strong>
+               },
+               {
+                   <strong class="hl-string"><em style="color: #f58220">"source"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"email"</em></strong>,
+                   <strong class="hl-string"><em style="color: #f58220">"target"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"email"</em></strong>
+               }
+           ],
+           <strong class="hl-string"><em style="color: #f58220">"policies"</em></strong> : [
+               {
+                   <strong class="hl-string"><em style="color: #f58220">"situation"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"CONFIRMED"</em></strong>,
+                   <strong class="hl-string"><em style="color: #f58220">"action"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"IGNORE"</em></strong>
+               },
+               <span class="bold"><strong>{
+                   "situation" : "FOUND",
+                   "action" : {
+                       "type" : "text/javascript",
+                       "file" : "script/triggerSunset.js"
+                   }
+               },</strong></span>
+               {
+                   <strong class="hl-string"><em style="color: #f58220">"situation"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"ABSENT"</em></strong>,
+                   <strong class="hl-string"><em style="color: #f58220">"action"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"IGNORE"</em></strong>
+               },
+               {
+                   <strong class="hl-string"><em style="color: #f58220">"situation"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"AMBIGUOUS"</em></strong>,
+                   <strong class="hl-string"><em style="color: #f58220">"action"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"IGNORE"</em></strong>
+               },
+               {
+                   <strong class="hl-string"><em style="color: #f58220">"situation"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"MISSING"</em></strong>,
+                   <strong class="hl-string"><em style="color: #f58220">"action"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"IGNORE"</em></strong>
+               },
+               {
+                   <strong class="hl-string"><em style="color: #f58220">"situation"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"UNQUALIFIED"</em></strong>,
+                   <strong class="hl-string"><em style="color: #f58220">"action"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"IGNORE"</em></strong>
+               },
+               {
+                   <strong class="hl-string"><em style="color: #f58220">"situation"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"UNASSIGNED"</em></strong>,
+                   <strong class="hl-string"><em style="color: #f58220">"action"</em></strong> : <strong class="hl-string"><em style="color: #f58220">"IGNORE"</em></strong>
+               }
+           ]
+       }
+    }
+}</div></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-security.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-auditing.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;10.&nbsp;Securing &amp; Hardening OpenIDM&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="OpenIDM-Integrators-Guide.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;12.&nbsp;Using Audit Logs</td></tr></table></div></body></html>
