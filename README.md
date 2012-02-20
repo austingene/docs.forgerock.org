@@ -60,9 +60,7 @@ with `mvn clean site`.
 3.  Add the `index.html` files that redirect by product and by version to
     the top-level `en/index.html` file.
 4.  Replace `coredoc.css` files with `css/coredoc.css` (after reading comments).
-5.  Copy .htaccess from a published doc set into directories containing HTML
-    and CSS for your new doc set.
-6.  Move your updated `doc` directory under `product/version/en` in the site
+5.  Move your updated `doc` directory under `product/version/en` in the site
     directory.
 
 
