@@ -34,6 +34,7 @@ function isValidProductVersion(product, version) {
   if (product == "openam-pa" && version == "3.0.5") return true;
   if (product == "openam-pa" && version == "3.0.3") return true;
   if (product == "opendj" && version == "2.5.0") return true;
+  if (product == "openidm" && version == "2.0.3") return true;
 */  if (product == "openidm" && version == "2.0.2") return true;
   return false;
 }
