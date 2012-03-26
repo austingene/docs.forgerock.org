@@ -30,54 +30,26 @@ alongside these alternatives.
 *ForgeRock projects* are at <http://forgerock.org/>.
 
 
-# The Example
-
-This project includes skeleton documentation sets with empty placeholder
-documents. The example is intended to demonstrate layout rather than
-demonstrate a finished result.
-
 
 # Publishing Core Documentation
 
 Publishing is a manual process for now.
 
-
-## Building a Core Documentation Set To Publish
-
-In the .pom for your project, make sure draft mode is turned off.
-
-    <!-- <draftMode>yes</draftMode> -->
-
-Then build your documentation as you normally would, for example
-with `mvn clean site`.
-
-## Preparing the Core Documentation Set For Publication
-
-1.  Under `site/doc`, remove the .epub and .rtf.
-2.  Under `site/doc`, rename the .pdf to include the version number in the
-    name. For example, `OpenIDM-Release-Notes.pdf` becomes
-    `OpenIDM-2.0.1-Release-Notes.pdf`.
-3.  Add the `index.html` files that redirect by product and by version to
-    the top-level `en/index.html` file.
-4.  Replace `coredoc.css` files with `css/coredoc.css` (after reading comments).
-5.  Move your updated `doc` directory under `product/version/en` in the site
-    directory.
-
-
-## Updating the Site For Publication
-
-1.  Add links and a table of links for your new documentation set in the
+1.  Run the `release` goal of the
+    [forgerock-doc-maven-plugin](https://github.com/markcraig/forgerock-doc-maven-plugin)
+    to prepare the release layout.
+2.  When you are satisfied with the result, copy it to the proper location.
+3.  Add links and a table of links for your new documentation set in the
     top-level `en/index.html` file.
-2.  Update `js/docs.js` to include your product and version.
-3.  Test your work.
-4.  Publish.
+4.  Update `js/docs.js` to include your product and version.
+5.  Test your work.
+6.  Publish.
 
 
 # TODO
 
 * Improve the look and feel.
 * Published localized documentation.
-* Script updates to the site, rather than rely on manual updates.
 * Automate publishing so that it happens during release using Maven.
 
 
