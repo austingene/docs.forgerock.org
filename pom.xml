@@ -1,0 +1,109 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+ <modelVersion>4.0.0</modelVersion>
+
+ <parent>
+  <groupId>org.forgerock</groupId>
+  <artifactId>forgerock-parent</artifactId>
+  <version>1.1.0-SNAPSHOT</version>
+ </parent>
+ <groupId>org.forgerock.commons</groupId>
+ <artifactId>org.forgerock.docs</artifactId>
+ <version>1.0.0-SNAPSHOT</version>
+ <packaging>pom</packaging>
+
+ <name>docs.forgerock.org</name>
+
+ <distributionManagement>
+  <site>
+   <id>forgerock.org</id>
+   <name>ForgeRock Community Server</name>
+   <url>${siteDistributionURL}</url>
+  </site>
+ </distributionManagement>
+
+ <properties>
+  <!--<siteDistributionURL>scp://forgerock.org/var/www/vhosts/docs.forgerock.org/httpdocs</siteDistributionURL> -->
+  <siteDistributionURL>file:///Users/mark/Sites/docs.forgerock.org</siteDistributionURL>
+ </properties>
+
+ <repositories>
+  <repository>
+   <id>forgerock-staging-repository</id>
+   <name>ForgeRock Release Repository</name>
+   <url>http://maven.forgerock.org/repo/releases</url>
+   <snapshots>
+    <enabled>false</enabled>
+   </snapshots>
+  </repository>
+  <repository>
+   <id>forgerock-snapshots-repository</id>
+   <name>ForgeRock Snapshot Repository</name>
+   <url>http://maven.forgerock.org/repo/snapshots</url>
+   <releases>
+    <enabled>false</enabled>
+   </releases>
+  </repository>
+ </repositories>
+
+ <build>
+  <extensions>
+   <extension>
+    <groupId>org.apache.maven.wagon</groupId>
+    <artifactId>wagon-ssh</artifactId>
+    <version>2.2</version>
+   </extension>
+  </extensions>
+  <plugins>
+   <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-resources-plugin</artifactId>
+    <executions>
+     <execution>
+      <id>copy-site</id>
+      <phase>install</phase>
+      <goals>
+       <goal>copy-resources</goal>
+      </goals>
+      <configuration>
+       <encoding>UTF-8</encoding>
+       <resources>
+        <resource>
+         <directory>${basedir}</directory>
+         <excludes>
+<!-- These do not work yet:
+          <exclude>.gitignore</exclude>
+          <exclude>.project</exclude>
+          <exclude>.settings</exclude>
+ -->
+          <exclude>pom.xml</exclude>
+          <exclude>README.md</exclude>
+         </excludes>
+        </resource>
+       </resources>
+       <outputDirectory>${basedir}/target</outputDirectory>
+      </configuration>
+     </execution>
+    </executions>
+   </plugin>
+   <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-site-plugin</artifactId>
+    <version>3.0</version>
+    <configuration>
+     <inputDirectory>${basedir}/target</inputDirectory>
+    </configuration>
+    <executions>
+     <execution>
+      <id>upload-docs</id>
+      <phase>install</phase>
+      <goals>
+       <goal>deploy</goal>
+      </goals>
+     </execution>
+    </executions>
+   </plugin>
+  </plugins>
+ </build>
+</project>
