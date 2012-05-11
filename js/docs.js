@@ -43,15 +43,24 @@ function isValidProductVersion(product, version) {
 function setDisplay() {
   var product = getProduct();
   var version = getVersion();
-  // A dot (.) is not valid in an HTML id attribute value.
-  var versionId = version.replace(/\./g,"-");
+  var uri = getUri();
 
-  $("#overview").addClass("nodisplay");
+  if (uri == "") {
+    // A dot (.) is not valid in an HTML id attribute value.
+    var versionId = version.replace(/\./g,"-");
 
-  if (isValidProductVersion(product, version))
-    $("#" + product + "-" + versionId).removeClass("nodisplay");
-  else if (isValidProduct(product)) $("#" + product).removeClass("nodisplay");
-  else $("#overview").removeClass("nodisplay");
+    $("#overview").addClass("nodisplay");
+
+    if (isValidProductVersion(product, version)) {
+      $("#" + product + "-" + versionId).removeClass("nodisplay");
+    } else if (isValidProduct(product)) {
+      $("#" + product).removeClass("nodisplay");
+    } else {
+      $("#overview").removeClass("nodisplay");
+    }
+  } else {
+    visitDeepLink();
+  }
 }
 
 function clearTextField(srchForm) {
@@ -78,17 +87,36 @@ function getVersion() {
   return getQuerystring("version", "");
 }
 
-//function getProductContent() {
-//  var product = getProduct();
-//  var version = getVersion();
-//  return "<iframe id=\"product-content\" height=\"100%\" width=\"100%\""
-//    + "frameborder=\"0\" scrolling=\"no\""
-//    + src=\"" + getIFrameSrc(product, version) + "\"></iframe>";
-//}
+function getUri() {
+  return getQuerystring("uri", "");
+}
 
-//function getIFrameSrc(product, version) {
-//  // Return iFrame source for a particular product, version.
-//  if (version == "" && isValidProduct(product)) return product + ".html";
-//  else if !isValidProductVersion(product, version) return "overview.html";
-//  else return product + "-" + version + ".html";
-//}
+function visitDeepLink() {
+  var protocol = location.protocol;
+  var host = location.host;
+  var pathname = location.pathname;
+  var hash = location.hash;
+
+  var safeLocation = protocol + "//" + host + pathname;
+
+  // For the deep link, strip trailing file name + add product, version, URI, hash.
+  var deepLink = safeLocation.replace(/[^\\\/]+$/, "") + getProduct() + "/" + getVersion() + getUri() + hash;
+
+  if (isValidProduct(getProduct())) {
+    // The setDisplay() function tolerates invalid versions, pointing to the
+    // product page instead.
+    safeLocation = safeLocation + "?product=" + getProduct() + "&version=" + getVersion();
+  }
+
+  $.ajax({
+    async: false,
+    type: 'HEAD',
+    url: deepLink,
+    success: function() {
+      window.location.assign(deepLink);
+    },
+    error: function() {
+      window.location.assign(safeLocation);
+    }
+  });
+}
