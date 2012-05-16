@@ -1,0 +1,387 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;2.&nbsp;First OpenIDM Sample</title><link rel="stylesheet" type="text/css" href="css/coredoc.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><link rel="home" href="OpenIDM-Install-Guide.html" title="OpenIDM 2.0.2 Installation Guide"><link rel="up" href="OpenIDM-Install-Guide.html" title="OpenIDM 2.0.2 Installation Guide"><link rel="prev" href="chap-install.html" title="Chapter&nbsp;1.&nbsp;Installing OpenIDM Services"><link rel="next" href="chap-samples.html" title="Chapter&nbsp;3.&nbsp;More OpenIDM Samples"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script src="http://code.jquery.com/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+// On double-click, reformat <div class="screen"> for easy copying.
+$(document).ready(function() {
+  // Workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=116083
+  if (navigator.userAgent.match(/Firefox/i)) {
+    $(".screen").wrap("<pre />");
+    $(".programlisting").wrap("<pre />");
+  }
+  $(".screen").attr("title", "Double-click [-] to flatten lines.");
+  $(".screen").prepend('<img src="../images/minus.png" class="toggle">');
+});
+$(".screen").live("dblclick", function() {
+  $(this).replaceWith(
+    "<div class=\"flat\" title=\"Double-click [+] to wrap long lines.\">" +
+    $(this).html().replace(/minus\.png/,"plus.png").replace(/\n /g," ") + "\n<!--" + $(this).html() + "-->" +
+    "</div>");
+});
+$(".flat").live("dblclick", function() {
+  $(this).replaceWith(
+    "<div class=\"screen\" title=\"Double-click [-] to flatten lines.\">" +
+    $(this).html().replace(/(.|\n)+<!\-\-/m,"").replace(/\-\-\>/,"").replace(/plus\.png/,"minus.png") +
+    "</div>");
+});
+</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head ><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;2.&nbsp;First OpenIDM Sample</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-install.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-samples.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;2.&nbsp;First OpenIDM Sample"><div class="titlepage"><div><div><h2 class="title"><a name="chap-sample"></a>Chapter&nbsp;2.&nbsp;First OpenIDM Sample</h2></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="section"><a href="chap-sample.html#before-you-begin-sample">2.1. Before You Begin</a></span></dt><dt><span class="section"><a href="chap-sample.html#about-the-sample">2.2. About the Sample</a></span></dt><dt><span class="section"><a href="chap-sample.html#sample-running-reconciliation">2.3. Running Reconciliation</a></span></dt><dt><span class="section"><a href="chap-sample.html#sample-viewing-users-logs">2.4. Viewing Users &amp; Logs</a></span></dt><dt><span class="section"><a href="chap-sample.html#sample-adding-users-resource">2.5. Adding Users in a Resource</a></span></dt><dt><span class="section"><a href="chap-sample.html#sample-adding-users-rest">2.6. Adding Users Through REST</a></span></dt></dl></div><a class="indexterm" name="d1922e519"></a><a class="indexterm" name="d1922e522"></a><a class="indexterm" name="d1922e527"></a><p>In OpenIDM 2.0.2, the sample in
+ <code class="filename">openidm/samples/sample1</code> is configured and enabled by
+ default. This chapter provides an overview of the sample and how it is
+ configured. To see a listing and an overview of the rest of the samples
+ provided see the README found in <code class="filename">openidm/samples</code> and in
+ the chapter <span class="olink"><em class="citetitle">More OpenIDM
+ Samples</em></span>.</p><div class="section" title="2.1.&nbsp;Before You Begin"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="before-you-begin-sample"></a>2.1.&nbsp;Before You Begin</h2></div></div></div><p>Install and start OpenIDM as described in the chapter on <span class="olink"><em class="citetitle">Installing
+  OpenIDM Services</em></span>.</p><p>OpenIDM comes with an internal noSQL database, OrientDB for use as
+  the internal repository out of the box. This makes it easy to get started
+  with OpenIDM. OrientDB is not yet supported for production use, however,
+  so use a supported JDBC database when moving to production.</p><p>If you want to query the internal noSQL database, download and unzip
+  <a class="link" href="http://code.google.com/p/orient/wiki/Download" target="_blank">OrientDB 1.0</a>. Once you have downloaded and unzipped
+  OrientDB, you can find the shell console in the <code class="filename">bin</code>
+  directory. Start OrientDB console using either <span class="command"><strong>console.sh</strong></span>
+  or <span class="command"><strong>console.bat</strong></span>, and then connect to the running OpenIDM
+  with the <span class="command"><strong>connect</strong></span> command.</p><div class="screen">$ /path/to/orientdb-1.0rc6/bin/console.sh
+&gt;
+&gt; connect remote:localhost/openidm admin admin
+
+Connecting to database [remote:localhost/openidm] with user 'admin'...OK
+
+&gt;</div><div class="variablelist"><p>Once connected to the database, you might find the following
+   commands useful.</p><dl><dt><span class="term"><span class="command"><strong>info</strong></span></span></dt><dd><p>Shows classes and records</p></dd><dt><span class="term"><span class="command"><strong>select * from managed_user</strong></span></span></dt><dd><p>Shows all users in the OpenIDM repository</p></dd><dt><span class="term"><span class="command"><strong>select * from audit_activity</strong></span></span></dt><dd><p>Shows all activity audit records</p><p>This table is created when there is some activity.</p></dd><dt><span class="term"><span class="command"><strong>select * from audit_recon</strong></span></span></dt><dd><p>Shows all reconciliation audit records</p><p>This table is created when you run reconciliation.</p></dd></dl></div></div><div class="section" title="2.2.&nbsp;About the Sample"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="about-the-sample"></a>2.2.&nbsp;About the Sample</h2></div></div></div><p>OpenIDM connects identity data objects held in external resources
+  by mapping one object to another. To connect to external resources,
+  OpenIDM uses <a class="link" href="http://openicf.forgerock.org" target="_top">OpenICF</a>
+  connectors configured for use with the external resources.</p><p>When objects in one external resource change, OpenIDM determines how
+  the changes affect other objects, and can make the changes as necessary.
+  This sample demonstrates how OpenIDM does this by using
+  <em class="firstterm">reconciliation</em> and
+  <em class="firstterm">synchronization</em>. OpenIDM reconciliation compares
+  objects in one object set to mapped objects in another object set.
+  Reconciliation can work in write mode, where OpenIDM writes changes to
+  affected objects, or in report mode, where OpenIDM reports on what changes
+  would be written without making the changes. OpenIDM synchronization reflects
+  changes in objects to any mapped objects, making changes as necessary to
+  create or remove mapped objects and links to associate them. For a more
+  thorough explanation of reconciliation and synchronization, the section on
+  <span class="olink"><em class="citetitle">Types of
+  Synchronization</em></span> in the <em class="citetitle">Integrator's
+  Guide</em>.</p><p>This sample connects to an XML file holding sample user data. The XML
+  file is configured as the authoritative source. In this sample, users are
+  created in the local repository to show you how you can manage local users
+  through the REST APIs. You can also use OpenIDM without storing managed
+  objects for users in the local repository, instead reconciling and
+  synchronizing objects directly through connectors to external
+  resources.</p><p>Furthermore, this sample involves only one external resource. In
+  practice, you can connect as many resources as needed for your
+  deployment.</p><div class="variablelist" title="Sample Configuration Files"><a name="about-the-sample-configuration"></a><div class="variablelist-title">Sample Configuration Files</div><p>You can find configuration files for the sample under the
+   <code class="filename">openidm/samples/sample1/conf</code> directory. As you review
+   the samples, keep the following in mind.</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>OpenIDM regularly scans for any scheduler configuration files in the
+     <code class="filename">openidm/conf</code> directory.</p></li><li class="listitem"><p>OpenIDM's reconciliation service reads the mappings and actions for
+    the source and target users from
+    <code class="filename">openidm/conf/sync.json</code>.</p></li><li class="listitem"><p>Reconciliation runs, querying all users in the source, and then
+    creating, deleting, or modifying users in the local OpenIDM repository
+    according to the synchronization mappings.</p></li><li class="listitem"><p>OpenIDM writes all operations to the audit logs in both the internal
+    database and also the flat files in the <code class="filename">openidm/audit</code>
+    directory.</p></li></ol></div><p>The following configuration files play important roles in this
+   sample.</p><dl><dt><span class="term"><code class="filename">openidm/conf/provisioner.openicf-xml.json</code></span></dt><dd><p>This connector configuration file serves for the XML file resource.
+     In this sample, this connector instance acts as the authoritative source
+     for users. In the configuration file you can see that the
+     <code class="literal">xmlFilePath</code> is set to
+     <code class="filename">samples/sample1/data/xmlConnectorData.xml</code>, which
+     contains users in XML format.</p><p>For details on the OpenICF connector configuration files see the
+     <span class="olink"><em class="citetitle">Connecting to External Resources</em></span> chapter in
+     the <em class="citetitle">Integrator's Guide</em>.</p></dd><dt><span class="term"><code class="filename">openidm/conf/scheduler-reconcile_systemXmlAccounts_managedUser.json</code></span></dt><dd><p>The sample scheduler configuration file defines a reconciliation
+     job that, if enabled by setting <code class="literal">"enabled" : true</code>,
+     starts a reconciliation each minute for the mapping named
+     <code class="literal">systemXmlAccounts_managedUser</code>. The mapping is defined
+     in the configuration file, <code class="filename">conf/sync.json</code>.</p><div class="programlisting">{
+    <strong class="hl-string"><em style="color: #f58220">"enabled"</em></strong> : false,
+    <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"cron"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"schedule"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"0 0/1 * * * ?"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"invokeService"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"org.forgerock.openidm.sync"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"invokeContext"</em></strong>: {
+        <strong class="hl-string"><em style="color: #f58220">"action"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"reconcile"</em></strong>,
+        <strong class="hl-string"><em style="color: #f58220">"mapping"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"systemXmlfileAccounts_managedUser"</em></strong>
+    }
+}</div><p>You can also start reconciliation through the REST interface. The
+     call to the REST interface is an HTTP POST such as the following.</p><div class="screen" width="100">$ curl
+ --header "X-OpenIDM-Username: openidm-admin"
+ --header "X-OpenIDM-Password: openidm-admin"
+ --request POST
+ "http://localhost:8080/openidm/sync?_action=recon&amp;mapping=systemXmlfileAccounts_managedUser"</div><p>For details on the scheduler configuration see the <span class="olink"><em class="citetitle">Scheduling Synchronization</em></span> chapter in the
+     <em class="citetitle">Integrator's Guide</em>.</p></dd><dt><span class="term"><code class="filename">openidm/conf/sync.json</code></span></dt><dd><p>This sample configuration file defines the configuration for
+     reconciliation and synchronization. The
+     <code class="literal">systemXmlAccounts_managedUser</code> is the mapping for
+     the reconciliation in the scheduler configuration. This entry in
+     <code class="filename">conf/sync.json</code> defines the synchronization mappings
+     between the XML file connector (source) and the local repository
+     (target).</p><div class="programlisting">
+{
+    <strong class="hl-string"><em style="color: #f58220">"mappings"</em></strong>: [
+        {
+            <strong class="hl-string"><em style="color: #f58220">"name"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"systemXmlfileAccounts_managedUser"</em></strong>,
+            <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"system/xmlfile/account"</em></strong>,
+            <strong class="hl-string"><em style="color: #f58220">"target"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"managed/user"</em></strong>,
+            <strong class="hl-string"><em style="color: #f58220">"correlationQuery"</em></strong>: {
+                <strong class="hl-string"><em style="color: #f58220">"type"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"text/javascript"</em></strong>,
+                <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"var query = {'_query-id' : 'for-userName',
+</em></strong>                    <strong class="hl-string"><em style="color: #f58220">'userName'</em></strong> :  source.name};query;<strong class="hl-string"><em style="color: #f58220">"
+</em></strong>            },
+            <strong class="hl-string"><em style="color: #f58220">"properties"</em></strong>: [
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"description"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"target"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"description"</em></strong>
+                },
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"firstname"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"target"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"givenName"</em></strong>
+                },
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"email"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"target"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"email"</em></strong>
+                },
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"lastname"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"target"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"familyName"</em></strong>
+                },
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"name"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"target"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"userName"</em></strong>
+                },
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"source"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"name"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"target"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"_id"</em></strong>
+                }
+            ],
+            <strong class="hl-string"><em style="color: #f58220">"policies"</em></strong>: [
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"situation"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"CONFIRMED"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"action"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"UPDATE"</em></strong>
+                },
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"situation"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"FOUND"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"action"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"IGNORE"</em></strong>
+                },
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"situation"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"ABSENT"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"action"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"CREATE"</em></strong>
+                },
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"situation"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"AMBIGUOUS"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"action"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"IGNORE"</em></strong>
+                },
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"situation"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"MISSING"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"action"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"IGNORE"</em></strong>
+                },
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"situation"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"SOURCE_MISSING"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"action"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"IGNORE"</em></strong>
+                },
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"situation"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"UNQUALIFIED"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"action"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"IGNORE"</em></strong>
+                },
+                {
+                    <strong class="hl-string"><em style="color: #f58220">"situation"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"UNASSIGNED"</em></strong>,
+                    <strong class="hl-string"><em style="color: #f58220">"action"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"IGNORE"</em></strong>
+                }
+            ]
+        }
+    ]
+}</div><p>Source and target paths starting with <code class="literal">managed</code>,
+     such as <code class="literal">managed/user</code>, always refer to objects in the
+     local OpenIDM repository, whereas paths starting with
+     <code class="literal">system</code>, such as <code class="literal">system/xmlfile/account</code>,
+     refer to connector objects, in this case the XML file connector.</p><p>To filter objects from the resource for a particular target, you can
+     use the <code class="literal">validTarget</code> script in the mapping to ensure
+     only users matching specified criteria are considered part of the
+     reconciliation. You can use an <code class="literal">onCreate</code> script in a
+     mapping to set default values for a user created in the target resource.
+     For details on scripting see the <span class="olink"><em class="citetitle">Scripting Reference</em></span> appendix in the
+     <em class="citetitle">Integrator's Guide</em>.</p><p>For details on synchronization, reconciliation, and
+     <code class="filename">sync.json</code>, see the <span class="olink"><em class="citetitle">Configuring Synchronization</em></span> chapter in the
+     <em class="citetitle">Integrator's Guide</em>.</p></dd></dl></div></div><div class="section" title="2.3.&nbsp;Running Reconciliation"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="sample-running-reconciliation"></a>2.3.&nbsp;Running Reconciliation</h2></div></div></div><p>If OpenIDM is not running, start it as described in the procedure
+  <span class="olink"><em class="citetitle">To Start OpenIDM
+  Services</em></span>.</p><p>Reconcile the objects in the resources either by editing
+  <code class="filename">conf/sync.json</code> to set <code class="literal">"enabled" : true</code>
+  and then waiting until the scheduled reconciliation happens, or by using the
+  REST interface.</p><div class="screen" width="100">$ curl
+ --header "X-OpenIDM-Username: openidm-admin"
+ --header "X-OpenIDM-Password: openidm-admin"
+ --request POST
+ "http://localhost:8080/openidm/sync?_action=recon&amp;mapping=systemXmlfileAccounts_managedUser"</div><p>To see what happened, review CSV format log,
+  <code class="filename">openidm/audit/recon.csv</code>.</p></div><div class="section" title="2.4.&nbsp;Viewing Users &amp; Logs"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="sample-viewing-users-logs"></a>2.4.&nbsp;Viewing Users &amp; Logs</h2></div></div></div><p>After reconciliation runs, you can use the REST interface to display
+  all users in the local repository, by performing an HTTP GET on the following
+  URL:
+  <code class="literal">http://localhost:8080/openidm/managed/user/?_query-id=query-all-ids</code>.</p><p>OpenIDM returns a JSON file. Depending on your browser, it can display
+  the JSON or download it as a file. Alternatively, you can use the following
+  <a class="link" href="http://curl.haxx.se/" target="_top"><span class="command"><strong>curl</strong></span></a>
+  command to get the JSON file.</p><div class="screen">$ curl
+ --header "X-OpenIDM-Username: openidm-admin"
+ --header "X-OpenIDM-Password: openidm-admin"
+ --request GET
+ http://localhost:8080/openidm/managed/user/?_query-id=query-all-ids
+
+{
+ "query-time-ms":1,
+ "result":[
+  {
+   "_id":"joe",
+   "_rev":"0"
+  },{
+   "_id":"DDOE1",
+   "_rev":"0"
+  }],
+ "conversion-time-ms":0
+ }
+</div><p>If you created user <code class="literal">joe</code> as described previously in
+  this guide, you see IDs for two users, the second user
+  <code class="literal">DDOE1</code> created during reconcililation. Now try a RESTful
+  GET of user <code class="literal">DDOE1</code> by appending the user ID to the managed
+  user URL,
+  <code class="literal">http://localhost:8080/openidm/managed/user/</code>.</p><div class="screen">$ curl
+ --header "X-OpenIDM-Username: openidm-admin"
+ --header "X-OpenIDM-Password: openidm-admin"
+ http://localhost:8080/openidm/managed/user/DDOE1
+
+{
+ "familyName": "Doe1",
+ "userName": "DDOE1",
+ "givenName": "Darth1",
+ "_id": "DDOE1",
+ "_rev": "0",
+ "email": [ "mail1@example.com" ],
+ "description": "Created By XML1"
+ }</div><p>In the OrientDB console, connect to the database, and then query the
+  users and audit logs. The following shows edited excerpts from a console
+  session querying OrientDB.</p><div class="screen">&gt; connect remote:localhost/openidm admin admin
+Connecting to database [remote:localhost/openidm] with user 'admin'...OK
+
+&gt; select * from managed_user
+
+---+---------+...+--------------------+...
+  #| RID     |...|_openidm_id         |...
+---+---------+...+--------------------+...
+  0|     #8:0|...|joe                 |...
+  1|     #8:1|...|DDOE1               |...
+---+---------+...+--------------------+...
+
+2 item(s) found. Query executed in 0.011 sec(s).
+
+&gt; select * from audit_activity
+
+---+---------+--------------------+--------------------+--------------------+...
+  #| RID     |rev                 |status              |timestamp           |...
+---+---------+--------------------+--------------------+--------------------+...
+  0|    #11:0|0                   |SUCCESS             |2011-12-02T07:34:19 |...
+  1|    #11:1|0                   |SUCCESS             |2011-12-02T07:34:46 |...
+---+---------+--------------------+--------------------+--------------------+...
+
+2 item(s) found. Query executed in 0.013 sec(s).
+
+&gt; select * from audit_recon
+
+---+---------+--------------------+--------------------+--------------------+...
+  #| RID     |timestamp           |sourceObjectId      |_openidm_id         |...
+---+---------+--------------------+--------------------+--------------------+...
+  0|    #12:0|2011-12-02T07:34:46 |system/xmlfile/account/1|02f5c8fd-0cc4-4a5...
+  1|    #12:1|2011-12-02T07:34:46 |null                |4707745d-6b10-4c75-9b...
+---+---------+--------------------+--------------------+--------------------+...
+
+2 item(s) found. Query executed in 0.01 sec(s).</div><p>Again, this information is also available in the CSV format audit logs
+  located in the <code class="filename">openidm/audit</code> directory.</p><div class="screen">$ ls /path/to/openidm/audit/
+access.csv activity.csv recon.csv</div></div><div class="section" title="2.5.&nbsp;Adding Users in a Resource"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="sample-adding-users-resource"></a>2.5.&nbsp;Adding Users in a Resource</h2></div></div></div><p>Add a user to the source connector XML data file to see reconciliation
+  in action. During the next reconciliation, OpenIDM finds the new user in the
+  source connector, and creates the user in the local repository. To add the
+  user, copy the following XML into
+  <code class="filename">openidm/samples/sample1/data/xmlConnectorData.xml</code>.</p><div class="programlisting"><strong class="hl-tag" style="color: #f58220">&lt;ri:__ACCOUNT__&gt;</strong>
+   <strong class="hl-tag" style="color: #f58220">&lt;icf:__UID__&gt;</strong>12345<strong class="hl-tag" style="color: #f58220">&lt;/icf:__UID__&gt;</strong>
+   <strong class="hl-tag" style="color: #f58220">&lt;icf:__NAME__&gt;</strong>Daffy Duck<strong class="hl-tag" style="color: #f58220">&lt;/icf:__NAME__&gt;</strong>
+   <strong class="hl-tag" style="color: #f58220">&lt;icf:__PASSWORD__&gt;</strong>123456789<strong class="hl-tag" style="color: #f58220">&lt;/icf:__PASSWORD__&gt;</strong>
+   <strong class="hl-tag" style="color: #f58220">&lt;ri:email&gt;</strong>daffy.duck@forgerock.com<strong class="hl-tag" style="color: #f58220">&lt;/ri:email&gt;</strong>
+   <strong class="hl-tag" style="color: #f58220">&lt;ri:lastname&gt;</strong>Duck<strong class="hl-tag" style="color: #f58220">&lt;/ri:lastname&gt;</strong>
+   <strong class="hl-tag" style="color: #f58220">&lt;ri:firstname&gt;</strong>Daffy<strong class="hl-tag" style="color: #f58220">&lt;/ri:firstname&gt;</strong>
+<strong class="hl-tag" style="color: #f58220">&lt;/ri:__ACCOUNT__&gt;</strong></div><p>Run reconciliation as described in the section on <a class="link" href="chap-sample.html#sample-running-reconciliation" title="2.3.&nbsp;Running Reconciliation"><em class="citetitle">Running
+  Reconciliation</em></a>. After reconciliation has run, query the
+  local repository to see the new user appear in the list of all users under
+  <code class="literal">http://localhost:8080/openidm/managed/user/?_query-id=query-all-ids</code>.</p><div class="screen">$ curl
+ --header "X-OpenIDM-Username: openidm-admin"
+ --header "X-OpenIDM-Password: openidm-admin"
+ --request GET
+ http://localhost:8080/openidm/managed/user/?_query-id=query-all-ids
+
+{
+ "query-time-ms":1,
+ "result":[{
+    "_id":"DDOE1",
+    "_rev":"0"
+   },{
+   "_id":"joe",
+   "_rev":"0"
+   },{
+    "_id":"Daffy Duck",
+    "_rev":"0"
+   }],
+ "conversion-time-ms":0
+ }</div><p>Also look at the reconciliation audit log,
+  <code class="filename">openidm/audit/recon.csv</code> to see what took place during
+  reconciliation. This formatted excerpt from the log covers two
+  reconciliation runs.</p><div class="programlisting" width="110">
+"_id",  "action",...,"reconId","situation","sourceObjectId",...,              "targetObjectId","timestamp";
+"02...","CREATE",...,"cc0...", "ABSENT",   "system/xmlfile/account/1",...,    "managed/user/DDOE1",...;
+"47...","IGNORE",...,"cc0...", "UNQUALIFIED",""            ,...,              "managed/user/joe",...;
+"79...","UPDATE",...,"d15...", "CONFIRMED","system/xmlfile/account/1",...,    "managed/user/DDOE1",...;
+"af...","CREATE",...,"d15...", "ABSENT",   "system/xmlfile/account/12345",...,"managed/user/Daffy Duck",...;
+"23...","IGNORE",...,"d15...", "UNQUALIFIED","",...,                          "managed/user/joe",...;
+</div><p>The important fields in the audit log are the action, the situation,
+  the source <code class="literal">sourceObjectId</code>, and the target
+  <code class="literal">targetObjectId</code>. For each object in the source,
+  reconciliation results in a situation that leads to an action on the
+  target.</p><p>In the first reconciliation run (the abbreviated
+  <code class="literal">reconID</code> is shown as <code class="literal">cc0...</code>), the source
+  object does not exist in the target, resulting in an ABSENT situation and an
+  action to CREATE the object in the target. The object created earlier in the
+  target does not exist in the source, and so is IGNORED.</p><p>In the second reconciliation run (the abbreviated
+  <code class="literal">reconID</code> is shown as <code class="literal">d15...</code>) after you
+  added a user to the source XML, OpenIDM performs an UPDATE on the user object
+  <code class="literal">DDOE1</code> that already exists in the target, in this case
+  changing the internal ID. OpenIDM performs a CREATE on the target for the
+  new user.</p><p>You configure the action that OpenIDM takes based on an object's
+  situation in the configuration file, <code class="filename">conf/sync.json</code>.
+  For the list of all possible situations and actions, see the <span class="olink"><em class="citetitle">Configuring Synchronization</em></span> chapter in the
+  <em class="citetitle">Integrator's Guide</em>.</p><p>For details on auditing, see the <span class="olink"><em class="citetitle">Using Audit Logs</em></span> chapter in the
+  <em class="citetitle">Integrator's Guide</em>.</p></div><div class="section" title="2.6.&nbsp;Adding Users Through REST"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="sample-adding-users-rest"></a>2.6.&nbsp;Adding Users Through REST</h2></div></div></div><p>You can also add users directly to the local repository through the
+  REST interface. The following example adds a user named James Berg.</p><p>Create <code class="literal">james</code> (UNIX).</p><div class="screen">$ curl
+ --header "X-OpenIDM-Username: openidm-admin"
+ --header "X-OpenIDM-Password: openidm-admin"
+ --request PUT
+ --data '{
+  "name":"james",
+  "lastname":"Berg",
+  "firstname":"James",
+  "email":"james2@examplerock.com",
+  "fullname":"hallo2",
+  "description":"Created by OpenIDM REST.",
+  "userPassword":"asdfkj23"
+ }'
+ http://localhost:8080/openidm/managed/user/james
+
+{"_id":"james","_rev":"0"}</div><p>Create <code class="literal">james</code> (Windows).</p><div class="screen">C:\&gt;curl
+ --header "X-OpenIDM-Username: openidm-admin"
+ --header "X-OpenIDM-Password: openidm-admin"
+ --request PUT
+ --data {
+ \"name\":\"james\",
+ \"lastname\":\"Berg\",
+ \"firstname\":\"James\",
+ \"email\":\"james2@examplerock.com\",
+ \"fullname\":\"hallo2\",
+ \"description\":\"Created by OpenIDM REST.\",
+ \"userPassword\":\"asdfkj23\"
+ }
+ http://localhost:8080/openidm/managed/user/james
+
+{"_id":"james","_rev":"0"}</div><p>OpenIDM creates the new user in the repository. If you configure a
+  mapping to apply changes from the local repository to the XML file connector
+  as a target, OpenAM next updates the XML file to add the new user.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-install.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-samples.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;1.&nbsp;Installing OpenIDM Services&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="OpenIDM-Install-Guide.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;3.&nbsp;More OpenIDM Samples</td></tr></table></div></body></html>

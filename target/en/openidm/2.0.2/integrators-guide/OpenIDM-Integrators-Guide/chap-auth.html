@@ -1,0 +1,203 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;9.&nbsp;Managing Authentication, Authorization &amp; RBAC</title><link rel="stylesheet" type="text/css" href="css/coredoc.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><link rel="home" href="OpenIDM-Integrators-Guide.html" title="OpenIDM 2.0.2 Integrator's Guide"><link rel="up" href="OpenIDM-Integrators-Guide.html" title="OpenIDM 2.0.2 Integrator's Guide"><link rel="prev" href="chap-passwords.html" title="Chapter&nbsp;8.&nbsp;Managing Passwords"><link rel="next" href="chap-security.html" title="Chapter&nbsp;10.&nbsp;Securing &amp; Hardening OpenIDM"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script src="http://code.jquery.com/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+// On double-click, reformat <div class="screen"> for easy copying.
+$(document).ready(function() {
+  // Workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=116083
+  if (navigator.userAgent.match(/Firefox/i)) {
+    $(".screen").wrap("<pre />");
+    $(".programlisting").wrap("<pre />");
+  }
+  $(".screen").attr("title", "Double-click [-] to flatten lines.");
+  $(".screen").prepend('<img src="../images/minus.png" class="toggle">');
+});
+$(".screen").live("dblclick", function() {
+  $(this).replaceWith(
+    "<div class=\"flat\" title=\"Double-click [+] to wrap long lines.\">" +
+    $(this).html().replace(/minus\.png/,"plus.png").replace(/\n /g," ") + "\n<!--" + $(this).html() + "-->" +
+    "</div>");
+});
+$(".flat").live("dblclick", function() {
+  $(this).replaceWith(
+    "<div class=\"screen\" title=\"Double-click [-] to flatten lines.\">" +
+    $(this).html().replace(/(.|\n)+<!\-\-/m,"").replace(/\-\-\>/,"").replace(/plus\.png/,"minus.png") +
+    "</div>");
+});
+</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head ><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;9.&nbsp;Managing Authentication, Authorization &amp; RBAC</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-passwords.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-security.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;9.&nbsp;Managing Authentication, Authorization &amp; RBAC"><div class="titlepage"><div><div><h2 class="title"><a name="chap-auth"></a>Chapter&nbsp;9.&nbsp;Managing Authentication, Authorization &amp; RBAC</h2></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="section"><a href="chap-auth.html#openidm-users">9.1. OpenIDM Users</a></span></dt><dt><span class="section"><a href="chap-auth.html#openidm-authentication">9.2. Authentication</a></span></dt><dt><span class="section"><a href="chap-auth.html#openidm-roles">9.3. Roles</a></span></dt><dt><span class="section"><a href="chap-auth.html#openidm-authorization">9.4. Authorization</a></span></dt></dl></div><a class="indexterm" name="d155e3979"></a><a class="indexterm" name="d155e3982"></a><p>OpenIDM currently provides a simple, yet flexible authentication and
+ authorization mechanism based on REST interface URLs and on roles stored in
+ the repository.</p><div class="section" title="9.1.&nbsp;OpenIDM Users"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="openidm-users"></a>9.1.&nbsp;OpenIDM Users</h2></div></div></div><a class="indexterm" name="d155e3990"></a><a class="indexterm" name="d155e3995"></a><p>OpenIDM distinguishes between internal users and managed users.</p><div class="section" title="9.1.1.&nbsp;Internal Users"><div class="titlepage"><div><div><h3 class="title"><a name="internal-users"></a>9.1.1.&nbsp;Internal Users</h3></div></div></div><p>OpenIDM sets up two internal users by default, anonymous and
+   openidm-admin. OpenIDM separates these accounts from all other accounts
+   to protect them from any reconciliation or sync processes. You can add
+   or remove internal users at any time.</p><div class="variablelist"><dl><dt><span class="term">anonymous</span></dt><dd><p>This user serves to access OpenIDM anonymously, for users
+     who do not have their own accounts. The anonymous user is primarily
+     intended to allow self-registration.</p><p>OpenIDM stores the anonymous user's password,
+     <code class="literal">amonymous</code>, in clear text in the repository internal
+     user table. The password is not considered to be secret.</p></dd><dt><span class="term">openidm-admin</span></dt><dd><p>This user serves as the super administrator. After
+     installation, the <code class="literal">openidm-admin</code> user has full access,
+     and provides a fall back in case other users are locked out. Do not use
+     <code class="literal">openidm-admin</code> for normal tasks. Usually no one is
+     associated with the <code class="literal">openidm-admin</code> user, so audit log
+     records pertaining to <code class="literal">openidm-admin</code> do not reflect
+     the actions of any real person.</p><p>OpenIDM encrypts the password, <code class="literal">openidm-admin</code>, by
+     dfault. Change the password immediately after installation. For
+     instructions, see <span class="olink"><em class="citetitle">To Replace the Default User &amp;
+     Password</em></span>.</p></dd></dl></div><p>OpenIDM stores internal users and their role membership in a table
+   in the repository called <code class="literal">internaluser</code> when implemented
+   in MySQL.</p></div><div class="section" title="9.1.2.&nbsp;Managed Users"><div class="titlepage"><div><div><h3 class="title"><a name="managed-users"></a>9.1.2.&nbsp;Managed Users</h3></div></div></div><a class="indexterm" name="d155e4054"></a><p>External users that OpenIDM manages are referred to as managed users.
+   OpenIDM stores managed users in the managed objects table of the repository,
+   called <code class="literal">managedobjects</code> when implemented in MySQL. A second
+   table, <code class="literal">managedobjectproperties</code> in MySQL, serves as the
+   index table.</p><p>By default, the attribute names for managed user login and password
+   are <code class="literal">email</code> and <code class="literal">password</code>,
+   respectively.</p></div></div><div class="section" title="9.2.&nbsp;Authentication"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="openidm-authentication"></a>9.2.&nbsp;Authentication</h2></div></div></div><p>OpenIDM does not allow access to the REST interface unless you
+  authenticate. If a project requires anonymous access, to allow users to
+  self-register for example, then allow access by user
+  <code class="literal">anonymous</code>, password <code class="literal">anonymous</code>, as
+  described in <a class="xref" href="chap-auth.html#internal-users" title="9.1.1.&nbsp;Internal Users">Section&nbsp;9.1.1, &#8220;Internal Users&#8221;</a>. In production, only
+  applications are expected to access the REST interface.</p><div class="variablelist"><p>OpenIDM supports an improved authentication mechanism on the REST interface. The reason for not using standards, like basic authentication or form based authentication, is their leak of compatibility with AJAX.</p><dl><dt><span class="term">OpenIDM authentication with standard header fields</span></dt><dd><div class="screen">$ curl --user userName:password</div><p>This authentication is compatible with standard basic authentication except that it will not prompt for credentials if they are missing in the request.</p></dd><dt><span class="term">OpenIDM  authentication with OpenIDM header fields</span></dt><dd><div class="screen">$ curl
+ --header "X-OpenIDM-Username: openidm-admin"
+ --header "X-OpenIDM-Password: openidm-admin"</div></dd></dl></div><p>For more details about the OpenIDM authentication mechanism please see <span class="olink">
+  <em class="citetitle">Use Message Level Security</em>
+</span>.</p><p>You can change the attributes OpenIDM uses to store user login and
+  password values. The attribute names are shown in a database query
+  defined in
+  <code class="filename">openidm/conf/repo.<em class="replaceable"><code>repo-type</code></em>.json</code>.
+  </p><div class="variablelist"><p>Two queries are defined by default.</p><dl><dt><span class="term"><code class="literal">credential-internaluser-query</code></span></dt><dd><p>Uses the user object ID for login</p></dd><dt><span class="term"><code class="literal">credential-query</code></span></dt><dd><p>Uses the user email attribute for login</p></dd></dl></div><p>The <code class="filename">openidm/conf/authentication.json</code> file defines
+  the currently active query as the value of the <code class="literal">queryId</code>
+  property. In the following example, <code class="literal">credential-query</code> is
+  active.</p><div class="programlisting">
+{
+    <strong class="hl-string"><em style="color: #f58220">"queryId"</em></strong>: <span class="strong"><strong>"credential-query"</strong></span>,
+    <strong class="hl-string"><em style="color: #f58220">"queryOnResource"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"managed/user"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"defaultUserRoles"</em></strong>: [
+        <strong class="hl-string"><em style="color: #f58220">"openidm-authorized"</em></strong>
+    ]
+}</div></div><div class="section" title="9.3.&nbsp;Roles"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="openidm-roles"></a>9.3.&nbsp;Roles</h2></div></div></div><a class="indexterm" name="d155e4157"></a><a class="indexterm" name="d155e4162"></a><div class="variablelist"><p>OpenIDM sets up the following roles by default.</p><dl><dt><span class="term">openidm-reg</span></dt><dd><p>Role for users accessing OpenIDM with the default anonymous
+     account</p></dd><dt><span class="term">openidm-admin</span></dt><dd><p>OpenIDM administrator role</p></dd><dt><span class="term">openidm-authorized</span></dt><dd><p>Default role for any user authenticated with a user name and
+     password</p></dd><dt><span class="term">openidm-cert</span></dt><dd><p>Default role for any user authenticated with mutual SSL
+     authentication</p></dd></dl></div><p>You configure default roles assigned to successfully authenticated
+  users authentication using the <code class="literal">defaultUserRoles</code> property
+  in <code class="filename">openidm/conf/authentication.json</code>, which takes a list.
+  The default value is <code class="literal">openidm-authorized</code>.</p><div class="programlisting">
+{
+    <strong class="hl-string"><em style="color: #f58220">"queryId"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"credential-query"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"queryOnResource"</em></strong>: <strong class="hl-string"><em style="color: #f58220">"managed/user"</em></strong>,
+    <strong class="hl-string"><em style="color: #f58220">"defaultUserRoles"</em></strong>: [
+        <span class="strong"><strong>"openidm-authorized"</strong></span>
+    ]
+}</div></div><div class="section" title="9.4.&nbsp;Authorization"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="openidm-authorization"></a>9.4.&nbsp;Authorization</h2></div></div></div><a class="indexterm" name="d155e4211"></a><p>OpenIDM access control can be based on REST interface URLs.</p><p>The <code class="filename">openidm/script/router-authz.js</code> script
+  controls access to REST interface URLs. OpenIDM calls the script for each
+  request. The script either throws the string <code class="literal">Access denied</code>,
+  or nothing. If it throws <code class="literal">Access denied</code>, then OpenIDM
+  denies the request. The default script is shown below.</p><div class="programlisting">
+<strong class="hl-keyword">const</strong> allowCert = false;
+
+<strong class="hl-keyword">function</strong> contains(a, o) {
+    <strong class="hl-keyword">if</strong> (<strong class="hl-keyword">typeof</strong>(a) != <strong class="hl-string"><em style="color: #f58220">'undefined'</em></strong> &amp;&amp; a != null) {
+        <strong class="hl-keyword">for</strong> (<strong class="hl-keyword">var</strong> i = <span class="hl-number">0</span>; i &lt;= a.length; i++) {
+            <strong class="hl-keyword">if</strong> (a[i] === o) {
+                <strong class="hl-keyword">return</strong> true;
+            }
+        }
+    }
+    <strong class="hl-keyword">return</strong> false;
+}
+
+<strong class="hl-keyword">function</strong> allow() {
+    <strong class="hl-keyword">if</strong> (<strong class="hl-keyword">typeof</strong>(request.parent) === <strong class="hl-string"><em style="color: #f58220">'undefined'</em></strong> ||
+            request.parent.type != <strong class="hl-string"><em style="color: #f58220">'http'</em></strong>) {
+        <strong class="hl-keyword">return</strong> true;
+    }
+    <strong class="hl-keyword">var</strong> roles = request.parent.security[<strong class="hl-string"><em style="color: #f58220">'openidm-roles'</em></strong>];
+    <strong class="hl-keyword">if</strong> (contains(roles, <strong class="hl-string"><em style="color: #f58220">'openidm-admin'</em></strong>)) {
+        <strong class="hl-keyword">return</strong> true;
+    } <strong class="hl-keyword">else</strong> <strong class="hl-keyword">if</strong> (allowCert &amp;&amp; contains(roles, <strong class="hl-string"><em style="color: #f58220">'openidm-cert'</em></strong>)) {
+        <strong class="hl-keyword">return</strong> true;
+    } <strong class="hl-keyword">else</strong> {
+        <strong class="hl-keyword">return</strong> false;
+    }
+}
+
+<strong class="hl-keyword">if</strong> (!allow()) {
+    <strong class="hl-keyword">throw</strong> <strong class="hl-string"><em style="color: #f58220">"Access denied"</em></strong>;
+}</div><div class="variablelist"><p>The script can be seen as having three parts: constants, functions,
+   and a decision.</p><dl><dt><span class="term">constants</span></dt><dd><p>The constants can function as global switches, for example to toggle
+     whether certificate-based authentication is allowed.</p><p>The example that follows shows a constant used to toggle whether
+     anonymous authentication is allowed.</p></dd><dt><span class="term">functions</span></dt><dd><p>The default script defines two functions. The
+     <code class="literal">allow()</code> function is called by the final if-statement.
+     The <code class="literal">contains()</code> function takes the list of roles
+     assigned to an authenticated user, and checks whether the list contains
+     the role specified as the second argument. If the list does contain the
+     role, then <code class="literal">contains()</code> returns
+     <code class="literal">true</code>.</p></dd><dt><span class="term">decision</span></dt><dd><p>The if-statement at the end of the script executes first. It calls
+     the <code class="literal">allow()</code> function, which calls other functions.
+     The <code class="literal">allow()</code> function returns true or false, triggering
+     the behavior of the final if-statement. </p></dd></dl></div><p>The following example extends the script to filter out requests not
+  under <code class="literal">/openidm/config</code> or
+  <code class="literal">/openidm/managed</code>.</p><div class="programlisting">
+<strong class="hl-keyword">const</strong> allowCert = false;
+<strong class="hl-keyword">const</strong> allowAnon = false;
+
+<strong class="hl-keyword">function</strong> contains(a, o) {
+    <strong class="hl-keyword">if</strong> (<strong class="hl-keyword">typeof</strong>(a) != <strong class="hl-string"><em style="color: #f58220">'undefined'</em></strong> &amp;&amp; a != null) {
+        <strong class="hl-keyword">for</strong> (<strong class="hl-keyword">var</strong> i = <span class="hl-number">0</span>; i &lt;= a.length; i++) {
+            <strong class="hl-keyword">if</strong> (a[i] === o) {
+                <strong class="hl-keyword">return</strong> true;
+            }
+        }
+    }
+    <strong class="hl-keyword">return</strong> false;
+}
+
+<strong class="hl-keyword">function</strong> matchesContext(path, context, allowRoot, allowSubcontext) {
+    <strong class="hl-keyword">if</strong> (allowRoot &amp;&amp; path === context) {
+        <strong class="hl-keyword">return</strong> true;
+    }
+    <strong class="hl-keyword">if</strong> (allowSubcontext &amp;&amp; path.substring(<span class="hl-number">0</span>, context.length + <span class="hl-number">1</span>)
+            === context + <strong class="hl-string"><em style="color: #f58220">"/"</em></strong>) {
+        <strong class="hl-keyword">return</strong> true;
+    }
+    <strong class="hl-keyword">return</strong> false;
+}
+
+<strong class="hl-keyword">function</strong> allow() {
+    <strong class="hl-keyword">if</strong> (<strong class="hl-keyword">typeof</strong>(request.parent) === <strong class="hl-string"><em style="color: #f58220">'undefined'</em></strong> ||
+            request.parent.type != <strong class="hl-string"><em style="color: #f58220">'http'</em></strong>) {
+        <strong class="hl-keyword">return</strong> true;
+    }
+
+    <em class="hl-comment" style="color: #868686">// Restrict the URLs that are accessible externally</em>
+    <strong class="hl-keyword">var</strong> path = request.parent.path;
+    <strong class="hl-keyword">if</strong> (!(matchesContext(path, <strong class="hl-string"><em style="color: #f58220">"/openidm/config"</em></strong>, true, true)
+            || matchesContext(path, <strong class="hl-string"><em style="color: #f58220">"/openidm/managed"</em></strong>, false, true))) {
+        <strong class="hl-keyword">return</strong> false;
+    }
+
+    <strong class="hl-keyword">var</strong> roles = request.parent.security[<strong class="hl-string"><em style="color: #f58220">'openidm-roles'</em></strong>];
+    <strong class="hl-keyword">if</strong> (contains(roles, <strong class="hl-string"><em style="color: #f58220">'openidm-admin'</em></strong>)) {
+        <strong class="hl-keyword">return</strong> true;
+    } <strong class="hl-keyword">else</strong> <strong class="hl-keyword">if</strong> (allowCert &amp;&amp; contains(roles, <strong class="hl-string"><em style="color: #f58220">'openidm-cert'</em></strong>)) {
+        <strong class="hl-keyword">return</strong> true;
+    } <strong class="hl-keyword">else</strong> <strong class="hl-keyword">if</strong> (allowAnon &amp;&amp; contains(roles, <strong class="hl-string"><em style="color: #f58220">'openidm-reg'</em></strong>)) {
+        <strong class="hl-keyword">return</strong> true;    
+    } <strong class="hl-keyword">else</strong> {
+        <strong class="hl-keyword">return</strong> false;
+    }
+}
+
+<strong class="hl-keyword">if</strong> (!allow()) {
+    <strong class="hl-keyword">throw</strong> <strong class="hl-string"><em style="color: #f58220">"Access denied"</em></strong>;
+}</div><p>Compared to the default, this example has a second global constant,
+  <code class="literal">allowAnon</code>, used to allow or deny anonymous access. The
+  new constant serves in the <code class="literal">allow()</code> function when checking
+  for <code class="literal">openidm-reg</code> membership, the role for anonymous
+  users.</p><p>Furthermore this example includes an additional function,
+  <code class="literal">matchesContext()</code>, called from the
+  <code class="literal">allow()</code> function before the role test. The additional test
+  filters out all requests not to <code class="literal">/openidm/config</code> or below
+  <code class="literal">/openidm/managed</code>. The context root itself is excluded in
+  theh latter call to avoid actions like patch by query on
+  <code class="filename">/openidm/managed/user</code>.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-passwords.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-security.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;8.&nbsp;Managing Passwords&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="OpenIDM-Integrators-Guide.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;10.&nbsp;Securing &amp; Hardening OpenIDM</td></tr></table></div></body></html>
