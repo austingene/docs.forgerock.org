@@ -970,7 +970,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 <!-- END SyntaxHighlighter 3.0.83 -->
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
-</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;2.&nbsp;How OpenIG Works</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-overview.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-quickstart.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;2.&nbsp;How OpenIG Works"><div class="titlepage"><div><div><h2 class="title"><a name="chap-howitworks"></a>Chapter&nbsp;2.&nbsp;How OpenIG Works</h2></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="section"><a href="chap-howitworks.html#how-it-works-short">2.1. How It Works In A Nutshell</a></span></dt><dt><span class="section"><a href="chap-howitworks.html#how-it-works-detail">2.2. How It Works In Detail</a></span></dt></dl></div><a class="indexterm" name="d500e230"></a><p>This chapter provides a detailed look at OpenIG's components and how
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;2.&nbsp;How OpenIG Works</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-overview.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-quickstart.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;2.&nbsp;How OpenIG Works"><div class="titlepage"><div><div><h2 class="title"><a name="chap-howitworks"></a>Chapter&nbsp;2.&nbsp;How OpenIG Works</h2></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="section"><a href="chap-howitworks.html#how-it-works-short">2.1. How It Works In A Nutshell</a></span></dt><dt><span class="section"><a href="chap-howitworks.html#how-it-works-detail">2.2. How It Works In Detail</a></span></dt></dl></div><a class="indexterm" name="d505e230"></a><p>This chapter provides a detailed look at OpenIG's components and how
  they work together.</p><div class="section" title="2.1.&nbsp;How It Works In A Nutshell"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="how-it-works-short"></a>2.1.&nbsp;How It Works In A Nutshell</h2></div></div></div><p>The underlying core of ForgeRock Open Identity Gateway is based on a
   <a class="link" href="http://en.wikipedia.org/wiki/Reverse_proxy" target="_blank">reverse proxy architecture</a>. All HTTP traffic to each protected
   application is routed through OpenIG, enabling close inspection,
@@ -985,7 +985,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   Additionally, enable the SAML2 service and OpenIG becomes a SAML2
   endpoint. In this mode of operation, OpenIG receives
   and verifies the SAML2 request and then logs the user directly
-  into the target application.</p></div><div class="section" title="2.2.&nbsp;How It Works In Detail"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="how-it-works-detail"></a>2.2.&nbsp;How It Works In Detail</h2></div></div></div><p>The following modules make up OpenIG.</p><div class="section" title="2.2.1.&nbsp;OpenIG Core (Reverse Proxy)"><div class="titlepage"><div><div><h3 class="title"><a name="d500e248"></a>2.2.1.&nbsp;OpenIG Core (Reverse Proxy)</h3></div></div></div><p>OpenIG core is a standard Java EE servlet implementation of a reverse
+  into the target application.</p></div><div class="section" title="2.2.&nbsp;How It Works In Detail"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="how-it-works-detail"></a>2.2.&nbsp;How It Works In Detail</h2></div></div></div><p>The following modules make up OpenIG.</p><div class="section" title="2.2.1.&nbsp;OpenIG Core (Reverse Proxy)"><div class="titlepage"><div><div><h3 class="title"><a name="d505e248"></a>2.2.1.&nbsp;OpenIG Core (Reverse Proxy)</h3></div></div></div><p>OpenIG core is a standard Java EE servlet implementation of a reverse
    proxy. The main function of OpenIG core is to act as a reverse proxy to the
    target application. When deployed in its base configuration, OpenIG can be
    used as a pure reverse proxy. The power of the OpenIG core comes in its
@@ -994,28 +994,28 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
    login forms, transform or filter content, and even function as a Federation
    endpoint for the application.  All these features are possible without
    making any changes to the application's deployment container or the
-   application itself.</p></div><div class="section" title="2.2.2.&nbsp;Exchange"><div class="titlepage"><div><div><h3 class="title"><a name="d500e253"></a>2.2.2.&nbsp;Exchange</h3></div></div></div><p>The <a href="../../reference/index/Exchange.html" class="link">Exchange</a> is a
+   application itself.</p></div><div class="section" title="2.2.2.&nbsp;Exchange"><div class="titlepage"><div><div><h3 class="title"><a name="d505e253"></a>2.2.2.&nbsp;Exchange</h3></div></div></div><p>The <a href="../../reference/index/Exchange.html" class="link">Exchange</a> is a
    wrapper around the HTTP request and response objects that pass through
    OpenIG. Every request or response being processed in OpenIG can be accessed
    or modified through the Exchange object.  In addition, arbitrary data can
    be set in the Exchange to facilitate the passing of data and state between
-   filters and handlers.</p></div><div class="section" title="2.2.3.&nbsp;Dispatcher"><div class="titlepage"><div><div><h3 class="title"><a name="d500e261"></a>2.2.3.&nbsp;Dispatcher</h3></div></div></div><p>The Dispatcher may be thought of as the internal router of OpenIG.
+   filters and handlers.</p></div><div class="section" title="2.2.3.&nbsp;Dispatcher"><div class="titlepage"><div><div><h3 class="title"><a name="d505e261"></a>2.2.3.&nbsp;Dispatcher</h3></div></div></div><p>The Dispatcher may be thought of as the internal router of OpenIG.
    Every request that comes into OpenIG is analyzed and forwarded on to the
    configured processing chain of filters and handlers. A request may be
    forwarded based on the target host, URL, URL parameters, headers, cookies,
-   or any other component of the request.</p></div><div class="section" title="2.2.4.&nbsp;Chain"><div class="titlepage"><div><div><h3 class="title"><a name="d500e266"></a>2.2.4.&nbsp;Chain</h3></div></div></div><p>A <a href="../../reference/index/Chain.html" class="link">Chain</a> is a
+   or any other component of the request.</p></div><div class="section" title="2.2.4.&nbsp;Chain"><div class="titlepage"><div><div><h3 class="title"><a name="d505e266"></a>2.2.4.&nbsp;Chain</h3></div></div></div><p>A <a href="../../reference/index/Chain.html" class="link">Chain</a> is a
    combination of one or more Filters and a handler that process an incoming
    request from the Dispatcher. For example, the Dispatcher can process an
    incoming request with a URL parameter of <code class="literal">action=login</code>
    and forward the request to the Login Chain. The Login Chain executes a list
    of Filters and then calls a Handler. The Handler sends the request on to
-   the target application or to another Chain for further processing.</p></div><div class="section" title="2.2.5.&nbsp;Handlers"><div class="titlepage"><div><div><h3 class="title"><a name="d500e277"></a>2.2.5.&nbsp;Handlers</h3></div></div></div><p>The final processing of every Chain ends in a call to a Handler. A
+   the target application or to another Chain for further processing.</p></div><div class="section" title="2.2.5.&nbsp;Handlers"><div class="titlepage"><div><div><h3 class="title"><a name="d505e277"></a>2.2.5.&nbsp;Handlers</h3></div></div></div><p>The final processing of every Chain ends in a call to a Handler. A
    Handler can simply call another Chain or it can send the request on to the
    target application. The following Handlers are shipped with OpenIG:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><a href="../../reference/index/ClientHandler.html" class="link">ClientHandler</a>:
      Sends the final request to the target application.</p></li><li class="listitem"><p><a href="../../reference/index/StaticResponseHandler.html" class="link">StaticResponseHandler</a>: Used to send a response, such as a
      redirect, to a client during request processing.</p></li><li class="listitem"><p><a href="../../reference/index/StaticResponseHandler.html" class="link">SequenceHandler</a>:
      Links together multiple handlers or chains during request
-     processing.</p></li></ul></div></div><div class="section" title="2.2.6.&nbsp;Filters"><div class="titlepage"><div><div><h3 class="title"><a name="d500e298"></a>2.2.6.&nbsp;Filters</h3></div></div></div><p>Filters are responsible for processing HTTP requests in OpenIG.
+     processing.</p></li></ul></div></div><div class="section" title="2.2.6.&nbsp;Filters"><div class="titlepage"><div><div><h3 class="title"><a name="d505e298"></a>2.2.6.&nbsp;Filters</h3></div></div></div><p>Filters are responsible for processing HTTP requests in OpenIG.
    Filters can be chained together to act on the input stream coming from the
    browser, or the  output stream returned back from the target application.
    A filter can do something as simple as logging the input and output stream
@@ -1050,19 +1050,19 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
      specified key. The attributes are added to the exchange to be used by
      subsequent filters or handlers.</p></li><li class="listitem"><p><a href="../../reference/index/SqlAttributesFilter.html" class="link">SqlAttributesFilter</a>: Executes an SQL prepared statement with
      configured parameters. The result is added to the exchange to be used by
-     subsequent filters or handlers.</p></li></ul></div></div><div class="section" title="2.2.7.&nbsp;Configuration"><div class="titlepage"><div><div><h3 class="title"><a name="d500e362"></a>2.2.7.&nbsp;Configuration</h3></div></div></div><p>The configuration of OpenIG was designed to be very modular and
+     subsequent filters or handlers.</p></li></ul></div></div><div class="section" title="2.2.7.&nbsp;Configuration"><div class="titlepage"><div><div><h3 class="title"><a name="d505e362"></a>2.2.7.&nbsp;Configuration</h3></div></div></div><p>The configuration of OpenIG was designed to be very modular and
    self-contained. Each module within OpenIG stores its configuration in JSON
    representation, which is stored in flat files. The
    features of OpenIG can be configured by directly manipulating the JSON flat
-   files.</p></div><div class="section" title="2.2.8.&nbsp;Heaplets"><div class="titlepage"><div><div><h3 class="title"><a name="d500e367"></a>2.2.8.&nbsp;Heaplets</h3></div></div></div><p>Every OpenIG module which has JSON configuration also has a Heaplet
+   files.</p></div><div class="section" title="2.2.8.&nbsp;Heaplets"><div class="titlepage"><div><div><h3 class="title"><a name="d505e367"></a>2.2.8.&nbsp;Heaplets</h3></div></div></div><p>Every OpenIG module which has JSON configuration also has a Heaplet
    associated with it. Each module's Heaplet is responsible for reading the
    JSON configuration and creating that module's configuration in OpenIG's
    runtime heap. Each module can then read its configuration from the heap as
    well as make shared configuration information available to other
-   modules.</p></div><div class="section" title="2.2.9.&nbsp;Services"><div class="titlepage"><div><div><h3 class="title"><a name="d500e372"></a>2.2.9.&nbsp;Services</h3></div></div></div><p>The Services model was designed to allow the integration of value
+   modules.</p></div><div class="section" title="2.2.9.&nbsp;Services"><div class="titlepage"><div><div><h3 class="title"><a name="d505e372"></a>2.2.9.&nbsp;Services</h3></div></div></div><p>The Services model was designed to allow the integration of value
    added features, such as Federation, without requiring them to be tightly
    bound to the OpenIG implementation. SAML2 is the add on 
-   service shipping with OpenIG today.</p></div><div class="section" title="2.2.10.&nbsp;Federation Service (Federation Gateway)"><div class="titlepage"><div><div><h3 class="title"><a name="d500e377"></a>2.2.10.&nbsp;Federation Service (Federation Gateway)</h3></div></div></div><p>When the Federation Service is enabled, OpenIG acts as the
+   service shipping with OpenIG today.</p></div><div class="section" title="2.2.10.&nbsp;Federation Service (Federation Gateway)"><div class="titlepage"><div><div><h3 class="title"><a name="d505e377"></a>2.2.10.&nbsp;Federation Service (Federation Gateway)</h3></div></div></div><p>When the Federation Service is enabled, OpenIG acts as the
    Service Provider in a Circle of Trust with a SAML2 compliant Identity
    Provider. The Federation service supports both IDP and SP initiated SAML2
    profiles. The Federation Gateway may be a Service Provider in the classic

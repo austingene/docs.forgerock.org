@@ -970,14 +970,14 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 <!-- END SyntaxHighlighter 3.0.83 -->
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
-</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Expressions</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="expressions-conf.html">Prev</a>&nbsp;</td><th width="60%" align="center">Expressions</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="Functions.html">Next</a></td></tr></table><hr></div><div lang="en" class="refentry" title="Expressions"><a name="Expressions"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>Expressions &#8212; expression configuration parameter values</p></div><div class="refsect1" title="Description"><a name="d91e2470"></a><h2>Description</h2><a class="indexterm" name="d91e2473"></a><p>Expressions are specified as configuration parameter values for a
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Expressions</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="expressions-conf.html">Prev</a>&nbsp;</td><th width="60%" align="center">Expressions</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="Functions.html">Next</a></td></tr></table><hr></div><div lang="en" class="refentry" title="Expressions"><a name="Expressions"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>Expressions &#8212; expression configuration parameter values</p></div><div class="refsect1" title="Description"><a name="d96e2470"></a><h2>Description</h2><a class="indexterm" name="d96e2473"></a><p>Expressions are specified as configuration parameter values for a
   number of built-in objects. Such expressions conform to the Universal
-  Expression Language as specified in <a class="link" href="http://www.jcp.org/en/jsr/detail?id=245" target="_blank">JSR-245</a>.</p></div><div class="refsect1" title="General Syntax"><a name="d91e2483"></a><h2>General Syntax</h2><p>All expressions follow standard Universal Expression Language syntax:
+  Expression Language as specified in <a class="link" href="http://www.jcp.org/en/jsr/detail?id=245" target="_blank">JSR-245</a>.</p></div><div class="refsect1" title="General Syntax"><a name="d96e2483"></a><h2>General Syntax</h2><p>All expressions follow standard Universal Expression Language syntax:
   <code class="literal">${expression}</code>. The expression can be a simple reference to
   a value, a function call, and/or arbitrarily complex arithmetic, logical,
   relational and conditional operations. When supplied within a configuration
   parameter, an expression is always a string enclosed in quotation marks, for
-  example: <code class="literal">"${exchange.request.method}"</code>.</p></div><div class="refsect1" title="Value Expressions"><a name="d91e2494"></a><h2>Value Expressions</h2><p>A value expression references a value relative to the scope supplied to
+  example: <code class="literal">"${exchange.request.method}"</code>.</p></div><div class="refsect1" title="Value Expressions"><a name="d96e2494"></a><h2>Value Expressions</h2><p>A value expression references a value relative to the scope supplied to
   the expression. In the current version of the gateway, the supplied scope is
   always the HTTP <a href="../../reference/index/Exchange.html" class="link">exchange object</a>. For example
   <code class="literal">"${exchange.request.method}"</code> references the method of an
@@ -986,7 +986,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   expression, which references a value to be written. For example,
   <code class="literal">"${exchange.session.gotoURL}"</code> specifies a session
   attribute named <code class="literal">gotoURL</code> to write a value to. Attempts to
-  write values to read-only values are ignored.</p></div><div class="refsect1" title="Indexed Properties"><a name="d91e2514"></a><h2>Indexed Properties</h2><p>Properties of values are accessed using the <code class="literal">.</code> and
+  write values to read-only values are ignored.</p></div><div class="refsect1" title="Indexed Properties"><a name="d96e2514"></a><h2>Indexed Properties</h2><p>Properties of values are accessed using the <code class="literal">.</code> and
   <code class="literal">[]</code> operators, and can be nested arbitrarily. The value
   expressions <code class="literal">"${exchange.request}"</code> and
   <code class="literal">"${exchange['request']}"</code> are equivalent. In the case of
@@ -995,7 +995,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   <code class="literal">"${exchange.request.headers['Content-Type'][0]}"</code>
   references the first <code class="literal">Content-Type</code> header value in a
   request. If a property does not exist, then the index reference yields a
-  <code class="literal">null</code> (empty) value.</p></div><div class="refsect1" title="Operations"><a name="d91e2540"></a><h2>Operations</h2><p>Universal Expression Language supports arbitrarily complex arithmetic,
+  <code class="literal">null</code> (empty) value.</p></div><div class="refsect1" title="Operations"><a name="d96e2540"></a><h2>Operations</h2><p>Universal Expression Language supports arbitrarily complex arithmetic,
   logical, relational and conditional operations. They are, in order of
   precedence:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>Index property value: <code class="literal">[]</code>,
     <code class="literal">.</code></p></li><li class="listitem"><p>Change precedence of operation: <code class="literal">()</code></p></li><li class="listitem"><p>Unary negative: <code class="literal">-</code></p></li><li class="listitem"><p>Logical operations: <code class="literal">not</code>, <code class="literal">!</code>,
@@ -1007,12 +1007,12 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
     <code class="literal">ge</code>, <code class="literal">==</code>, <code class="literal">!=</code>,
     <code class="literal">eq</code>, <code class="literal">ne</code></p></li><li class="listitem"><p>Logical operations: <code class="literal">&amp;&amp;</code>,
     <code class="literal">and</code>, <code class="literal">||</code>, <code class="literal">or</code></p></li><li class="listitem"><p>Conditional operations: <code class="literal">?</code>,
-    <code class="literal">:</code></p></li></ul></div></div><div class="refsect1" title="Functions"><a name="d91e2660"></a><h2>Functions</h2><p>A number of <a href="../../reference/index/Functions.html" class="link">built-in functions</a> can be called within an expression. Syntax is
+    <code class="literal">:</code></p></li></ul></div></div><div class="refsect1" title="Functions"><a name="d96e2660"></a><h2>Functions</h2><p>A number of <a href="../../reference/index/Functions.html" class="link">built-in functions</a> can be called within an expression. Syntax is
   <code class="literal">${function(param, ...)}</code>, where zero or more parameters
   are supplied to the function. For example,
   <code class="literal">"${toLowerCase(exchange.request.method)}"</code> yields the
   method of the request, converted to lower case. Functions can be operands
-  for operations, and can yield parameters for other function calls.</p></div><div class="refsect1" title="Examples"><a name="d91e2674"></a><h2>Examples</h2><p>Lines are folded for readability in these example. In your JSON, keep
+  for operations, and can yield parameters for other function calls.</p></div><div class="refsect1" title="Examples"><a name="d96e2674"></a><h2>Examples</h2><p>Lines are folded for readability in these example. In your JSON, keep
   the values on one line.</p><pre class="brush: javascript;">
 "${exchange.request.uri.path == '/wordpress/wp-login.php' and
  exchange.request.form['action'][0] != 'logout'}"
@@ -1039,7 +1039,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 
 "${exchange.response.headers['Set-Cookie'][0]}"
 
-"${exchange.request.headers['host'][0]}"</pre></div><div class="refsect1" title="See Also"><a name="d91e2681"></a><h2>See Also</h2><p><a href="../../reference/index/Exchange.html" class="link">Exchange</a></p><p><a href="../../reference/index/Functions.html" class="link">Functions</a></p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="expressions-conf.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="expressions-conf.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="Functions.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Expressions&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Functions</td></tr></table></div><script type="text/javascript">
+"${exchange.request.headers['host'][0]}"</pre></div><div class="refsect1" title="See Also"><a name="d96e2681"></a><h2>See Also</h2><p><a href="../../reference/index/Exchange.html" class="link">Exchange</a></p><p><a href="../../reference/index/Functions.html" class="link">Functions</a></p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="expressions-conf.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="expressions-conf.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="Functions.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Expressions&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Functions</td></tr></table></div><script type="text/javascript">
 
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-23412190-14']);

@@ -970,7 +970,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 <!-- END SyntaxHighlighter 3.0.83 -->
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
-</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">SqlAttributesFilter</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="HttpBasicAuthFilter.html">Prev</a>&nbsp;</td><th width="60%" align="center">Filters</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="StaticRequestFilter.html">Next</a></td></tr></table><hr></div><div lang="en" class="refentry" title="SqlAttributesFilter"><a name="SqlAttributesFilter"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>SqlAttributesFilter &#8212; execute SQL query</p></div><div class="refsect1" title="Description"><a name="d91e1971"></a><h2>Description</h2><a class="indexterm" name="d91e1974"></a><p>Executes a SQL query through a prepared statement and exposes its
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">SqlAttributesFilter</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="HttpBasicAuthFilter.html">Prev</a>&nbsp;</td><th width="60%" align="center">Filters</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="StaticRequestFilter.html">Next</a></td></tr></table><hr></div><div lang="en" class="refentry" title="SqlAttributesFilter"><a name="SqlAttributesFilter"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>SqlAttributesFilter &#8212; execute SQL query</p></div><div class="refsect1" title="Description"><a name="d96e1971"></a><h2>Description</h2><a class="indexterm" name="d96e1974"></a><p>Executes a SQL query through a prepared statement and exposes its
   first result. Parameters in the prepared statement are derived from
   exchange-scoped expressions. The query result is exposed in an object whose
   location is specified by the <code class="literal">target</code> expression. If the
@@ -978,7 +978,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   until the first attempt to access a value in the target. This defers the
   overhead of connection pool, network and database query processing until a
   value is first required. This also means that the parameters expressions is
-  not evaluated until the object is first accessed.</p></div><div class="refsect1" title="Usage"><a name="d91e1986"></a><h2>Usage</h2><pre class="brush: javascript;">{
+  not evaluated until the object is first accessed.</p></div><div class="refsect1" title="Usage"><a name="d96e1986"></a><h2>Usage</h2><pre class="brush: javascript;">{
      "name": string,
      "type": "SqlAttributesFilter",
      "config": {
@@ -987,7 +987,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
          "parameters": [ expression, ... ],
          "target": lvalue-expression
      }
-}</pre></div><div class="refsect1" title="Properties"><a name="d91e1991"></a><h2>Properties</h2><div class="variablelist"><dl><dt><span class="term"><code class="code">"dataSource"</code>: <span class="emphasis"><em>string,
+}</pre></div><div class="refsect1" title="Properties"><a name="d96e1991"></a><h2>Properties</h2><div class="variablelist"><dl><dt><span class="term"><code class="code">"dataSource"</code>: <span class="emphasis"><em>string,
     required</em></span></span></dt><dd><p>The JNDI name of the factory for connections to the physical data
      source.</p></dd><dt><span class="term"><code class="code">"preparedStatement"</code>: <span class="emphasis"><em>string,
     required</em></span></span></dt><dd><p>The parameterized SQL query to execute, with <code class="literal">?</code>
@@ -995,7 +995,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
     required</em></span></span></dt><dd><p>The parameters to evaluate and include in the execution of the
      prepared statement.</p></dd><dt><span class="term"><code class="code">"target"</code>: <span class="emphasis"><em><a href="../../reference/index/Expressions.html" class="link">lvalue-expression</a>,
     required</em></span></span></dt><dd><p>Expression that yields the target object that will contain the query
-     results.</p></dd></dl></div></div><div class="refsect1" title="Example"><a name="d91e2043"></a><h2>Example</h2><p>Using the users sessionid from a cookie, query the database to find the
+     results.</p></dd></dl></div></div><div class="refsect1" title="Example"><a name="d96e2043"></a><h2>Example</h2><p>Using the users sessionid from a cookie, query the database to find the
   user logged in and set the profile attributes in the exchange:</p><pre class="brush: javascript;">{
         "name": "SqlAttributesFilter",
         "type": "SqlAttributesFilter",
@@ -1021,7 +1021,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
          }
  }</pre><p>Lines are folded for readability in this example. In your JSON, keep
   the values for <code class="literal">"preparedStatement"</code> and
-  <code class="literal">"parameters"</code> on one line.</p></div><div class="refsect1" title="Javadoc"><a name="d91e2058"></a><h2>Javadoc</h2><p><a class="link" href="http://docs.forgerock.org/en/openig/2.1.0/javadoc/org/forgerock/openig/filter/SqlAttributesFilter.html" target="_blank">org.forgerock.openig.filter.SqlAttributesFilter</a></p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="HttpBasicAuthFilter.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="filters-conf.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="StaticRequestFilter.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">HttpBasicAuthFilter&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;StaticRequestFilter</td></tr></table></div><script type="text/javascript">
+  <code class="literal">"parameters"</code> on one line.</p></div><div class="refsect1" title="Javadoc"><a name="d96e2058"></a><h2>Javadoc</h2><p><a class="link" href="http://docs.forgerock.org/en/openig/2.1.0/javadoc/org/forgerock/openig/filter/SqlAttributesFilter.html" target="_blank">org.forgerock.openig.filter.SqlAttributesFilter</a></p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="HttpBasicAuthFilter.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="filters-conf.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="StaticRequestFilter.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">HttpBasicAuthFilter&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;StaticRequestFilter</td></tr></table></div><script type="text/javascript">
 
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-23412190-14']);

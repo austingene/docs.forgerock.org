@@ -970,12 +970,12 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 <!-- END SyntaxHighlighter 3.0.83 -->
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
-</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">StaticRequestFilter</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="SqlAttributesFilter.html">Prev</a>&nbsp;</td><th width="60%" align="center">Filters</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="SwitchFilter.html">Next</a></td></tr></table><hr></div><div lang="en" class="refentry" title="StaticRequestFilter"><a name="StaticRequestFilter"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>StaticRequestFilter &#8212; create new request within exchange object</p></div><div class="refsect1" title="Description"><a name="d91e2076"></a><h2>Description</h2><a class="indexterm" name="d91e2079"></a><p>Creates a new request within the exchange object. It replaces any
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">StaticRequestFilter</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="SqlAttributesFilter.html">Prev</a>&nbsp;</td><th width="60%" align="center">Filters</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="SwitchFilter.html">Next</a></td></tr></table><hr></div><div lang="en" class="refentry" title="StaticRequestFilter"><a name="StaticRequestFilter"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>StaticRequestFilter &#8212; create new request within exchange object</p></div><div class="refsect1" title="Description"><a name="d96e2076"></a><h2>Description</h2><a class="indexterm" name="d96e2079"></a><p>Creates a new request within the exchange object. It replaces any
   request that may already be present in the exchange. The request can include
   a form, specified in the <code class="literal">form</code> parameter, which is included
   in an entity encoded in <code class="literal">application/x-www-form-urlencoded</code>
   format if request method is <code class="literal">POST</code>, or otherwise as
-  (additional) query parameters in the URI.</p></div><div class="refsect1" title="Usage"><a name="d91e2095"></a><h2>Usage</h2><pre class="brush: javascript;">{
+  (additional) query parameters in the URI.</p></div><div class="refsect1" title="Usage"><a name="d96e2095"></a><h2>Usage</h2><pre class="brush: javascript;">{
      "name": string,
      "type": "StaticRequestFilter",
      "config": {
@@ -989,7 +989,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
              field: [ expression, ... ], ...
          }
      }
-}</pre></div><div class="refsect1" title="Properties"><a name="d91e2100"></a><h2>Properties</h2><div class="variablelist"><dl><dt><span class="term"><code class="code">"method"</code>: <span class="emphasis"><em>string, required</em></span></span></dt><dd><p>The HTTP method to be performed on the resource (for example,
+}</pre></div><div class="refsect1" title="Properties"><a name="d96e2100"></a><h2>Properties</h2><div class="variablelist"><dl><dt><span class="term"><code class="code">"method"</code>: <span class="emphasis"><em>string, required</em></span></span></dt><dd><p>The HTTP method to be performed on the resource (for example,
      <code class="literal">"GET"</code>).</p></dd><dt><span class="term"><code class="code">"uri"</code>: <span class="emphasis"><em>string, required</em></span></span></dt><dd><p>The fully-qualified URI of the resource to access (for example,
      <code class="literal">"http://www.example.com/resource.txt"</code>).</p></dd><dt><span class="term"><code class="code">"version"</code>: <span class="emphasis"><em>string, optional</em></span></span></dt><dd><p>Protocol version. Default: <code class="literal">"HTTP/1.1"</code>.</p></dd><dt><span class="term"><code class="code">"headers"</code>: <span class="emphasis"><em>array of objects,
     required</em></span></span></dt><dd><p>Header fields to set in the request. The <code class="literal">name</code>
@@ -997,7 +997,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
      evaluate as values.</p></dd><dt><span class="term"><code class="code">"form"</code>: <span class="emphasis"><em>array of objects,
     required</em></span></span></dt><dd><p>A form to include in the request. The <code class="literal">field</code>
      specifies the field name, with an associated array of expressions to
-     evaluate as values.</p></dd></dl></div></div><div class="refsect1" title="Example"><a name="d91e2169"></a><h2>Example</h2><pre class="brush: javascript;">{
+     evaluate as values.</p></dd></dl></div></div><div class="refsect1" title="Example"><a name="d96e2169"></a><h2>Example</h2><pre class="brush: javascript;">{
      "name": "LoginRequestFilter",
      "type": "StaticRequestFilter",
      "config": {
@@ -1011,7 +1011,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
              "testcookie": [ "1" ]
          }
      }
-}</pre></div><div class="refsect1" title="Javadoc"><a name="d91e2174"></a><h2>Javadoc</h2><p><a class="link" href="http://docs.forgerock.org/en/openig/2.1.0/javadoc/org/forgerock/openig/filter/StaticRequestFilter.html" target="_blank">org.forgerock.openig.filter.StaticRequestFilter</a></p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="SqlAttributesFilter.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="filters-conf.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="SwitchFilter.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">SqlAttributesFilter&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;SwitchFilter</td></tr></table></div><script type="text/javascript">
+}</pre></div><div class="refsect1" title="Javadoc"><a name="d96e2174"></a><h2>Javadoc</h2><p><a class="link" href="http://docs.forgerock.org/en/openig/2.1.0/javadoc/org/forgerock/openig/filter/StaticRequestFilter.html" target="_blank">org.forgerock.openig.filter.StaticRequestFilter</a></p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="SqlAttributesFilter.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="filters-conf.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="SwitchFilter.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">SqlAttributesFilter&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;SwitchFilter</td></tr></table></div><script type="text/javascript">
 
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-23412190-14']);

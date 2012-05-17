@@ -970,7 +970,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 <!-- END SyntaxHighlighter 3.0.83 -->
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
-</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">DispatchServlet</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="servlets-conf.html">Prev</a>&nbsp;</td><th width="60%" align="center">Servlets</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="HandlerServlet.html">Next</a></td></tr></table><hr></div><div lang="en" class="refentry" title="DispatchServlet"><a name="DispatchServlet"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>DispatchServlet &#8212; dispatch request based on extra path information</p></div><div class="refsect1" title="Description"><a name="d91e410"></a><h2>Description</h2><a class="indexterm" name="d91e413"></a><p>Dispatches requests to mapped filters and servlets based on request&#8217;s
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">DispatchServlet</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="servlets-conf.html">Prev</a>&nbsp;</td><th width="60%" align="center">Servlets</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="HandlerServlet.html">Next</a></td></tr></table><hr></div><div lang="en" class="refentry" title="DispatchServlet"><a name="DispatchServlet"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>DispatchServlet &#8212; dispatch request based on extra path information</p></div><div class="refsect1" title="Description"><a name="d96e410"></a><h2>Description</h2><a class="indexterm" name="d96e413"></a><p>Dispatches requests to mapped filters and servlets based on request&#8217;s
   extra path information. The extra path information is the path that follows
   the path of the dispatch servlet itself, but precedes the query string. It is
   guaranteed to be a value that always begins with a "/" character.</p><p>All filters that match the pattern are invoked in the order they are
@@ -979,7 +979,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   invoked, and terminates any further processing of the request. If no matching
   servlet is found, an exception is thrown. To avoid this, a final
   <code class="literal">"catch-all"</code> servlet binding with a pattern of
-  <code class="literal">".*"</code> is recommended.</p></div><div class="refsect1" title="Usage"><a name="d91e431"></a><h2>Usage</h2><pre class="brush: javascript;">{
+  <code class="literal">".*"</code> is recommended.</p></div><div class="refsect1" title="Usage"><a name="d96e431"></a><h2>Usage</h2><pre class="brush: javascript;">{
      "name": string,
      "type": "DispatchServlet",
      "config": {
@@ -990,12 +990,12 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
              }, ...
          ]
      }
-}</pre></div><div class="refsect1" title="Properties"><a name="d91e436"></a><h2>Properties</h2><div class="variablelist"><dl><dt><span class="term"><code class="code">"bindings"</code>: <span class="emphasis"><em>array of objects,
+}</pre></div><div class="refsect1" title="Properties"><a name="d96e436"></a><h2>Properties</h2><div class="variablelist"><dl><dt><span class="term"><code class="code">"bindings"</code>: <span class="emphasis"><em>array of objects,
     required</em></span></span></dt><dd><p>A list of bindings of patterns and associated servlets/filters to
      dispatch to.</p></dd><dt><span class="term"><code class="code">"pattern"</code>: <span class="emphasis"><em><a href="../../reference/index/Patterns.html" class="link">pattern</a>,
     required</em></span></span></dt><dd><p>The regular expression pattern to match against the incoming request
      extra path information.</p></dd><dt><span class="term"><code class="code">"object"</code>: <span class="emphasis"><em>string, required</em></span></span></dt><dd><p>The name of the HTTP servlet or servlet filter heap object to
-     dispatch to if the regular expression pattern matches.</p></dd></dl></div></div><div class="refsect1" title="Example"><a name="d91e472"></a><h2>Example</h2><p>Sample from a federation configuration. Federation is implemented as
+     dispatch to if the regular expression pattern matches.</p></dd></dl></div></div><div class="refsect1" title="Example"><a name="d96e472"></a><h2>Example</h2><p>Sample from a federation configuration. Federation is implemented as
   its own servlet which will be dispatched-to based on the incoming URI
   starting with <code class="literal">"/saml"</code>. All other requests will go through
   the <code class="literal">HandlerServlet</code>.</p><pre class="brush: javascript;">{
@@ -1013,7 +1013,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
              }
          ]
      }
-}</pre></div><div class="refsect1" title="Javadoc"><a name="d91e485"></a><h2>Javadoc</h2><p><a class="link" href="http://docs.forgerock.org/en/openig/2.1.0/javadoc/org/forgerock/openig/servlet/DispatchServlet.html" target="_blank">org.forgerock.openig.servlet.DispatchServlet</a></p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="servlets-conf.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="servlets-conf.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="HandlerServlet.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Servlets&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;HandlerServlet</td></tr></table></div><script type="text/javascript">
+}</pre></div><div class="refsect1" title="Javadoc"><a name="d96e485"></a><h2>Javadoc</h2><p><a class="link" href="http://docs.forgerock.org/en/openig/2.1.0/javadoc/org/forgerock/openig/servlet/DispatchServlet.html" target="_blank">org.forgerock.openig.servlet.DispatchServlet</a></p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="servlets-conf.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="servlets-conf.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="HandlerServlet.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Servlets&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;HandlerServlet</td></tr></table></div><script type="text/javascript">
 
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-23412190-14']);

@@ -970,14 +970,14 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 <!-- END SyntaxHighlighter 3.0.83 -->
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
-</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">HttpBasicAuthFilter</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="CryptoHeaderFilter.html">Prev</a>&nbsp;</td><th width="60%" align="center">Filters</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="SqlAttributesFilter.html">Next</a></td></tr></table><hr></div><div lang="en" class="refentry" title="HttpBasicAuthFilter"><a name="HttpBasicAuthFilter"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>HttpBasicAuthFilter &#8212; perform HTTP Basic authentication</p></div><div class="refsect1" title="Description"><a name="d91e1885"></a><h2>Description</h2><a class="indexterm" name="d91e1888"></a><p>Performs authentication through the HTTP Basic authentication scheme.
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">HttpBasicAuthFilter</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="CryptoHeaderFilter.html">Prev</a>&nbsp;</td><th width="60%" align="center">Filters</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="SqlAttributesFilter.html">Next</a></td></tr></table><hr></div><div lang="en" class="refentry" title="HttpBasicAuthFilter"><a name="HttpBasicAuthFilter"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>HttpBasicAuthFilter &#8212; perform HTTP Basic authentication</p></div><div class="refsect1" title="Description"><a name="d96e1885"></a><h2>Description</h2><a class="indexterm" name="d96e1888"></a><p>Performs authentication through the HTTP Basic authentication scheme.
   For more information, see <a class="link" href="http://www.ietf.org/rfc/rfc2617.txt" target="_blank">RFC 2617</a>.</p><p>If challenged for authentication via a <code class="literal">401
   Unauthorized</code> status code by the server, this filter retries the
   request with credentials attached. Once an HTTP authentication challenge is
   issued from the remote server, all subsequent requests to that remote server
   that pass through the filter includes the user credentials.</p><p>If authentication fails (including the case of no credentials yielded
   from expressions), then the exchange is diverted to the specified
-  authentication failure handler.</p></div><div class="refsect1" title="Usage"><a name="d91e1905"></a><h2>Usage</h2><pre class="brush: javascript;">{
+  authentication failure handler.</p></div><div class="refsect1" title="Usage"><a name="d96e1905"></a><h2>Usage</h2><pre class="brush: javascript;">{
      "name": string,
      "type": "HttpBasicAuthFilter",
      "config": {
@@ -985,13 +985,13 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
          "password": expression,
          "failureHandler": string
      }
-}</pre></div><div class="refsect1" title="Properties"><a name="d91e1910"></a><h2>Properties</h2><div class="variablelist"><dl><dt><span class="term"><code class="code">"username"</code>: <span class="emphasis"><em><a href="../../reference/index/Expressions.html" class="link">expression</a>,
+}</pre></div><div class="refsect1" title="Properties"><a name="d96e1910"></a><h2>Properties</h2><div class="variablelist"><dl><dt><span class="term"><code class="code">"username"</code>: <span class="emphasis"><em><a href="../../reference/index/Expressions.html" class="link">expression</a>,
     required</em></span></span></dt><dd><p>Expression that yields the username to supply during
      authentication.</p></dd><dt><span class="term"><code class="code">"password"</code>: <span class="emphasis"><em><a href="../../reference/index/Expressions.html" class="link">expression</a>,
     required</em></span></span></dt><dd><p>Expression that yields the password to supply during
      authentication.</p></dd><dt><span class="term"><code class="code">"failureHandler"</code>: <span class="emphasis"><em>string,
     required</em></span></span></dt><dd><p>The name of the handler heap object to dispatch to if authentication
-     fails.</p></dd></dl></div></div><div class="refsect1" title="Example"><a name="d91e1948"></a><h2>Example</h2><pre class="brush: javascript;">{
+     fails.</p></dd></dl></div></div><div class="refsect1" title="Example"><a name="d96e1948"></a><h2>Example</h2><pre class="brush: javascript;">{
      "name": "TomcatAuthenticator",
      "type": "HttpBasicAuthFilter",
      "config": {
@@ -999,7 +999,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
          "password": "tomcat",
          "failureHandler": "TomcatAuthFailureHandler" 
       }
-}</pre></div><div class="refsect1" title="Javadoc"><a name="d91e1953"></a><h2>Javadoc</h2><p><a class="link" href="http://docs.forgerock.org/en/openig/2.1.0/javadoc/org/forgerock/openig/filter/HttpBasicAuthFilter.html" target="_blank">org.forgerock.openig.filter.HttpBasicAuthFilter</a></p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="CryptoHeaderFilter.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="filters-conf.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="SqlAttributesFilter.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">CryptoHeaderFilter&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;SqlAttributesFilter</td></tr></table></div><script type="text/javascript">
+}</pre></div><div class="refsect1" title="Javadoc"><a name="d96e1953"></a><h2>Javadoc</h2><p><a class="link" href="http://docs.forgerock.org/en/openig/2.1.0/javadoc/org/forgerock/openig/filter/HttpBasicAuthFilter.html" target="_blank">org.forgerock.openig.filter.HttpBasicAuthFilter</a></p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="CryptoHeaderFilter.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="filters-conf.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="SqlAttributesFilter.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">CryptoHeaderFilter&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;SqlAttributesFilter</td></tr></table></div><script type="text/javascript">
 
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-23412190-14']);

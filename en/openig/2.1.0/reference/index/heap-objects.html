@@ -970,12 +970,12 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 <!-- END SyntaxHighlighter 3.0.83 -->
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
-</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Heap Objects</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="gateway-servlet.html">Prev</a>&nbsp;</td><th width="60%" align="center">Required Configuration</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="servlets-conf.html">Next</a></td></tr></table><hr></div><div lang="en" class="refentry" title="Heap Objects"><a name="heap-objects"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>Heap Objects &#8212; configure and initialize objects, with dependency injection</p></div><div class="refsect1" title="Description"><a name="d91e273"></a><h2>Description</h2><a class="indexterm" name="d91e276"></a><p>A heap is a collection of associated objects, initialized from
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Heap Objects</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="gateway-servlet.html">Prev</a>&nbsp;</td><th width="60%" align="center">Required Configuration</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="servlets-conf.html">Next</a></td></tr></table><hr></div><div lang="en" class="refentry" title="Heap Objects"><a name="heap-objects"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>Heap Objects &#8212; configure and initialize objects, with dependency injection</p></div><div class="refsect1" title="Description"><a name="d96e273"></a><h2>Description</h2><a class="indexterm" name="d96e276"></a><p>A heap is a collection of associated objects, initialized from
   declarative configuration artifacts. All configurable objects in the gateway
   are heap objects. Heap objects are created and initialized by associated
   "heaplets", which retrieve any objects an object depends on from the heap.
   The heap configuration is included as an object in the <a href="../../reference/index/gateway-servlet.html" class="link">gateway servlet</a>
-  configuration, and has the following format.</p></div><div class="refsect1" title="Usage"><a name="d91e286"></a><h2>Usage</h2><pre class="brush: javascript;">{
+  configuration, and has the following format.</p></div><div class="refsect1" title="Usage"><a name="d96e286"></a><h2>Usage</h2><pre class="brush: javascript;">{
      "objects": [
          {
              "name": string,
@@ -983,19 +983,19 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
              "config": { object-specific configuration }
          }, ...
      ]  
-}</pre></div><div class="refsect1" title="Properties"><a name="d91e294"></a><h2>Properties</h2><div class="variablelist"><dl><dt><span class="term"><code class="code">"name"</code>: <span class="emphasis"><em>string, required</em></span></span></dt><dd><p>The unique name to give the heap object in the heap. This name is
+}</pre></div><div class="refsect1" title="Properties"><a name="d96e294"></a><h2>Properties</h2><div class="variablelist"><dl><dt><span class="term"><code class="code">"name"</code>: <span class="emphasis"><em>string, required</em></span></span></dt><dd><p>The unique name to give the heap object in the heap. This name is
      used to resolve the heap object, for example when another heap object
      names a heap object dependency.</p></dd><dt><span class="term"><code class="code">"type"</code>: <span class="emphasis"><em>string, required</em></span></span></dt><dd><p>The class name of the object to be created. Example:
      <code class="literal">"HandlerServlet"</code>. To determine the type name, see
      the specific object documentation in this reference.</p></dd><dt><span class="term"><code class="code">"config"</code>: <span class="emphasis"><em>object, required</em></span></span></dt><dd><p>The configuration that is specific to the heap object being created.
      For an example, see the <a href="../../reference/index/HandlerServlet.html" class="link">HandlerServlet</a>
-     reference.</p></dd></dl></div></div><div class="refsect1" title="Automatically Created Objects"><a name="d91e334"></a><h2>Automatically Created Objects</h2><div class="variablelist"><p>When a heap is first created, it is automatically populated with some
+     reference.</p></dd></dl></div></div><div class="refsect1" title="Automatically Created Objects"><a name="d96e334"></a><h2>Automatically Created Objects</h2><div class="variablelist"><p>When a heap is first created, it is automatically populated with some
    objects, without required configuration. An automatically created object can
    be overridden by creating a heap object with the same name.</p><dl><dt><span class="term"><code class="code">"LogSink"</code></span></dt><dd><p>The default object to use for writing all audit and performance
      logging. Default: a <a href="../../reference/index/ConsoleLogSink.html" class="link">ConsoleLogSink</a>
      object with default values.</p></dd><dt><span class="term"><code class="code">"TemporaryStorage"</code></span></dt><dd><p>The default object to use for managing temporary buffers. Default: a
      <a href="../../reference/index/TemporaryStorage.html" class="link">TemporaryStorage</a>
-     object with default values.</p></dd></dl></div></div><div class="refsect1" title="Implicit Properties"><a name="d91e360"></a><h2>Implicit Properties</h2><div class="variablelist"><p>Every heap object has a set of implicit properties, which can be
+     object with default values.</p></dd></dl></div></div><div class="refsect1" title="Implicit Properties"><a name="d96e360"></a><h2>Implicit Properties</h2><div class="variablelist"><p>Every heap object has a set of implicit properties, which can be
    overridden on an object-by-object basis:</p><dl><dt><span class="term"><code class="code">"logSink"</code>: <span class="emphasis"><em>string</em></span></span></dt><dd><p>Specifies the heap object that should be used for audit and
      performance logging. Default: <code class="literal">"LogSink"</code>.</p></dd><dt><span class="term"><code class="code">"temporaryStorage"</code>: <span class="emphasis"><em>string</em></span></span></dt><dd><p>Specifies the heap object that should be used for temporary buffer
      storage. Default: <code class="literal">"TemporaryStorage"</code>.</p></dd></dl></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="gateway-servlet.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="required-conf.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="servlets-conf.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Gateway Servlet&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Servlets</td></tr></table></div><script type="text/javascript">

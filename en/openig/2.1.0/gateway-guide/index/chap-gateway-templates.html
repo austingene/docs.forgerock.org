@@ -983,7 +983,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
     for initial development or debugging and may rapidly fill up your available
     disk space if left enabled.</p></li><li class="listitem"><p>Substitute the <code class="literal">TARGETIP</code> tag with the IP address of
     your application.</p></li><li class="listitem"><p>Modify the <code class="literal">LoginRequest</code> filter to match the form
-    required for login by your target application.</p></li></ul></div></div><div class="section" title="11.1.&nbsp;Proxy &amp; Capture"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-proxy-capture"></a>11.1.&nbsp;Proxy &amp; Capture</h2></div></div></div><a class="indexterm" name="d500e2105"></a><p>Proxies all requests and captures them in a flat file. Use this
+    required for login by your target application.</p></li></ul></div></div><div class="section" title="11.1.&nbsp;Proxy &amp; Capture"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-proxy-capture"></a>11.1.&nbsp;Proxy &amp; Capture</h2></div></div></div><a class="indexterm" name="d505e2111"></a><p>Proxies all requests and captures them in a flat file. Use this
   template if you need to analyze the traffic for your application. Simply
   change the <code class="literal">baseURI</code> to be that of the target application,
   restart OpenIG, and login to the application. The entire sequence is logged
@@ -1055,7 +1055,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
         ]
     },
     "servletObject": "HandlerServlet"
-}</pre></div><div class="section" title="11.2.&nbsp;Simple Login Form"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-simple-login"></a>11.2.&nbsp;Simple Login Form</h2></div></div></div><a class="indexterm" name="d500e2121"></a><p>Logs the user into the target application with hard-coded user name
+}</pre></div><div class="section" title="11.2.&nbsp;Simple Login Form"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-simple-login"></a>11.2.&nbsp;Simple Login Form</h2></div></div></div><a class="indexterm" name="d505e2127"></a><p>Logs the user into the target application with hard-coded user name
   and password. This template intercepts the login page request and replaces
   it with the login form.</p><pre class="brush: javascript;">{
   "heap": {
@@ -1131,7 +1131,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   },
   "servletObject": "HandlerServlet",
 }
-</pre></div><div class="section" title="11.3.&nbsp;Login Form With Cookie From Login Page"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-login-cookie"></a>11.3.&nbsp;Login Form With Cookie From Login Page</h2></div></div></div><a class="indexterm" name="d500e2134"></a><p>For applications that expect a cookie from the login page to be sent
+</pre></div><div class="section" title="11.3.&nbsp;Login Form With Cookie From Login Page"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-login-cookie"></a>11.3.&nbsp;Login Form With Cookie From Login Page</h2></div></div></div><a class="indexterm" name="d505e2140"></a><p>For applications that expect a cookie from the login page to be sent
   in the login request form. This templates allows the login page request to
   go through to the target, intercepts the response, then creates the login
   form and adds the intercepted cookie to the POST.</p><pre class="brush: javascript;">{
@@ -1230,7 +1230,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   },
   "servletObject": "HandlerServlet",
 }
-</pre></div><div class="section" title="11.4.&nbsp;Login Form With Extract Filter &amp; Cookie Filter"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-login-extract-cookie-filters"></a>11.4.&nbsp;Login Form With Extract Filter &amp; Cookie Filter</h2></div></div></div><a class="indexterm" name="d500e2147"></a><p>For applications that return the login page when the user tries to
+</pre></div><div class="section" title="11.4.&nbsp;Login Form With Extract Filter &amp; Cookie Filter"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-login-extract-cookie-filters"></a>11.4.&nbsp;Login Form With Extract Filter &amp; Cookie Filter</h2></div></div></div><a class="indexterm" name="d505e2153"></a><p>For applications that return the login page when the user tries to
   access a page without a valid session. This template shows how to use the
   <code class="literal">ExtractFilter</code> to find the login page on the response and
   use the <code class="literal">CookieFilter</code> to ensure the cookies from the
@@ -1362,7 +1362,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   },
   "servletObject": "HandlerServlet",
 }
-</pre></div><div class="section" title="11.5.&nbsp;Login Which Requires a Hidden Value From the Login Page"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-login-hidden-value"></a>11.5.&nbsp;Login Which Requires a Hidden Value From the Login Page</h2></div></div></div><a class="indexterm" name="d500e2196"></a><p>Extracts a hidden value from the login page and includes it in the
+</pre></div><div class="section" title="11.5.&nbsp;Login Which Requires a Hidden Value From the Login Page"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-login-hidden-value"></a>11.5.&nbsp;Login Which Requires a Hidden Value From the Login Page</h2></div></div></div><a class="indexterm" name="d505e2202"></a><p>Extracts a hidden value from the login page and includes it in the
   login form POSTed to the target application.</p><pre class="brush: javascript;">{
   "heap": {
     "objects": [
@@ -1453,7 +1453,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   },
   "servletObject": "HandlerServlet",
 }
-</pre></div><div class="section" title="11.6.&nbsp;HTTP &amp; HTTPS Application"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-http-and-https"></a>11.6.&nbsp;HTTP &amp; HTTPS Application</h2></div></div></div><a class="indexterm" name="d500e2209"></a><p>Proxies traffic to an application listening on ports 80 and 443. The
+</pre></div><div class="section" title="11.6.&nbsp;HTTP &amp; HTTPS Application"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-http-and-https"></a>11.6.&nbsp;HTTP &amp; HTTPS Application</h2></div></div></div><a class="indexterm" name="d505e2215"></a><p>Proxies traffic to an application listening on ports 80 and 443. The
   assumption is the application uses HTTPS for authentication and HTTP for the
   general application features. Assuming the login will all take place on
   port 443, you will need to add the login filters and handlers to the
@@ -1529,7 +1529,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   },
   "servletObject": "HandlerServlet",
 }
-</pre></div><div class="section" title="11.7.&nbsp;Multiple Applications"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-multiple-apps"></a>11.7.&nbsp;Multiple Applications</h2></div></div></div><a class="indexterm" name="d500e2234"></a><p>Shows how a single OpenIG configuration can proxy to multiple
+</pre></div><div class="section" title="11.7.&nbsp;Multiple Applications"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-multiple-apps"></a>11.7.&nbsp;Multiple Applications</h2></div></div></div><a class="indexterm" name="d505e2240"></a><p>Shows how a single OpenIG configuration can proxy to multiple
   applications on different IPs and ports. This template is setup to proxy to
   both the WordPress and MediaWiki hosted samples. OpenIG must be setup to
   listen on both ports 8080 and 8181. The <code class="literal">DispatchHandler</code> is
@@ -1684,7 +1684,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   },
   "servletObject": "HandlerServlet",
 }
-</pre></div><div class="section" title="11.9.&nbsp;Microsoft Online Outlook Web Access"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-owa-online"></a>11.9.&nbsp;Microsoft Online Outlook Web Access</h2></div></div></div><a class="indexterm" name="d500e2258"></a><p>A sample template used to log a user into Microsoft Online Outlook Web
+</pre></div><div class="section" title="11.9.&nbsp;Microsoft Online Outlook Web Access"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-owa-online"></a>11.9.&nbsp;Microsoft Online Outlook Web Access</h2></div></div></div><a class="indexterm" name="d505e2264"></a><p>A sample template used to log a user into Microsoft Online Outlook Web
   Access. This template shows how you would use the Gateway and the OpenAM
   password capture feature to integrate with OWA. You can follow the
   <a href="../../gateway-guide/index/chap-password-capture-replay-tutorial.html" class="link">Tutorial On Password Capture
