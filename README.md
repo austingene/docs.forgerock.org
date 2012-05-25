@@ -50,7 +50,6 @@ Publishing is a manual process for now.
 
 * Improve the look and feel.
 * Published localized documentation.
-* Automate publishing so that it happens during release using Maven.
 
 
 * * *
