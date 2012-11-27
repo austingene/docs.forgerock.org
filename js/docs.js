@@ -32,6 +32,7 @@ function isValidProduct(product) {
 
 function isValidProductVersion(product, version) {
   if (product == "openam" && version == "10.0.0") return true;
+  if (product == "openam" && version == "10.0.1") return true;
 /*  if (product == "openam-pa" && version == "3.0.5") return true;
 */  if (product == "opendj" && version == "2.5.0-Xpress1") return true;
   if (product == "openig" && version == "2.1.0") return true;
