@@ -23,21 +23,25 @@
 
 function isValidProduct(product) {
   if (product == "openam") return true;
-/*  if (product == "openam-pa") return true;
-*/  if (product == "opendj") return true;
-  if (product == "openig") return true;
+  if (product == "openam-pa") return true;
+  if (product == "opendj") return true;
+  if (product == "openicf") return true;
   if (product == "openidm") return true;
+  if (product == "openig") return true;
   return false;
 }
 
 function isValidProductVersion(product, version) {
-  if (product == "openam" && version == "10.0.0") return true;
+  if (product == "openam" && version == "10.1.0-Xpress") return true;
   if (product == "openam" && version == "10.0.1") return true;
-/*  if (product == "openam-pa" && version == "3.0.5") return true;
-*/  if (product == "opendj" && version == "2.5.0-Xpress1") return true;
-  if (product == "openig" && version == "2.1.0") return true;
+  if (product == "openam" && version == "10.0.0") return true;
+  if (product == "openam-pa" && version == "3.1.0-Xpress") return true;
+  if (product == "opendj" && version == "2.5.0-Xpress1") return true;
+  if (product == "openicf" && version == "1.1.0.1-Xpress") return true;
+  if (product == "openidm" && version == "2.1.0-Xpress") return true;
   if (product == "openidm" && version == "2.0.3") return true;
   if (product == "openidm" && version == "2.0.2") return true;
+  if (product == "openig" && version == "2.1.0") return true;
   return false;
 }
 
