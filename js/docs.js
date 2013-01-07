@@ -17,32 +17,52 @@
  *
  * CCPL HEADER END
  *
- *     Copyright 2011-2012 ForgeRock AS
+ *     Copyright 2011-2013 ForgeRock AS
  *
  */
 
+/**
+ * Format is "product": [ "version", ...].
+ * The latest version of a product is the first element of the array.
+ */
+var products = {
+    "openam": [
+        "10.1.0-Xpress",
+        "10.0.1",
+        "10.0.0"
+    ],
+    "openam-pa": [
+        "3.1.0-Xpress"
+    ],
+    "opendj": [
+        "2.5.0-Xpress1"
+    ],
+    "openicf": [
+        "1.1.1.0"
+    ],
+    "openig": [
+        "2.1.0"
+    ],
+    "openidm": [
+        "2.1.0-Xpress",
+        "2.0.3",
+        "2.0.2"
+    ]
+};
+
 function isValidProduct(product) {
-  if (product == "openam") return true;
-  if (product == "openam-pa") return true;
-  if (product == "opendj") return true;
-  if (product == "openicf") return true;
-  if (product == "openidm") return true;
-  if (product == "openig") return true;
-  return false;
+    if (products.hasOwnProperty(product)) {
+        return true;
+    }
+    return false;
 }
 
 function isValidProductVersion(product, version) {
-  if (product == "openam" && version == "10.1.0-Xpress") return true;
-  if (product == "openam" && version == "10.0.1") return true;
-  if (product == "openam" && version == "10.0.0") return true;
-  if (product == "openam-pa" && version == "3.1.0-Xpress") return true;
-  if (product == "opendj" && version == "2.5.0-Xpress1") return true;
-  if (product == "openicf" && version == "1.1.1.0") return true;
-  if (product == "openidm" && version == "2.1.0-Xpress") return true;
-  if (product == "openidm" && version == "2.0.3") return true;
-  if (product == "openidm" && version == "2.0.2") return true;
-  if (product == "openig" && version == "2.1.0") return true;
-  return false;
+    if (products.hasOwnProperty(product)) {
+        if (products[product].indexOf(version) != -1)
+            return true;
+    }
+    return false;
 }
 
 function setDisplay() {
