@@ -88,13 +88,6 @@ function setDisplay() {
   }
 }
 
-function clearTextField(srchForm) {
-  if (srchForm.q.value == "Google Search") srchForm.q.value = "";
-}
-function replaceTextIfEmpty(srchForm) {
-  if (srchForm.q.value == "") srchForm.q.value = "Google Search";
-}
-
 function getQuerystring(key, default_) {
   if (default_==null) default_="";
   key = key.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
