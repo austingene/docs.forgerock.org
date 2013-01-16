@@ -25,6 +25,41 @@ $(document).ready(function() {
       "<div class=\"flat nodisplay\" title=\"Click [+] to wrap long lines.\">"
         + plus + $(this).html().replace(/(\n|\r\n) /g," ") + "</div>"
     )});
+
+  /*
+   * COMMWEB-73: Make it easier to copy links to anchors in the HTML core docs
+   *
+   * On mouseover, prepend a ↪ to titles which links to the element.
+   *
+   * This code works for elements that are class="title". To affect procedures
+   * as well for example, change $(".title") to $(".title, .procedure"). Then
+   * also change the code to insert the ↪ in the procedure title, rather than
+   * outside the entire procedure, which is a block. The same applies to
+   * example and probably other block-formatted elements.
+   */
+  $(".title").each(function() {
+    var href = $(this).children("a").attr("name");
+    $(this).prepend('<a href=\"#' + href
+      + '\" class=\"showlink\" style=\"display: none;\">&#x021AA; </a>');
+    $(this).mouseenter(function() {
+      $(this).children('a.showlink').show();
+    }).mouseleave(function() {
+      $(this).children('a.showlink').hide();
+    });
+  });
+
+  /*
+   * DOCS-36: HTML output should wrap large images in links to themselves at
+   *          full size
+   *
+   * It would be cool if when you click (large) images in HTML output, you get
+   * the same effect as right-click &gt; copy image location + new tab &gt;
+   * paste copied image location and go.
+   */
+  $("img").wrap(function() {
+    return "<a target=\"_blank\" href=\"" + $(this).attr('src') + "\" />";
+  });
+
 });
 
 /*
@@ -973,7 +1008,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 </head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;6.&nbsp;Support</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-feedback.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;</td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;6.&nbsp;Support"><div class="titlepage"><div><div><h2 class="title"><a name="chap-support"></a>Chapter&nbsp;6.&nbsp;Support</h2></div></div></div><p>You can purchase OpenDJ support subscriptions and training courses
  from ForgeRock and from consulting partners around the world and in your
  area. To contact ForgeRock, send mail to <a class="link" href="mailto:info@forgerock.com" target="_top">info@forgerock.com</a>. To find a
- partner in your area, see <a class="link" href="http://forgerock.com/partners/find-a-partner/" target="_blank">http://forgerock.com/partners/find-a-partner/</a>.</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-feedback.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;</td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;5.&nbsp;How to Report Problems &amp; Provide Feedback&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssue.jspa?pid=10040&components=10132&issuetype=1">Log a documentation bug.</a></p></div>
+ partner in your area, see <a class="link" href="http://www.forgerock.com/content/consulting-partners" target="_blank">http://www.forgerock.com/content/consulting-partners</a>.</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-feedback.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;</td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;5.&nbsp;How to Report Problems &amp; Provide Feedback&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssue.jspa?pid=10040&components=10132&issuetype=1">Log a documentation bug.</a></p></div>
 <script type="text/javascript">
 
   var _gaq = _gaq || [];

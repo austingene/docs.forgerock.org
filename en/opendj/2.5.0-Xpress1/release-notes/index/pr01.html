@@ -25,6 +25,41 @@ $(document).ready(function() {
       "<div class=\"flat nodisplay\" title=\"Click [+] to wrap long lines.\">"
         + plus + $(this).html().replace(/(\n|\r\n) /g," ") + "</div>"
     )});
+
+  /*
+   * COMMWEB-73: Make it easier to copy links to anchors in the HTML core docs
+   *
+   * On mouseover, prepend a ↪ to titles which links to the element.
+   *
+   * This code works for elements that are class="title". To affect procedures
+   * as well for example, change $(".title") to $(".title, .procedure"). Then
+   * also change the code to insert the ↪ in the procedure title, rather than
+   * outside the entire procedure, which is a block. The same applies to
+   * example and probably other block-formatted elements.
+   */
+  $(".title").each(function() {
+    var href = $(this).children("a").attr("name");
+    $(this).prepend('<a href=\"#' + href
+      + '\" class=\"showlink\" style=\"display: none;\">&#x021AA; </a>');
+    $(this).mouseenter(function() {
+      $(this).children('a.showlink').show();
+    }).mouseleave(function() {
+      $(this).children('a.showlink').hide();
+    });
+  });
+
+  /*
+   * DOCS-36: HTML output should wrap large images in links to themselves at
+   *          full size
+   *
+   * It would be cool if when you click (large) images in HTML output, you get
+   * the same effect as right-click &gt; copy image location + new tab &gt;
+   * paste copied image location and go.
+   */
+  $("img").wrap(function() {
+    return "<a target=\"_blank\" href=\"" + $(this).attr('src') + "\" />";
+  });
+
 });
 
 /*
@@ -980,15 +1015,18 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   and modify the source code to build your own version if you prefer.</p><p>These release notes are written for everyone working with the
   OpenDJ 2.5.0-Xpress1 release. Read these notes before you
   install or upgrade OpenDJ software. These notes cover hardware and software
-  prerequisites for installing and upgrading OpenDJ software. These
+  prerequisites for installing OpenDJ software. These
   notes list key features added and changed in this release. They also
   cover compatibility with previous releases and alert you to potential
   changes coming up that could affect your scripts and applications.
   Finally, these notes list both issues fixed since the previous
   release and known issues open at the time of release.</p><p>See the <a class="link" href="http://opendj.forgerock.org/doc/install-guide/index.html#install-guide" target="_blank"><em class="citetitle">Installation
   Guide</em></a> for more after you read these release notes. The
-  installation guide covers installation and upgrade for OpenDJ directory
-  server and OpenDJ DSML gateway.</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="index.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-whats-new.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">OpenDJ 2.5.0-Xpress1 Release Notes&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;1.&nbsp;What's New in OpenDJ 2.5.0-Xpress1</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssue.jspa?pid=10040&components=10132&issuetype=1">Log a documentation bug.</a></p></div>
+  installation guide covers installation for OpenDJ directory
+  server and OpenDJ DSML gateway.</p><div class="important" title="Important" style="font-style: italic;"><h3 class="title">Important</h3><p>Upgrade from earlier versions is not supported for the
+   OpenDJ 2.5.0-Xpress1 release.</p><p>The change to Berkeley JE 5 from Berkeley JE 4 requires changes
+   to JE backends prior to upgrade, and this release does not include a
+   mechanism for making such changes.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="index.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-whats-new.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">OpenDJ 2.5.0-Xpress1 Release Notes&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;1.&nbsp;What's New in OpenDJ 2.5.0-Xpress1</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssue.jspa?pid=10040&components=10132&issuetype=1">Log a documentation bug.</a></p></div>
 <script type="text/javascript">
 
   var _gaq = _gaq || [];

@@ -25,6 +25,41 @@ $(document).ready(function() {
       "<div class=\"flat nodisplay\" title=\"Click [+] to wrap long lines.\">"
         + plus + $(this).html().replace(/(\n|\r\n) /g," ") + "</div>"
     )});
+
+  /*
+   * COMMWEB-73: Make it easier to copy links to anchors in the HTML core docs
+   *
+   * On mouseover, prepend a ↪ to titles which links to the element.
+   *
+   * This code works for elements that are class="title". To affect procedures
+   * as well for example, change $(".title") to $(".title, .procedure"). Then
+   * also change the code to insert the ↪ in the procedure title, rather than
+   * outside the entire procedure, which is a block. The same applies to
+   * example and probably other block-formatted elements.
+   */
+  $(".title").each(function() {
+    var href = $(this).children("a").attr("name");
+    $(this).prepend('<a href=\"#' + href
+      + '\" class=\"showlink\" style=\"display: none;\">&#x021AA; </a>');
+    $(this).mouseenter(function() {
+      $(this).children('a.showlink').show();
+    }).mouseleave(function() {
+      $(this).children('a.showlink').hide();
+    });
+  });
+
+  /*
+   * DOCS-36: HTML output should wrap large images in links to themselves at
+   *          full size
+   *
+   * It would be cool if when you click (large) images in HTML output, you get
+   * the same effect as right-click &gt; copy image location + new tab &gt;
+   * paste copied image location and go.
+   */
+  $("img").wrap(function() {
+    return "<a target=\"_blank\" href=\"" + $(this).attr('src') + "\" />";
+  });
+
 });
 
 /*
@@ -974,9 +1009,8 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
  also deprecated and removed functionality.</p><div class="section" title="3.1.&nbsp;Major Changes to Existing Functionality"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="changed-functionality"></a>3.1.&nbsp;Major Changes to Existing Functionality</h2></div></div></div><p>OpenDJ 2.5.0-Xpress1 improves on earlier releases
   introducing many new features and important fixes without major,
   backwards-incompatible changes. Take the following into account,
-  however.</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>When upgrading from 2.4.4 or earlier, after you upgrade but before
-    you restart OpenDJ, you must rebuild the <code class="literal">ds-sync-hist</code>
-    index.</p></li><li class="listitem"><p>The default DB cache size is now 50%, rather than 10%.</p><p>If you have multiple backends, configure cache sizes
+  however.</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>Upgrade from earlier versions is not supported for the
+    OpenDJ 2.5.0-Xpress1 release.</p></li><li class="listitem"><p>The default DB cache size is now 50%, rather than 10%.</p><p>If you have multiple backends, configure cache sizes
     accordingly.</p></li><li class="listitem"><p>The number of LDAP request handlers now defaults to half the CPU
     count.</p></li><li class="listitem"><p>The replication purge delay default has increased from one day to
     three days.</p></li><li class="listitem"><p>Syntax checking has been added for certificate and country attribute
