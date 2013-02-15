@@ -1015,7 +1015,20 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   ensure you have the latest security fixes.</p><p>ForgeRock has tested this release of OpenAM primarily with Oracle
   Java SE JDK.</p><p>OpenAM Java SDK requires Java Development Kit 1.5 or 1.6.</p></div><div class="section" title="2.2.&nbsp;Web Application Container Requirements"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="web-container-requirements"></a>2.2.&nbsp;Web Application Container Requirements</h2></div></div></div><div class="itemizedlist"><p>This release of OpenAM runs in the following web application
    containers.</p><ul class="itemizedlist" type="disc"><li class="listitem"><p>Apache Tomcat 6.0.x, 7.0.x (ForgeRock's preferred web container for
-    OpenAM)</p></li><li class="listitem"><p>GlassFish v2</p></li><li class="listitem"><p>IBM WebSphere 8, 8.5</p></li><li class="listitem"><p>JBoss Enterprise Application Platform 4.x, 5.x</p><p>JBoss Application Server 7.x</p></li><li class="listitem"><p>Oracle WebLogic Server 11g (10.3.5)</p><p>Oracle WebLogic Server 12c (12.1.1)</p></li></ul></div><p>If running as a non-root user, the web application container must be
+    OpenAM)</p></li><li class="listitem"><p>GlassFish v2</p></li><li class="listitem"><p>IBM WebSphere 8, 8.5</p><p>For this Xpress release, apply the following workaround to install
+    OpenAM on IBM WebSphere 8.</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Edit the web archive to change the
+      <code class="filename">configuratorTagSwap.properties</code> file, removing
+      the trailing slash from the <code class="literal">tagswap.files</code>
+      property.</p><div class="screen"><pre class="brush: plain;">$ cd ~/Downloads/
+$ mkdir openam &amp;&amp; cd openam
+$ jar xf ../openam-server-10.1.0-Xpress.war
+$ vi WEB-INF/classes/configuratorTagSwap.properties
+# Remove the trailing slash in the tagswap.files property.
+# This should all remain on one line in your file:
+tagswap.files=/WEB-INF/classes/AMConfig.properties
+ /WEB-INF/template/sms/serverconfig.xml /WEB-INF/classes/rsa_api.properties
+$ jar cf ../openam.war *</pre></div></li><li class="listitem"><p>Deploy the resulting <code class="filename">openam.war</code> web
+      archive.</p></li></ol></div></li><li class="listitem"><p>JBoss Enterprise Application Platform 4.x, 5.x</p><p>JBoss Application Server 7.x</p></li><li class="listitem"><p>Oracle WebLogic Server 11g (10.3.5)</p><p>Oracle WebLogic Server 12c (12.1.1)</p></li></ul></div><p>If running as a non-root user, the web application container must be
   able to write to its own home directory, where OpenAM stores configuration
   files.</p></div><div class="section" title="2.3.&nbsp;Data Store Requirements"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="data-store-requirements"></a>2.3.&nbsp;Data Store Requirements</h2></div></div></div><div class="itemizedlist"><p>This release of OpenAM works with the following configuration data
    stores.</p><ul class="itemizedlist" type="disc"><li class="listitem"><p>Embedded (using ForgeRock OpenDJ for the data store)</p><p>When using the embedded configuration store, you must deploy OpenAM
