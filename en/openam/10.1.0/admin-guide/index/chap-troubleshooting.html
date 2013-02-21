@@ -1009,9 +1009,9 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 <!-- END SyntaxHighlighter 3.0.83 -->
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
-</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;17.&nbsp;Troubleshooting</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-securing.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="openam-glossary.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;17.&nbsp;Troubleshooting"><div class="titlepage"><div><div><h2 class="title"><a name="chap-troubleshooting"></a>Chapter&nbsp;17.&nbsp;Troubleshooting</h2></div></div></div><a class="indexterm" name="d14437e16836"></a><p>This chapter covers how to get debugging information and troubleshoot
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;17.&nbsp;Troubleshooting</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-securing.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="openam-glossary.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;17.&nbsp;Troubleshooting"><div class="titlepage"><div><div><h2 class="title"><a name="chap-troubleshooting"></a>Chapter&nbsp;17.&nbsp;Troubleshooting</h2></div></div></div><a class="indexterm" name="d14442e16838"></a><p>This chapter covers how to get debugging information and troubleshoot
  issues in OpenAM deployments.</p><div class="qandaset" title="Solutions to Common Issues"><h2 class="title"><a name="solutions-to-common-issues"></a>Solutions to Common Issues</h2><p>This section offers solutions to common problems when working with
-  OpenAM.</p><table border="0" width="100%" summary="Q and A Set"><col align="left" width="1%"><col><tbody><tr class="qandadiv"><td align="left" valign="top" colspan="2"><h3 class="title"><a name="troubleshooting-openam-installation"></a>17.1. OpenAM Installation</h3></td></tr><tr class="question" title="Q:"><td align="left" valign="top"><a name="cannot-write-to-config-directory"></a><a name="d14437e16850"></a><p><b>Q:</b></p></td><td align="left" valign="top"><p>OpenAM configuration could not write to the configuration directory.
+  OpenAM.</p><table border="0" width="100%" summary="Q and A Set"><col align="left" width="1%"><col><tbody><tr class="qandadiv"><td align="left" valign="top" colspan="2"><h3 class="title"><a name="troubleshooting-openam-installation"></a>17.1. OpenAM Installation</h3></td></tr><tr class="question" title="Q:"><td align="left" valign="top"><a name="cannot-write-to-config-directory"></a><a name="d14442e16852"></a><p><b>Q:</b></p></td><td align="left" valign="top"><p>OpenAM configuration could not write to the configuration directory.
      Where must I change permissions, and what permissions are required?</p></td></tr><tr class="answer"><td align="left" valign="top"><p><b>A:</b></p></td><td align="left" valign="top"><p>If the user running the web container has a $HOME directory, then
      the configuration directory is stored there, and you probably do not have
      this problem. If you do not know the user running the web container, use
@@ -1033,7 +1033,7 @@ $ jar xf ../openam-server-10.1.0-Xpress.war
 $ vi WEB-INF/classes/bootstrap.properties 
 $ grep ^config WEB-INF/classes/bootstrap.properties 
 configuration.dir=/my/readwrite/config/dir
-$ jar cf ../openam.war *</pre></div></td></tr><tr class="question" title="Q:"><td align="left" valign="top"><a name="deploy-failed-lack-of-memory"></a><a name="d14437e16889"></a><p><b>Q:</b></p></td><td align="left" valign="top"><p>Deployment failed due to lack of memory. What do I do?</p></td></tr><tr class="answer"><td align="left" valign="top"><p><b>A:</b></p></td><td align="left" valign="top"><p>OpenAM requires at least a maximum heap size of 1024 MB, with a 256
+$ jar cf ../openam.war *</pre></div></td></tr><tr class="question" title="Q:"><td align="left" valign="top"><a name="deploy-failed-lack-of-memory"></a><a name="d14442e16891"></a><p><b>Q:</b></p></td><td align="left" valign="top"><p>Deployment failed due to lack of memory. What do I do?</p></td></tr><tr class="answer"><td align="left" valign="top"><p><b>A:</b></p></td><td align="left" valign="top"><p>OpenAM requires at least a maximum heap size of 1024 MB, with a 256
      MB maximum permanent generation heap size. For the Sun JVM, ensure the
      container starts with <code class="literal">-Xmx1024m -XX:MaxPermSize=256m</code>
      for these settings.</p><p>If you do not know the settings used when the web container was
@@ -1043,7 +1043,7 @@ $ jar cf ../openam.war *</pre></div></td></tr><tr class="question" title="Q:"><t
      run OpenAM to avoid running out of memory.</p><p>If you make it through deployment and seem to be running out of
      memory later, you can confirm memory errors in OpenAM by searching the
      <code class="filename"><em class="replaceable"><code>config-dir</code></em>/openam/debug/*</code>
-     files for <code class="literal">java.lang.OutOfMemoryError</code>.</p></td></tr><tr class="question" title="Q:"><td align="left" valign="top"><a name="deploy-failed-invalid-hostname"></a><a name="d14437e16921"></a><p><b>Q:</b></p></td><td align="left" valign="top"><p>Deployment failed due to invalid hostname configuration. What do
+     files for <code class="literal">java.lang.OutOfMemoryError</code>.</p></td></tr><tr class="question" title="Q:"><td align="left" valign="top"><a name="deploy-failed-invalid-hostname"></a><a name="d14442e16923"></a><p><b>Q:</b></p></td><td align="left" valign="top"><p>Deployment failed due to invalid hostname configuration. What do
      I do?</p></td></tr><tr class="answer"><td align="left" valign="top"><p><b>A:</b></p></td><td align="left" valign="top"><p>OpenAM requires that you use a fully qualified domain name (FQDN)
      that the host can resolve.</p><div class="screen"><pre class="brush: plain;">$ ping openam-ter.example.com
 PING openam-ter (192.168.56.2) 56(84) bytes of data.
@@ -1054,7 +1054,7 @@ PING openam-ter (192.168.56.2) 56(84) bytes of data.
      on how your network is configured.</p><div class="screen"><pre class="brush: plain;">$ cat /etc/hosts | grep openam
 192.168.56.2 openam openam.example.com
 192.168.56.3 openam-bis openam-bis.example.com
-192.168.56.5 openam-ter openam-ter.example.com</pre></div></td></tr><tr class="question" title="Q:"><td align="left" valign="top"><a name="who-deleted-my-config"></a><a name="d14437e16940"></a><p><b>Q:</b></p></td><td align="left" valign="top"><p>I configured OpenAM, and now am seeing the configuration screen
+192.168.56.5 openam-ter openam-ter.example.com</pre></div></td></tr><tr class="question" title="Q:"><td align="left" valign="top"><a name="who-deleted-my-config"></a><a name="d14442e16942"></a><p><b>Q:</b></p></td><td align="left" valign="top"><p>I configured OpenAM, and now am seeing the configuration screen
      again. Who deleted my configuration?</p></td></tr><tr class="answer"><td align="left" valign="top"><p><b>A:</b></p></td><td align="left" valign="top"><p>OpenAM uses a file in <code class="filename">$HOME/.openamcfg/</code> to
      bootstrap and find its configuration. The file is named after the path
      to OpenAM and contains the path to the configuration. The following
@@ -1063,14 +1063,14 @@ PING openam-ter (192.168.56.2) 56(84) bytes of data.
      running as user <code class="literal">amuser</code> with <code class="literal">$HOME</code>
      <code class="filename">/home/amuser</code>.</p><div class="screen"><pre class="brush: plain;">$ cat .openamcfg/AMConfig_path_to_tomcat_webapps_openam_ 
 /home/amuser/openam</pre></div><p>If OpenAM cannot find its configuration, then it displays the
-     configuration screen.</p></td></tr><tr class="qandadiv"><td align="left" valign="top" colspan="2"><h3 class="title"><a name="troubleshooting-openam-administration"></a>17.2. OpenAM Administration</h3></td></tr><tr class="question" title="Q:"><td align="left" valign="top"><a name="cannot-use-ssoadm-jsp"></a><a name="d14437e16969"></a><p><b>Q:</b></p></td><td align="left" valign="top"><p>I cannot use the browser-based equivalent of
+     configuration screen.</p></td></tr><tr class="qandadiv"><td align="left" valign="top" colspan="2"><h3 class="title"><a name="troubleshooting-openam-administration"></a>17.2. OpenAM Administration</h3></td></tr><tr class="question" title="Q:"><td align="left" valign="top"><a name="cannot-use-ssoadm-jsp"></a><a name="d14442e16971"></a><p><b>Q:</b></p></td><td align="left" valign="top"><p>I cannot use the browser-based equivalent of
      <span class="command"><strong>ssoadm</strong></span>,
      <code class="literal">http://openam.example.com:8080/openam/ssoadm.jsp</code>. Why
      not?</p></td></tr><tr class="answer"><td align="left" valign="top"><p><b>A:</b></p></td><td align="left" valign="top"><p>For security reasons, <code class="literal">ssoadm.jsp</code> is not activated
      by default. To activate it, browse to Configuration &gt; Servers and Sites
      &gt; Servers &gt; <em class="replaceable"><code>ServerName</code></em> &gt; Advanced,
      and then add a property named <code class="literal">ssoadm.disabled</code> with
-     value <code class="literal">false</code>.</p></td></tr><tr class="question" title="Q:"><td align="left" valign="top"><a name="opendj-missing-schema"></a><a name="d14437e16994"></a><p><b>Q:</b></p></td><td align="left" valign="top"><p>I added OpenDJ as a data store, and now I cannot add a user. OpenAM
+     value <code class="literal">false</code>.</p></td></tr><tr class="question" title="Q:"><td align="left" valign="top"><a name="opendj-missing-schema"></a><a name="d14442e16996"></a><p><b>Q:</b></p></td><td align="left" valign="top"><p>I added OpenDJ as a data store, and now I cannot add a user. OpenAM
      gives me the following error.</p><div class="literallayout"><p>ERROR:&nbsp;LDAPv3Repo.create&nbsp;failed.&nbsp;errorCode=65&nbsp;Entry<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;uid=test,ou=people,dc=example,dc=com&nbsp;violates&nbsp;the&nbsp;Directory&nbsp;Server<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;schema&nbsp;configuration&nbsp;because&nbsp;it&nbsp;includes&nbsp;attribute&nbsp;inetUserStatus&nbsp;which<br>
@@ -1087,7 +1087,7 @@ PING openam-ter (192.168.56.2) 56(84) bytes of data.
  --bindPassword password
  --filename ~/Downloads/openam/ldif/fam_sds_schema.ldif
 Processing MODIFY request for CN=schema
-MODIFY operation successful for DN CN=schema</pre></div></td></tr><tr class="question" title="Q:"><td align="left" valign="top"><a name="openam-sfo-time-wait"></a><a name="d14437e17013"></a><p><b>Q:</b></p></td><td align="left" valign="top"><p>I have session failover configured for an OpenAM site. I see many
+MODIFY operation successful for DN CN=schema</pre></div></td></tr><tr class="question" title="Q:"><td align="left" valign="top"><a name="openam-sfo-time-wait"></a><a name="d14442e17015"></a><p><b>Q:</b></p></td><td align="left" valign="top"><p>I have session failover configured for an OpenAM site. I see many
      connections in <code class="literal">TIME_WAIT</code> state, and the connections
      seem to be used only for communication between OpenAM servers in that
      site. What should I set to have fewer connections in
