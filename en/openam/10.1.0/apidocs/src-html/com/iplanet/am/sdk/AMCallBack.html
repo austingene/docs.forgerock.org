@@ -1,0 +1,608 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/**<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.<a name="line.2"></a>
+<span class="sourceLineNo">003</span> *<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * Copyright (c) 2005 Sun Microsystems Inc. All Rights Reserved<a name="line.4"></a>
+<span class="sourceLineNo">005</span> *<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * The contents of this file are subject to the terms<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * of the Common Development and Distribution License<a name="line.7"></a>
+<span class="sourceLineNo">008</span> * (the License). You may not use this file except in<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * compliance with the License.<a name="line.9"></a>
+<span class="sourceLineNo">010</span> *<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * You can obtain a copy of the License at<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * https://opensso.dev.java.net/public/CDDLv1.0.html or<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * opensso/legal/CDDLv1.0.txt<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * See the License for the specific language governing<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * permission and limitations under the License.<a name="line.15"></a>
+<span class="sourceLineNo">016</span> *<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * When distributing Covered Code, include this CDDL<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * Header Notice in each file and include the License file<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * at opensso/legal/CDDLv1.0.txt.<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * If applicable, add the following below the CDDL Header,<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * with the fields enclosed by brackets [] replaced by<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * your own identifying information:<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * "Portions Copyrighted [year] [name of copyright owner]"<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * $Id: AMCallBack.java,v 1.3 2008/06/25 05:41:19 qcheng Exp $<a name="line.25"></a>
+<span class="sourceLineNo">026</span> *<a name="line.26"></a>
+<span class="sourceLineNo">027</span> */<a name="line.27"></a>
+<span class="sourceLineNo">028</span><a name="line.28"></a>
+<span class="sourceLineNo">029</span>package com.iplanet.am.sdk;<a name="line.29"></a>
+<span class="sourceLineNo">030</span><a name="line.30"></a>
+<span class="sourceLineNo">031</span>import java.util.Map;<a name="line.31"></a>
+<span class="sourceLineNo">032</span>import java.util.Set;<a name="line.32"></a>
+<span class="sourceLineNo">033</span><a name="line.33"></a>
+<span class="sourceLineNo">034</span>import com.iplanet.sso.SSOToken;<a name="line.34"></a>
+<span class="sourceLineNo">035</span><a name="line.35"></a>
+<span class="sourceLineNo">036</span>/**<a name="line.36"></a>
+<span class="sourceLineNo">037</span> * A Plugin Class that needs to be extended by external applications in-order to<a name="line.37"></a>
+<span class="sourceLineNo">038</span> * do some special pre/post-processing for creation/deletion and modification<a name="line.38"></a>
+<span class="sourceLineNo">039</span> * operations for User, Organization, Roles and Groups. The implementation<a name="line.39"></a>
+<span class="sourceLineNo">040</span> * classes/module(s) are pluggable and are configurable through the Organization<a name="line.40"></a>
+<span class="sourceLineNo">041</span> * attribute: &lt;code&gt;iplanet-am-admin-console-pre-post-processing-modules&lt;/code&gt;<a name="line.41"></a>
+<span class="sourceLineNo">042</span> * of the &lt;code&gt;iPlanetAMAdminConsoleService&lt;/code&gt; service.<a name="line.42"></a>
+<span class="sourceLineNo">043</span> * <a name="line.43"></a>
+<span class="sourceLineNo">044</span> * &lt;p&gt;<a name="line.44"></a>
+<span class="sourceLineNo">045</span> * For call backs pertaining to Organizations and Organizational Units, the<a name="line.45"></a>
+<span class="sourceLineNo">046</span> * parent organization's configuration (<a name="line.46"></a>
+<span class="sourceLineNo">047</span> * &lt;code&gt;iPlanetAMAdminConsoleService&lt;/code&gt;<a name="line.47"></a>
+<span class="sourceLineNo">048</span> * Organization configuration) will be used to obtain the plugin modules.<a name="line.48"></a>
+<span class="sourceLineNo">049</span> * <a name="line.49"></a>
+<span class="sourceLineNo">050</span> * &lt;p&gt;<a name="line.50"></a>
+<span class="sourceLineNo">051</span> * The call backs will be made at the time of performing one of the<a name="line.51"></a>
+<span class="sourceLineNo">052</span> * corresponding User/Organization/Role/Group operations (create/modify/delete<a name="line.52"></a>
+<span class="sourceLineNo">053</span> * and attribute fetch) by the Sun Java System Access Manager SDK. Applications<a name="line.53"></a>
+<span class="sourceLineNo">054</span> * that need to perform special pre/post processing for one or more of the above<a name="line.54"></a>
+<span class="sourceLineNo">055</span> * operations, should extend the class and override the corresponding methods.<a name="line.55"></a>
+<span class="sourceLineNo">056</span> * <a name="line.56"></a>
+<span class="sourceLineNo">057</span> * &lt;p&gt;<a name="line.57"></a>
+<span class="sourceLineNo">058</span> * The API's for pre call back provide a mechanism to inspect the attributes<a name="line.58"></a>
+<span class="sourceLineNo">059</span> * being modified and also modify the values appropriately if required. Care<a name="line.59"></a>
+<span class="sourceLineNo">060</span> * should be taken while performing such modifications, so that it will not<a name="line.60"></a>
+<span class="sourceLineNo">061</span> * affect other plugins which are dependent on the same attributes.<a name="line.61"></a>
+<span class="sourceLineNo">062</span> * <a name="line.62"></a>
+<span class="sourceLineNo">063</span> * &lt;p&gt;<a name="line.63"></a>
+<span class="sourceLineNo">064</span> * &lt;b&gt;Note:&lt;/b&gt;<a name="line.64"></a>
+<span class="sourceLineNo">065</span> * &lt;ul&gt;<a name="line.65"></a>
+<span class="sourceLineNo">066</span> * &lt;p&gt;<a name="line.66"></a>
+<span class="sourceLineNo">067</span> * &lt;li&gt; When more than one plugin modules are configured at a particular<a name="line.67"></a>
+<span class="sourceLineNo">068</span> * Organization level, the call backs for each of the plugins will occur one<a name="line.68"></a>
+<span class="sourceLineNo">069</span> * after the other. Also, note that the order in which plugins are called back<a name="line.69"></a>
+<span class="sourceLineNo">070</span> * is cannot pre-determined in any way.<a name="line.70"></a>
+<span class="sourceLineNo">071</span> * <a name="line.71"></a>
+<span class="sourceLineNo">072</span> * &lt;p&gt;<a name="line.72"></a>
+<span class="sourceLineNo">073</span> * &lt;li&gt; Since the methods of this class will be invoked by the Identity Server<a name="line.73"></a>
+<span class="sourceLineNo">074</span> * SDK and will control the flow of SDK, extreme caution should be taken while<a name="line.74"></a>
+<span class="sourceLineNo">075</span> * overriding these methods to avoid performance bottle necks.<a name="line.75"></a>
+<span class="sourceLineNo">076</span> * <a name="line.76"></a>
+<span class="sourceLineNo">077</span> * &lt;p&gt;<a name="line.77"></a>
+<span class="sourceLineNo">078</span> * &lt;li&gt; The exceptions thrown by the pre-processing methods of this class will<a name="line.78"></a>
+<span class="sourceLineNo">079</span> * be treated as a failure of external processing and the operation in progress<a name="line.79"></a>
+<span class="sourceLineNo">080</span> * will be halted by the SDK. The exception thrown should include a proper user<a name="line.80"></a>
+<span class="sourceLineNo">081</span> * specific localized error message which can be propagated back to the<a name="line.81"></a>
+<span class="sourceLineNo">082</span> * application using the SDK. The locale of the user should to be determined<a name="line.82"></a>
+<span class="sourceLineNo">083</span> * using token of the authenticated user while constructing such a localized<a name="line.83"></a>
+<span class="sourceLineNo">084</span> * message.<a name="line.84"></a>
+<span class="sourceLineNo">085</span> * &lt;/ul&gt;<a name="line.85"></a>
+<span class="sourceLineNo">086</span> * <a name="line.86"></a>
+<span class="sourceLineNo">087</span> * @deprecated  As of Sun Java System Access Manager 7.1.<a name="line.87"></a>
+<span class="sourceLineNo">088</span> * @supported.all.api<a name="line.88"></a>
+<span class="sourceLineNo">089</span> */<a name="line.89"></a>
+<span class="sourceLineNo">090</span>public class AMCallBack {<a name="line.90"></a>
+<span class="sourceLineNo">091</span><a name="line.91"></a>
+<span class="sourceLineNo">092</span>    protected AMCallBack() {<a name="line.92"></a>
+<span class="sourceLineNo">093</span>    }<a name="line.93"></a>
+<span class="sourceLineNo">094</span><a name="line.94"></a>
+<span class="sourceLineNo">095</span>    /**<a name="line.95"></a>
+<span class="sourceLineNo">096</span>     * This method provides a mechanism for applications to obtain attributes<a name="line.96"></a>
+<span class="sourceLineNo">097</span>     * external to the Access Manager data store.<a name="line.97"></a>
+<span class="sourceLineNo">098</span>     * <a name="line.98"></a>
+<span class="sourceLineNo">099</span>     * This callback gets invoked when any of the {@link AMObject#getAttributes <a name="line.99"></a>
+<span class="sourceLineNo">100</span>     * AMObject.getAttributes()} methods are called. When multiple plugins<a name="line.100"></a>
+<span class="sourceLineNo">101</span>     * override this method, then attributes returned from each of them will be<a name="line.101"></a>
+<span class="sourceLineNo">102</span>     * merged and returned. When the &lt;code&gt;getAttribute()&lt;/code&gt; method that<a name="line.102"></a>
+<span class="sourceLineNo">103</span>     * request specific attributes the call backs are made only for those<a name="line.103"></a>
+<span class="sourceLineNo">104</span>     * attributes that are not found in the Access Manager's data store. If the<a name="line.104"></a>
+<span class="sourceLineNo">105</span>     * &lt;code&gt;getAttributes()&lt;/code&gt; which do not request any specific<a name="line.105"></a>
+<span class="sourceLineNo">106</span>     * attributes is called, the call back will take place after obtaining all<a name="line.106"></a>
+<span class="sourceLineNo">107</span>     * the attributes for the corresponding entry from the Access Manager's data<a name="line.107"></a>
+<span class="sourceLineNo">108</span>     * store. &lt;br&gt;<a name="line.108"></a>
+<span class="sourceLineNo">109</span>     * &lt;b&gt;NOTE:&lt;/b&gt;<a name="line.109"></a>
+<span class="sourceLineNo">110</span>     * &lt;ul&gt;<a name="line.110"></a>
+<span class="sourceLineNo">111</span>     * &lt;li&gt; This callback is not enabled by default. In order for this call back<a name="line.111"></a>
+<span class="sourceLineNo">112</span>     * to be invoked, the organizational attribute:<a name="line.112"></a>
+<span class="sourceLineNo">113</span>     * &lt;code&gt;iplanet-am-admin-console-external-attribute-fetch-enabled&lt;/code&gt;<a name="line.113"></a>
+<span class="sourceLineNo">114</span>     * of the &lt;code&gt;iPlanetAMAdminConsoleService&lt;/code&gt; service should be set<a name="line.114"></a>
+<span class="sourceLineNo">115</span>     * to &lt;code&gt;enabled&lt;/code&gt;<a name="line.115"></a>
+<span class="sourceLineNo">116</span>     * &lt;li&gt; Overriding this method would cause significant performance impact.<a name="line.116"></a>
+<span class="sourceLineNo">117</span>     * Hence, extreme caution should be taken while overriding this method to<a name="line.117"></a>
+<span class="sourceLineNo">118</span>     * avoid processing overhead.<a name="line.118"></a>
+<span class="sourceLineNo">119</span>     * &lt;li&gt; The attributes returned by the plugins will not be cached by SDK.<a name="line.119"></a>
+<span class="sourceLineNo">120</span>     * Hence, in order to avoid performance overheads, it is recommended that<a name="line.120"></a>
+<span class="sourceLineNo">121</span>     * plugin's maintain a local cache of frequently attributes. Also, the cache<a name="line.121"></a>
+<span class="sourceLineNo">122</span>     * needs to be in sync with any modifications made to those attributes.<a name="line.122"></a>
+<span class="sourceLineNo">123</span>     * &lt;/ul&gt;<a name="line.123"></a>
+<span class="sourceLineNo">124</span>     * <a name="line.124"></a>
+<span class="sourceLineNo">125</span>     * @param token<a name="line.125"></a>
+<span class="sourceLineNo">126</span>     *            the &lt;code&gt;SSOToken&lt;/code&gt;<a name="line.126"></a>
+<span class="sourceLineNo">127</span>     * @param entryDN<a name="line.127"></a>
+<span class="sourceLineNo">128</span>     *            the DN of the entry being added<a name="line.128"></a>
+<span class="sourceLineNo">129</span>     * @param attrNames<a name="line.129"></a>
+<span class="sourceLineNo">130</span>     *            names of attributes that need to retrieved. If null, all<a name="line.130"></a>
+<span class="sourceLineNo">131</span>     *            attributes should be returned.<a name="line.131"></a>
+<span class="sourceLineNo">132</span>     * <a name="line.132"></a>
+<span class="sourceLineNo">133</span>     * @return a Map of attributes, where the key is the attribute name and the<a name="line.133"></a>
+<span class="sourceLineNo">134</span>     *         value is a Set of values. This map of attributes will be copied<a name="line.134"></a>
+<span class="sourceLineNo">135</span>     *         to the original map retrieved from the Access Manager data store<a name="line.135"></a>
+<span class="sourceLineNo">136</span>     *         and will be returned to the caller.<a name="line.136"></a>
+<span class="sourceLineNo">137</span>     */<a name="line.137"></a>
+<span class="sourceLineNo">138</span>    public Map getAttributes(SSOToken token, String entryDN, Set attrNames) {<a name="line.138"></a>
+<span class="sourceLineNo">139</span>        return null;<a name="line.139"></a>
+<span class="sourceLineNo">140</span>    }<a name="line.140"></a>
+<span class="sourceLineNo">141</span><a name="line.141"></a>
+<span class="sourceLineNo">142</span>    /**<a name="line.142"></a>
+<span class="sourceLineNo">143</span>     * Method which gets invoked before a create operation is performed.<a name="line.143"></a>
+<span class="sourceLineNo">144</span>     * <a name="line.144"></a>
+<span class="sourceLineNo">145</span>     * @param token<a name="line.145"></a>
+<span class="sourceLineNo">146</span>     *            the &lt;code&gt;SSOToken&lt;/code&gt;<a name="line.146"></a>
+<span class="sourceLineNo">147</span>     * @param entryDN<a name="line.147"></a>
+<span class="sourceLineNo">148</span>     *            the DN of the entry being added<a name="line.148"></a>
+<span class="sourceLineNo">149</span>     * @param attributes<a name="line.149"></a>
+<span class="sourceLineNo">150</span>     *            a map consisting of attribute names and a set of values for<a name="line.150"></a>
+<span class="sourceLineNo">151</span>     *            each of them. This map of attributes can be inspected,<a name="line.151"></a>
+<span class="sourceLineNo">152</span>     *            modified and sent back. Note, caution should be taken while<a name="line.152"></a>
+<span class="sourceLineNo">153</span>     *            performing modifications to avoid changing attributes that are<a name="line.153"></a>
+<span class="sourceLineNo">154</span>     *            used by Access Manager. If no modifications need to done,<a name="line.154"></a>
+<span class="sourceLineNo">155</span>     *            either the original map or null value can be returned.<a name="line.155"></a>
+<span class="sourceLineNo">156</span>     * @param objectType<a name="line.156"></a>
+<span class="sourceLineNo">157</span>     *            represents the type of entry on which the operation is being<a name="line.157"></a>
+<span class="sourceLineNo">158</span>     *            performed. Types could be:<a name="line.158"></a>
+<span class="sourceLineNo">159</span>     *            &lt;ul&gt;<a name="line.159"></a>
+<span class="sourceLineNo">160</span>     *            &lt;li&gt; {@link AMObject#USER AMObject.USER}<a name="line.160"></a>
+<span class="sourceLineNo">161</span>     *            &lt;li&gt; {@link AMObject#ROLE AMObject.ROLE}<a name="line.161"></a>
+<span class="sourceLineNo">162</span>     *            &lt;li&gt; {@link AMObject#FILTERED_ROLE AMObject.FILTERED_ROLE}<a name="line.162"></a>
+<span class="sourceLineNo">163</span>     *            &lt;li&gt; {@link AMObject#ORGANIZATION AMObject.ORGANIZATION}<a name="line.163"></a>
+<span class="sourceLineNo">164</span>     *            &lt;li&gt; {@link AMObject#ORGANIZATIONAL_UNIT <a name="line.164"></a>
+<span class="sourceLineNo">165</span>     *            AMObject.ORGANIZATIONAL_UNIT}<a name="line.165"></a>
+<span class="sourceLineNo">166</span>     *            &lt;li&gt; {@link AMObject#GROUP AMObject.GROUP}<a name="line.166"></a>
+<span class="sourceLineNo">167</span>     *            &lt;li&gt; {@link AMObject#DYNAMIC_GROUP AMObject.DYNAMIC_GROUP}<a name="line.167"></a>
+<span class="sourceLineNo">168</span>     *            &lt;li&gt; {@link AMObject#ASSIGNABLE_DYNAMIC_GROUP <a name="line.168"></a>
+<span class="sourceLineNo">169</span>     *            AMObject.ASSIGNABLE_DYNAMIC_GROUP}<a name="line.169"></a>
+<span class="sourceLineNo">170</span>     *            &lt;/ul&gt;<a name="line.170"></a>
+<span class="sourceLineNo">171</span>     * @return Map of updated values for &lt;code&gt;attributes&lt;code&gt; or null. If this<a name="line.171"></a>
+<span class="sourceLineNo">172</span>     *         returned map is not null, then this map will be used while<a name="line.172"></a>
+<span class="sourceLineNo">173</span>     *         performing the operation. <a name="line.173"></a>
+<span class="sourceLineNo">174</span>     * @throws AMPreCallBackException if an <a name="line.174"></a>
+<span class="sourceLineNo">175</span>     *         error that occurs during pre processing. The SDK will not proceed<a name="line.175"></a>
+<span class="sourceLineNo">176</span>     *         with the create operation, if any one of the implementation<a name="line.176"></a>
+<span class="sourceLineNo">177</span>     *         classes throws an exception. A user specific localized message<a name="line.177"></a>
+<span class="sourceLineNo">178</span>     *         should be sent as part of the exception message. The specific<a name="line.178"></a>
+<span class="sourceLineNo">179</span>     *         messages can be added to &lt;code&gt;amProfile.properties&lt;/code&gt; file.<a name="line.179"></a>
+<span class="sourceLineNo">180</span>     */<a name="line.180"></a>
+<span class="sourceLineNo">181</span>    public Map preProcessCreate(SSOToken token, String entryDN, Map attributes,<a name="line.181"></a>
+<span class="sourceLineNo">182</span>            int objectType) throws AMPreCallBackException {<a name="line.182"></a>
+<span class="sourceLineNo">183</span>        return attributes;<a name="line.183"></a>
+<span class="sourceLineNo">184</span>    }<a name="line.184"></a>
+<span class="sourceLineNo">185</span><a name="line.185"></a>
+<span class="sourceLineNo">186</span>    /**<a name="line.186"></a>
+<span class="sourceLineNo">187</span>     * Method which gets invoked before a modify operation is performed.<a name="line.187"></a>
+<span class="sourceLineNo">188</span>     * <a name="line.188"></a>
+<span class="sourceLineNo">189</span>     * @param token<a name="line.189"></a>
+<span class="sourceLineNo">190</span>     *            the &lt;code&gt;SSOToken&lt;/code&gt;<a name="line.190"></a>
+<span class="sourceLineNo">191</span>     * @param entryDN<a name="line.191"></a>
+<span class="sourceLineNo">192</span>     *            the DN of the entry being modified<a name="line.192"></a>
+<span class="sourceLineNo">193</span>     * @param oldAttributes<a name="line.193"></a>
+<span class="sourceLineNo">194</span>     *            a map consisting of attribute names and a set of values for<a name="line.194"></a>
+<span class="sourceLineNo">195</span>     *            each of them before modification<a name="line.195"></a>
+<span class="sourceLineNo">196</span>     * @param newAttributes<a name="line.196"></a>
+<span class="sourceLineNo">197</span>     *            a map consisting of attribute names and a set of values for<a name="line.197"></a>
+<span class="sourceLineNo">198</span>     *            each of them after modification. This map of attributes can be<a name="line.198"></a>
+<span class="sourceLineNo">199</span>     *            inspected, modified and sent back. Note, caution should be<a name="line.199"></a>
+<span class="sourceLineNo">200</span>     *            taken while performing modifications to avoid changing<a name="line.200"></a>
+<span class="sourceLineNo">201</span>     *            attributes that are used by Access Manager. If no<a name="line.201"></a>
+<span class="sourceLineNo">202</span>     *            modifications need to done, either the original map or null<a name="line.202"></a>
+<span class="sourceLineNo">203</span>     *            value can be returned.<a name="line.203"></a>
+<span class="sourceLineNo">204</span>     * @param objectType<a name="line.204"></a>
+<span class="sourceLineNo">205</span>     *            represents the type of entry on which the operation is being<a name="line.205"></a>
+<span class="sourceLineNo">206</span>     *            performed. Types could be:<a name="line.206"></a>
+<span class="sourceLineNo">207</span>     *            &lt;ul&gt;<a name="line.207"></a>
+<span class="sourceLineNo">208</span>     *            &lt;li&gt; {@link AMObject#USER AMObject.USER}<a name="line.208"></a>
+<span class="sourceLineNo">209</span>     *            &lt;li&gt; {@link AMObject#ROLE AMObject.ROLE}<a name="line.209"></a>
+<span class="sourceLineNo">210</span>     *            &lt;li&gt; {@link AMObject#FILTERED_ROLE AMObject.FILTERED_ROLE}<a name="line.210"></a>
+<span class="sourceLineNo">211</span>     *            &lt;li&gt; {@link AMObject#ORGANIZATION AMObject.ORGANIZATION}<a name="line.211"></a>
+<span class="sourceLineNo">212</span>     *            &lt;li&gt; {@link AMObject#ORGANIZATIONAL_UNIT <a name="line.212"></a>
+<span class="sourceLineNo">213</span>     *            AMObject.ORGANIZATIONAL_UNIT}<a name="line.213"></a>
+<span class="sourceLineNo">214</span>     *            &lt;li&gt; {@link AMObject#GROUP AMObject.GROUP}<a name="line.214"></a>
+<span class="sourceLineNo">215</span>     *            &lt;li&gt; {@link AMObject#DYNAMIC_GROUP AMObject.DYNAMIC_GROUP}<a name="line.215"></a>
+<span class="sourceLineNo">216</span>     *            &lt;li&gt; {@link AMObject#ASSIGNABLE_DYNAMIC_GROUP <a name="line.216"></a>
+<span class="sourceLineNo">217</span>     *            AMObject.ASSIGNABLE_DYNAMIC_GROUP}<a name="line.217"></a>
+<span class="sourceLineNo">218</span>     *            &lt;/ul&gt;<a name="line.218"></a>
+<span class="sourceLineNo">219</span>     * @return Map of updated values for &lt;code&gt;newAttributes&lt;/code&gt; or null.<a name="line.219"></a>
+<span class="sourceLineNo">220</span>     *         If this returned map is not null, then this map will be used<a name="line.220"></a>
+<span class="sourceLineNo">221</span>     *         while performing the operation.<a name="line.221"></a>
+<span class="sourceLineNo">222</span>     * <a name="line.222"></a>
+<span class="sourceLineNo">223</span>     * @throws AMPreCallBackException<a name="line.223"></a>
+<span class="sourceLineNo">224</span>     *             if an error occurs pre processing. The SDK will not proceed<a name="line.224"></a>
+<span class="sourceLineNo">225</span>     *             with the modify operation, if any one of the implementation<a name="line.225"></a>
+<span class="sourceLineNo">226</span>     *             classes throws an exception. A user specific localized<a name="line.226"></a>
+<span class="sourceLineNo">227</span>     *             message should be sent as part of the exception message. The<a name="line.227"></a>
+<span class="sourceLineNo">228</span>     *             specific messages can be added to<a name="line.228"></a>
+<span class="sourceLineNo">229</span>     *             &lt;code&gt;amProfile.properties&lt;/code&gt; file.<a name="line.229"></a>
+<span class="sourceLineNo">230</span>     */<a name="line.230"></a>
+<span class="sourceLineNo">231</span>    public Map preProcessModify(SSOToken token, String entryDN,<a name="line.231"></a>
+<span class="sourceLineNo">232</span>            Map oldAttributes, Map newAttributes, int objectType)<a name="line.232"></a>
+<span class="sourceLineNo">233</span>            throws AMPreCallBackException {<a name="line.233"></a>
+<span class="sourceLineNo">234</span>        return newAttributes;<a name="line.234"></a>
+<span class="sourceLineNo">235</span>    }<a name="line.235"></a>
+<span class="sourceLineNo">236</span><a name="line.236"></a>
+<span class="sourceLineNo">237</span>    /**<a name="line.237"></a>
+<span class="sourceLineNo">238</span>     * Method which gets invoked before an entry is deleted. The deletion type<a name="line.238"></a>
+<span class="sourceLineNo">239</span>     * configured in Sun Java System Access Manager is also passed as a<a name="line.239"></a>
+<span class="sourceLineNo">240</span>     * parameter to this method.<a name="line.240"></a>
+<span class="sourceLineNo">241</span>     * <a name="line.241"></a>
+<span class="sourceLineNo">242</span>     * @param token<a name="line.242"></a>
+<span class="sourceLineNo">243</span>     *            the &lt;code&gt;SSOToken&lt;/code&gt;<a name="line.243"></a>
+<span class="sourceLineNo">244</span>     * @param entryDN<a name="line.244"></a>
+<span class="sourceLineNo">245</span>     *            the DN of the entry being deleted<a name="line.245"></a>
+<span class="sourceLineNo">246</span>     * @param attributes<a name="line.246"></a>
+<span class="sourceLineNo">247</span>     *            a map consisting of attribute names and a set of values for<a name="line.247"></a>
+<span class="sourceLineNo">248</span>     *            each of them.<a name="line.248"></a>
+<span class="sourceLineNo">249</span>     * @param softDeleteEnabled<a name="line.249"></a>
+<span class="sourceLineNo">250</span>     *            if true soft delete will be performed Otherwise hard delete<a name="line.250"></a>
+<span class="sourceLineNo">251</span>     *            will be performed.<a name="line.251"></a>
+<span class="sourceLineNo">252</span>     * @param objectType<a name="line.252"></a>
+<span class="sourceLineNo">253</span>     *            represents the type of entry on which the operation is being<a name="line.253"></a>
+<span class="sourceLineNo">254</span>     *            performed. Types could be:<a name="line.254"></a>
+<span class="sourceLineNo">255</span>     *            &lt;ul&gt;<a name="line.255"></a>
+<span class="sourceLineNo">256</span>     *            &lt;li&gt; {@link AMObject#USER AMObject.USER}<a name="line.256"></a>
+<span class="sourceLineNo">257</span>     *            &lt;li&gt; {@link AMObject#ROLE AMObject.ROLE}<a name="line.257"></a>
+<span class="sourceLineNo">258</span>     *            &lt;li&gt; {@link AMObject#FILTERED_ROLE AMObject.FILTERED_ROLE}<a name="line.258"></a>
+<span class="sourceLineNo">259</span>     *            &lt;li&gt; {@link AMObject#ORGANIZATION AMObject.ORGANIZATION}<a name="line.259"></a>
+<span class="sourceLineNo">260</span>     *            &lt;li&gt; {@link AMObject#ORGANIZATIONAL_UNIT <a name="line.260"></a>
+<span class="sourceLineNo">261</span>     *            AMObject.ORGANIZATIONAL_UNIT}<a name="line.261"></a>
+<span class="sourceLineNo">262</span>     *            &lt;li&gt; {@link AMObject#GROUP AMObject.GROUP}<a name="line.262"></a>
+<span class="sourceLineNo">263</span>     *            &lt;li&gt; {@link AMObject#DYNAMIC_GROUP AMObject.DYNAMIC_GROUP}<a name="line.263"></a>
+<span class="sourceLineNo">264</span>     *            &lt;li&gt; {@link AMObject#ASSIGNABLE_DYNAMIC_GROUP <a name="line.264"></a>
+<span class="sourceLineNo">265</span>     *            AMObject.ASSIGNABLE_DYNAMIC_GROUP}<a name="line.265"></a>
+<span class="sourceLineNo">266</span>     *            &lt;/ul&gt;<a name="line.266"></a>
+<span class="sourceLineNo">267</span>     * @throws AMPreCallBackException<a name="line.267"></a>
+<span class="sourceLineNo">268</span>     *             if an error occurs during entry delete pre-processing. The<a name="line.268"></a>
+<span class="sourceLineNo">269</span>     *             SDK will not proceed with the delete operation, if any one of<a name="line.269"></a>
+<span class="sourceLineNo">270</span>     *             the implementation classes throws an exception. A user<a name="line.270"></a>
+<span class="sourceLineNo">271</span>     *             specific localized message should be sent as part of the<a name="line.271"></a>
+<span class="sourceLineNo">272</span>     *             exception message. The specific messages can be added to<a name="line.272"></a>
+<span class="sourceLineNo">273</span>     *             &lt;code&gt;amProfile.properties&lt;/code&gt; file.<a name="line.273"></a>
+<span class="sourceLineNo">274</span>     */<a name="line.274"></a>
+<span class="sourceLineNo">275</span>    public void preProcessDelete(SSOToken token, String entryDN,<a name="line.275"></a>
+<span class="sourceLineNo">276</span>            Map attributes, boolean softDeleteEnabled, int objectType)<a name="line.276"></a>
+<span class="sourceLineNo">277</span>            throws AMPreCallBackException {<a name="line.277"></a>
+<span class="sourceLineNo">278</span>    }<a name="line.278"></a>
+<span class="sourceLineNo">279</span><a name="line.279"></a>
+<span class="sourceLineNo">280</span>    /**<a name="line.280"></a>
+<span class="sourceLineNo">281</span>     * Method which gets invoked after a entry create operation is performed.<a name="line.281"></a>
+<span class="sourceLineNo">282</span>     * <a name="line.282"></a>
+<span class="sourceLineNo">283</span>     * @param token<a name="line.283"></a>
+<span class="sourceLineNo">284</span>     *            the &lt;code&gt;SSOToken&lt;/code&gt;<a name="line.284"></a>
+<span class="sourceLineNo">285</span>     * @param entryDN<a name="line.285"></a>
+<span class="sourceLineNo">286</span>     *            the DN of the entry being added<a name="line.286"></a>
+<span class="sourceLineNo">287</span>     * @param attributes<a name="line.287"></a>
+<span class="sourceLineNo">288</span>     *            a map consisting of attribute names and a set of values for<a name="line.288"></a>
+<span class="sourceLineNo">289</span>     *            each of them<a name="line.289"></a>
+<span class="sourceLineNo">290</span>     * @param objectType<a name="line.290"></a>
+<span class="sourceLineNo">291</span>     *            represents the type of entry on which the operation is being<a name="line.291"></a>
+<span class="sourceLineNo">292</span>     *            performed. Types could be:<a name="line.292"></a>
+<span class="sourceLineNo">293</span>     *            &lt;ul&gt;<a name="line.293"></a>
+<span class="sourceLineNo">294</span>     *            &lt;li&gt; {@link AMObject#USER AMObject.USER}<a name="line.294"></a>
+<span class="sourceLineNo">295</span>     *            &lt;li&gt; {@link AMObject#ROLE AMObject.ROLE}<a name="line.295"></a>
+<span class="sourceLineNo">296</span>     *            &lt;li&gt; {@link AMObject#FILTERED_ROLE AMObject.FILTERED_ROLE}<a name="line.296"></a>
+<span class="sourceLineNo">297</span>     *            &lt;li&gt; {@link AMObject#ORGANIZATION AMObject.ORGANIZATION}<a name="line.297"></a>
+<span class="sourceLineNo">298</span>     *            &lt;li&gt; {@link AMObject#ORGANIZATIONAL_UNIT <a name="line.298"></a>
+<span class="sourceLineNo">299</span>     *            AMObject.ORGANIZATIONAL_UNIT}<a name="line.299"></a>
+<span class="sourceLineNo">300</span>     *            &lt;li&gt; {@link AMObject#GROUP AMObject.GROUP}<a name="line.300"></a>
+<span class="sourceLineNo">301</span>     *            &lt;li&gt; {@link AMObject#DYNAMIC_GROUP AMObject.DYNAMIC_GROUP}<a name="line.301"></a>
+<span class="sourceLineNo">302</span>     *            &lt;li&gt; {@link AMObject#ASSIGNABLE_DYNAMIC_GROUP <a name="line.302"></a>
+<span class="sourceLineNo">303</span>     *            AMObject.ASSIGNABLE_DYNAMIC_GROUP}<a name="line.303"></a>
+<span class="sourceLineNo">304</span>     *            &lt;/ul&gt;<a name="line.304"></a>
+<span class="sourceLineNo">305</span>     * <a name="line.305"></a>
+<span class="sourceLineNo">306</span>     * @throws AMPostCallBackException<a name="line.306"></a>
+<span class="sourceLineNo">307</span>     *             if an error occurs during post processing. A user specific<a name="line.307"></a>
+<span class="sourceLineNo">308</span>     *             localized message should be sent as part of the exception<a name="line.308"></a>
+<span class="sourceLineNo">309</span>     *             message. The specific messages can be added to<a name="line.309"></a>
+<span class="sourceLineNo">310</span>     *             &lt;code&gt;amProfile.properties&lt;/code&gt; file.<a name="line.310"></a>
+<span class="sourceLineNo">311</span>     */<a name="line.311"></a>
+<span class="sourceLineNo">312</span>    public void postProcessCreate(SSOToken token, String entryDN,<a name="line.312"></a>
+<span class="sourceLineNo">313</span>            Map attributes, int objectType) throws AMPostCallBackException {<a name="line.313"></a>
+<span class="sourceLineNo">314</span>    }<a name="line.314"></a>
+<span class="sourceLineNo">315</span><a name="line.315"></a>
+<span class="sourceLineNo">316</span>    /**<a name="line.316"></a>
+<span class="sourceLineNo">317</span>     * Method which gets invoked after a entry is modified<a name="line.317"></a>
+<span class="sourceLineNo">318</span>     * <a name="line.318"></a>
+<span class="sourceLineNo">319</span>     * @param token<a name="line.319"></a>
+<span class="sourceLineNo">320</span>     *            the &lt;code&gt;SSOToken&lt;/code&gt;<a name="line.320"></a>
+<span class="sourceLineNo">321</span>     * @param entryDN<a name="line.321"></a>
+<span class="sourceLineNo">322</span>     *            the DN of the entry being modified<a name="line.322"></a>
+<span class="sourceLineNo">323</span>     * @param oldAttributes<a name="line.323"></a>
+<span class="sourceLineNo">324</span>     *            a map consisting of attribute names and a set of values for<a name="line.324"></a>
+<span class="sourceLineNo">325</span>     *            each of them before modification<a name="line.325"></a>
+<span class="sourceLineNo">326</span>     * @param newAttributes<a name="line.326"></a>
+<span class="sourceLineNo">327</span>     *            a map consisting of attribute names and a set of values for<a name="line.327"></a>
+<span class="sourceLineNo">328</span>     *            each of them after modification<a name="line.328"></a>
+<span class="sourceLineNo">329</span>     * @param objectType<a name="line.329"></a>
+<span class="sourceLineNo">330</span>     *            represents the type of entry on which the operation is being<a name="line.330"></a>
+<span class="sourceLineNo">331</span>     *            performed. Types could be:<a name="line.331"></a>
+<span class="sourceLineNo">332</span>     *            &lt;ul&gt;<a name="line.332"></a>
+<span class="sourceLineNo">333</span>     *            &lt;li&gt; {@link AMObject#USER AMObject.USER}<a name="line.333"></a>
+<span class="sourceLineNo">334</span>     *            &lt;li&gt; {@link AMObject#ROLE AMObject.ROLE}<a name="line.334"></a>
+<span class="sourceLineNo">335</span>     *            &lt;li&gt; {@link AMObject#FILTERED_ROLE AMObject.FILTERED_ROLE}<a name="line.335"></a>
+<span class="sourceLineNo">336</span>     *            &lt;li&gt; {@link AMObject#ORGANIZATION AMObject.ORGANIZATION}<a name="line.336"></a>
+<span class="sourceLineNo">337</span>     *            &lt;li&gt; {@link AMObject#ORGANIZATIONAL_UNIT <a name="line.337"></a>
+<span class="sourceLineNo">338</span>     *            AMObject.ORGANIZATIONAL_UNIT}<a name="line.338"></a>
+<span class="sourceLineNo">339</span>     *            &lt;li&gt; {@link AMObject#GROUP AMObject.GROUP}<a name="line.339"></a>
+<span class="sourceLineNo">340</span>     *            &lt;li&gt; {@link AMObject#DYNAMIC_GROUP AMObject.DYNAMIC_GROUP}<a name="line.340"></a>
+<span class="sourceLineNo">341</span>     *            &lt;li&gt; {@link AMObject#ASSIGNABLE_DYNAMIC_GROUP <a name="line.341"></a>
+<span class="sourceLineNo">342</span>     *            AMObject.ASSIGNABLE_DYNAMIC_GROUP}<a name="line.342"></a>
+<span class="sourceLineNo">343</span>     *            &lt;/ul&gt;<a name="line.343"></a>
+<span class="sourceLineNo">344</span>     * <a name="line.344"></a>
+<span class="sourceLineNo">345</span>     * @throws AMPostCallBackException<a name="line.345"></a>
+<span class="sourceLineNo">346</span>     *             if an error occurs during post processing. A user specific<a name="line.346"></a>
+<span class="sourceLineNo">347</span>     *             localized message should be sent as part of the exception<a name="line.347"></a>
+<span class="sourceLineNo">348</span>     *             message. The specific messages can be added to<a name="line.348"></a>
+<span class="sourceLineNo">349</span>     *             &lt;code&gt;amProfile.properties&lt;/code&gt; file.<a name="line.349"></a>
+<span class="sourceLineNo">350</span>     */<a name="line.350"></a>
+<span class="sourceLineNo">351</span>    public void postProcessModify(SSOToken token, String entryDN,<a name="line.351"></a>
+<span class="sourceLineNo">352</span>            Map oldAttributes, Map newAttributes, int objectType)<a name="line.352"></a>
+<span class="sourceLineNo">353</span>            throws AMPostCallBackException {<a name="line.353"></a>
+<span class="sourceLineNo">354</span>    }<a name="line.354"></a>
+<span class="sourceLineNo">355</span><a name="line.355"></a>
+<span class="sourceLineNo">356</span>    /**<a name="line.356"></a>
+<span class="sourceLineNo">357</span>     * Method which gets invoked after a entry entry is deleted. The deletion<a name="line.357"></a>
+<span class="sourceLineNo">358</span>     * type configured in Sun Java System Access Manager is also passed as a<a name="line.358"></a>
+<span class="sourceLineNo">359</span>     * parameter to this method.<a name="line.359"></a>
+<span class="sourceLineNo">360</span>     * <a name="line.360"></a>
+<span class="sourceLineNo">361</span>     * @param token<a name="line.361"></a>
+<span class="sourceLineNo">362</span>     *            the &lt;code&gt;SSOToken&lt;/code&gt;<a name="line.362"></a>
+<span class="sourceLineNo">363</span>     * @param entryDN<a name="line.363"></a>
+<span class="sourceLineNo">364</span>     *            the DN of the entry being deleted<a name="line.364"></a>
+<span class="sourceLineNo">365</span>     * @param attributes<a name="line.365"></a>
+<span class="sourceLineNo">366</span>     *            a map consisting of attribute names and a set of values for<a name="line.366"></a>
+<span class="sourceLineNo">367</span>     *            each of them<a name="line.367"></a>
+<span class="sourceLineNo">368</span>     * @param softDelete<a name="line.368"></a>
+<span class="sourceLineNo">369</span>     *            If true, this implies that the object is just being marked for<a name="line.369"></a>
+<span class="sourceLineNo">370</span>     *            deletion, if false, then it implies that the object is being<a name="line.370"></a>
+<span class="sourceLineNo">371</span>     *            removed from the data store.<a name="line.371"></a>
+<span class="sourceLineNo">372</span>     * @param objectType<a name="line.372"></a>
+<span class="sourceLineNo">373</span>     *            represents the type of entry on which the operation is being<a name="line.373"></a>
+<span class="sourceLineNo">374</span>     *            performed. Types could be:<a name="line.374"></a>
+<span class="sourceLineNo">375</span>     *            &lt;ul&gt;<a name="line.375"></a>
+<span class="sourceLineNo">376</span>     *            &lt;li&gt; {@link AMObject#USER AMObject.USER}<a name="line.376"></a>
+<span class="sourceLineNo">377</span>     *            &lt;li&gt; {@link AMObject#ROLE AMObject.ROLE}<a name="line.377"></a>
+<span class="sourceLineNo">378</span>     *            &lt;li&gt; {@link AMObject#FILTERED_ROLE AMObject.FILTERED_ROLE}<a name="line.378"></a>
+<span class="sourceLineNo">379</span>     *            &lt;li&gt; {@link AMObject#ORGANIZATION AMObject.ORGANIZATION}<a name="line.379"></a>
+<span class="sourceLineNo">380</span>     *            &lt;li&gt; {@link AMObject#ORGANIZATIONAL_UNIT <a name="line.380"></a>
+<span class="sourceLineNo">381</span>     *            AMObject.ORGANIZATIONAL_UNIT}<a name="line.381"></a>
+<span class="sourceLineNo">382</span>     *            &lt;li&gt; {@link AMObject#GROUP AMObject.GROUP}<a name="line.382"></a>
+<span class="sourceLineNo">383</span>     *            &lt;li&gt; {@link AMObject#DYNAMIC_GROUP AMObject.DYNAMIC_GROUP}<a name="line.383"></a>
+<span class="sourceLineNo">384</span>     *            &lt;li&gt; {@link AMObject#ASSIGNABLE_DYNAMIC_GROUP <a name="line.384"></a>
+<span class="sourceLineNo">385</span>     *            AMObject.ASSIGNABLE_DYNAMIC_GROUP}<a name="line.385"></a>
+<span class="sourceLineNo">386</span>     *            &lt;/ul&gt;<a name="line.386"></a>
+<span class="sourceLineNo">387</span>     * @throws AMPostCallBackException<a name="line.387"></a>
+<span class="sourceLineNo">388</span>     *             if an error occurs during post processing. A user specific<a name="line.388"></a>
+<span class="sourceLineNo">389</span>     *             localized message should be sent as part of the exception<a name="line.389"></a>
+<span class="sourceLineNo">390</span>     *             message. The specific messages can be added to<a name="line.390"></a>
+<span class="sourceLineNo">391</span>     *             &lt;code&gt;amProfile.properties&lt;/code&gt; file.<a name="line.391"></a>
+<span class="sourceLineNo">392</span>     */<a name="line.392"></a>
+<span class="sourceLineNo">393</span>    public void postProcessDelete(SSOToken token, String entryDN,<a name="line.393"></a>
+<span class="sourceLineNo">394</span>            Map attributes, boolean softDelete, int objectType)<a name="line.394"></a>
+<span class="sourceLineNo">395</span>            throws AMPostCallBackException {<a name="line.395"></a>
+<span class="sourceLineNo">396</span>    }<a name="line.396"></a>
+<span class="sourceLineNo">397</span><a name="line.397"></a>
+<span class="sourceLineNo">398</span>    /**<a name="line.398"></a>
+<span class="sourceLineNo">399</span>     * Method which gets called before users are added to a role/group.<a name="line.399"></a>
+<span class="sourceLineNo">400</span>     * <a name="line.400"></a>
+<span class="sourceLineNo">401</span>     * @param token<a name="line.401"></a>
+<span class="sourceLineNo">402</span>     *            the &lt;code&gt;SSOToken&lt;/code&gt;<a name="line.402"></a>
+<span class="sourceLineNo">403</span>     * @param entryDN<a name="line.403"></a>
+<span class="sourceLineNo">404</span>     *            the DN of the entry being added<a name="line.404"></a>
+<span class="sourceLineNo">405</span>     * @param members<a name="line.405"></a>
+<span class="sourceLineNo">406</span>     *            a set consisting of user DN's. This set of members can be<a name="line.406"></a>
+<span class="sourceLineNo">407</span>     *            inspected, modified (users can be added/removed) and sent<a name="line.407"></a>
+<span class="sourceLineNo">408</span>     *            back. If no modifications need to done, either the original<a name="line.408"></a>
+<span class="sourceLineNo">409</span>     *            set or null value can be returned.<a name="line.409"></a>
+<span class="sourceLineNo">410</span>     * @param objectType<a name="line.410"></a>
+<span class="sourceLineNo">411</span>     *            represents the type of entry on which the operation is being<a name="line.411"></a>
+<span class="sourceLineNo">412</span>     *            performed. Types could be:<a name="line.412"></a>
+<span class="sourceLineNo">413</span>     *            &lt;ul&gt;<a name="line.413"></a>
+<span class="sourceLineNo">414</span>     *            &lt;li&gt; {@link AMObject#ROLE AMObject.ROLE}<a name="line.414"></a>
+<span class="sourceLineNo">415</span>     *            &lt;li&gt; {@link AMObject#GROUP AMObject.GROUP}<a name="line.415"></a>
+<span class="sourceLineNo">416</span>     *            &lt;li&gt; {@link AMObject#ASSIGNABLE_DYNAMIC_GROUP <a name="line.416"></a>
+<span class="sourceLineNo">417</span>     *            AMObject.ASSIGNABLE_DYNAMIC_GROUP}<a name="line.417"></a>
+<span class="sourceLineNo">418</span>     *            &lt;/ul&gt;<a name="line.418"></a>
+<span class="sourceLineNo">419</span>     * <a name="line.419"></a>
+<span class="sourceLineNo">420</span>     * @return Set of updated values for &lt;code&gt;members&lt;code&gt; or null. If null<a name="line.420"></a>
+<span class="sourceLineNo">421</span>     * value or empty set is returned, no users will be added. Hence, if no<a name="line.421"></a>
+<span class="sourceLineNo">422</span>     * modification is being performed to the original set, it needs to be <a name="line.422"></a>
+<span class="sourceLineNo">423</span>     * back.<a name="line.423"></a>
+<span class="sourceLineNo">424</span>     *<a name="line.424"></a>
+<span class="sourceLineNo">425</span>     * @throws AMPreCallBackException if an <a name="line.425"></a>
+<span class="sourceLineNo">426</span>     * error occurs during pre processing. The SDK will not proceed with<a name="line.426"></a>
+<span class="sourceLineNo">427</span>     * the adding users to role/group operation, if any one of the <a name="line.427"></a>
+<span class="sourceLineNo">428</span>     * implementation classes throws an exception. A user specific localized <a name="line.428"></a>
+<span class="sourceLineNo">429</span>     * message should be sent as part of the exception message. The specific <a name="line.429"></a>
+<span class="sourceLineNo">430</span>     * messages can be added to<a name="line.430"></a>
+<span class="sourceLineNo">431</span>     * &lt;code&gt;amProfile.properties&lt;/code&gt; file.<a name="line.431"></a>
+<span class="sourceLineNo">432</span>     */<a name="line.432"></a>
+<span class="sourceLineNo">433</span>    public Set preProcessAddUser(SSOToken token, String entryDN, Set members,<a name="line.433"></a>
+<span class="sourceLineNo">434</span>            int objectType) throws AMPreCallBackException {<a name="line.434"></a>
+<span class="sourceLineNo">435</span>        return members;<a name="line.435"></a>
+<span class="sourceLineNo">436</span>    }<a name="line.436"></a>
+<span class="sourceLineNo">437</span><a name="line.437"></a>
+<span class="sourceLineNo">438</span>    /**<a name="line.438"></a>
+<span class="sourceLineNo">439</span>     * Method which gets invoked after users are added to a role/group.<a name="line.439"></a>
+<span class="sourceLineNo">440</span>     * <a name="line.440"></a>
+<span class="sourceLineNo">441</span>     * @param token<a name="line.441"></a>
+<span class="sourceLineNo">442</span>     *            the &lt;code&gt;SSOToken&lt;/code&gt;<a name="line.442"></a>
+<span class="sourceLineNo">443</span>     * @param entryDN<a name="line.443"></a>
+<span class="sourceLineNo">444</span>     *            the DN of the entry being added<a name="line.444"></a>
+<span class="sourceLineNo">445</span>     * @param members<a name="line.445"></a>
+<span class="sourceLineNo">446</span>     *            a Set consisting of user DN's which represent the users added<a name="line.446"></a>
+<span class="sourceLineNo">447</span>     *            to the role/group.<a name="line.447"></a>
+<span class="sourceLineNo">448</span>     * @param objectType<a name="line.448"></a>
+<span class="sourceLineNo">449</span>     *            represents the type of entry on which the operation is being<a name="line.449"></a>
+<span class="sourceLineNo">450</span>     *            performed. Types could be:<a name="line.450"></a>
+<span class="sourceLineNo">451</span>     *            &lt;ul&gt;<a name="line.451"></a>
+<span class="sourceLineNo">452</span>     *            &lt;li&gt; {@link AMObject#ROLE AMObject.ROLE}<a name="line.452"></a>
+<span class="sourceLineNo">453</span>     *            &lt;li&gt; {@link AMObject#GROUP AMObject.GROUP}<a name="line.453"></a>
+<span class="sourceLineNo">454</span>     *            &lt;li&gt; {@link AMObject#ASSIGNABLE_DYNAMIC_GROUP <a name="line.454"></a>
+<span class="sourceLineNo">455</span>     *            AMObject.ASSIGNABLE_DYNAMIC_GROUP}<a name="line.455"></a>
+<span class="sourceLineNo">456</span>     *            &lt;/ul&gt;<a name="line.456"></a>
+<span class="sourceLineNo">457</span>     * <a name="line.457"></a>
+<span class="sourceLineNo">458</span>     * @throws AMPostCallBackException<a name="line.458"></a>
+<span class="sourceLineNo">459</span>     *             if an error occurs during post processing. A user specific<a name="line.459"></a>
+<span class="sourceLineNo">460</span>     *             localized message should be sent as part of the exception<a name="line.460"></a>
+<span class="sourceLineNo">461</span>     *             message. The specific messages can be added to<a name="line.461"></a>
+<span class="sourceLineNo">462</span>     *             &lt;code&gt;amProfile.properties&lt;/code&gt; file.<a name="line.462"></a>
+<span class="sourceLineNo">463</span>     */<a name="line.463"></a>
+<span class="sourceLineNo">464</span>    public void postProcessAddUser(SSOToken token, String entryDN, Set members,<a name="line.464"></a>
+<span class="sourceLineNo">465</span>            int objectType) throws AMPostCallBackException {<a name="line.465"></a>
+<span class="sourceLineNo">466</span>    }<a name="line.466"></a>
+<span class="sourceLineNo">467</span><a name="line.467"></a>
+<span class="sourceLineNo">468</span>    /**<a name="line.468"></a>
+<span class="sourceLineNo">469</span>     * Method which gets called before users are removed from a role/group.<a name="line.469"></a>
+<span class="sourceLineNo">470</span>     * <a name="line.470"></a>
+<span class="sourceLineNo">471</span>     * @param token<a name="line.471"></a>
+<span class="sourceLineNo">472</span>     *            the &lt;code&gt;SSOToken&lt;/code&gt;<a name="line.472"></a>
+<span class="sourceLineNo">473</span>     * @param entryDN<a name="line.473"></a>
+<span class="sourceLineNo">474</span>     *            the DN of the entry being added<a name="line.474"></a>
+<span class="sourceLineNo">475</span>     * @param members<a name="line.475"></a>
+<span class="sourceLineNo">476</span>     *            a set consisting of user DN's. This set of members can be<a name="line.476"></a>
+<span class="sourceLineNo">477</span>     *            inspected, modified (users can be added/removed) and sent<a name="line.477"></a>
+<span class="sourceLineNo">478</span>     *            back. If no modifications need to done, either the original<a name="line.478"></a>
+<span class="sourceLineNo">479</span>     *            set or null value can be returned.<a name="line.479"></a>
+<span class="sourceLineNo">480</span>     * @param objectType<a name="line.480"></a>
+<span class="sourceLineNo">481</span>     *            represents the type of entry on which the operation is being<a name="line.481"></a>
+<span class="sourceLineNo">482</span>     *            performed. Types could be:<a name="line.482"></a>
+<span class="sourceLineNo">483</span>     *            &lt;ul&gt;<a name="line.483"></a>
+<span class="sourceLineNo">484</span>     *            &lt;li&gt; {@link AMObject#ROLE AMObject.ROLE}<a name="line.484"></a>
+<span class="sourceLineNo">485</span>     *            &lt;li&gt; {@link AMObject#GROUP AMObject.GROUP}<a name="line.485"></a>
+<span class="sourceLineNo">486</span>     *            &lt;li&gt; {@link AMObject#ASSIGNABLE_DYNAMIC_GROUP <a name="line.486"></a>
+<span class="sourceLineNo">487</span>     *            AMObject.ASSIGNABLE_DYNAMIC_GROUP}<a name="line.487"></a>
+<span class="sourceLineNo">488</span>     *            &lt;/ul&gt;<a name="line.488"></a>
+<span class="sourceLineNo">489</span>     * <a name="line.489"></a>
+<span class="sourceLineNo">490</span>     * @return Set of updated values for &lt;code&gt;members&lt;code&gt; or null. If null<a name="line.490"></a>
+<span class="sourceLineNo">491</span>     * value or empty set is returned, no users will be removed. Hence, if no<a name="line.491"></a>
+<span class="sourceLineNo">492</span>     * modification is being performed to the original set, it needs to be <a name="line.492"></a>
+<span class="sourceLineNo">493</span>     * back.<a name="line.493"></a>
+<span class="sourceLineNo">494</span>     *<a name="line.494"></a>
+<span class="sourceLineNo">495</span>     * @throws AMPreCallBackException if an <a name="line.495"></a>
+<span class="sourceLineNo">496</span>     * error that occurs during pre processing. The SDK will not proceed with<a name="line.496"></a>
+<span class="sourceLineNo">497</span>     * the removing users from role/group operation, if any one of the <a name="line.497"></a>
+<span class="sourceLineNo">498</span>     * implementation classes throws an exception. A user specific localized <a name="line.498"></a>
+<span class="sourceLineNo">499</span>     * message should be sent as part of the exception message. The specific <a name="line.499"></a>
+<span class="sourceLineNo">500</span>     * messages can be added to &lt;code&gt;amProfile.properties&lt;/code&gt; file.<a name="line.500"></a>
+<span class="sourceLineNo">501</span>     */<a name="line.501"></a>
+<span class="sourceLineNo">502</span>    public Set preProcessRemoveUser(SSOToken token, String entryDN,<a name="line.502"></a>
+<span class="sourceLineNo">503</span>            Set members, int objectType) throws AMPreCallBackException {<a name="line.503"></a>
+<span class="sourceLineNo">504</span>        return members;<a name="line.504"></a>
+<span class="sourceLineNo">505</span>    }<a name="line.505"></a>
+<span class="sourceLineNo">506</span><a name="line.506"></a>
+<span class="sourceLineNo">507</span>    /**<a name="line.507"></a>
+<span class="sourceLineNo">508</span>     * Method which gets invoked after users are removed from a role/group.<a name="line.508"></a>
+<span class="sourceLineNo">509</span>     * <a name="line.509"></a>
+<span class="sourceLineNo">510</span>     * @param token<a name="line.510"></a>
+<span class="sourceLineNo">511</span>     *            the &lt;code&gt;SSOToken&lt;/code&gt;<a name="line.511"></a>
+<span class="sourceLineNo">512</span>     * @param entryDN<a name="line.512"></a>
+<span class="sourceLineNo">513</span>     *            the DN of the entry being added<a name="line.513"></a>
+<span class="sourceLineNo">514</span>     * @param members<a name="line.514"></a>
+<span class="sourceLineNo">515</span>     *            a Set consisting of user DN's which represent the users added<a name="line.515"></a>
+<span class="sourceLineNo">516</span>     *            to the role/group.<a name="line.516"></a>
+<span class="sourceLineNo">517</span>     * @param objectType<a name="line.517"></a>
+<span class="sourceLineNo">518</span>     *            represents the type of entry on which the operation is being<a name="line.518"></a>
+<span class="sourceLineNo">519</span>     *            performed. Types could be:<a name="line.519"></a>
+<span class="sourceLineNo">520</span>     *            &lt;ul&gt;<a name="line.520"></a>
+<span class="sourceLineNo">521</span>     *            &lt;li&gt; {@link AMObject#ROLE AMObject.ROLE}<a name="line.521"></a>
+<span class="sourceLineNo">522</span>     *            &lt;li&gt; {@link AMObject#GROUP AMObject.GROUP}<a name="line.522"></a>
+<span class="sourceLineNo">523</span>     *            &lt;li&gt; {@link AMObject#ASSIGNABLE_DYNAMIC_GROUP <a name="line.523"></a>
+<span class="sourceLineNo">524</span>     *            AMObject.ASSIGNABLE_DYNAMIC_GROUP}<a name="line.524"></a>
+<span class="sourceLineNo">525</span>     *            &lt;/ul&gt;<a name="line.525"></a>
+<span class="sourceLineNo">526</span>     * <a name="line.526"></a>
+<span class="sourceLineNo">527</span>     * @throws AMPostCallBackException<a name="line.527"></a>
+<span class="sourceLineNo">528</span>     *             if an error occurs during post processing. A user specific<a name="line.528"></a>
+<span class="sourceLineNo">529</span>     *             localized message should be sent as part of the exception<a name="line.529"></a>
+<span class="sourceLineNo">530</span>     *             message. The specific messages can be added to<a name="line.530"></a>
+<span class="sourceLineNo">531</span>     *             &lt;code&gt;amProfile.properties&lt;/code&gt; file.<a name="line.531"></a>
+<span class="sourceLineNo">532</span>     */<a name="line.532"></a>
+<span class="sourceLineNo">533</span>    public void postProcessRemoveUser(SSOToken token, String entryDN,<a name="line.533"></a>
+<span class="sourceLineNo">534</span>            Set members, int objectType) throws AMPostCallBackException {<a name="line.534"></a>
+<span class="sourceLineNo">535</span>    }<a name="line.535"></a>
+<span class="sourceLineNo">536</span>}<a name="line.536"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>
