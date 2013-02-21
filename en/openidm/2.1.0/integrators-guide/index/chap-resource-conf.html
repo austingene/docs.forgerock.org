@@ -1554,14 +1554,18 @@ $ cp samples/provisioners/provisioner.openicf.connectorinfoprovider.json conf/
       </p><div class="screen"><pre class="brush: plain;">$ curl --header "X-OpenIDM-Username: openidm-admin" --header "X-OpenIDM-Password: 
 openidm-admin" --request POST  "http://localhost:8080/openidm/recon?
 _action=recon&amp;mapping=systemADAccounts_managedUser"</pre></div><p>This will return a reconciliation id similar to the following:
-      </p><div class="screen"><pre class="brush: plain;">{"_id":"0629d920-e29f-4650-889f-4423632481ad"}</pre></div></li><li class="step" title="Step 7"><p>Check in the OpenIDM internal repository (OrientDB or MySQL) if the users 
-      were reconciled. To connect the repository go to <a class="link" href="http://openidm.forgerock.org/doc/install-guide/index.html#before-you-begin-sample" target="_blank">http://openidm.forgerock.org/doc/install-guide/index.html#before-you-begin-sample</a>
-      (for OrientDB) or <a class="link" href="http://openidm.forgerock.org/doc/install-guide/index.html#chap-repository" target="_blank">http://openidm.forgerock.org/doc/install-guide/index.html#chap-repository</a>
-      (for MySQL).
+      </p><div class="screen"><pre class="brush: plain;">{"_id":"0629d920-e29f-4650-889f-4423632481ad"}</pre></div></li><li class="step" title="Step 7"><p>Check the internal repository (OrientDB or MySQL) to make sure that
+      the users were reconciled. For information about connecting to OrientDB,
+      see <a href="../../install-guide/index/chap-sample.html#before-you-begin-sample" class="link">
+      <em class="citetitle">Before You Begin</em></a> in the
+      <em class="citetitle">Installation Guide</em>. For information about using
+      MySQL as a repository, see <a href="../../install-guide/index/chap-repository.html" class="link">
+      <em class="citetitle">Installing a Repository For Production</em></a> in the
+      <em class="citetitle">Installation Guide</em>.
       </p></li></ol></div></div><div class="section" title="9.4.3.2.&nbsp;Installing a Standalone Java Connector Server"><div class="titlepage"><div><div><h4 class="title"><a name="install-standalone-connector"></a>9.4.3.2.&nbsp;Installing a Standalone Java Connector Server</h4></div></div></div><p>It may be necessary to set up a remote Java Connector Server (JSC). This
     section provides directions for setting up the standalone connecter on
     Unix/Linux and Windows.
-    </p><div class="procedure" title="Procedure&nbsp;9.5.&nbsp;Installing a Standalone Connector Server for Unix/Linux"><a name="d229e4100"></a><div class="procedure-title">Procedure&nbsp;9.5.&nbsp;Installing a Standalone Connector Server for Unix/Linux</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Download the <code class="filename">OpenICF Java zip</code> file from 
+    </p><div class="procedure" title="Procedure&nbsp;9.5.&nbsp;Installing a Standalone Connector Server for Unix/Linux"><a name="d229e4110"></a><div class="procedure-title">Procedure&nbsp;9.5.&nbsp;Installing a Standalone Connector Server for Unix/Linux</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Download the <code class="filename">OpenICF Java zip</code> file from 
        <a class="link" href="http://forgerock.org/openicf.html" target="_blank">http://forgerock.org/openicf.html</a>.
        </p></li><li class="step" title="Step 2"><p>Run the terminal and unpack it. The following command will unzip the file
        in the current folder, so make sure to move to the appropriate location prior to
@@ -1583,7 +1587,7 @@ _action=recon&amp;mapping=systemADAccounts_managedUser"</pre></div><p>This will 
        </p><div class="screen"><pre class="brush: plain;">java -cp "./lib/framework/*"
 org.identityconnectors.framework.server.Main -run -properties 
 ./conf/ConnectorServer.properties</pre></div></li><li class="step" title="Step 7"><p>If necessary, you can stop the JCS by pressing <code class="literal">^C</code>.
-       </p></li></ol></div><div class="procedure" title="Procedure&nbsp;9.6.&nbsp;Installing a Standalone Connector Server for Windows"><a name="d229e4157"></a><div class="procedure-title">Procedure&nbsp;9.6.&nbsp;Installing a Standalone Connector Server for Windows</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Download the <code class="filename">OpenICF Java zip</code> file from 
+       </p></li></ol></div><div class="procedure" title="Procedure&nbsp;9.6.&nbsp;Installing a Standalone Connector Server for Windows"><a name="d229e4167"></a><div class="procedure-title">Procedure&nbsp;9.6.&nbsp;Installing a Standalone Connector Server for Windows</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Download the <code class="filename">OpenICF Java zip</code> file from 
        <a class="link" href="http://forgerock.org/openicf.html" target="_blank">http://forgerock.org/openicf.html</a>. 
        </p></li><li class="step" title="Step 2"><p>Unpack the zip file in the desired location, for example 
        <code class="literal">C:\openicf</code>.
@@ -1616,14 +1620,14 @@ org.identityconnectors.framework.server.Main -run -properties
        </p><div class="section" title="9.4.3.2.1.&nbsp;MySQL Database Example to Reconcile JCS Users"><div class="titlepage"><div><div><h5 class="title"><a name="example-mysql-jcs-reconciliation"></a>9.4.3.2.1.&nbsp;MySQL Database Example to Reconcile JCS Users</h5></div></div></div><p>This sample demonstrates using reconciliation of users stored in a MySQL 
       database on a remote machine. The JCS runs on the same machine as the MySQL 
       database and mediates the connection between OpenIDM and MySQL database.
-      </p><div class="procedure" title="Procedure&nbsp;9.7.&nbsp;Configuring JCS"><a name="d229e4263"></a><div class="procedure-title">Procedure&nbsp;9.7.&nbsp;Configuring JCS</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Download <a class="link" href="http://www.mysql.com/downloads/connector/j/" target="_blank">MySQL JDBC Driver</a>.        
+      </p><div class="procedure" title="Procedure&nbsp;9.7.&nbsp;Configuring JCS"><a name="d229e4273"></a><div class="procedure-title">Procedure&nbsp;9.7.&nbsp;Configuring JCS</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Download <a class="link" href="http://www.mysql.com/downloads/connector/j/" target="_blank">MySQL JDBC Driver</a>.        
           </p></li><li class="step" title="Step 2"><p>Unpack the <code class="filename">MySQL JDBC Driver</code> and copy the 
           <code class="filename">mysql-connector-java-5.1.22-bin.jar</code> to the 
           <code class="literal">openicf/lib</code> directory.
           </p></li><li class="step" title="Step 3"><p>Go to the <code class="literal">/tools</code> directory. The groovy scripts in the folder
          run on the JCS side. Copy them from <code class="literal">path/to/openidm/sample/sample3/tools</code>
          folder to <code class="literal">openicf/</code>.
-          </p></li></ol></div><div class="procedure" title="Procedure&nbsp;9.8.&nbsp;Configuring OpenIDM for the MySQL Database Example"><a name="d229e4296"></a><div class="procedure-title">Procedure&nbsp;9.8.&nbsp;Configuring OpenIDM for the MySQL Database Example</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Start OpenIDM. You can ignore errors like <code class="literal">cannot
+          </p></li></ol></div><div class="procedure" title="Procedure&nbsp;9.8.&nbsp;Configuring OpenIDM for the MySQL Database Example"><a name="d229e4306"></a><div class="procedure-title">Procedure&nbsp;9.8.&nbsp;Configuring OpenIDM for the MySQL Database Example</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Start OpenIDM. You can ignore errors like <code class="literal">cannot
           connect to database</code> and <code class="literal">cannot find jdbc driver</code>.
           These errors will be fixed once OpenIDM is configured and restarted.
           </p></li><li class="step" title="Step 2"><p>Go to the <code class="filename">provisioner.openicf.connectorinfoprovider.json</code>
@@ -1854,16 +1858,20 @@ $ cp samples/provisioners/provisioner.openicf.connectorinfoprovider.json ./conf<
           </p><div class="screen"><pre class="brush: plain;">$ curl --header "X-OpenIDM-Username: openidm-admin"  
 --header "X-OpenIDM-Password: openidm-admin"  --request POST 
 "http://localhost:8080/openidm/recon?_action=recon&amp;mapping=systemHrdb_managedUser"</pre></div><p>This will return a reconciliation id similar to the following:
-          </p><div class="screen"><pre class="brush: plain;">{"_id":"a5346543-db9a-4f8b-ba25-af2a1b576a54"}</pre></div></li><li class="step" title="Step 9"><p>Check in the OpenIDM internal repository (OrientDB or MySQL) that the users
-          were reconciled. For information about connecting to the repository, see
-          <a class="link" href="http://openidm.forgerock.org/doc/install-guide/index.html#before-you-begin-sample" target="_blank">http://openidm.forgerock.org/doc/install-guide/index.html#before-you-begin-sample</a>
-          or <a class="link" href="http://openidm.forgerock.org/doc/install-guide/index.html#chap-repository" target="_blank">http://openidm.forgerock.org/doc/install-guide/index.html#chap-repository</a>.
-          </p></li></ol></div></div></div><div class="section" title="9.4.3.3.&nbsp;XML Example to Reconcile JCS Users"><div class="titlepage"><div><div><h4 class="title"><a name="example-xml-jcs-reconciliation"></a>9.4.3.3.&nbsp;XML Example to Reconcile JCS Users</h4></div></div></div><p>This sample demonstrates using reconciliation of users created in an XML 
+          </p><div class="screen"><pre class="brush: plain;">{"_id":"a5346543-db9a-4f8b-ba25-af2a1b576a54"}</pre></div></li><li class="step" title="Step 9"><p>Check the internal repository (OrientDB or MySQL) to make sure that
+             the users were reconciled. For information about connecting to OrientDB,
+             see <a href="../../install-guide/index/chap-sample.html#before-you-begin-sample" class="link">
+             <em class="citetitle">Before You Begin</em></a> in the
+             <em class="citetitle">Installation Guide</em>. For information about using
+             MySQL as a repository, see <a href="../../install-guide/index/chap-repository.html" class="link">
+             <em class="citetitle">Installing a Repository For Production</em></a> in the
+             <em class="citetitle">Installation Guide</em>.
+             </p></li></ol></div></div></div><div class="section" title="9.4.3.3.&nbsp;XML Example to Reconcile JCS Users"><div class="titlepage"><div><div><h4 class="title"><a name="example-xml-jcs-reconciliation"></a>9.4.3.3.&nbsp;XML Example to Reconcile JCS Users</h4></div></div></div><p>This sample demonstrates using reconciliation of users created in an XML 
       folder on a remote machine. The JCS provides a way for OpenIDM to pick up and 
       synchronize the OpenIDM repository with the remote XML user repository.
-      </p><div class="procedure" title="Procedure&nbsp;9.9.&nbsp;Configuring JCS"><a name="d229e4469"></a><div class="procedure-title">Procedure&nbsp;9.9.&nbsp;Configuring JCS</div><ul class="procedure"><li class="step" title="Step 1"><p>Copy the <code class="literal">openidm/samples/sample1/data</code> directory to
+      </p><div class="procedure" title="Procedure&nbsp;9.9.&nbsp;Configuring JCS"><a name="d229e4489"></a><div class="procedure-title">Procedure&nbsp;9.9.&nbsp;Configuring JCS</div><ul class="procedure"><li class="step" title="Step 1"><p>Copy the <code class="literal">openidm/samples/sample1/data</code> directory to
           a location on the JCS machine.
-          </p></li></ul></div><div class="procedure" title="Procedure&nbsp;9.10.&nbsp;Configuring OpenIDM for the XML Example"><a name="d229e4478"></a><div class="procedure-title">Procedure&nbsp;9.10.&nbsp;Configuring OpenIDM for the XML Example</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Start OpenIDM. You can ignore errors like <code class="literal">cannot
+          </p></li></ul></div><div class="procedure" title="Procedure&nbsp;9.10.&nbsp;Configuring OpenIDM for the XML Example"><a name="d229e4498"></a><div class="procedure-title">Procedure&nbsp;9.10.&nbsp;Configuring OpenIDM for the XML Example</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Start OpenIDM. You can ignore errors like <code class="literal">cannot
           connect to database</code> and <code class="literal">cannot find jdbc driver</code>.
           These errors will be fixed once OpenIDM has been configured and restarted.
           </p></li><li class="step" title="Step 2"><p>Copy the <code class="literal">openidm/samples/sample1/conf</code> directory
@@ -2011,12 +2019,15 @@ $ cp -r ./samples/sample1/conf ./conf</pre></div><p>For Windows, enter the follo
           </p><div class="screen"><pre class="brush: plain;">$ curl --header "X-OpenIDM-Username: openidm-admin" 
 --header "X-OpenIDM-Password: openidm-admin" --request POST 
 "http://localhost:8080/openidm/recon?_action=recon&amp;mapping=systemXmlfileAccounts_managedUser"</pre></div><p>This will return a reconciliation id similar to the following:
-          </p><div class="screen"><pre class="brush: plain;">{"_id":"a5346543-db9a-4f8b-ba25-af2a1b576a54"}</pre></div></li><li class="step" title="Step 9"><p>Check in the OpenIDM internal repository (OrientDB or MySQL) if the
-          users were reconciled. For information about connecting to the repository,
-          see <a class="link" href="http://openidm.forgerock.org/doc/install-guide/index.html#before-you-begin-sample" target="_blank">http://openidm.forgerock.org/doc/install-guide/index.html#before-you-begin-sample</a>
-          (for OrientDB) or <a class="link" href="http://openidm.forgerock.org/doc/install-guide/index.html#chap-repository" target="_blank">http://openidm.forgerock.org/doc/install-guide/index.html#chap-repository</a>
-          (for MySQL).
-          </p></li></ol></div></div><div class="section" title="9.4.3.4.&nbsp;Configuring the Active Directory Connector"><div class="titlepage"><div><div><h4 class="title"><a name="configuring-ad-connector"></a>9.4.3.4.&nbsp;Configuring the Active Directory Connector</h4></div></div></div><p>A sample Active Directory Connector configuration file is provided 
+          </p><div class="screen"><pre class="brush: plain;">{"_id":"a5346543-db9a-4f8b-ba25-af2a1b576a54"}</pre></div></li><li class="step" title="Step 9"><p>Check the internal repository (OrientDB or MySQL) to make sure that
+             the users were reconciled. For information about connecting to OrientDB,
+             see <a href="../../install-guide/index/chap-sample.html#before-you-begin-sample" class="link">
+             <em class="citetitle">Before You Begin</em></a> in the
+             <em class="citetitle">Installation Guide</em>. For information about using
+             MySQL as a repository, see <a href="../../install-guide/index/chap-repository.html" class="link">
+             <em class="citetitle">Installing a Repository For Production</em></a> in the
+             <em class="citetitle">Installation Guide</em>.
+             </p></li></ol></div></div><div class="section" title="9.4.3.4.&nbsp;Configuring the Active Directory Connector"><div class="titlepage"><div><div><h4 class="title"><a name="configuring-ad-connector"></a>9.4.3.4.&nbsp;Configuring the Active Directory Connector</h4></div></div></div><p>A sample Active Directory Connector configuration file is provided 
     in <code class="filename">opendim/samples/provisioners/provisioner.openicf-ad.json</code>. 
     The following excerpt shows the configuration for the connector.
     </p><pre class="brush: javascript;">
@@ -2160,7 +2171,7 @@ $ cp -r ./samples/sample1/conf ./conf</pre></div><p>For Windows, enter the follo
         "createScriptFileName" : "/path/to/openidm/tools/CreateScript.groovy",
    </pre><p>If you require a traditional transaction with a manual commit for 
    a specific script, you can disable autocommit mode in the script or scripts 
-   for each action that requires a manual commit.</p></div></div><div class="section" title="9.5.&nbsp;Creating Default Connector Configurations"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="connector-wiz"></a>9.5.&nbsp;Creating Default Connector Configurations</h2></div></div></div><a class="indexterm" name="d229e4886"></a><p>Rather than creating provisioner files by hand, use the service that
+   for each action that requires a manual commit.</p></div></div><div class="section" title="9.5.&nbsp;Creating Default Connector Configurations"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="connector-wiz"></a>9.5.&nbsp;Creating Default Connector Configurations</h2></div></div></div><a class="indexterm" name="d229e4916"></a><p>Rather than creating provisioner files by hand, use the service that
   OpenIDM exposes through the REST interface to create basic connector
   configuration files named <code class="filename">provisioner-openicf-<em class="replaceable"><code>Connector
   Name</code></em>.json</code> file.</p><div class="orderedlist"><p>You create a new connector configuration file in three stages.</p><ol class="orderedlist" type="1"><li class="listitem"><p>List available connectors.</p></li><li class="listitem"><p>Generate the core configuration.</p></li><li class="listitem"><p>Connect to the target system and generate the final
