@@ -80,10 +80,7 @@ browser to open the link in a new tab or window, rather than replacing what the
 reader is currently viewing.
 
 Definitely do this step using an editor or IDE that lets you prepare, review,
-and commit a global search replace across multiple files. If you find yourself
-writing your own tool to make the changes, you are probably working too hard.
-If you do it by hand, get in touch with me because you are obviously not busy
-enough and I have some work to delegate to you. ;-)
+and commit a global search replace across multiple files.
 
 
 # TODO
