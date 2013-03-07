@@ -1010,7 +1010,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 <!-- END SyntaxHighlighter 3.0.83 -->
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
 </head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;2.&nbsp;Defining Authentication Services</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-admin-tools.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-authz-policy.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;2.&nbsp;Defining Authentication Services"><div class="titlepage"><div><div><h2 class="title"><a name="chap-auth-services"></a>Chapter&nbsp;2.&nbsp;Defining Authentication Services</h2></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="section"><a href="chap-auth-services.html#what-is-authn">2.1. About Authentication in OpenAM</a></span></dt><dt><span class="section"><a href="chap-auth-services.html#configure-authn-modules">2.2. Configuring Authentication Modules</a></span></dt><dt><span class="section"><a href="chap-auth-services.html#configure-authn-chains">2.3. Configuring Authentication Chains</a></span></dt><dt><span class="section"><a href="chap-auth-services.html#authn-post-auth-plugins">2.4. Post Authentication Plugins</a></span></dt><dt><span class="section"><a href="chap-auth-services.html#authn-from-browser">2.5. Authenticating To OpenAM</a></span></dt><dt><span class="section"><a href="chap-auth-services.html#configure-account-lockout">2.6. Configuring Account Lockout</a></span></dt></dl></div><p>An <em class="firstterm">authentication</em> service confirms the identity
- of a user or a client application.</p><p>This chapter describes how to configure authentication in OpenAM.</p><div class="section" title="2.1.&nbsp;About Authentication in OpenAM"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="what-is-authn"></a>2.1.&nbsp;About Authentication in OpenAM</h2></div></div></div><a class="indexterm" name="d14442e490"></a><p>Access management is about controlling access to resources. OpenAM
+ of a user or a client application.</p><p>This chapter describes how to configure authentication in OpenAM.</p><div class="section" title="2.1.&nbsp;About Authentication in OpenAM"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="what-is-authn"></a>2.1.&nbsp;About Authentication in OpenAM</h2></div></div></div><a class="indexterm" name="d4531e490"></a><p>Access management is about controlling access to resources. OpenAM
   plays a role similar to border control at an international airport. Instead
   of having each and every airline company deal with access to each
   destination, all airlines redirects passengers to border control. Border
@@ -1043,7 +1043,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   international flights authenticate with passports and visas. Passengers for
   domestic flights might authenticate with an identity card or a driver's
   license. Customers withdrawing cash from an ATM authenticate with a
-  card and a PIN. </p><a class="indexterm" name="d14442e507"></a><a class="indexterm" name="d14442e512"></a><p>As the authentication process depends on the situation, OpenAM allows
+  card and a PIN. </p><a class="indexterm" name="d4531e507"></a><a class="indexterm" name="d4531e512"></a><p>As the authentication process depends on the situation, OpenAM allows
   you to configure authentication processes and then configure how they are
   applied depending on the situation. OpenAM uses <em class="firstterm">authentication
   modules</em> to handle different ways of authenticating. Basically,
@@ -1052,7 +1052,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   sets of credentials can be used, you can choose to chain modules together.
   In OpenAM, this is called <em class="firstterm">authentication chaining</em>.
   When you chain authentication modules, you can configure each module as
-  required, optional, requisite, or sufficient.<sup>[<a name="d14442e525" href="#ftn.d14442e525" class="footnote">3</a>]</sup></p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>When a <em class="firstterm">required</em> module fails, the rest of
+  required, optional, requisite, or sufficient.<sup>[<a name="d4531e525" href="#ftn.d4531e525" class="footnote">3</a>]</sup></p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>When a <em class="firstterm">required</em> module fails, the rest of
     the chain is processed, but the authentication fails.</p><p>A required module might be used for login with email and password,
     but then fall through to another module to handle new users who have not
     yet signed up.</p></li><li class="listitem"><p>When an <em class="firstterm">optional</em> module fails,
@@ -1062,7 +1062,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
     is successful and later modules in the chain are skipped.</p><p>You could set Windows Desktop SSO as sufficient, so authenticated
     Windows users are let through, whereas web users have to traverse another
     authentication module such as one requiring an email address and a
-    password.</p></li></ul></div><a class="indexterm" name="d14442e561"></a><p>With OpenAM, you can further set <em class="firstterm">authentication
+    password.</p></li></ul></div><a class="indexterm" name="d4531e561"></a><p>With OpenAM, you can further set <em class="firstterm">authentication
   levels</em> per module, with higher levels being used typically
   to allow access to more restricted resources. The OpenAM SPIs also let you
   develop your own authentication modules, and post-authentication plugins.
@@ -1094,7 +1094,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
    protected resources.</p></div><div class="section" title="2.2.1.&nbsp;Hints For the Active Directory Authentication Module"><div class="titlepage"><div><div><h3 class="title"><a name="ad-module-conf-hints"></a>2.2.1.&nbsp;Hints For the Active Directory Authentication Module</h3></div></div></div><p>OpenAM connects to Active Directory over Lightweight Directory Access
    Protocol (LDAP). OpenAM provides separate Active Directory and LDAP
    modules to make it easier for you to use both Active Directory and also
-   another directory service in an authentication chain.</p><a class="indexterm" name="d14442e601"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
+   another directory service in an authentication chain.</p><a class="indexterm" name="d4531e601"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
    <code class="literal">sunAMAuthADService</code></p><div class="variablelist"><dl><dt><span class="term">Primary Active Directory Server, </span><span class="term">Secondary Active Directory Server</span></dt><dd><p>The default port for LDAP is 389. If you are connecting to
       Active Directory over SSL, the default port for LDAP/SSL is 636.</p><p>To allow users to change passwords through OpenAM, Active Directory
       requires that you connect over SSL.</p><p>If you want to use SSL or TLS for security, then scroll down to
@@ -1181,7 +1181,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
    chain returns success. You must set up OpenAM to save the data as part of
    post-authentication processing by editing the authentication chain to add
    <code class="literal">org.forgerock.openam.authentication.modules.adaptive.Adaptive</code>
-   to the list of post authentication plugins.</p><a class="indexterm" name="d14442e828"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
+   to the list of post authentication plugins.</p><a class="indexterm" name="d4531e828"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
    <code class="literal">sunAMAuthAdaptiveService</code></p><div class="variablelist" title="General"><div class="variablelist-title">General</div><dl><dt><span class="term">Authentication Level</span></dt><dd><p><span class="command"><strong>ssoadm</strong></span> attribute:
       <code class="literal">openam-auth-adaptive-auth-level</code></p></dd><dt><span class="term">Adaptive Threshold</span></dt><dd><p>Risk threshold score. If the sum of the Scores is greater than the
       threshold, the Adaptive Risk module returns failure.</p><p><span class="command"><strong>ssoadm</strong></span> attribute:
@@ -1294,7 +1294,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
       passes the Request Header Check.</p><p><span class="command"><strong>ssoadm</strong></span> attribute:
       <code class="literal">openam-auth-adaptive-req-header-invert</code></p></dd></dl></div></div><div class="section" title="2.2.3.&nbsp;Hints For the Anonymous Authentication Module"><div class="titlepage"><div><div><h3 class="title"><a name="anon-module-conf-hints"></a>2.2.3.&nbsp;Hints For the Anonymous Authentication Module</h3></div></div></div><p>This module lets you track and manage anonymous users, perhaps
    forcing further authentication later when a user moves to access resources
-   that require more protection.</p><a class="indexterm" name="d14442e1459"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
+   that require more protection.</p><a class="indexterm" name="d4531e1459"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
    <code class="literal">iPlanetAMAuthAnonymousService</code></p><div class="variablelist"><dl><dt><span class="term">Valid Anonymous Users</span></dt><dd><p>Specifies valid anonymous user IDs in addition to the default.</p><p><span class="command"><strong>ssoadm</strong></span> attribute:
       <code class="literal">iplanet-am-auth-anonymous-users-list</code></p></dd><dt><span class="term">Default Anonymous User Name</span></dt><dd><p>Specifies the user ID assigned by the module if the Valid
       Anonymous Users list is empty. Default: <code class="literal">anonymous</code></p><p><span class="command"><strong>ssoadm</strong></span> attribute:
@@ -1321,7 +1321,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
    Jensen</code>, and Barbara Jensen's entry in the directory has
    <code class="literal">cn=Barbara Jensen</code>, then you can use <code class="literal">CN=Barbara
    Jensen</code> from the Subject DN to search for the entry with
-   <code class="literal">cn=Barbara Jensen</code> in the directory.</p><a class="indexterm" name="d14442e1542"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
+   <code class="literal">cn=Barbara Jensen</code> in the directory.</p><a class="indexterm" name="d4531e1542"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
    <code class="literal">iPlanetAMAuthCertService</code></p><div class="variablelist"><dl><dt><span class="term">Match Certificate in LDAP</span></dt><dd><p>When enabled, OpenAM searches for a match for the user's
       certificate in the LDAP directory. If a match is found and not revoked
       according to a CRL or OCSP validation, then authentication succeeds.</p><p><span class="command"><strong>ssoadm</strong></span> attribute:
@@ -1371,7 +1371,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
    modules. It also lets you configure connection pools for access to
    directory servers, and whether to retain objects used during authentication
    for use during logout. Furthermore, the Core module lets you set defaults
-   used when configuring authentication in a particular realm.</p><a class="indexterm" name="d14442e1762"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
+   used when configuring authentication in a particular realm.</p><a class="indexterm" name="d4531e1762"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
    <code class="literal">iPlanetAMAuthService</code></p><div class="variablelist"><dl><dt><span class="term">Pluggable Authentication Module Classes</span></dt><dd><p>Add class names for custom authentication modules to this list.</p><p><span class="command"><strong>ssoadm</strong></span> attribute:
       <code class="literal">iplanet-am-auth-authenticators</code></p></dd><dt><span class="term">Supported Authentication Modules for Clients</span></dt><dd><p>This list serves to limit what types of authentication modules
       can be used with specify types of client applications. The client type
@@ -1576,13 +1576,13 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
    needed for the corresponding repository in that realm.</p><p>Yet, the Data Store module is generic. It does not implement data
    store-specific capabilities such as the password policy and password reset
    features provided by LDAP modules. Therefore the Data Store module returns
-   failure when such capabilities are invoked.</p><a class="indexterm" name="d14442e2367"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
+   failure when such capabilities are invoked.</p><a class="indexterm" name="d4531e2367"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
    <code class="literal">sunAMAuthDataStoreService</code></p><p><span class="command"><strong>ssoadm</strong></span> attributes:
    <code class="literal">amAuthDataStore</code>, and
    <code class="literal">sunAMAuthDataStoreAuthLevel</code></p></div><div class="section" title="2.2.7.&nbsp;Hints For the Federation Authentication Module"><div class="titlepage"><div><div><h3 class="title"><a name="federation-module-conf-hints"></a>2.2.7.&nbsp;Hints For the Federation Authentication Module</h3></div></div></div><p>The Federation authentication module is used by a service provider
    to create a user session after validating single sign-on protocol messages.
    This authentication module is used by the SAML, SAMLv2, ID-FF, and
-   WS-Federation protocols.</p><a class="indexterm" name="d14442e2392"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
+   WS-Federation protocols.</p><a class="indexterm" name="d4531e2392"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
    <code class="literal">sunAMAuthFederationService</code></p><p><span class="command"><strong>ssoadm</strong></span> attribute:
    <code class="literal">sunAMAuthFederationAuthLevel</code></p></div><div class="section" title="2.2.8.&nbsp;Hints For the HOTP Authentication Module"><div class="titlepage"><div><div><h3 class="title"><a name="hotp-module-conf-hints"></a>2.2.8.&nbsp;Hints For the HOTP Authentication Module</h3></div></div></div><p>The HMAC One-Time Password authentication module works together with
    the Data Store module to retrieve a user's mail address or telephone number
@@ -1597,7 +1597,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
    users begin logging into the system. You can also setup a mobile phone, 
    mobile carrier, and email attributes for tighter controls over where 
    the messages are generated and what provider the messages go through to reach
-   the user.</p><a class="indexterm" name="d14442e2424"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
+   the user.</p><a class="indexterm" name="d4531e2424"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
    <code class="literal">sunAMAuthHOTPService</code></p><div class="variablelist"><dl><dt><span class="term">SMS Gateway Implementation Class</span></dt><dd><p>Change this if you must customize the SMS gateway implementation.
       The default class sends an SMS or email, depending on the
       configuration.</p><p><span class="command"><strong>ssoadm</strong></span> attribute:
@@ -1625,11 +1625,11 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
       <code class="literal">sunAMAuthHOTPAutoClicking</code></p></dd><dt><span class="term">Authentication Level</span></dt><dd><p><span class="command"><strong>ssoadm</strong></span> attribute:
       <code class="literal">sunAMAuthHOTPAuthLevel</code></p></dd></dl></div></div><div class="section" title="2.2.9.&nbsp;Hints For the HTTP Basic Authentication Module"><div class="titlepage"><div><div><h3 class="title"><a name="http-module-conf-hints"></a>2.2.9.&nbsp;Hints For the HTTP Basic Authentication Module</h3></div></div></div><p>HTTP basic authentication takes a user name and password from HTTP
    authentication and tries authentication against the backend module in OpenAM,
-   depending on what you configure as the Backend Module Name.</p><a class="indexterm" name="d14442e2628"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
+   depending on what you configure as the Backend Module Name.</p><a class="indexterm" name="d4531e2628"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
    <code class="literal">iPlanetAMAuthHTTPBasicService</code></p><div class="variablelist"><dl><dt><span class="term">Backend Module Name</span></dt><dd><p>Specifies the module that checks the user credentials.</p><p><span class="command"><strong>ssoadm</strong></span> attribute:
       <code class="literal">iplanet-am-auth-http-basic-module-configured</code></p></dd><dt><span class="term">Authentication Level</span></dt><dd><p><span class="command"><strong>ssoadm</strong></span> attribute:
       <code class="literal">iplanet-am-auth-httpbasic-auth-level</code></p></dd></dl></div></div><div class="section" title="2.2.10.&nbsp;Hints For the JDBC Authentication Module"><div class="titlepage"><div><div><h3 class="title"><a name="jdbc-module-conf-hints"></a>2.2.10.&nbsp;Hints For the JDBC Authentication Module</h3></div></div></div><p>The Java Database Connectivity (JDBC) module lets OpenAM connect to
-   a database such as MySQL or Oracle DB to authenticate users.</p><a class="indexterm" name="d14442e2667"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
+   a database such as MySQL or Oracle DB to authenticate users.</p><a class="indexterm" name="d4531e2667"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
    <code class="literal">sunAMAuthJDBCService</code></p><div class="variablelist"><dl><dt><span class="term">Connection Type</span></dt><dd><p>Choose Connection pool is retrieved via JNDI to connect using the
       Java Naming and Diretory Interface connection pool supported by the web
       container in which OpenAM runs. Choose Non-persistent JDBC connection to
@@ -1658,7 +1658,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
      <code class="literal">sunAMAuthJDBCAuthLevel</code></p></dd></dl></div></div><div class="section" title="2.2.11.&nbsp;Hints For the LDAP Authentication Module"><div class="titlepage"><div><div><h3 class="title"><a name="ldap-module-conf-hints"></a>2.2.11.&nbsp;Hints For the LDAP Authentication Module</h3></div></div></div><p>OpenAM connects to directory servers using Lightweight Directory
    Access Protocol (LDAP). To build an easy-to-manage, high performance, pure
    Java, open source directory service, try
-   <a class="link" href="http://opendj.org" target="_top">OpenDJ</a> directory services.</p><a class="indexterm" name="d14442e2815"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
+   <a class="link" href="http://opendj.org" target="_top">OpenDJ</a> directory services.</p><a class="indexterm" name="d4531e2815"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
    <code class="literal">iPlanetAMAuthLDAPService</code></p><div class="variablelist"><dl><dt><span class="term">Primary LDAP Server, </span><span class="term">Secondary LDAP Server</span></dt><dd><p>Directory servers generally use built-in data replication for high
       availability. Thus a directory service likely consists of a pool of
       replicas to which OpenAM can connect to retrieve and update directory
@@ -1745,7 +1745,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
       <code class="literal">iplanet-am-auth-ldap-behera-password-policy-enabled</code></p></dd><dt><span class="term">Authentication Level</span></dt><dd><p><span class="command"><strong>ssoadm</strong></span> attribute:
      <code class="literal">iplanet-am-auth-ldap-auth-level</code></p></dd></dl></div></div><div class="section" title="2.2.12.&nbsp;Hints For the Membership Authentication Module"><div class="titlepage"><div><div><h3 class="title"><a name="membership-module-conf-hints"></a>2.2.12.&nbsp;Hints For the Membership Authentication Module</h3></div></div></div><p>The Membership module permits self-registration for new users. You
    can then have OpenAM create new user profiles in the identity
-   repository.</p><a class="indexterm" name="d14442e3085"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
+   repository.</p><a class="indexterm" name="d4531e3085"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
    <code class="literal">iPlanetAMAuthMembershipService</code></p><div class="variablelist"><dl><dt><span class="term">Minimum Password Length</span></dt><dd><p>Specify the minimum acceptable number of characters in the password
       provided during self-registration.</p><p><span class="command"><strong>ssoadm</strong></span> attribute:
       <code class="literal">iplanet-am-auth-membership-min-password-length</code></p></dd><dt><span class="term">Default User Roles</span></dt><dd><p>Specifies the Distinguished Name (DN) of a role to be assigned to
@@ -1762,7 +1762,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
    authentication module enables non-interactive authentication using a mobile
    subscriber ISDN associated with a terminal such as a mobile phone.
    The module checks the subscriber ISDN against the value found on a user's
-   entry in an LDAP directory service.</p><a class="indexterm" name="d14442e3150"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
+   entry in an LDAP directory service.</p><a class="indexterm" name="d4531e3150"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
    <code class="literal">sunAMAuthMSISDNService</code></p><div class="variablelist"><dl><dt><span class="term">Trusted Gateway IP Address</span></dt><dd><p>Specifies a list of IP addresses of trusted clients that can access
       MSIDSN modules. Either restrict the clients allowed to access the MSISDN
       module by add each IPv4 address here, or leave the list empty to allow
@@ -1809,7 +1809,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
       HMAC One-Time Password (HOTP) Authentication Module, but does not replace the original
       module for those already using HOTP prior to the 10.1.0 release. The OATH module includes 
       HOTP authentication and Time-Based One-Time Password (TOTP) authentication. Both types
-      of authentication require an OATH compliant device that can provide the OTP.</p><a class="indexterm" name="d14442e3342"></a><p> HOTP authentication generates the OTP every time the user requests a new OTP
+      of authentication require an OATH compliant device that can provide the OTP.</p><a class="indexterm" name="d4531e3342"></a><p> HOTP authentication generates the OTP every time the user requests a new OTP
       on their device. The device tracks the number of times the user requests a new OTP, called
       the counter. The OTP displays for a period of time you designate in the setup, so the 
       user may be further in the counter on their device than on their account. OpenAM will resynchronize
@@ -1856,7 +1856,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
       <code class="literal">iPlanetAMAuthOATHLastLoginTimeAttributeName</code></p></dd><dt><span class="term">Authentication Level</span></dt><dd><p><span class="command"><strong>ssoadm</strong></span> attribute:
       <code class="literal">sunAMAuthHOTPAuthLevel</code></p></dd></dl></div></div><div class="section" title="2.2.15.&nbsp;Hints For the OAuth 2.0 Authentication Module"><div class="titlepage"><div><div><h3 class="title"><a name="oauth2-module-conf-hints"></a>2.2.15.&nbsp;Hints For the OAuth 2.0 Authentication Module</h3></div></div></div><p>The OAuth 2.0 authentication module lets OpenAM authenticate clients
    of OAuth resource servers. References in this section are to RFC 6749, <a class="link" href="http://tools.ietf.org/html/rfc6749" target="_blank">The OAuth
-   2.0 Authorization Framework</a>.</p><a class="indexterm" name="d14442e3498"></a><a class="indexterm" name="d14442e3503"></a><div class="note" title="Note" style="font-style: italic;"><h3 class="title">Note</h3><p>The default settings are for Facebook.</p></div><p><span class="command"><strong>ssoadm</strong></span> service name:
+   2.0 Authorization Framework</a>.</p><a class="indexterm" name="d4531e3498"></a><a class="indexterm" name="d4531e3503"></a><div class="note" title="Note" style="font-style: italic;"><h3 class="title">Note</h3><p>The default settings are for Facebook.</p></div><p><span class="command"><strong>ssoadm</strong></span> service name:
    <code class="literal">sunAMAuthOAuthService</code></p><div class="variablelist"><dl><dt><span class="term">Client ID</span></dt><dd><p>OAuth <code class="literal">client_id</code> as described in
       <a class="link" href="http://tools.ietf.org/html/rfc6749#section-2.2" target="_blank">section 2.2 of RFC 6749</a>.</p><p><span class="command"><strong>ssoadm</strong></span> attribute:
       <code class="literal">iplanet-am-auth-oauth-client-id</code></p></dd><dt><span class="term">Client Secret</span></dt><dd><p>OAuth <code class="literal">client_secret</code> as described in
@@ -1938,7 +1938,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
          <p>Example: <code class="literal">https://openam.example.com:8443/openam/oauth2/access_token</code>.</p></td></tr><tr><td>User Profile Service URL</td><td>
          <p><code class="literal">/oauth2/tokeninfo</code> under the deployment URL.</p>
          <p>Example: <code class="literal">https://openam.example.com:8443/openam/oauth2/tokeninfo</code>.</p></td></tr></tbody></table></div></div><br class="table-break"><div class="table"><a name="oauth2-facebook"></a><div class="table-title">Table&nbsp;2.2.&nbsp;Endpoint URLs for Facebook</div><div class="table-contents"><table summary="Endpoint URLs for Facebook" width="100%" border="0"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>OpenAM Field</th><th>Details</th></tr></thead><tbody><tr><td>Authentication Endpoint URL</td><td>https://www.facebook.com/dialog/oauth</td></tr><tr><td>Access Token Endpoint URL</td><td>https://graph.facebook.com/oauth/access_token</td></tr><tr><td>User Profile Service URL</td><td>https://graph.facebook.com/me</td></tr><tr><td>OAuth 2.0 Provider logout service</td><td>http://www.facebook.com/logout.php</td></tr></tbody></table></div></div><br class="table-break"><div class="table"><a name="oauth2-google"></a><div class="table-title">Table&nbsp;2.3.&nbsp;Endpoint URLs for Google</div><div class="table-contents"><table summary="Endpoint URLs for Google" width="100%" border="0"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>OpenAM Field</th><th>Details</th></tr></thead><tbody><tr><td>Authentication Endpoint URL</td><td>https://accounts.google.com/o/oauth2/auth</td></tr><tr><td>Access Token Endpoint URL</td><td>https://accounts.google.com/o/oauth2/token</td></tr><tr><td>User Profile Service URL</td><td>https://www.googleapis.com/oauth2/v1/userinfo</td></tr><tr><td>OAuth 2.0 Provider logout service</td><td>https://mail.google.com/mail/?logout</td></tr></tbody></table></div></div><br class="table-break"><div class="table"><a name="oauth2-msn"></a><div class="table-title">Table&nbsp;2.4.&nbsp;Endpoint URLs for MSN</div><div class="table-contents"><table summary="Endpoint URLs for MSN" width="100%" border="0"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>OpenAM Field</th><th>Details</th></tr></thead><tbody><tr><td>Authentication Endpoint URL</td><td>https://oauth.live.com/authorize</td></tr><tr><td>Access Token Endpoint URL</td><td>https://oauth.live.com/token</td></tr><tr><td>User Profile Service URL</td><td>https://apis.live.net/v5.0/me</td></tr><tr><td>OAuth 2.0 Provider logout service</td><td>http://oauth.live.com/logout</td></tr></tbody></table></div></div><br class="table-break"></div><div class="section" title="2.2.16.&nbsp;Hints For the RADIUS Authentication Module"><div class="titlepage"><div><div><h3 class="title"><a name="radius-module-conf-hints"></a>2.2.16.&nbsp;Hints For the RADIUS Authentication Module</h3></div></div></div><p>The Remote Authentication Dial-In User Service (RADIUS) module lets
-   OpenAM authenticate users against RADIUS servers.</p><a class="indexterm" name="d14442e4086"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
+   OpenAM authenticate users against RADIUS servers.</p><a class="indexterm" name="d4531e4086"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
    <code class="literal">iPlanetAMAuthRadiusService</code></p><div class="variablelist"><dl><dt><span class="term">Server 1</span></dt><dd><p>Specify the IP address or fully qualified domain name of the
       primary RADIUS server. The default is <code class="literal">127.0.0.1</code>
       (localhost loopback).</p><p><span class="command"><strong>ssoadm</strong></span> attribute:
@@ -1958,10 +1958,10 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
    the user to OpenAM, so that OpenAM creates a session for the user.
    This module is useful in virtual federation, where an existing entity
    instructs the local OpenAM instance to use federation protocols to transfer
-   authentication and attribute information to a partner application.</p><a class="indexterm" name="d14442e4191"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
+   authentication and attribute information to a partner application.</p><a class="indexterm" name="d4531e4191"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
    <code class="literal">sunAMAuthSAEService</code></p><p><span class="command"><strong>ssoadm</strong></span> attribute:
    <code class="literal">sunAMAuthSAEAuthLevel</code></p></div><div class="section" title="2.2.18.&nbsp;Hints For the SecurID Authentication Module"><div class="titlepage"><div><div><h3 class="title"><a name="securid-module-conf-hints"></a>2.2.18.&nbsp;Hints For the SecurID Authentication Module</h3></div></div></div><p>The SecurID module lets OpenAM authenticate users with RSA
-   Authentication Manager software and RSA SecurID authenticators.</p><a class="indexterm" name="d14442e4213"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
+   Authentication Manager software and RSA SecurID authenticators.</p><a class="indexterm" name="d4531e4213"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
    <code class="literal">iPlanetAMAuthSecurIDService</code></p><div class="variablelist"><dl><dt><span class="term">ACE/Server Configuration Path</span></dt><dd><p>Specify the directory in which the SecurID ACE/Server
       <code class="filename">sdconf.rec</code> file is located, which by default is
       expected under the configuration directory for OpenAM, such as
@@ -1976,7 +1976,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
    authenticate to OpenAM without having to provide the login information
    again. Users might need to set up Integrated Windows Authentication in
    Internet Explorer to benefit from single sign on when logged on to
-   a Windows desktop.</p><a class="indexterm" name="d14442e4258"></a><a class="indexterm" name="d14442e4263"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
+   a Windows desktop.</p><a class="indexterm" name="d4531e4258"></a><a class="indexterm" name="d4531e4263"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
    <code class="literal">iPlanetAMAuthWindowsDesktopSSOService</code></p><div class="variablelist"><dl><dt><span class="term">Service Principal</span></dt><dd><p>Specify the Kerberos principal for authentication in the following
       format.</p><pre class="literallayout">HTTP/<em class="replaceable"><code>host</code></em>.<em class="replaceable"><code>domain</code></em>@<em class="replaceable"><code>dc-domain-name</code></em></pre><p>Here, <em class="replaceable"><code>host</code></em> and
       <em class="replaceable"><code>domain</code></em> correspond to the host and domain names
@@ -2001,7 +2001,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
      <code class="literal">iplanet-am-auth-windowsdesktopsso-auth-level</code></p></dd></dl></div></div><div class="section" title="2.2.20.&nbsp;Hints For the Windows NT Authentication Module"><div class="titlepage"><div><div><h3 class="title"><a name="winnt-module-conf-hints"></a>2.2.20.&nbsp;Hints For the Windows NT Authentication Module</h3></div></div></div><p>The Windows NT module lets OpenAM authenticate against a Microsoft
    Windows NT server.</p><p>This module requires that you install a Samba client in a 
    <code class="filename">bin</code> directory under the OpenAM configuration directory
-   such as <code class="filename">$HOME/openam/openam/bin</code>.</p><a class="indexterm" name="d14442e4387"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
+   such as <code class="filename">$HOME/openam/openam/bin</code>.</p><a class="indexterm" name="d4531e4387"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
    <code class="literal">iPlanetAMAuthNTService</code></p><div class="variablelist"><dl><dt><span class="term">Authentication Domain</span></dt><dd><p>Specify the Windows domain name to which users belong.</p><p><span class="command"><strong>ssoadm</strong></span> attribute:
       <code class="literal">iplanet-am-auth-nt-domain</code></p></dd><dt><span class="term">Authentication Host</span></dt><dd><p>Specify the NetBIOS name of the Windows NT host to which to
       authenticate users.</p><p><span class="command"><strong>ssoadm</strong></span> attribute:
@@ -2009,7 +2009,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
       <code class="literal">iplanet-am-auth-samba-config-file-name</code></p></dd><dt><span class="term">Authentication Level</span></dt><dd><p><span class="command"><strong>ssoadm</strong></span> attribute:
      <code class="literal">iplanet-am-auth-nt-auth-level</code></p></dd></dl></div></div><div class="section" title="2.2.21.&nbsp;Hints For the WSSAuth Authentication Module"><div class="titlepage"><div><div><h3 class="title"><a name="wss-module-conf-hints"></a>2.2.21.&nbsp;Hints For the WSSAuth Authentication Module</h3></div></div></div><p>The Web Service Security (WSSAuth) module lets OpenAM validate a
    user name, password combination received as an authentication token in
-   a request from a Web Service Client to a Web Service Provider.</p><a class="indexterm" name="d14442e4450"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
+   a request from a Web Service Client to a Web Service Provider.</p><a class="indexterm" name="d4531e4450"></a><p><span class="command"><strong>ssoadm</strong></span> service name:
    <code class="literal">sunAMAuthWSSAuthModuleService</code></p><div class="variablelist"><dl><dt><span class="term">User search attribute</span></dt><dd><p>Specify a user attribute to search for a user. Default is
       <code class="literal">uid</code>.</p><p><span class="command"><strong>ssoadm</strong></span> attribute:
       <code class="literal">sunWebservicesUserSearchAttribute</code></p></dd><dt><span class="term">User realm</span></dt><dd><p>Specify the realm to which users belong. For the OpenAM Security
@@ -2017,7 +2017,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
       <code class="literal">sunWebServicesUserRealm</code></p></dd><dt><span class="term">User password attribute</span></dt><dd><p>Specify the password attribute or that of the password equivalent.
       The default is <code class="literal">userPassword</code>.</p><p><span class="command"><strong>ssoadm</strong></span> attribute:
       <code class="literal">sunWebservicesUserPasswordAttribute</code></p></dd><dt><span class="term">Authentication Level</span></dt><dd><p><span class="command"><strong>ssoadm</strong></span> attribute:
-      <code class="literal">sunWebservicesAuthenticationLevel</code></p></dd></dl></div></div></div><div class="section" title="2.3.&nbsp;Configuring Authentication Chains"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configure-authn-chains"></a>2.3.&nbsp;Configuring Authentication Chains</h2></div></div></div><a class="indexterm" name="d14442e4521"></a><p>Once you have configured authentication modules, and added the modules
+      <code class="literal">sunWebservicesAuthenticationLevel</code></p></dd></dl></div></div></div><div class="section" title="2.3.&nbsp;Configuring Authentication Chains"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configure-authn-chains"></a>2.3.&nbsp;Configuring Authentication Chains</h2></div></div></div><a class="indexterm" name="d4531e4521"></a><p>Once you have configured authentication modules, and added the modules
   to the list of module instances, you can configure authentication chains.
   Authentication chains let you handle situations where alternative modules
   are needed, or where a single set of credentials is not sufficient.</p><div class="procedure" title="Procedure&nbsp;2.1.&nbsp;To Create an Authentication Chain"><a name="create-authn-chain"></a><div class="procedure-title">Procedure&nbsp;2.1.&nbsp;To Create an Authentication Chain</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>On the Access Control tab page of the OpenAM console, click the
@@ -2067,7 +2067,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
     leave the default administrator chain as is to avoid locking yourself
     out as administrator. By default, <code class="literal">amadmin</code> can login at
     <code class="literal">/openam/UI/Login</code>. You can change that for your
-    deployment.</p></li><li class="step" title="Step 3"><p>Save your work.</p></li></ol></div></div><div class="section" title="2.4.&nbsp;Post Authentication Plugins"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="authn-post-auth-plugins"></a>2.4.&nbsp;Post Authentication Plugins</h2></div></div></div><a class="indexterm" name="d14442e4649"></a><p>Post authentication plugins include custom processing at the end of the
+    deployment.</p></li><li class="step" title="Step 3"><p>Save your work.</p></li></ol></div></div><div class="section" title="2.4.&nbsp;Post Authentication Plugins"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="authn-post-auth-plugins"></a>2.4.&nbsp;Post Authentication Plugins</h2></div></div></div><a class="indexterm" name="d4531e4649"></a><p>Post authentication plugins include custom processing at the end of the
   authentication process, immediately before the subject is authenticated.
   Common uses of post authentication plugins include setting cookies and
   session variables. Post authentication plugins are often used in conjunction
@@ -2101,7 +2101,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   by adding parameters to the login URL when testing your configuration.</p><p>The base URL to authenticate to OpenAM points to
   <code class="literal">/UI/Login</code> under the deployment URL, such as
   <code class="literal">http://openam.example.com:8080/openam/UI/Login</code>.
-  <sup>[<a name="d14442e4729" href="#ftn.d14442e4729" class="footnote">4</a>]</sup> You can, however, specify parameters in the query string
+  <sup>[<a name="d4531e4729" href="#ftn.d4531e4729" class="footnote">4</a>]</sup> You can, however, specify parameters in the query string
   of the URL to request a specific authentication configuration. For example,
   <code class="literal">http://openam.example.com:8080/openam/UI/Login?module=LDAP</code>
   requests that OpenAM use the LDAP authentication module.</p><div class="variablelist"><p>OpenAM accepts the following parameters in the query string. With
@@ -2161,7 +2161,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
      or <code class="literal">user</code>.</p><p>Example: <code class="literal">http://openam.example.com:8080/openam/UI/Login?service=ExternalChain</code></p></dd><dt><span class="term">user</span></dt><dd><p>Request that the user, specified by her OpenAM universal ID,
      authenticate according to the chain specified in her profile.</p><p>As this parameter determines authentication module selection, do
      not use it with <code class="literal">authlevel</code>, <code class="literal">module</code>,
-     or <code class="literal">service</code>.</p><p>Example: <code class="literal">http://openam.example.com:8080/openam/UI/Login?user=admin</code></p></dd></dl></div></div><div class="section" title="2.6.&nbsp;Configuring Account Lockout"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configure-account-lockout"></a>2.6.&nbsp;Configuring Account Lockout</h2></div></div></div><a class="indexterm" name="d14442e4992"></a><div class="itemizedlist"><p>OpenAM supports two different approaches to <em class="firstterm">account
+     or <code class="literal">service</code>.</p><p>Example: <code class="literal">http://openam.example.com:8080/openam/UI/Login?user=admin</code></p></dd></dl></div></div><div class="section" title="2.6.&nbsp;Configuring Account Lockout"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configure-account-lockout"></a>2.6.&nbsp;Configuring Account Lockout</h2></div></div></div><a class="indexterm" name="d4531e4992"></a><div class="itemizedlist"><p>OpenAM supports two different approaches to <em class="firstterm">account
    lockout</em>, where OpenAM locks an account after repeated
    authentication failures. Lockout works with modules for which users
    can enter a password incorrectly.</p><ul class="itemizedlist" type="disc"><li class="listitem"><p>Memory lockout locks the user account, keeping track of the locked
@@ -2187,9 +2187,9 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
     the number of failed attempts in the data store, other OpenAM servers
     accessing the user data store can also see the number.</p></li></ul></div><p>If you need to unlock a user's account, find the user under Access
   Control &gt; <em class="replaceable"><code>Realm Name</code></em> &gt; Subjects &gt; User,
-  set the user's User Status to Active, and click Save.</p></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.d14442e525" href="#d14442e525" class="para">3</a>] </sup>The four terms,
+  set the user's User Status to Active, and click Save.</p></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.d4531e525" href="#d4531e525" class="para">3</a>] </sup>The four terms,
   required, optional, requisite, and sufficient, come from JAAS, the Java
-  standard for authentication and authorization.</p></div><div class="footnote"><p><sup>[<a id="ftn.d14442e4729" href="#d14442e4729" class="para">4</a>] </sup>The base URL to logout is similar, for example
+  standard for authentication and authorization.</p></div><div class="footnote"><p><sup>[<a id="ftn.d4531e4729" href="#d4531e4729" class="para">4</a>] </sup>The base URL to logout is similar, for example
   <code class="literal">http://openam.example.com:8080/openam/UI/Logout</code>.</p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-admin-tools.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-authz-policy.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;1.&nbsp;Administration Interfaces &amp; Tools&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;3.&nbsp;Defining Authorization Policies</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssue.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
 <script type="text/javascript">
 

@@ -1009,11 +1009,10 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 <!-- END SyntaxHighlighter 3.0.83 -->
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
-</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;3.&nbsp;Using RESTful Web Services</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-client-dev.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-jdk.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;3.&nbsp;Using RESTful Web Services"><div class="titlepage"><div><div><h2 class="title"><a name="chap-rest"></a>Chapter&nbsp;3.&nbsp;Using RESTful Web Services</h2></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="section"><a href="chap-rest.html#about-openam-rest-api">3.1. About the RESTful API</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-auth">3.2. Authentication &amp; Logout</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-tokens">3.3. Token Validation &amp; Attribute Retrieval</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-authz">3.4. Authorization</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-oauth2">3.5. OAuth 2.0 Authorization</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-logging">3.6. Logging</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-crud-identity">3.7. Identity Management</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-crud-realm">3.8. Realm Management</a></span></dt></dl></div><a class="indexterm" name="d11930e270"></a><p>This chapter shows how to use the OpenAM RESTful interfaces for direct
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;3.&nbsp;Using RESTful Web Services</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-client-dev.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-jdk.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;3.&nbsp;Using RESTful Web Services"><div class="titlepage"><div><div><h2 class="title"><a name="chap-rest"></a>Chapter&nbsp;3.&nbsp;Using RESTful Web Services</h2></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="section"><a href="chap-rest.html#about-openam-rest-api">3.1. About the RESTful API</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-auth">3.2. Authentication &amp; Logout</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-tokens">3.3. Token Validation &amp; Attribute Retrieval</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-authz">3.4. Authorization</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-oauth2">3.5. OAuth 2.0 Authorization</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-logging">3.6. Logging</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-crud-identity">3.7. Identity Management</a></span></dt></dl></div><a class="indexterm" name="d2062e270"></a><p>This chapter shows how to use the OpenAM RESTful interfaces for direct
  integration between web client applications and OpenAM.</p><div class="section" title="3.1.&nbsp;About the RESTful API"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="about-openam-rest-api"></a>3.1.&nbsp;About the RESTful API</h2></div></div></div><p>OpenAM offers a RESTful API for these access and identity management
   operations:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><a class="link" href="chap-rest.html#rest-api-auth" title="3.2.&nbsp;Authentication &amp; Logout">Authentication</a> (login)</p></li><li class="listitem"><p><a class="link" href="chap-rest.html#rest-api-auth" title="3.2.&nbsp;Authentication &amp; Logout">Logout</a></p></li><li class="listitem"><p><a class="link" href="chap-rest.html#rest-api-tokens" title="3.3.&nbsp;Token Validation &amp; Attribute Retrieval">Token attribute retrieval</a></p></li><li class="listitem"><p><a class="link" href="chap-rest.html#rest-api-tokens" title="3.3.&nbsp;Token Validation &amp; Attribute Retrieval">Token validation</a></p></li><li class="listitem"><p><a class="link" href="chap-rest.html#rest-api-authz" title="3.4.&nbsp;Authorization">Authorization</a></p></li><li class="listitem"><p><a class="link" href="chap-rest.html#rest-api-oauth2" title="3.5.&nbsp;OAuth 2.0 Authorization">OAuth 2.0 Authorization</a></p></li><li class="listitem"><p><a class="link" href="chap-rest.html#rest-api-logging" title="3.6.&nbsp;Logging">Logging</a></p></li><li class="listitem"><p><a class="link" href="chap-rest.html#rest-api-crud-identity" title="3.7.&nbsp;Identity Management">Identity management</a> (creating,
-    reading, updating, deleting identities)</p></li><li class="listitem"><p><a class="link" href="chap-rest.html#rest-api-crud-realm" title="3.8.&nbsp;Realm Management">Realm management</a> (creating,
-    reading, updating, deleting realms)</p></li></ul></div><p>To call the API, access URLs under <code class="literal">identity/</code> where
+    reading, updating, deleting identities)</p></li></ul></div><p>To call the API, access URLs under <code class="literal">identity/</code> where
   OpenAM is deployed, such as
   <code class="literal">https://openam.example.com:8443/openam/identity/</code>.</p><p>You can select the output format returned by specifying
   <code class="literal">json/</code> or <code class="literal">xml/</code> in the URL after
@@ -1023,7 +1022,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   encoded before being submitted with a request. Thus, an example token
   looks like this.</p><pre class="literallayout">token.id=AQIC5wM2LY4SfczntBbXvEAOuECbqMY3J4NW3byH6xwgkGE.*AAJTSQACMDE.*</pre><p>Without c66Encode activated, the same token might look like this.</p><pre class="literallayout">token.id=AQIC5wM2LY4SfczntBbXvEAOuECbqMY3J4NW3byH6xwgkGE=@AAJTSQACMDE=#</pre><p>In the latter example, you would have to <a class="link" href="http://en.wikipedia.org/wiki/Percent-encoding" target="_top">percent
   encode</a> the <code class="literal">=</code>, <code class="literal">@</code>, and
-  <code class="literal">#</code> characters in your requests.</p><p>In this chapter, long URLs are wrapped to fit the printed page.</p></div><div class="section" title="3.2.&nbsp;Authentication &amp; Logout"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="rest-api-auth"></a>3.2.&nbsp;Authentication &amp; Logout</h2></div></div></div><a class="indexterm" name="d11930e369"></a><a class="indexterm" name="d11930e374"></a><p>Simple authentication with a user name and password returns a
+  <code class="literal">#</code> characters in your requests.</p><p>In this chapter, long URLs are wrapped to fit the printed page.</p></div><div class="section" title="3.2.&nbsp;Authentication &amp; Logout"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="rest-api-auth"></a>3.2.&nbsp;Authentication &amp; Logout</h2></div></div></div><a class="indexterm" name="d2062e364"></a><a class="indexterm" name="d2062e369"></a><p>Simple authentication with a user name and password returns a
   token.</p><div class="screen"><pre class="brush: plain;">$ curl "https://openam.example.com:8443/openam/identity/authenticate?
  username=bjensen
  &amp;password=hifalutin"
@@ -1046,7 +1045,7 @@ boolean=true</pre></div><p>An invalid token returns <code class="literal">boolea
  tokenid=INVALID"
 boolean=false</pre></div><p>With a valid token, you can retrieve attributes about the subject.
   OpenAM returns a series of <em class="replaceable"><code>name</code></em>,
-  <em class="replaceable"><code>value</code></em> pairs.</p><a class="indexterm" name="d11930e437"></a><div class="screen"><pre class="brush: plain;">$ curl "https://openam.example.com:8443/openam/identity/attributes?
+  <em class="replaceable"><code>value</code></em> pairs.</p><a class="indexterm" name="d2062e432"></a><div class="screen"><pre class="brush: plain;">$ curl "https://openam.example.com:8443/openam/identity/attributes?
  subjectid=AQIC5wM2LY4SfcxuxIP0VnP2lVjs7ypEM6VDx6srk56CN1Q.*AAJTSQACMDE.*"
 userdetails.token.id=
  AQIC5wM2LY4SfcxuxIP0VnP2lVjs7ypEM6VDx6srk56CN1Q.*AAJTSQACMDE.*
@@ -1093,7 +1092,7 @@ userdetails.token.id=
  AQIC5wM2LY4SfcxuxIP0VnP2lVjs7ypEM6VDx6srk56CN1Q.*AAJTSQACMDE.*
 userdetails.attribute.name=cn
 userdetails.attribute.value=Babs Jensen
-userdetails.attribute.value=Barbara Jensen</pre></div></div><div class="section" title="3.4.&nbsp;Authorization"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="rest-api-authz"></a>3.4.&nbsp;Authorization</h2></div></div></div><a class="indexterm" name="d11930e458"></a><p>You can call on OpenAM to decide whether to authorize access to a
+userdetails.attribute.value=Barbara Jensen</pre></div></div><div class="section" title="3.4.&nbsp;Authorization"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="rest-api-authz"></a>3.4.&nbsp;Authorization</h2></div></div></div><a class="indexterm" name="d2062e453"></a><p>You can call on OpenAM to decide whether to authorize access to a
   protected resource based on a valid token. Of course, you must percent
   encode the resource URI.</p><div class="screen"><pre class="brush: plain;">$ curl "https://openam.example.com:8443/openam/identity/authorize?
  uri=http%3A%2F%2Fwww.example.com%3A8080%2Fexamples%2Findex.html
@@ -1118,7 +1117,7 @@ boolean=true</pre></div><p>To indicate access denied, OpenAM returns
     and <code class="literal">env=<em class="replaceable"><code>requestDnsName%3Dtime-zone</code></em></code>
     where <em class="replaceable"><code>time-zone</code></em> is from Java
     <code class="literal">TimeZone.getTimeZone().getID()</code>. The
-    <code class="literal">env</code> parameters thus express conditions.</p></li></ul></div></div><div class="section" title="3.5.&nbsp;OAuth 2.0 Authorization"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="rest-api-oauth2"></a>3.5.&nbsp;OAuth 2.0 Authorization</h2></div></div></div><div class="toc"><dl><dt><span class="section"><a href="chap-rest.html#rest-api-oauth2-client-endpoints">3.5.1. OAuth 2.0 Client &amp; Resource Server Endpoints</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-oauth2-token-admin-endpoint">3.5.2. OAuth 2.0 Token Administration Endpoint</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-oauth2-client-admin-endpoint">3.5.3. OAuth 2.0 Client Administration Endpoint</a></span></dt></dl></div><a class="indexterm" name="d11930e566"></a><div class="itemizedlist"><p>OpenAM exposes the following REST endpoints for different OAuth 2.0
+    <code class="literal">env</code> parameters thus express conditions.</p></li></ul></div></div><div class="section" title="3.5.&nbsp;OAuth 2.0 Authorization"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="rest-api-oauth2"></a>3.5.&nbsp;OAuth 2.0 Authorization</h2></div></div></div><div class="toc"><dl><dt><span class="section"><a href="chap-rest.html#rest-api-oauth2-client-endpoints">3.5.1. OAuth 2.0 Client &amp; Resource Server Endpoints</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-oauth2-token-admin-endpoint">3.5.2. OAuth 2.0 Token Administration Endpoint</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-oauth2-client-admin-endpoint">3.5.3. OAuth 2.0 Client Administration Endpoint</a></span></dt></dl></div><a class="indexterm" name="d2062e561"></a><div class="itemizedlist"><p>OpenAM exposes the following REST endpoints for different OAuth 2.0
    purposes.</p><ul class="itemizedlist" type="disc"><li class="listitem"><p>Endpoints for <a class="link" href="chap-rest.html#rest-api-oauth2-client-endpoints" title="3.5.1.&nbsp;OAuth 2.0 Client &amp; Resource Server Endpoints">OAuth
     2.0 clients and resource servers</a>, mostly defined in RFC 6749,
     <a class="link" href="http://tools.ietf.org/html/rfc6749" target="_blank"><em class="citetitle">The OAuth 2.0 Authorization Framework</em></a>, with
@@ -1189,9 +1188,7 @@ $ curl https://openam.example.com:8443/openam/oauth2/tokeninfo
    as in the preceding example, with scopes set to <code class="literal">mail</code> and
    <code class="literal">cn</code>.</p></div><div class="section" title="3.5.2.&nbsp;OAuth 2.0 Token Administration Endpoint"><div class="titlepage"><div><div><h3 class="title"><a name="rest-api-oauth2-token-admin-endpoint"></a>3.5.2.&nbsp;OAuth 2.0 Token Administration Endpoint</h3></div></div></div><p>The OpenAM-specific OAuth 2.0 token administration endpoint lets
    administrators read, list, and delete OAuth 2.0 tokens. OAuth 2.0 clients
-   can also manage their own tokens.</p><p>Resource owners can manage OAuth 2.0 tokens that they authorized by
-   using the web-based OAuth 2 Token Manager. See the <em class="citetitle">Administration
-   Guide</em> section on <a href="../../admin-guide/index/chap-oauth2.html#oauth2-manage-tokens" class="link"><em class="citetitle">Managing OAuth 2.0 Tokens</em></a> for details.</p><p>OpenAM exposes the token administration endpoint at
+   can also manage their own tokens.</p><p>OpenAM exposes the token administration endpoint at
    <code class="literal">/frrest/oauth2/token</code>, such as
    <code class="literal">https://openam.example.com:8443/openam/frrest/oauth2/token</code>.</p><div class="note" title="Note" style="font-style: italic;"><h3 class="title">Note</h3><p>This endpoint location is likely to change in the future.</p></div><p>To get a token, perform an HTTP GET on
    <code class="literal">/frrest/oauth2/token/<em class="replaceable"><code>token-id</code></em></code>,
@@ -1383,7 +1380,7 @@ $ curl "https://openam.example.com:8443/openam/identity/log?
 "2011-09-14 16:38:17"   "Hello World"   id=bjensen,ou=user,o=openam
    8a4025a2b3af291d01  "Not Available" INFO    o=openam
    id=amadmin,ou=user,o=openam "Not Available" rest.access "Not Available"
-   192.168.56.2</pre></div></div><div class="section" title="3.7.&nbsp;Identity Management"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="rest-api-crud-identity"></a>3.7.&nbsp;Identity Management</h2></div></div></div><div class="toc"><dl><dt><span class="section"><a href="chap-rest.html#rest-api-create-identity">3.7.1. Creating Identities</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-read-identity">3.7.2. Reading Identities</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-update-identity">3.7.3. Updating Identities</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-delete-identity">3.7.4. Deleting Identities</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-create-legacy">3.7.5. Creating Identities (Legacy API)</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-read-legacy">3.7.6. Reading &amp; Searching for Identities (Legacy API)</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-update-legacy">3.7.7. Updating Identities (Legacy API)</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-delete-legacy">3.7.8. Deleting Identities (Legacy API)</a></span></dt></dl></div><a class="indexterm" name="d11930e993"></a><p>This section shows how to create, read, update, and delete identities
+   192.168.56.2</pre></div></div><div class="section" title="3.7.&nbsp;Identity Management"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="rest-api-crud-identity"></a>3.7.&nbsp;Identity Management</h2></div></div></div><div class="toc"><dl><dt><span class="section"><a href="chap-rest.html#rest-api-create-identity">3.7.1. Creating Identities</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-read-identity">3.7.2. Reading Identities</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-update-identity">3.7.3. Updating Identities</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-delete-identity">3.7.4. Deleting Identities</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-create-legacy">3.7.5. Creating Identities (Legacy API)</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-read-legacy">3.7.6. Reading &amp; Searching for Identities (Legacy API)</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-update-legacy">3.7.7. Updating Identities (Legacy API)</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-delete-legacy">3.7.8. Deleting Identities (Legacy API)</a></span></dt></dl></div><a class="indexterm" name="d2062e980"></a><p>This section shows how to create, read, update, and delete identities
   using the RESTful APIs.</p><div class="itemizedlist"><p>OpenAM has two REST APIs for managing identities.</p><ul class="itemizedlist" type="disc"><li class="listitem"><p>Under the <code class="literal">/json/users</code>, you find the newer 
     JSON-based API.</p><p>Examples in this section show authentication using the API described
     in <a class="xref" href="chap-rest.html#rest-api-auth" title="3.2.&nbsp;Authentication &amp; Logout">Section&nbsp;3.2, &#8220;Authentication &amp; Logout&#8221;</a>. For browser-based clients, you
@@ -1391,8 +1388,7 @@ $ curl "https://openam.example.com:8443/openam/identity/log?
     application.</p><div class="itemizedlist"><p>The following sections cover this JSON-based API.</p><ul class="itemizedlist" type="circle"><li class="listitem"><p><a class="xref" href="chap-rest.html#rest-api-create-identity" title="3.7.1.&nbsp;Creating Identities">Section&nbsp;3.7.1, &#8220;Creating Identities&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-rest.html#rest-api-read-identity" title="3.7.2.&nbsp;Reading Identities">Section&nbsp;3.7.2, &#8220;Reading Identities&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-rest.html#rest-api-update-identity" title="3.7.3.&nbsp;Updating Identities">Section&nbsp;3.7.3, &#8220;Updating Identities&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-rest.html#rest-api-delete-identity" title="3.7.4.&nbsp;Deleting Identities">Section&nbsp;3.7.4, &#8220;Deleting Identities&#8221;</a></p></li></ul></div></li><li class="listitem"><p>Under the <code class="literal">/identity</code> endpoint, you find the
     backwards-compatible, legacy API.</p><div class="itemizedlist"><p>The following sections cover this backwards-compatible API.</p><ul class="itemizedlist" type="circle"><li class="listitem"><p><a class="xref" href="chap-rest.html#rest-api-create-legacy" title="3.7.5.&nbsp;Creating Identities (Legacy API)">Section&nbsp;3.7.5, &#8220;Creating Identities (Legacy API)&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-rest.html#rest-api-read-legacy" title="3.7.6.&nbsp;Reading &amp; Searching for Identities (Legacy API)">Section&nbsp;3.7.6, &#8220;Reading &amp; Searching for Identities (Legacy API)&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-rest.html#rest-api-update-legacy" title="3.7.7.&nbsp;Updating Identities (Legacy API)">Section&nbsp;3.7.7, &#8220;Updating Identities (Legacy API)&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-rest.html#rest-api-delete-legacy" title="3.7.8.&nbsp;Deleting Identities (Legacy API)">Section&nbsp;3.7.8, &#8220;Deleting Identities (Legacy API)&#8221;</a></p></li></ul></div></li></ul></div><div class="section" title="3.7.1.&nbsp;Creating Identities"><div class="titlepage"><div><div><h3 class="title"><a name="rest-api-create-identity"></a>3.7.1.&nbsp;Creating Identities</h3></div></div></div><p>OpenAM lets administrators create a user profile by making 
    an HTTP POST of the JSON representation of the profile to
-   <code class="literal">/json/users/<em class="replaceable"><code>realm</code></em>/?_action=create</code>.
-   To add a user to the Top Level Realm, you do not need to specify the realm.</p><p>The following example shows an administrator creating a new user. The 
+   <code class="literal">/json/users/?_action=create</code>.</p><p>The following example shows an administrator creating a new user. The 
     only required fields are <code class="literal">name</code> and 
     <code class="literal">userpassword</code>. If no other name is provided, the entry
     you make for <code class="literal">name</code> defaults to both the user id and the
@@ -1502,11 +1498,10 @@ $ curl --request PUT --header "iplanetDirectoryPro: AQIC5w...2NzEz*"
     the profile on successful creation. On failure, OpenAM returns a JSON
     representation of the error including the
     <a class="link" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html" target="_blank">HTTP status code</a>.</p></div><div class="section" title="3.7.2.&nbsp;Reading Identities"><div class="titlepage"><div><div><h3 class="title"><a name="rest-api-read-identity"></a>3.7.2.&nbsp;Reading Identities</h3></div></div></div><p>OpenAM lets users and administrators read profiles by requesting an HTTP
-   GET on <code class="literal">/json/<em class="replaceable"><code>subrealm</code></em>/users/<em class="replaceable"><code>user-id</code></em></code>.
+   GET on <code class="literal">/json/users/<em class="replaceable"><code>user-id</code></em></code>.
    This allows users and administrators to verify user data, status, and directory.
    If users or administrators see missing or incorrect information, they can write 
-   down the correct information and add it using <a class="xref" href="chap-rest.html#rest-api-update-identity" title="3.7.3.&nbsp;Updating Identities">Section&nbsp;3.7.3, &#8220;Updating Identities&#8221;</a>.
-   To read a profile on the Top Level Realm, you do not need to specify the realm.</p><p>Users can review the data associated with their accounts and administrators 
+   down the correct information and add it using <a class="xref" href="chap-rest.html#rest-api-update-identity" title="3.7.3.&nbsp;Updating Identities">Section&nbsp;3.7.3, &#8220;Updating Identities&#8221;</a>.</p><p>Users can review the data associated with their accounts and administrators 
    can read other user's profiles. The following example shows an administrator 
    accessing user data. Users can view their information by changing
    <code class="literal">username=amadmin</code> to <code class="literal"><em class="replaceable"><code>user-id</code></em></code>.</p><div class="screen"><pre class="brush: plain;">$ curl "https://openam.example.com:8443/openam/identity/authenticate
@@ -1558,8 +1553,7 @@ $ curl --header "iplanetDirectoryPro: AQIC5w...2NzEz*"
     error including the
     <a class="link" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html" target="_blank">HTTP status code</a>.</p></div><div class="section" title="3.7.3.&nbsp;Updating Identities"><div class="titlepage"><div><div><h3 class="title"><a name="rest-api-update-identity"></a>3.7.3.&nbsp;Updating Identities</h3></div></div></div><p>OpenAM lets users update their own profiles, and lets administrators
    update other users' profiles. To update an identity do an HTTP PUT of the JSON 
-   representation of the changes to <code class="literal">/json/<em class="replaceable"><code>subrealm</code></em>/users/<em class="replaceable"><code>user-id</code></em></code>. 
-   To update a profile on the Top Level Realm, you do not need to specify the realm.</p><p>The following example shows how users can update their own
+   representation of the changes to <code class="literal">/json/users/<em class="replaceable"><code>user-id</code></em></code>.</p><p>The following example shows how users can update their own
     profiles.</p><div class="screen"><pre class="brush: plain;">$ curl "https://openam.example.com:8443/openam/identity/authenticate
  ?username=demo&amp;password=changeit"
 token.id=AQIC5...Y3MTAx*
@@ -1613,8 +1607,7 @@ $ curl --request PUT --header "iplanetDirectoryPro: AQIC5...Y3MTAx*"
     profile on success. On failure, OpenAM returns a JSON representation of the
     error including the
     <a class="link" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html" target="_blank">HTTP status code</a>.</p></div><div class="section" title="3.7.4.&nbsp;Deleting Identities"><div class="titlepage"><div><div><h3 class="title"><a name="rest-api-delete-identity"></a>3.7.4.&nbsp;Deleting Identities</h3></div></div></div><p>OpenAM lets administrators delete a user profile by making an HTTP DELETE 
-   call to <code class="literal">/json/<em class="replaceable"><code>subrealm</code></em>/users/<em class="replaceable"><code>user-id</code></em></code>. 
-   To delete a user from the Top Level Realm, you do not need to specify the realm.</p><p>The following example removes a user from the top level
+   call to <code class="literal">/json/users/<em class="replaceable"><code>user-id</code></em></code>.</p><p>The following example removes a user from the top level
     realm. Only administrators should delete users. The user id is the only 
     field required to delete a user.</p><div class="screen"><pre class="brush: plain;">$ curl "https://openam.example.com:8443/openam/identity/authenticate
  ?username=amadmin&amp;password=password"
@@ -1709,109 +1702,7 @@ string=bjensen</pre></div></div><div class="section" title="3.7.7.&nbsp;Updating
  admin=AQIC5wM2LY4SfcxSYA8eG-vrNHb_W7nG8XkfAGyRyuaebDY.*AAJTSQACMDE.*
  &amp;identity_name=testuser
  &amp;identity_realm=%2F
- &amp;identity_type=user"</pre></div></div></div><div class="section" title="3.8.&nbsp;Realm Management"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="rest-api-crud-realm"></a>3.8.&nbsp;Realm Management</h2></div></div></div><div class="toc"><dl><dt><span class="section"><a href="chap-rest.html#rest-api-parameters-realm">3.8.1. Default Parameters for Realms</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-create-realm">3.8.2. Creating Realms</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-read-realm">3.8.3. Reading Realms</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-update-realm">3.8.4. Updating Realms</a></span></dt><dt><span class="section"><a href="chap-rest.html#rest-api-delete-realm">3.8.5. Deleting Realms</a></span></dt></dl></div><a class="indexterm" name="d11930e1278"></a><p>This section shows how to create, read, update, and delete realms 
-  using the RESTful APIs.</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>Under the <code class="literal">/json/realms</code> endpoint, you find the 
-    newer JSON-based API.</p><div class="itemizedlist"><p>The following sections cover this JSON-based API.</p><ul class="itemizedlist" type="circle"><li class="listitem"><p><a class="xref" href="chap-rest.html#rest-api-parameters-realm" title="3.8.1.&nbsp;Default Parameters for Realms">Section&nbsp;3.8.1, &#8220;Default Parameters for Realms&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-rest.html#rest-api-create-realm" title="3.8.2.&nbsp;Creating Realms">Section&nbsp;3.8.2, &#8220;Creating Realms&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-rest.html#rest-api-read-realm" title="3.8.3.&nbsp;Reading Realms">Section&nbsp;3.8.3, &#8220;Reading Realms&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-rest.html#rest-api-update-realm" title="3.8.4.&nbsp;Updating Realms">Section&nbsp;3.8.4, &#8220;Updating Realms&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-rest.html#rest-api-delete-realm" title="3.8.5.&nbsp;Deleting Realms">Section&nbsp;3.8.5, &#8220;Deleting Realms&#8221;</a></p></li></ul></div></li></ul></div><div class="section" title="3.8.1.&nbsp;Default Parameters for Realms"><div class="titlepage"><div><div><h3 class="title"><a name="rest-api-parameters-realm"></a>3.8.1.&nbsp;Default Parameters for Realms</h3></div></div></div><p>Realms have a number of fields entered with the default loading.
-    The following table provides information on what the default realm settings are,
-    and these settings can be updated, added, or deleted when updating
-    a realm.</p><div class="table"><a name="realm-parameter"></a><div class="table-title">Table&nbsp;3.1.&nbsp;Realm Parameters for JSON-based API</div><div class="table-contents"><table summary="Realm Parameters for JSON-based API" width="100%" border="0"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Realm Parameter</th><th>Default</th><th>Purpose</th></tr></thead><tbody><tr><td>realm</td><td>None - the only required field to add a realm</td><td><p>The name of the realm</p>
-         <p>Example: <code class="literal">testRealm</code></p></td></tr><tr><td>sunOrganizationStatus</td><td>None</td><td><p>The status of the realm</p>
-         <p><code class="literal">Active</code> or <code class="literal">Inactive</code></p></td></tr><tr><td>sunOrganizationAliases</td><td>None</td><td><p>Any applicable aliases associated with the realm. Be aware that
-        an alias can only be used once. Entering an alias used by another realm
-        will remove the alias from that realm and you will lose configuration.</p>
-         <p>Example: <code class="literal">opensso.example.com</code></p></td></tr><tr><td>serviceNames</td><td><code class="literal">sunAMAuthHOTPService</code>
-        <code class="literal">iPlanetAMAuthConfiguration</code>        
-        <code class="literal">sunAMAuthFederationService</code>
-        <code class="literal">sunIdentityRepositoryService</code>
-        <code class="literal">iPlanetAMPolicyConfigService</code>
-        <code class="literal">iPlanetAMAuthService</code>
-        <code class="literal">iPlanetAMAuthLDAPService</code>
-        <code class="literal">sunAMAuthDataStoreService</code>
-        <code class="literal">sunAMAuthSAEService</code>
-        <code class="literal">sunAMDelegationService</code>
-        <code class="literal">sunAMAuthWSSAuthModuleService</code>
-        <code class="literal">iPlanetAMAuthOATHService</code>
-        </td><td>Services needed for the realm, including authentication modules</td></tr></tbody></table></div></div><br class="table-break"></div><div class="section" title="3.8.2.&nbsp;Creating Realms"><div class="titlepage"><div><div><h3 class="title"><a name="rest-api-create-realm"></a>3.8.2.&nbsp;Creating Realms</h3></div></div></div><p>OpenAM lets administrators create a realm by making 
-   an HTTP POST of the JSON representation of the profile to
-   <code class="literal">/json/realms/?_action=create</code>.</p><p>You can create realms using an HTTP POST of the JSON representation 
-    of the profile to <code class="literal">/json/realms/?_action=create</code>, as shown in 
-    the following example. The only required field is <code class="literal">realm</code>, 
-    but the realm will not be active if the status is not set.</p><div class="screen"><pre class="brush: plain;">$ curl "https://openam.example.com:8443/openam/identity/authenticate
- ?username=amadmin&amp;password=password"
-token.id=AQIC5w...2NzEz*
-$ curl --request POST --header "iplanetDirectoryPro: AQIC5w...2NzEz*"
- --header "Content-Type: application/json"
- --data '{ "realm": "testRealm" }'
- https://openam.example.com:8443/openam/json/realms/?_action=create
-{"realmCreated":"/testRealm"}</pre></div><p>You can also set the <code class="literal">sunOrganizationAliases</code> parameter,
-    but it can only be assigned to one realm (usually the top level realm). Before
-    setting this parameter, make sure it is not already assigned elsewhere. If you 
-    replace remove it from another realm, you will lose your configuration.</p><p>Alternatively, administrators can create realms by the specific realm
-    name using the HTTP PUT of the JSON representation of the changes to 
-    <code class="literal">/json/realms/<em class="replaceable"><code>realm-id</code></em></code>, as
-    shown in the following example.</p><div class="screen"><pre class="brush: plain;">$ curl "https://openam.example.com:8443/openam/identity/authenticate
- ?username=amadmin&amp;password=password"
-token.id=AQIC5w...2NzEz*
-$ curl --request PUT --header "iplanetDirectoryPro: AQIC5w...2NzEz*"
- --header "Content-Type: application/json"
- --data '{ "sunOrganizationStatus": "Active" }'
- https://openam.example.com:8443/openam/json/realms/testRealm
-{</pre></div><p>As shown in the examples, OpenAM returns the JSON representation of
-    the profile on successful creation. On failure, OpenAM returns a JSON
-    representation of the error including the
-    <a class="link" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html" target="_blank">HTTP status code</a>.</p></div><div class="section" title="3.8.3.&nbsp;Reading Realms"><div class="titlepage"><div><div><h3 class="title"><a name="rest-api-read-realm"></a>3.8.3.&nbsp;Reading Realms</h3></div></div></div><p>OpenAM lets administrators read realms by requesting an HTTP GET on 
-   <code class="literal">/json/realms/<em class="replaceable"><code>realm-id</code></em></code>. This 
-   allows administrators to review all active realm services for the realm, 
-   like policy configuration and modules. If users or administrators see missing 
-   information (such as Active status) or incorrect information, they can write 
-   down the correct information and add it using <a class="xref" href="chap-rest.html#rest-api-update-realm" title="3.8.4.&nbsp;Updating Realms">Section&nbsp;3.8.4, &#8220;Updating Realms&#8221;</a></p><p>The following example shows an administrator reciving information about
-    the <code class="literal">testRealm</code>.</p><div class="screen"><pre class="brush: plain;">$ curl "https://openam.example.com:8443/openam/identity/authenticate
- ?username=amadmin&amp;password=password"
-token.id=AQIC5w...2NzEz*
-$ curl --header "iplanetDirectoryPro: AQIC5w...2NzEz*"
- https://openam.example.com:8443/openam/json/realms/testRealm
-{
-    "serviceNames":[
-                  "sunAMAuthHOTPService",
-                  "iPlanetAMAuthConfiguration",
-                  "sunAMAuthFederationService",
-                  "sunIdentityRepositoryService",
-                  "iPlanetAMPolicyConfigService",
-                  "iPlanetAMAuthService",
-                  "iPlanetAMAuthLDAPService",
-                  "sunAMAuthDataStoreService",
-                  "sunAMAuthSAEService",
-                  "sunAMDelegationService",
-                  "sunAMAuthWSSAuthModuleService",
-                  "iPlanetAMAuthOATHService"
-    ]
-}</pre></div><p>As shown in the example, OpenAM returns the JSON representation of the
-    profile on success. On failure, OpenAM returns a JSON representation of the
-    error including the
-    <a class="link" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html" target="_blank">HTTP status code</a>.</p></div><div class="section" title="3.8.4.&nbsp;Updating Realms"><div class="titlepage"><div><div><h3 class="title"><a name="rest-api-update-realm"></a>3.8.4.&nbsp;Updating Realms</h3></div></div></div><p>OpenAM lets administrators update realms. To update a realm, do an HTTP PUT 
-   of the JSON representation of the changes to
-   <code class="literal">/json/realms/<em class="replaceable"><code>realm-id</code></em></code>.</p><p>The following example shows how to update a realm.</p><div class="screen"><pre class="brush: plain;">$ curl "https://openam.example.com:8443/openam/identity/authenticate
- ?username=amadmin&amp;password=password"
-token.id=AQIC5...Y3MTAx*
-$ curl --request PUT --header "iplanetDirectoryPro: AQIC5...Y3MTAx*"
- --header "Content-Type: application/json"
- --data '{ "sunOrganizationStatus": "Active" }'
- https://openam.example.com:8443/openam/json/realms/testRealm</pre></div><p>As shown in the example, OpenAM returns the JSON representation of the
-    profile on success. On failure, OpenAM returns a JSON representation of the
-    error including the
-    <a class="link" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html" target="_blank">HTTP status code</a>.</p></div><div class="section" title="3.8.5.&nbsp;Deleting Realms"><div class="titlepage"><div><div><h3 class="title"><a name="rest-api-delete-realm"></a>3.8.5.&nbsp;Deleting Realms</h3></div></div></div><p>OpenAM lets administrators delete a realm by making an HTTP DELETE call to
-   <code class="literal">/json/realms/<em class="replaceable"><code>realm-id</code></em></code>.</p><p>The following example deletes a realm. The top level realm cannot
-    be deleted. Only administrators should delete realms. The name of the realm
-    is the only field required to delete the realm.</p><p>Make sure that you do not have any information you need within a realm 
-    before deleting it. Once a realm is deleted, the only way to restore it is 
-    to return to a backed up deployment of OpenAM.</p><div class="screen"><pre class="brush: plain;">$ curl "https://openam.example.com:8443/openam/identity/authenticate
- ?username=amadmin&amp;password=password"
-token.id=AQIC5w...2NzEz*
-$ curl --request DELETE --header "iplanetDirectoryPro: AQIC5w...2NzEz*"
- https://openam.example.com:8443/openam/json/realms/testRealm
-{"success":"true"}</pre></div><p>On success, OpenAM returns a JSON object indicating success. On
-    failure, OpenAM returns a JSON representation of the error including the
-    <a class="link" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html" target="_blank">HTTP status code</a>.</p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-client-dev.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-jdk.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;2.&nbsp;Developing Client Applications&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;4.&nbsp;Using the OpenAM Java SDK</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssue.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+ &amp;identity_type=user"</pre></div></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-client-dev.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-jdk.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;2.&nbsp;Developing Client Applications&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;4.&nbsp;Using the OpenAM Java SDK</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssue.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
