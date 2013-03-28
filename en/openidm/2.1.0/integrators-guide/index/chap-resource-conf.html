@@ -1009,7 +1009,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 <!-- END SyntaxHighlighter 3.0.83 -->
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
-</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;9.&nbsp;Connecting to External Resources</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-logs.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-synchronization.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;9.&nbsp;Connecting to External Resources"><div class="titlepage"><div><div><h2 class="title"><a name="chap-resource-conf"></a>Chapter&nbsp;9.&nbsp;Connecting to External Resources</h2></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="section"><a href="chap-resource-conf.html#openidm-openicf">9.1. About OpenIDM &amp; OpenICF</a></span></dt><dt><span class="section"><a href="chap-resource-conf.html#connector-info-provider-conf">9.2. Accessing Remote Connectors</a></span></dt><dt><span class="section"><a href="chap-resource-conf.html#openicf-provisioner-conf">9.3. Configuring Connectors</a></span></dt><dt><span class="section"><a href="chap-resource-conf.html#connector-examples">9.4. Connector Configuration Examples</a></span></dt><dt><span class="section"><a href="chap-resource-conf.html#connector-wiz">9.5. Creating Default Connector Configurations</a></span></dt></dl></div><a class="indexterm" name="d229e2853"></a><a class="indexterm" name="d229e2856"></a><a class="indexterm" name="d229e2859"></a><p>This chapter describes how to connect to external resources such
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;9.&nbsp;Connecting to External Resources</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-logs.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-synchronization.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;9.&nbsp;Connecting to External Resources"><div class="titlepage"><div><div><h2 class="title"><a name="chap-resource-conf"></a>Chapter&nbsp;9.&nbsp;Connecting to External Resources</h2></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="section"><a href="chap-resource-conf.html#openidm-openicf">9.1. About OpenIDM &amp; OpenICF</a></span></dt><dt><span class="section"><a href="chap-resource-conf.html#connector-info-provider-conf">9.2. Accessing Remote Connectors</a></span></dt><dt><span class="section"><a href="chap-resource-conf.html#openicf-provisioner-conf">9.3. Configuring Connectors</a></span></dt><dt><span class="section"><a href="chap-resource-conf.html#connector-examples">9.4. Connector Configuration Examples</a></span></dt><dt><span class="section"><a href="chap-resource-conf.html#connector-wiz">9.5. Creating Default Connector Configurations</a></span></dt></dl></div><a class="indexterm" name="d229e2844"></a><a class="indexterm" name="d229e2847"></a><a class="indexterm" name="d229e2850"></a><p>This chapter describes how to connect to external resources such
  as LDAP, Active Directory, flat files, and others. Configurations shown
  here are simplified to show essential aspects. Not all resources support
  all OpenIDM operations, however the resources shown here support
@@ -1031,7 +1031,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
  as required, and copy them to the <code class="filename">openidm/conf</code> directory.
  </p><div class="section" title="9.1.&nbsp;About OpenIDM &amp; OpenICF"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="openidm-openicf"></a>9.1.&nbsp;About OpenIDM &amp; OpenICF</h2></div></div></div><p>The following figure shows how OpenIDM can connect to resources
   through an OpenICF server. In most cases, the OpenICF server runs as part
-  of OpenIDM.</p><div class="mediaobject" title="OpenICF architecture"><a name="figure-openicfarch"></a><img src="images/OpenICFArch.png" longdesc="/Users/lana/Workspace/openidm/trunk/target/docbkx/html/integrators-guide/index/figure-openicfarch.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-openicfarch.html" target="longdesc">D</a>]</span></div></div><p>OpenICF provides a common service provider interface to allow identity
+  of OpenIDM.</p><div class="mediaobject" title="OpenICF architecture"><a name="figure-openicfarch"></a><img src="images/OpenICFArch.png" longdesc="/Users/mark/Downloads/openidm/target/docbkx/html/integrators-guide/index/figure-openicfarch.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-openicfarch.html" target="longdesc">D</a>]</span></div></div><p>OpenICF provides a common service provider interface to allow identity
   services access to the resources that contain user information. OpenICF uses
   a connection server that can run as a local connector server inside OpenIDM,
   or as a remote connector server that is a standalone process.</p><p>A remote connector server is required when access libraries that cannot 
@@ -1042,7 +1042,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   connector server implemented as a .NET service.)</p><div class="tip" title="Tip" style="font-style: italic;"><h3 class="title">Tip</h3><p>Not only .NET connector servers but also Java connector servers can be 
    run as standalone, remote services. Run them as remote services for 
    scalability, or to have the service run in the cloud.</p><p>By default, and for convenience, OpenIDM includes a Java connector
-   server that runs as a <code class="literal">"#LOCAL"</code> service.</p></div></div><div class="section" title="9.2.&nbsp;Accessing Remote Connectors"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="connector-info-provider-conf"></a>9.2.&nbsp;Accessing Remote Connectors</h2></div></div></div><a class="indexterm" name="d229e2928"></a><p>When you configure remote connectors, you must use the connector info 
+   server that runs as a <code class="literal">"#LOCAL"</code> service.</p></div></div><div class="section" title="9.2.&nbsp;Accessing Remote Connectors"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="connector-info-provider-conf"></a>9.2.&nbsp;Accessing Remote Connectors</h2></div></div></div><a class="indexterm" name="d229e2919"></a><p>When you configure remote connectors, you must use the connector info 
   provider service to connect through remote connector servers. The configuration is
   stored in the configuration file,
   <code class="filename">openidm/conf/provisioner.openicf.connectorinfoprovider.json</code>.
@@ -1145,7 +1145,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   "xsdIcfFilePath": "samples/sample1/data/resource-schema-1.xsd",
   "xsdFilePath": "samples/sample1/data/resource-schema-extension.xsd",
   "xmlFilePath": "samples/sample1/data/xmlConnectorData.xml"
- }</pre><dl><dt><span class="term"><em class="replaceable"><code>property</code></em></span></dt><dd><p>Individual properties depend on the type of connector.</p></dd></dl></div><div class="variablelist" title="Object Types"><a name="object-types"></a><div class="variablelist-title">Object Types</div><a class="indexterm" name="d229e3250"></a><p>This configuration object specifies the supported object types. The
+ }</pre><dl><dt><span class="term"><em class="replaceable"><code>property</code></em></span></dt><dd><p>Individual properties depend on the type of connector.</p></dd></dl></div><div class="variablelist" title="Object Types"><a name="object-types"></a><div class="variablelist-title">Object Types</div><a class="indexterm" name="d229e3241"></a><p>This configuration object specifies the supported object types. The
    property name defines the <code class="literal">objectType</code> used in the
    URI: <code class="literal">system/$<em class="replaceable"><code>systemName</code></em>/$<em class="replaceable"><code>objectType</code></em></code></p><p>The configuration is based on <a class="link" href="http://tools.ietf.org/html/draft-zyp-json-schema-03" target="_blank">JSON
    Schema</a> with extensions described below.</p><p>Attribute names which start and/or end with <code class="literal">__</code> are
@@ -1245,7 +1245,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
      service uses this value. Default value:
      <code class="literal">DO_NOTHING</code>.</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">DO_NOTHING</code>: On operation the service does
        nothing.</p></li><li class="listitem"><p><code class="literal">THROW_EXCEPTION</code>: On operation the service
-       throws a  <code class="literal">ForbiddenException</code> exception.</p></li></ul></div></dd></dl></div></div><div class="section" title="9.4.&nbsp;Connector Configuration Examples"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="connector-examples"></a>9.4.&nbsp;Connector Configuration Examples</h2></div></div></div><div class="toc"><dl><dt><span class="section"><a href="chap-resource-conf.html#xml-file-connector">9.4.1. XML File Connector</a></span></dt><dt><span class="section"><a href="chap-resource-conf.html#ldap-connector">9.4.2. Generic LDAP Connector</a></span></dt><dt><span class="section"><a href="chap-resource-conf.html#active-directory-connector">9.4.3. Active Directory Connector</a></span></dt><dt><span class="section"><a href="chap-resource-conf.html#csv-file-connector">9.4.4. CSV File Connector</a></span></dt><dt><span class="section"><a href="chap-resource-conf.html#scripted-sql-connector">9.4.5. Scripted SQL Connector</a></span></dt></dl></div><a class="indexterm" name="d229e3503"></a><p>This section explains provisioner configurations for common
+       throws a  <code class="literal">ForbiddenException</code> exception.</p></li></ul></div></dd></dl></div></div><div class="section" title="9.4.&nbsp;Connector Configuration Examples"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="connector-examples"></a>9.4.&nbsp;Connector Configuration Examples</h2></div></div></div><div class="toc"><dl><dt><span class="section"><a href="chap-resource-conf.html#xml-file-connector">9.4.1. XML File Connector</a></span></dt><dt><span class="section"><a href="chap-resource-conf.html#ldap-connector">9.4.2. Generic LDAP Connector</a></span></dt><dt><span class="section"><a href="chap-resource-conf.html#active-directory-connector">9.4.3. Active Directory Connector</a></span></dt><dt><span class="section"><a href="chap-resource-conf.html#csv-file-connector">9.4.4. CSV File Connector</a></span></dt><dt><span class="section"><a href="chap-resource-conf.html#scripted-sql-connector">9.4.5. Scripted SQL Connector</a></span></dt></dl></div><a class="indexterm" name="d229e3494"></a><p>This section explains provisioner configurations for common
   connectors. Also see <a class="xref" href="chap-resource-conf.html#connector-wiz" title="9.5.&nbsp;Creating Default Connector Configurations">Section&nbsp;9.5, &#8220;Creating Default Connector Configurations&#8221;</a> for instructions
   on interactively building connector configurations.</p><div class="section" title="9.4.1.&nbsp;XML File Connector"><div class="titlepage"><div><div><h3 class="title"><a name="xml-file-connector"></a>9.4.1.&nbsp;XML File Connector</h3></div></div></div><p>The following example shows an excerpt of the provisioner
    configuration for an XML file connector.</p><pre class="brush: javascript;">
@@ -1385,11 +1385,12 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
     as a proxy to provide to any authenticated application access to the C# bundles 
     deployed within the C# connector server.
         </p><p>Make sure the following requirements are met prior to installing .NET.
-     </p><div class="procedure" title="Procedure&nbsp;9.1.&nbsp;Installing the .NET Connector Server"><a name="d229e3838"></a><div class="procedure-title">Procedure&nbsp;9.1.&nbsp;Installing the .NET Connector Server</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Download the Connector Server from <a class="link" href="http://builds.forgerock.org/job/OpenICF%20-%20Framework%20(dotnet)/" target="_blank">http://builds.forgerock.org/job/OpenICF%20-%20Framework%20(dotnet)/</a>.
-     </p></li><li class="step" title="Step 2"><p>Execute ServiceInstall-1.1.0.xxxx.msi. 
+     </p><div class="procedure" title="Procedure&nbsp;9.1.&nbsp;Installing the .NET Connector Server"><a name="d229e3829"></a><div class="procedure-title">Procedure&nbsp;9.1.&nbsp;Installing the .NET Connector Server</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Download the OPENICF .NET Connector Server from the OpenIDM download
+     page under the ForgeRock <a class="link" href="http://forgerock.com/download-stack/" target="_blank">Open Stack download page</a>.
+     </p></li><li class="step" title="Step 2"><p>Execute ServiceInstall-1.1.1.0-dotnet.msi.
      </p></li><li class="step" title="Step 3"><p>Complete the wizard.
      </p></li></ol></div><p>When the wizard has run, the Connector Server is installed as a
-   Windows Service.</p><div class="procedure" title="Procedure&nbsp;9.2.&nbsp;Running the .NET Connector Server"><a name="d229e3855"></a><div class="procedure-title">Procedure&nbsp;9.2.&nbsp;Running the .NET Connector Server</div><p>The .NET Connector Server can be started one of two ways.
+   Windows Service.</p><div class="procedure" title="Procedure&nbsp;9.2.&nbsp;Running the .NET Connector Server"><a name="d229e3846"></a><div class="procedure-title">Procedure&nbsp;9.2.&nbsp;Running the .NET Connector Server</div><p>The .NET Connector Server can be started one of two ways.
     </p><ol class="procedure" type="1"><li class="step" title="Step 1"><p>In the Microsoft Service Console, go to <code class="literal">Start</code>, type 
      <code class="literal">Services</code>, <code class="literal">Services</code>.
      </p><p>or</p></li><li class="step" title="Step 2"><p>In the command prompt, go to <code class="literal">Start</code>, type <code class="literal">cmd</code>,
@@ -1399,7 +1400,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
      </p></li><li class="step" title="Step 4"><p>Enter <code class="literal">cd Program Files (x86)/Identity Connectors/Connector Server</code>.
      </p></li><li class="step" title="Step 5"><p>Start the server with the following command: 
       </p><div class="screen"><pre class="brush: plain;">ConnectorServer.exe/run</pre></div><p>.
-     </p></li></ol></div><div class="procedure" title="Procedure&nbsp;9.3.&nbsp;Configuring the .NET Connector Server"><a name="d229e3904"></a><div class="procedure-title">Procedure&nbsp;9.3.&nbsp;Configuring the .NET Connector Server</div><p>After starting the Microsoft Services Console, follow these steps to configure
+     </p></li></ol></div><div class="procedure" title="Procedure&nbsp;9.3.&nbsp;Configuring the .NET Connector Server"><a name="d229e3895"></a><div class="procedure-title">Procedure&nbsp;9.3.&nbsp;Configuring the .NET Connector Server</div><p>After starting the Microsoft Services Console, follow these steps to configure
      the .NET Connector Server.
      </p><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Check to see if the Connector Server is currently running. If so, stop it. 
       All configuration changes require that the Connector Server be stopped and
@@ -1443,10 +1444,11 @@ initializeData="c:\connectorserver2.log" traceOutputOptions="DateTime"&gt;
        For very verbose logging you can set the value to "Verbose" or "All". The 
        amount of logging performed has a direct effect on the performance of the 
        Connector Servers, so be careful of the setting.
-       </p></div></li><li class="step" title="Step 5"><p>Download the Active Directory Connector from <a class="link" href="http://builds.forgerock.org/job/OpenICF%20-%20Framework%20(dotnet)/" target="_blank">http://builds.forgerock.org/job/OpenICF%20-%20Framework%20(dotnet)/</a>.
+       </p></div></li><li class="step" title="Step 5"><p>Download the AD Connector from the OpenIDM download page under the
+      ForgeRock <a class="link" href="http://forgerock.com/download-stack/" target="_blank">Open Stack download page</a>.
       </p></li><li class="step" title="Step 6"><p>Unzip the directory in the Connector Server folder.
       </p></li><li class="step" title="Step 7"><p>Start the Connector Server service.
-      </p></li></ol></div><div class="procedure" title="Procedure&nbsp;9.4.&nbsp;Configuring the .NET Connector Server with OpenIDM"><a name="d229e3987"></a><div class="procedure-title">Procedure&nbsp;9.4.&nbsp;Configuring the .NET Connector Server with OpenIDM</div><p>When you configure remote connectors, you must use the connector 
+      </p></li></ol></div><div class="procedure" title="Procedure&nbsp;9.4.&nbsp;Configuring the .NET Connector Server with OpenIDM"><a name="d229e3978"></a><div class="procedure-title">Procedure&nbsp;9.4.&nbsp;Configuring the .NET Connector Server with OpenIDM</div><p>When you configure remote connectors, you must use the connector 
      info provider service to connect through remote connector servers. 
      The configuration is stored in the configuration file, 
      <code class="filename">openidm/conf/provisioner.openicf.connectorinfoprovider.json</code>. 
@@ -1565,12 +1567,12 @@ _action=recon&amp;mapping=systemADAccounts_managedUser"</pre></div><p>This will 
       </p></li></ol></div></div><div class="section" title="9.4.3.2.&nbsp;Installing a Standalone Java Connector Server"><div class="titlepage"><div><div><h4 class="title"><a name="install-standalone-connector"></a>9.4.3.2.&nbsp;Installing a Standalone Java Connector Server</h4></div></div></div><p>It may be necessary to set up a remote Java Connector Server (JSC). This
     section provides directions for setting up the standalone connecter on
     Unix/Linux and Windows.
-    </p><div class="procedure" title="Procedure&nbsp;9.5.&nbsp;Installing a Standalone Connector Server for Unix/Linux"><a name="d229e4110"></a><div class="procedure-title">Procedure&nbsp;9.5.&nbsp;Installing a Standalone Connector Server for Unix/Linux</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Download the <code class="filename">OpenICF Java zip</code> file from 
-       <a class="link" href="http://forgerock.org/openicf.html" target="_blank">http://forgerock.org/openicf.html</a>.
+    </p><div class="procedure" title="Procedure&nbsp;9.5.&nbsp;Installing a Standalone Connector Server for Unix/Linux"><a name="d229e4101"></a><div class="procedure-title">Procedure&nbsp;9.5.&nbsp;Installing a Standalone Connector Server for Unix/Linux</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Download the OPENICF JAVA Connector Server from the OpenIDM
+       download page under the ForgeRock <a class="link" href="http://forgerock.com/download-stack/" target="_blank">Open Stack download page</a>.
        </p></li><li class="step" title="Step 2"><p>Run the terminal and unpack it. The following command will unzip the file
        in the current folder, so make sure to move to the appropriate location prior to
        running the command.
-       </p><div class="screen"><pre class="brush: plain;">unzip openicf-1.1.0.1-SNAPSHOT-java.zip</pre></div></li><li class="step" title="Step 3"><p>Change the directory to OpenICF using the following command:
+       </p><div class="screen"><pre class="brush: plain;">unzip openicf-1.1.1.0-java.zip</pre></div></li><li class="step" title="Step 3"><p>Change the directory to OpenICF using the following command:
        </p><div class="screen"><pre class="brush: plain;">$ cd path/to/openicf</pre></div></li><li class="step" title="Step 4"><p>If needed, secure the communication between OpenIDM and JCS. The JCS 
        uses a property called <code class="literal">secret key</code> to authenticate the connection. 
        The default secret key value is <code class="literal">changeit</code>. To change the value 
@@ -1587,8 +1589,9 @@ _action=recon&amp;mapping=systemADAccounts_managedUser"</pre></div><p>This will 
        </p><div class="screen"><pre class="brush: plain;">java -cp "./lib/framework/*"
 org.identityconnectors.framework.server.Main -run -properties 
 ./conf/ConnectorServer.properties</pre></div></li><li class="step" title="Step 7"><p>If necessary, you can stop the JCS by pressing <code class="literal">^C</code>.
-       </p></li></ol></div><div class="procedure" title="Procedure&nbsp;9.6.&nbsp;Installing a Standalone Connector Server for Windows"><a name="d229e4167"></a><div class="procedure-title">Procedure&nbsp;9.6.&nbsp;Installing a Standalone Connector Server for Windows</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Download the <code class="filename">OpenICF Java zip</code> file from 
-       <a class="link" href="http://forgerock.org/openicf.html" target="_blank">http://forgerock.org/openicf.html</a>. 
+       </p></li></ol></div><div class="procedure" title="Procedure&nbsp;9.6.&nbsp;Installing a Standalone Connector Server for Windows"><a name="d229e4155"></a><div class="procedure-title">Procedure&nbsp;9.6.&nbsp;Installing a Standalone Connector Server for Windows</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Download the OPENICF JAVA Connector Server from the OpenIDM
+       download page under the ForgeRock <a class="link" href="http://forgerock.com/download-stack/" target="_blank">Open Stack download
+       page</a>.
        </p></li><li class="step" title="Step 2"><p>Unpack the zip file in the desired location, for example 
        <code class="literal">C:\openicf</code>.
        </p></li><li class="step" title="Step 3"><p>Run the command line (<code class="literal">Start</code>, type <code class="literal">cmd</code>,
@@ -1620,14 +1623,14 @@ org.identityconnectors.framework.server.Main -run -properties
        </p><div class="section" title="9.4.3.2.1.&nbsp;MySQL Database Example to Reconcile JCS Users"><div class="titlepage"><div><div><h5 class="title"><a name="example-mysql-jcs-reconciliation"></a>9.4.3.2.1.&nbsp;MySQL Database Example to Reconcile JCS Users</h5></div></div></div><p>This sample demonstrates using reconciliation of users stored in a MySQL 
       database on a remote machine. The JCS runs on the same machine as the MySQL 
       database and mediates the connection between OpenIDM and MySQL database.
-      </p><div class="procedure" title="Procedure&nbsp;9.7.&nbsp;Configuring JCS"><a name="d229e4273"></a><div class="procedure-title">Procedure&nbsp;9.7.&nbsp;Configuring JCS</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Download <a class="link" href="http://www.mysql.com/downloads/connector/j/" target="_blank">MySQL JDBC Driver</a>.        
+      </p><div class="procedure" title="Procedure&nbsp;9.7.&nbsp;Configuring JCS"><a name="d229e4258"></a><div class="procedure-title">Procedure&nbsp;9.7.&nbsp;Configuring JCS</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Download <a class="link" href="http://www.mysql.com/downloads/connector/j/" target="_blank">MySQL JDBC Driver</a>.        
           </p></li><li class="step" title="Step 2"><p>Unpack the <code class="filename">MySQL JDBC Driver</code> and copy the 
-          <code class="filename">mysql-connector-java-5.1.22-bin.jar</code> to the 
+          <code class="filename">mysql-connector-java-5.1.22-bin.jar</code> to the
           <code class="literal">openicf/lib</code> directory.
           </p></li><li class="step" title="Step 3"><p>Go to the <code class="literal">/tools</code> directory. The groovy scripts in the folder
          run on the JCS side. Copy them from <code class="literal">path/to/openidm/sample/sample3/tools</code>
          folder to <code class="literal">openicf/</code>.
-          </p></li></ol></div><div class="procedure" title="Procedure&nbsp;9.8.&nbsp;Configuring OpenIDM for the MySQL Database Example"><a name="d229e4306"></a><div class="procedure-title">Procedure&nbsp;9.8.&nbsp;Configuring OpenIDM for the MySQL Database Example</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Start OpenIDM. You can ignore errors like <code class="literal">cannot
+          </p></li></ol></div><div class="procedure" title="Procedure&nbsp;9.8.&nbsp;Configuring OpenIDM for the MySQL Database Example"><a name="d229e4291"></a><div class="procedure-title">Procedure&nbsp;9.8.&nbsp;Configuring OpenIDM for the MySQL Database Example</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Start OpenIDM. You can ignore errors like <code class="literal">cannot
           connect to database</code> and <code class="literal">cannot find jdbc driver</code>.
           These errors will be fixed once OpenIDM is configured and restarted.
           </p></li><li class="step" title="Step 2"><p>Go to the <code class="filename">provisioner.openicf.connectorinfoprovider.json</code>
@@ -1663,7 +1666,7 @@ $ cp samples/provisioners/provisioner.openicf.connectorinfoprovider.json ./conf<
 	        "connectorHostRef" : "mysql", 
 	        "bundleName" : "org.forgerock.openicf.connectors.db.openicf-scriptedsql
 	        -connector", 
-	        "bundleVersion" : "1.1.0.0-SNAPSHOT", 
+	        "bundleVersion" : "1.1.1.0",
 	        "connectorName" : "org.forgerock.openicf.scriptedsql.ScriptedSQLConnector" 
 	    }, 
 	    "producerBufferSize" : 100, 
@@ -1827,10 +1830,9 @@ $ cp samples/provisioners/provisioner.openicf.connectorinfoprovider.json ./conf<
              to the property <code class="literal">name</code> of 
              <code class="filename">provisioner.openicf.connectorinfoprovider.json</code>. This 
              indicates which connectorinfoprovider to use.
-             </p></li><li class="listitem"><p>The <code class="filename">bundleVersion : 1.1.0.0-SNAPSHOT</code> must be
-             exactly the same as <code class="filename">openicf-scriptedsql-connector-1.1.0.0-SNAPSHOT.jar</code>.
-             on JCS <code class="literal">/bundles</code> (the name will be different for other
-             versions, e.g., <code class="literal">1.1.0.1</code>). Unpack the <code class="literal">.jar</code>
+             </p></li><li class="listitem"><p>The <code class="filename">bundleVersion : 1.1.1.0</code> must be
+             exactly the same as <code class="filename">openicf-scriptedsql-connector-1.1.1.0.jar</code>.
+             on JCS <code class="literal">/bundles</code>. Unpack the <code class="literal">.jar</code>
              file, open <code class="filename">META-INF/MANIFEST.MF</code>, and search for the
              <code class="literal">Bundle-Version</code> property.
              </p></li><li class="listitem"><p>The path to groovy scripts should be <code class="literal">createScriptFileName : 
@@ -1869,9 +1871,9 @@ $ cp samples/provisioners/provisioner.openicf.connectorinfoprovider.json ./conf<
              </p></li></ol></div></div></div><div class="section" title="9.4.3.3.&nbsp;XML Example to Reconcile JCS Users"><div class="titlepage"><div><div><h4 class="title"><a name="example-xml-jcs-reconciliation"></a>9.4.3.3.&nbsp;XML Example to Reconcile JCS Users</h4></div></div></div><p>This sample demonstrates using reconciliation of users created in an XML 
       folder on a remote machine. The JCS provides a way for OpenIDM to pick up and 
       synchronize the OpenIDM repository with the remote XML user repository.
-      </p><div class="procedure" title="Procedure&nbsp;9.9.&nbsp;Configuring JCS"><a name="d229e4489"></a><div class="procedure-title">Procedure&nbsp;9.9.&nbsp;Configuring JCS</div><ul class="procedure"><li class="step" title="Step 1"><p>Copy the <code class="literal">openidm/samples/sample1/data</code> directory to
+      </p><div class="procedure" title="Procedure&nbsp;9.9.&nbsp;Configuring JCS"><a name="d229e4471"></a><div class="procedure-title">Procedure&nbsp;9.9.&nbsp;Configuring JCS</div><ul class="procedure"><li class="step" title="Step 1"><p>Copy the <code class="literal">openidm/samples/sample1/data</code> directory to
           a location on the JCS machine.
-          </p></li></ul></div><div class="procedure" title="Procedure&nbsp;9.10.&nbsp;Configuring OpenIDM for the XML Example"><a name="d229e4498"></a><div class="procedure-title">Procedure&nbsp;9.10.&nbsp;Configuring OpenIDM for the XML Example</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Start OpenIDM. You can ignore errors like <code class="literal">cannot
+          </p></li></ul></div><div class="procedure" title="Procedure&nbsp;9.10.&nbsp;Configuring OpenIDM for the XML Example"><a name="d229e4480"></a><div class="procedure-title">Procedure&nbsp;9.10.&nbsp;Configuring OpenIDM for the XML Example</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Start OpenIDM. You can ignore errors like <code class="literal">cannot
           connect to database</code> and <code class="literal">cannot find jdbc driver</code>.
           These errors will be fixed once OpenIDM has been configured and restarted.
           </p></li><li class="step" title="Step 2"><p>Copy the <code class="literal">openidm/samples/sample1/conf</code> directory
@@ -1903,7 +1905,7 @@ $ cp -r ./samples/sample1/conf ./conf</pre></div><p>For Windows, enter the follo
     "connectorRef" : { 
         "connectorHostRef" : "xml", 
         "bundleName" : "org.forgerock.openicf.connectors.file.openicf-xml-connector", 
-        "bundleVersion" : "1.1.0.0-SNAPSHOT", 
+        "bundleVersion" : "1.1.1.0",
         "connectorName" : "com.forgerock.openicf.xml.XMLConnector" 
     }, 
     "producerBufferSize" : 100, 
@@ -1997,10 +1999,9 @@ $ cp -r ./samples/sample1/conf ./conf</pre></div><p>For Windows, enter the follo
              to the property <code class="literal">name</code> of 
              <code class="filename">provisioner.openicf.connectorinfoprovider.json</code>. This 
              indicates which connectorinfoprovider to use.
-             </p></li><li class="listitem"><p>The <code class="filename">bundleVersion : 1.1.0.0-SNAPSHOT</code> must be
-             exactly the same as <code class="filename">openicf-scriptedsql-connector-1.1.0.0-SNAPSHOT.jar</code>.
-             on JCS <code class="literal">/bundles</code> (the name will be different for other
-             versions, e.g., <code class="literal">1.1.0.1</code>).
+             </p></li><li class="listitem"><p>The <code class="filename">bundleVersion : 1.1.1.0</code> must be
+             exactly the same as <code class="filename">openicf-scriptedsql-connector-1.1.1.0.jar</code>.
+             on JCS <code class="literal">/bundles</code>.
              </p></li><li class="listitem"><p>The path to <code class="literal">xsdIcfFilePath : /Program files (x86)/openicf/data/resource-schema-1.xs</code>
              </p></li></ul></div></li><li class="step" title="Step 7"><p>Restart OpenIDM to verify that all of the configuration changes have
           occurred. There should be no error message when OpenIDM is restarted.
@@ -2171,7 +2172,7 @@ $ cp -r ./samples/sample1/conf ./conf</pre></div><p>For Windows, enter the follo
         "createScriptFileName" : "/path/to/openidm/tools/CreateScript.groovy",
    </pre><p>If you require a traditional transaction with a manual commit for 
    a specific script, you can disable autocommit mode in the script or scripts 
-   for each action that requires a manual commit.</p></div></div><div class="section" title="9.5.&nbsp;Creating Default Connector Configurations"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="connector-wiz"></a>9.5.&nbsp;Creating Default Connector Configurations</h2></div></div></div><a class="indexterm" name="d229e4916"></a><p>Rather than creating provisioner files by hand, use the service that
+   for each action that requires a manual commit.</p></div></div><div class="section" title="9.5.&nbsp;Creating Default Connector Configurations"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="connector-wiz"></a>9.5.&nbsp;Creating Default Connector Configurations</h2></div></div></div><a class="indexterm" name="d229e4895"></a><p>Rather than creating provisioner files by hand, use the service that
   OpenIDM exposes through the REST interface to create basic connector
   configuration files named <code class="filename">provisioner-openicf-<em class="replaceable"><code>Connector
   Name</code></em>.json</code> file.</p><div class="orderedlist"><p>You create a new connector configuration file in three stages.</p><ol class="orderedlist" type="1"><li class="listitem"><p>List available connectors.</p></li><li class="listitem"><p>Generate the core configuration.</p></li><li class="listitem"><p>Connect to the target system and generate the final

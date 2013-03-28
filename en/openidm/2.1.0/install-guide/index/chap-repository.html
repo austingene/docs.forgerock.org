@@ -1009,7 +1009,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 <!-- END SyntaxHighlighter 3.0.83 -->
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
-</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;4.&nbsp;Installing a Repository For Production</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-samples.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-uninstall.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;4.&nbsp;Installing a Repository For Production"><div class="titlepage"><div><div><h2 class="title"><a name="chap-repository"></a>Chapter&nbsp;4.&nbsp;Installing a Repository For Production</h2></div></div></div><a class="indexterm" name="d2894e2114"></a><p>By default, OpenIDM uses OrientDB for its internal repository so that you
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;4.&nbsp;Installing a Repository For Production</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-samples.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-uninstall.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;4.&nbsp;Installing a Repository For Production"><div class="titlepage"><div><div><h2 class="title"><a name="chap-repository"></a>Chapter&nbsp;4.&nbsp;Installing a Repository For Production</h2></div></div></div><a class="indexterm" name="d2895e2129"></a><p>By default, OpenIDM uses OrientDB for its internal repository so that you
  do not have to install a database in order to evaluate OpenIDM. Before using
  OpenIDM in production, however, you must replace OrientDB with a supported
  repository.</p><p>OpenIDM 2.1.0 supports the use of <a class="link" href="http://dev.mysql.com/downloads/mysql/" target="_blank">MySQL</a> 
@@ -1025,7 +1025,7 @@ $ ./shutdown.sh
 OpenIDM is not running, not stopping.</pre></div></li><li class="step" title="Step 3"><p>Remove <code class="filename">openidm/conf/repo.orientdb.json</code>.</p><div class="screen"><pre class="brush: plain;">$ cd /path/to/openidm/conf/
 $ rm repo.orientdb.json</pre></div></li><li class="step" title="Step 4"><p>Copy <code class="filename">openidm/samples/misc/repo.jdbc.json</code> to the
    <code class="filename">openidm/conf</code> directory.</p><div class="screen"><pre class="brush: plain;">$ cd /path/to/openidm/conf
-$ cp ../samples/misc/repo.jdbc.json .</pre></div></li><li class="step" title="Step 5"><a class="indexterm" name="d2894e2177"></a><p>Import the data definition language script for OpenIDM into
+$ cp ../samples/misc/repo.jdbc.json .</pre></div></li><li class="step" title="Step 5"><a class="indexterm" name="d2895e2192"></a><p>Import the data definition language script for OpenIDM into
    MySQL.</p><div class="screen"><pre class="brush: plain;">$ ./bin/mysql -u root -p &lt; /path/to/openidm/db/scripts/mysql/openidm.sql
 Enter password:
 $ </pre></div><p>This step creates an <code class="literal">openidm</code> database for use

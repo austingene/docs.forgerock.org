@@ -1009,7 +1009,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 <!-- END SyntaxHighlighter 3.0.83 -->
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
-</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;15.&nbsp;Integrating Business Processes and Workflows</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-security.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-auditing.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;15.&nbsp;Integrating Business Processes and Workflows"><div class="titlepage"><div><div><h2 class="title"><a name="chap-workflow"></a>Chapter&nbsp;15.&nbsp;Integrating Business Processes and Workflows</h2></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="section"><a href="chap-workflow.html#about-bmpm-2-activiti">15.1. BPMN 2.0 and the Activiti Tools</a></span></dt><dt><span class="section"><a href="chap-workflow.html#setting-up-activiti">15.2. Setting Up Activiti Integration With OpenIDM</a></span></dt><dt><span class="section"><a href="chap-workflow.html#workflows-REST">15.3. Managing Workflows Over the REST Interface</a></span></dt><dt><span class="section"><a href="chap-workflow.html#sample-activiti-workflows">15.4. Example Activiti Workflows With OpenIDM</a></span></dt></dl></div><a class="indexterm" name="d229e9267"></a><a class="indexterm" name="d229e9270"></a><p>Key to any identity management solution is the ability to provide
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;15.&nbsp;Integrating Business Processes and Workflows</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-security.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-auditing.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;15.&nbsp;Integrating Business Processes and Workflows"><div class="titlepage"><div><div><h2 class="title"><a name="chap-workflow"></a>Chapter&nbsp;15.&nbsp;Integrating Business Processes and Workflows</h2></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="section"><a href="chap-workflow.html#about-bmpm-2-activiti">15.1. BPMN 2.0 and the Activiti Tools</a></span></dt><dt><span class="section"><a href="chap-workflow.html#setting-up-activiti">15.2. Setting Up Activiti Integration With OpenIDM</a></span></dt><dt><span class="section"><a href="chap-workflow.html#workflows-REST">15.3. Managing Workflows Over the REST Interface</a></span></dt><dt><span class="section"><a href="chap-workflow.html#sample-activiti-workflows">15.4. Example Activiti Workflows With OpenIDM</a></span></dt></dl></div><a class="indexterm" name="d229e9246"></a><a class="indexterm" name="d229e9249"></a><p>Key to any identity management solution is the ability to provide
  workflow-driven provisioning activities, whether for self-service actions
  such as requests for entitlements, roles or resources, running sunrise or
  sunset processes, handling approvals with escalations, or performing
@@ -1095,7 +1095,7 @@ script task using expression resolver: [
     <a href="../../install-guide/index/chap-install.html" class="link"><em class="citetitle">Installation 
     Guide</em></a>.</p></li><li class="step" title="Step 2"><p>Download and unzip the Activiti zip file 
     (<code class="filename">activiti-5.10.zip</code>) from <a class="link" href="http://activiti.org/download.html" target="_blank">
-    http://activiti.org/download.html</a>.</p></li><li class="step" title="Step 3"><p>Edit the Activiti configuration file to avoid a port conflict with 
+    Activiti Downloads</a> page.</p></li><li class="step" title="Step 3"><p>Edit the Activiti configuration file to avoid a port conflict with 
     OpenIDM. OpenIDM runs on port 8080 by default. Edit the file so that 
     Activiti Explorer runs on port 9090 (by replacing each instance of 8080 
     with 9090). The following example uses <code class="literal">sed</code> on a UNIX 
@@ -1116,11 +1116,11 @@ $ ant demo.start
 $ ant tomcat.stop 
       </pre></div></li><li class="listitem"><p>Copy the OpenIDM remote workflow WAR file to the Tomcat webapps 
       folder.</p><div class="screen"><pre class="brush: plain;">$ cd /path/to/openidm/bin/workflow
-$ cp openidm-workflow-remote-2.1.0-SNAPSHOT.war \
+$ cp openidm-workflow-remote-2.1.0.war \
  /path/to/activiti/apps/apache-tomcat-6.0.32/webapps/
       </pre></div></li><li class="listitem"><p>Copy the OpenIDM workflow Activiti demo jar file to the Tomcat 
       Activiti Explorer library.</p><div class="screen"><pre class="brush: plain;">$ cd /path/to/openidm/bin/workflow/
-$ cp openidm-workflow-activiti-2.1.0-SNAPSHOT-jar-with-dependencies.jar \
+$ cp openidm-workflow-activiti-2.1.0-jar-with-dependencies.jar \
  /path/to/activiti/apps/apache-tomcat-6.0.32/webapps/activiti-explorer/WEB-INF/lib/
       </pre></div></li><li class="listitem"><p>Edit the Activiti Explorer configuration file to be able to use the 
       OpenIDM extensions.</p><div class="screen"><pre class="brush: plain;">$ cd /path/to/activiti/
@@ -1243,7 +1243,7 @@ $ ./startup.sh
     "enabled"  : "true",
     "location" : "remote",
     "engine" : {
-        "url" : "http://localhost:9090/openidm-workflow-remote-2.1.0-SNAPSHOT",
+        "url" : "http://localhost:9090/openidm-workflow-remote-2.1.0",
         "username" : "youractivitiuser",
         "password" : "youractivitipassword"
     },
@@ -1580,7 +1580,7 @@ filtered-query&amp;businessKey=myBusinessKey"
    listening on <code class="literal">localhost</code>, port 25.</p><div class="variablelist"><p>The example sets up a workflow that can accept parameters used to
     specify the sender and recipient of the mail.</p><dl><dt><span class="term"><code class="literal">${fromSender}</code></span></dt><dd><p>Used to specify the sender</p></dd><dt><span class="term"><code class="literal">${toEmail}</code></span></dt><dd><p>Used to specify the recipient</p></dd></dl></div><p>Once you have defined the workflow, drag and drop components to create
    the workflow. This simple example uses only a <code class="literal">StartEvent</code>, 
-   <code class="literal">MailTask</code>, and <code class="literal">EndEvent</code>.</p><div class="mediaobject" title="Email notification process"><a name="figure-bpmn-email-notification"></a><img src="images/bpmn-email-notification.png" longdesc="/Users/lana/Workspace/openidm/trunk/target/docbkx/html/integrators-guide/index/figure-bpmn-email-notification.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-bpmn-email-notification.html" target="longdesc">D</a>]</span></div></div><p>After creating the workflow, adjust the generated XML source code to
+   <code class="literal">MailTask</code>, and <code class="literal">EndEvent</code>.</p><div class="mediaobject" title="Email notification process"><a name="figure-bpmn-email-notification"></a><img src="images/bpmn-email-notification.png" longdesc="/Users/mark/Downloads/openidm/target/docbkx/html/integrators-guide/index/figure-bpmn-email-notification.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-bpmn-email-notification.html" target="longdesc">D</a>]</span></div></div><p>After creating the workflow, adjust the generated XML source code to
    use the variables inside the <code class="literal">&lt;serviceTask&gt;</code>
    tag shown in the following listing.</p><pre class="brush: xml;">
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
