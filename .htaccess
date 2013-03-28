@@ -10,3 +10,6 @@ AddOutputFilterByType DEFLATE application/xhtml+xml
 AddOutputFilterByType DEFLATE application/rss+xml
 AddOutputFilterByType DEFLATE application/javascript
 AddOutputFilterByType DEFLATE application/x-javascript
+
+# Workaround for OPENAM-1045: Link to release notes when initiating upgrade is wrong
+RedirectMatch 301 ^/en/openam/(.*)-SNAPSHOT/release-notes/(.*)$ http://openam.forgerock.org/doc/release-notes/$2
