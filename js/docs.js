@@ -27,7 +27,7 @@
  */
 var products = {
     "openam": [
-        "10.1.0-Xpress",
+        "10.1.0",
         "10.0.1",
         "10.0.0"
     ],
@@ -51,18 +51,14 @@ var products = {
 };
 
 function isValidProduct(product) {
-    if (products.hasOwnProperty(product)) {
-        return true;
-    }
-    return false;
+    return products.hasOwnProperty(product);
 }
 
 function isValidProductVersion(product, version) {
-    if (products.hasOwnProperty(product)) {
-        if (products[product].indexOf(version) != -1)
-            return true;
-    }
-    return false;
+    return (
+      isValidProduct(product)
+      && (products[product].indexOf(version) != -1)
+    );
 }
 
 function setDisplay() {

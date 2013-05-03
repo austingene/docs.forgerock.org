@@ -1016,7 +1016,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
  <a href="../../integrators-guide/index/appendix-file-layout.html" class="link"><em class="citetitle">File
  Layout</em></a>.</p><p>OpenIDM stores configuration objects in its internal repository.
  You can manage the configuration by using either the REST access to the
- configuration objects, or by using the JSON file based views.</p><div class="section" title="5.1.&nbsp;OpenIDM Configuration Objects"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configuration-objects"></a>5.1.&nbsp;OpenIDM Configuration Objects</h2></div></div></div><a class="indexterm" name="d229e1708"></a><a class="indexterm" name="d229e1713"></a><p>OpenIDM exposes internal configuration objects in JSON format.
+ configuration objects, or by using the JSON file based views.</p><div class="section" title="5.1.&nbsp;OpenIDM Configuration Objects"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configuration-objects"></a>5.1.&nbsp;OpenIDM Configuration Objects</h2></div></div></div><a class="indexterm" name="d229e1710"></a><a class="indexterm" name="d229e1715"></a><p>OpenIDM exposes internal configuration objects in JSON format.
       Configuration elements can be either single instance or multiple
       instance for an OpenIDM installation.</p><div class="itemizedlist" title="Single Instance Configuration Objects"><a name="single-instance-configuration-objects"></a><div class="itemizedlist-title">Single Instance Configuration Objects</div><p>Single instance configuration objects correspond to services that have
    at most one instance per installation.</p><p>JSON file views of these configuration objects are named
@@ -1087,8 +1087,8 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
             configuration only from the repository. To disable the file-based
             configuration view, edit the <code class="filename">conf/system.properties</code>
             file to uncomment the following line:
-            <code class="literal"># openidm.fileinstall.enabled=false</code>. </p></div></div><div class="section" title="5.4.&nbsp;Configuring OpenIDM Over REST"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configuring-over-rest"></a>5.4.&nbsp;Configuring OpenIDM Over REST</h2></div></div></div><a class="indexterm" name="d229e1932"></a><a class="indexterm" name="d229e1935"></a><p>OpenIDM exposes configuration objects under the
-  <code class="literal">/openidm/config</code> context.</p><a class="indexterm" name="d229e1945"></a><p>You can list the configuration on the local host by performing a GET
+            <code class="literal"># openidm.fileinstall.enabled=false</code>. </p></div></div><div class="section" title="5.4.&nbsp;Configuring OpenIDM Over REST"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configuring-over-rest"></a>5.4.&nbsp;Configuring OpenIDM Over REST</h2></div></div></div><a class="indexterm" name="d229e1934"></a><a class="indexterm" name="d229e1937"></a><p>OpenIDM exposes configuration objects under the
+  <code class="literal">/openidm/config</code> context.</p><a class="indexterm" name="d229e1947"></a><p>You can list the configuration on the local host by performing a GET
   <code class="literal">http://localhost:8080/openidm/config</code>. The following
   example shows the default configuration for an OpenIDM instance started
   with Sample 1.</p><div class="screen"><pre class="brush: plain;">$ curl --request GET 
@@ -1384,7 +1384,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   environments.</p><p>Property references are contained within the construct 
   <code class="literal">&amp;{ }</code>. When such references are found, OpenIDM replaces 
   them with the appropriate property value, defined in the 
-  <code class="filename">boot.properties</code> file.</p><div class="example"><a name="d229e2021"></a><div class="example-title">Example&nbsp;5.1.&nbsp;</div><div class="example-contents"><p>The following example defines two separate OpenIDM environments - 
+  <code class="filename">boot.properties</code> file.</p><div class="example"><a name="d229e2023"></a><div class="example-title">Example&nbsp;5.1.&nbsp;</div><div class="example-contents"><p>The following example defines two separate OpenIDM environments - 
    a development environment and a production environment. You can specify the 
    environment at startup time and, depending on the environment, the database 
    URL is set accordingly.</p><p>The environments are defined by adding the following lines to the 
@@ -1410,7 +1410,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
    $ ./startup.sh
    </pre></div></div></div><br class="example-break"><div class="section" title="5.5.1.&nbsp;Using Property Value Substitution With System Properties"><div class="titlepage"><div><div><h3 class="title"><a name="property-substitution-system"></a>5.5.1.&nbsp;Using Property Value Substitution With System Properties</h3></div></div></div><p>You can use property value substitution in conjunction with the system 
   properties, to modify the configuration according to the system on which 
-  the OpenIDM instance runs.</p><div class="example"><a name="d229e2054"></a><div class="example-title">Example&nbsp;5.2.&nbsp;</div><div class="example-contents"><p>The following example modifies the <code class="literal">audit.json</code> file so 
+  the OpenIDM instance runs.</p><div class="example"><a name="d229e2056"></a><div class="example-title">Example&nbsp;5.2.&nbsp;</div><div class="example-contents"><p>The following example modifies the <code class="literal">audit.json</code> file so 
    that the log file is written to the user's directory. The 
    <code class="literal">user.home</code> property is a default Java System property.</p><pre class="brush: javascript;">{
     "logTo" : [
@@ -1423,7 +1423,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 }
    </pre></div></div><br class="example-break"><p>You can define <span class="emphasis"><em>nested</em></span> properties (that is a property 
  definition within another property definition) and you can combine system 
- properties and boot properties.</p><div class="example"><a name="d229e2070"></a><div class="example-title">Example&nbsp;5.3.&nbsp;</div><div class="example-contents"><p>The following example uses the <code class="literal">user.country</code> property, 
+ properties and boot properties.</p><div class="example"><a name="d229e2072"></a><div class="example-title">Example&nbsp;5.3.&nbsp;</div><div class="example-contents"><p>The following example uses the <code class="literal">user.country</code> property, 
    a default Java System property. The example defines specific LDAP ports, 
    depending on the country (identified by the country code) in the 
    <code class="literal">boot.properties</code> file. The value of the LDAP port (set in 
