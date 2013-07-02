@@ -35,6 +35,7 @@ var products = {
         "3.1.0-Xpress"
     ],
     "opendj": [
+        "2.6.0",
         "2.5.0-Xpress1"
     ],
     "openicf": [

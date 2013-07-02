@@ -1,0 +1,747 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * CDDL HEADER START<a name="line.2"></a>
+<span class="sourceLineNo">003</span> *<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * The contents of this file are subject to the terms of the<a name="line.4"></a>
+<span class="sourceLineNo">005</span> * Common Development and Distribution License, Version 1.0 only<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * (the "License").  You may not use this file except in compliance<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * with the License.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * You can obtain a copy of the license at<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * trunk/opends/resource/legal-notices/OpenDS.LICENSE<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * or https://OpenDS.dev.java.net/OpenDS.LICENSE.<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * See the License for the specific language governing permissions<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * and limitations under the License.<a name="line.13"></a>
+<span class="sourceLineNo">014</span> *<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * When distributing Covered Code, include this CDDL HEADER in each<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * file and include the License file at<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * trunk/opends/resource/legal-notices/OpenDS.LICENSE.  If applicable,<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * add the following below this CDDL HEADER, with the fields enclosed<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * by brackets "[]" replaced with your own identifying information:<a name="line.19"></a>
+<span class="sourceLineNo">020</span> *      Portions Copyright [yyyy] [name of copyright owner]<a name="line.20"></a>
+<span class="sourceLineNo">021</span> *<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * CDDL HEADER END<a name="line.22"></a>
+<span class="sourceLineNo">023</span> *<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *<a name="line.24"></a>
+<span class="sourceLineNo">025</span> *      Copyright 2006-2009 Sun Microsystems, Inc.<a name="line.25"></a>
+<span class="sourceLineNo">026</span> *      Portions copyright 2011-2013 ForgeRock AS.<a name="line.26"></a>
+<span class="sourceLineNo">027</span> */<a name="line.27"></a>
+<span class="sourceLineNo">028</span>package org.opends.server.types;<a name="line.28"></a>
+<span class="sourceLineNo">029</span><a name="line.29"></a>
+<span class="sourceLineNo">030</span>import java.util.List;<a name="line.30"></a>
+<span class="sourceLineNo">031</span>import java.util.Map;<a name="line.31"></a>
+<span class="sourceLineNo">032</span><a name="line.32"></a>
+<span class="sourceLineNo">033</span>import org.opends.messages.Message;<a name="line.33"></a>
+<span class="sourceLineNo">034</span>import org.opends.messages.MessageBuilder;<a name="line.34"></a>
+<span class="sourceLineNo">035</span>import org.opends.server.api.ClientConnection;<a name="line.35"></a>
+<span class="sourceLineNo">036</span>import org.opends.server.controls.ControlDecoder;<a name="line.36"></a>
+<span class="sourceLineNo">037</span><a name="line.37"></a>
+<span class="sourceLineNo">038</span><a name="line.38"></a>
+<span class="sourceLineNo">039</span>/**<a name="line.39"></a>
+<span class="sourceLineNo">040</span> * This interface defines a generic operation that may be processed by<a name="line.40"></a>
+<span class="sourceLineNo">041</span> * the Directory Server.  Specific subclasses should implement<a name="line.41"></a>
+<span class="sourceLineNo">042</span> * specific functionality appropriate for the type of operation.<a name="line.42"></a>
+<span class="sourceLineNo">043</span> * &lt;BR&gt;&lt;BR&gt;<a name="line.43"></a>
+<span class="sourceLineNo">044</span> * Note that this class is not intended to be subclassed by any<a name="line.44"></a>
+<span class="sourceLineNo">045</span> * third-party code outside of the OpenDS project.  It should only be<a name="line.45"></a>
+<span class="sourceLineNo">046</span> * extended by the operation types included in the<a name="line.46"></a>
+<span class="sourceLineNo">047</span> * {@code org.opends.server.core} package.<a name="line.47"></a>
+<span class="sourceLineNo">048</span> */<a name="line.48"></a>
+<span class="sourceLineNo">049</span>@org.opends.server.types.PublicAPI(<a name="line.49"></a>
+<span class="sourceLineNo">050</span>     stability=org.opends.server.types.StabilityLevel.VOLATILE,<a name="line.50"></a>
+<span class="sourceLineNo">051</span>     mayInstantiate=false,<a name="line.51"></a>
+<span class="sourceLineNo">052</span>     mayExtend=false,<a name="line.52"></a>
+<span class="sourceLineNo">053</span>     mayInvoke=true)<a name="line.53"></a>
+<span class="sourceLineNo">054</span>public interface Operation extends Runnable<a name="line.54"></a>
+<span class="sourceLineNo">055</span>{<a name="line.55"></a>
+<span class="sourceLineNo">056</span>  /**<a name="line.56"></a>
+<span class="sourceLineNo">057</span>   * Identifier used to get the local operation [if any] in the<a name="line.57"></a>
+<span class="sourceLineNo">058</span>   * attachments.<a name="line.58"></a>
+<span class="sourceLineNo">059</span>   */<a name="line.59"></a>
+<span class="sourceLineNo">060</span>  public static final String LOCALBACKENDOPERATIONS =<a name="line.60"></a>
+<span class="sourceLineNo">061</span>    "LocalBackendOperations";<a name="line.61"></a>
+<span class="sourceLineNo">062</span><a name="line.62"></a>
+<span class="sourceLineNo">063</span>  /**<a name="line.63"></a>
+<span class="sourceLineNo">064</span>   * Retrieves the operation type for this operation.<a name="line.64"></a>
+<span class="sourceLineNo">065</span>   *<a name="line.65"></a>
+<span class="sourceLineNo">066</span>   * @return  The operation type for this operation.<a name="line.66"></a>
+<span class="sourceLineNo">067</span>   */<a name="line.67"></a>
+<span class="sourceLineNo">068</span>  public abstract OperationType getOperationType();<a name="line.68"></a>
+<span class="sourceLineNo">069</span><a name="line.69"></a>
+<span class="sourceLineNo">070</span>  /**<a name="line.70"></a>
+<span class="sourceLineNo">071</span>   * Terminates the client connection being used to process this<a name="line.71"></a>
+<span class="sourceLineNo">072</span>   * operation.  If this is called by a plugin, then that plugin must<a name="line.72"></a>
+<span class="sourceLineNo">073</span>   * return a result indicating that the  client connection has been<a name="line.73"></a>
+<span class="sourceLineNo">074</span>   * terminated.<a name="line.74"></a>
+<span class="sourceLineNo">075</span>   *<a name="line.75"></a>
+<span class="sourceLineNo">076</span>   * @param  disconnectReason  The disconnect reason that provides the<a name="line.76"></a>
+<span class="sourceLineNo">077</span>   *                           generic cause for the disconnect.<a name="line.77"></a>
+<span class="sourceLineNo">078</span>   * @param  sendNotification  Indicates whether to try to provide<a name="line.78"></a>
+<span class="sourceLineNo">079</span>   *                           notification<a name="line.79"></a>
+<span class="sourceLineNo">080</span>   *                           to the client that the connection will<a name="line.80"></a>
+<span class="sourceLineNo">081</span>   *                           be closed.<a name="line.81"></a>
+<span class="sourceLineNo">082</span>   * @param  message           The message to send to the client.  It<a name="line.82"></a>
+<span class="sourceLineNo">083</span>   *                           may be {@code null} if no notification<a name="line.83"></a>
+<span class="sourceLineNo">084</span>   *                           is to be sent.<a name="line.84"></a>
+<span class="sourceLineNo">085</span>   */<a name="line.85"></a>
+<span class="sourceLineNo">086</span>  public abstract void disconnectClient(<a name="line.86"></a>
+<span class="sourceLineNo">087</span>          DisconnectReason disconnectReason,<a name="line.87"></a>
+<span class="sourceLineNo">088</span>          boolean sendNotification, Message message<a name="line.88"></a>
+<span class="sourceLineNo">089</span>  );<a name="line.89"></a>
+<span class="sourceLineNo">090</span><a name="line.90"></a>
+<span class="sourceLineNo">091</span>  /**<a name="line.91"></a>
+<span class="sourceLineNo">092</span>   * Retrieves a set of standard elements that should be logged in all<a name="line.92"></a>
+<span class="sourceLineNo">093</span>   * requests and responses for all types of operations.  Each element<a name="line.93"></a>
+<span class="sourceLineNo">094</span>   * in the array will itself be a two-element array in which the<a name="line.94"></a>
+<span class="sourceLineNo">095</span>   * first element is the name of the field and the second is a string<a name="line.95"></a>
+<span class="sourceLineNo">096</span>   * representation of the value, or {@code null} if there is no value<a name="line.96"></a>
+<span class="sourceLineNo">097</span>   * for that field.<a name="line.97"></a>
+<span class="sourceLineNo">098</span>   *<a name="line.98"></a>
+<span class="sourceLineNo">099</span>   * @return  A standard set of elements that should be logged in<a name="line.99"></a>
+<span class="sourceLineNo">100</span>   *          requests and responses for all types of operations.<a name="line.100"></a>
+<span class="sourceLineNo">101</span>   */<a name="line.101"></a>
+<span class="sourceLineNo">102</span>  public abstract String[][] getCommonLogElements();<a name="line.102"></a>
+<span class="sourceLineNo">103</span><a name="line.103"></a>
+<span class="sourceLineNo">104</span>  /**<a name="line.104"></a>
+<span class="sourceLineNo">105</span>   * Retrieves a standard set of elements that should be logged in<a name="line.105"></a>
+<span class="sourceLineNo">106</span>   * requests for this type of operation.  Each element in the array<a name="line.106"></a>
+<span class="sourceLineNo">107</span>   * will itself be a two-element array in which the first element is<a name="line.107"></a>
+<span class="sourceLineNo">108</span>   * the name of the field and the second is a string representation<a name="line.108"></a>
+<span class="sourceLineNo">109</span>   * of the value, or {@code null} if there is no value for that<a name="line.109"></a>
+<span class="sourceLineNo">110</span>   * field.<a name="line.110"></a>
+<span class="sourceLineNo">111</span>   *<a name="line.111"></a>
+<span class="sourceLineNo">112</span>   * @return  A standard set of elements that should be logged in<a name="line.112"></a>
+<span class="sourceLineNo">113</span>   *          requests for this type of operation.<a name="line.113"></a>
+<span class="sourceLineNo">114</span>   */<a name="line.114"></a>
+<span class="sourceLineNo">115</span>  public abstract String[][] getRequestLogElements();<a name="line.115"></a>
+<span class="sourceLineNo">116</span><a name="line.116"></a>
+<span class="sourceLineNo">117</span>  /**<a name="line.117"></a>
+<span class="sourceLineNo">118</span>   * Retrieves a standard set of elements that should be logged in<a name="line.118"></a>
+<span class="sourceLineNo">119</span>   * responses for this type of operation.  Each element in the array<a name="line.119"></a>
+<span class="sourceLineNo">120</span>   * will itself be a two-element array in which the first element is<a name="line.120"></a>
+<span class="sourceLineNo">121</span>   * the name of the field and the second is a string representation<a name="line.121"></a>
+<span class="sourceLineNo">122</span>   * of the value, or {@code null} if there is no value for that<a name="line.122"></a>
+<span class="sourceLineNo">123</span>   * field.<a name="line.123"></a>
+<span class="sourceLineNo">124</span>   *<a name="line.124"></a>
+<span class="sourceLineNo">125</span>   * @return  A standard set of elements that should be logged in<a name="line.125"></a>
+<span class="sourceLineNo">126</span>   *          responses for this type of operation.<a name="line.126"></a>
+<span class="sourceLineNo">127</span>   */<a name="line.127"></a>
+<span class="sourceLineNo">128</span>  public abstract String[][] getResponseLogElements();<a name="line.128"></a>
+<span class="sourceLineNo">129</span><a name="line.129"></a>
+<span class="sourceLineNo">130</span>  /**<a name="line.130"></a>
+<span class="sourceLineNo">131</span>   * Retrieves the client connection with which this operation is<a name="line.131"></a>
+<span class="sourceLineNo">132</span>   * associated.<a name="line.132"></a>
+<span class="sourceLineNo">133</span>   *<a name="line.133"></a>
+<span class="sourceLineNo">134</span>   * @return  The client connection with which this operation is<a name="line.134"></a>
+<span class="sourceLineNo">135</span>   *          associated.<a name="line.135"></a>
+<span class="sourceLineNo">136</span>   */<a name="line.136"></a>
+<span class="sourceLineNo">137</span>  public abstract ClientConnection getClientConnection();<a name="line.137"></a>
+<span class="sourceLineNo">138</span><a name="line.138"></a>
+<span class="sourceLineNo">139</span>  /**<a name="line.139"></a>
+<span class="sourceLineNo">140</span>   * Retrieves the unique identifier that is assigned to the client<a name="line.140"></a>
+<span class="sourceLineNo">141</span>   * connection that submitted this operation.<a name="line.141"></a>
+<span class="sourceLineNo">142</span>   *<a name="line.142"></a>
+<span class="sourceLineNo">143</span>   * @return  The unique identifier that is assigned to the client<a name="line.143"></a>
+<span class="sourceLineNo">144</span>   *          connection that submitted this operation.<a name="line.144"></a>
+<span class="sourceLineNo">145</span>   */<a name="line.145"></a>
+<span class="sourceLineNo">146</span>  public abstract long getConnectionID();<a name="line.146"></a>
+<span class="sourceLineNo">147</span><a name="line.147"></a>
+<span class="sourceLineNo">148</span>  /**<a name="line.148"></a>
+<span class="sourceLineNo">149</span>   * Retrieves the operation ID for this operation.<a name="line.149"></a>
+<span class="sourceLineNo">150</span>   *<a name="line.150"></a>
+<span class="sourceLineNo">151</span>   * @return  The operation ID for this operation.<a name="line.151"></a>
+<span class="sourceLineNo">152</span>   */<a name="line.152"></a>
+<span class="sourceLineNo">153</span>  public abstract long getOperationID();<a name="line.153"></a>
+<span class="sourceLineNo">154</span><a name="line.154"></a>
+<span class="sourceLineNo">155</span>  /**<a name="line.155"></a>
+<span class="sourceLineNo">156</span>   * Retrieves the message ID assigned to this operation.<a name="line.156"></a>
+<span class="sourceLineNo">157</span>   *<a name="line.157"></a>
+<span class="sourceLineNo">158</span>   * @return  The message ID assigned to this operation.<a name="line.158"></a>
+<span class="sourceLineNo">159</span>   */<a name="line.159"></a>
+<span class="sourceLineNo">160</span>  public abstract int getMessageID();<a name="line.160"></a>
+<span class="sourceLineNo">161</span><a name="line.161"></a>
+<span class="sourceLineNo">162</span>  /**<a name="line.162"></a>
+<span class="sourceLineNo">163</span>   * Retrieves the set of controls included in the request from the<a name="line.163"></a>
+<span class="sourceLineNo">164</span>   * client.  The returned list must not be altered.<a name="line.164"></a>
+<span class="sourceLineNo">165</span>   *<a name="line.165"></a>
+<span class="sourceLineNo">166</span>   * @return  The set of controls included in the request from the<a name="line.166"></a>
+<span class="sourceLineNo">167</span>   *          client.<a name="line.167"></a>
+<span class="sourceLineNo">168</span>   */<a name="line.168"></a>
+<span class="sourceLineNo">169</span>  public abstract List&lt;Control&gt; getRequestControls();<a name="line.169"></a>
+<span class="sourceLineNo">170</span><a name="line.170"></a>
+<span class="sourceLineNo">171</span>  /**<a name="line.171"></a>
+<span class="sourceLineNo">172</span>   * Retrieves a control included in the request from the client.<a name="line.172"></a>
+<span class="sourceLineNo">173</span>   *<a name="line.173"></a>
+<span class="sourceLineNo">174</span>   * @param &lt;T&gt;<a name="line.174"></a>
+<span class="sourceLineNo">175</span>   *          The type of control requested.<a name="line.175"></a>
+<span class="sourceLineNo">176</span>   * @param d<a name="line.176"></a>
+<span class="sourceLineNo">177</span>   *          The requested control's decoder.<a name="line.177"></a>
+<span class="sourceLineNo">178</span>   * @return The decoded form of the requested control included in the<a name="line.178"></a>
+<span class="sourceLineNo">179</span>   *         request from the client or &lt;code&gt;null&lt;/code&gt; if the<a name="line.179"></a>
+<span class="sourceLineNo">180</span>   *         control was not found.<a name="line.180"></a>
+<span class="sourceLineNo">181</span>   * @throws DirectoryException<a name="line.181"></a>
+<span class="sourceLineNo">182</span>   *           if an error occurs while decoding the control.<a name="line.182"></a>
+<span class="sourceLineNo">183</span>   */<a name="line.183"></a>
+<span class="sourceLineNo">184</span>  public abstract &lt;T extends Control&gt; T getRequestControl(<a name="line.184"></a>
+<span class="sourceLineNo">185</span>      ControlDecoder&lt;T&gt; d) throws DirectoryException;<a name="line.185"></a>
+<span class="sourceLineNo">186</span><a name="line.186"></a>
+<span class="sourceLineNo">187</span>  /**<a name="line.187"></a>
+<span class="sourceLineNo">188</span>   * Adds the provided control to the set of request controls for this<a name="line.188"></a>
+<span class="sourceLineNo">189</span>   * operation.  This method may only be called by pre-parse plugins.<a name="line.189"></a>
+<span class="sourceLineNo">190</span>   *<a name="line.190"></a>
+<span class="sourceLineNo">191</span>   * @param  control  The control to add to the set of request<a name="line.191"></a>
+<span class="sourceLineNo">192</span>   *                  controls for this operation.<a name="line.192"></a>
+<span class="sourceLineNo">193</span>   */<a name="line.193"></a>
+<span class="sourceLineNo">194</span>  public abstract void addRequestControl(Control control);<a name="line.194"></a>
+<span class="sourceLineNo">195</span><a name="line.195"></a>
+<span class="sourceLineNo">196</span>  /**<a name="line.196"></a>
+<span class="sourceLineNo">197</span>   * Removes the provided control from the set of request controls for<a name="line.197"></a>
+<span class="sourceLineNo">198</span>   * this operation.  This method may only be called by pre-parse<a name="line.198"></a>
+<span class="sourceLineNo">199</span>   * plugins.<a name="line.199"></a>
+<span class="sourceLineNo">200</span>   *<a name="line.200"></a>
+<span class="sourceLineNo">201</span>   * @param  control  The control to remove from the set of request<a name="line.201"></a>
+<span class="sourceLineNo">202</span>   *                  controls for this operation.<a name="line.202"></a>
+<span class="sourceLineNo">203</span>   */<a name="line.203"></a>
+<span class="sourceLineNo">204</span>  public abstract void removeRequestControl(Control control);<a name="line.204"></a>
+<span class="sourceLineNo">205</span><a name="line.205"></a>
+<span class="sourceLineNo">206</span>  /**<a name="line.206"></a>
+<span class="sourceLineNo">207</span>   * Retrieves the set of controls to include in the response to the<a name="line.207"></a>
+<span class="sourceLineNo">208</span>   * client.  The contents of this list must not be altered.<a name="line.208"></a>
+<span class="sourceLineNo">209</span>   *<a name="line.209"></a>
+<span class="sourceLineNo">210</span>   * @return  The set of controls to include in the response to the<a name="line.210"></a>
+<span class="sourceLineNo">211</span>   *          client.<a name="line.211"></a>
+<span class="sourceLineNo">212</span>   */<a name="line.212"></a>
+<span class="sourceLineNo">213</span>  public abstract List&lt;Control&gt; getResponseControls();<a name="line.213"></a>
+<span class="sourceLineNo">214</span><a name="line.214"></a>
+<span class="sourceLineNo">215</span>  /**<a name="line.215"></a>
+<span class="sourceLineNo">216</span>   * Adds the provided control to the set of controls to include in<a name="line.216"></a>
+<span class="sourceLineNo">217</span>   * the response to the client.  This method may not be called by<a name="line.217"></a>
+<span class="sourceLineNo">218</span>   * post-response plugins.<a name="line.218"></a>
+<span class="sourceLineNo">219</span>   *<a name="line.219"></a>
+<span class="sourceLineNo">220</span>   * @param  control  The control to add to the set of controls to<a name="line.220"></a>
+<span class="sourceLineNo">221</span>   *                  include in the response to the client.<a name="line.221"></a>
+<span class="sourceLineNo">222</span>   */<a name="line.222"></a>
+<span class="sourceLineNo">223</span>  public abstract void addResponseControl(Control control);<a name="line.223"></a>
+<span class="sourceLineNo">224</span><a name="line.224"></a>
+<span class="sourceLineNo">225</span>  /**<a name="line.225"></a>
+<span class="sourceLineNo">226</span>   * Removes the provided control from the set of controls to include<a name="line.226"></a>
+<span class="sourceLineNo">227</span>   * in the response to the client.  This method may not be called by<a name="line.227"></a>
+<span class="sourceLineNo">228</span>   * post-response plugins.<a name="line.228"></a>
+<span class="sourceLineNo">229</span>   *<a name="line.229"></a>
+<span class="sourceLineNo">230</span>   * @param  control  The control to remove from the set of controls<a name="line.230"></a>
+<span class="sourceLineNo">231</span>   *                  to include in the response to the client.<a name="line.231"></a>
+<span class="sourceLineNo">232</span>   */<a name="line.232"></a>
+<span class="sourceLineNo">233</span>  public abstract void removeResponseControl(Control control);<a name="line.233"></a>
+<span class="sourceLineNo">234</span><a name="line.234"></a>
+<span class="sourceLineNo">235</span>  /**<a name="line.235"></a>
+<span class="sourceLineNo">236</span>   * Retrieves the result code for this operation.<a name="line.236"></a>
+<span class="sourceLineNo">237</span>   *<a name="line.237"></a>
+<span class="sourceLineNo">238</span>   * @return  The result code associated for this operation, or<a name="line.238"></a>
+<span class="sourceLineNo">239</span>   *          {@code UNDEFINED} if the operation has not yet<a name="line.239"></a>
+<span class="sourceLineNo">240</span>   *          completed.<a name="line.240"></a>
+<span class="sourceLineNo">241</span>   */<a name="line.241"></a>
+<span class="sourceLineNo">242</span>  public abstract ResultCode getResultCode();<a name="line.242"></a>
+<span class="sourceLineNo">243</span><a name="line.243"></a>
+<span class="sourceLineNo">244</span>  /**<a name="line.244"></a>
+<span class="sourceLineNo">245</span>   * Specifies the result code for this operation.  This method may<a name="line.245"></a>
+<span class="sourceLineNo">246</span>   * not be called by post-response plugins.<a name="line.246"></a>
+<span class="sourceLineNo">247</span>   *<a name="line.247"></a>
+<span class="sourceLineNo">248</span>   * @param  resultCode  The result code for this operation.<a name="line.248"></a>
+<span class="sourceLineNo">249</span>   */<a name="line.249"></a>
+<span class="sourceLineNo">250</span>  public abstract void setResultCode(ResultCode resultCode);<a name="line.250"></a>
+<span class="sourceLineNo">251</span><a name="line.251"></a>
+<span class="sourceLineNo">252</span>  /**<a name="line.252"></a>
+<span class="sourceLineNo">253</span>   * Retrieves the error message for this operation.  Its contents may<a name="line.253"></a>
+<span class="sourceLineNo">254</span>   * be altered by pre-parse, pre-operation, and post-operation<a name="line.254"></a>
+<span class="sourceLineNo">255</span>   * plugins, but not by post-response plugins.<a name="line.255"></a>
+<span class="sourceLineNo">256</span>   *<a name="line.256"></a>
+<span class="sourceLineNo">257</span>   * @return  The error message for this operation.<a name="line.257"></a>
+<span class="sourceLineNo">258</span>   */<a name="line.258"></a>
+<span class="sourceLineNo">259</span>  public abstract MessageBuilder getErrorMessage();<a name="line.259"></a>
+<span class="sourceLineNo">260</span><a name="line.260"></a>
+<span class="sourceLineNo">261</span>  /**<a name="line.261"></a>
+<span class="sourceLineNo">262</span>   * Specifies the error message for this operation.  This method may<a name="line.262"></a>
+<span class="sourceLineNo">263</span>   * not be called by post-response plugins.<a name="line.263"></a>
+<span class="sourceLineNo">264</span>   *<a name="line.264"></a>
+<span class="sourceLineNo">265</span>   * @param  errorMessage  The error message for this operation.<a name="line.265"></a>
+<span class="sourceLineNo">266</span>   */<a name="line.266"></a>
+<span class="sourceLineNo">267</span>  public abstract void setErrorMessage(MessageBuilder errorMessage);<a name="line.267"></a>
+<span class="sourceLineNo">268</span><a name="line.268"></a>
+<span class="sourceLineNo">269</span>  /**<a name="line.269"></a>
+<span class="sourceLineNo">270</span>   * Appends the provided message to the error message buffer.  If the<a name="line.270"></a>
+<span class="sourceLineNo">271</span>   * buffer has not yet been created, then this will create it first<a name="line.271"></a>
+<span class="sourceLineNo">272</span>   * and then add the provided message.  This method may not be called<a name="line.272"></a>
+<span class="sourceLineNo">273</span>   * by post-response plugins.<a name="line.273"></a>
+<span class="sourceLineNo">274</span>   *<a name="line.274"></a>
+<span class="sourceLineNo">275</span>   * @param  message  The message to append to the error message<a name="line.275"></a>
+<span class="sourceLineNo">276</span>   */<a name="line.276"></a>
+<span class="sourceLineNo">277</span>  public abstract void appendErrorMessage(Message message);<a name="line.277"></a>
+<span class="sourceLineNo">278</span><a name="line.278"></a>
+<span class="sourceLineNo">279</span>  /**<a name="line.279"></a>
+<span class="sourceLineNo">280</span>   * Returns an unmodifiable list containing the additional log items for this<a name="line.280"></a>
+<span class="sourceLineNo">281</span>   * operation, which should be written to the log but not included in the<a name="line.281"></a>
+<span class="sourceLineNo">282</span>   * response to the client.<a name="line.282"></a>
+<span class="sourceLineNo">283</span>   *<a name="line.283"></a>
+<span class="sourceLineNo">284</span>   * @return An unmodifiable list containing the additional log items for this<a name="line.284"></a>
+<span class="sourceLineNo">285</span>   *         operation.<a name="line.285"></a>
+<span class="sourceLineNo">286</span>   */<a name="line.286"></a>
+<span class="sourceLineNo">287</span>  public abstract List&lt;AdditionalLogItem&gt; getAdditionalLogItems();<a name="line.287"></a>
+<span class="sourceLineNo">288</span><a name="line.288"></a>
+<span class="sourceLineNo">289</span>  /**<a name="line.289"></a>
+<span class="sourceLineNo">290</span>   * Adds an additional log item to this operation, which should be written to<a name="line.290"></a>
+<span class="sourceLineNo">291</span>   * the log but not included in the response to the client. This method may not<a name="line.291"></a>
+<span class="sourceLineNo">292</span>   * be called by post-response plugins.<a name="line.292"></a>
+<span class="sourceLineNo">293</span>   *<a name="line.293"></a>
+<span class="sourceLineNo">294</span>   * @param item<a name="line.294"></a>
+<span class="sourceLineNo">295</span>   *          The additional log item for this operation.<a name="line.295"></a>
+<span class="sourceLineNo">296</span>   */<a name="line.296"></a>
+<span class="sourceLineNo">297</span>  public abstract void addAdditionalLogItem(AdditionalLogItem item);<a name="line.297"></a>
+<span class="sourceLineNo">298</span><a name="line.298"></a>
+<span class="sourceLineNo">299</span>  /**<a name="line.299"></a>
+<span class="sourceLineNo">300</span>   * Retrieves the matched DN for this operation.<a name="line.300"></a>
+<span class="sourceLineNo">301</span>   *<a name="line.301"></a>
+<span class="sourceLineNo">302</span>   * @return  The matched DN for this operation, or {@code null} if<a name="line.302"></a>
+<span class="sourceLineNo">303</span>   *          the operation has not yet completed or does not have a<a name="line.303"></a>
+<span class="sourceLineNo">304</span>   *          matched DN.<a name="line.304"></a>
+<span class="sourceLineNo">305</span>   */<a name="line.305"></a>
+<span class="sourceLineNo">306</span>  public abstract DN getMatchedDN();<a name="line.306"></a>
+<span class="sourceLineNo">307</span><a name="line.307"></a>
+<span class="sourceLineNo">308</span>  /**<a name="line.308"></a>
+<span class="sourceLineNo">309</span>   * Specifies the matched DN for this operation.  This may not be<a name="line.309"></a>
+<span class="sourceLineNo">310</span>   * called by post-response plugins.<a name="line.310"></a>
+<span class="sourceLineNo">311</span>   *<a name="line.311"></a>
+<span class="sourceLineNo">312</span>   * @param  matchedDN  The matched DN for this operation.<a name="line.312"></a>
+<span class="sourceLineNo">313</span>   */<a name="line.313"></a>
+<span class="sourceLineNo">314</span>  public abstract void setMatchedDN(DN matchedDN);<a name="line.314"></a>
+<span class="sourceLineNo">315</span><a name="line.315"></a>
+<span class="sourceLineNo">316</span>  /**<a name="line.316"></a>
+<span class="sourceLineNo">317</span>   * Retrieves the set of referral URLs for this operation.  Its<a name="line.317"></a>
+<span class="sourceLineNo">318</span>   * contents must not be altered by the caller.<a name="line.318"></a>
+<span class="sourceLineNo">319</span>   *<a name="line.319"></a>
+<span class="sourceLineNo">320</span>   * @return  The set of referral URLs for this operation, or<a name="line.320"></a>
+<span class="sourceLineNo">321</span>   *          {@code null} if the operation is not yet complete or<a name="line.321"></a>
+<span class="sourceLineNo">322</span>   *          does not have a set of referral URLs.<a name="line.322"></a>
+<span class="sourceLineNo">323</span>   */<a name="line.323"></a>
+<span class="sourceLineNo">324</span>  public abstract List&lt;String&gt; getReferralURLs();<a name="line.324"></a>
+<span class="sourceLineNo">325</span><a name="line.325"></a>
+<span class="sourceLineNo">326</span>  /**<a name="line.326"></a>
+<span class="sourceLineNo">327</span>   * Specifies the set of referral URLs for this operation.  This may<a name="line.327"></a>
+<span class="sourceLineNo">328</span>   * not be called by post-response plugins.<a name="line.328"></a>
+<span class="sourceLineNo">329</span>   *<a name="line.329"></a>
+<span class="sourceLineNo">330</span>   * @param  referralURLs  The set of referral URLs for this<a name="line.330"></a>
+<span class="sourceLineNo">331</span>   *                       operation.<a name="line.331"></a>
+<span class="sourceLineNo">332</span>   */<a name="line.332"></a>
+<span class="sourceLineNo">333</span>  public abstract void setReferralURLs(List&lt;String&gt; referralURLs);<a name="line.333"></a>
+<span class="sourceLineNo">334</span><a name="line.334"></a>
+<span class="sourceLineNo">335</span>  /**<a name="line.335"></a>
+<span class="sourceLineNo">336</span>   * Sets the response elements for this operation based on the<a name="line.336"></a>
+<span class="sourceLineNo">337</span>   * information contained in the provided {@code DirectoryException}<a name="line.337"></a>
+<span class="sourceLineNo">338</span>   * object.  This method may not be called by post-response plugins.<a name="line.338"></a>
+<span class="sourceLineNo">339</span>   *<a name="line.339"></a>
+<span class="sourceLineNo">340</span>   * @param  directoryException  The exception containing the<a name="line.340"></a>
+<span class="sourceLineNo">341</span>   *                             information to use for the response<a name="line.341"></a>
+<span class="sourceLineNo">342</span>   *                             elements.<a name="line.342"></a>
+<span class="sourceLineNo">343</span>   */<a name="line.343"></a>
+<span class="sourceLineNo">344</span>  public abstract void setResponseData(<a name="line.344"></a>
+<span class="sourceLineNo">345</span>      DirectoryException directoryException);<a name="line.345"></a>
+<span class="sourceLineNo">346</span><a name="line.346"></a>
+<span class="sourceLineNo">347</span>  /**<a name="line.347"></a>
+<span class="sourceLineNo">348</span>   * Indicates whether this is an internal operation rather than one<a name="line.348"></a>
+<span class="sourceLineNo">349</span>   * that was requested by an external client.<a name="line.349"></a>
+<span class="sourceLineNo">350</span>   *<a name="line.350"></a>
+<span class="sourceLineNo">351</span>   * @return  {@code true} if this is an internal operation, or<a name="line.351"></a>
+<span class="sourceLineNo">352</span>   *          {@code false} if it is not.<a name="line.352"></a>
+<span class="sourceLineNo">353</span>   */<a name="line.353"></a>
+<span class="sourceLineNo">354</span>  public abstract boolean isInternalOperation();<a name="line.354"></a>
+<span class="sourceLineNo">355</span><a name="line.355"></a>
+<span class="sourceLineNo">356</span>  /**<a name="line.356"></a>
+<span class="sourceLineNo">357</span>   * Specifies whether this is an internal operation rather than one<a name="line.357"></a>
+<span class="sourceLineNo">358</span>   * that was requested by an external client.  This may not be called<a name="line.358"></a>
+<span class="sourceLineNo">359</span>   * from within a plugin.<a name="line.359"></a>
+<span class="sourceLineNo">360</span>   *<a name="line.360"></a>
+<span class="sourceLineNo">361</span>   * @param  isInternalOperation  Specifies whether this is an<a name="line.361"></a>
+<span class="sourceLineNo">362</span>   *                              internal operation rather than one<a name="line.362"></a>
+<span class="sourceLineNo">363</span>   *                              that was requested by an external<a name="line.363"></a>
+<span class="sourceLineNo">364</span>   *                              client.<a name="line.364"></a>
+<span class="sourceLineNo">365</span>   */<a name="line.365"></a>
+<span class="sourceLineNo">366</span>  public abstract void setInternalOperation(boolean<a name="line.366"></a>
+<span class="sourceLineNo">367</span>      isInternalOperation);<a name="line.367"></a>
+<span class="sourceLineNo">368</span><a name="line.368"></a>
+<span class="sourceLineNo">369</span>  /**<a name="line.369"></a>
+<span class="sourceLineNo">370</span>   * Indicates whether this is an inner operation rather than one that was<a name="line.370"></a>
+<span class="sourceLineNo">371</span>   * directly requested by an external client. Said otherwise, inner operations<a name="line.371"></a>
+<span class="sourceLineNo">372</span>   * include internal operations, but also operations in the server indirectly<a name="line.372"></a>
+<span class="sourceLineNo">373</span>   * mandated by external requests like Rest2LDAP for example. This may not be<a name="line.373"></a>
+<span class="sourceLineNo">374</span>   * called from within a plugin.<a name="line.374"></a>
+<span class="sourceLineNo">375</span>   *<a name="line.375"></a>
+<span class="sourceLineNo">376</span>   * @return {@code true} if this is an inner operation, or {@code false} if it<a name="line.376"></a>
+<span class="sourceLineNo">377</span>   *         is not.<a name="line.377"></a>
+<span class="sourceLineNo">378</span>   */<a name="line.378"></a>
+<span class="sourceLineNo">379</span>  boolean isInnerOperation();<a name="line.379"></a>
+<span class="sourceLineNo">380</span><a name="line.380"></a>
+<span class="sourceLineNo">381</span>  /**<a name="line.381"></a>
+<span class="sourceLineNo">382</span>   * Specifies whether this is an inner operation rather than one that was<a name="line.382"></a>
+<span class="sourceLineNo">383</span>   * directly requested by an external client. Said otherwise, inner operations<a name="line.383"></a>
+<span class="sourceLineNo">384</span>   * include internal operations, but also operations in the server indirectly<a name="line.384"></a>
+<span class="sourceLineNo">385</span>   * mandated by external requests like Rest2LDAP for example. This may not be<a name="line.385"></a>
+<span class="sourceLineNo">386</span>   * called from within a plugin.<a name="line.386"></a>
+<span class="sourceLineNo">387</span>   *<a name="line.387"></a>
+<span class="sourceLineNo">388</span>   * @param isInnerOperation<a name="line.388"></a>
+<span class="sourceLineNo">389</span>   *          Specifies whether this is an inner operation rather than one that<a name="line.389"></a>
+<span class="sourceLineNo">390</span>   *          was requested by an external client.<a name="line.390"></a>
+<span class="sourceLineNo">391</span>   */<a name="line.391"></a>
+<span class="sourceLineNo">392</span>  void setInnerOperation(boolean isInnerOperation);<a name="line.392"></a>
+<span class="sourceLineNo">393</span><a name="line.393"></a>
+<span class="sourceLineNo">394</span>  /**<a name="line.394"></a>
+<span class="sourceLineNo">395</span>   * Indicates whether this is a synchronization operation rather than<a name="line.395"></a>
+<span class="sourceLineNo">396</span>   * one that was requested by an external client.<a name="line.396"></a>
+<span class="sourceLineNo">397</span>   *<a name="line.397"></a>
+<span class="sourceLineNo">398</span>   * @return  {@code true} if this is a data synchronization<a name="line.398"></a>
+<span class="sourceLineNo">399</span>   *          operation, or {@code false} if it is not.<a name="line.399"></a>
+<span class="sourceLineNo">400</span>   */<a name="line.400"></a>
+<span class="sourceLineNo">401</span>  public abstract boolean isSynchronizationOperation();<a name="line.401"></a>
+<span class="sourceLineNo">402</span><a name="line.402"></a>
+<span class="sourceLineNo">403</span>  /**<a name="line.403"></a>
+<span class="sourceLineNo">404</span>   * Specifies whether this is a synchronization operation rather than<a name="line.404"></a>
+<span class="sourceLineNo">405</span>   * one that was requested by an external client.  This method may<a name="line.405"></a>
+<span class="sourceLineNo">406</span>   * not be called from within a plugin.<a name="line.406"></a>
+<span class="sourceLineNo">407</span>   *<a name="line.407"></a>
+<span class="sourceLineNo">408</span>   * @param  isSynchronizationOperation  Specifies whether this is a<a name="line.408"></a>
+<span class="sourceLineNo">409</span>   *                                     synchronization operation<a name="line.409"></a>
+<span class="sourceLineNo">410</span>   *                                     rather than one that was<a name="line.410"></a>
+<span class="sourceLineNo">411</span>   *                                     requested by an external<a name="line.411"></a>
+<span class="sourceLineNo">412</span>   *                                     client.<a name="line.412"></a>
+<span class="sourceLineNo">413</span>   */<a name="line.413"></a>
+<span class="sourceLineNo">414</span>  public abstract void setSynchronizationOperation(<a name="line.414"></a>
+<span class="sourceLineNo">415</span>      boolean isSynchronizationOperation);<a name="line.415"></a>
+<span class="sourceLineNo">416</span><a name="line.416"></a>
+<span class="sourceLineNo">417</span>  /**<a name="line.417"></a>
+<span class="sourceLineNo">418</span>   * Specifies whether this operation must be synchronized to other<a name="line.418"></a>
+<span class="sourceLineNo">419</span>   * copies of the data.<a name="line.419"></a>
+<span class="sourceLineNo">420</span>   *<a name="line.420"></a>
+<span class="sourceLineNo">421</span>   * @param  dontSynchronize  Specifies whether this operation must be<a name="line.421"></a>
+<span class="sourceLineNo">422</span>   *                          synchronized to other copies<a name="line.422"></a>
+<span class="sourceLineNo">423</span>   *                          of the data.<a name="line.423"></a>
+<span class="sourceLineNo">424</span>   */<a name="line.424"></a>
+<span class="sourceLineNo">425</span>  public abstract void setDontSynchronize(boolean dontSynchronize);<a name="line.425"></a>
+<span class="sourceLineNo">426</span><a name="line.426"></a>
+<span class="sourceLineNo">427</span>  /**<a name="line.427"></a>
+<span class="sourceLineNo">428</span>   * Retrieves the entry for the user that should be considered the<a name="line.428"></a>
+<span class="sourceLineNo">429</span>   * authorization identity for this operation.  In many cases, it<a name="line.429"></a>
+<span class="sourceLineNo">430</span>   * will be the same as the authorization entry for the underlying<a name="line.430"></a>
+<span class="sourceLineNo">431</span>   * client connection, or {@code null} if no authentication has been<a name="line.431"></a>
+<span class="sourceLineNo">432</span>   * performed on that connection.  However, it may be some other<a name="line.432"></a>
+<span class="sourceLineNo">433</span>   * value if special processing has been requested (e.g., the<a name="line.433"></a>
+<span class="sourceLineNo">434</span>   * operation included a proxied authorization control).  This method<a name="line.434"></a>
+<span class="sourceLineNo">435</span>   * should not be called by pre-parse plugins because the correct<a name="line.435"></a>
+<span class="sourceLineNo">436</span>   * value may not yet have been determined.<a name="line.436"></a>
+<span class="sourceLineNo">437</span>   *<a name="line.437"></a>
+<span class="sourceLineNo">438</span>   * @return  The entry for the user that should be considered the<a name="line.438"></a>
+<span class="sourceLineNo">439</span>   *          authorization identity for this operation, or<a name="line.439"></a>
+<span class="sourceLineNo">440</span>   *          {@code null} if the authorization identity should be the<a name="line.440"></a>
+<span class="sourceLineNo">441</span>   *          unauthenticated  user.<a name="line.441"></a>
+<span class="sourceLineNo">442</span>   */<a name="line.442"></a>
+<span class="sourceLineNo">443</span>  public abstract Entry getAuthorizationEntry();<a name="line.443"></a>
+<span class="sourceLineNo">444</span><a name="line.444"></a>
+<span class="sourceLineNo">445</span>  /**<a name="line.445"></a>
+<span class="sourceLineNo">446</span>   * Provides the entry for the user that should be considered the<a name="line.446"></a>
+<span class="sourceLineNo">447</span>   * authorization identity for this operation.  This must not be<a name="line.447"></a>
+<span class="sourceLineNo">448</span>   * called from within a plugin.<a name="line.448"></a>
+<span class="sourceLineNo">449</span>   *<a name="line.449"></a>
+<span class="sourceLineNo">450</span>   * @param  authorizationEntry  The entry for the user that should be<a name="line.450"></a>
+<span class="sourceLineNo">451</span>   *                             considered the authorization identity<a name="line.451"></a>
+<span class="sourceLineNo">452</span>   *                             for this operation, or {@code null}<a name="line.452"></a>
+<span class="sourceLineNo">453</span>   *                             if it should be the unauthenticated<a name="line.453"></a>
+<span class="sourceLineNo">454</span>   *                             user.<a name="line.454"></a>
+<span class="sourceLineNo">455</span>   */<a name="line.455"></a>
+<span class="sourceLineNo">456</span>  public abstract void setAuthorizationEntry(Entry<a name="line.456"></a>
+<span class="sourceLineNo">457</span>      authorizationEntry);<a name="line.457"></a>
+<span class="sourceLineNo">458</span><a name="line.458"></a>
+<span class="sourceLineNo">459</span>  /**<a name="line.459"></a>
+<span class="sourceLineNo">460</span>   * Retrieves the authorization DN for this operation.  In many<a name="line.460"></a>
+<span class="sourceLineNo">461</span>   * cases, it will be the same as the DN of the authenticated user<a name="line.461"></a>
+<span class="sourceLineNo">462</span>   * for the underlying connection, or the null DN if no<a name="line.462"></a>
+<span class="sourceLineNo">463</span>   * authentication has been performed on that connection.  However,<a name="line.463"></a>
+<span class="sourceLineNo">464</span>   * it may be some other value if special processing has been<a name="line.464"></a>
+<span class="sourceLineNo">465</span>   * requested (e.g., the operation included a proxied authorization<a name="line.465"></a>
+<span class="sourceLineNo">466</span>   * control).  This method should not be called by pre-parse plugins<a name="line.466"></a>
+<span class="sourceLineNo">467</span>   * because the correct value may not have yet been determined.<a name="line.467"></a>
+<span class="sourceLineNo">468</span>   *<a name="line.468"></a>
+<span class="sourceLineNo">469</span>   * @return  The authorization DN for this operation, or the null DN<a name="line.469"></a>
+<span class="sourceLineNo">470</span>   *          if it should be the unauthenticated user..<a name="line.470"></a>
+<span class="sourceLineNo">471</span>   */<a name="line.471"></a>
+<span class="sourceLineNo">472</span>  public abstract DN getAuthorizationDN();<a name="line.472"></a>
+<span class="sourceLineNo">473</span><a name="line.473"></a>
+<span class="sourceLineNo">474</span>  /**<a name="line.474"></a>
+<span class="sourceLineNo">475</span>   * Retrieves the set of attachments defined for this operation, as a<a name="line.475"></a>
+<span class="sourceLineNo">476</span>   * mapping between the attachment name and the associated object.<a name="line.476"></a>
+<span class="sourceLineNo">477</span>   *<a name="line.477"></a>
+<span class="sourceLineNo">478</span>   * @return  The set of attachments defined for this operation.<a name="line.478"></a>
+<span class="sourceLineNo">479</span>   */<a name="line.479"></a>
+<span class="sourceLineNo">480</span>  public abstract Map&lt;String, Object&gt; getAttachments();<a name="line.480"></a>
+<span class="sourceLineNo">481</span><a name="line.481"></a>
+<span class="sourceLineNo">482</span>  /**<a name="line.482"></a>
+<span class="sourceLineNo">483</span>   * Retrieves the attachment with the specified name.<a name="line.483"></a>
+<span class="sourceLineNo">484</span>   *<a name="line.484"></a>
+<span class="sourceLineNo">485</span>   * @param  name  The name for the attachment to retrieve.  It will<a name="line.485"></a>
+<span class="sourceLineNo">486</span>   *               be treated in a case-sensitive manner.<a name="line.486"></a>
+<span class="sourceLineNo">487</span>   *<a name="line.487"></a>
+<span class="sourceLineNo">488</span>   * @return  The requested attachment object, or {@code null} if it<a name="line.488"></a>
+<span class="sourceLineNo">489</span>   *          does not exist.<a name="line.489"></a>
+<span class="sourceLineNo">490</span>   */<a name="line.490"></a>
+<span class="sourceLineNo">491</span>  public abstract Object getAttachment(String name);<a name="line.491"></a>
+<span class="sourceLineNo">492</span><a name="line.492"></a>
+<span class="sourceLineNo">493</span>  /**<a name="line.493"></a>
+<span class="sourceLineNo">494</span>   * Removes the attachment with the specified name.<a name="line.494"></a>
+<span class="sourceLineNo">495</span>   *<a name="line.495"></a>
+<span class="sourceLineNo">496</span>   * @param  name  The name for the attachment to remove.  It will be<a name="line.496"></a>
+<span class="sourceLineNo">497</span>   *               treated in a case-sensitive manner.<a name="line.497"></a>
+<span class="sourceLineNo">498</span>   *<a name="line.498"></a>
+<span class="sourceLineNo">499</span>   * @return  The attachment that was removed, or {@code null} if it<a name="line.499"></a>
+<span class="sourceLineNo">500</span>   *          does not exist.<a name="line.500"></a>
+<span class="sourceLineNo">501</span>   */<a name="line.501"></a>
+<span class="sourceLineNo">502</span>  public abstract Object removeAttachment(String name);<a name="line.502"></a>
+<span class="sourceLineNo">503</span><a name="line.503"></a>
+<span class="sourceLineNo">504</span>  /**<a name="line.504"></a>
+<span class="sourceLineNo">505</span>   * Sets the value of the specified attachment.  If an attachment<a name="line.505"></a>
+<span class="sourceLineNo">506</span>   * already exists with the same name, it will be replaced.<a name="line.506"></a>
+<span class="sourceLineNo">507</span>   * Otherwise, a new attachment will be added.<a name="line.507"></a>
+<span class="sourceLineNo">508</span>   *<a name="line.508"></a>
+<span class="sourceLineNo">509</span>   * @param  name   The name to use for the attachment.<a name="line.509"></a>
+<span class="sourceLineNo">510</span>   * @param  value  The value to use for the attachment.<a name="line.510"></a>
+<span class="sourceLineNo">511</span>   *<a name="line.511"></a>
+<span class="sourceLineNo">512</span>   * @return  The former value held by the attachment with the given<a name="line.512"></a>
+<span class="sourceLineNo">513</span>   *          name, or {@code null} if there was previously no such<a name="line.513"></a>
+<span class="sourceLineNo">514</span>   *          attachment.<a name="line.514"></a>
+<span class="sourceLineNo">515</span>   */<a name="line.515"></a>
+<span class="sourceLineNo">516</span>  public abstract Object setAttachment(String name, Object value);<a name="line.516"></a>
+<span class="sourceLineNo">517</span><a name="line.517"></a>
+<span class="sourceLineNo">518</span>  /**<a name="line.518"></a>
+<span class="sourceLineNo">519</span>   * Retrieves the time that processing started for this operation.<a name="line.519"></a>
+<span class="sourceLineNo">520</span>   *<a name="line.520"></a>
+<span class="sourceLineNo">521</span>   * @return  The time that processing started for this operation.<a name="line.521"></a>
+<span class="sourceLineNo">522</span>   */<a name="line.522"></a>
+<span class="sourceLineNo">523</span>  public abstract long getProcessingStartTime();<a name="line.523"></a>
+<span class="sourceLineNo">524</span><a name="line.524"></a>
+<span class="sourceLineNo">525</span>  /**<a name="line.525"></a>
+<span class="sourceLineNo">526</span>   * Retrieves the time that processing stopped for this operation.<a name="line.526"></a>
+<span class="sourceLineNo">527</span>   * This will actually hold a time immediately before the response<a name="line.527"></a>
+<span class="sourceLineNo">528</span>   * was sent to the client.<a name="line.528"></a>
+<span class="sourceLineNo">529</span>   *<a name="line.529"></a>
+<span class="sourceLineNo">530</span>   * @return  The time that processing stopped for this operation.<a name="line.530"></a>
+<span class="sourceLineNo">531</span>   */<a name="line.531"></a>
+<span class="sourceLineNo">532</span>  public abstract long getProcessingStopTime();<a name="line.532"></a>
+<span class="sourceLineNo">533</span><a name="line.533"></a>
+<span class="sourceLineNo">534</span>  /**<a name="line.534"></a>
+<span class="sourceLineNo">535</span>   * Retrieves the length of time in milliseconds that the server<a name="line.535"></a>
+<span class="sourceLineNo">536</span>   * spent processing this operation.  This should not be called until<a name="line.536"></a>
+<span class="sourceLineNo">537</span>   * after the server has sent the response to the client.<a name="line.537"></a>
+<span class="sourceLineNo">538</span>   *<a name="line.538"></a>
+<span class="sourceLineNo">539</span>   * @return  The length of time in milliseconds that the server spent<a name="line.539"></a>
+<span class="sourceLineNo">540</span>   *          processing this operation.<a name="line.540"></a>
+<span class="sourceLineNo">541</span>   */<a name="line.541"></a>
+<span class="sourceLineNo">542</span>  public abstract long getProcessingTime();<a name="line.542"></a>
+<span class="sourceLineNo">543</span><a name="line.543"></a>
+<span class="sourceLineNo">544</span>  /**<a name="line.544"></a>
+<span class="sourceLineNo">545</span>   * Retrieves the length of time in nanoseconds that<a name="line.545"></a>
+<span class="sourceLineNo">546</span>   * the server spent processing this operation if available.<a name="line.546"></a>
+<span class="sourceLineNo">547</span>   * This should not be called until after the server has sent the<a name="line.547"></a>
+<span class="sourceLineNo">548</span>   * response to the client.<a name="line.548"></a>
+<span class="sourceLineNo">549</span>   *<a name="line.549"></a>
+<span class="sourceLineNo">550</span>   * @return  The length of time in nanoseconds that the server<a name="line.550"></a>
+<span class="sourceLineNo">551</span>   *          spent processing this operation or -1 if its not<a name="line.551"></a>
+<span class="sourceLineNo">552</span>   *          available.<a name="line.552"></a>
+<span class="sourceLineNo">553</span>   */<a name="line.553"></a>
+<span class="sourceLineNo">554</span>  public abstract long getProcessingNanoTime();<a name="line.554"></a>
+<span class="sourceLineNo">555</span><a name="line.555"></a>
+<span class="sourceLineNo">556</span>  /**<a name="line.556"></a>
+<span class="sourceLineNo">557</span>   * Indicates that processing on this operation has completed<a name="line.557"></a>
+<span class="sourceLineNo">558</span>   * successfully and that the client should perform any associated<a name="line.558"></a>
+<span class="sourceLineNo">559</span>   * cleanup work.<a name="line.559"></a>
+<span class="sourceLineNo">560</span>   */<a name="line.560"></a>
+<span class="sourceLineNo">561</span>  public abstract void operationCompleted();<a name="line.561"></a>
+<span class="sourceLineNo">562</span><a name="line.562"></a>
+<span class="sourceLineNo">563</span>  /**<a name="line.563"></a>
+<span class="sourceLineNo">564</span>   * Attempts to cancel this operation before processing has<a name="line.564"></a>
+<span class="sourceLineNo">565</span>   * completed.<a name="line.565"></a>
+<span class="sourceLineNo">566</span>   *<a name="line.566"></a>
+<span class="sourceLineNo">567</span>   * @param  cancelRequest  Information about the way in which the<a name="line.567"></a>
+<span class="sourceLineNo">568</span>   *                        operation should be canceled.<a name="line.568"></a>
+<span class="sourceLineNo">569</span>   *<a name="line.569"></a>
+<span class="sourceLineNo">570</span>   * @return  A code providing information on the result of the<a name="line.570"></a>
+<span class="sourceLineNo">571</span>   *          cancellation.<a name="line.571"></a>
+<span class="sourceLineNo">572</span>   */<a name="line.572"></a>
+<span class="sourceLineNo">573</span>  public abstract CancelResult cancel(CancelRequest cancelRequest);<a name="line.573"></a>
+<span class="sourceLineNo">574</span><a name="line.574"></a>
+<span class="sourceLineNo">575</span>  /**<a name="line.575"></a>
+<span class="sourceLineNo">576</span>   * Attempts to abort this operation before processing has<a name="line.576"></a>
+<span class="sourceLineNo">577</span>   * completed.<a name="line.577"></a>
+<span class="sourceLineNo">578</span>   *<a name="line.578"></a>
+<span class="sourceLineNo">579</span>   * @param  cancelRequest  Information about the way in which the<a name="line.579"></a>
+<span class="sourceLineNo">580</span>   *                        operation should be canceled.<a name="line.580"></a>
+<span class="sourceLineNo">581</span>   */<a name="line.581"></a>
+<span class="sourceLineNo">582</span>  public abstract void abort(CancelRequest cancelRequest);<a name="line.582"></a>
+<span class="sourceLineNo">583</span><a name="line.583"></a>
+<span class="sourceLineNo">584</span><a name="line.584"></a>
+<span class="sourceLineNo">585</span>  /**<a name="line.585"></a>
+<span class="sourceLineNo">586</span>   * Retrieves the cancel request that has been issued for this<a name="line.586"></a>
+<span class="sourceLineNo">587</span>   * operation, if there is one.  This method should not be called by<a name="line.587"></a>
+<span class="sourceLineNo">588</span>   * post-operation or post-response plugins.<a name="line.588"></a>
+<span class="sourceLineNo">589</span>   *<a name="line.589"></a>
+<span class="sourceLineNo">590</span>   * @return  The cancel request that has been issued for this<a name="line.590"></a>
+<span class="sourceLineNo">591</span>   *          operation, or {@code null} if there has not been any<a name="line.591"></a>
+<span class="sourceLineNo">592</span>   *          request to cancel.<a name="line.592"></a>
+<span class="sourceLineNo">593</span>   */<a name="line.593"></a>
+<span class="sourceLineNo">594</span>  public abstract CancelRequest getCancelRequest();<a name="line.594"></a>
+<span class="sourceLineNo">595</span><a name="line.595"></a>
+<span class="sourceLineNo">596</span>  /**<a name="line.596"></a>
+<span class="sourceLineNo">597</span>   * Retrieves the cancel result for this operation.<a name="line.597"></a>
+<span class="sourceLineNo">598</span>   *<a name="line.598"></a>
+<span class="sourceLineNo">599</span>   * @return  The cancel result for this operation.  It will be<a name="line.599"></a>
+<span class="sourceLineNo">600</span>   *          {@code null} if the operation has not seen and reacted<a name="line.600"></a>
+<span class="sourceLineNo">601</span>   *          to a cancel request.<a name="line.601"></a>
+<span class="sourceLineNo">602</span>   */<a name="line.602"></a>
+<span class="sourceLineNo">603</span>  public abstract CancelResult getCancelResult();<a name="line.603"></a>
+<span class="sourceLineNo">604</span><a name="line.604"></a>
+<span class="sourceLineNo">605</span>  /**<a name="line.605"></a>
+<span class="sourceLineNo">606</span>   * Retrieves a string representation of this operation.<a name="line.606"></a>
+<span class="sourceLineNo">607</span>   *<a name="line.607"></a>
+<span class="sourceLineNo">608</span>   * @return  A string representation of this operation.<a name="line.608"></a>
+<span class="sourceLineNo">609</span>   */<a name="line.609"></a>
+<span class="sourceLineNo">610</span>  @Override<a name="line.610"></a>
+<span class="sourceLineNo">611</span>  public abstract String toString();<a name="line.611"></a>
+<span class="sourceLineNo">612</span><a name="line.612"></a>
+<span class="sourceLineNo">613</span>  /**<a name="line.613"></a>
+<span class="sourceLineNo">614</span>   * Appends a string representation of this operation to the provided<a name="line.614"></a>
+<span class="sourceLineNo">615</span>   * buffer.<a name="line.615"></a>
+<span class="sourceLineNo">616</span>   *<a name="line.616"></a>
+<span class="sourceLineNo">617</span>   * @param  buffer  The buffer into which a string representation of<a name="line.617"></a>
+<span class="sourceLineNo">618</span>   *                 this operation should be appended.<a name="line.618"></a>
+<span class="sourceLineNo">619</span>   */<a name="line.619"></a>
+<span class="sourceLineNo">620</span>  public abstract void toString(StringBuilder buffer);<a name="line.620"></a>
+<span class="sourceLineNo">621</span><a name="line.621"></a>
+<span class="sourceLineNo">622</span>  /**<a name="line.622"></a>
+<span class="sourceLineNo">623</span>   * Indicates whether this operation needs to be synchronized to<a name="line.623"></a>
+<span class="sourceLineNo">624</span>   * other copies of the data.<a name="line.624"></a>
+<span class="sourceLineNo">625</span>   *<a name="line.625"></a>
+<span class="sourceLineNo">626</span>   * @return  {@code true} if this operation should not be<a name="line.626"></a>
+<span class="sourceLineNo">627</span>   *          synchronized, or {@code false} if it should be<a name="line.627"></a>
+<span class="sourceLineNo">628</span>   *          synchronized.<a name="line.628"></a>
+<span class="sourceLineNo">629</span>   */<a name="line.629"></a>
+<span class="sourceLineNo">630</span>  public abstract boolean dontSynchronize();<a name="line.630"></a>
+<span class="sourceLineNo">631</span><a name="line.631"></a>
+<span class="sourceLineNo">632</span>  /**<a name="line.632"></a>
+<span class="sourceLineNo">633</span>   * Set the attachments to the operation.<a name="line.633"></a>
+<span class="sourceLineNo">634</span>   *<a name="line.634"></a>
+<span class="sourceLineNo">635</span>   * @param attachments - Attachments to register within the<a name="line.635"></a>
+<span class="sourceLineNo">636</span>   *                      operation<a name="line.636"></a>
+<span class="sourceLineNo">637</span>   */<a name="line.637"></a>
+<span class="sourceLineNo">638</span>  public abstract void setAttachments(Map&lt;String,<a name="line.638"></a>
+<span class="sourceLineNo">639</span>      Object&gt; attachments);<a name="line.639"></a>
+<span class="sourceLineNo">640</span><a name="line.640"></a>
+<span class="sourceLineNo">641</span>  /**<a name="line.641"></a>
+<span class="sourceLineNo">642</span>   * Checks to see if this operation requested to cancel in which case<a name="line.642"></a>
+<span class="sourceLineNo">643</span>   * CanceledOperationException will be thrown.<a name="line.643"></a>
+<span class="sourceLineNo">644</span>   *<a name="line.644"></a>
+<span class="sourceLineNo">645</span>   * @param signalTooLate &lt;code&gt;true&lt;/code&gt; to signal that any further<a name="line.645"></a>
+<span class="sourceLineNo">646</span>   *                      cancel requests will be too late after<a name="line.646"></a>
+<span class="sourceLineNo">647</span>   *                      return from this call or &lt;code&gt;false&lt;/code&gt;<a name="line.647"></a>
+<span class="sourceLineNo">648</span>   *                      otherwise.<a name="line.648"></a>
+<span class="sourceLineNo">649</span>   *<a name="line.649"></a>
+<span class="sourceLineNo">650</span>   * @throws CanceledOperationException if this operation should<a name="line.650"></a>
+<span class="sourceLineNo">651</span>   * be cancelled.<a name="line.651"></a>
+<span class="sourceLineNo">652</span>   */<a name="line.652"></a>
+<span class="sourceLineNo">653</span>  public void checkIfCanceled(boolean signalTooLate)<a name="line.653"></a>
+<span class="sourceLineNo">654</span>      throws CanceledOperationException;<a name="line.654"></a>
+<span class="sourceLineNo">655</span><a name="line.655"></a>
+<span class="sourceLineNo">656</span>  /**<a name="line.656"></a>
+<span class="sourceLineNo">657</span>   * Registers a callback which should be run once this operation has<a name="line.657"></a>
+<span class="sourceLineNo">658</span>   * completed and the response sent back to the client.<a name="line.658"></a>
+<span class="sourceLineNo">659</span>   *<a name="line.659"></a>
+<span class="sourceLineNo">660</span>   * @param callback<a name="line.660"></a>
+<span class="sourceLineNo">661</span>   *          The callback to be run once this operation has completed<a name="line.661"></a>
+<span class="sourceLineNo">662</span>   *          and the response sent back to the client.<a name="line.662"></a>
+<span class="sourceLineNo">663</span>   */<a name="line.663"></a>
+<span class="sourceLineNo">664</span>  public void registerPostResponseCallback(Runnable callback);<a name="line.664"></a>
+<span class="sourceLineNo">665</span><a name="line.665"></a>
+<span class="sourceLineNo">666</span>  /**<a name="line.666"></a>
+<span class="sourceLineNo">667</span>   * Performs the work of actually processing this operation. This should<a name="line.667"></a>
+<span class="sourceLineNo">668</span>   * include all processing for the operation, including invoking pre-parse and<a name="line.668"></a>
+<span class="sourceLineNo">669</span>   * post-response plugins, logging messages and any other work that might need<a name="line.669"></a>
+<span class="sourceLineNo">670</span>   * to be done in the course of processing.<a name="line.670"></a>
+<span class="sourceLineNo">671</span>   */<a name="line.671"></a>
+<span class="sourceLineNo">672</span>  @Override<a name="line.672"></a>
+<span class="sourceLineNo">673</span>  void run();<a name="line.673"></a>
+<span class="sourceLineNo">674</span>}<a name="line.674"></a>
+<span class="sourceLineNo">675</span><a name="line.675"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

@@ -1,0 +1,455 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * CDDL HEADER START<a name="line.2"></a>
+<span class="sourceLineNo">003</span> *<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * The contents of this file are subject to the terms of the<a name="line.4"></a>
+<span class="sourceLineNo">005</span> * Common Development and Distribution License, Version 1.0 only<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * (the "License").  You may not use this file except in compliance<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * with the License.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * You can obtain a copy of the license at<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * trunk/opends/resource/legal-notices/OpenDS.LICENSE<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * or https://OpenDS.dev.java.net/OpenDS.LICENSE.<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * See the License for the specific language governing permissions<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * and limitations under the License.<a name="line.13"></a>
+<span class="sourceLineNo">014</span> *<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * When distributing Covered Code, include this CDDL HEADER in each<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * file and include the License file at<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * trunk/opends/resource/legal-notices/OpenDS.LICENSE.  If applicable,<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * add the following below this CDDL HEADER, with the fields enclosed<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * by brackets "[]" replaced with your own identifying information:<a name="line.19"></a>
+<span class="sourceLineNo">020</span> *      Portions Copyright [yyyy] [name of copyright owner]<a name="line.20"></a>
+<span class="sourceLineNo">021</span> *<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * CDDL HEADER END<a name="line.22"></a>
+<span class="sourceLineNo">023</span> *<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *<a name="line.24"></a>
+<span class="sourceLineNo">025</span> *      Copyright 2010 Sun Microsystems, Inc.<a name="line.25"></a>
+<span class="sourceLineNo">026</span> */<a name="line.26"></a>
+<span class="sourceLineNo">027</span>package org.opends.server.admin.client.cli;<a name="line.27"></a>
+<span class="sourceLineNo">028</span><a name="line.28"></a>
+<span class="sourceLineNo">029</span>import static org.opends.messages.ToolMessages.*;<a name="line.29"></a>
+<span class="sourceLineNo">030</span>import static org.opends.server.tools.ToolConstants.*;<a name="line.30"></a>
+<span class="sourceLineNo">031</span><a name="line.31"></a>
+<span class="sourceLineNo">032</span>import java.text.ParseException;<a name="line.32"></a>
+<span class="sourceLineNo">033</span>import java.util.Collections;<a name="line.33"></a>
+<span class="sourceLineNo">034</span>import java.util.Date;<a name="line.34"></a>
+<span class="sourceLineNo">035</span>import java.util.EnumSet;<a name="line.35"></a>
+<span class="sourceLineNo">036</span>import java.util.LinkedList;<a name="line.36"></a>
+<span class="sourceLineNo">037</span>import java.util.List;<a name="line.37"></a>
+<span class="sourceLineNo">038</span>import java.util.Set;<a name="line.38"></a>
+<span class="sourceLineNo">039</span><a name="line.39"></a>
+<span class="sourceLineNo">040</span>import org.opends.server.backends.task.FailedDependencyAction;<a name="line.40"></a>
+<span class="sourceLineNo">041</span>import org.opends.server.backends.task.RecurringTask;<a name="line.41"></a>
+<span class="sourceLineNo">042</span>import org.opends.server.types.DirectoryException;<a name="line.42"></a>
+<span class="sourceLineNo">043</span>import org.opends.server.util.StaticUtils;<a name="line.43"></a>
+<span class="sourceLineNo">044</span>import org.opends.server.util.args.Argument;<a name="line.44"></a>
+<span class="sourceLineNo">045</span>import org.opends.server.util.args.ArgumentException;<a name="line.45"></a>
+<span class="sourceLineNo">046</span>import org.opends.server.util.args.StringArgument;<a name="line.46"></a>
+<span class="sourceLineNo">047</span>import org.opends.server.util.cli.CLIException;<a name="line.47"></a>
+<span class="sourceLineNo">048</span><a name="line.48"></a>
+<span class="sourceLineNo">049</span>/**<a name="line.49"></a>
+<span class="sourceLineNo">050</span> * A class that contains all the arguments related to the task scheduling.<a name="line.50"></a>
+<span class="sourceLineNo">051</span> *<a name="line.51"></a>
+<span class="sourceLineNo">052</span> */<a name="line.52"></a>
+<span class="sourceLineNo">053</span>public class TaskScheduleArgs<a name="line.53"></a>
+<span class="sourceLineNo">054</span>{<a name="line.54"></a>
+<span class="sourceLineNo">055</span>  /**<a name="line.55"></a>
+<span class="sourceLineNo">056</span>   * Magic value used to indicate that the user would like to schedule<a name="line.56"></a>
+<span class="sourceLineNo">057</span>   * this operation to run immediately as a task as opposed to running<a name="line.57"></a>
+<span class="sourceLineNo">058</span>   * the operation in the local VM.<a name="line.58"></a>
+<span class="sourceLineNo">059</span>   */<a name="line.59"></a>
+<span class="sourceLineNo">060</span>  public static final String NOW = "0";<a name="line.60"></a>
+<span class="sourceLineNo">061</span>  /**<a name="line.61"></a>
+<span class="sourceLineNo">062</span>   *  Argument for describing the task's start time.<a name="line.62"></a>
+<span class="sourceLineNo">063</span>   */<a name="line.63"></a>
+<span class="sourceLineNo">064</span>  public StringArgument startArg;<a name="line.64"></a>
+<span class="sourceLineNo">065</span><a name="line.65"></a>
+<span class="sourceLineNo">066</span>  /**<a name="line.66"></a>
+<span class="sourceLineNo">067</span>   *  Argument to indicate a recurring task.<a name="line.67"></a>
+<span class="sourceLineNo">068</span>   */<a name="line.68"></a>
+<span class="sourceLineNo">069</span>  public StringArgument recurringArg;<a name="line.69"></a>
+<span class="sourceLineNo">070</span><a name="line.70"></a>
+<span class="sourceLineNo">071</span>  /**<a name="line.71"></a>
+<span class="sourceLineNo">072</span>   *  Argument for specifying completion notifications.<a name="line.72"></a>
+<span class="sourceLineNo">073</span>   */<a name="line.73"></a>
+<span class="sourceLineNo">074</span>  public StringArgument completionNotificationArg;<a name="line.74"></a>
+<span class="sourceLineNo">075</span><a name="line.75"></a>
+<span class="sourceLineNo">076</span>  /**<a name="line.76"></a>
+<span class="sourceLineNo">077</span>   *  Argument for specifying error notifications.<a name="line.77"></a>
+<span class="sourceLineNo">078</span>   */<a name="line.78"></a>
+<span class="sourceLineNo">079</span>  public StringArgument errorNotificationArg;<a name="line.79"></a>
+<span class="sourceLineNo">080</span><a name="line.80"></a>
+<span class="sourceLineNo">081</span>  /**<a name="line.81"></a>
+<span class="sourceLineNo">082</span>   *  Argument for specifying dependency.<a name="line.82"></a>
+<span class="sourceLineNo">083</span>   */<a name="line.83"></a>
+<span class="sourceLineNo">084</span>  public StringArgument dependencyArg;<a name="line.84"></a>
+<span class="sourceLineNo">085</span><a name="line.85"></a>
+<span class="sourceLineNo">086</span>  /**<a name="line.86"></a>
+<span class="sourceLineNo">087</span>   *  Argument for specifying a failed dependency action.<a name="line.87"></a>
+<span class="sourceLineNo">088</span>   */<a name="line.88"></a>
+<span class="sourceLineNo">089</span>  public StringArgument failedDependencyActionArg;<a name="line.89"></a>
+<span class="sourceLineNo">090</span><a name="line.90"></a>
+<span class="sourceLineNo">091</span>  /**<a name="line.91"></a>
+<span class="sourceLineNo">092</span>   * Default constructor.<a name="line.92"></a>
+<span class="sourceLineNo">093</span>   */<a name="line.93"></a>
+<span class="sourceLineNo">094</span>  public TaskScheduleArgs()<a name="line.94"></a>
+<span class="sourceLineNo">095</span>  {<a name="line.95"></a>
+<span class="sourceLineNo">096</span>    try<a name="line.96"></a>
+<span class="sourceLineNo">097</span>    {<a name="line.97"></a>
+<span class="sourceLineNo">098</span>     createTaskArguments();<a name="line.98"></a>
+<span class="sourceLineNo">099</span>    }<a name="line.99"></a>
+<span class="sourceLineNo">100</span>    catch (ArgumentException ae)<a name="line.100"></a>
+<span class="sourceLineNo">101</span>    {<a name="line.101"></a>
+<span class="sourceLineNo">102</span>      // This is a bug.<a name="line.102"></a>
+<span class="sourceLineNo">103</span>      throw new RuntimeException("Unexpected error: "+ae, ae);<a name="line.103"></a>
+<span class="sourceLineNo">104</span>    }<a name="line.104"></a>
+<span class="sourceLineNo">105</span>  }<a name="line.105"></a>
+<span class="sourceLineNo">106</span><a name="line.106"></a>
+<span class="sourceLineNo">107</span>  private void createTaskArguments() throws ArgumentException<a name="line.107"></a>
+<span class="sourceLineNo">108</span>  {<a name="line.108"></a>
+<span class="sourceLineNo">109</span>    startArg = new StringArgument(OPTION_LONG_START_DATETIME,<a name="line.109"></a>
+<span class="sourceLineNo">110</span>        OPTION_SHORT_START_DATETIME, OPTION_LONG_START_DATETIME, false, false,<a name="line.110"></a>
+<span class="sourceLineNo">111</span>        true, INFO_START_DATETIME_PLACEHOLDER.get(), null, null,<a name="line.111"></a>
+<span class="sourceLineNo">112</span>        INFO_DESCRIPTION_START_DATETIME.get());<a name="line.112"></a>
+<span class="sourceLineNo">113</span><a name="line.113"></a>
+<span class="sourceLineNo">114</span>    recurringArg = new StringArgument(OPTION_LONG_RECURRING_TASK,<a name="line.114"></a>
+<span class="sourceLineNo">115</span>        OPTION_SHORT_RECURRING_TASK, OPTION_LONG_RECURRING_TASK, false, false,<a name="line.115"></a>
+<span class="sourceLineNo">116</span>        true, INFO_RECURRING_TASK_PLACEHOLDER.get(), null, null,<a name="line.116"></a>
+<span class="sourceLineNo">117</span>        INFO_DESCRIPTION_RECURRING_TASK.get());<a name="line.117"></a>
+<span class="sourceLineNo">118</span><a name="line.118"></a>
+<span class="sourceLineNo">119</span>    completionNotificationArg = new StringArgument(<a name="line.119"></a>
+<span class="sourceLineNo">120</span>        OPTION_LONG_COMPLETION_NOTIFICATION_EMAIL,<a name="line.120"></a>
+<span class="sourceLineNo">121</span>        OPTION_SHORT_COMPLETION_NOTIFICATION_EMAIL,<a name="line.121"></a>
+<span class="sourceLineNo">122</span>        OPTION_LONG_COMPLETION_NOTIFICATION_EMAIL, false, true, true,<a name="line.122"></a>
+<span class="sourceLineNo">123</span>        INFO_EMAIL_ADDRESS_PLACEHOLDER.get(), null, null,<a name="line.123"></a>
+<span class="sourceLineNo">124</span>        INFO_DESCRIPTION_TASK_COMPLETION_NOTIFICATION.get());<a name="line.124"></a>
+<span class="sourceLineNo">125</span><a name="line.125"></a>
+<span class="sourceLineNo">126</span>    errorNotificationArg = new StringArgument(<a name="line.126"></a>
+<span class="sourceLineNo">127</span>        OPTION_LONG_ERROR_NOTIFICATION_EMAIL,<a name="line.127"></a>
+<span class="sourceLineNo">128</span>        OPTION_SHORT_ERROR_NOTIFICATION_EMAIL,<a name="line.128"></a>
+<span class="sourceLineNo">129</span>        OPTION_LONG_ERROR_NOTIFICATION_EMAIL, false, true, true,<a name="line.129"></a>
+<span class="sourceLineNo">130</span>        INFO_EMAIL_ADDRESS_PLACEHOLDER.get(), null, null,<a name="line.130"></a>
+<span class="sourceLineNo">131</span>        INFO_DESCRIPTION_TASK_ERROR_NOTIFICATION.get());<a name="line.131"></a>
+<span class="sourceLineNo">132</span><a name="line.132"></a>
+<span class="sourceLineNo">133</span>    dependencyArg = new StringArgument(OPTION_LONG_DEPENDENCY,<a name="line.133"></a>
+<span class="sourceLineNo">134</span>        OPTION_SHORT_DEPENDENCY, OPTION_LONG_DEPENDENCY, false, true, true,<a name="line.134"></a>
+<span class="sourceLineNo">135</span>        INFO_TASK_ID_PLACEHOLDER.get(), null, null,<a name="line.135"></a>
+<span class="sourceLineNo">136</span>        INFO_DESCRIPTION_TASK_DEPENDENCY_ID.get());<a name="line.136"></a>
+<span class="sourceLineNo">137</span><a name="line.137"></a>
+<span class="sourceLineNo">138</span>    Set&lt;FailedDependencyAction&gt; fdaValSet =<a name="line.138"></a>
+<span class="sourceLineNo">139</span>      EnumSet.allOf(FailedDependencyAction.class);<a name="line.139"></a>
+<span class="sourceLineNo">140</span>    failedDependencyActionArg = new StringArgument(<a name="line.140"></a>
+<span class="sourceLineNo">141</span>        OPTION_LONG_FAILED_DEPENDENCY_ACTION,<a name="line.141"></a>
+<span class="sourceLineNo">142</span>        OPTION_SHORT_FAILED_DEPENDENCY_ACTION,<a name="line.142"></a>
+<span class="sourceLineNo">143</span>        OPTION_LONG_FAILED_DEPENDENCY_ACTION, false, true, true,<a name="line.143"></a>
+<span class="sourceLineNo">144</span>        INFO_ACTION_PLACEHOLDER.get(), null, null,<a name="line.144"></a>
+<span class="sourceLineNo">145</span>        INFO_DESCRIPTION_TASK_FAILED_DEPENDENCY_ACTION.get(StaticUtils<a name="line.145"></a>
+<span class="sourceLineNo">146</span>            .collectionToString(fdaValSet, ","), FailedDependencyAction<a name="line.146"></a>
+<span class="sourceLineNo">147</span>            .defaultValue().name()));<a name="line.147"></a>
+<span class="sourceLineNo">148</span><a name="line.148"></a>
+<span class="sourceLineNo">149</span>    for (Argument arg : getArguments())<a name="line.149"></a>
+<span class="sourceLineNo">150</span>    {<a name="line.150"></a>
+<span class="sourceLineNo">151</span>      arg.setPropertyName(arg.getLongIdentifier());<a name="line.151"></a>
+<span class="sourceLineNo">152</span>    }<a name="line.152"></a>
+<span class="sourceLineNo">153</span>  }<a name="line.153"></a>
+<span class="sourceLineNo">154</span><a name="line.154"></a>
+<span class="sourceLineNo">155</span>  /**<a name="line.155"></a>
+<span class="sourceLineNo">156</span>   * Returns all the task schedule related arguments.<a name="line.156"></a>
+<span class="sourceLineNo">157</span>   * @return all the task schedule related arguments.<a name="line.157"></a>
+<span class="sourceLineNo">158</span>   */<a name="line.158"></a>
+<span class="sourceLineNo">159</span>  public Argument[] getArguments()<a name="line.159"></a>
+<span class="sourceLineNo">160</span>  {<a name="line.160"></a>
+<span class="sourceLineNo">161</span>    return new Argument[] {startArg, recurringArg, completionNotificationArg,<a name="line.161"></a>
+<span class="sourceLineNo">162</span>       errorNotificationArg, dependencyArg, failedDependencyActionArg};<a name="line.162"></a>
+<span class="sourceLineNo">163</span>  }<a name="line.163"></a>
+<span class="sourceLineNo">164</span><a name="line.164"></a>
+<span class="sourceLineNo">165</span>  /**<a name="line.165"></a>
+<span class="sourceLineNo">166</span>   * Validates arguments related to task scheduling.  This should be<a name="line.166"></a>
+<span class="sourceLineNo">167</span>   * called after the &lt;code&gt;ArgumentParser.parseArguments&lt;/code&gt; has<a name="line.167"></a>
+<span class="sourceLineNo">168</span>   * been called.<a name="line.168"></a>
+<span class="sourceLineNo">169</span>   * &lt;br&gt;<a name="line.169"></a>
+<span class="sourceLineNo">170</span>   * Note that this method does only validation that is not dependent on whether<a name="line.170"></a>
+<span class="sourceLineNo">171</span>   * the operation will be launched as a task or not.  If the operation is not<a name="line.171"></a>
+<span class="sourceLineNo">172</span>   * to be launched as a task, the method {@link #validateArgsIfOffline()}<a name="line.172"></a>
+<span class="sourceLineNo">173</span>   * should be called instead of this method.<a name="line.173"></a>
+<span class="sourceLineNo">174</span>   * @throws ArgumentException if there is a problem with the arguments.<a name="line.174"></a>
+<span class="sourceLineNo">175</span>   * @throws CLIException if there is a problem with one of the values provided<a name="line.175"></a>
+<span class="sourceLineNo">176</span>   * by the user.<a name="line.176"></a>
+<span class="sourceLineNo">177</span>   */<a name="line.177"></a>
+<span class="sourceLineNo">178</span>  public void validateArgs()<a name="line.178"></a>
+<span class="sourceLineNo">179</span>  throws ArgumentException, CLIException {<a name="line.179"></a>
+<span class="sourceLineNo">180</span>    if (startArg.isPresent() &amp;&amp; !NOW.equals(startArg.getValue())) {<a name="line.180"></a>
+<span class="sourceLineNo">181</span>      try {<a name="line.181"></a>
+<span class="sourceLineNo">182</span>        Date date = StaticUtils.parseDateTimeString(startArg.getValue());<a name="line.182"></a>
+<span class="sourceLineNo">183</span>        // Check that the provided date is not previous to the current date.<a name="line.183"></a>
+<span class="sourceLineNo">184</span>        Date currentDate = new Date(System.currentTimeMillis());<a name="line.184"></a>
+<span class="sourceLineNo">185</span>        if (currentDate.after(date))<a name="line.185"></a>
+<span class="sourceLineNo">186</span>        {<a name="line.186"></a>
+<span class="sourceLineNo">187</span>          throw new CLIException(ERR_START_DATETIME_ALREADY_PASSED.get(<a name="line.187"></a>
+<span class="sourceLineNo">188</span>              startArg.getValue()));<a name="line.188"></a>
+<span class="sourceLineNo">189</span>        }<a name="line.189"></a>
+<span class="sourceLineNo">190</span>      } catch (ParseException pe) {<a name="line.190"></a>
+<span class="sourceLineNo">191</span>        throw new ArgumentException(ERR_START_DATETIME_FORMAT.get());<a name="line.191"></a>
+<span class="sourceLineNo">192</span>      }<a name="line.192"></a>
+<span class="sourceLineNo">193</span>    }<a name="line.193"></a>
+<span class="sourceLineNo">194</span><a name="line.194"></a>
+<span class="sourceLineNo">195</span>    if (recurringArg.isPresent())<a name="line.195"></a>
+<span class="sourceLineNo">196</span>    {<a name="line.196"></a>
+<span class="sourceLineNo">197</span>      try<a name="line.197"></a>
+<span class="sourceLineNo">198</span>      {<a name="line.198"></a>
+<span class="sourceLineNo">199</span>        RecurringTask.parseTaskTab(recurringArg.getValue());<a name="line.199"></a>
+<span class="sourceLineNo">200</span>      }<a name="line.200"></a>
+<span class="sourceLineNo">201</span>      catch (DirectoryException de)<a name="line.201"></a>
+<span class="sourceLineNo">202</span>      {<a name="line.202"></a>
+<span class="sourceLineNo">203</span>        throw new ArgumentException(ERR_RECURRING_SCHEDULE_FORMAT_ERROR.get(<a name="line.203"></a>
+<span class="sourceLineNo">204</span>            de.getMessageObject()), de);<a name="line.204"></a>
+<span class="sourceLineNo">205</span>      }<a name="line.205"></a>
+<span class="sourceLineNo">206</span>    }<a name="line.206"></a>
+<span class="sourceLineNo">207</span><a name="line.207"></a>
+<span class="sourceLineNo">208</span>    if (completionNotificationArg.isPresent()) {<a name="line.208"></a>
+<span class="sourceLineNo">209</span>      LinkedList&lt;String&gt; addrs = completionNotificationArg.getValues();<a name="line.209"></a>
+<span class="sourceLineNo">210</span>      for (String addr : addrs) {<a name="line.210"></a>
+<span class="sourceLineNo">211</span>        if (!StaticUtils.isEmailAddress(addr)) {<a name="line.211"></a>
+<span class="sourceLineNo">212</span>          throw new ArgumentException(ERR_TASKTOOL_INVALID_EMAIL_ADDRESS.get(<a name="line.212"></a>
+<span class="sourceLineNo">213</span>                  addr, completionNotificationArg.getLongIdentifier()));<a name="line.213"></a>
+<span class="sourceLineNo">214</span>        }<a name="line.214"></a>
+<span class="sourceLineNo">215</span>      }<a name="line.215"></a>
+<span class="sourceLineNo">216</span>    }<a name="line.216"></a>
+<span class="sourceLineNo">217</span><a name="line.217"></a>
+<span class="sourceLineNo">218</span>    if (errorNotificationArg.isPresent()) {<a name="line.218"></a>
+<span class="sourceLineNo">219</span>      LinkedList&lt;String&gt; addrs = errorNotificationArg.getValues();<a name="line.219"></a>
+<span class="sourceLineNo">220</span>      for (String addr : addrs) {<a name="line.220"></a>
+<span class="sourceLineNo">221</span>        if (!StaticUtils.isEmailAddress(addr)) {<a name="line.221"></a>
+<span class="sourceLineNo">222</span>          throw new ArgumentException(ERR_TASKTOOL_INVALID_EMAIL_ADDRESS.get(<a name="line.222"></a>
+<span class="sourceLineNo">223</span>                  addr, errorNotificationArg.getLongIdentifier()));<a name="line.223"></a>
+<span class="sourceLineNo">224</span>        }<a name="line.224"></a>
+<span class="sourceLineNo">225</span>      }<a name="line.225"></a>
+<span class="sourceLineNo">226</span>    }<a name="line.226"></a>
+<span class="sourceLineNo">227</span><a name="line.227"></a>
+<span class="sourceLineNo">228</span>    if (failedDependencyActionArg.isPresent()) {<a name="line.228"></a>
+<span class="sourceLineNo">229</span><a name="line.229"></a>
+<span class="sourceLineNo">230</span>      if (!dependencyArg.isPresent()) {<a name="line.230"></a>
+<span class="sourceLineNo">231</span>        throw new ArgumentException(ERR_TASKTOOL_FDA_WITH_NO_DEPENDENCY.get());<a name="line.231"></a>
+<span class="sourceLineNo">232</span>      }<a name="line.232"></a>
+<span class="sourceLineNo">233</span><a name="line.233"></a>
+<span class="sourceLineNo">234</span>      String fda = failedDependencyActionArg.getValue();<a name="line.234"></a>
+<span class="sourceLineNo">235</span>      if (null == FailedDependencyAction.fromString(fda)) {<a name="line.235"></a>
+<span class="sourceLineNo">236</span>        Set&lt;FailedDependencyAction&gt; fdaValSet =<a name="line.236"></a>
+<span class="sourceLineNo">237</span>          EnumSet.allOf(FailedDependencyAction.class);<a name="line.237"></a>
+<span class="sourceLineNo">238</span>        throw new ArgumentException(ERR_TASKTOOL_INVALID_FDA.get(fda,<a name="line.238"></a>
+<span class="sourceLineNo">239</span>                        StaticUtils.collectionToString(fdaValSet, ",")));<a name="line.239"></a>
+<span class="sourceLineNo">240</span>      }<a name="line.240"></a>
+<span class="sourceLineNo">241</span>    }<a name="line.241"></a>
+<span class="sourceLineNo">242</span>  }<a name="line.242"></a>
+<span class="sourceLineNo">243</span><a name="line.243"></a>
+<span class="sourceLineNo">244</span>  /**<a name="line.244"></a>
+<span class="sourceLineNo">245</span>   * Validates arguments related to task scheduling.  This should be<a name="line.245"></a>
+<span class="sourceLineNo">246</span>   * called after the &lt;code&gt;ArgumentParser.parseArguments&lt;/code&gt; has<a name="line.246"></a>
+<span class="sourceLineNo">247</span>   * been called.<a name="line.247"></a>
+<span class="sourceLineNo">248</span>   * &lt;br&gt;<a name="line.248"></a>
+<span class="sourceLineNo">249</span>   * This method assumes that the operation is not to be launched as a task.<a name="line.249"></a>
+<span class="sourceLineNo">250</span>   * This method covers all the checks done by {@link #validateArgs()}, so it<a name="line.250"></a>
+<span class="sourceLineNo">251</span>   * is not necessary to call that method if this method is being called.<a name="line.251"></a>
+<span class="sourceLineNo">252</span>   * @throws ArgumentException if there is a problem with the arguments.<a name="line.252"></a>
+<span class="sourceLineNo">253</span>   * @throws CLIException if there is a problem with one of the values provided<a name="line.253"></a>
+<span class="sourceLineNo">254</span>   * by the user.<a name="line.254"></a>
+<span class="sourceLineNo">255</span>   */<a name="line.255"></a>
+<span class="sourceLineNo">256</span>  public void validateArgsIfOffline()<a name="line.256"></a>
+<span class="sourceLineNo">257</span>  throws ArgumentException, CLIException<a name="line.257"></a>
+<span class="sourceLineNo">258</span>  {<a name="line.258"></a>
+<span class="sourceLineNo">259</span>    Argument[] incompatibleArgs = {startArg, recurringArg,<a name="line.259"></a>
+<span class="sourceLineNo">260</span>        completionNotificationArg,<a name="line.260"></a>
+<span class="sourceLineNo">261</span>        errorNotificationArg, dependencyArg, failedDependencyActionArg};<a name="line.261"></a>
+<span class="sourceLineNo">262</span>    for (Argument arg : incompatibleArgs)<a name="line.262"></a>
+<span class="sourceLineNo">263</span>    {<a name="line.263"></a>
+<span class="sourceLineNo">264</span>      if (arg.isPresent()) {<a name="line.264"></a>
+<span class="sourceLineNo">265</span>        throw new ArgumentException(ERR_TASKTOOL_OPTIONS_FOR_TASK_ONLY.get(<a name="line.265"></a>
+<span class="sourceLineNo">266</span>                arg.getLongIdentifier()));<a name="line.266"></a>
+<span class="sourceLineNo">267</span>      }<a name="line.267"></a>
+<span class="sourceLineNo">268</span>    }<a name="line.268"></a>
+<span class="sourceLineNo">269</span>    validateArgs();<a name="line.269"></a>
+<span class="sourceLineNo">270</span>  }<a name="line.270"></a>
+<span class="sourceLineNo">271</span><a name="line.271"></a>
+<span class="sourceLineNo">272</span>  /**<a name="line.272"></a>
+<span class="sourceLineNo">273</span>   * Gets the date at which the associated task should be scheduled to start.<a name="line.273"></a>
+<span class="sourceLineNo">274</span>   *<a name="line.274"></a>
+<span class="sourceLineNo">275</span>   * @return date/time at which the task should be scheduled<a name="line.275"></a>
+<span class="sourceLineNo">276</span>   */<a name="line.276"></a>
+<span class="sourceLineNo">277</span>  public Date getStartDateTime() {<a name="line.277"></a>
+<span class="sourceLineNo">278</span>    Date start = null;<a name="line.278"></a>
+<span class="sourceLineNo">279</span><a name="line.279"></a>
+<span class="sourceLineNo">280</span>    // If the start time arg is present parse its value<a name="line.280"></a>
+<span class="sourceLineNo">281</span>    if (startArg != null &amp;&amp; startArg.isPresent()) {<a name="line.281"></a>
+<span class="sourceLineNo">282</span>      if (NOW.equals(startArg.getValue())) {<a name="line.282"></a>
+<span class="sourceLineNo">283</span>        start = new Date();<a name="line.283"></a>
+<span class="sourceLineNo">284</span>      } else {<a name="line.284"></a>
+<span class="sourceLineNo">285</span>        try {<a name="line.285"></a>
+<span class="sourceLineNo">286</span>          start = StaticUtils.parseDateTimeString(startArg.getValue());<a name="line.286"></a>
+<span class="sourceLineNo">287</span>        } catch (ParseException pe) {<a name="line.287"></a>
+<span class="sourceLineNo">288</span>          // ignore; validated in validateTaskArgs()<a name="line.288"></a>
+<span class="sourceLineNo">289</span>        }<a name="line.289"></a>
+<span class="sourceLineNo">290</span>      }<a name="line.290"></a>
+<span class="sourceLineNo">291</span>    }<a name="line.291"></a>
+<span class="sourceLineNo">292</span>    return start;<a name="line.292"></a>
+<span class="sourceLineNo">293</span>  }<a name="line.293"></a>
+<span class="sourceLineNo">294</span><a name="line.294"></a>
+<span class="sourceLineNo">295</span>  /**<a name="line.295"></a>
+<span class="sourceLineNo">296</span>   * Whether the arguments provided by the user, indicate that the task should<a name="line.296"></a>
+<span class="sourceLineNo">297</span>   * be executed immediately.<a name="line.297"></a>
+<span class="sourceLineNo">298</span>   * &lt;br&gt;<a name="line.298"></a>
+<span class="sourceLineNo">299</span>   * This method assumes that the arguments have already been parsed and<a name="line.299"></a>
+<span class="sourceLineNo">300</span>   * validated.<a name="line.300"></a>
+<span class="sourceLineNo">301</span>   * @return {@code true} if the task must be executed immediately and<a name="line.301"></a>
+<span class="sourceLineNo">302</span>   * {@code false} otherwise.<a name="line.302"></a>
+<span class="sourceLineNo">303</span>   */<a name="line.303"></a>
+<span class="sourceLineNo">304</span>  public boolean isStartNow()<a name="line.304"></a>
+<span class="sourceLineNo">305</span>  {<a name="line.305"></a>
+<span class="sourceLineNo">306</span>    boolean isStartNow = true;<a name="line.306"></a>
+<span class="sourceLineNo">307</span>    if (startArg != null &amp;&amp; startArg.isPresent()) {<a name="line.307"></a>
+<span class="sourceLineNo">308</span>      isStartNow = NOW.equals(startArg.getValue());<a name="line.308"></a>
+<span class="sourceLineNo">309</span>    }<a name="line.309"></a>
+<span class="sourceLineNo">310</span>    return isStartNow;<a name="line.310"></a>
+<span class="sourceLineNo">311</span>  }<a name="line.311"></a>
+<span class="sourceLineNo">312</span><a name="line.312"></a>
+<span class="sourceLineNo">313</span>  /**<a name="line.313"></a>
+<span class="sourceLineNo">314</span>   * Gets the date/time pattern for recurring task schedule.<a name="line.314"></a>
+<span class="sourceLineNo">315</span>   *<a name="line.315"></a>
+<span class="sourceLineNo">316</span>   * @return recurring date/time pattern at which the task<a name="line.316"></a>
+<span class="sourceLineNo">317</span>   *         should be scheduled.<a name="line.317"></a>
+<span class="sourceLineNo">318</span>   */<a name="line.318"></a>
+<span class="sourceLineNo">319</span>  public String getRecurringDateTime() {<a name="line.319"></a>
+<span class="sourceLineNo">320</span>    String pattern = null;<a name="line.320"></a>
+<span class="sourceLineNo">321</span><a name="line.321"></a>
+<span class="sourceLineNo">322</span>    // If the recurring task arg is present parse its value<a name="line.322"></a>
+<span class="sourceLineNo">323</span>    if (recurringArg != null &amp;&amp; recurringArg.isPresent()) {<a name="line.323"></a>
+<span class="sourceLineNo">324</span>      pattern = recurringArg.getValue();<a name="line.324"></a>
+<span class="sourceLineNo">325</span>    }<a name="line.325"></a>
+<span class="sourceLineNo">326</span>    return pattern;<a name="line.326"></a>
+<span class="sourceLineNo">327</span>  }<a name="line.327"></a>
+<span class="sourceLineNo">328</span><a name="line.328"></a>
+<span class="sourceLineNo">329</span>  /**<a name="line.329"></a>
+<span class="sourceLineNo">330</span>   * Gets a list of task IDs upon which the associated task is dependent.<a name="line.330"></a>
+<span class="sourceLineNo">331</span>   *<a name="line.331"></a>
+<span class="sourceLineNo">332</span>   * @return list of task IDs<a name="line.332"></a>
+<span class="sourceLineNo">333</span>   */<a name="line.333"></a>
+<span class="sourceLineNo">334</span>  public List&lt;String&gt; getDependencyIds() {<a name="line.334"></a>
+<span class="sourceLineNo">335</span>    if (dependencyArg.isPresent()) {<a name="line.335"></a>
+<span class="sourceLineNo">336</span>      return dependencyArg.getValues();<a name="line.336"></a>
+<span class="sourceLineNo">337</span>    } else {<a name="line.337"></a>
+<span class="sourceLineNo">338</span>      return Collections.emptyList();<a name="line.338"></a>
+<span class="sourceLineNo">339</span>    }<a name="line.339"></a>
+<span class="sourceLineNo">340</span>  }<a name="line.340"></a>
+<span class="sourceLineNo">341</span><a name="line.341"></a>
+<span class="sourceLineNo">342</span>  /**<a name="line.342"></a>
+<span class="sourceLineNo">343</span>   * Gets the action to take should one of the dependent task fail.<a name="line.343"></a>
+<span class="sourceLineNo">344</span>   *<a name="line.344"></a>
+<span class="sourceLineNo">345</span>   * @return action to take<a name="line.345"></a>
+<span class="sourceLineNo">346</span>   */<a name="line.346"></a>
+<span class="sourceLineNo">347</span>  public FailedDependencyAction getFailedDependencyAction() {<a name="line.347"></a>
+<span class="sourceLineNo">348</span>    FailedDependencyAction fda = null;<a name="line.348"></a>
+<span class="sourceLineNo">349</span>    if (failedDependencyActionArg.isPresent()) {<a name="line.349"></a>
+<span class="sourceLineNo">350</span>      String fdaString = failedDependencyActionArg.getValue();<a name="line.350"></a>
+<span class="sourceLineNo">351</span>      fda = FailedDependencyAction.fromString(fdaString);<a name="line.351"></a>
+<span class="sourceLineNo">352</span>    }<a name="line.352"></a>
+<span class="sourceLineNo">353</span>    return fda;<a name="line.353"></a>
+<span class="sourceLineNo">354</span>  }<a name="line.354"></a>
+<span class="sourceLineNo">355</span><a name="line.355"></a>
+<span class="sourceLineNo">356</span>  /**<a name="line.356"></a>
+<span class="sourceLineNo">357</span>   * Gets a list of email address to which an email will be sent when this<a name="line.357"></a>
+<span class="sourceLineNo">358</span>   * task completes.<a name="line.358"></a>
+<span class="sourceLineNo">359</span>   *<a name="line.359"></a>
+<span class="sourceLineNo">360</span>   * @return list of email addresses<a name="line.360"></a>
+<span class="sourceLineNo">361</span>   */<a name="line.361"></a>
+<span class="sourceLineNo">362</span>  public List&lt;String&gt; getNotifyUponCompletionEmailAddresses() {<a name="line.362"></a>
+<span class="sourceLineNo">363</span>    if (completionNotificationArg.isPresent()) {<a name="line.363"></a>
+<span class="sourceLineNo">364</span>      return completionNotificationArg.getValues();<a name="line.364"></a>
+<span class="sourceLineNo">365</span>    } else {<a name="line.365"></a>
+<span class="sourceLineNo">366</span>      return Collections.emptyList();<a name="line.366"></a>
+<span class="sourceLineNo">367</span>    }<a name="line.367"></a>
+<span class="sourceLineNo">368</span>  }<a name="line.368"></a>
+<span class="sourceLineNo">369</span><a name="line.369"></a>
+<span class="sourceLineNo">370</span>  /**<a name="line.370"></a>
+<span class="sourceLineNo">371</span>   * Gets a list of email address to which an email will be sent if this<a name="line.371"></a>
+<span class="sourceLineNo">372</span>   * task encounters an error during execution.<a name="line.372"></a>
+<span class="sourceLineNo">373</span>   *<a name="line.373"></a>
+<span class="sourceLineNo">374</span>   * @return list of email addresses<a name="line.374"></a>
+<span class="sourceLineNo">375</span>   */<a name="line.375"></a>
+<span class="sourceLineNo">376</span>  public List&lt;String&gt; getNotifyUponErrorEmailAddresses() {<a name="line.376"></a>
+<span class="sourceLineNo">377</span>    if (errorNotificationArg.isPresent()) {<a name="line.377"></a>
+<span class="sourceLineNo">378</span>      return errorNotificationArg.getValues();<a name="line.378"></a>
+<span class="sourceLineNo">379</span>    } else {<a name="line.379"></a>
+<span class="sourceLineNo">380</span>      return Collections.emptyList();<a name="line.380"></a>
+<span class="sourceLineNo">381</span>    }<a name="line.381"></a>
+<span class="sourceLineNo">382</span>  }<a name="line.382"></a>
+<span class="sourceLineNo">383</span>}<a name="line.383"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

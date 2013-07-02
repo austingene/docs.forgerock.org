@@ -1,0 +1,895 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * CDDL HEADER START<a name="line.2"></a>
+<span class="sourceLineNo">003</span> *<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * The contents of this file are subject to the terms of the<a name="line.4"></a>
+<span class="sourceLineNo">005</span> * Common Development and Distribution License, Version 1.0 only<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * (the "License").  You may not use this file except in compliance<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * with the License.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * You can obtain a copy of the license at<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * trunk/opends/resource/legal-notices/OpenDS.LICENSE<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * or https://OpenDS.dev.java.net/OpenDS.LICENSE.<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * See the License for the specific language governing permissions<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * and limitations under the License.<a name="line.13"></a>
+<span class="sourceLineNo">014</span> *<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * When distributing Covered Code, include this CDDL HEADER in each<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * file and include the License file at<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * trunk/opends/resource/legal-notices/OpenDS.LICENSE.  If applicable,<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * add the following below this CDDL HEADER, with the fields enclosed<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * by brackets "[]" replaced with your own identifying information:<a name="line.19"></a>
+<span class="sourceLineNo">020</span> *      Portions Copyright [yyyy] [name of copyright owner]<a name="line.20"></a>
+<span class="sourceLineNo">021</span> *<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * CDDL HEADER END<a name="line.22"></a>
+<span class="sourceLineNo">023</span> *<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *<a name="line.24"></a>
+<span class="sourceLineNo">025</span> *      Copyright 2006-2010 Sun Microsystems, Inc.<a name="line.25"></a>
+<span class="sourceLineNo">026</span> *      Portions Copyright 2011-2013 ForgeRock AS<a name="line.26"></a>
+<span class="sourceLineNo">027</span> */<a name="line.27"></a>
+<span class="sourceLineNo">028</span>package org.opends.dsml.protocol;<a name="line.28"></a>
+<span class="sourceLineNo">029</span><a name="line.29"></a>
+<span class="sourceLineNo">030</span><a name="line.30"></a>
+<span class="sourceLineNo">031</span>import static javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI;<a name="line.31"></a>
+<span class="sourceLineNo">032</span>import static org.opends.server.protocols.ldap.LDAPResultCode.<a name="line.32"></a>
+<span class="sourceLineNo">033</span>  CLIENT_SIDE_CONNECT_ERROR;<a name="line.33"></a>
+<span class="sourceLineNo">034</span>import static org.opends.server.util.ServerConstants.SASL_MECHANISM_PLAIN;<a name="line.34"></a>
+<span class="sourceLineNo">035</span>import static org.opends.messages.CoreMessages.<a name="line.35"></a>
+<span class="sourceLineNo">036</span>  INFO_RESULT_CLIENT_SIDE_ENCODING_ERROR;<a name="line.36"></a>
+<span class="sourceLineNo">037</span>import static org.opends.messages.CoreMessages.INFO_RESULT_AUTHORIZATION_DENIED;<a name="line.37"></a>
+<span class="sourceLineNo">038</span><a name="line.38"></a>
+<span class="sourceLineNo">039</span>import java.io.BufferedInputStream;<a name="line.39"></a>
+<span class="sourceLineNo">040</span>import java.io.InputStream;<a name="line.40"></a>
+<span class="sourceLineNo">041</span>import java.io.IOException;<a name="line.41"></a>
+<span class="sourceLineNo">042</span>import java.io.OutputStream;<a name="line.42"></a>
+<span class="sourceLineNo">043</span>import java.net.URL;<a name="line.43"></a>
+<span class="sourceLineNo">044</span>import java.text.ParseException;<a name="line.44"></a>
+<span class="sourceLineNo">045</span>import java.util.concurrent.atomic.AtomicInteger;<a name="line.45"></a>
+<span class="sourceLineNo">046</span>import java.util.ArrayList;<a name="line.46"></a>
+<span class="sourceLineNo">047</span>import java.util.Enumeration;<a name="line.47"></a>
+<span class="sourceLineNo">048</span>import java.util.HashSet;<a name="line.48"></a>
+<span class="sourceLineNo">049</span>import java.util.Iterator;<a name="line.49"></a>
+<span class="sourceLineNo">050</span>import java.util.LinkedHashSet;<a name="line.50"></a>
+<span class="sourceLineNo">051</span>import java.util.List;<a name="line.51"></a>
+<span class="sourceLineNo">052</span>import java.util.StringTokenizer;<a name="line.52"></a>
+<span class="sourceLineNo">053</span><a name="line.53"></a>
+<span class="sourceLineNo">054</span>import javax.servlet.http.HttpServlet;<a name="line.54"></a>
+<span class="sourceLineNo">055</span>import javax.servlet.http.HttpServletRequest;<a name="line.55"></a>
+<span class="sourceLineNo">056</span>import javax.servlet.http.HttpServletResponse;<a name="line.56"></a>
+<span class="sourceLineNo">057</span>import javax.servlet.ServletConfig;<a name="line.57"></a>
+<span class="sourceLineNo">058</span>import javax.servlet.ServletException;<a name="line.58"></a>
+<span class="sourceLineNo">059</span>import javax.xml.bind.JAXBContext;<a name="line.59"></a>
+<span class="sourceLineNo">060</span>import javax.xml.bind.JAXBElement;<a name="line.60"></a>
+<span class="sourceLineNo">061</span>import javax.xml.bind.JAXBException;<a name="line.61"></a>
+<span class="sourceLineNo">062</span>import javax.xml.bind.Marshaller;<a name="line.62"></a>
+<span class="sourceLineNo">063</span>import javax.xml.bind.Unmarshaller;<a name="line.63"></a>
+<span class="sourceLineNo">064</span>import javax.xml.parsers.DocumentBuilder;<a name="line.64"></a>
+<span class="sourceLineNo">065</span>import javax.xml.parsers.DocumentBuilderFactory;<a name="line.65"></a>
+<span class="sourceLineNo">066</span>import javax.xml.soap.*;<a name="line.66"></a>
+<span class="sourceLineNo">067</span>import javax.xml.validation.Schema;<a name="line.67"></a>
+<span class="sourceLineNo">068</span>import javax.xml.validation.SchemaFactory;<a name="line.68"></a>
+<span class="sourceLineNo">069</span><a name="line.69"></a>
+<span class="sourceLineNo">070</span>import org.opends.messages.Message;<a name="line.70"></a>
+<span class="sourceLineNo">071</span>import org.opends.server.controls.ProxiedAuthV2Control;<a name="line.71"></a>
+<span class="sourceLineNo">072</span>import org.opends.server.core.DirectoryServer;<a name="line.72"></a>
+<span class="sourceLineNo">073</span>import org.opends.server.protocols.asn1.ASN1Exception;<a name="line.73"></a>
+<span class="sourceLineNo">074</span>import org.opends.server.protocols.ldap.LDAPConstants;<a name="line.74"></a>
+<span class="sourceLineNo">075</span>import org.opends.server.protocols.ldap.LDAPFilter;<a name="line.75"></a>
+<span class="sourceLineNo">076</span>import org.opends.server.protocols.ldap.LDAPMessage;<a name="line.76"></a>
+<span class="sourceLineNo">077</span>import org.opends.server.protocols.ldap.LDAPResultCode;<a name="line.77"></a>
+<span class="sourceLineNo">078</span>import org.opends.server.protocols.ldap.SearchRequestProtocolOp;<a name="line.78"></a>
+<span class="sourceLineNo">079</span>import org.opends.server.schema.SchemaConstants;<a name="line.79"></a>
+<span class="sourceLineNo">080</span>import org.opends.server.tools.LDAPConnection;<a name="line.80"></a>
+<span class="sourceLineNo">081</span>import org.opends.server.tools.LDAPConnectionException;<a name="line.81"></a>
+<span class="sourceLineNo">082</span>import org.opends.server.tools.LDAPConnectionOptions;<a name="line.82"></a>
+<span class="sourceLineNo">083</span>import org.opends.server.tools.SSLConnectionException;<a name="line.83"></a>
+<span class="sourceLineNo">084</span>import org.opends.server.tools.SSLConnectionFactory;<a name="line.84"></a>
+<span class="sourceLineNo">085</span>import org.opends.server.types.ByteString;<a name="line.85"></a>
+<span class="sourceLineNo">086</span>import org.opends.server.types.DereferencePolicy;<a name="line.86"></a>
+<span class="sourceLineNo">087</span>import org.opends.server.types.LDAPException;<a name="line.87"></a>
+<span class="sourceLineNo">088</span>import org.opends.server.types.SearchScope;<a name="line.88"></a>
+<span class="sourceLineNo">089</span>import org.opends.server.util.Base64;<a name="line.89"></a>
+<span class="sourceLineNo">090</span><a name="line.90"></a>
+<span class="sourceLineNo">091</span>import org.w3c.dom.Document;<a name="line.91"></a>
+<span class="sourceLineNo">092</span>import org.xml.sax.Attributes;<a name="line.92"></a>
+<span class="sourceLineNo">093</span>import org.xml.sax.helpers.DefaultHandler;<a name="line.93"></a>
+<span class="sourceLineNo">094</span>import org.xml.sax.helpers.XMLReaderFactory;<a name="line.94"></a>
+<span class="sourceLineNo">095</span>import org.xml.sax.InputSource;<a name="line.95"></a>
+<span class="sourceLineNo">096</span>import org.xml.sax.SAXException;<a name="line.96"></a>
+<span class="sourceLineNo">097</span>import org.xml.sax.XMLReader;<a name="line.97"></a>
+<span class="sourceLineNo">098</span><a name="line.98"></a>
+<span class="sourceLineNo">099</span><a name="line.99"></a>
+<span class="sourceLineNo">100</span>/**<a name="line.100"></a>
+<span class="sourceLineNo">101</span> * This class provides the entry point for the DSML request.<a name="line.101"></a>
+<span class="sourceLineNo">102</span> * It parses the SOAP request, calls the appropriate class<a name="line.102"></a>
+<span class="sourceLineNo">103</span> * which performs the LDAP operation, and returns the response<a name="line.103"></a>
+<span class="sourceLineNo">104</span> * as a DSML response.<a name="line.104"></a>
+<span class="sourceLineNo">105</span> */<a name="line.105"></a>
+<span class="sourceLineNo">106</span>public class DSMLServlet extends HttpServlet {<a name="line.106"></a>
+<span class="sourceLineNo">107</span>  private static final String PKG_NAME = "org.opends.dsml.protocol";<a name="line.107"></a>
+<span class="sourceLineNo">108</span>  private static final String PORT = "ldap.port";<a name="line.108"></a>
+<span class="sourceLineNo">109</span>  private static final String HOST = "ldap.host";<a name="line.109"></a>
+<span class="sourceLineNo">110</span>  private static final String USERDN = "ldap.userdn";<a name="line.110"></a>
+<span class="sourceLineNo">111</span>  private static final String USERPWD = "ldap.userpassword";<a name="line.111"></a>
+<span class="sourceLineNo">112</span>  private static final String USESSL = "ldap.usessl";<a name="line.112"></a>
+<span class="sourceLineNo">113</span>  private static final String USESTARTTLS = "ldap.usestarttls";<a name="line.113"></a>
+<span class="sourceLineNo">114</span>  private static final String TRUSTSTOREPATH = "ldap.truststore.path";<a name="line.114"></a>
+<span class="sourceLineNo">115</span>  private static final String TRUSTSTOREPASSWORD = "ldap.truststore.password";<a name="line.115"></a>
+<span class="sourceLineNo">116</span>  private static final String TRUSTALLCERTS = "ldap.trustall";<a name="line.116"></a>
+<span class="sourceLineNo">117</span>  private static final String USEHTTPAUTHZID = "ldap.authzidtypeisid";<a name="line.117"></a>
+<span class="sourceLineNo">118</span>  private static final String EXOPSTRINGPREFIX = "ldap.exop.string.";<a name="line.118"></a>
+<span class="sourceLineNo">119</span>  private static final long serialVersionUID = -3748022009593442973L;<a name="line.119"></a>
+<span class="sourceLineNo">120</span>  private static final AtomicInteger nextMessageID = new AtomicInteger(1);<a name="line.120"></a>
+<span class="sourceLineNo">121</span><a name="line.121"></a>
+<span class="sourceLineNo">122</span>  // definitions of return error messages<a name="line.122"></a>
+<span class="sourceLineNo">123</span>  private static final String MALFORMED_REQUEST = "malformedRequest";<a name="line.123"></a>
+<span class="sourceLineNo">124</span>  private static final String NOT_ATTEMPTED = "notAttempted";<a name="line.124"></a>
+<span class="sourceLineNo">125</span>  private static final String AUTHENTICATION_FAILED = "authenticationFailed";<a name="line.125"></a>
+<span class="sourceLineNo">126</span>  private static final String COULD_NOT_CONNECT = "couldNotConnect";<a name="line.126"></a>
+<span class="sourceLineNo">127</span>  private static final String GATEWAY_INTERNAL_ERROR = "gatewayInternalError";<a name="line.127"></a>
+<span class="sourceLineNo">128</span>  private static final String UNRESOLVABLE_URI = "unresolvableURI";<a name="line.128"></a>
+<span class="sourceLineNo">129</span><a name="line.129"></a>
+<span class="sourceLineNo">130</span>  // definitions of onError values<a name="line.130"></a>
+<span class="sourceLineNo">131</span>  private static final String ON_ERROR_RESUME = "resume";<a name="line.131"></a>
+<span class="sourceLineNo">132</span>  private static final String ON_ERROR_EXIT = "exit";<a name="line.132"></a>
+<span class="sourceLineNo">133</span><a name="line.133"></a>
+<span class="sourceLineNo">134</span>  private static JAXBContext jaxbContext;<a name="line.134"></a>
+<span class="sourceLineNo">135</span>  private ObjectFactory objFactory;<a name="line.135"></a>
+<span class="sourceLineNo">136</span>  private MessageFactory messageFactory;<a name="line.136"></a>
+<span class="sourceLineNo">137</span>  private DocumentBuilder db;<a name="line.137"></a>
+<span class="sourceLineNo">138</span>  private static Schema schema;<a name="line.138"></a>
+<span class="sourceLineNo">139</span><a name="line.139"></a>
+<span class="sourceLineNo">140</span>  // this extends the default handler of SAX parser. It helps to retrieve the<a name="line.140"></a>
+<span class="sourceLineNo">141</span>  // requestID value when the xml request is malformed and thus unparsable<a name="line.141"></a>
+<span class="sourceLineNo">142</span>  // using SOAP or JAXB.<a name="line.142"></a>
+<span class="sourceLineNo">143</span>  private DSMLContentHandler contentHandler;<a name="line.143"></a>
+<span class="sourceLineNo">144</span><a name="line.144"></a>
+<span class="sourceLineNo">145</span>  private String hostName;<a name="line.145"></a>
+<span class="sourceLineNo">146</span>  private Integer port;<a name="line.146"></a>
+<span class="sourceLineNo">147</span>  private String userDN;<a name="line.147"></a>
+<span class="sourceLineNo">148</span>  private String userPassword;<a name="line.148"></a>
+<span class="sourceLineNo">149</span>  private Boolean useSSL;<a name="line.149"></a>
+<span class="sourceLineNo">150</span>  private Boolean useStartTLS;<a name="line.150"></a>
+<span class="sourceLineNo">151</span>  private String trustStorePathValue;<a name="line.151"></a>
+<span class="sourceLineNo">152</span>  private String trustStorePasswordValue;<a name="line.152"></a>
+<span class="sourceLineNo">153</span>  private Boolean trustAll;<a name="line.153"></a>
+<span class="sourceLineNo">154</span>  private Boolean useHTTPAuthzID;<a name="line.154"></a>
+<span class="sourceLineNo">155</span>  private HashSet&lt;String&gt; exopStrings = new HashSet&lt;String&gt;();<a name="line.155"></a>
+<span class="sourceLineNo">156</span>  private org.opends.server.types.Control proxyAuthzControl = null;<a name="line.156"></a>
+<span class="sourceLineNo">157</span><a name="line.157"></a>
+<span class="sourceLineNo">158</span>  /**<a name="line.158"></a>
+<span class="sourceLineNo">159</span>   * This method will be called by the Servlet Container when<a name="line.159"></a>
+<span class="sourceLineNo">160</span>   * this servlet is being placed into service.<a name="line.160"></a>
+<span class="sourceLineNo">161</span>   *<a name="line.161"></a>
+<span class="sourceLineNo">162</span>   * @param config - the &lt;CODE&gt;ServletConfig&lt;/CODE&gt; object that<a name="line.162"></a>
+<span class="sourceLineNo">163</span>   *               contains configuration information for this servlet.<a name="line.163"></a>
+<span class="sourceLineNo">164</span>   * @throws ServletException If an error occurs during processing.<a name="line.164"></a>
+<span class="sourceLineNo">165</span>   */<a name="line.165"></a>
+<span class="sourceLineNo">166</span>  @Override<a name="line.166"></a>
+<span class="sourceLineNo">167</span>  public void init(ServletConfig config) throws ServletException {<a name="line.167"></a>
+<span class="sourceLineNo">168</span><a name="line.168"></a>
+<span class="sourceLineNo">169</span>    try {<a name="line.169"></a>
+<span class="sourceLineNo">170</span>      hostName = config.getServletContext().getInitParameter(HOST);<a name="line.170"></a>
+<span class="sourceLineNo">171</span><a name="line.171"></a>
+<span class="sourceLineNo">172</span>      port = new Integer(config.getServletContext().getInitParameter(PORT));<a name="line.172"></a>
+<span class="sourceLineNo">173</span><a name="line.173"></a>
+<span class="sourceLineNo">174</span>      userDN = config.getServletContext().getInitParameter(USERDN);<a name="line.174"></a>
+<span class="sourceLineNo">175</span><a name="line.175"></a>
+<span class="sourceLineNo">176</span>      userPassword = config.getServletContext().getInitParameter(USERPWD);<a name="line.176"></a>
+<span class="sourceLineNo">177</span><a name="line.177"></a>
+<span class="sourceLineNo">178</span>      useSSL = Boolean.valueOf(<a name="line.178"></a>
+<span class="sourceLineNo">179</span>          config.getServletContext().getInitParameter(USESSL));<a name="line.179"></a>
+<span class="sourceLineNo">180</span><a name="line.180"></a>
+<span class="sourceLineNo">181</span>      useStartTLS = Boolean.valueOf(<a name="line.181"></a>
+<span class="sourceLineNo">182</span>          config.getServletContext().getInitParameter(USESTARTTLS));<a name="line.182"></a>
+<span class="sourceLineNo">183</span><a name="line.183"></a>
+<span class="sourceLineNo">184</span>      trustStorePathValue =<a name="line.184"></a>
+<span class="sourceLineNo">185</span>          config.getServletContext().getInitParameter(TRUSTSTOREPATH);<a name="line.185"></a>
+<span class="sourceLineNo">186</span><a name="line.186"></a>
+<span class="sourceLineNo">187</span>      trustStorePasswordValue =<a name="line.187"></a>
+<span class="sourceLineNo">188</span>          config.getServletContext().getInitParameter(TRUSTSTOREPASSWORD);<a name="line.188"></a>
+<span class="sourceLineNo">189</span><a name="line.189"></a>
+<span class="sourceLineNo">190</span>      trustAll = Boolean.valueOf(<a name="line.190"></a>
+<span class="sourceLineNo">191</span>          config.getServletContext().getInitParameter(TRUSTALLCERTS));<a name="line.191"></a>
+<span class="sourceLineNo">192</span><a name="line.192"></a>
+<span class="sourceLineNo">193</span>      useHTTPAuthzID = Boolean.valueOf(<a name="line.193"></a>
+<span class="sourceLineNo">194</span>          config.getServletContext().getInitParameter(USEHTTPAUTHZID));<a name="line.194"></a>
+<span class="sourceLineNo">195</span><a name="line.195"></a>
+<span class="sourceLineNo">196</span>      /*<a name="line.196"></a>
+<span class="sourceLineNo">197</span>       * Find all the param-names matching the pattern:<a name="line.197"></a>
+<span class="sourceLineNo">198</span>       * ldap.exop.string.1.2.3.4.5<a name="line.198"></a>
+<span class="sourceLineNo">199</span>       * and if the value's true then mark that OID (1.2.3.4.5) as one returning<a name="line.199"></a>
+<span class="sourceLineNo">200</span>       * a string value.<a name="line.200"></a>
+<span class="sourceLineNo">201</span>       */<a name="line.201"></a>
+<span class="sourceLineNo">202</span>      Enumeration names = config.getServletContext().getInitParameterNames();<a name="line.202"></a>
+<span class="sourceLineNo">203</span>      while (names.hasMoreElements())<a name="line.203"></a>
+<span class="sourceLineNo">204</span>      {<a name="line.204"></a>
+<span class="sourceLineNo">205</span>        String name = (String) names.nextElement();<a name="line.205"></a>
+<span class="sourceLineNo">206</span>        if (name.startsWith(EXOPSTRINGPREFIX) &amp;&amp;<a name="line.206"></a>
+<span class="sourceLineNo">207</span>            Boolean.valueOf(config.getServletContext().getInitParameter(name)))<a name="line.207"></a>
+<span class="sourceLineNo">208</span>        {<a name="line.208"></a>
+<span class="sourceLineNo">209</span>          exopStrings.add(name.substring(EXOPSTRINGPREFIX.length()));<a name="line.209"></a>
+<span class="sourceLineNo">210</span>        }<a name="line.210"></a>
+<span class="sourceLineNo">211</span>      }<a name="line.211"></a>
+<span class="sourceLineNo">212</span><a name="line.212"></a>
+<span class="sourceLineNo">213</span>      // allow the use of anyURI values in adds and modifies<a name="line.213"></a>
+<span class="sourceLineNo">214</span>      System.setProperty("mapAnyUriToUri", "true");<a name="line.214"></a>
+<span class="sourceLineNo">215</span><a name="line.215"></a>
+<span class="sourceLineNo">216</span>      if(jaxbContext==null)<a name="line.216"></a>
+<span class="sourceLineNo">217</span>        jaxbContext = JAXBContext.newInstance(PKG_NAME,<a name="line.217"></a>
+<span class="sourceLineNo">218</span>                this.getClass().getClassLoader());<a name="line.218"></a>
+<span class="sourceLineNo">219</span>      // assign the DSMLv2 schema for validation<a name="line.219"></a>
+<span class="sourceLineNo">220</span>      if(schema==null)<a name="line.220"></a>
+<span class="sourceLineNo">221</span>      {<a name="line.221"></a>
+<span class="sourceLineNo">222</span>        URL url = getClass().getResource("/resources/DSMLv2.xsd");<a name="line.222"></a>
+<span class="sourceLineNo">223</span>        if ( url != null ) {<a name="line.223"></a>
+<span class="sourceLineNo">224</span>          SchemaFactory sf = SchemaFactory.newInstance(W3C_XML_SCHEMA_NS_URI);<a name="line.224"></a>
+<span class="sourceLineNo">225</span>          schema = sf.newSchema(url);<a name="line.225"></a>
+<span class="sourceLineNo">226</span>        }<a name="line.226"></a>
+<span class="sourceLineNo">227</span>      }<a name="line.227"></a>
+<span class="sourceLineNo">228</span><a name="line.228"></a>
+<span class="sourceLineNo">229</span>      objFactory = new ObjectFactory();<a name="line.229"></a>
+<span class="sourceLineNo">230</span>      messageFactory = MessageFactory.newInstance();<a name="line.230"></a>
+<span class="sourceLineNo">231</span>      DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();<a name="line.231"></a>
+<span class="sourceLineNo">232</span>      dbf.setNamespaceAware(true);<a name="line.232"></a>
+<span class="sourceLineNo">233</span>      db = dbf.newDocumentBuilder();<a name="line.233"></a>
+<span class="sourceLineNo">234</span><a name="line.234"></a>
+<span class="sourceLineNo">235</span>      this.contentHandler = new DSMLContentHandler();<a name="line.235"></a>
+<span class="sourceLineNo">236</span><a name="line.236"></a>
+<span class="sourceLineNo">237</span>      DirectoryServer.bootstrapClient();<a name="line.237"></a>
+<span class="sourceLineNo">238</span>    } catch (Exception je) {<a name="line.238"></a>
+<span class="sourceLineNo">239</span>      je.printStackTrace();<a name="line.239"></a>
+<span class="sourceLineNo">240</span>      throw new ServletException(je.getMessage());<a name="line.240"></a>
+<span class="sourceLineNo">241</span>    }<a name="line.241"></a>
+<span class="sourceLineNo">242</span>  }<a name="line.242"></a>
+<span class="sourceLineNo">243</span><a name="line.243"></a>
+<span class="sourceLineNo">244</span><a name="line.244"></a>
+<span class="sourceLineNo">245</span><a name="line.245"></a>
+<span class="sourceLineNo">246</span>  /**<a name="line.246"></a>
+<span class="sourceLineNo">247</span>   * Check if using the proxy authz control will work, by using it to read<a name="line.247"></a>
+<span class="sourceLineNo">248</span>   * the Root DSE.<a name="line.248"></a>
+<span class="sourceLineNo">249</span>   *<a name="line.249"></a>
+<span class="sourceLineNo">250</span>   * @param connection The authenticated LDAP connection used to check.<a name="line.250"></a>
+<span class="sourceLineNo">251</span>   * @param authorizationID The authorization ID, in the format<a name="line.251"></a>
+<span class="sourceLineNo">252</span>   *                        "u:&amp;lt;userid&amp;gt;" or "dn:&amp;lt;DN&amp;gt;".<a name="line.252"></a>
+<span class="sourceLineNo">253</span>   * @return a configured proxy authz control.<a name="line.253"></a>
+<span class="sourceLineNo">254</span>   * @throws  LDAPConnectionException  If an error occurs during the check.<a name="line.254"></a>
+<span class="sourceLineNo">255</span>   *<a name="line.255"></a>
+<span class="sourceLineNo">256</span>   */<a name="line.256"></a>
+<span class="sourceLineNo">257</span>  private org.opends.server.types.Control checkAuthzControl(<a name="line.257"></a>
+<span class="sourceLineNo">258</span>      LDAPConnection connection, String authorizationID)<a name="line.258"></a>
+<span class="sourceLineNo">259</span>      throws LDAPConnectionException<a name="line.259"></a>
+<span class="sourceLineNo">260</span>  {<a name="line.260"></a>
+<span class="sourceLineNo">261</span>    LinkedHashSet&lt;String&gt;attributes = new LinkedHashSet&lt;String&gt;(1);<a name="line.261"></a>
+<span class="sourceLineNo">262</span>    attributes.add(SchemaConstants.NO_ATTRIBUTES);<a name="line.262"></a>
+<span class="sourceLineNo">263</span>    ArrayList&lt;org.opends.server.types.Control&gt; controls =<a name="line.263"></a>
+<span class="sourceLineNo">264</span>        new ArrayList&lt;org.opends.server.types.Control&gt;(1);<a name="line.264"></a>
+<span class="sourceLineNo">265</span>    org.opends.server.types.Control proxyAuthzControl =<a name="line.265"></a>
+<span class="sourceLineNo">266</span>        new ProxiedAuthV2Control(true, ByteString.valueOf(authorizationID));<a name="line.266"></a>
+<span class="sourceLineNo">267</span>    controls.add(proxyAuthzControl);<a name="line.267"></a>
+<span class="sourceLineNo">268</span><a name="line.268"></a>
+<span class="sourceLineNo">269</span>    try<a name="line.269"></a>
+<span class="sourceLineNo">270</span>    {<a name="line.270"></a>
+<span class="sourceLineNo">271</span>      SearchRequestProtocolOp protocolOp = new SearchRequestProtocolOp(<a name="line.271"></a>
+<span class="sourceLineNo">272</span>          ByteString.wrap(new byte[]{}), SearchScope.BASE_OBJECT,<a name="line.272"></a>
+<span class="sourceLineNo">273</span>          DereferencePolicy.NEVER_DEREF_ALIASES,<a name="line.273"></a>
+<span class="sourceLineNo">274</span>          0, 0,<a name="line.274"></a>
+<span class="sourceLineNo">275</span>          true, LDAPFilter.decode("(objectClass=*)"), attributes);<a name="line.275"></a>
+<span class="sourceLineNo">276</span>      byte opType;<a name="line.276"></a>
+<span class="sourceLineNo">277</span>      LDAPMessage msg =<a name="line.277"></a>
+<span class="sourceLineNo">278</span>        new LDAPMessage(DSMLServlet.nextMessageID(), protocolOp, controls);<a name="line.278"></a>
+<span class="sourceLineNo">279</span>      connection.getLDAPWriter().writeMessage(msg);<a name="line.279"></a>
+<span class="sourceLineNo">280</span>      do {<a name="line.280"></a>
+<span class="sourceLineNo">281</span>        LDAPMessage responseMessage = connection.getLDAPReader().<a name="line.281"></a>
+<span class="sourceLineNo">282</span>            readMessage();<a name="line.282"></a>
+<span class="sourceLineNo">283</span>        opType = responseMessage.getProtocolOpType();<a name="line.283"></a>
+<span class="sourceLineNo">284</span>        switch (opType)<a name="line.284"></a>
+<span class="sourceLineNo">285</span>        {<a name="line.285"></a>
+<span class="sourceLineNo">286</span>        case LDAPConstants.OP_TYPE_SEARCH_RESULT_DONE:<a name="line.286"></a>
+<span class="sourceLineNo">287</span>          switch (responseMessage.getSearchResultDoneProtocolOp().<a name="line.287"></a>
+<span class="sourceLineNo">288</span>              getResultCode())<a name="line.288"></a>
+<span class="sourceLineNo">289</span>          {<a name="line.289"></a>
+<span class="sourceLineNo">290</span>            default:<a name="line.290"></a>
+<span class="sourceLineNo">291</span>              Message m = INFO_RESULT_AUTHORIZATION_DENIED.get();<a name="line.291"></a>
+<span class="sourceLineNo">292</span>              throw new LDAPConnectionException(m, CLIENT_SIDE_CONNECT_ERROR,<a name="line.292"></a>
+<span class="sourceLineNo">293</span>                  null);<a name="line.293"></a>
+<span class="sourceLineNo">294</span>            case LDAPResultCode.SUCCESS:<a name="line.294"></a>
+<span class="sourceLineNo">295</span>              return proxyAuthzControl;<a name="line.295"></a>
+<span class="sourceLineNo">296</span>          }<a name="line.296"></a>
+<span class="sourceLineNo">297</span>        }<a name="line.297"></a>
+<span class="sourceLineNo">298</span>      } while (opType != LDAPConstants.OP_TYPE_SEARCH_RESULT_DONE);<a name="line.298"></a>
+<span class="sourceLineNo">299</span>    }<a name="line.299"></a>
+<span class="sourceLineNo">300</span>    catch (LDAPException le)<a name="line.300"></a>
+<span class="sourceLineNo">301</span>    {<a name="line.301"></a>
+<span class="sourceLineNo">302</span>      Message m = INFO_RESULT_CLIENT_SIDE_ENCODING_ERROR.get();<a name="line.302"></a>
+<span class="sourceLineNo">303</span>      throw new LDAPConnectionException(m, CLIENT_SIDE_CONNECT_ERROR, null, le);<a name="line.303"></a>
+<span class="sourceLineNo">304</span>    }<a name="line.304"></a>
+<span class="sourceLineNo">305</span>    catch (ASN1Exception ae)<a name="line.305"></a>
+<span class="sourceLineNo">306</span>    {<a name="line.306"></a>
+<span class="sourceLineNo">307</span>      Message m = INFO_RESULT_CLIENT_SIDE_ENCODING_ERROR.get();<a name="line.307"></a>
+<span class="sourceLineNo">308</span>      throw new LDAPConnectionException(m, CLIENT_SIDE_CONNECT_ERROR, null,<a name="line.308"></a>
+<span class="sourceLineNo">309</span>          ae);<a name="line.309"></a>
+<span class="sourceLineNo">310</span>    }<a name="line.310"></a>
+<span class="sourceLineNo">311</span>    catch (IOException ie)<a name="line.311"></a>
+<span class="sourceLineNo">312</span>    {<a name="line.312"></a>
+<span class="sourceLineNo">313</span>      Message m = INFO_RESULT_CLIENT_SIDE_ENCODING_ERROR.get();<a name="line.313"></a>
+<span class="sourceLineNo">314</span>      throw new LDAPConnectionException(m, CLIENT_SIDE_CONNECT_ERROR, null, ie);<a name="line.314"></a>
+<span class="sourceLineNo">315</span>    }<a name="line.315"></a>
+<span class="sourceLineNo">316</span>    throw new LDAPConnectionException(Message.EMPTY);<a name="line.316"></a>
+<span class="sourceLineNo">317</span>  }<a name="line.317"></a>
+<span class="sourceLineNo">318</span><a name="line.318"></a>
+<span class="sourceLineNo">319</span>  /**<a name="line.319"></a>
+<span class="sourceLineNo">320</span>   * The HTTP POST operation. This servlet expects a SOAP message<a name="line.320"></a>
+<span class="sourceLineNo">321</span>   * with a DSML request payload.<a name="line.321"></a>
+<span class="sourceLineNo">322</span>   *<a name="line.322"></a>
+<span class="sourceLineNo">323</span>   * @param req Information about the request received from the client.<a name="line.323"></a>
+<span class="sourceLineNo">324</span>   * @param res Information about the response to send to the client.<a name="line.324"></a>
+<span class="sourceLineNo">325</span>   * @throws ServletException If an error occurs during servlet processing.<a name="line.325"></a>
+<span class="sourceLineNo">326</span>   * @throws IOException   If an error occurs while interacting with the client.<a name="line.326"></a>
+<span class="sourceLineNo">327</span>   */<a name="line.327"></a>
+<span class="sourceLineNo">328</span>  public void doPost(HttpServletRequest req, HttpServletResponse res)<a name="line.328"></a>
+<span class="sourceLineNo">329</span>  throws ServletException, IOException {<a name="line.329"></a>
+<span class="sourceLineNo">330</span>    LDAPConnectionOptions connOptions = new LDAPConnectionOptions();<a name="line.330"></a>
+<span class="sourceLineNo">331</span>    connOptions.setUseSSL(useSSL);<a name="line.331"></a>
+<span class="sourceLineNo">332</span>    connOptions.setStartTLS(useStartTLS);<a name="line.332"></a>
+<span class="sourceLineNo">333</span><a name="line.333"></a>
+<span class="sourceLineNo">334</span>    LDAPConnection connection = null;<a name="line.334"></a>
+<span class="sourceLineNo">335</span>    BatchRequest batchRequest = null;<a name="line.335"></a>
+<span class="sourceLineNo">336</span><a name="line.336"></a>
+<span class="sourceLineNo">337</span>    // Keep the Servlet input stream buffered in case the SOAP unmarshalling<a name="line.337"></a>
+<span class="sourceLineNo">338</span>    // fails, the SAX parsing will be able to retrieve the requestID even if<a name="line.338"></a>
+<span class="sourceLineNo">339</span>    // the XML is malmformed by resetting the input stream.<a name="line.339"></a>
+<span class="sourceLineNo">340</span>    BufferedInputStream is = new BufferedInputStream(req.getInputStream(),<a name="line.340"></a>
+<span class="sourceLineNo">341</span>                                                     65536);<a name="line.341"></a>
+<span class="sourceLineNo">342</span>    if ( is.markSupported() ) {<a name="line.342"></a>
+<span class="sourceLineNo">343</span>      is.mark(65536);<a name="line.343"></a>
+<span class="sourceLineNo">344</span>    }<a name="line.344"></a>
+<span class="sourceLineNo">345</span><a name="line.345"></a>
+<span class="sourceLineNo">346</span>    // Create response in the beginning as it might be used if the parsing<a name="line.346"></a>
+<span class="sourceLineNo">347</span>    // failes.<a name="line.347"></a>
+<span class="sourceLineNo">348</span>    BatchResponse batchResponse = objFactory.createBatchResponse();<a name="line.348"></a>
+<span class="sourceLineNo">349</span>    List&lt;JAXBElement&lt;?&gt;&gt; batchResponses = batchResponse.getBatchResponses();<a name="line.349"></a>
+<span class="sourceLineNo">350</span>    Document doc = db.newDocument();<a name="line.350"></a>
+<span class="sourceLineNo">351</span><a name="line.351"></a>
+<span class="sourceLineNo">352</span>    if (useSSL || useStartTLS)<a name="line.352"></a>
+<span class="sourceLineNo">353</span>    {<a name="line.353"></a>
+<span class="sourceLineNo">354</span>      SSLConnectionFactory sslConnectionFactory = new SSLConnectionFactory();<a name="line.354"></a>
+<span class="sourceLineNo">355</span>      try<a name="line.355"></a>
+<span class="sourceLineNo">356</span>      {<a name="line.356"></a>
+<span class="sourceLineNo">357</span>        sslConnectionFactory.init(trustAll, null, null, null,<a name="line.357"></a>
+<span class="sourceLineNo">358</span>                                  trustStorePathValue, trustStorePasswordValue);<a name="line.358"></a>
+<span class="sourceLineNo">359</span>      }<a name="line.359"></a>
+<span class="sourceLineNo">360</span>      catch(SSLConnectionException e)<a name="line.360"></a>
+<span class="sourceLineNo">361</span>      {<a name="line.361"></a>
+<span class="sourceLineNo">362</span>        batchResponses.add(<a name="line.362"></a>
+<span class="sourceLineNo">363</span>          createErrorResponse(<a name="line.363"></a>
+<span class="sourceLineNo">364</span>            new LDAPException(LDAPResultCode.CLIENT_SIDE_CONNECT_ERROR,<a name="line.364"></a>
+<span class="sourceLineNo">365</span>              Message.raw(<a name="line.365"></a>
+<span class="sourceLineNo">366</span>              "Invalid SSL or TLS configuration to connect to LDAP server."))));<a name="line.366"></a>
+<span class="sourceLineNo">367</span>      }<a name="line.367"></a>
+<span class="sourceLineNo">368</span>      connOptions.setSSLConnectionFactory(sslConnectionFactory);<a name="line.368"></a>
+<span class="sourceLineNo">369</span>    }<a name="line.369"></a>
+<span class="sourceLineNo">370</span><a name="line.370"></a>
+<span class="sourceLineNo">371</span>    SOAPBody soapBody = null;<a name="line.371"></a>
+<span class="sourceLineNo">372</span><a name="line.372"></a>
+<span class="sourceLineNo">373</span>    MimeHeaders mimeHeaders = new MimeHeaders();<a name="line.373"></a>
+<span class="sourceLineNo">374</span>    Enumeration en = req.getHeaderNames();<a name="line.374"></a>
+<span class="sourceLineNo">375</span>    String bindDN = null;<a name="line.375"></a>
+<span class="sourceLineNo">376</span>    String bindPassword = null;<a name="line.376"></a>
+<span class="sourceLineNo">377</span>    boolean authenticationInHeader = false;<a name="line.377"></a>
+<span class="sourceLineNo">378</span>    boolean authenticationIsID = false;<a name="line.378"></a>
+<span class="sourceLineNo">379</span>    while (en.hasMoreElements()) {<a name="line.379"></a>
+<span class="sourceLineNo">380</span>      String headerName = (String) en.nextElement();<a name="line.380"></a>
+<span class="sourceLineNo">381</span>      String headerVal = req.getHeader(headerName);<a name="line.381"></a>
+<span class="sourceLineNo">382</span>      if (headerName.equalsIgnoreCase("authorization")) {<a name="line.382"></a>
+<span class="sourceLineNo">383</span>        if (headerVal.startsWith("Basic ")) {<a name="line.383"></a>
+<span class="sourceLineNo">384</span>          authenticationInHeader = true;<a name="line.384"></a>
+<span class="sourceLineNo">385</span>          String authorization = headerVal.substring(6).trim();<a name="line.385"></a>
+<span class="sourceLineNo">386</span>          try {<a name="line.386"></a>
+<span class="sourceLineNo">387</span>            String unencoded = new String(Base64.decode(authorization));<a name="line.387"></a>
+<span class="sourceLineNo">388</span>            int colon = unencoded.indexOf(':');<a name="line.388"></a>
+<span class="sourceLineNo">389</span>            if (colon &gt; 0) {<a name="line.389"></a>
+<span class="sourceLineNo">390</span>              if (useHTTPAuthzID)<a name="line.390"></a>
+<span class="sourceLineNo">391</span>              {<a name="line.391"></a>
+<span class="sourceLineNo">392</span>                connOptions.setSASLMechanism("mech=" + SASL_MECHANISM_PLAIN);<a name="line.392"></a>
+<span class="sourceLineNo">393</span>                connOptions.addSASLProperty(<a name="line.393"></a>
+<span class="sourceLineNo">394</span>                    "authid=u:" + unencoded.substring(0, colon).trim());<a name="line.394"></a>
+<span class="sourceLineNo">395</span>                authenticationIsID = true;<a name="line.395"></a>
+<span class="sourceLineNo">396</span>              }<a name="line.396"></a>
+<span class="sourceLineNo">397</span>              else<a name="line.397"></a>
+<span class="sourceLineNo">398</span>              {<a name="line.398"></a>
+<span class="sourceLineNo">399</span>                bindDN = unencoded.substring(0, colon).trim();<a name="line.399"></a>
+<span class="sourceLineNo">400</span>              }<a name="line.400"></a>
+<span class="sourceLineNo">401</span>              bindPassword = unencoded.substring(colon + 1);<a name="line.401"></a>
+<span class="sourceLineNo">402</span>            }<a name="line.402"></a>
+<span class="sourceLineNo">403</span>          } catch (ParseException ex) {<a name="line.403"></a>
+<span class="sourceLineNo">404</span>            // user/DN:password parsing error<a name="line.404"></a>
+<span class="sourceLineNo">405</span>            batchResponses.add(<a name="line.405"></a>
+<span class="sourceLineNo">406</span>              createErrorResponse(<a name="line.406"></a>
+<span class="sourceLineNo">407</span>                    new LDAPException(LDAPResultCode.INVALID_CREDENTIALS,<a name="line.407"></a>
+<span class="sourceLineNo">408</span>                    Message.raw(ex.getMessage()))));<a name="line.408"></a>
+<span class="sourceLineNo">409</span>            break;<a name="line.409"></a>
+<span class="sourceLineNo">410</span>          }<a name="line.410"></a>
+<span class="sourceLineNo">411</span>        }<a name="line.411"></a>
+<span class="sourceLineNo">412</span>      }<a name="line.412"></a>
+<span class="sourceLineNo">413</span>      StringTokenizer tk = new StringTokenizer(headerVal, ",");<a name="line.413"></a>
+<span class="sourceLineNo">414</span>      while (tk.hasMoreTokens()) {<a name="line.414"></a>
+<span class="sourceLineNo">415</span>        mimeHeaders.addHeader(headerName, tk.nextToken().trim());<a name="line.415"></a>
+<span class="sourceLineNo">416</span>      }<a name="line.416"></a>
+<span class="sourceLineNo">417</span>    }<a name="line.417"></a>
+<span class="sourceLineNo">418</span><a name="line.418"></a>
+<span class="sourceLineNo">419</span>    if ( ! authenticationInHeader ) {<a name="line.419"></a>
+<span class="sourceLineNo">420</span>      // if no authentication, set default user from web.xml<a name="line.420"></a>
+<span class="sourceLineNo">421</span>      if (userDN != null)<a name="line.421"></a>
+<span class="sourceLineNo">422</span>      {<a name="line.422"></a>
+<span class="sourceLineNo">423</span>        bindDN = userDN;<a name="line.423"></a>
+<span class="sourceLineNo">424</span>        if (userPassword != null)<a name="line.424"></a>
+<span class="sourceLineNo">425</span>        {<a name="line.425"></a>
+<span class="sourceLineNo">426</span>          bindPassword = userPassword;<a name="line.426"></a>
+<span class="sourceLineNo">427</span>        }<a name="line.427"></a>
+<span class="sourceLineNo">428</span>        else<a name="line.428"></a>
+<span class="sourceLineNo">429</span>        {<a name="line.429"></a>
+<span class="sourceLineNo">430</span>          batchResponses.add(<a name="line.430"></a>
+<span class="sourceLineNo">431</span>              createErrorResponse(<a name="line.431"></a>
+<span class="sourceLineNo">432</span>                    new LDAPException(LDAPResultCode.INVALID_CREDENTIALS,<a name="line.432"></a>
+<span class="sourceLineNo">433</span>                    Message.raw("Invalid configured credentials."))));<a name="line.433"></a>
+<span class="sourceLineNo">434</span>        }<a name="line.434"></a>
+<span class="sourceLineNo">435</span>      }<a name="line.435"></a>
+<span class="sourceLineNo">436</span>      else<a name="line.436"></a>
+<span class="sourceLineNo">437</span>      {<a name="line.437"></a>
+<span class="sourceLineNo">438</span>        bindDN = "";<a name="line.438"></a>
+<span class="sourceLineNo">439</span>        bindPassword = "";<a name="line.439"></a>
+<span class="sourceLineNo">440</span>      }<a name="line.440"></a>
+<span class="sourceLineNo">441</span>    } else {<a name="line.441"></a>
+<span class="sourceLineNo">442</span>      // otherwise if DN or password is null, send back an error<a name="line.442"></a>
+<span class="sourceLineNo">443</span>      if (((!authenticationIsID &amp;&amp; (bindDN == null)) || bindPassword == null)<a name="line.443"></a>
+<span class="sourceLineNo">444</span>         &amp;&amp; batchResponses.isEmpty()) {<a name="line.444"></a>
+<span class="sourceLineNo">445</span>        batchResponses.add(<a name="line.445"></a>
+<span class="sourceLineNo">446</span>              createErrorResponse(<a name="line.446"></a>
+<span class="sourceLineNo">447</span>                    new LDAPException(LDAPResultCode.INVALID_CREDENTIALS,<a name="line.447"></a>
+<span class="sourceLineNo">448</span>                    Message.raw("Unable to retrieve credentials."))));<a name="line.448"></a>
+<span class="sourceLineNo">449</span>      }<a name="line.449"></a>
+<span class="sourceLineNo">450</span>    }<a name="line.450"></a>
+<span class="sourceLineNo">451</span><a name="line.451"></a>
+<span class="sourceLineNo">452</span>    // if an error already occured, the list is not empty<a name="line.452"></a>
+<span class="sourceLineNo">453</span>    if ( batchResponses.isEmpty() ) {<a name="line.453"></a>
+<span class="sourceLineNo">454</span>      try {<a name="line.454"></a>
+<span class="sourceLineNo">455</span>        SOAPMessage message = messageFactory.createMessage(mimeHeaders, is);<a name="line.455"></a>
+<span class="sourceLineNo">456</span>        soapBody = message.getSOAPBody();<a name="line.456"></a>
+<span class="sourceLineNo">457</span>      } catch (SOAPException ex) {<a name="line.457"></a>
+<span class="sourceLineNo">458</span>        // SOAP was unable to parse XML successfully<a name="line.458"></a>
+<span class="sourceLineNo">459</span>        batchResponses.add(<a name="line.459"></a>
+<span class="sourceLineNo">460</span>          createXMLParsingErrorResponse(is,<a name="line.460"></a>
+<span class="sourceLineNo">461</span>                                        batchResponse,<a name="line.461"></a>
+<span class="sourceLineNo">462</span>                                        String.valueOf(ex.getCause())));<a name="line.462"></a>
+<span class="sourceLineNo">463</span>      }<a name="line.463"></a>
+<span class="sourceLineNo">464</span>    }<a name="line.464"></a>
+<span class="sourceLineNo">465</span><a name="line.465"></a>
+<span class="sourceLineNo">466</span>    if ( soapBody != null ) {<a name="line.466"></a>
+<span class="sourceLineNo">467</span>      Iterator it = soapBody.getChildElements();<a name="line.467"></a>
+<span class="sourceLineNo">468</span>      while (it.hasNext()) {<a name="line.468"></a>
+<span class="sourceLineNo">469</span>        Object obj = it.next();<a name="line.469"></a>
+<span class="sourceLineNo">470</span>        if (!(obj instanceof SOAPElement)) {<a name="line.470"></a>
+<span class="sourceLineNo">471</span>          continue;<a name="line.471"></a>
+<span class="sourceLineNo">472</span>        }<a name="line.472"></a>
+<span class="sourceLineNo">473</span>        SOAPElement se = (SOAPElement) obj;<a name="line.473"></a>
+<span class="sourceLineNo">474</span>        JAXBElement&lt;BatchRequest&gt; batchRequestElement = null;<a name="line.474"></a>
+<span class="sourceLineNo">475</span>        try {<a name="line.475"></a>
+<span class="sourceLineNo">476</span>          Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();<a name="line.476"></a>
+<span class="sourceLineNo">477</span>          unmarshaller.setSchema(schema);<a name="line.477"></a>
+<span class="sourceLineNo">478</span>          batchRequestElement = unmarshaller.unmarshal(se, BatchRequest.class);<a name="line.478"></a>
+<span class="sourceLineNo">479</span>        } catch (JAXBException e) {<a name="line.479"></a>
+<span class="sourceLineNo">480</span>          // schema validation failed<a name="line.480"></a>
+<span class="sourceLineNo">481</span>          batchResponses.add(createXMLParsingErrorResponse(is,<a name="line.481"></a>
+<span class="sourceLineNo">482</span>                                                       batchResponse,<a name="line.482"></a>
+<span class="sourceLineNo">483</span>                                                       String.valueOf(e)));<a name="line.483"></a>
+<span class="sourceLineNo">484</span>        }<a name="line.484"></a>
+<span class="sourceLineNo">485</span>        if ( batchRequestElement != null ) {<a name="line.485"></a>
+<span class="sourceLineNo">486</span>          boolean authzInBind = false;<a name="line.486"></a>
+<span class="sourceLineNo">487</span>          boolean authzInControl = false;<a name="line.487"></a>
+<span class="sourceLineNo">488</span>          batchRequest = batchRequestElement.getValue();<a name="line.488"></a>
+<span class="sourceLineNo">489</span><a name="line.489"></a>
+<span class="sourceLineNo">490</span>          /*<a name="line.490"></a>
+<span class="sourceLineNo">491</span>           *  Process optional authRequest (i.e. use authz)<a name="line.491"></a>
+<span class="sourceLineNo">492</span>           */<a name="line.492"></a>
+<span class="sourceLineNo">493</span>          if (batchRequest.authRequest != null) {<a name="line.493"></a>
+<span class="sourceLineNo">494</span>            if (authenticationIsID == true) {<a name="line.494"></a>
+<span class="sourceLineNo">495</span>              // If we are using SASL, then use the bind authz.<a name="line.495"></a>
+<span class="sourceLineNo">496</span>              connOptions.addSASLProperty("authzid=" +<a name="line.496"></a>
+<span class="sourceLineNo">497</span>                  batchRequest.authRequest.getPrincipal());<a name="line.497"></a>
+<span class="sourceLineNo">498</span>              authzInBind = true;<a name="line.498"></a>
+<span class="sourceLineNo">499</span>            } else {<a name="line.499"></a>
+<span class="sourceLineNo">500</span>              // If we are using simple then we have to do some work after<a name="line.500"></a>
+<span class="sourceLineNo">501</span>              // the bind.<a name="line.501"></a>
+<span class="sourceLineNo">502</span>              authzInControl = true;<a name="line.502"></a>
+<span class="sourceLineNo">503</span>            }<a name="line.503"></a>
+<span class="sourceLineNo">504</span>          }<a name="line.504"></a>
+<span class="sourceLineNo">505</span>          // set requestID in response<a name="line.505"></a>
+<span class="sourceLineNo">506</span>          batchResponse.setRequestID(batchRequest.getRequestID());<a name="line.506"></a>
+<span class="sourceLineNo">507</span><a name="line.507"></a>
+<span class="sourceLineNo">508</span>          boolean connected = false;<a name="line.508"></a>
+<span class="sourceLineNo">509</span><a name="line.509"></a>
+<span class="sourceLineNo">510</span>          if ( connection == null ) {<a name="line.510"></a>
+<span class="sourceLineNo">511</span>            connection = new LDAPConnection(hostName, port, connOptions);<a name="line.511"></a>
+<span class="sourceLineNo">512</span>            try {<a name="line.512"></a>
+<span class="sourceLineNo">513</span><a name="line.513"></a>
+<span class="sourceLineNo">514</span>              connection.connectToHost(bindDN, bindPassword);<a name="line.514"></a>
+<span class="sourceLineNo">515</span>              if (authzInControl)<a name="line.515"></a>
+<span class="sourceLineNo">516</span>              {<a name="line.516"></a>
+<span class="sourceLineNo">517</span>                proxyAuthzControl = checkAuthzControl(connection,<a name="line.517"></a>
+<span class="sourceLineNo">518</span>                    batchRequest.authRequest.getPrincipal());<a name="line.518"></a>
+<span class="sourceLineNo">519</span>              }<a name="line.519"></a>
+<span class="sourceLineNo">520</span>              if (authzInBind || authzInControl)<a name="line.520"></a>
+<span class="sourceLineNo">521</span>              {<a name="line.521"></a>
+<span class="sourceLineNo">522</span>                LDAPResult authResponse = objFactory.createLDAPResult();<a name="line.522"></a>
+<span class="sourceLineNo">523</span>                ResultCode code = ResultCodeFactory.create(objFactory,<a name="line.523"></a>
+<span class="sourceLineNo">524</span>                    LDAPResultCode.SUCCESS);<a name="line.524"></a>
+<span class="sourceLineNo">525</span>                authResponse.setResultCode(code);<a name="line.525"></a>
+<span class="sourceLineNo">526</span>                batchResponses.add(<a name="line.526"></a>
+<span class="sourceLineNo">527</span>                    objFactory.createBatchResponseAuthResponse(authResponse));<a name="line.527"></a>
+<span class="sourceLineNo">528</span>              }<a name="line.528"></a>
+<span class="sourceLineNo">529</span>              connected = true;<a name="line.529"></a>
+<span class="sourceLineNo">530</span>            } catch (LDAPConnectionException e) {<a name="line.530"></a>
+<span class="sourceLineNo">531</span>              // if connection failed, return appropriate error response<a name="line.531"></a>
+<span class="sourceLineNo">532</span>              batchResponses.add(createErrorResponse(e));<a name="line.532"></a>
+<span class="sourceLineNo">533</span>            }<a name="line.533"></a>
+<span class="sourceLineNo">534</span>          }<a name="line.534"></a>
+<span class="sourceLineNo">535</span>          if ( connected ) {<a name="line.535"></a>
+<span class="sourceLineNo">536</span>            List&lt;DsmlMessage&gt; list = batchRequest.getBatchRequests();<a name="line.536"></a>
+<span class="sourceLineNo">537</span><a name="line.537"></a>
+<span class="sourceLineNo">538</span>            for (DsmlMessage request : list) {<a name="line.538"></a>
+<span class="sourceLineNo">539</span>              JAXBElement&lt;?&gt; result = performLDAPRequest(connection, request);<a name="line.539"></a>
+<span class="sourceLineNo">540</span>              if ( result != null ) {<a name="line.540"></a>
+<span class="sourceLineNo">541</span>                batchResponses.add(result);<a name="line.541"></a>
+<span class="sourceLineNo">542</span>              }<a name="line.542"></a>
+<span class="sourceLineNo">543</span>              // evaluate response to check if an error occured<a name="line.543"></a>
+<span class="sourceLineNo">544</span>              Object o = result.getValue();<a name="line.544"></a>
+<span class="sourceLineNo">545</span>              if ( o instanceof ErrorResponse ) {<a name="line.545"></a>
+<span class="sourceLineNo">546</span>                if ( ON_ERROR_EXIT.equals(batchRequest.getOnError()) ) {<a name="line.546"></a>
+<span class="sourceLineNo">547</span>                  break;<a name="line.547"></a>
+<span class="sourceLineNo">548</span>                }<a name="line.548"></a>
+<span class="sourceLineNo">549</span>              } else if ( o instanceof LDAPResult ) {<a name="line.549"></a>
+<span class="sourceLineNo">550</span>                int code = ((LDAPResult)o).getResultCode().getCode();<a name="line.550"></a>
+<span class="sourceLineNo">551</span>                if ( code != LDAPResultCode.SUCCESS<a name="line.551"></a>
+<span class="sourceLineNo">552</span>                  &amp;&amp; code != LDAPResultCode.REFERRAL<a name="line.552"></a>
+<span class="sourceLineNo">553</span>                  &amp;&amp; code != LDAPResultCode.COMPARE_TRUE<a name="line.553"></a>
+<span class="sourceLineNo">554</span>                  &amp;&amp; code != LDAPResultCode.COMPARE_FALSE ) {<a name="line.554"></a>
+<span class="sourceLineNo">555</span>                  if ( ON_ERROR_EXIT.equals(batchRequest.getOnError()) ) {<a name="line.555"></a>
+<span class="sourceLineNo">556</span>                    break;<a name="line.556"></a>
+<span class="sourceLineNo">557</span>                  }<a name="line.557"></a>
+<span class="sourceLineNo">558</span>                }<a name="line.558"></a>
+<span class="sourceLineNo">559</span>              }<a name="line.559"></a>
+<span class="sourceLineNo">560</span>            }<a name="line.560"></a>
+<span class="sourceLineNo">561</span>          }<a name="line.561"></a>
+<span class="sourceLineNo">562</span>          // close connection to LDAP server<a name="line.562"></a>
+<span class="sourceLineNo">563</span>          if ( connection != null ) {<a name="line.563"></a>
+<span class="sourceLineNo">564</span>            connection.close(nextMessageID);<a name="line.564"></a>
+<span class="sourceLineNo">565</span>          }<a name="line.565"></a>
+<span class="sourceLineNo">566</span>        }<a name="line.566"></a>
+<span class="sourceLineNo">567</span>      }<a name="line.567"></a>
+<span class="sourceLineNo">568</span>    }<a name="line.568"></a>
+<span class="sourceLineNo">569</span>    try {<a name="line.569"></a>
+<span class="sourceLineNo">570</span>      Marshaller marshaller = jaxbContext.createMarshaller();<a name="line.570"></a>
+<span class="sourceLineNo">571</span>      marshaller.marshal(objFactory.createBatchResponse(batchResponse), doc);<a name="line.571"></a>
+<span class="sourceLineNo">572</span>      sendResponse(doc, res);<a name="line.572"></a>
+<span class="sourceLineNo">573</span>    } catch (Exception e) {<a name="line.573"></a>
+<span class="sourceLineNo">574</span>      e.printStackTrace();<a name="line.574"></a>
+<span class="sourceLineNo">575</span>    }<a name="line.575"></a>
+<span class="sourceLineNo">576</span><a name="line.576"></a>
+<span class="sourceLineNo">577</span>  }<a name="line.577"></a>
+<span class="sourceLineNo">578</span><a name="line.578"></a>
+<span class="sourceLineNo">579</span>  /**<a name="line.579"></a>
+<span class="sourceLineNo">580</span>   * Returns an error response after a parsing error. The response has the<a name="line.580"></a>
+<span class="sourceLineNo">581</span>   * requestID of the batch request, the error response message of the parsing<a name="line.581"></a>
+<span class="sourceLineNo">582</span>   * exception message and the type 'malformed request'.<a name="line.582"></a>
+<span class="sourceLineNo">583</span>   *<a name="line.583"></a>
+<span class="sourceLineNo">584</span>   * @param is the xml InputStream to parse<a name="line.584"></a>
+<span class="sourceLineNo">585</span>   * @param batchResponse the JAXB object to fill in<a name="line.585"></a>
+<span class="sourceLineNo">586</span>   * @param parserErrorMessage the parsing error message<a name="line.586"></a>
+<span class="sourceLineNo">587</span>   *<a name="line.587"></a>
+<span class="sourceLineNo">588</span>   * @return a JAXBElement that contains an ErrorResponse<a name="line.588"></a>
+<span class="sourceLineNo">589</span>   */<a name="line.589"></a>
+<span class="sourceLineNo">590</span>  private JAXBElement&lt;ErrorResponse&gt; createXMLParsingErrorResponse(<a name="line.590"></a>
+<span class="sourceLineNo">591</span>                                                    InputStream is,<a name="line.591"></a>
+<span class="sourceLineNo">592</span>                                                    BatchResponse batchResponse,<a name="line.592"></a>
+<span class="sourceLineNo">593</span>                                                    String parserErrorMessage) {<a name="line.593"></a>
+<span class="sourceLineNo">594</span>    ErrorResponse errorResponse = objFactory.createErrorResponse();<a name="line.594"></a>
+<span class="sourceLineNo">595</span><a name="line.595"></a>
+<span class="sourceLineNo">596</span>    try {<a name="line.596"></a>
+<span class="sourceLineNo">597</span>      // try alternative XML parsing using SAX to retrieve requestID value<a name="line.597"></a>
+<span class="sourceLineNo">598</span>      XMLReader xmlReader = XMLReaderFactory.createXMLReader();<a name="line.598"></a>
+<span class="sourceLineNo">599</span>      // clear previous match<a name="line.599"></a>
+<span class="sourceLineNo">600</span>      this.contentHandler.requestID = null;<a name="line.600"></a>
+<span class="sourceLineNo">601</span>      xmlReader.setContentHandler(this.contentHandler);<a name="line.601"></a>
+<span class="sourceLineNo">602</span>      is.reset();<a name="line.602"></a>
+<span class="sourceLineNo">603</span><a name="line.603"></a>
+<span class="sourceLineNo">604</span>      xmlReader.parse(new InputSource(is));<a name="line.604"></a>
+<span class="sourceLineNo">605</span>    } catch (Throwable e) {<a name="line.605"></a>
+<span class="sourceLineNo">606</span>      // document is unparsable so will jump here<a name="line.606"></a>
+<span class="sourceLineNo">607</span>    }<a name="line.607"></a>
+<span class="sourceLineNo">608</span>    if ( parserErrorMessage!= null ) {<a name="line.608"></a>
+<span class="sourceLineNo">609</span>      errorResponse.setMessage(parserErrorMessage);<a name="line.609"></a>
+<span class="sourceLineNo">610</span>    }<a name="line.610"></a>
+<span class="sourceLineNo">611</span>    batchResponse.setRequestID(this.contentHandler.requestID);<a name="line.611"></a>
+<span class="sourceLineNo">612</span><a name="line.612"></a>
+<span class="sourceLineNo">613</span>    errorResponse.setType(MALFORMED_REQUEST);<a name="line.613"></a>
+<span class="sourceLineNo">614</span><a name="line.614"></a>
+<span class="sourceLineNo">615</span>    return objFactory.createBatchResponseErrorResponse(errorResponse);<a name="line.615"></a>
+<span class="sourceLineNo">616</span>  }<a name="line.616"></a>
+<span class="sourceLineNo">617</span><a name="line.617"></a>
+<span class="sourceLineNo">618</span>  /**<a name="line.618"></a>
+<span class="sourceLineNo">619</span>   * Returns an error response with attributes set according to the exception<a name="line.619"></a>
+<span class="sourceLineNo">620</span>   * provided as argument.<a name="line.620"></a>
+<span class="sourceLineNo">621</span>   *<a name="line.621"></a>
+<span class="sourceLineNo">622</span>   * @param t the exception that occured<a name="line.622"></a>
+<span class="sourceLineNo">623</span>   *<a name="line.623"></a>
+<span class="sourceLineNo">624</span>   * @return a JAXBElement that contains an ErrorResponse<a name="line.624"></a>
+<span class="sourceLineNo">625</span>   */<a name="line.625"></a>
+<span class="sourceLineNo">626</span>  private JAXBElement&lt;ErrorResponse&gt; createErrorResponse(Throwable t) {<a name="line.626"></a>
+<span class="sourceLineNo">627</span>    // potential exceptions are IOException, LDAPException, ASN1Exception<a name="line.627"></a>
+<span class="sourceLineNo">628</span><a name="line.628"></a>
+<span class="sourceLineNo">629</span>    ErrorResponse errorResponse = objFactory.createErrorResponse();<a name="line.629"></a>
+<span class="sourceLineNo">630</span>    errorResponse.setMessage(String.valueOf(t));<a name="line.630"></a>
+<span class="sourceLineNo">631</span><a name="line.631"></a>
+<span class="sourceLineNo">632</span>    if ( t instanceof LDAPException ) {<a name="line.632"></a>
+<span class="sourceLineNo">633</span>      switch(((LDAPException)t).getResultCode()) {<a name="line.633"></a>
+<span class="sourceLineNo">634</span>        case LDAPResultCode.AUTHORIZATION_DENIED:<a name="line.634"></a>
+<span class="sourceLineNo">635</span>        case LDAPResultCode.INAPPROPRIATE_AUTHENTICATION:<a name="line.635"></a>
+<span class="sourceLineNo">636</span>        case LDAPResultCode.INVALID_CREDENTIALS:<a name="line.636"></a>
+<span class="sourceLineNo">637</span>        case LDAPResultCode.STRONG_AUTH_REQUIRED:<a name="line.637"></a>
+<span class="sourceLineNo">638</span>          errorResponse.setType(AUTHENTICATION_FAILED);<a name="line.638"></a>
+<span class="sourceLineNo">639</span>          break;<a name="line.639"></a>
+<span class="sourceLineNo">640</span><a name="line.640"></a>
+<span class="sourceLineNo">641</span>        case LDAPResultCode.CLIENT_SIDE_CONNECT_ERROR:<a name="line.641"></a>
+<span class="sourceLineNo">642</span>          errorResponse.setType(COULD_NOT_CONNECT);<a name="line.642"></a>
+<span class="sourceLineNo">643</span>          break;<a name="line.643"></a>
+<span class="sourceLineNo">644</span><a name="line.644"></a>
+<span class="sourceLineNo">645</span>        case LDAPResultCode.UNWILLING_TO_PERFORM:<a name="line.645"></a>
+<span class="sourceLineNo">646</span>          errorResponse.setType(NOT_ATTEMPTED);<a name="line.646"></a>
+<span class="sourceLineNo">647</span>          break;<a name="line.647"></a>
+<span class="sourceLineNo">648</span><a name="line.648"></a>
+<span class="sourceLineNo">649</span>        default:<a name="line.649"></a>
+<span class="sourceLineNo">650</span>          errorResponse.setType(MALFORMED_REQUEST);<a name="line.650"></a>
+<span class="sourceLineNo">651</span>          break;<a name="line.651"></a>
+<span class="sourceLineNo">652</span>      }<a name="line.652"></a>
+<span class="sourceLineNo">653</span>    } else if ( t instanceof LDAPConnectionException ) {<a name="line.653"></a>
+<span class="sourceLineNo">654</span>      errorResponse.setType(COULD_NOT_CONNECT);<a name="line.654"></a>
+<span class="sourceLineNo">655</span>    } else if ( t instanceof IOException ) {<a name="line.655"></a>
+<span class="sourceLineNo">656</span>      errorResponse.setType(UNRESOLVABLE_URI);<a name="line.656"></a>
+<span class="sourceLineNo">657</span>    } else {<a name="line.657"></a>
+<span class="sourceLineNo">658</span>      errorResponse.setType(GATEWAY_INTERNAL_ERROR);<a name="line.658"></a>
+<span class="sourceLineNo">659</span>    }<a name="line.659"></a>
+<span class="sourceLineNo">660</span><a name="line.660"></a>
+<span class="sourceLineNo">661</span>    return objFactory.createBatchResponseErrorResponse(errorResponse);<a name="line.661"></a>
+<span class="sourceLineNo">662</span>  }<a name="line.662"></a>
+<span class="sourceLineNo">663</span><a name="line.663"></a>
+<span class="sourceLineNo">664</span>  /**<a name="line.664"></a>
+<span class="sourceLineNo">665</span>   * Performs the LDAP operation and sends back the result (if any). In case<a name="line.665"></a>
+<span class="sourceLineNo">666</span>   * of error, an error response is returned.<a name="line.666"></a>
+<span class="sourceLineNo">667</span>   *<a name="line.667"></a>
+<span class="sourceLineNo">668</span>   * @param connection a connected connection<a name="line.668"></a>
+<span class="sourceLineNo">669</span>   * @param request the JAXB request to perform<a name="line.669"></a>
+<span class="sourceLineNo">670</span>   *<a name="line.670"></a>
+<span class="sourceLineNo">671</span>   * @return null for an abandon request, the expect result for all other<a name="line.671"></a>
+<span class="sourceLineNo">672</span>   *         requests or an error in case of unexpected behaviour.<a name="line.672"></a>
+<span class="sourceLineNo">673</span>   */<a name="line.673"></a>
+<span class="sourceLineNo">674</span>  private JAXBElement&lt;?&gt; performLDAPRequest(LDAPConnection connection,<a name="line.674"></a>
+<span class="sourceLineNo">675</span>                                            DsmlMessage request) {<a name="line.675"></a>
+<span class="sourceLineNo">676</span>    ArrayList&lt;org.opends.server.types.Control&gt; controls =<a name="line.676"></a>
+<span class="sourceLineNo">677</span>        new ArrayList&lt;org.opends.server.types.Control&gt;(1);<a name="line.677"></a>
+<span class="sourceLineNo">678</span>    if (proxyAuthzControl != null)<a name="line.678"></a>
+<span class="sourceLineNo">679</span>    {<a name="line.679"></a>
+<span class="sourceLineNo">680</span>      controls.add(proxyAuthzControl);<a name="line.680"></a>
+<span class="sourceLineNo">681</span>    }<a name="line.681"></a>
+<span class="sourceLineNo">682</span>    try {<a name="line.682"></a>
+<span class="sourceLineNo">683</span>      if (request instanceof SearchRequest) {<a name="line.683"></a>
+<span class="sourceLineNo">684</span>        // Process the search request.<a name="line.684"></a>
+<span class="sourceLineNo">685</span>        SearchRequest sr = (SearchRequest) request;<a name="line.685"></a>
+<span class="sourceLineNo">686</span>        DSMLSearchOperation ds = new DSMLSearchOperation(connection);<a name="line.686"></a>
+<span class="sourceLineNo">687</span>        SearchResponse searchResponse = ds.doSearch(objFactory, sr, controls);<a name="line.687"></a>
+<span class="sourceLineNo">688</span>        return objFactory.createBatchResponseSearchResponse(searchResponse);<a name="line.688"></a>
+<span class="sourceLineNo">689</span>      } else if (request instanceof AddRequest) {<a name="line.689"></a>
+<span class="sourceLineNo">690</span>        // Process the add request.<a name="line.690"></a>
+<span class="sourceLineNo">691</span>        AddRequest ar = (AddRequest) request;<a name="line.691"></a>
+<span class="sourceLineNo">692</span>        DSMLAddOperation addOp = new DSMLAddOperation(connection);<a name="line.692"></a>
+<span class="sourceLineNo">693</span>        LDAPResult addResponse = addOp.doOperation(objFactory, ar, controls);<a name="line.693"></a>
+<span class="sourceLineNo">694</span>        return objFactory.createBatchResponseAddResponse(addResponse);<a name="line.694"></a>
+<span class="sourceLineNo">695</span>      } else if (request instanceof AbandonRequest) {<a name="line.695"></a>
+<span class="sourceLineNo">696</span>        // Process the abandon request.<a name="line.696"></a>
+<span class="sourceLineNo">697</span>        AbandonRequest ar = (AbandonRequest) request;<a name="line.697"></a>
+<span class="sourceLineNo">698</span>        DSMLAbandonOperation ao = new DSMLAbandonOperation(connection);<a name="line.698"></a>
+<span class="sourceLineNo">699</span>        LDAPResult abandonResponse = ao.doOperation(objFactory, ar, controls);<a name="line.699"></a>
+<span class="sourceLineNo">700</span>        return null;<a name="line.700"></a>
+<span class="sourceLineNo">701</span>      } else if (request instanceof ExtendedRequest) {<a name="line.701"></a>
+<span class="sourceLineNo">702</span>        // Process the extended request.<a name="line.702"></a>
+<span class="sourceLineNo">703</span>        ExtendedRequest er = (ExtendedRequest) request;<a name="line.703"></a>
+<span class="sourceLineNo">704</span>        DSMLExtendedOperation eo = new DSMLExtendedOperation(connection,<a name="line.704"></a>
+<span class="sourceLineNo">705</span>            exopStrings);<a name="line.705"></a>
+<span class="sourceLineNo">706</span>        ExtendedResponse extendedResponse = eo.doOperation(objFactory, er,<a name="line.706"></a>
+<span class="sourceLineNo">707</span>            controls);<a name="line.707"></a>
+<span class="sourceLineNo">708</span>        return objFactory.createBatchResponseExtendedResponse(extendedResponse);<a name="line.708"></a>
+<span class="sourceLineNo">709</span><a name="line.709"></a>
+<span class="sourceLineNo">710</span>      } else if (request instanceof DelRequest) {<a name="line.710"></a>
+<span class="sourceLineNo">711</span>        // Process the delete request.<a name="line.711"></a>
+<span class="sourceLineNo">712</span>        DelRequest dr = (DelRequest) request;<a name="line.712"></a>
+<span class="sourceLineNo">713</span>        DSMLDeleteOperation delOp = new DSMLDeleteOperation(connection);<a name="line.713"></a>
+<span class="sourceLineNo">714</span>        LDAPResult delResponse = delOp.doOperation(objFactory, dr, controls);<a name="line.714"></a>
+<span class="sourceLineNo">715</span>        return objFactory.createBatchResponseDelResponse(delResponse);<a name="line.715"></a>
+<span class="sourceLineNo">716</span>      } else if (request instanceof CompareRequest) {<a name="line.716"></a>
+<span class="sourceLineNo">717</span>        // Process the compare request.<a name="line.717"></a>
+<span class="sourceLineNo">718</span>        CompareRequest cr = (CompareRequest) request;<a name="line.718"></a>
+<span class="sourceLineNo">719</span>        DSMLCompareOperation compareOp =<a name="line.719"></a>
+<span class="sourceLineNo">720</span>                new DSMLCompareOperation(connection);<a name="line.720"></a>
+<span class="sourceLineNo">721</span>        LDAPResult compareResponse = compareOp.doOperation(objFactory, cr,<a name="line.721"></a>
+<span class="sourceLineNo">722</span>            controls);<a name="line.722"></a>
+<span class="sourceLineNo">723</span>        return objFactory.createBatchResponseCompareResponse(compareResponse);<a name="line.723"></a>
+<span class="sourceLineNo">724</span>      } else if (request instanceof ModifyDNRequest) {<a name="line.724"></a>
+<span class="sourceLineNo">725</span>        // Process the Modify DN request.<a name="line.725"></a>
+<span class="sourceLineNo">726</span>        ModifyDNRequest mr = (ModifyDNRequest) request;<a name="line.726"></a>
+<span class="sourceLineNo">727</span>        DSMLModifyDNOperation moddnOp =<a name="line.727"></a>
+<span class="sourceLineNo">728</span>                new DSMLModifyDNOperation(connection);<a name="line.728"></a>
+<span class="sourceLineNo">729</span>        LDAPResult moddnResponse = moddnOp.doOperation(objFactory, mr,<a name="line.729"></a>
+<span class="sourceLineNo">730</span>            controls);<a name="line.730"></a>
+<span class="sourceLineNo">731</span>        return objFactory.createBatchResponseModDNResponse(moddnResponse);<a name="line.731"></a>
+<span class="sourceLineNo">732</span>      } else if (request instanceof ModifyRequest) {<a name="line.732"></a>
+<span class="sourceLineNo">733</span>        // Process the Modify request.<a name="line.733"></a>
+<span class="sourceLineNo">734</span>        ModifyRequest modr = (ModifyRequest) request;<a name="line.734"></a>
+<span class="sourceLineNo">735</span>        DSMLModifyOperation modOp = new DSMLModifyOperation(connection);<a name="line.735"></a>
+<span class="sourceLineNo">736</span>        LDAPResult modResponse = modOp.doOperation(objFactory, modr, controls);<a name="line.736"></a>
+<span class="sourceLineNo">737</span>        return objFactory.createBatchResponseModifyResponse(modResponse);<a name="line.737"></a>
+<span class="sourceLineNo">738</span>      } else if (request instanceof AuthRequest) {<a name="line.738"></a>
+<span class="sourceLineNo">739</span>        // Process the Auth request.<a name="line.739"></a>
+<span class="sourceLineNo">740</span>        // Only returns an BatchReponse with an AuthResponse containing the<a name="line.740"></a>
+<span class="sourceLineNo">741</span>        // LDAP result code AUTH_METHOD_NOT_SUPPORTED<a name="line.741"></a>
+<span class="sourceLineNo">742</span>        ResultCode resultCode = objFactory.createResultCode();<a name="line.742"></a>
+<span class="sourceLineNo">743</span>        resultCode.setCode(LDAPResultCode.AUTH_METHOD_NOT_SUPPORTED);<a name="line.743"></a>
+<span class="sourceLineNo">744</span><a name="line.744"></a>
+<span class="sourceLineNo">745</span>        LDAPResult ldapResult = objFactory.createLDAPResult();<a name="line.745"></a>
+<span class="sourceLineNo">746</span>        ldapResult.setResultCode(resultCode);<a name="line.746"></a>
+<span class="sourceLineNo">747</span><a name="line.747"></a>
+<span class="sourceLineNo">748</span>        return objFactory.createBatchResponseAuthResponse(ldapResult);<a name="line.748"></a>
+<span class="sourceLineNo">749</span>      }<a name="line.749"></a>
+<span class="sourceLineNo">750</span>    } catch (Throwable t) {<a name="line.750"></a>
+<span class="sourceLineNo">751</span>      return createErrorResponse(t);<a name="line.751"></a>
+<span class="sourceLineNo">752</span>    }<a name="line.752"></a>
+<span class="sourceLineNo">753</span>    // should never happen as the schema was validated<a name="line.753"></a>
+<span class="sourceLineNo">754</span>    return null;<a name="line.754"></a>
+<span class="sourceLineNo">755</span>  }<a name="line.755"></a>
+<span class="sourceLineNo">756</span><a name="line.756"></a>
+<span class="sourceLineNo">757</span><a name="line.757"></a>
+<span class="sourceLineNo">758</span>  /**<a name="line.758"></a>
+<span class="sourceLineNo">759</span>   * Send a response back to the client. This could be either a SOAP fault<a name="line.759"></a>
+<span class="sourceLineNo">760</span>   * or a correct DSML response.<a name="line.760"></a>
+<span class="sourceLineNo">761</span>   *<a name="line.761"></a>
+<span class="sourceLineNo">762</span>   * @param doc   The document to include in the response.<a name="line.762"></a>
+<span class="sourceLineNo">763</span>   * @param res   Information about the HTTP response to the client.<a name="line.763"></a>
+<span class="sourceLineNo">764</span>   *<a name="line.764"></a>
+<span class="sourceLineNo">765</span>   * @throws IOException   If an error occurs while interacting with the client.<a name="line.765"></a>
+<span class="sourceLineNo">766</span>   * @throws SOAPException If an encoding or decoding error occurs.<a name="line.766"></a>
+<span class="sourceLineNo">767</span>   */<a name="line.767"></a>
+<span class="sourceLineNo">768</span>  private void sendResponse(Document doc, HttpServletResponse res)<a name="line.768"></a>
+<span class="sourceLineNo">769</span>    throws IOException, SOAPException {<a name="line.769"></a>
+<span class="sourceLineNo">770</span><a name="line.770"></a>
+<span class="sourceLineNo">771</span>    SOAPMessage reply = messageFactory.createMessage();<a name="line.771"></a>
+<span class="sourceLineNo">772</span>    SOAPHeader header = reply.getSOAPHeader();<a name="line.772"></a>
+<span class="sourceLineNo">773</span>    header.detachNode();<a name="line.773"></a>
+<span class="sourceLineNo">774</span>    SOAPBody replyBody = reply.getSOAPBody();<a name="line.774"></a>
+<span class="sourceLineNo">775</span><a name="line.775"></a>
+<span class="sourceLineNo">776</span>    res.setHeader("Content-Type", "text/xml");<a name="line.776"></a>
+<span class="sourceLineNo">777</span><a name="line.777"></a>
+<span class="sourceLineNo">778</span>    SOAPElement bodyElement = replyBody.addDocument(doc);<a name="line.778"></a>
+<span class="sourceLineNo">779</span><a name="line.779"></a>
+<span class="sourceLineNo">780</span>    reply.saveChanges();<a name="line.780"></a>
+<span class="sourceLineNo">781</span><a name="line.781"></a>
+<span class="sourceLineNo">782</span>    OutputStream os = res.getOutputStream();<a name="line.782"></a>
+<span class="sourceLineNo">783</span>    reply.writeTo(os);<a name="line.783"></a>
+<span class="sourceLineNo">784</span>    os.flush();<a name="line.784"></a>
+<span class="sourceLineNo">785</span>  }<a name="line.785"></a>
+<span class="sourceLineNo">786</span><a name="line.786"></a>
+<span class="sourceLineNo">787</span><a name="line.787"></a>
+<span class="sourceLineNo">788</span>  /**<a name="line.788"></a>
+<span class="sourceLineNo">789</span>   * Retrieves a message ID that may be used for the next LDAP message sent to<a name="line.789"></a>
+<span class="sourceLineNo">790</span>   * the Directory Server.<a name="line.790"></a>
+<span class="sourceLineNo">791</span>   *<a name="line.791"></a>
+<span class="sourceLineNo">792</span>   * @return  A message ID that may be used for the next LDAP message sent to<a name="line.792"></a>
+<span class="sourceLineNo">793</span>   *          the Directory Server.<a name="line.793"></a>
+<span class="sourceLineNo">794</span>   */<a name="line.794"></a>
+<span class="sourceLineNo">795</span>  public static int nextMessageID() {<a name="line.795"></a>
+<span class="sourceLineNo">796</span>    int nextID = nextMessageID.getAndIncrement();<a name="line.796"></a>
+<span class="sourceLineNo">797</span>    if (nextID == Integer.MAX_VALUE) {<a name="line.797"></a>
+<span class="sourceLineNo">798</span>      nextMessageID.set(1);<a name="line.798"></a>
+<span class="sourceLineNo">799</span>    }<a name="line.799"></a>
+<span class="sourceLineNo">800</span><a name="line.800"></a>
+<span class="sourceLineNo">801</span>    return nextID;<a name="line.801"></a>
+<span class="sourceLineNo">802</span>  }<a name="line.802"></a>
+<span class="sourceLineNo">803</span><a name="line.803"></a>
+<span class="sourceLineNo">804</span>    /**<a name="line.804"></a>
+<span class="sourceLineNo">805</span>   * This class is used when a xml request is malformed to retrieve the<a name="line.805"></a>
+<span class="sourceLineNo">806</span>   * requestID value using an event xml parser.<a name="line.806"></a>
+<span class="sourceLineNo">807</span>   */<a name="line.807"></a>
+<span class="sourceLineNo">808</span>  private static class DSMLContentHandler extends DefaultHandler {<a name="line.808"></a>
+<span class="sourceLineNo">809</span>    private String requestID;<a name="line.809"></a>
+<span class="sourceLineNo">810</span>    /*<a name="line.810"></a>
+<span class="sourceLineNo">811</span>     * This function fetches the requestID value of the batchRequest xml<a name="line.811"></a>
+<span class="sourceLineNo">812</span>     * element and call the default implementation (super).<a name="line.812"></a>
+<span class="sourceLineNo">813</span>     */<a name="line.813"></a>
+<span class="sourceLineNo">814</span>    public void startElement(String uri, String localName, String qName,<a name="line.814"></a>
+<span class="sourceLineNo">815</span>                             Attributes attributes) throws SAXException {<a name="line.815"></a>
+<span class="sourceLineNo">816</span>      if ( requestID==null &amp;&amp; localName.equals("batchRequest") ) {<a name="line.816"></a>
+<span class="sourceLineNo">817</span>        requestID = attributes.getValue("requestID");<a name="line.817"></a>
+<span class="sourceLineNo">818</span>      }<a name="line.818"></a>
+<span class="sourceLineNo">819</span>      super.startElement(uri, localName, qName, attributes);<a name="line.819"></a>
+<span class="sourceLineNo">820</span>    }<a name="line.820"></a>
+<span class="sourceLineNo">821</span>  }<a name="line.821"></a>
+<span class="sourceLineNo">822</span>}<a name="line.822"></a>
+<span class="sourceLineNo">823</span><a name="line.823"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>
