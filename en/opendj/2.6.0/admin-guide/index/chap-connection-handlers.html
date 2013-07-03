@@ -1053,7 +1053,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 <!-- END SyntaxHighlighter 3.0.83 -->
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
-</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;4.&nbsp;Configuring Connection Handlers</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-import-export.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-privileges-acis.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;4.&nbsp;Configuring Connection Handlers"><div class="titlepage"><div><div><h2 class="title"><a name="chap-connection-handlers"></a>Chapter&nbsp;4.&nbsp;Configuring Connection Handlers</h2></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="section"><a href="chap-connection-handlers.html#configure-ldap-port">4.1. LDAP Client Access</a></span></dt><dt><span class="section"><a href="chap-connection-handlers.html#setup-server-cert">4.2. Preparing For Secure Communications</a></span></dt><dt><span class="section"><a href="chap-connection-handlers.html#configure-starttls">4.3. LDAP Client Access With Transport Layer Security</a></span></dt><dt><span class="section"><a href="chap-connection-handlers.html#configure-ssl">4.4. LDAP Client Access Over SSL</a></span></dt><dt><span class="section"><a href="chap-connection-handlers.html#restrict-clients">4.5. Restricting Client Access</a></span></dt><dt><span class="section"><a href="chap-connection-handlers.html#tls-protocols-cipher-suites">4.6. TLS Protocols &amp; Cipher Suites</a></span></dt><dt><span class="section"><a href="chap-connection-handlers.html#setup-rest2ldap">4.7. RESTful Client Access</a></span></dt><dt><span class="section"><a href="chap-connection-handlers.html#setup-dsml">4.8. DSML Client Access</a></span></dt><dt><span class="section"><a href="chap-connection-handlers.html#jmx-access">4.9. JMX Client Access</a></span></dt><dt><span class="section"><a href="chap-connection-handlers.html#ldif-access">4.10. LDIF File Access</a></span></dt><dt><span class="section"><a href="chap-connection-handlers.html#snmp-access">4.11. SNMP Access</a></span></dt></dl></div><a class="indexterm" name="d1707e1099"></a><p>This chapter shows you how to configure OpenDJ directory server to
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;4.&nbsp;Configuring Connection Handlers</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-import-export.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-privileges-acis.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;4.&nbsp;Configuring Connection Handlers"><div class="titlepage"><div><div><h2 class="title"><a name="chap-connection-handlers"></a>Chapter&nbsp;4.&nbsp;Configuring Connection Handlers</h2></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="section"><a href="chap-connection-handlers.html#configure-ldap-port">4.1. LDAP Client Access</a></span></dt><dt><span class="section"><a href="chap-connection-handlers.html#setup-server-cert">4.2. Preparing For Secure Communications</a></span></dt><dt><span class="section"><a href="chap-connection-handlers.html#configure-starttls">4.3. LDAP Client Access With Transport Layer Security</a></span></dt><dt><span class="section"><a href="chap-connection-handlers.html#configure-ssl">4.4. LDAP Client Access Over SSL</a></span></dt><dt><span class="section"><a href="chap-connection-handlers.html#restrict-clients">4.5. Restricting Client Access</a></span></dt><dt><span class="section"><a href="chap-connection-handlers.html#tls-protocols-cipher-suites">4.6. TLS Protocols &amp; Cipher Suites</a></span></dt><dt><span class="section"><a href="chap-connection-handlers.html#setup-rest2ldap">4.7. RESTful Client Access</a></span></dt><dt><span class="section"><a href="chap-connection-handlers.html#setup-dsml">4.8. DSML Client Access</a></span></dt><dt><span class="section"><a href="chap-connection-handlers.html#jmx-access">4.9. JMX Client Access</a></span></dt><dt><span class="section"><a href="chap-connection-handlers.html#ldif-access">4.10. LDIF File Access</a></span></dt><dt><span class="section"><a href="chap-connection-handlers.html#snmp-access">4.11. SNMP Access</a></span></dt></dl></div><a class="indexterm" name="d1710e1099"></a><p>This chapter shows you how to configure OpenDJ directory server to
  listen for directory client requests, using connection handlers. You can view
  information about connection handlers in the OpenDJ Control Panel, and update
  the configuration using the <span class="command"><strong>dsconfig</strong></span> command.</p><div class="section" title="4.1.&nbsp;LDAP Client Access"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configure-ldap-port"></a>4.1.&nbsp;LDAP Client Access</h2></div></div></div><p>You configure LDAP client access by using the command-line tool
@@ -1092,7 +1092,7 @@ $ dsconfig
  --handler-name "LDAP Connection Handler"
  --set enabled:true
  --trustAll
- --no-prompt</pre></div></li></ol></div></div><div class="section" title="4.2.&nbsp;Preparing For Secure Communications"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="setup-server-cert"></a>4.2.&nbsp;Preparing For Secure Communications</h2></div></div></div><a class="indexterm" name="d1707e1142"></a><p>One common way to protect connections between OpenDJ and client
+ --no-prompt</pre></div></li></ol></div></div><div class="section" title="4.2.&nbsp;Preparing For Secure Communications"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="setup-server-cert"></a>4.2.&nbsp;Preparing For Secure Communications</h2></div></div></div><a class="indexterm" name="d1710e1142"></a><p>One common way to protect connections between OpenDJ and client
   applications involves using StartTLS for LDAP or LDAPS to secure
   connections. OpenDJ and client applications use X.509 digital certificates
   to set up secure connections.</p><p>Both OpenDJ and client applications check that certificates are signed
@@ -1103,7 +1103,7 @@ $ dsconfig
   server certificate. Other clients might not prompt you. OpenDJ server has no
   one to prompt when a client presents a certificate that cannot be
   trusted, so it must simply refuse to set up the
-  connection.<sup>[<a name="d1707e1151" href="#ftn.d1707e1151" class="footnote">1</a>]</sup>
+  connection.<sup>[<a name="d1710e1151" href="#ftn.d1710e1151" class="footnote">1</a>]</sup>
   In other words, it is important for both OpenDJ and client applications
   to be able to verify that peer certificates exchanged have been signed by
   a trusted party.</p><p>In practice this means that both OpenDJ and client applications must
@@ -1111,7 +1111,7 @@ $ dsconfig
   respective trust stores. Conventionally, certificates are therefore signed by
   a Certificate Authority (CA). A CA is trusted to sign other certificates. The
   Java runtime environment for example comes with a trust store holding
-  certificates from many well-known CAs.<sup>[<a name="d1707e1157" href="#ftn.d1707e1157" class="footnote">2</a>]</sup> If your client uses a valid
+  certificates from many well-known CAs.<sup>[<a name="d1710e1157" href="#ftn.d1710e1157" class="footnote">2</a>]</sup> If your client uses a valid
   certificate signed by one of these CAs, then OpenDJ can verify the
   certificate without additional configuration, because OpenDJ can find
   the CA certificate in the Java CA certificate trust store. Likewise if
@@ -1358,7 +1358,7 @@ $ dsconfig
  --trustAll
  --no-prompt</pre></div><p>At this point, OpenDJ directory server can use your new self-signed
     certificate, for example for StartTLS and LDAPS or HTTPS connection
-    handlers.</p></li></ol></div></div><div class="section" title="4.3.&nbsp;LDAP Client Access With Transport Layer Security"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configure-starttls"></a>4.3.&nbsp;LDAP Client Access With Transport Layer Security</h2></div></div></div><a class="indexterm" name="d1707e1391"></a><p>StartTLS (Transport Layer Security) negotiations start on the unsecure
+    handlers.</p></li></ol></div></div><div class="section" title="4.3.&nbsp;LDAP Client Access With Transport Layer Security"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configure-starttls"></a>4.3.&nbsp;LDAP Client Access With Transport Layer Security</h2></div></div></div><a class="indexterm" name="d1710e1391"></a><p>StartTLS (Transport Layer Security) negotiations start on the unsecure
   LDAP port, and then protect communication with the client. You can opt to
   configure StartTLS during installation, or later using the
   <span class="command"><strong>dsconfig</strong></span> command.</p><div class="procedure" title="Procedure&nbsp;4.4.&nbsp;To Enable StartTLS on the LDAP Port"><a name="setup-starttls-port"></a><div class="procedure-title">Procedure&nbsp;4.4.&nbsp;To Enable StartTLS on the LDAP Port</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Make sure you have a server certificate installed.</p><div class="screen"><pre class="brush: plain;">$ keytool
@@ -1379,7 +1379,7 @@ Certificate fingerprint (SHA1): 92:B7:4C:4F:2E:24:...:EB:7C:22:3F
  --set key-manager-provider:JKS
  --set trust-manager-provider:JKS
  --trustAll
- --no-prompt</pre></div><p>The change takes effect. No need to restart the server.</p></li></ol></div></div><div class="section" title="4.4.&nbsp;LDAP Client Access Over SSL"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configure-ssl"></a>4.4.&nbsp;LDAP Client Access Over SSL</h2></div></div></div><a class="indexterm" name="d1707e1417"></a><p>You configure LDAPS (LDAP/SSL) client access by using the command-line
+ --no-prompt</pre></div><p>The change takes effect. No need to restart the server.</p></li></ol></div></div><div class="section" title="4.4.&nbsp;LDAP Client Access Over SSL"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configure-ssl"></a>4.4.&nbsp;LDAP Client Access Over SSL</h2></div></div></div><a class="indexterm" name="d1710e1417"></a><p>You configure LDAPS (LDAP/SSL) client access by using the command-line
   tool <span class="command"><strong>dsconfig</strong></span>. You can opt to configure LDAPS access
   when you install.</p><p>The standard port number for LDAPS client access is 636. If you
   install OpenDJ directory server as a user who can use port 636 and the port
@@ -1433,7 +1433,7 @@ $ dsconfig
  --handler-name "LDAPS Connection Handler"
  --set enabled:true
  --trustAll
- --no-prompt</pre></div></li></ol></div></div><div class="section" title="4.5.&nbsp;Restricting Client Access"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="restrict-clients"></a>4.5.&nbsp;Restricting Client Access</h2></div></div></div><a class="indexterm" name="d1707e1465"></a><p>Using the OpenDJ directory server global configuration properties, you
+ --no-prompt</pre></div></li></ol></div></div><div class="section" title="4.5.&nbsp;Restricting Client Access"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="restrict-clients"></a>4.5.&nbsp;Restricting Client Access</h2></div></div></div><a class="indexterm" name="d1710e1465"></a><p>Using the OpenDJ directory server global configuration properties, you
   can add global restrictions on how clients access the server. These settings
   are per server, and so much be set independently on each server in replication
   topology.</p><p>These global settings are fairly coarse-grained. For a full discussion
@@ -1476,7 +1476,7 @@ $ dsconfig
  --bindDN "cn=Directory Manager"
  --bindPassword password
  --set return-bind-error-messages:true
- --no-prompt</pre></div></dd></dl></div></div><div class="section" title="4.6.&nbsp;TLS Protocols &amp; Cipher Suites"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="tls-protocols-cipher-suites"></a>4.6.&nbsp;TLS Protocols &amp; Cipher Suites</h2></div></div></div><a class="indexterm" name="d1707e1532"></a><p>By default OpenDJ supports the SSL and TLS protocols and the cipher
+ --no-prompt</pre></div></dd></dl></div></div><div class="section" title="4.6.&nbsp;TLS Protocols &amp; Cipher Suites"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="tls-protocols-cipher-suites"></a>4.6.&nbsp;TLS Protocols &amp; Cipher Suites</h2></div></div></div><a class="indexterm" name="d1710e1532"></a><p>By default OpenDJ supports the SSL and TLS protocols and the cipher
   suites supported by the underlying Java virtual machine. For details see the
   documentation for the Java virtual machine in which you run OpenDJ. For Oracle
   Java, see the <em class="citetitle">Java Cryptography Architecture Oracle Providers
@@ -1536,7 +1536,7 @@ supportedTLSProtocols: TLSv1.2
  --add ssl-cipher-suite:TLS_EMPTY_RENEGOTIATION_INFO_SCSV
  --add ssl-cipher-suite:TLS_RSA_WITH_AES_256_CBC_SHA
  --no-prompt
- --trustAll</pre></div></div><div class="section" title="4.7.&nbsp;RESTful Client Access"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="setup-rest2ldap"></a>4.7.&nbsp;RESTful Client Access</h2></div></div></div><a class="indexterm" name="d1707e1580"></a><a class="indexterm" name="d1707e1583"></a><a class="indexterm" name="d1707e1586"></a><div class="orderedlist"><p>OpenDJ offers two ways to give RESTful client applications HTTP access
+ --trustAll</pre></div></div><div class="section" title="4.7.&nbsp;RESTful Client Access"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="setup-rest2ldap"></a>4.7.&nbsp;RESTful Client Access</h2></div></div></div><a class="indexterm" name="d1710e1580"></a><a class="indexterm" name="d1710e1583"></a><a class="indexterm" name="d1710e1586"></a><div class="orderedlist"><p>OpenDJ offers two ways to give RESTful client applications HTTP access
    to directory data as JSON resources.</p><ol class="orderedlist" type="1"><li class="listitem"><p>Enable the listener on OpenDJ directory server to respond
     to REST requests.</p><p>With this approach, you do not need to install additional
     software.</p></li><li class="listitem"><p>Configure the external REST LDAP gateway Servlet to access your
@@ -1649,7 +1649,7 @@ $ curl
    your directory service.</p><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Download and install the gateway as described in <a href="../../install-guide/index/chap-install-cli.html#install-rest2ldap-servlet" class="link"><em class="citetitle">To Install
     OpenDJ REST LDAP Gateway</em></a>.</p></li><li class="step" title="Step 2"><p>Adjust the configuration for your directory service as described in
     <a href="../../admin-guide/index/appendix-rest2ldap.html" class="link"><em class="citetitle">REST LDAP
-    Configuration</em></a>.</p></li></ol></div></div><div class="section" title="4.8.&nbsp;DSML Client Access"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="setup-dsml"></a>4.8.&nbsp;DSML Client Access</h2></div></div></div><a class="indexterm" name="d1707e1689"></a><p>Directory Services Markup Language (DSML) client access is implemented
+    Configuration</em></a>.</p></li></ol></div></div><div class="section" title="4.8.&nbsp;DSML Client Access"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="setup-dsml"></a>4.8.&nbsp;DSML Client Access</h2></div></div></div><a class="indexterm" name="d1710e1689"></a><p>Directory Services Markup Language (DSML) client access is implemented
   as a servlet that runs in a web application container.</p><p>You configure DSML client access by editing the
   <code class="filename">WEB-INF/web.xml</code> after you deploy the web
   application. In particular, you must at least set the
@@ -1691,7 +1691,7 @@ $ curl
   <a class="link" href="http://jxplorer.org/" target="_top">JXplorer</a>, where DSML Service:
   /<em class="replaceable"><code>webapp-dir</code></em>/DSMLServlet. Here,
   <em class="replaceable"><code>webapp-dir</code></em> refers to the name of the directory
-  in which you unpacked the DSML .war file.</p><div class="mediaobject"><a name="figure-jxplorer-dsml"></a><img src="images/JXplorer-dsml.png"><div class="caption"><p>JXplorer accessing OpenDJ through DSML</p></div></div></div><div class="section" title="4.9.&nbsp;JMX Client Access"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="jmx-access"></a>4.9.&nbsp;JMX Client Access</h2></div></div></div><a class="indexterm" name="d1707e1846"></a><p>You configure Java Management Extensions (JMX) client access by using
+  in which you unpacked the DSML .war file.</p><div class="mediaobject"><a name="figure-jxplorer-dsml"></a><img src="images/JXplorer-dsml.png"><div class="caption"><p>JXplorer accessing OpenDJ through DSML</p></div></div></div><div class="section" title="4.9.&nbsp;JMX Client Access"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="jmx-access"></a>4.9.&nbsp;JMX Client Access</h2></div></div></div><a class="indexterm" name="d1710e1846"></a><p>You configure Java Management Extensions (JMX) client access by using
   the command-line tool, <span class="command"><strong>dsconfig</strong></span>.</p><div class="procedure" title="Procedure&nbsp;4.9.&nbsp;To Set Up JMX Access"><a name="setup-jmx"></a><div class="procedure-title">Procedure&nbsp;4.9.&nbsp;To Set Up JMX Access</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Configure the server to activate JMX access.</p><div class="screen"><pre class="brush: plain;">$ dsconfig
  set-connection-handler-prop
  --hostname opendj.example.com
@@ -1712,7 +1712,7 @@ $ curl
        <code class="literal">192.168.0.10</code> and you configured OpenDJ to listen
        for JMX connections on port 1689, then the service URI is
        <code class="literal">service:jmx:rmi:///jndi/rmi://192.168.0.10:1689/org.opends.server.protocols.jmx.client-unknown</code>.</p></dd><dt><span class="term">User name</span></dt><dd><p>The full DN of the user with privileges to connect over JMX such
-       as <code class="literal">uid=kvaughan,ou=People,dc=example,dc=com</code>.</p></dd><dt><span class="term">Password</span></dt><dd><p>The bind password for the user.</p></dd></dl></div></li></ol></div></div><div class="section" title="4.10.&nbsp;LDIF File Access"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ldif-access"></a>4.10.&nbsp;LDIF File Access</h2></div></div></div><a class="indexterm" name="d1707e1926"></a><p>The LDIF connection handler lets you make changes to directory data
+       as <code class="literal">uid=kvaughan,ou=People,dc=example,dc=com</code>.</p></dd><dt><span class="term">Password</span></dt><dd><p>The bind password for the user.</p></dd></dl></div></li></ol></div></div><div class="section" title="4.10.&nbsp;LDIF File Access"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ldif-access"></a>4.10.&nbsp;LDIF File Access</h2></div></div></div><a class="indexterm" name="d1710e1926"></a><p>The LDIF connection handler lets you make changes to directory data
   by placing LDIF in a file system directory that OpenDJ server regularly
   polls for changes. The LDIF, once consumed, is deleted.</p><p>You configure LDIF file access by using the command-line tool
   <span class="command"><strong>dsconfig</strong></span>.</p><div class="procedure" title="Procedure&nbsp;4.11.&nbsp;To Set Up LDIF File Access"><a name="setup-ldif-access"></a><div class="procedure-title">Procedure&nbsp;4.11.&nbsp;To Set Up LDIF File Access</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Activate LDIF file access.</p><div class="screen"><pre class="brush: plain;">$ dsconfig
@@ -1728,8 +1728,8 @@ $ curl
     <code class="literal">ldif-directory</code> property for the LDIF connection
     handler.</p></li></ol></div></div><div class="section" title="4.11.&nbsp;SNMP Access"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="snmp-access"></a>4.11.&nbsp;SNMP Access</h2></div></div></div><p>For instructions on setting up the SNMP Connection Handler, see the
   section, <a href="../../admin-guide/index/chap-monitoring.html#snmp-monitoring" class="link"><em class="citetitle">SNMP-Based
-  Monitoring</em></a>.</p></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.d1707e1151" href="#d1707e1151" class="para">1</a>] </sup>Unless you use the Blind Trust Manager
-  Provider, which is recommended only for test purposes.</p></div><div class="footnote"><p><sup>[<a id="ftn.d1707e1157" href="#d1707e1157" class="para">2</a>] </sup><code class="filename">$JAVA_HOME/jre/lib/security/cacerts</code> holds the CA certificates.
+  Monitoring</em></a>.</p></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.d1710e1151" href="#d1710e1151" class="para">1</a>] </sup>Unless you use the Blind Trust Manager
+  Provider, which is recommended only for test purposes.</p></div><div class="footnote"><p><sup>[<a id="ftn.d1710e1157" href="#d1710e1157" class="para">2</a>] </sup><code class="filename">$JAVA_HOME/jre/lib/security/cacerts</code> holds the CA certificates.
    To read the full list, use the following command.</p><div class="screen"><pre class="brush: plain;">$ keytool
  -list
  -v

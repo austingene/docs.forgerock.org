@@ -1054,7 +1054,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 <!-- END SyntaxHighlighter 3.0.83 -->
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
 </head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;21.&nbsp;Monitoring, Logging, &amp; Alerts</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-samba.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-tuning.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;21.&nbsp;Monitoring, Logging, &amp; Alerts"><div class="titlepage"><div><div><h2 class="title"><a name="chap-monitoring"></a>Chapter&nbsp;21.&nbsp;Monitoring, Logging, &amp; Alerts</h2></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="section"><a href="chap-monitoring.html#ldap-monitoring">21.1. LDAP-Based Monitoring</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#snmp-monitoring">21.2. SNMP-Based Monitoring</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#jmx-monitoring">21.3. JMX-Based Monitoring</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#monitoring-status-and-tasks">21.4. Server Operation &amp; Tasks</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#logging">21.5. Server Logs</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#alert-notifications">21.6. Alert Notifications</a></span></dt></dl></div><p>This chapter describes the monitoring capabilities that OpenDJ
- implements, and shows how to configure them.</p><a class="indexterm" name="d1707e9964"></a><p>OpenDJ Control Panel provides basic monitoring capabilities under
+ implements, and shows how to configure them.</p><a class="indexterm" name="d1710e9964"></a><p>OpenDJ Control Panel provides basic monitoring capabilities under
  Monitoring &gt; General Information, Monitoring &gt; Connection Handler, and
  Monitoring &gt; Manage Tasks. This chapter covers the other options for
  monitoring OpenDJ.</p><div class="section" title="21.1.&nbsp;LDAP-Based Monitoring"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ldap-monitoring"></a>21.1.&nbsp;LDAP-Based Monitoring</h2></div></div></div><p>OpenDJ exposes monitoring information over LDAP under the entry
@@ -1082,7 +1082,7 @@ ds-backend-id: userRoot
 ds-base-dn-entry-count: 163 dc=example,dc=com
 ds-backend-base-dn: dc=example,dc=com
 </pre></div><p>You can set global ACIs on the Access Control Handler if you want
-  to limit read access under <code class="literal">cn=monitor</code>.</p></div><div class="section" title="21.2.&nbsp;SNMP-Based Monitoring"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="snmp-monitoring"></a>21.2.&nbsp;SNMP-Based Monitoring</h2></div></div></div><a class="indexterm" name="d1707e9994"></a><p>OpenDJ lets you monitor the server over the Simple Network Management
+  to limit read access under <code class="literal">cn=monitor</code>.</p></div><div class="section" title="21.2.&nbsp;SNMP-Based Monitoring"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="snmp-monitoring"></a>21.2.&nbsp;SNMP-Based Monitoring</h2></div></div></div><a class="indexterm" name="d1710e9994"></a><p>OpenDJ lets you monitor the server over the Simple Network Management
   Protocol (SNMP), with support for the Management Information Base described
   in <a class="link" href="http://tools.ietf.org/html/rfc2605" target="_top">RFC 2605: Directory
   Server Monitoring MIB</a>.</p><p>OpenDJ SNMP-based monitoring depends on OpenDMK, which you must
@@ -1142,7 +1142,7 @@ $ dsconfig
   SNMP listen port works.</p><div class="screen"><pre class="brush: plain;">$ snmpwalk -v 2c -c OpenDJ@OpenDJ localhost:11161
 SNMPv2-SMI::mib-2.66.1.1.1.1 = STRING: "OpenDJ 2.6.0..."
 SNMPv2-SMI::mib-2.66.1.1.2.1 = STRING: "/path/to/opendj"
-...</pre></div></div><div class="section" title="21.3.&nbsp;JMX-Based Monitoring"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="jmx-monitoring"></a>21.3.&nbsp;JMX-Based Monitoring</h2></div></div></div><a class="indexterm" name="d1707e10052"></a><p>OpenDJ provides Java Management eXtensions (JMX) based monitoring. A
+...</pre></div></div><div class="section" title="21.3.&nbsp;JMX-Based Monitoring"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="jmx-monitoring"></a>21.3.&nbsp;JMX-Based Monitoring</h2></div></div></div><a class="indexterm" name="d1710e10052"></a><p>OpenDJ provides Java Management eXtensions (JMX) based monitoring. A
   number of tools support JMX, including <span class="command"><strong>jconsole</strong></span> and
   <span class="command"><strong>jvisualvm</strong></span>, which are bundled with the Sun/Oracle Java
   platform. JMX is not configured by default. Use the
@@ -1216,7 +1216,7 @@ Replication: Disabled</pre></div><p>The <span class="command"><strong>manage-tas
 ID                         Type    Status
 --------------------------------------------------------
 example                    Backup  Recurring
-example-20110623030000000  Backup  Waiting on start time</pre></div></div><div class="section" title="21.5.&nbsp;Server Logs"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="logging"></a>21.5.&nbsp;Server Logs</h2></div></div></div><div class="toc"><dl><dt><span class="section"><a href="chap-monitoring.html#log-rotation">21.5.1. Log Rotation &amp; Retention</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#log-filtering">21.5.2. Log Filtering</a></span></dt></dl></div><a class="indexterm" name="d1707e10117"></a><a class="indexterm" name="d1707e10120"></a><p>By default OpenDJ stores access and errors logs as well as a
+example-20110623030000000  Backup  Waiting on start time</pre></div></div><div class="section" title="21.5.&nbsp;Server Logs"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="logging"></a>21.5.&nbsp;Server Logs</h2></div></div></div><div class="toc"><dl><dt><span class="section"><a href="chap-monitoring.html#log-rotation">21.5.1. Log Rotation &amp; Retention</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#log-filtering">21.5.2. Log Filtering</a></span></dt></dl></div><a class="indexterm" name="d1710e10117"></a><a class="indexterm" name="d1710e10120"></a><p>By default OpenDJ stores access and errors logs as well as a
   server process ID file under the <code class="filename">logs/</code> directory.
   For the replication service, OpenDJ also keeps a replication log there.
   You can also configure a debug log. Furthermore, you can configure policies
@@ -1352,7 +1352,7 @@ rotation-policy  : 24 Hours Time Limit Rotation Policy, Size Limit Rotation
    for creating and deleting log rotation and retention policies, and for
    setting policy properties. You can update which policies apply to a logger
    by using the <span class="command"><strong>dsconfig set-log-publisher-prop</strong></span>
-   command.</p></div><div class="section" title="21.5.2.&nbsp;Log Filtering"><div class="titlepage"><div><div><h3 class="title"><a name="log-filtering"></a>21.5.2.&nbsp;Log Filtering</h3></div></div></div><a class="indexterm" name="d1707e10378"></a><p>Each time a client application sends a request to OpenDJ, the server
+   command.</p></div><div class="section" title="21.5.2.&nbsp;Log Filtering"><div class="titlepage"><div><div><h3 class="title"><a name="log-filtering"></a>21.5.2.&nbsp;Log Filtering</h3></div></div></div><a class="indexterm" name="d1710e10378"></a><p>Each time a client application sends a request to OpenDJ, the server
    writes to its access log. As shown above, a simple search operation results
    in five messages written to the access log. This volume of logging gives you
    the information to analyze overall access patterns, or to audit access when
@@ -1412,7 +1412,7 @@ rotation-policy  : 24 Hours Time Limit Rotation Policy, Size Limit Rotation
    for example, when evaluating response times. In addition, you can change
    the log message time stamps with <code class="literal">log-record-time-format</code>,
    and specify whether to log LDAP control OIDs for operations by setting
-   <code class="literal">log-control-oids</code> to <code class="literal">true</code>.</p></div></div><div class="section" title="21.6.&nbsp;Alert Notifications"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="alert-notifications"></a>21.6.&nbsp;Alert Notifications</h2></div></div></div><a class="indexterm" name="d1707e10470"></a><p>OpenDJ can send alerts to provide notifications of significant server
+   <code class="literal">log-control-oids</code> to <code class="literal">true</code>.</p></div></div><div class="section" title="21.6.&nbsp;Alert Notifications"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="alert-notifications"></a>21.6.&nbsp;Alert Notifications</h2></div></div></div><a class="indexterm" name="d1710e10470"></a><p>OpenDJ can send alerts to provide notifications of significant server
   events. Yet alert notifications are not enabled by default. You can use
   the <span class="command"><strong>dsconfig</strong></span> command to enable alert notifications.</p><div class="screen"><pre class="brush: plain;">$ dsconfig
  set-alert-handler-prop

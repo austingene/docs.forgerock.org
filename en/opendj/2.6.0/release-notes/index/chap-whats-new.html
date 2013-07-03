@@ -1054,49 +1054,12 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 <!-- END SyntaxHighlighter 3.0.83 -->
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
 </head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;1.&nbsp;What's New in OpenDJ 2.6.0</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="pr01.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-before-you-install.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;1.&nbsp;What's New in OpenDJ 2.6.0"><div class="titlepage"><div><div><h2 class="title"><a name="chap-whats-new"></a>Chapter&nbsp;1.&nbsp;What's New in OpenDJ 2.6.0</h2></div></div></div><p>Compared to the OpenDJ 2.4.6 release, OpenDJ
-  2.6.0 provides the following new features.</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>OpenDJ now lets you use more TLS cipher suites in SSFs, including
-     those provided by Bouncy Castle and IBM (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-826" target="_blank">OPENDJ-826</a>).</p></li><li class="listitem"><p>OpenDJ now provides native RESTful access over HTTP to directory
+  2.6.0 provides the following new features.</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>OpenDJ now provides native RESTful access over HTTP to directory
      data (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-808" target="_blank">OPENDJ-808</a>). See the procedure, <a href="../../admin-guide/index/chap-connection-handlers.html#setup-rest2ldap-connection-handler" class="link"><em class="citetitle">To Set Up REST
      Access to OpenDJ Directory Server</em></a>, to activate this
      feature.</p><p>OpenDJ REST LDAP gateway lets clients access directory data in remote
      LDAP servers over HTTP (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-757" target="_blank">OPENDJ-757</a>). See the procedure, <a href="../../install-guide/index/chap-install-cli.html#install-rest2ldap-servlet" class="link"><em class="citetitle">To Install
-     OpenDJ REST LDAP Gateway</em></a>, to get started.</p></li><li class="listitem"><p>OpenDJ now lets you escape characters in <span class="command"><strong>make-ldif</strong></span>
-     templates (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-800" target="_blank">OPENDJ-800</a>).</p></li><li class="listitem"><p>Persistent connections can now be identified when querying
-     <code class="literal">cn=monitor</code> for the LDAP client connection handler.
-     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-677" target="_blank">OPENDJ-677</a>).</p></li><li class="listitem"><p>OpenDJ now runs more reliably as a Windows Service (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-617" target="_blank">OPENDJ-617</a>).</p></li><li class="listitem"><p>Country String syntax now validates ISO 3166 codes (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-562" target="_blank">OPENDJ-562</a>).</p></li><li class="listitem"><p>OpenDJ now sets <code class="literal">isMemberOf</code> on groups as well as
-     user entries (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-513" target="_blank">OPENDJ-513</a>).</p></li><li class="listitem"><p>OpenDJ now supports the PBKDF2 password storage scheme (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-510" target="_blank">OPENDJ-510</a>).</p></li><li class="listitem"><p>Performance has been significantly improved for searches with a
-     virtual attribute in the filter (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-508" target="_blank">OPENDJ-508</a>).</p></li><li class="listitem"><p>OpenDJ now includes attribute syntax validation for X.509
-     certificate values (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-482" target="_blank">OPENDJ-482</a>).</p></li><li class="listitem"><p>The OpenDJ <span class="command"><strong>rebuild-index</strong></span> command now provides
-     an option, <code class="option">--clearDegradedState</code>, to forcefully clear
-     the state of an unused index for a newly created attribute (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-473" target="_blank">OPENDJ-473</a>).</p></li><li class="listitem"><p>Import now performs better when handling LDIF entries with
-     attributes that have many values, such as large static group entries
-     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-469" target="_blank">OPENDJ-469</a>).</p></li><li class="listitem"><p>The OpenDJ upgrade process and <span class="command"><strong>upgrade</strong></span> command
-     have changed to facilitate native packaging on more platforms and to
-     make upgrade easier to handle over time (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-455" target="_blank">OPENDJ-455</a>).</p><p>Also, you can now force OpenDJ upgrade to complete if errors occur in
-     non-interactive mode (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-522" target="_blank">OPENDJ-522</a>).</p><p>See <a href="../../install-guide/index/chap-upgrade.html" class="link"><em class="citetitle">Upgrading to
-     OpenDJ 2.6.0</em></a> for
-     instructions.</p></li><li class="listitem"><p>The mechanism to determine during setup whether the configuration
-     has been modified runs a more effective check (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-446" target="_blank">OPENDJ-446</a>).</p></li><li class="listitem"><p>OpenDJ now provides a read-only, non-searchable operational
-     attribute, <code class="literal">ds-pwd-password-expiration-time</code>, to make
-     it easier to read the password expiration time for an account (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-441" target="_blank">OPENDJ-441</a>).</p></li><li class="listitem"><p>OpenDJ now logs only fatal errors, severe errors, warnings, and
-     notices at startup time (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-438" target="_blank">OPENDJ-438</a>).</p></li><li class="listitem"><p>OpenDJ now lets you setup the server in command-line mode without
-     creating a default backend (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-435" target="_blank">OPENDJ-435</a>).</p></li><li class="listitem"><p>OpenDJ now computes last login time as UTC time when the value is
-     expressed in GeneralizedTime syntax (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-418" target="_blank">OPENDJ-418</a>).</p></li><li class="listitem"><p>OpenDJ now includes an ETag attribute for optimistic concurrency
-     control (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-409" target="_blank">OPENDJ-409</a>).</p></li><li class="listitem"><p>OpenDJ now provides Debian and RPM packages (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-408" target="_blank">OPENDJ-408</a>).</p></li><li class="listitem"><p>OpenDJ now provides the <span class="command"><strong>rebuild-index
-     --rebuildDegraded</strong></span> command for rebuilding degraded indexes
-     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-406" target="_blank">OPENDJ-406</a>).</p></li><li class="listitem"><p>OpenDJ schema for configuration attributes has been cleaned up
-     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-393" target="_blank">OPENDJ-393</a>).</p></li><li class="listitem"><p>OpenDJ now exposes the <code class="literal">je.log.fileCacheSize</code>
-     property through the <code class="literal">ds-cfg-db-log-filecache-size</code>
-     configuration attribute (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-383" target="_blank">OPENDJ-383</a>).</p></li><li class="listitem"><p>OpenDJ verify and rebuild index commands now use JE 5 disk ordered
-     cursoring (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-372" target="_blank">OPENDJ-372</a>).</p></li><li class="listitem"><p>OpenDJ now uses Berkeley JE 5, which brings many performance
-     improvements (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-371" target="_blank">OPENDJ-371</a>, <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-662" target="_blank">OPENDJ-662</a>).</p></li><li class="listitem"><p>More OpenDJ tools now prompt for a bind password when none is
-     provided (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-358" target="_blank">OPENDJ-358</a>).</p></li><li class="listitem"><p>OpenDJ DSML gateway now allows authentication using an ID rather
-     than a DN (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-352" target="_blank">OPENDJ-352</a>).</p></li><li class="listitem"><p>OpenDJ now lets you filter access and audit logs to focus on
-     messages that interest you. OpenDJ supports many criteria for flexible
-     log filtering (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-308" target="_blank">OPENDJ-308</a>).</p></li><li class="listitem"><p>The OpenDJ dictionary password validator can now check whether a
-     password value contains dictionary words as substrings (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-295" target="_blank">OPENDJ-295</a>).</p></li><li class="listitem"><p>OpenDJ now logs use of the proxied authorization V1 control with
-     <code class="literal">obsoleteProxiedAuthzV1Control</code> (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-283" target="_blank">OPENDJ-283</a>).</p></li><li class="listitem"><p>OpenDJ DSML gateway can now connect over SSL to the LDAP
-     server (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-269" target="_blank">OPENDJ-269</a>).</p></li><li class="listitem"><p>OpenDJ now lets you delegate authentication to another LDAP
+     OpenDJ REST LDAP Gateway</em></a>, to get started.</p></li><li class="listitem"><p>OpenDJ now lets you delegate authentication to another LDAP
       directory service, such as Active Directory. The feature is called
       <em class="firstterm">pass through authentication</em> (PTA) (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-262" target="_blank">OPENDJ-262</a>).
       With PTA, OpenDJ replays a user's simple bind operation against the remote
@@ -1112,31 +1075,73 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
       through authentication.</p><p>To configure PTA, you set up an LDAP pass through authentication
       policy in OpenDJ's configuration, and then assign the policy to users in
       the same way you would assign a password policy. See the
-      <a href="../../admin-guide/index/chap-pta.html" class="link"><em class="citetitle">Administration Guide</em></a> for details.</p></li><li class="listitem"><p>OpenDJ now lets you configure attributes to be removed or renamed
+      <a href="../../admin-guide/index/chap-pta.html" class="link"><em class="citetitle">Administration Guide</em></a> for details.</p></li><li class="listitem"><p>OpenDJ now provides Debian and RPM packages (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-408" target="_blank">OPENDJ-408</a>).</p></li><li class="listitem"><p>The OpenDJ upgrade process and <span class="command"><strong>upgrade</strong></span> command
+     have changed to facilitate native packaging on more platforms and to
+     make upgrade easier to handle over time (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-455" target="_blank">OPENDJ-455</a>).</p><p>Also, you can now force OpenDJ upgrade to complete if errors occur in
+     non-interactive mode (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-522" target="_blank">OPENDJ-522</a>).</p><p>See <a href="../../install-guide/index/chap-upgrade.html" class="link"><em class="citetitle">Upgrading to
+     OpenDJ 2.6.0</em></a> for
+     instructions.</p></li><li class="listitem"><p>OpenDJ now lets you filter access and audit logs to focus on
+     messages that interest you. OpenDJ supports many criteria for flexible
+     log filtering (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-308" target="_blank">OPENDJ-308</a>).</p></li><li class="listitem"><p>OpenDJ now includes an ETag attribute for optimistic concurrency
+     control (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-409" target="_blank">OPENDJ-409</a>).</p></li><li class="listitem"><p>OpenDJ now supports the PBKDF2 password storage scheme (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-510" target="_blank">OPENDJ-510</a>).</p></li><li class="listitem"><p>OpenDJ now lets you use more TLS cipher suites in SSFs, including
+     those provided by Bouncy Castle and IBM (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-826" target="_blank">OPENDJ-826</a>).</p></li><li class="listitem"><p>OpenDJ can now synchronize Samba password attribute values with the
+     <code class="literal">userPassword</code> attribute value, ensuring that when users
+     change their LDAP passwords in OpenDJ or change their LanMan or NT
+     passwords in Samba, their password attribute values all stay in sync
+     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-233" target="_blank">OPENDJ-233</a>, <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-511" target="_blank">OPENDJ-511</a>). To activate this feature, configure the OpenDJ Samba
+     Password plugin by using the <span class="command"><strong>dsconfig</strong></span> command.</p></li><li class="listitem"><p>The OpenDJ dictionary password validator can now check whether a
+     password value contains dictionary words as substrings (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-295" target="_blank">OPENDJ-295</a>).</p></li><li class="listitem"><p>The character set password validator now supports optional character
+     sets (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-168" target="_blank">OPENDJ-168</a>). Also, The character set password validator now
+     understands classes like "All non-Latin characters" (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-620" target="_blank">OPENDJ-620</a>)</p></li><li class="listitem"><p>OpenDJ now provides a read-only, non-searchable operational
+     attribute, <code class="literal">ds-pwd-password-expiration-time</code>, to make
+     it easier to read the password expiration time for an account (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-441" target="_blank">OPENDJ-441</a>).</p></li><li class="listitem"><p>OpenDJ now computes last login time as UTC time when the value is
+     expressed in GeneralizedTime syntax (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-418" target="_blank">OPENDJ-418</a>).</p></li><li class="listitem"><p>OpenDJ now lets you escape characters in <span class="command"><strong>make-ldif</strong></span>
+     templates (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-800" target="_blank">OPENDJ-800</a>).</p></li><li class="listitem"><p>Country String syntax now validates ISO 3166 codes (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-562" target="_blank">OPENDJ-562</a>).</p></li><li class="listitem"><p>OpenDJ now sets <code class="literal">isMemberOf</code> on groups as well as
+     user entries (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-513" target="_blank">OPENDJ-513</a>).</p></li><li class="listitem"><p>Performance has been significantly improved for searches with a
+     virtual attribute in the filter (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-508" target="_blank">OPENDJ-508</a>).</p></li><li class="listitem"><p>OpenDJ now better supports more, and larger static groups
+     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-197" target="_blank">OPENDJ-197</a>).</p></li><li class="listitem"><p>OpenDJ now supports checking that entries of new group members
+     exist (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-221" target="_blank">OPENDJ-221</a>). OpenDJ can now ensure both that members' entries
+     exist when they are added to groups, and also that members are removed
+     from groups when their entries are deleted.</p></li><li class="listitem"><p>OpenDJ now includes attribute syntax validation for X.509
+     certificate values (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-482" target="_blank">OPENDJ-482</a>).</p></li><li class="listitem"><p>OpenDJ now runs more reliably as a Windows Service (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-617" target="_blank">OPENDJ-617</a>).</p></li><li class="listitem"><p>OpenDJ now provides the <span class="command"><strong>rebuild-index
+     --rebuildDegraded</strong></span> command for rebuilding degraded indexes
+     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-406" target="_blank">OPENDJ-406</a>).</p></li><li class="listitem"><p>The OpenDJ <span class="command"><strong>rebuild-index</strong></span> command now provides
+     an option, <code class="option">--clearDegradedState</code>, to forcefully clear
+     the state of an unused index for a newly created attribute (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-473" target="_blank">OPENDJ-473</a>).</p></li><li class="listitem"><p>Import now performs better when handling LDIF entries with
+     attributes that have many values, such as large static group entries
+     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-469" target="_blank">OPENDJ-469</a>).</p></li><li class="listitem"><p>Persistent connections can now be identified when querying
+     <code class="literal">cn=monitor</code> for the LDAP client connection handler.
+     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-677" target="_blank">OPENDJ-677</a>).</p></li><li class="listitem"><p>OpenDJ now lets you configure the access log to display LDAP
+     controls (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-60" target="_blank">OPENDJ-60</a>).</p></li><li class="listitem"><p>OpenDJ now adds <code class="literal">Unindexed</code> to access log response
+     messages for unindexed searches, making it easier to identify searches
+     rejected by default (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-246" target="_blank">OPENDJ-246</a>).</p></li><li class="listitem"><p>OpenDJ now logs use of the proxied authorization V1 control with
+     <code class="literal">obsoleteProxiedAuthzV1Control</code> (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-283" target="_blank">OPENDJ-283</a>).</p></li><li class="listitem"><p>OpenDJ now logs only fatal errors, severe errors, warnings, and
+     notices at startup time (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-438" target="_blank">OPENDJ-438</a>).</p></li><li class="listitem"><p>The mechanism to determine during setup whether the configuration
+     has been modified runs a more effective check (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-446" target="_blank">OPENDJ-446</a>).</p></li><li class="listitem"><p>OpenDJ now lets you setup the server in command-line mode without
+     creating a default backend (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-435" target="_blank">OPENDJ-435</a>).</p></li><li class="listitem"><p>OpenDJ schema for configuration attributes has been cleaned up
+     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-393" target="_blank">OPENDJ-393</a>).</p></li><li class="listitem"><p>OpenDJ now uses Berkeley JE 5, which brings many performance
+     improvements (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-371" target="_blank">OPENDJ-371</a>, <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-662" target="_blank">OPENDJ-662</a>).</p><p>With the new version, explicitly use the Java setting
+     <code class="option">-XX:+UseCompressedOops</code> to improve performance, even if
+     the setting is enabled by default in recent versions of the Java runtime
+     environment. To apply JVM settings for your server, edit
+     <code class="filename">config/java.properties</code>, and apply the changes with
+     the <span class="command"><strong>dsjavaproperties</strong></span> command.</p></li><li class="listitem"><p>OpenDJ now exposes the <code class="literal">je.log.fileCacheSize</code>
+     property through the <code class="literal">ds-cfg-db-log-filecache-size</code>
+     configuration attribute (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-383" target="_blank">OPENDJ-383</a>).</p></li><li class="listitem"><p>OpenDJ verify and rebuild index commands now use JE 5 disk ordered
+     cursoring (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-372" target="_blank">OPENDJ-372</a>).</p></li><li class="listitem"><p>More OpenDJ tools now prompt for a bind password when none is
+     provided (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-358" target="_blank">OPENDJ-358</a>).</p></li><li class="listitem"><p>OpenDJ DSML gateway now allows authentication using an ID rather
+     than a DN (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-352" target="_blank">OPENDJ-352</a>).</p></li><li class="listitem"><p>OpenDJ DSML gateway can now connect over SSL to the LDAP
+     server (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-269" target="_blank">OPENDJ-269</a>).</p></li><li class="listitem"><p>OpenDJ now lets you configure attributes to be removed or renamed
      on update (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-258" target="_blank">OPENDJ-258</a>).</p></li><li class="listitem"><p>Subordinate indexes <code class="literal">id2children</code> and
      <code class="literal">id2subtree</code> can now be disabled on OpenDJ JE backends to
      improve performance when repeated adds and deletes are performed beneath
      the same entry (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-250" target="_blank">OPENDJ-250</a>).</p></li><li class="listitem"><p>OpenDJ now calls Account Status Notification Handlers when an
      account in enabled or disabled by the <span class="command"><strong>manage-account</strong></span>
-     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-248" target="_blank">OPENDJ-248</a>).</p></li><li class="listitem"><p>OpenDJ now adds <code class="literal">Unindexed</code> to access log response
-     messages for unindexed searches, making it easier to identify searches
-     rejected by default (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-246" target="_blank">OPENDJ-246</a>).</p></li><li class="listitem"><p>OpenDJ can now synchronize Samba password attribute values with the
-     <code class="literal">userPassword</code> attribute value, ensuring that when users
-     change their LDAP passwords in OpenDJ or change their LanMan or NT
-     passwords in Samba, their password attribute values all stay in sync
-     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-233" target="_blank">OPENDJ-233</a>, <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-511" target="_blank">OPENDJ-511</a>). To activate this feature, configure the OpenDJ Samba
-     Password plugin by using the <span class="command"><strong>dsconfig</strong></span> command.</p></li><li class="listitem"><p>OpenDJ now supports checking that entries of new group members
-     exist (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-221" target="_blank">OPENDJ-221</a>). OpenDJ can now ensure both that members' entries
-     exist when they are added to groups, and also that members are removed
-     from groups when their entries are deleted.</p></li><li class="listitem"><p>OpenDJ now better supports more, and larger static groups
-     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-197" target="_blank">OPENDJ-197</a>).</p></li><li class="listitem"><p>Change log content and configuration has been improved in this
+     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-248" target="_blank">OPENDJ-248</a>).</p></li><li class="listitem"><p>Change log content and configuration has been improved in this
      release (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-194" target="_blank">OPENDJ-194</a>).</p></li><li class="listitem"><p>Default database cache size, request handler counts, and replication
      purge delay are now set more sensibly for default installations
-     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-116" target="_blank">OPENDJ-116</a>, <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-186" target="_blank">OPENDJ-186</a>).</p></li><li class="listitem"><p>The character set password validator now supports optional character
-     sets (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-168" target="_blank">OPENDJ-168</a>). Also, The character set password validator now
-     understands classes like "All non-Latin characters" (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-620" target="_blank">OPENDJ-620</a>)</p></li><li class="listitem"><p>Collective attributes can now be applied based on the values of
-     virtual attributes (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-76" target="_blank">OPENDJ-76</a>).</p></li><li class="listitem"><p>OpenDJ now lets you configure the access log to display LDAP
-     controls (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-60" target="_blank">OPENDJ-60</a>).</p></li><li class="listitem"><p>OpenDJ now lets you execute control-panel as any user, not only the
+     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-116" target="_blank">OPENDJ-116</a>, <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-186" target="_blank">OPENDJ-186</a>).</p></li><li class="listitem"><p>Collective attributes can now be applied based on the values of
+     virtual attributes (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-76" target="_blank">OPENDJ-76</a>).</p></li><li class="listitem"><p>OpenDJ now lets you execute control-panel as any user, not only the
      user who installed OpenDJ (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-19" target="_blank">OPENDJ-19</a>).</p></li></ul></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="pr01.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-before-you-install.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">About OpenDJ&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;2.&nbsp;Before You Install OpenDJ Software</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssue.jspa?pid=10040&components=10132&issuetype=1">Log a documentation bug.</a></p></div>
 <script type="text/javascript">
 

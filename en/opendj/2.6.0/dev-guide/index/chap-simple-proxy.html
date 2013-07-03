@@ -1053,10 +1053,10 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 <!-- END SyntaxHighlighter 3.0.83 -->
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
-</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;13.&nbsp;Writing a Simple LDAP Proxy</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-i18n.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="dev-tools-ref.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;13.&nbsp;Writing a Simple LDAP Proxy"><div class="titlepage"><div><div><h2 class="title"><a name="chap-simple-proxy"></a>Chapter&nbsp;13.&nbsp;Writing a Simple LDAP Proxy</h2></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="section"><a href="chap-simple-proxy.html#connection-pooling">13.1. Connection Pooling</a></span></dt><dt><span class="section"><a href="chap-simple-proxy.html#load-balancing-and-failover">13.2. Load Balancing &amp; Failover</a></span></dt><dt><span class="section"><a href="chap-simple-proxy.html#handling-client-connections">13.3. Listening For &amp; Handling Client Connections</a></span></dt><dt><span class="section"><a href="chap-simple-proxy.html#dn-attr-rewriting">13.4. DN &amp; Attribute Rewriting</a></span></dt></dl></div><a class="indexterm" name="d563e3226"></a><p>The OpenDJ LDAP SDK <a class="link" href="http://opendj.forgerock.org/opendj-ldap-sdk-examples/xref/org/forgerock/opendj/examples/Proxy.html" target="_blank">example Proxy</a> demonstrates a simple LDAP proxy that forwards requests
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;13.&nbsp;Writing a Simple LDAP Proxy</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-i18n.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="dev-tools-ref.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;13.&nbsp;Writing a Simple LDAP Proxy"><div class="titlepage"><div><div><h2 class="title"><a name="chap-simple-proxy"></a>Chapter&nbsp;13.&nbsp;Writing a Simple LDAP Proxy</h2></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="section"><a href="chap-simple-proxy.html#connection-pooling">13.1. Connection Pooling</a></span></dt><dt><span class="section"><a href="chap-simple-proxy.html#load-balancing-and-failover">13.2. Load Balancing &amp; Failover</a></span></dt><dt><span class="section"><a href="chap-simple-proxy.html#handling-client-connections">13.3. Listening For &amp; Handling Client Connections</a></span></dt><dt><span class="section"><a href="chap-simple-proxy.html#dn-attr-rewriting">13.4. DN &amp; Attribute Rewriting</a></span></dt></dl></div><a class="indexterm" name="d566e3226"></a><p>The OpenDJ LDAP SDK <a class="link" href="http://opendj.forgerock.org/opendj-ldap-sdk-examples/xref/org/forgerock/opendj/examples/Proxy.html" target="_blank">example Proxy</a> demonstrates a simple LDAP proxy that forwards requests
  to one or more remote directory servers. Although the implementation is
  intended as an example, it does demonstrate use of the asynchronous API,
- load balancing, and connection pooling.</p><a class="indexterm" name="d563e3236"></a><p>The Proxy example sets up connections pools with load balancing to the
+ load balancing, and connection pooling.</p><a class="indexterm" name="d566e3236"></a><p>The Proxy example sets up connections pools with load balancing to the
  directory servers. It passes the connection factories to a
  <code class="literal">ProxyBackend</code> that handles the requests passed back
  to the directory servers. It also sets up an LDAP listener to receive incoming
@@ -1068,7 +1068,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
  basic operation. It authenticates to the directory server to check incoming
  credentials, and adds the proxied authorization control to requests other than
  binds. The <code class="literal">ProxyBackend</code> handles all operations using
- asynchronous connections and methods.</p><div class="section" title="13.1.&nbsp;Connection Pooling"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="connection-pooling"></a>13.1.&nbsp;Connection Pooling</h2></div></div></div><a class="indexterm" name="d563e3262"></a><p>As shown in the Proxy example, the
+ asynchronous connections and methods.</p><div class="section" title="13.1.&nbsp;Connection Pooling"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="connection-pooling"></a>13.1.&nbsp;Connection Pooling</h2></div></div></div><a class="indexterm" name="d566e3262"></a><p>As shown in the Proxy example, the
   <code class="literal">Connections.newFixedConnectionPool()</code> returns a connection
   pool of the maximum size you specify.</p><pre class="brush: java;">final List&lt;ConnectionFactory&gt; factories = new LinkedList&lt;~&gt;();
 
@@ -1092,7 +1092,7 @@ factories.add(Connections.newFixedConnectionPool(Connections
   correctly authenticates the user currently served by the connection.</p><p>When you <code class="literal">close()</code> a connection from the pool, the
   OpenDJ LDAP SDK does not perform an <code class="literal">unbind()</code>. This is why
   you must be careful about how you manage authentication on connections from a
-  pool.</p></div><div class="section" title="13.2.&nbsp;Load Balancing &amp; Failover"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="load-balancing-and-failover"></a>13.2.&nbsp;Load Balancing &amp; Failover</h2></div></div></div><a class="indexterm" name="d563e3298"></a><p>The <code class="literal">Connections.newLoadBalancer()</code> method returns a
+  pool.</p></div><div class="section" title="13.2.&nbsp;Load Balancing &amp; Failover"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="load-balancing-and-failover"></a>13.2.&nbsp;Load Balancing &amp; Failover</h2></div></div></div><a class="indexterm" name="d566e3298"></a><p>The <code class="literal">Connections.newLoadBalancer()</code> method returns a
   load balancer based on the algorithm you choose. Algorithms include both
   round robin for equitably sharing load across local directory servers, and
   also failover usually used for switching automatically from an unresponsive
@@ -1124,7 +1124,7 @@ final FailoverLoadBalancingAlgorithm algorithm =
         new FailoverLoadBalancingAlgorithm(factories);
 
 final ConnectionFactory factory = Connections.newLoadBalancer(algorithm);</pre><p>The algorithms also include constructors that let you adjust timeouts
-  and so forth.</p></div><div class="section" title="13.3.&nbsp;Listening For &amp; Handling Client Connections"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="handling-client-connections"></a>13.3.&nbsp;Listening For &amp; Handling Client Connections</h2></div></div></div><a class="indexterm" name="d563e3321"></a><p>You create an <code class="literal">LDAPListener</code> to handle incoming client
+  and so forth.</p></div><div class="section" title="13.3.&nbsp;Listening For &amp; Handling Client Connections"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="handling-client-connections"></a>13.3.&nbsp;Listening For &amp; Handling Client Connections</h2></div></div></div><a class="indexterm" name="d566e3321"></a><p>You create an <code class="literal">LDAPListener</code> to handle incoming client
   connections. The <code class="literal">LDAPListener</code> takes a connection handler
   that deals with the connections, in this case connections back to the
   directory servers handling client requests.</p><pre class="brush: java;">
@@ -1155,12 +1155,12 @@ final ProxyBackend backend = new ProxyBackend(factory, bindFactory);
 final ServerConnectionFactory&lt;LDAPClientContext, Integer&gt; connectionHandler =
         Connections.newServerConnectionFactory(backend);
 </pre><p>See the Proxy example code for details about the
-  <code class="literal">ProxyBackend</code> implementation.</p></div><div class="section" title="13.4.&nbsp;DN &amp; Attribute Rewriting"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="dn-attr-rewriting"></a>13.4.&nbsp;DN &amp; Attribute Rewriting</h2></div></div></div><a class="indexterm" name="d563e3360"></a><p>Suppose you have a client application that expects a different
+  <code class="literal">ProxyBackend</code> implementation.</p></div><div class="section" title="13.4.&nbsp;DN &amp; Attribute Rewriting"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="dn-attr-rewriting"></a>13.4.&nbsp;DN &amp; Attribute Rewriting</h2></div></div></div><a class="indexterm" name="d566e3360"></a><p>Suppose you have a client application that expects a different
   attribute name, such as <code class="literal">fullname</code> for a standard attribute
   like <code class="literal">cn</code> (common name), and that expects a distinguished
   name (DN) suffix different from what is stored in the directory. If you
   cannot change the application, one possible alternative is a proxy layer
-  that does DN and attribute rewriting.<sup>[<a name="d563e3373" href="#ftn.d563e3373" class="footnote">9</a>]</sup></p><div class="screen"><pre class="brush: plain;"># A search accessing the directory server
+  that does DN and attribute rewriting.<sup>[<a name="d566e3373" href="#ftn.d566e3373" class="footnote">9</a>]</sup></p><div class="screen"><pre class="brush: plain;"># A search accessing the directory server
 $ ldapsearch -b dc=example,dc=com -p 1389 "(cn=Babs Jensen)" cn
 dn: uid=bjensen,ou=People,dc=example,dc=com
 cn: Barbara Jensen
@@ -1175,7 +1175,7 @@ fullname: Babs Jensen
   and search result entries. When you read the example, look for the
   <code class="literal">rewrite()</code> methods.</p><p>In the above output, the rewriter proxy listens on port 8389,
   connecting to a directory server listening on 1389. The directory server
-  contains data from <a class="link" href="http://opendj.forgerock.org/Example.ldif" target="_blank"><code class="filename">Example.ldif</code></a>.</p></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.d563e3373" href="#d563e3373" class="para">9</a>] </sup>Some servers, such as
+  contains data from <a class="link" href="http://opendj.forgerock.org/Example.ldif" target="_blank"><code class="filename">Example.ldif</code></a>.</p></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.d566e3373" href="#d566e3373" class="para">9</a>] </sup>Some servers, such as
   OpenDJ directory server, can do attribute rewriting without a proxy layer.
   See your directory server's documentation for details.</p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-i18n.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="dev-tools-ref.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;12.&nbsp;Internationalizing Applications&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Tools Reference</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssue.jspa?pid=10040&components=10132&issuetype=1">Log a documentation bug.</a></p></div>
 <script type="text/javascript">

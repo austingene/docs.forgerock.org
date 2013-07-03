@@ -1075,14 +1075,14 @@ objectClass: top
 ou: Groups
 
 Processing ADD request for ou=Groups,dc=example,dc=com
-ADD operation successful for DN ou=Groups,dc=example,dc=com</pre></div></div><div class="section" title="14.1.&nbsp;Creating Static Groups"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="static-groups"></a>14.1.&nbsp;Creating Static Groups</h2></div></div></div><a class="indexterm" name="d1707e8265"></a><p>A <em class="firstterm">static group</em> is expressed as an entry
+ADD operation successful for DN ou=Groups,dc=example,dc=com</pre></div></div><div class="section" title="14.1.&nbsp;Creating Static Groups"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="static-groups"></a>14.1.&nbsp;Creating Static Groups</h2></div></div></div><a class="indexterm" name="d1710e8265"></a><p>A <em class="firstterm">static group</em> is expressed as an entry
   that enumerates all the entries that belong to the group. Static group
   entries grow as their membership increases.</p><p>Static group entries can take the standard object class
   <code class="literal">groupOfNames</code> where each <code class="literal">member</code>
   attribute value is a distinguished name of an entry, or
   <code class="literal">groupOfUniqueNames</code> where each
   <code class="literal">uniqueMember</code> attribute value has Name and Optional UID
-  syntax.<sup>[<a name="d1707e8289" href="#ftn.d1707e8289" class="footnote">8</a>]</sup> Like other LDAP attributes,
+  syntax.<sup>[<a name="d1710e8289" href="#ftn.d1710e8289" class="footnote">8</a>]</sup> Like other LDAP attributes,
   <code class="literal">member</code> and <code class="literal">uniqueMember</code> attributes take
   sets of unique values.</p><p>Static group entries can also have the object class
   <code class="literal">groupOfEntries</code>, which is like
@@ -1173,7 +1173,7 @@ $ ldapmodify
 Processing MODIFY request for
  cn=Initially Empty Static Group,ou=Groups,dc=example,dc=com
 MODIFY operation successful for DN
- cn=Initially Empty Static Group,ou=Groups,dc=example,dc=com</pre></div></div><div class="section" title="14.2.&nbsp;Creating Dynamic Groups"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="dynamic-groups"></a>14.2.&nbsp;Creating Dynamic Groups</h2></div></div></div><a class="indexterm" name="d1707e8350"></a><p>A <em class="firstterm">dynamic group</em> specifies members using
+ cn=Initially Empty Static Group,ou=Groups,dc=example,dc=com</pre></div></div><div class="section" title="14.2.&nbsp;Creating Dynamic Groups"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="dynamic-groups"></a>14.2.&nbsp;Creating Dynamic Groups</h2></div></div></div><a class="indexterm" name="d1710e8350"></a><p>A <em class="firstterm">dynamic group</em> specifies members using
   LDAP URLs. Dynamic groups entries can stay small even as their
   membership increases.</p><p>Dynamic group entries take the <code class="literal">groupOfURLs</code>
   object class, with one or more <code class="literal">memberURL</code> values
@@ -1232,7 +1232,7 @@ dn: uid=bjensen,ou=People,dc=example,dc=com
 mail: bjensen@example.com
 
 dn: uid=rjensen,ou=People,dc=example,dc=com
-mail: rjensen@example.com</pre></div></div><div class="section" title="14.3.&nbsp;Creating Virtual Static Groups"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="virtual-static-groups"></a>14.3.&nbsp;Creating Virtual Static Groups</h2></div></div></div><a class="indexterm" name="d1707e8390"></a><p>OpenDJ lets you create <em class="firstterm">virtual static groups</em>,
+mail: rjensen@example.com</pre></div></div><div class="section" title="14.3.&nbsp;Creating Virtual Static Groups"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="virtual-static-groups"></a>14.3.&nbsp;Creating Virtual Static Groups</h2></div></div></div><a class="indexterm" name="d1710e8390"></a><p>OpenDJ lets you create <em class="firstterm">virtual static groups</em>,
   which let applications see dynamic groups as what appear to be static
   groups.</p><p>The virtual static group takes auxiliary object class
   <code class="literal">ds-virtual-static-group</code>. Virtual static groups also take
@@ -1311,7 +1311,7 @@ member: uid=mtyler,ou=People,dc=example,dc=com
 member: uid=abergin,ou=People,dc=example,dc=com
 member: uid=mschneid,ou=People,dc=example,dc=com
 cn: Virtual Static
-ds-target-group-dn: cn=My Dynamic Group,ou=Groups,dc=example,dc=com</pre></div></div><div class="section" title="14.4.&nbsp;Looking Up Group Membership"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="group-membership"></a>14.4.&nbsp;Looking Up Group Membership</h2></div></div></div><a class="indexterm" name="d1707e8440"></a><p>OpenDJ lets you look up which groups a user belongs to by using the
+ds-target-group-dn: cn=My Dynamic Group,ou=Groups,dc=example,dc=com</pre></div></div><div class="section" title="14.4.&nbsp;Looking Up Group Membership"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="group-membership"></a>14.4.&nbsp;Looking Up Group Membership</h2></div></div></div><a class="indexterm" name="d1710e8440"></a><p>OpenDJ lets you look up which groups a user belongs to by using the
   <code class="literal">isMemberOf</code> attribute.</p><div class="screen"><pre class="brush: plain;">$ ldapsearch
  --port 1389
  --baseDN dc=example,dc=com
@@ -1320,7 +1320,7 @@ ds-target-group-dn: cn=My Dynamic Group,ou=Groups,dc=example,dc=com</pre></div><
 dn: uid=bjensen,ou=People,dc=example,dc=com
 isMemberOf: cn=My Static Group,ou=Groups,dc=example,dc=com
 isMemberOf: cn=Virtual Static,ou=Groups,dc=example,dc=com
-isMemberOf: cn=My Dynamic Group,ou=Groups,dc=example,dc=com</pre></div><p>You must request <code class="literal">isMemberOf</code> explicitly.</p></div><div class="section" title="14.5.&nbsp;Configuring Referential Integrity"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="referential-integrity"></a>14.5.&nbsp;Configuring Referential Integrity</h2></div></div></div><a class="indexterm" name="d1707e8460"></a><p>When you delete or rename an entry that belongs to static groups, that
+isMemberOf: cn=My Dynamic Group,ou=Groups,dc=example,dc=com</pre></div><p>You must request <code class="literal">isMemberOf</code> explicitly.</p></div><div class="section" title="14.5.&nbsp;Configuring Referential Integrity"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="referential-integrity"></a>14.5.&nbsp;Configuring Referential Integrity</h2></div></div></div><a class="indexterm" name="d1710e8460"></a><p>When you delete or rename an entry that belongs to static groups, that
   entry's DN must be removed or changed in the list of each group to which it
   belongs. You can configure OpenDJ to resolve membership on your behalf after
   the change operation succeeds by enabling referential integrity.</p><p>Referential integrity functionality is implemented as a plugin. The
@@ -1379,7 +1379,7 @@ member: uid=tmorris,ou=People,dc=example,dc=com</pre></div><p>By default the ref
  <code class="literal">member:(objectclass=person)</code>. To ensure that entries must be
  located in the same naming context, set
  <code class="literal">check-references-scope-criteria</code> to
- <code class="literal">naming-context</code>.</p></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.d1707e8289" href="#d1707e8289" class="para">8</a>] </sup>Name and Optional UID syntax values are a DN optionally
+ <code class="literal">naming-context</code>.</p></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.d1710e8289" href="#d1710e8289" class="para">8</a>] </sup>Name and Optional UID syntax values are a DN optionally
   followed by <code class="literal">#<em class="replaceable"><code>BitString</code></em></code>. The
   <em class="replaceable"><code>BitString</code></em>, such as <code class="literal">'0101111101'B</code>,
   serves to distinguish the entry from another entry having the same DN, which
