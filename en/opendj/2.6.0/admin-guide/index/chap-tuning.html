@@ -1053,7 +1053,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 <!-- END SyntaxHighlighter 3.0.83 -->
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
-</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;22.&nbsp;Tuning Servers For Performance</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-monitoring.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-change-certs.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;22.&nbsp;Tuning Servers For Performance"><div class="titlepage"><div><div><h2 class="title"><a name="chap-tuning"></a>Chapter&nbsp;22.&nbsp;Tuning Servers For Performance</h2></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="section"><a href="chap-tuning.html#perf-define-starting-points">22.1. Defining Performance Requirements &amp; Constraints</a></span></dt><dt><span class="section"><a href="chap-tuning.html#perf-testing">22.2. Testing Performance</a></span></dt><dt><span class="section"><a href="chap-tuning.html#perf-tweaking">22.3. Tweaking OpenDJ Performance</a></span></dt></dl></div><a class="indexterm" name="d1706e10692"></a><p>Server tuning refers to the art of adjusting server, JVM, and system
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;22.&nbsp;Tuning Servers For Performance</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-monitoring.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-change-certs.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;22.&nbsp;Tuning Servers For Performance"><div class="titlepage"><div><div><h2 class="title"><a name="chap-tuning"></a>Chapter&nbsp;22.&nbsp;Tuning Servers For Performance</h2></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="section"><a href="chap-tuning.html#perf-define-starting-points">22.1. Defining Performance Requirements &amp; Constraints</a></span></dt><dt><span class="section"><a href="chap-tuning.html#perf-testing">22.2. Testing Performance</a></span></dt><dt><span class="section"><a href="chap-tuning.html#perf-tweaking">22.3. Tweaking OpenDJ Performance</a></span></dt></dl></div><a class="indexterm" name="d1707e10699"></a><p>Server tuning refers to the art of adjusting server, JVM, and system
  configuration to meet the service level performance requirements of directory
  clients. In the optimal case you achieve service level performance
  requirements without much tuning at all, perhaps only setting JVM runtime
@@ -1077,7 +1077,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
      scenarios. For example, a response time performance requirement might
      be defined as, "Directory response times must average less than 10
      milliseconds for all operations except searches returning more than 10
-     entries, with 99.9% of response times under 40 milliseconds."</p></li><li class="listitem"><p>Directory service <em class="firstterm">throughput</em></p><a class="indexterm" name="d1706e10724"></a><p>Directory service throughput can range up to many thousands of
+     entries, with 99.9% of response times under 40 milliseconds."</p></li><li class="listitem"><p>Directory service <em class="firstterm">throughput</em></p><a class="indexterm" name="d1707e10731"></a><p>Directory service throughput can range up to many thousands of
      operations per second. In fact there is no upper limit for read operations
      such as searches, because only write operations must be replicated. To
      increase read throughput, simply add additional replicas. More important
@@ -1178,7 +1178,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
    by setting the local DB backend property
    <code class="literal">entries-compressed</code> to <code class="literal">true</code> before you
    (re-)import data from LDIF. With <code class="literal">entries-compressed: true</code>
-   OpenDJ compresses entries before writing them to the database.<sup>[<a name="d1706e10921" href="#ftn.d1706e10921" class="footnote">10</a>]</sup></p><div class="screen"><pre class="brush: plain;">$ dsconfig
+   OpenDJ compresses entries before writing them to the database.<sup>[<a name="d1707e10928" href="#ftn.d1707e10928" class="footnote">10</a>]</sup></p><div class="screen"><pre class="brush: plain;">$ dsconfig
  set-backend-prop
  --port 4444
  --hostname opendj.example.com
@@ -1197,7 +1197,7 @@ $ import-ldif
  --backendID userRoot
  --includeBranch dc=example,dc=com
  --start 0
-Import task 20120917100628767 scheduled to start Sep 17, 2012 10:06:28 AM CEST</pre></div></div><div class="section" title="22.3.3.&nbsp;LDIF Import Settings"><div class="titlepage"><div><div><h3 class="title"><a name="perf-import"></a>22.3.3.&nbsp;LDIF Import Settings</h3></div></div></div><a class="indexterm" name="d1706e10929"></a><p>You can tweak OpenDJ to speed up import of large LDIF files.</p><p>By default, the temporary directory used for scratch files is
+Import task 20120917100628767 scheduled to start Sep 17, 2012 10:06:28 AM CEST</pre></div></div><div class="section" title="22.3.3.&nbsp;LDIF Import Settings"><div class="titlepage"><div><div><h3 class="title"><a name="perf-import"></a>22.3.3.&nbsp;LDIF Import Settings</h3></div></div></div><a class="indexterm" name="d1707e10936"></a><p>You can tweak OpenDJ to speed up import of large LDIF files.</p><p>By default, the temporary directory used for scratch files is
    <code class="filename">import-tmp</code> under the directory where you installed
    OpenDJ. Use <span class="command"><strong>import-ldif</strong></span> with the
    <code class="option">--tmpdirectory</code> option to set this directory to a
@@ -1277,7 +1277,7 @@ Import task 20120917100628767 scheduled to start Sep 17, 2012 10:06:28 AM CEST</
  --publisher-name "File-Based Access Logger"
  --set enabled:false
  --trustAll
- --no-prompt</pre></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.d1706e10921" href="#d1706e10921" class="para">10</a>] </sup>OpenDJ does not proactively rewrite all entries in the database after
+ --no-prompt</pre></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.d1707e10928" href="#d1707e10928" class="para">10</a>] </sup>OpenDJ does not proactively rewrite all entries in the database after
    you change the settings. Instead, to force OpenDJ to compress all entries,
    import the data from LDIF.</p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-monitoring.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-change-certs.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;21.&nbsp;Monitoring, Logging, &amp; Alerts&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;23.&nbsp;Changing Server Certificates</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssue.jspa?pid=10040&components=10132&issuetype=1">Log a documentation bug.</a></p></div>
 <script type="text/javascript">

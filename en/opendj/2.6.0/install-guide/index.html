@@ -1053,14 +1053,14 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 <!-- END SyntaxHighlighter 3.0.83 -->
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
-</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div lang="en" class="book" title="OpenDJ 2.6.0 Installation Guide"><div class="titlepage"><div><div><h1 class="title"><a name="install-guide"></a>OpenDJ 2.6.0 Installation Guide</h1></div><div><div class="authorgroup"><div class="author"><h3 class="author"><span class="firstname">Mark</span> <span class="surname">Craig</span></h3></div></div></div><div><p class="releaseinfo">Software release date: July 4, 2013</p></div><div><p class="copyright">Copyright &copy; 2011-2013 ForgeRock AS</p></div><div><a href="legalnotice.html">Legal Notice</a></div><div><p class="pubdate">Publication date: July&nbsp;02,&nbsp;2013</p></div><div><div class="abstract" title="Abstract"><div class="abstract-title">Abstract</div><p>This guide shows you how to install OpenDJ directory services. The
-   OpenDJ project offers open source LDAP directory services in Java.</p></div></div></div><hr></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="preface"><a href="#preface">Preface</a></span></dt><dt><span class="chapter"><a href="#chap-install-gui">1. Installing OpenDJ With the QuickSetup Wizard</a></span></dt><dt><span class="chapter"><a href="#chap-install-cli">2. Installing OpenDJ From the Command Line</a></span></dt><dt><span class="chapter"><a href="#chap-jvm-opts">3. Tuning JVM Options</a></span></dt><dt><span class="chapter"><a href="#chap-upgrade">4. Upgrading to OpenDJ 2.6.0</a></span></dt><dt><span class="chapter"><a href="#chap-uninstall">5. Removing OpenDJ Servers</a></span></dt><dt><span class="index"><a href="#d331e1227">Index</a></span></dt></dl></div><div lang="en" class="preface" title="Preface"><div class="titlepage"><div><div><h2 class="title"><a name="preface"></a>Preface</h2></div></div></div><p>This guide shows you how to install, upgrade, and remove OpenDJ
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div lang="en" class="book" title="OpenDJ 2.6.0 Installation Guide"><div class="titlepage"><div><div><h1 class="title"><a name="install-guide"></a>OpenDJ 2.6.0 Installation Guide</h1></div><div><div class="authorgroup"><div class="author"><h3 class="author"><span class="firstname">Mark</span> <span class="surname">Craig</span></h3></div></div></div><div><p class="releaseinfo">Software release date: July 04, 2013</p></div><div><p class="copyright">Copyright &copy; 2011-2013 ForgeRock AS</p></div><div><a href="legalnotice.html">Legal Notice</a></div><div><p class="pubdate">Publication date: July&nbsp;03,&nbsp;2013</p></div><div><div class="abstract" title="Abstract"><div class="abstract-title">Abstract</div><p>This guide shows you how to install OpenDJ directory services. The
+   OpenDJ project offers open source LDAP directory services in Java.</p></div></div></div><hr></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="preface"><a href="#preface">Preface</a></span></dt><dt><span class="chapter"><a href="#chap-install-gui">1. Installing OpenDJ With the QuickSetup Wizard</a></span></dt><dt><span class="chapter"><a href="#chap-install-cli">2. Installing OpenDJ From the Command Line</a></span></dt><dt><span class="chapter"><a href="#chap-jvm-opts">3. Tuning JVM Options</a></span></dt><dt><span class="chapter"><a href="#chap-upgrade">4. Upgrading to OpenDJ 2.6.0</a></span></dt><dt><span class="chapter"><a href="#chap-uninstall">5. Removing OpenDJ Servers</a></span></dt><dt><span class="index"><a href="#d329e1240">Index</a></span></dt></dl></div><div lang="en" class="preface" title="Preface"><div class="titlepage"><div><div><h2 class="title"><a name="preface"></a>Preface</h2></div></div></div><p>This guide shows you how to install, upgrade, and remove OpenDJ
  software. Unless you are planning a throwaway evaluation or test
  installation, read the <a href="../release-notes/index.html#release-notes" class="link"><em class="citetitle">Release
  Notes</em></a> before you get started.</p><p>If you want only to try OpenDJ server software, and you
  do not plan to store any real or important data that you want to keep,
  then you need not read this entire guide. Instead, try <a href="../install-guide/index.html#chap-install-gui" class="link"><em class="citetitle">Installing OpenDJ
- With the QuickSetup Wizard</em></a>.</p><div class="section" title="1.&nbsp;Who Should Read this Guide"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d331e106"></a>1.&nbsp;Who Should Read this Guide</h2></div></div></div><p>This guide is written for anyone installing OpenDJ who plans to
+ With the QuickSetup Wizard</em></a>.</p><div class="section" title="1.&nbsp;Who Should Read this Guide"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d329e106"></a>1.&nbsp;Who Should Read this Guide</h2></div></div></div><p>This guide is written for anyone installing OpenDJ who plans to
   maintain directory services for client applications. Basic OpenDJ
   installation, especially using Java WebStart, can be simple and
   straightforward, particularly if you are already acquainted with directory
@@ -1108,7 +1108,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
  through the <a class="link" href="https://lists.forgerock.org/mailman/listinfo/docs" target="_blank">ForgeRock docs mailing list</a>.</p><p>The Community Wikis describe how to check out and build source code.
  Should you want to contribute a patch, test, or feature, or want to author
  part of the core documentation, first have a look on the ForgeRock site
- at <a class="link" href="http://forgerock.org/get_involved.html" target="_blank">how to get involved</a>.</p></div></div><div lang="en" class="chapter" title="Chapter&nbsp;1.&nbsp;Installing OpenDJ With the QuickSetup Wizard"><div class="titlepage"><div><div><h2 class="title"><a name="chap-install-gui"></a>Chapter&nbsp;1.&nbsp;Installing OpenDJ With the QuickSetup Wizard</h2></div></div></div><a class="indexterm" name="d331e212"></a><a class="indexterm" name="d331e215"></a><p>If you want only to try OpenDJ server software, and you do not plan to
+ at <a class="link" href="http://forgerock.org/get_involved.html" target="_blank">how to get involved</a>.</p></div></div><div lang="en" class="chapter" title="Chapter&nbsp;1.&nbsp;Installing OpenDJ With the QuickSetup Wizard"><div class="titlepage"><div><div><h2 class="title"><a name="chap-install-gui"></a>Chapter&nbsp;1.&nbsp;Installing OpenDJ With the QuickSetup Wizard</h2></div></div></div><a class="indexterm" name="d329e212"></a><a class="indexterm" name="d329e215"></a><p>If you want only to try OpenDJ server software, and you do not plan to
  store any real or important data that you want to keep, then read only this
  chapter, or just try out installation without reading any further.</p><div lang="en" class="itemizedlist"><p>Download OpenDJ software from one of the following locations.</p><ul class="itemizedlist" type="disc"><li class="listitem"><p>The ForgeRock <a class="link" href="http://forgerock.com/download-stack/" target="_blank">Enterprise Downloads</a> page has the latest stable,
   supported release of OpenDJ and the other products in the ForgeRock identity
@@ -1127,7 +1127,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
  installer.</p><div class="screen"><pre class="brush: plain;">$ export PATH=/path/to/java/bin:$PATH
 $ javaws URL-to-QuickSetup-Installer</pre></div><p>The WebStart installer corresponds to what you start if you download
  OpenDJ-2.6.0.zip, unzip the file, and then run
- <span class="command"><strong>./opendj/setup</strong></span> (UNIX), <span class="command"><strong>opendj\setup.bat</strong></span>
+ <span class="command"><strong>opendj/setup</strong></span> (UNIX), <span class="command"><strong>opendj\setup.bat</strong></span>
   (Windows), or <span class="command"><strong>opendj/QuickSetup.app</strong></span> (Mac OS X).</p><p>Java WebStart launches the the QuickSetup wizard, and soon the
  Welcome screen appears.</p><div class="mediaobject"><a name="figure-quicksetup-welcome"></a><img src="images/QuickSetup-welcome.png" longdesc="/Users/mark/Documents/workspace/2.6.0-docs/target/docbkx/html/install-guide/figure-quicksetup-welcome.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-quicksetup-welcome.html" target="longdesc">D</a>]</span></div></div><div class="mediaobject"><a name="figure-quicksetup-license"></a><img src="images/QuickSetup-license.png" longdesc="/Users/mark/Documents/workspace/2.6.0-docs/target/docbkx/html/install-guide/figure-quicksetup-license.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-quicksetup-license.html" target="longdesc">D</a>]</span></div></div><div class="mediaobject"><a name="figure-quicksetup-svrconf"></a><img src="images/QuickSetup-svrconf.png" longdesc="/Users/mark/Documents/workspace/2.6.0-docs/target/docbkx/html/install-guide/figure-quicksetup-svrconf.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-quicksetup-svrconf.html" target="longdesc">D</a>]</span></div></div><div class="mediaobject"><a name="figure-quicksetup-replopts"></a><img src="images/QuickSetup-replopts.png" longdesc="/Users/mark/Documents/workspace/2.6.0-docs/target/docbkx/html/install-guide/figure-quicksetup-replopts.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-quicksetup-replopts.html" target="longdesc">D</a>]</span></div></div><div class="mediaobject"><a name="figure-quicksetup-gendata"></a><img src="images/QuickSetup-gendata.png" longdesc="/Users/mark/Documents/workspace/2.6.0-docs/target/docbkx/html/install-guide/figure-quicksetup-gendata.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-quicksetup-gendata.html" target="longdesc">D</a>]</span></div></div><div class="mediaobject"><a name="figure-quicksetup-jvmopts"></a><img src="images/QuickSetup-jvmopts.png" longdesc="/Users/mark/Documents/workspace/2.6.0-docs/target/docbkx/html/install-guide/figure-quicksetup-jvmopts.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-quicksetup-jvmopts.html" target="longdesc">D</a>]</span></div></div><div class="mediaobject"><a name="figure-quicksetup-review"></a><img src="images/QuickSetup-review.png" longdesc="/Users/mark/Documents/workspace/2.6.0-docs/target/docbkx/html/install-guide/figure-quicksetup-review.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-quicksetup-review.html" target="longdesc">D</a>]</span></div></div><div class="mediaobject"><a name="figure-quicksetup-finished"></a><img src="images/QuickSetup-finished.png" longdesc="/Users/mark/Documents/workspace/2.6.0-docs/target/docbkx/html/install-guide/figure-quicksetup-finished.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-quicksetup-finished.html" target="longdesc">D</a>]</span></div></div><div class="mediaobject"><a name="figure-quicksetup-control-panel"></a><img src="images/OpenDJ-Control-Panel.png" longdesc="/Users/mark/Documents/workspace/2.6.0-docs/target/docbkx/html/install-guide/figure-quicksetup-control-panel.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-quicksetup-control-panel.html" target="longdesc">D</a>]</span></div></div><div class="itemizedlist"><p>To launch OpenDJ Control Panel again later, you can run one of the
   following, depending on your host system.</p><ul class="itemizedlist" type="disc"><li class="listitem"><p>(Mac OS X) <span class="command"><strong>opendj/bin/ControlPanel.app</strong></span></p></li><li class="listitem"><p>(UNIX) <span class="command"><strong>opendj/bin/control-panel</strong></span></p></li><li class="listitem"><p>(Windows) <span class="command"><strong>opendj\bat\control-panel.bat</strong></span></p></li></ul></div></div><div lang="en" class="chapter" title="Chapter&nbsp;2.&nbsp;Installing OpenDJ From the Command Line"><div class="titlepage"><div><div><h2 class="title"><a name="chap-install-cli"></a>Chapter&nbsp;2.&nbsp;Installing OpenDJ From the Command Line</h2></div></div></div><p>This chapter covers command-line installation with additional
@@ -1139,14 +1139,14 @@ $ javaws URL-to-QuickSetup-Installer</pre></div><p>The WebStart installer corres
    of the <span class="command"><strong>java</strong></span> command. The latter environment variable is
    useful for example if you have both 32-bit and 64-bit versions of the Java
    environment installed, and want to make sure you use the 64-bit
-   version.</p></li><li class="step" title="Step 2"><a name="download-opendj"></a><a class="indexterm" name="d331e405"></a><div lang="en" class="itemizedlist"><p>Download OpenDJ software from one of the following locations.</p><ul class="itemizedlist" type="disc"><li class="listitem"><p>The ForgeRock <a class="link" href="http://forgerock.com/download-stack/" target="_blank">Enterprise Downloads</a> page has the latest stable,
+   version.</p></li><li class="step" title="Step 2"><a name="download-opendj"></a><a class="indexterm" name="d329e405"></a><div lang="en" class="itemizedlist"><p>Download OpenDJ software from one of the following locations.</p><ul class="itemizedlist" type="disc"><li class="listitem"><p>The ForgeRock <a class="link" href="http://forgerock.com/download-stack/" target="_blank">Enterprise Downloads</a> page has the latest stable,
   supported release of OpenDJ and the other products in the ForgeRock identity
   stack.</p></li><li class="listitem"><p>The <a class="link" href="http://forgerock.org/opendj.html" target="_blank">Nightly Builds</a> page posts links to the latest nightly
   builds of OpenDJ software. Note that these builds are the working version
   from the trunk and are not for use in a production environment.</p></li><li class="listitem"><p>The <a class="link" href="http://forgerock.org/opendj-archive.html" target="_blank">Community Archives</a> page includes stable community
-  builds for previous releases of OpenDJ software.</p></li></ul></div><div class="variablelist"><p>The following server software is available.</p><dl><dt><span class="term">OpenDJ-2.6.0.zip</span></dt><dd><p>Cross-platform OpenDJ directory server installation files</p></dd><dt><span class="term">opendj_2.6.0_all.deb</span></dt><dd><p>OpenDJ directory server native package for Debian and related
-      Linux distributions.</p></dd><dt><span class="term">opendj-2.6.0.noarch.rpm</span></dt><dd><p>OpenDJ directory server native package for Red Hat and related
-      Linux distributions.</p></dd><dt><span class="term">OpenDJ-2.6.0-DSML.war</span></dt><dd><p>Cross-platform OpenDJ DSML gateway web archive</p></dd></dl></div></li><li class="step" title="Step 3"><a name="app-server-needed-for-dsml"></a><a class="indexterm" name="d331e458"></a><p>If you plan to install OpenDJ DSML gateway or OpenDJ REST LDAP gateway,
+  builds for previous releases of OpenDJ software.</p></li></ul></div><div class="variablelist"><p>The following server software is available.</p><dl><dt><span class="term">OpenDJ-2.6.0.zip</span></dt><dd><p>Cross-platform OpenDJ directory server installation files</p></dd><dt><span class="term">opendj_2.6.0-1_all.deb</span></dt><dd><p>OpenDJ directory server native package for Debian and related
+      Linux distributions.</p></dd><dt><span class="term">opendj-2.6.0-1.noarch.rpm</span></dt><dd><p>OpenDJ directory server native package for Red Hat and related
+      Linux distributions.</p></dd><dt><span class="term">OpenDJ-2.6.0-DSML.war</span></dt><dd><p>Cross-platform OpenDJ DSML gateway web archive</p></dd><dt><span class="term">opendj-rest2ldap-servlet-2.6.0-servlet.war</span></dt><dd><p>Cross-platform OpenDJ REST LDAP gateway web archive</p></dd></dl></div></li><li class="step" title="Step 3"><a name="app-server-needed-for-dsml"></a><a class="indexterm" name="d329e464"></a><p>If you plan to install OpenDJ DSML gateway or OpenDJ REST LDAP gateway,
    make sure you have an appropriate application server installed.</p></li><li class="step" title="Step 4"><p>If you plan to configure SSL or TLS to secure network
    communications between the server and client applications, get a
    properly signed digital certificate that your client applications
@@ -1156,7 +1156,7 @@ $ javaws URL-to-QuickSetup-Installer</pre></div><p>The WebStart installer corres
    or on a PKCS#11 token. To import a signed certificate into a key store,
    you can use the Java <span class="command"><strong>keytool</strong></span> command.</p><p>See <a href="../admin-guide/index.html#setup-server-cert" class="link"><em class="citetitle">Preparing For
    Secure Communications</em></a> in the <em class="citetitle">Administration
-   Guide</em> for examples.</p></li></ol></div><div class="procedure" title="Procedure&nbsp;2.2.&nbsp;To Install OpenDJ Directory Server"><a name="command-line-install"></a><div class="procedure-title">Procedure&nbsp;2.2.&nbsp;To Install OpenDJ Directory Server</div><a class="indexterm" name="d331e483"></a><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Unzip <code class="filename">OpenDJ-2.6.0.zip</code>
+   Guide</em> for examples.</p></li></ol></div><div class="procedure" title="Procedure&nbsp;2.2.&nbsp;To Install OpenDJ Directory Server"><a name="command-line-install"></a><div class="procedure-title">Procedure&nbsp;2.2.&nbsp;To Install OpenDJ Directory Server</div><a class="indexterm" name="d329e489"></a><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Unzip <code class="filename">OpenDJ-2.6.0.zip</code>
    in the file system directory where you want to install the server.</p><p>Unlike the web-based Quick Setup install, the <span class="command"><strong>setup</strong></span>
    command uses the directory where you unzipped the files as the installation
    directory, and does not ask you where to install OpenDJ. Therefore, if you
@@ -1167,15 +1167,23 @@ $ javaws URL-to-QuickSetup-Installer</pre></div><p>The WebStart installer corres
    additional <span class="command"><strong>setup</strong></span> options to specify
    values for the options you choose during interactive mode, thus
    scripting the installation process. See <span class="command"><strong>setup --help</strong></span>
-   and the notes below.</p><a class="indexterm" name="d331e514"></a><p>To perform a non-interactive, silent installation, provide all
+   and the notes below.</p><a class="indexterm" name="d329e520"></a><p>To perform a non-interactive, silent installation, provide all
    the options to configure OpenDJ, and then also use the <code class="literal">-n</code>
    or <code class="literal">--no-prompt</code> option.</p><p>The <span class="command"><strong>setup</strong></span> command without the
    <code class="literal">--cli</code> option runs the Quick Start
    GUI installer with your local version of software, as does
    Java WebStart with a remote version of the software.</p><div class="screen"><pre class="brush: plain;">$ /path/to/opendj/setup --cli
+READ THIS SOFTWARE LICENSE AGREEMENT CAREFULLY. BY DOWNLOADING OR INSTALLING
+THE FORGEROCK SOFTWARE, YOU, ON BEHALF OF YOURSELF AND YOUR COMPANY, AGREE TO
+BE BOUND BY THIS SOFTWARE LICENSE AGREEMENT. IF YOU DO NOT AGREE TO THESE
+TERMS, DO NOT DOWNLOAD OR INSTALL THE FORGEROCK SOFTWARE.
 
-OpenDJ 2.6.0
-Please wait while the setup program initializes...
+...
+
+Please read the License Agreement above.
+You must accept the terms of the agreement before continuing with the
+installation.
+Accept the license (Yes/No) [No]:Yes
 
 What would you like to use as the initial root user DN for the Directory
 Server? [cn=Directory Manager]:
@@ -1280,7 +1288,7 @@ To see basic server configuration status and configuration you can launch \
           applications view self-signed certificates like fake IDs, and
           so do not trust them. Self-signed certificates facilitate testing,
           but are not intended for production use.</p></dd></dl></div></dd><dt><span class="term">Start the server</span></dt><dd><p>If you do not start the server during installation, you can use
-      the <span class="command"><strong>bin/start-ds</strong></span> command later.</p></dd></dl></div></li><li class="step" title="Step 3"><p>Run the <span class="command"><strong>status</strong></span> command to make sure your OpenDJ
+      the <span class="command"><strong>/path/to/opendj/bin/start-ds</strong></span> command later.</p></dd></dl></div></li><li class="step" title="Step 3"><p>Run the <span class="command"><strong>status</strong></span> command to make sure your OpenDJ
    server is working as expected.</p><div class="screen"><pre class="brush: plain;">$ /path/to/opendj/bin/status
 
 &gt;&gt;&gt;&gt; Specify OpenDJ LDAP connection parameters
@@ -1315,19 +1323,18 @@ Base DN:     dc=example,dc=com
 Backend ID:  userRoot
 Entries:     160
 Replication: Disabled</pre></div></li></ol></div><div class="note" title="Note" style="font-style: italic;"><h3 class="title">Note</h3><p>You can install OpenDJ in unattended and silent fashion, too. See
-  the procedure, <a class="xref" href="#install-properties-file" title="Procedure&nbsp;2.5.&nbsp;To Install OpenDJ Directory Server With a Properties File">Procedure&nbsp;2.5, &#8220;To Install OpenDJ Directory Server With a Properties File&#8221;</a>.</p></div><div class="procedure" title="Procedure&nbsp;2.3.&nbsp;To Install From the Debian Package"><a name="install-deb"></a><div class="procedure-title">Procedure&nbsp;2.3.&nbsp;To Install From the Debian Package</div><a class="indexterm" name="d331e644"></a><p>On Debian and related Linux distributions such as Ubuntu, you can
+  the procedure, <a class="xref" href="#install-properties-file" title="Procedure&nbsp;2.5.&nbsp;To Install OpenDJ Directory Server With a Properties File">Procedure&nbsp;2.5, &#8220;To Install OpenDJ Directory Server With a Properties File&#8221;</a>.</p></div><div class="procedure" title="Procedure&nbsp;2.3.&nbsp;To Install From the Debian Package"><a name="install-deb"></a><div class="procedure-title">Procedure&nbsp;2.3.&nbsp;To Install From the Debian Package</div><a class="indexterm" name="d329e650"></a><p>On Debian and related Linux distributions such as Ubuntu, you can
   install OpenDJ directory server from the Debian package.</p><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Before you install OpenDJ, install a Java runtime environment if none
-   is installed yet.</p><div class="screen"><pre class="brush: plain;">$ sudo apt-get install default-jre</pre></div></li><li class="step" title="Step 2"><p>Install the OpenDJ directory server package.</p><div class="screen"><pre class="brush: plain;">$ sudo dpkg -i opendj*.deb
+   is installed yet.</p><div class="screen"><pre class="brush: plain;">$ sudo apt-get install default-jre</pre></div></li><li class="step" title="Step 2"><p>Install the OpenDJ directory server package.</p><div class="screen"><pre class="brush: plain;">$ sudo dpkg -i opendj_2.6.0-1_all.deb
 Selecting previously unselected package opendj.
 (Reading database ... 185569 files and directories currently installed.)
-Unpacking opendj (from opendj_2.6.0_all.deb) ...
+Unpacking opendj (from opendj_2.6.0-1_all.deb) ...
 
 Setting up opendj (2.6.0) ...
 $</pre></div><p>The .deb installs OpenDJ directory server in the directory
    <code class="filename">/opt/opendj</code>.</p><p>The files are owned by root by default, making it easier to have OpenDJ
    listen on ports 389 and 636.</p></li><li class="step" title="Step 3"><p>Configure OpenDJ directory server by using the command
    <span class="command"><strong>sudo /opt/opendj/setup</strong></span>.</p><div class="screen"><pre class="brush: plain;">$ sudo /opt/opendj/setup --cli
-[ sudo ] password for user:
 ...
 To see basic server configuration status and configuration you can launch
  /opt/opendj/bin/status</pre></div></li><li class="step" title="Step 4"><p>Check OpenDJ directory server status.</p><div class="screen"><pre class="brush: plain;">$ sudo /opt/opendj/bin/status
@@ -1365,23 +1372,23 @@ Address:Port : Protocol               : State
 Base DN:     dc=example,dc=com
 Backend ID:  userRoot
 Entries:     2002
-Replication: </pre></div></li><li class="step" title="Step 5"><p>If you want to run OpenDJ when the system starts, see <a href="../admin-guide/index.html#create-rc-script-1" class="link">create-rc-script</a>.</p></li></ol></div><div class="procedure" title="Procedure&nbsp;2.4.&nbsp;To Install From the RPM Package"><a name="install-rpm"></a><div class="procedure-title">Procedure&nbsp;2.4.&nbsp;To Install From the RPM Package</div><a class="indexterm" name="d331e691"></a><p>On Red Hat and related Linux distributions such as Fedora and CentOS,
-  you can install OpenDJ directory server from the RPM package.</p><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Before you install OpenDJ, install a Java runtime environment if none
-   is installed yet.</p><div class="screen"><pre class="brush: plain;">$ su
+Replication: </pre></div></li><li class="step" title="Step 5"><p>If you want to run OpenDJ when the system starts, see <a href="../admin-guide/index.html#create-rc-script-1" class="link">create-rc-script</a>.</p></li></ol></div><div class="procedure" title="Procedure&nbsp;2.4.&nbsp;To Install From the RPM Package"><a name="install-rpm"></a><div class="procedure-title">Procedure&nbsp;2.4.&nbsp;To Install From the RPM Package</div><a class="indexterm" name="d329e697"></a><p>On Red Hat and related Linux distributions such as Fedora and CentOS,
+  you can install OpenDJ directory server from the RPM package.</p><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Log in as superuser to install the software.</p><div class="screen"><pre class="brush: plain;">$ su
 Password:
-# rpm -ivh jdk-*.rpm</pre></div></li><li class="step" title="Step 2"><p>Install the OpenDJ directory server package.</p><div class="screen"><pre class="brush: plain;">$ su
-Password:
-# rpm -i opendj*.rpm
+# </pre></div></li><li class="step" title="Step 2"><p>Before you install OpenDJ, install a Java runtime environment if none
+   is installed yet.</p><p>You might need to download an .rpm to install the Java runtime
+   environment, and then install it using the <span class="command"><strong>rpm</strong></span>
+   command.</p><div class="screen"><pre class="brush: plain;"># rpm -ivh jre-*.rpm</pre></div></li><li class="step" title="Step 3"><p>Install the OpenDJ directory server package.</p><div class="screen"><pre class="brush: plain;"># rpm -i opendj-2.6.0-1.noarch.rpm
 Pre Install - initial install
 Post Install - initial install
 
 #</pre></div><p>The .rpm installs OpenDJ directory server in the directory
    <code class="filename">/opt/opendj</code>.</p><p>The files are owned by root by default, making it easier to have OpenDJ
-   listen on ports 389 and 636.</p></li><li class="step" title="Step 3"><p>Configure OpenDJ directory server by using the command
+   listen on ports 389 and 636.</p></li><li class="step" title="Step 4"><p>Configure OpenDJ directory server by using the command
    <span class="command"><strong>/opt/opendj/setup</strong></span>.</p><div class="screen"><pre class="brush: plain;"># /opt/opendj/setup --cli
 ...
 To see basic server configuration status and configuration you can launch
- /opt/opendj/bin/status</pre></div></li><li class="step" title="Step 4"><p>Check OpenDJ directory server status.</p><div class="screen"><pre class="brush: plain;"># /opt/opendj/bin/status
+ /opt/opendj/bin/status</pre></div></li><li class="step" title="Step 5"><p>Check OpenDJ directory server status.</p><div class="screen"><pre class="brush: plain;"># /opt/opendj/bin/status
 
 
 &gt;&gt;&gt;&gt; Specify OpenDJ LDAP connection parameters
@@ -1416,7 +1423,7 @@ Address:Port : Protocol               : State
 Base DN:     dc=example,dc=com
 Backend ID:  userRoot
 Entries:     2002
-Replication: </pre></div></li><li class="step" title="Step 5"><p>If you want to run OpenDJ when the system starts, see <a href="../admin-guide/index.html#create-rc-script-1" class="link">create-rc-script</a>.</p></li></ol></div><div class="procedure" title="Procedure&nbsp;2.5.&nbsp;To Install OpenDJ Directory Server With a Properties File"><a name="install-properties-file"></a><div class="procedure-title">Procedure&nbsp;2.5.&nbsp;To Install OpenDJ Directory Server With a Properties File</div><p>You can install OpenDJ directory server by using the
+Replication: </pre></div></li><li class="step" title="Step 6"><p>If you want to run OpenDJ when the system starts, see <a href="../admin-guide/index.html#create-rc-script-1" class="link">create-rc-script</a>.</p></li></ol></div><div class="procedure" title="Procedure&nbsp;2.5.&nbsp;To Install OpenDJ Directory Server With a Properties File"><a name="install-properties-file"></a><div class="procedure-title">Procedure&nbsp;2.5.&nbsp;To Install OpenDJ Directory Server With a Properties File</div><p>You can install OpenDJ directory server by using the
   <span class="command"><strong>setup</strong></span> command with a properties file.</p><p>Property names correspond to the option names, but without leading
   dashes. Options that take no arguments become boolean properties as in the
   following example.</p><pre class="brush: ini;">enableStartTLS=true</pre><p>If you use a properties file with multiple tools, prefix the property
@@ -1440,8 +1447,9 @@ ldifFile                        =/net/install/dj/Example.ldif
    of the properties files.</p></li><li class="step" title="Step 2"><p>Prepare an installation script.</p><div class="screen"><pre class="brush: plain;">$ cat /net/install/dj/1/setup.sh
 #!/bin/sh
 
-unzip -d /path/to /net/install/dj/OpenDJ-2.6.0 &amp;&amp; cd /path/to/opendj
-./setup --cli --propertiesFilePath /net/install/dj/1/setup.props --no-prompt</pre></div></li><li class="step" title="Step 3"><p>Run your installation script.</p><div class="screen"><pre class="brush: plain;">$ /net/install/dj/1/setup.sh
+unzip -d /path/to /net/install/dj/OpenDJ-2.6.0.zip &amp;&amp; cd /path/to/opendj
+./setup --cli --propertiesFilePath /net/install/dj/1/setup.props \
+  --acceptLicense --no-prompt</pre></div></li><li class="step" title="Step 3"><p>Run your installation script.</p><div class="screen"><pre class="brush: plain;">$ /net/install/dj/1/setup.sh
 Archive:  /net/install/dj/OpenDJ-2.6.0.zip
    creating: /path/to/opendj
 ...
@@ -1449,9 +1457,14 @@ Archive:  /net/install/dj/OpenDJ-2.6.0.zip
   inflating: /path/to/opendj/uninstall
   inflating: /path/to/opendj/upgrade
 
-OpenDJ 2.6.0
-Please wait while the setup program initializes...
+READ THIS SOFTWARE LICENSE AGREEMENT CAREFULLY. BY DOWNLOADING OR INSTALLING
+THE FORGEROCK SOFTWARE, YOU, ON BEHALF OF YOURSELF AND YOUR COMPANY, AGREE TO
+BE BOUND BY THIS SOFTWARE LICENSE AGREEMENT. IF YOU DO NOT AGREE TO THESE
+TERMS, DO NOT DOWNLOAD OR INSTALL THE FORGEROCK SOFTWARE.
 
+...
+
+Do you accept the License Agreement?yes
 See /var/folders/.../opendj-setup-....log for a detailed log of this operation.
 
 Configuring Directory Server ..... Done.
@@ -1461,7 +1474,7 @@ Starting Directory Server ....... Done.
 
 To see basic server configuration status and configuration you can launch
  /path/to/opendj/bin/status</pre></div><p>At this point you can use OpenDJ directory server, or you can perform
-   additional configuration.</p></li></ol></div><div class="procedure" title="Procedure&nbsp;2.6.&nbsp;To Install OpenDJ REST LDAP Gateway"><a name="install-rest2ldap-servlet"></a><div class="procedure-title">Procedure&nbsp;2.6.&nbsp;To Install OpenDJ REST LDAP Gateway</div><a class="indexterm" name="d331e780"></a><p>The OpenDJ REST LDAP gateway functions as a web application in a web
+   additional configuration.</p></li></ol></div><div class="procedure" title="Procedure&nbsp;2.6.&nbsp;To Install OpenDJ REST LDAP Gateway"><a name="install-rest2ldap-servlet"></a><div class="procedure-title">Procedure&nbsp;2.6.&nbsp;To Install OpenDJ REST LDAP Gateway</div><a class="indexterm" name="d329e796"></a><p>The OpenDJ REST LDAP gateway functions as a web application in a web
   application container, running independently of OpenDJ. Alternatively,
   you can use the HTTP connection handler in OpenDJ directory server. See the
   procedure, <a href="../admin-guide/index.html#setup-rest2ldap-connection-handler" class="link"><em class="citetitle">To Set Up REST
@@ -1506,7 +1519,7 @@ To see basic server configuration status and configuration you can launch
 }</pre></div><p>If you generated example data, Babs Jensen's entry is not included.
    Try a URL such as
    <code class="literal">http://user.0:password@opendj.example.com:8080/rest2ldap/users/user.0</code>
-   instead.</p></li></ol></div><div class="procedure" title="Procedure&nbsp;2.7.&nbsp;To Install OpenDJ DSML gateway"><a name="install-dsml-gateway"></a><div class="procedure-title">Procedure&nbsp;2.7.&nbsp;To Install OpenDJ DSML gateway</div><a class="indexterm" name="d331e858"></a><p>The OpenDJ DSML gateway functions as a web application located in a
+   instead.</p></li></ol></div><div class="procedure" title="Procedure&nbsp;2.7.&nbsp;To Install OpenDJ DSML gateway"><a name="install-dsml-gateway"></a><div class="procedure-title">Procedure&nbsp;2.7.&nbsp;To Install OpenDJ DSML gateway</div><a class="indexterm" name="d329e874"></a><p>The OpenDJ DSML gateway functions as a web application located in a
   web application container. The DSML gateway runs independently of OpenDJ
   directory server. You configure the gateway to access your directory service
   by editing the <code class="literal">ldap.host</code> and <code class="literal">ldap.port</code>
@@ -1516,13 +1529,13 @@ To see basic server configuration status and configuration you can launch
    <code class="literal">ldap.host</code> and <code class="literal">ldap.port</code> are
    correct.</p></li><li class="step" title="Step 3"><p>Restart the web application container according to the instructions
    for your application server.</p></li></ol></div></div><div lang="en" class="chapter" title="Chapter&nbsp;3.&nbsp;Tuning JVM Options"><div class="titlepage"><div><div><h2 class="title"><a name="chap-jvm-opts"></a>Chapter&nbsp;3.&nbsp;Tuning JVM Options</h2></div></div></div><p>By default, OpenDJ installs with options appropriate for evaluation, not
- for production.</p><a class="indexterm" name="d331e899"></a><div class="variablelist"><p>You can change JVM options for the server in the QuickStart installer,
+ for production.</p><a class="indexterm" name="d329e915"></a><div class="variablelist"><p>You can change JVM options for the server in the QuickStart installer,
   and alternatively using the Control Panel (Runtime Options &gt; Java Settings),
   or with the <span class="command"><strong>dsjavaproperties</strong></span> command after editing the
   <code class="filename">config/java.properties</code> file.</p><dl><dt><span class="term">Heap size</span></dt><dd><p>The JVM heap size by default is either 256 MB or 1 GB.</p><p>In production, use at least a 2 GB heap (-Xms2G -Xmx2G).</p></dd><dt><span class="term">Server optimizations</span></dt><dd><p>Use -server to select the HotSpot Server VM.</p></dd><dt><span class="term">32-bit vs. 64-bit</span></dt><dd><p>For heap sizes over 4 GB on 64-bit systems use -d64.</p></dd><dt><span class="term">Garbage collection</span></dt><dd><p>Use -XX:+UseConcMarkSweepGC to select the CMS garbage collector
     for low GC pause times.</p></dd><dt><span class="term">New generation size</span></dt><dd><p>If your directory handles high throughput, set the new generation
     size large enough for the JVM to avoid promoting short-lived objects
-    into the old gen space (-XX:NewSize=512M).</p></dd></dl></div></div><div lang="en" class="chapter" title="Chapter&nbsp;4.&nbsp;Upgrading to OpenDJ 2.6.0"><div class="titlepage"><div><div><h2 class="title"><a name="chap-upgrade"></a>Chapter&nbsp;4.&nbsp;Upgrading to OpenDJ 2.6.0</h2></div></div></div><a class="indexterm" name="d331e949"></a><p>This chapter covers upgrade from OpenDJ 2.4.5 and later versions.</p><p>For upgrades from earlier versions, upgrade first to at least OpenDJ
+    into the old gen space (-XX:NewSize=512M).</p></dd></dl></div></div><div lang="en" class="chapter" title="Chapter&nbsp;4.&nbsp;Upgrading to OpenDJ 2.6.0"><div class="titlepage"><div><div><h2 class="title"><a name="chap-upgrade"></a>Chapter&nbsp;4.&nbsp;Upgrading to OpenDJ 2.6.0</h2></div></div></div><a class="indexterm" name="d329e965"></a><p>This chapter covers upgrade from OpenDJ 2.4.5 and later versions.</p><p>For upgrades from earlier versions, upgrade first to at least OpenDJ
  2.4.5, and then follow the procedures in this chapter. See <a class="link" href="https://wikis.forgerock.org/confluence/display/OPENDJ/OpenDJ+Installation+Guide#OpenDJInstallationGuide-UpgradingOpenDJDirectoryServer" target="_blank">Upgrading OpenDJ Directory Server</a> in the OpenDJ Wiki for details on
  upgrading to OpenDJ 2.4.5 from earlier versions.</p><div class="procedure" title="Procedure&nbsp;4.1.&nbsp;Before You Upgrade"><a name="before-you-upgrade"></a><div class="procedure-title">Procedure&nbsp;4.1.&nbsp;Before You Upgrade</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Prepare to perform the upgrade procedure as the user who owns the
    OpenDJ server files. </p><p>Make sure you have the credentials to run commands as the user who
@@ -1531,11 +1544,11 @@ To see basic server configuration status and configuration you can launch
   stack.</p></li><li class="listitem"><p>The <a class="link" href="http://forgerock.org/opendj.html" target="_blank">Nightly Builds</a> page posts links to the latest nightly
   builds of OpenDJ software. Note that these builds are the working version
   from the trunk and are not for use in a production environment.</p></li><li class="listitem"><p>The <a class="link" href="http://forgerock.org/opendj-archive.html" target="_blank">Community Archives</a> page includes stable community
-  builds for previous releases of OpenDJ software.</p></li></ul></div></li><li class="step" title="Step 3"><p>In order to revert should the upgrade fail, make sure you perform a
+  builds for previous releases of OpenDJ software.</p></li></ul></div></li><li class="step" title="Step 3"><p>In order to revert if the upgrade fails, make sure you perform a
    full backup of your current OpenDJ installation.</p><p>It might be most expedient to back up the file system directory where
    the current OpenDJ server is installed as part of the upgrade process.</p><p>Alternatively, see <a href="../admin-guide/index.html#chap-backup-restore" class="link"><em class="citetitle">Backing Up &amp; Restoring Data</em></a> for
    instructions.</p></li></ol></div><div class="procedure" title="Procedure&nbsp;4.2.&nbsp;To Upgrade an OpenDJ Directory Server"><a name="upgrade-zip"></a><div class="procedure-title">Procedure&nbsp;4.2.&nbsp;To Upgrade an OpenDJ Directory Server</div><p>To upgrade OpenDJ directory server installed from native packages (.deb,
-  .rpm), use the package management tools provided by the system.</p><p>The following steps describe how to upgrade OpenDJ directory server
+  .rpm), use the command-line package management tools provided by the system.</p><p>The following steps describe how to upgrade OpenDJ directory server
   installed from the cross-platform (.zip) delivery.</p><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Login as the user who owns the current OpenDJ server.</p></li><li class="step" title="Step 2"><p>Stop the current OpenDJ server.</p></li><li class="step" title="Step 3"><p>If you have not already backed up the current OpenDJ server, make a
    back up copy of the directory where OpenDJ is installed.</p></li><li class="step" title="Step 4"><p>If OpenDJ is currently installed in a directory such as
    <code class="filename">OpenDJ-2.4.5</code>, you can change the directory name to
@@ -1548,7 +1561,8 @@ To see basic server configuration status and configuration you can launch
    script files that you copied over the current server files.</p><p>By default, the <span class="command"><strong>upgrade</strong></span> command requests
    confirmation before making important configuration changes. You can use
    the <code class="option">--no-prompt</code> option to run the command
-   non-interactively.</p><p>When using the <code class="option">--no-prompt</code> option, if the
+   non-interactively, with the <code class="option">--acceptLicense</code> option to
+   accept the license terms non-interactively.</p><p>When using the <code class="option">--no-prompt</code> option, if the
    <span class="command"><strong>upgrade</strong></span> command cannot complete because it requires
    confirmation for a potentially very long or critical task, then it exits
    with an error and a message about how to finish making the changes. You can
@@ -1579,16 +1593,28 @@ $ unzip -q ~/Downloads/OpenDJ-2.6.0.zip
 $ cp -r opendj/* OpenDJ-2.4.5/
 $ rm -rf opendj
 $ mv OpenDJ-2.4.5 opendj
-$ ./opendj/upgrade --no-prompt
+$ ./opendj/upgrade --no-prompt --acceptLicense
 
 &gt;&gt;&gt;&gt; OpenDJ Upgrade Utility
 
- * OpenDJ will be upgraded from version 2.4.5.7743 to 2.6.0.revision
+ * OpenDJ will be upgraded from version 2.4.5.7743 to 2.6.0.9086
  * See '/path/to/opendj/upgrade.log' for a detailed log of this operation
+
+READ THIS SOFTWARE LICENSE AGREEMENT CAREFULLY. BY DOWNLOADING OR INSTALLING
+THE FORGEROCK SOFTWARE, YOU, ON BEHALF OF YOURSELF AND YOUR COMPANY, AGREE TO
+BE BOUND BY THIS SOFTWARE LICENSE AGREEMENT. IF YOU DO NOT AGREE TO THESE
+TERMS, DO NOT DOWNLOAD OR INSTALL THE FORGEROCK SOFTWARE.
+
+ ...
+
+Please read the License Agreement above.
+You must accept the terms of the agreement before continuing with the
+installation
+Do you accept the License Agreement? yes
 
 &gt;&gt;&gt;&gt; Preparing to upgrade
 
-  OpenDJ 2.6.0 modified the default configuration of the 'isMemberOf' virtual
+  OpenDJ 2.5.0 modified the default configuration of the 'isMemberOf' virtual
   attribute so that it is included with group entries. This was done in order
   to make it easier for users to determine which groups a 'nested' group
   belongs to.
@@ -1602,6 +1628,7 @@ $ ./opendj/upgrade --no-prompt
   Fixing de-DE collation matching rule OID............................   100%
   Updating password policy configurations.............................   100%
   Updating audit log publisher configuration..........................   100%
+  Rename SNMP security config file....................................   100%
   Adding 'etag' virtual attribute schema..............................   100%
   Configuring 'etag' virtual attribute................................   100%
   Configuring 'ds-pwp-password-expiration-time' virtual attribute.....   100%
@@ -1615,15 +1642,17 @@ $ ./opendj/upgrade --no-prompt
   Adding 'http-config.json' configuration file........................   100%
   Adding HTTP connection handler configuration........................   100%
   Adding file-based HTTP access logger................................   100%
+  Adding 'emailAddress' attribute.....................................   100%
+  Updating subject attribute to user attribute configuration..........   100%
   Replacing schema file '02-config.ldif'..............................   100%
   Archiving concatenated schema.......................................   100%
 
-&gt;&gt;&gt;&gt; OpenDJ was successfully upgraded from version 2.4.5.7743 to 2.6.0.revision
+&gt;&gt;&gt;&gt; OpenDJ was successfully upgraded from version 2.4.5.7743 to 2.6.0.9086
 
  * See '/path/to/opendj/upgrade.log' for a detailed log of this operation
 $ ./opendj/bin/start-ds --quiet
 $ </pre></div></div></div><br class="example-break"><div class="procedure" title="Procedure&nbsp;4.3.&nbsp;To Upgrade Replicated Servers"><a name="upgrade-repl"></a><div class="procedure-title">Procedure&nbsp;4.3.&nbsp;To Upgrade Replicated Servers</div><ul class="procedure"><li class="step" title="Step 1"><p>Upgrade each server sequentially, as described above.</p></li></ul></div><div class="procedure" title="Procedure&nbsp;4.4.&nbsp;To Upgrade OpenDJ DSML Gateway"><a name="upgrade-dsml"></a><div class="procedure-title">Procedure&nbsp;4.4.&nbsp;To Upgrade OpenDJ DSML Gateway</div><ul class="procedure"><li class="step" title="Step 1"><p>Replace the gateway web application with the newer version,
-   as for a fresh installation.</p></li></ul></div></div><div lang="en" class="chapter" title="Chapter&nbsp;5.&nbsp;Removing OpenDJ Servers"><div class="titlepage"><div><div><h2 class="title"><a name="chap-uninstall"></a>Chapter&nbsp;5.&nbsp;Removing OpenDJ Servers</h2></div></div></div><a class="indexterm" name="d331e1122"></a><p>Remove OpenDJ directory server software with the
+   as for a fresh installation.</p></li></ul></div></div><div lang="en" class="chapter" title="Chapter&nbsp;5.&nbsp;Removing OpenDJ Servers"><div class="titlepage"><div><div><h2 class="title"><a name="chap-uninstall"></a>Chapter&nbsp;5.&nbsp;Removing OpenDJ Servers</h2></div></div></div><a class="indexterm" name="d329e1135"></a><p>Remove OpenDJ directory server software with the
  <span class="command"><strong>uninstall</strong></span> command.</p><div class="procedure" title="Procedure&nbsp;5.1.&nbsp;To Uninstall OpenDJ From the Graphical Uninstaller"><a name="uninstall-gui"></a><div class="procedure-title">Procedure&nbsp;5.1.&nbsp;To Uninstall OpenDJ From the Graphical Uninstaller</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>(UNIX) Run <span class="command"><strong>opendj/uninstall</strong></span>.</p><p>(Windows) Double-click <code class="filename">opendj\uninstall.bat</code>.</p><p>(Mac OS X) Double-click <code class="filename">opendj/Uninstall.app</code>.</p><div class="mediaobject"><a name="figure-uninstall-start"></a><img src="images/uninstall-start.png" longdesc="/Users/mark/Documents/workspace/2.6.0-docs/target/docbkx/html/install-guide/figure-uninstall-start.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-uninstall-start.html" target="longdesc">D</a>]</span></div></div></li><li class="step" title="Step 2"><p>When the process is finished, you might still have some files
    to remove manually.</p><div class="mediaobject"><a name="figure-uninstall-finished"></a><img src="images/uninstall-finished.png" longdesc="/Users/mark/Documents/workspace/2.6.0-docs/target/docbkx/html/install-guide/figure-uninstall-finished.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-uninstall-finished.html" target="longdesc">D</a>]</span></div></div></li></ol></div><div class="procedure" title="Procedure&nbsp;5.2.&nbsp;To Uninstall OpenDJ On the Command Line"><a name="uninstall-cli"></a><div class="procedure-title">Procedure&nbsp;5.2.&nbsp;To Uninstall OpenDJ On the Command Line</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Login as the user who installed and runs the server.</p></li><li class="step" title="Step 2"><p>Run the <span class="command"><strong>opendj/uninstall --cli</strong></span> command.</p><p>This command starts the removal program in interactive mode on the
    command line, prompting you for each option. Alternatively, use additional
@@ -1652,7 +1681,7 @@ To complete the uninstallation, you must delete manually the following files
 and directories:
 /path/to/opendj/lib
 See /var/....log for a detailed log of this operation.</pre></div></li><li class="step" title="Step 3"><p>If the command output tells you to delete files manually, then remove
-   those remaining files to complete the process.</p><div class="screen"><pre class="brush: plain;">$ rm -rf /path/to/opendj</pre></div></li></ol></div><div class="procedure" title="Procedure&nbsp;5.3.&nbsp;To Uninstall the Debian Package"><a name="uninstall-deb"></a><div class="procedure-title">Procedure&nbsp;5.3.&nbsp;To Uninstall the Debian Package</div><a class="indexterm" name="d331e1194"></a><p>When you uninstall the Debian package from the command line, OpenDJ
+   those remaining files to complete the process.</p><div class="screen"><pre class="brush: plain;">$ rm -rf /path/to/opendj</pre></div></li></ol></div><div class="procedure" title="Procedure&nbsp;5.3.&nbsp;To Uninstall the Debian Package"><a name="uninstall-deb"></a><div class="procedure-title">Procedure&nbsp;5.3.&nbsp;To Uninstall the Debian Package</div><a class="indexterm" name="d329e1207"></a><p>When you uninstall the Debian package from the command line, OpenDJ
   directory server is stopped if it is running.</p><ul class="procedure"><li class="step" title="Step 1"><p>Remove the package from your system.</p><div class="screen"><pre class="brush: plain;">$ sudo dpkg -r opendj
 (Reading database ... 185725 files and directories currently installed.)
 Removing opendj ...
@@ -1667,7 +1696,7 @@ Stopping Server...
 
 $ </pre></div><p>Removing the package does not remove your data or configuration.
     You must remove <code class="filename">/opt/opendj</code> manually to get rid of
-    all files.</p></li></ul></div><div class="procedure" title="Procedure&nbsp;5.4.&nbsp;To Uninstall the RPM Package"><a name="uninstall-rpm"></a><div class="procedure-title">Procedure&nbsp;5.4.&nbsp;To Uninstall the RPM Package</div><a class="indexterm" name="d331e1212"></a><p>When you uninstall the RPM package from the command line, OpenDJ
+    all files.</p></li></ul></div><div class="procedure" title="Procedure&nbsp;5.4.&nbsp;To Uninstall the RPM Package"><a name="uninstall-rpm"></a><div class="procedure-title">Procedure&nbsp;5.4.&nbsp;To Uninstall the RPM Package</div><a class="indexterm" name="d329e1225"></a><p>When you uninstall the RPM package from the command line, OpenDJ
   directory server is stopped if it is running.</p><ul class="procedure"><li class="step" title="Step 1"><p>Remove the package from your system.</p><div class="screen"><pre class="brush: plain;"># rpm -e opendj
 Pre Uninstall - uninstall
 Stopping Server...
@@ -1679,7 +1708,7 @@ Post Uninstall - uninstall
 OpenDJ successfully removed.
 # </pre></div><p>Removing the package does not remove your data or configuration.
    You must remove <code class="filename">/opt/opendj</code> manually to get rid of
-   all files.</p></li></ul></div></div><div class="index" title="Index"><div class="titlepage"><div><div><h2 class="title"><a name="d331e1227"></a>Index</h2></div></div></div><div class="index"><div class="indexdiv"><h3>C</h3><dl><dt>Command-line installation, <a class="indexterm" href="#chap-install-cli">Installing OpenDJ From the Command Line</a></dt></dl></div><div class="indexdiv"><h3>D</h3><dl><dt>Debian (.deb) package, <a class="indexterm" href="#chap-install-cli">Installing OpenDJ From the Command Line</a>, <a class="indexterm" href="#chap-uninstall">Removing OpenDJ Servers</a></dt><dt>Downloading OpenDJ, <a class="indexterm" href="#chap-install-gui">Installing OpenDJ With the QuickSetup Wizard</a>, <a class="indexterm" href="#chap-install-cli">Installing OpenDJ From the Command Line</a></dt><dt>DSML gateway, <a class="indexterm" href="#chap-install-cli">Installing OpenDJ From the Command Line</a></dt></dl></div><div class="indexdiv"><h3>J</h3><dl><dt>Java</dt><dd><dl><dt>Settings, <a class="indexterm" href="#chap-jvm-opts">Tuning JVM Options</a></dt></dl></dd></dl></div><div class="indexdiv"><h3>Q</h3><dl><dt>Quick install, <a class="indexterm" href="#chap-install-gui">Installing OpenDJ With the QuickSetup Wizard</a></dt></dl></div><div class="indexdiv"><h3>R</h3><dl><dt>Red Hat (.rpm) package, <a class="indexterm" href="#chap-install-cli">Installing OpenDJ From the Command Line</a>, <a class="indexterm" href="#chap-uninstall">Removing OpenDJ Servers</a></dt><dt>REST LDAP gateway, <a class="indexterm" href="#chap-install-cli">Installing OpenDJ From the Command Line</a></dt></dl></div><div class="indexdiv"><h3>S</h3><dl><dt>Silent installation, <a class="indexterm" href="#chap-install-cli">Installing OpenDJ From the Command Line</a></dt></dl></div><div class="indexdiv"><h3>U</h3><dl><dt>Uninstalling, <a class="indexterm" href="#chap-uninstall">Removing OpenDJ Servers</a></dt><dt>Upgrading, <a class="indexterm" href="#chap-upgrade">Upgrading to OpenDJ 2.6.0</a></dt></dl></div></div></div></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssue.jspa?pid=10040&components=10132&issuetype=1">Log a documentation bug.</a></p></div>
+   all files.</p></li></ul></div></div><div class="index" title="Index"><div class="titlepage"><div><div><h2 class="title"><a name="d329e1240"></a>Index</h2></div></div></div><div class="index"><div class="indexdiv"><h3>C</h3><dl><dt>Command-line installation, <a class="indexterm" href="#chap-install-cli">Installing OpenDJ From the Command Line</a></dt></dl></div><div class="indexdiv"><h3>D</h3><dl><dt>Debian (.deb) package, <a class="indexterm" href="#chap-install-cli">Installing OpenDJ From the Command Line</a>, <a class="indexterm" href="#chap-uninstall">Removing OpenDJ Servers</a></dt><dt>Downloading OpenDJ, <a class="indexterm" href="#chap-install-gui">Installing OpenDJ With the QuickSetup Wizard</a>, <a class="indexterm" href="#chap-install-cli">Installing OpenDJ From the Command Line</a></dt><dt>DSML gateway, <a class="indexterm" href="#chap-install-cli">Installing OpenDJ From the Command Line</a></dt></dl></div><div class="indexdiv"><h3>J</h3><dl><dt>Java</dt><dd><dl><dt>Settings, <a class="indexterm" href="#chap-jvm-opts">Tuning JVM Options</a></dt></dl></dd></dl></div><div class="indexdiv"><h3>Q</h3><dl><dt>Quick install, <a class="indexterm" href="#chap-install-gui">Installing OpenDJ With the QuickSetup Wizard</a></dt></dl></div><div class="indexdiv"><h3>R</h3><dl><dt>Red Hat (.rpm) package, <a class="indexterm" href="#chap-install-cli">Installing OpenDJ From the Command Line</a>, <a class="indexterm" href="#chap-uninstall">Removing OpenDJ Servers</a></dt><dt>REST LDAP gateway, <a class="indexterm" href="#chap-install-cli">Installing OpenDJ From the Command Line</a></dt></dl></div><div class="indexdiv"><h3>S</h3><dl><dt>Silent installation, <a class="indexterm" href="#chap-install-cli">Installing OpenDJ From the Command Line</a></dt></dl></div><div class="indexdiv"><h3>U</h3><dl><dt>Uninstalling, <a class="indexterm" href="#chap-uninstall">Removing OpenDJ Servers</a></dt><dt>Upgrading, <a class="indexterm" href="#chap-upgrade">Upgrading to OpenDJ 2.6.0</a></dt></dl></div></div></div></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssue.jspa?pid=10040&components=10132&issuetype=1">Log a documentation bug.</a></p></div>
 <script type="text/javascript">
 
   var _gaq = _gaq || [];

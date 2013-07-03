@@ -1053,7 +1053,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 <!-- END SyntaxHighlighter 3.0.83 -->
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
-</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;7.&nbsp;Performing RESTful Operations</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-ldap-operations.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-indexing.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;7.&nbsp;Performing RESTful Operations"><div class="titlepage"><div><div><h2 class="title"><a name="chap-rest-operations"></a>Chapter&nbsp;7.&nbsp;Performing RESTful Operations</h2></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="section"><a href="chap-rest-operations.html#understand-rest">7.1. Understanding the OpenDJ REST API</a></span></dt><dt><span class="section"><a href="chap-rest-operations.html#authenticate-rest">7.2. Authenticating Over REST</a></span></dt><dt><span class="section"><a href="chap-rest-operations.html#create-rest">7.3. Creating Resources</a></span></dt><dt><span class="section"><a href="chap-rest-operations.html#read-rest">7.4. Reading a Resource</a></span></dt><dt><span class="section"><a href="chap-rest-operations.html#update-rest">7.5. Updating Resources</a></span></dt><dt><span class="section"><a href="chap-rest-operations.html#delete-rest">7.6. Deleting Resources</a></span></dt><dt><span class="section"><a href="chap-rest-operations.html#patch-rest">7.7. Patching Resources</a></span></dt><dt><span class="section"><a href="chap-rest-operations.html#action-rest">7.8. Using Actions</a></span></dt><dt><span class="section"><a href="chap-rest-operations.html#query-rest">7.9. Querying Resource Collections</a></span></dt></dl></div><a class="indexterm" name="d1706e4987"></a><a class="indexterm" name="d1706e4990"></a><a class="indexterm" name="d1706e4993"></a><p>OpenDJ lets you access directory data as JSON resources over HTTP.
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;7.&nbsp;Performing RESTful Operations</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-ldap-operations.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-indexing.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;7.&nbsp;Performing RESTful Operations"><div class="titlepage"><div><div><h2 class="title"><a name="chap-rest-operations"></a>Chapter&nbsp;7.&nbsp;Performing RESTful Operations</h2></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="section"><a href="chap-rest-operations.html#understand-rest">7.1. Understanding the OpenDJ REST API</a></span></dt><dt><span class="section"><a href="chap-rest-operations.html#authenticate-rest">7.2. Authenticating Over REST</a></span></dt><dt><span class="section"><a href="chap-rest-operations.html#create-rest">7.3. Creating Resources</a></span></dt><dt><span class="section"><a href="chap-rest-operations.html#read-rest">7.4. Reading a Resource</a></span></dt><dt><span class="section"><a href="chap-rest-operations.html#update-rest">7.5. Updating Resources</a></span></dt><dt><span class="section"><a href="chap-rest-operations.html#delete-rest">7.6. Deleting Resources</a></span></dt><dt><span class="section"><a href="chap-rest-operations.html#patch-rest">7.7. Patching Resources</a></span></dt><dt><span class="section"><a href="chap-rest-operations.html#action-rest">7.8. Using Actions</a></span></dt><dt><span class="section"><a href="chap-rest-operations.html#query-rest">7.9. Querying Resource Collections</a></span></dt></dl></div><a class="indexterm" name="d1707e4996"></a><a class="indexterm" name="d1707e4999"></a><a class="indexterm" name="d1707e5002"></a><p>OpenDJ lets you access directory data as JSON resources over HTTP.
  This chapter demonstrates basic RESTful client operations using the
  default configuration and sample directory data imported into OpenDJ from
  <a class="link" href="http://opendj.forgerock.org/Example.ldif" target="_blank">Example.ldif</a>. Before trying the examples, enable HTTP access to
@@ -1488,7 +1488,7 @@ $ dsconfig
   <span class="emphasis"><em>sets</em></span>. In other words, values in the field are unique,
   and the ordering of an array of values is not meaningful in the context of
   patch operations. If you reference array values by index, OpenDJ returns
-  an error.<sup>[<a name="d1706e5322" href="#ftn.d1706e5322" class="footnote">5</a>]</sup></p><p>Instead use the patch operations as if arrays values were sets. For
+  an error.<sup>[<a name="d1707e5331" href="#ftn.d1707e5331" class="footnote">5</a>]</sup></p><p>Instead use the patch operations as if arrays values were sets. For
   example, you can include Barbara Jensen in a group by adding her to the set
   of members.</p><div class="screen"><pre class="brush: plain;">$ curl
  --user kvaughan:bribery
@@ -1610,8 +1610,7 @@ $ curl
   on creation. To use this action, perform an HTTP POST with header
   <code class="literal">Content-Type: application/json</code>,
   <code class="literal">_action=create</code> in the query string, and the JSON content of
-  your resource.</p><p>The following example creates a new user entry. Lines are folded for
-  readability.</p><div class="screen"><pre class="brush: plain;">$ curl
+  your resource.</p><p>The following example creates a new user entry.</p><div class="screen"><pre class="brush: plain;">$ curl
  --request POST
  --user kvaughan:bribery
  --header "Content-Type: application/json"
@@ -1665,8 +1664,7 @@ $ curl
    such as <code class="literal">userName</code> or <code class="literal">id</code>. A
    <em class="replaceable"><code>json-pointer</code></em> can however point to nested
    elements as described in the <a class="link" href="http://tools.ietf.org/html/draft-ietf-appsawg-json-pointer" target="_blank">JSON
-   Pointer</a> Internet-Draft.</p><dl><dt><span class="term">Comparison expressions</span></dt><dd><p>You can build filters using the following comparison expressions.</p><p>Request URLs are folded in the following examples to make them
-     easier to read.</p><div class="variablelist"><dl><dt><span class="term"><code class="literal"><em class="replaceable"><code>json-pointer</code></em> eq <em class="replaceable"><code>json-value</code></em></code></span></dt><dd><p>Matches when the pointer equals the value, as in the following
+   Pointer</a> Internet-Draft.</p><dl><dt><span class="term">Comparison expressions</span></dt><dd><p>You can build filters using the following comparison expressions.</p><div class="variablelist"><dl><dt><span class="term"><code class="literal"><em class="replaceable"><code>json-pointer</code></em> eq <em class="replaceable"><code>json-value</code></em></code></span></dt><dd><p>Matches when the pointer equals the value, as in the following
         example.</p><div class="screen"><pre class="brush: plain;">$ curl --user kvaughan:bribery 'http://opendj.example.com:8080
  /users?_queryFilter=userName+eq+"bjensen@example.com"&amp;_prettyPrint=true'
 {
@@ -1855,7 +1853,7 @@ $ curl
   "resultCount" : 2,
   "pagedResultsCookie" : null,
   "remainingPagedResults" : -1
-}</pre></div></dd></dl></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.d1706e5322" href="#d1706e5322" class="para">5</a>] </sup>OpenDJ does let you use a hyphen as the last element
+}</pre></div></dd></dl></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.d1707e5331" href="#d1707e5331" class="para">5</a>] </sup>OpenDJ does let you use a hyphen as the last element
   of the "field" JSON pointer value to add an element to the set, as in
   <span class="command"><strong>curl --user kvaughan:bribery --request PATCH --header "Content-Type:
   application/json" --data '[{ "operation" : "add", "field" : "/members/-",

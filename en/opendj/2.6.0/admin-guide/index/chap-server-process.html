@@ -1060,14 +1060,13 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
  chapter also describes what OpenDJ directory server does during startup
  and shutdown, and how it recovers following an abrupt shutdown such as
  happens during a system crash or when you kill the server process using
- system tools.</p><div class="section" title="2.1.&nbsp;Starting a Server"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="start-server"></a>2.1.&nbsp;Starting a Server</h2></div></div></div><a class="indexterm" name="d1706e626"></a><div class="itemizedlist"><p>Use one of the following techniques.</p><ul class="itemizedlist" type="disc"><li class="listitem"><p>Use the <span class="command"><strong>start-ds</strong></span> command.</p><div class="screen"><pre class="brush: plain;">$ opendj/bin/start-ds</pre></div><p>Alternatively, you can specify the --no-detach option to start
+ system tools.</p><div class="section" title="2.1.&nbsp;Starting a Server"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="start-server"></a>2.1.&nbsp;Starting a Server</h2></div></div></div><a class="indexterm" name="d1707e626"></a><div class="itemizedlist"><p>Use one of the following techniques.</p><ul class="itemizedlist" type="disc"><li class="listitem"><p>Use the <span class="command"><strong>start-ds</strong></span> command.</p><div class="screen"><pre class="brush: plain;">$ opendj/bin/start-ds</pre></div><p>Alternatively, you can specify the --no-detach option to start
     the server in the foreground.</p></li><li class="listitem"><p>(UNIX) Create an RC script, and then use the script to start
     the server.</p><p>Unless you run OpenDJ as root, use the --userName
     <em class="replaceable"><code>userName</code></em> option to specify the user
     who installed OpenDJ.</p><div class="screen"><pre class="brush: plain;">$ sudo opendj/bin/create-rc-script
  --outputFile /etc/init.d/opendj
  --userName mark
-[sudo] password for mark: 
 $ sudo /etc/init.d/opendj start</pre></div><p>For example, on Linux if you run OpenDJ as root, you can use the
     RC script to start the server at system boot, and stop the server at
     system shutdown.</p><div class="screen"><pre class="brush: plain;">$ sudo update-rc.d opendj defaults
@@ -1088,19 +1087,17 @@ update-rc.d: see &lt;http://wiki.debian.org/LSBInitScripts&gt;
   current active configuration. It is possible, though not usually recommended,
   to turn this behavior off by changing the global server setting
   <code class="literal">save-config-on-successful-startup</code> to
-  <code class="literal">false</code>.</p></div><div class="section" title="2.2.&nbsp;Stopping a Server"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="stop-server"></a>2.2.&nbsp;Stopping a Server</h2></div></div></div><a class="indexterm" name="d1706e672"></a><div class="itemizedlist"><p>Use one of the following techniques.</p><ul class="itemizedlist" type="disc"><li class="listitem"><p>Use the <span class="command"><strong>stop-ds</strong></span> command.</p><div class="screen"><pre class="brush: plain;">$ opendj/bin/stop-ds</pre></div></li><li class="listitem"><p>(UNIX) Create an RC script, and then use the script to stop
+  <code class="literal">false</code>.</p></div><div class="section" title="2.2.&nbsp;Stopping a Server"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="stop-server"></a>2.2.&nbsp;Stopping a Server</h2></div></div></div><a class="indexterm" name="d1707e672"></a><div class="itemizedlist"><p>Use one of the following techniques.</p><ul class="itemizedlist" type="disc"><li class="listitem"><p>Use the <span class="command"><strong>stop-ds</strong></span> command.</p><div class="screen"><pre class="brush: plain;">$ opendj/bin/stop-ds</pre></div></li><li class="listitem"><p>(UNIX) Create an RC script, and then use the script to stop
     the server.</p><div class="screen"><pre class="brush: plain;">$ sudo opendj/bin/create-rc-script
  --outputFile /etc/init.d/opendj
  --userName mark
-[sudo] password for mark: 
 $ sudo /etc/init.d/opendj stop</pre></div></li><li class="listitem"><p>(Windows) Register OpenDJ as a Windows Service, and then manage
-    the service through Windows administration tools.</p><div class="screen"><pre class="brush: plain;">C:\Users\Mark&gt; opendj\bat\windows-service.bat --enableService</pre></div></li></ul></div></div><div class="section" title="2.3.&nbsp;Restarting a Server"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="restart-server"></a>2.3.&nbsp;Restarting a Server</h2></div></div></div><a class="indexterm" name="d1706e699"></a><div class="itemizedlist"><p>Use one of the following techniques.</p><ul class="itemizedlist" type="disc"><li class="listitem"><p>Use the <span class="command"><strong>stop-ds</strong></span> command.</p><div class="screen"><pre class="brush: plain;">$ opendj/bin/stop-ds --restart</pre></div></li><li class="listitem"><p>(UNIX) Create an RC script, and then use the script to stop
+    the service through Windows administration tools.</p><div class="screen"><pre class="brush: plain;">C:\Users\Mark&gt; opendj\bat\windows-service.bat --enableService</pre></div></li></ul></div></div><div class="section" title="2.3.&nbsp;Restarting a Server"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="restart-server"></a>2.3.&nbsp;Restarting a Server</h2></div></div></div><a class="indexterm" name="d1707e699"></a><div class="itemizedlist"><p>Use one of the following techniques.</p><ul class="itemizedlist" type="disc"><li class="listitem"><p>Use the <span class="command"><strong>stop-ds</strong></span> command.</p><div class="screen"><pre class="brush: plain;">$ opendj/bin/stop-ds --restart</pre></div></li><li class="listitem"><p>(UNIX) Create an RC script, and then use the script to stop
     the server.</p><div class="screen"><pre class="brush: plain;">$ sudo opendj/bin/create-rc-script
  --outputFile /etc/init.d/opendj
  --userName mark
-[sudo] password for mark: 
 $ /etc/init.d/opendj restart</pre></div></li><li class="listitem"><p>(Windows) Register OpenDJ as a Windows Service, and then manage
-    the service through Windows administration tools.</p><div class="screen"><pre class="brush: plain;">C:\Users\Mark&gt; opendj\bat\windows-service.bat --enableService</pre></div></li></ul></div></div><div class="section" title="2.4.&nbsp;Server Recovery"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="crash-recovery"></a>2.4.&nbsp;Server Recovery</h2></div></div></div><a class="indexterm" name="d1706e726"></a><p>OpenDJ tends to show resilience when restarting after a crash or after
+    the service through Windows administration tools.</p><div class="screen"><pre class="brush: plain;">C:\Users\Mark&gt; opendj\bat\windows-service.bat --enableService</pre></div></li></ul></div></div><div class="section" title="2.4.&nbsp;Server Recovery"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="crash-recovery"></a>2.4.&nbsp;Server Recovery</h2></div></div></div><a class="indexterm" name="d1707e726"></a><p>OpenDJ tends to show resilience when restarting after a crash or after
   the server process is killed abruptly. OpenDJ might have to replay the last
   few entries in a transaction log. Generally OpenDJ returns to service
   quickly.</p><p>You can find Berkeley Java Edition database recovery messages in the

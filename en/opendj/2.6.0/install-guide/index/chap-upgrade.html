@@ -1053,7 +1053,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 <!-- END SyntaxHighlighter 3.0.83 -->
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
-</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;4.&nbsp;Upgrading to OpenDJ 2.6.0</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-jvm-opts.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-uninstall.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;4.&nbsp;Upgrading to OpenDJ 2.6.0"><div class="titlepage"><div><div><h2 class="title"><a name="chap-upgrade"></a>Chapter&nbsp;4.&nbsp;Upgrading to OpenDJ 2.6.0</h2></div></div></div><a class="indexterm" name="d330e949"></a><p>This chapter covers upgrade from OpenDJ 2.4.5 and later versions.</p><p>For upgrades from earlier versions, upgrade first to at least OpenDJ
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;4.&nbsp;Upgrading to OpenDJ 2.6.0</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-jvm-opts.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-uninstall.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;4.&nbsp;Upgrading to OpenDJ 2.6.0"><div class="titlepage"><div><div><h2 class="title"><a name="chap-upgrade"></a>Chapter&nbsp;4.&nbsp;Upgrading to OpenDJ 2.6.0</h2></div></div></div><a class="indexterm" name="d328e965"></a><p>This chapter covers upgrade from OpenDJ 2.4.5 and later versions.</p><p>For upgrades from earlier versions, upgrade first to at least OpenDJ
  2.4.5, and then follow the procedures in this chapter. See <a class="link" href="https://wikis.forgerock.org/confluence/display/OPENDJ/OpenDJ+Installation+Guide#OpenDJInstallationGuide-UpgradingOpenDJDirectoryServer" target="_blank">Upgrading OpenDJ Directory Server</a> in the OpenDJ Wiki for details on
  upgrading to OpenDJ 2.4.5 from earlier versions.</p><div class="procedure" title="Procedure&nbsp;4.1.&nbsp;Before You Upgrade"><a name="before-you-upgrade"></a><div class="procedure-title">Procedure&nbsp;4.1.&nbsp;Before You Upgrade</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Prepare to perform the upgrade procedure as the user who owns the
    OpenDJ server files. </p><p>Make sure you have the credentials to run commands as the user who
@@ -1062,11 +1062,11 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   stack.</p></li><li class="listitem"><p>The <a class="link" href="http://forgerock.org/opendj.html" target="_blank">Nightly Builds</a> page posts links to the latest nightly
   builds of OpenDJ software. Note that these builds are the working version
   from the trunk and are not for use in a production environment.</p></li><li class="listitem"><p>The <a class="link" href="http://forgerock.org/opendj-archive.html" target="_blank">Community Archives</a> page includes stable community
-  builds for previous releases of OpenDJ software.</p></li></ul></div></li><li class="step" title="Step 3"><p>In order to revert should the upgrade fail, make sure you perform a
+  builds for previous releases of OpenDJ software.</p></li></ul></div></li><li class="step" title="Step 3"><p>In order to revert if the upgrade fails, make sure you perform a
    full backup of your current OpenDJ installation.</p><p>It might be most expedient to back up the file system directory where
    the current OpenDJ server is installed as part of the upgrade process.</p><p>Alternatively, see <a href="../../admin-guide/index/chap-backup-restore.html" class="link"><em class="citetitle">Backing Up &amp; Restoring Data</em></a> for
    instructions.</p></li></ol></div><div class="procedure" title="Procedure&nbsp;4.2.&nbsp;To Upgrade an OpenDJ Directory Server"><a name="upgrade-zip"></a><div class="procedure-title">Procedure&nbsp;4.2.&nbsp;To Upgrade an OpenDJ Directory Server</div><p>To upgrade OpenDJ directory server installed from native packages (.deb,
-  .rpm), use the package management tools provided by the system.</p><p>The following steps describe how to upgrade OpenDJ directory server
+  .rpm), use the command-line package management tools provided by the system.</p><p>The following steps describe how to upgrade OpenDJ directory server
   installed from the cross-platform (.zip) delivery.</p><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Login as the user who owns the current OpenDJ server.</p></li><li class="step" title="Step 2"><p>Stop the current OpenDJ server.</p></li><li class="step" title="Step 3"><p>If you have not already backed up the current OpenDJ server, make a
    back up copy of the directory where OpenDJ is installed.</p></li><li class="step" title="Step 4"><p>If OpenDJ is currently installed in a directory such as
    <code class="filename">OpenDJ-2.4.5</code>, you can change the directory name to
@@ -1079,7 +1079,8 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
    script files that you copied over the current server files.</p><p>By default, the <span class="command"><strong>upgrade</strong></span> command requests
    confirmation before making important configuration changes. You can use
    the <code class="option">--no-prompt</code> option to run the command
-   non-interactively.</p><p>When using the <code class="option">--no-prompt</code> option, if the
+   non-interactively, with the <code class="option">--acceptLicense</code> option to
+   accept the license terms non-interactively.</p><p>When using the <code class="option">--no-prompt</code> option, if the
    <span class="command"><strong>upgrade</strong></span> command cannot complete because it requires
    confirmation for a potentially very long or critical task, then it exits
    with an error and a message about how to finish making the changes. You can
@@ -1110,16 +1111,28 @@ $ unzip -q ~/Downloads/OpenDJ-2.6.0.zip
 $ cp -r opendj/* OpenDJ-2.4.5/
 $ rm -rf opendj
 $ mv OpenDJ-2.4.5 opendj
-$ ./opendj/upgrade --no-prompt
+$ ./opendj/upgrade --no-prompt --acceptLicense
 
 &gt;&gt;&gt;&gt; OpenDJ Upgrade Utility
 
- * OpenDJ will be upgraded from version 2.4.5.7743 to 2.6.0.revision
+ * OpenDJ will be upgraded from version 2.4.5.7743 to 2.6.0.9086
  * See '/path/to/opendj/upgrade.log' for a detailed log of this operation
+
+READ THIS SOFTWARE LICENSE AGREEMENT CAREFULLY. BY DOWNLOADING OR INSTALLING
+THE FORGEROCK SOFTWARE, YOU, ON BEHALF OF YOURSELF AND YOUR COMPANY, AGREE TO
+BE BOUND BY THIS SOFTWARE LICENSE AGREEMENT. IF YOU DO NOT AGREE TO THESE
+TERMS, DO NOT DOWNLOAD OR INSTALL THE FORGEROCK SOFTWARE.
+
+ ...
+
+Please read the License Agreement above.
+You must accept the terms of the agreement before continuing with the
+installation
+Do you accept the License Agreement? yes
 
 &gt;&gt;&gt;&gt; Preparing to upgrade
 
-  OpenDJ 2.6.0 modified the default configuration of the 'isMemberOf' virtual
+  OpenDJ 2.5.0 modified the default configuration of the 'isMemberOf' virtual
   attribute so that it is included with group entries. This was done in order
   to make it easier for users to determine which groups a 'nested' group
   belongs to.
@@ -1133,6 +1146,7 @@ $ ./opendj/upgrade --no-prompt
   Fixing de-DE collation matching rule OID............................   100%
   Updating password policy configurations.............................   100%
   Updating audit log publisher configuration..........................   100%
+  Rename SNMP security config file....................................   100%
   Adding 'etag' virtual attribute schema..............................   100%
   Configuring 'etag' virtual attribute................................   100%
   Configuring 'ds-pwp-password-expiration-time' virtual attribute.....   100%
@@ -1146,10 +1160,12 @@ $ ./opendj/upgrade --no-prompt
   Adding 'http-config.json' configuration file........................   100%
   Adding HTTP connection handler configuration........................   100%
   Adding file-based HTTP access logger................................   100%
+  Adding 'emailAddress' attribute.....................................   100%
+  Updating subject attribute to user attribute configuration..........   100%
   Replacing schema file '02-config.ldif'..............................   100%
   Archiving concatenated schema.......................................   100%
 
-&gt;&gt;&gt;&gt; OpenDJ was successfully upgraded from version 2.4.5.7743 to 2.6.0.revision
+&gt;&gt;&gt;&gt; OpenDJ was successfully upgraded from version 2.4.5.7743 to 2.6.0.9086
 
  * See '/path/to/opendj/upgrade.log' for a detailed log of this operation
 $ ./opendj/bin/start-ds --quiet
