@@ -1058,7 +1058,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
  event a server crashes or a network goes down, and also as you backup or
  upgrade your directory service. You can configure data replication as part
  of OpenDJ installation, and in many cases let replication do its work in
- the background.</p><div class="section" title="9.1.&nbsp;Replication Quick Setup"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="repl-quick-setup"></a>9.1.&nbsp;Replication Quick Setup</h2></div></div></div><a class="indexterm" name="d1710e6273"></a><a class="indexterm" name="d1710e6278"></a><p>You can set up replication during installation by choosing to
+ the background.</p><div class="section" title="9.1.&nbsp;Replication Quick Setup"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="repl-quick-setup"></a>9.1.&nbsp;Replication Quick Setup</h2></div></div></div><a class="indexterm" name="d1711e6273"></a><a class="indexterm" name="d1711e6278"></a><p>You can set up replication during installation by choosing to
   configure replication through the setup wizard.</p><p>In the Topology Options screen for the first server you set up, select
   This server will be part of a replication topology. If you also choose
   Configure as Secure, then replication traffic is protected by SSL.</p><div class="mediaobject"><a name="figure-repla-setup"></a><img src="images/replA-setup.png" longdesc="/Users/mark/Documents/workspace/2.6.0-docs/target/docbkx/html/admin-guide/index/figure-repla-setup.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-repla-setup.html" target="longdesc">D</a>]</span></div></div><p>In the Topology Options screen for subsequent servers, also select
@@ -1068,12 +1068,12 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   <code class="literal">cn=admin data</code> across replicas, used to manage replication
   in the topology.</p><div class="mediaobject"><a name="figure-replb-global-admin"></a><img src="images/replB-global-admin.png" longdesc="/Users/mark/Documents/workspace/2.6.0-docs/target/docbkx/html/admin-guide/index/figure-replb-global-admin.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-replb-global-admin.html" target="longdesc">D</a>]</span></div></div><p>You further set up what to replicate.</p><div class="mediaobject"><a name="figure-replb-data-repl"></a><img src="images/replB-data-repl.png" longdesc="/Users/mark/Documents/workspace/2.6.0-docs/target/docbkx/html/admin-guide/index/figure-replb-data-repl.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-replb-data-repl.html" target="longdesc">D</a>]</span></div></div><p>Once replication is set up, it works for all the replicas. You can
   monitor the replication connection and status through the OpenDJ Control
-  Panel.</p><div class="mediaobject"><a name="figure-repla-monitor-repl"></a><img src="images/replA-monitor-repl.png" longdesc="/Users/mark/Documents/workspace/2.6.0-docs/target/docbkx/html/admin-guide/index/figure-repla-monitor-repl.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-repla-monitor-repl.html" target="longdesc">D</a>]</span></div></div></div><div class="section" title="9.2.&nbsp;About Replication"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="about-repl"></a>9.2.&nbsp;About Replication</h2></div></div></div><div class="toc"><dl><dt><span class="section"><a href="chap-replication.html#repl-what-it-is">9.2.1. What Replication Is</a></span></dt><dt><span class="section"><a href="chap-replication.html#repl-per-suffix">9.2.2. Replication Per Suffix</a></span></dt><dt><span class="section"><a href="chap-replication.html#repl-connection-selection">9.2.3. Replication Connection Selection</a></span></dt></dl></div><a class="indexterm" name="d1710e6331"></a><p>Before you take replication further than setting up replication
+  Panel.</p><div class="mediaobject"><a name="figure-repla-monitor-repl"></a><img src="images/replA-monitor-repl.png" longdesc="/Users/mark/Documents/workspace/2.6.0-docs/target/docbkx/html/admin-guide/index/figure-repla-monitor-repl.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-repla-monitor-repl.html" target="longdesc">D</a>]</span></div></div></div><div class="section" title="9.2.&nbsp;About Replication"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="about-repl"></a>9.2.&nbsp;About Replication</h2></div></div></div><div class="toc"><dl><dt><span class="section"><a href="chap-replication.html#repl-what-it-is">9.2.1. What Replication Is</a></span></dt><dt><span class="section"><a href="chap-replication.html#repl-per-suffix">9.2.2. Replication Per Suffix</a></span></dt><dt><span class="section"><a href="chap-replication.html#repl-connection-selection">9.2.3. Replication Connection Selection</a></span></dt></dl></div><a class="indexterm" name="d1711e6331"></a><p>Before you take replication further than setting up replication
   in the setup wizard, read this section to learn more about how OpenDJ
   replication works.</p><div class="section" title="9.2.1.&nbsp;What Replication Is"><div class="titlepage"><div><div><h3 class="title"><a name="repl-what-it-is"></a>9.2.1.&nbsp;What Replication Is</h3></div></div></div><p>Replication is the process of copying updates between OpenDJ
    directory servers such that all servers converge on identical copies of
    directory data. Replication is designed to let convergence happen over
-   time by default. <sup>[<a name="d1710e6343" href="#ftn.d1710e6343" class="footnote">6</a>]</sup> Letting convergence
+   time by default. <sup>[<a name="d1711e6343" href="#ftn.d1711e6343" class="footnote">6</a>]</sup> Letting convergence
    happen over time means that different replicas can be momentarily out of
    sync, but it also means that if you lose an individual server or even an
    entire data center, your directory service can keep on running, and then
@@ -1091,7 +1091,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
    example. Keeping server clocks synchronized helps prevent issues with SSL
    connections and with replication itself. Keeping server clocks synchronized
    also makes it easier to compare timestamps from multiple servers.</p></div><div class="section" title="9.2.2.&nbsp;Replication Per Suffix"><div class="titlepage"><div><div><h3 class="title"><a name="repl-per-suffix"></a>9.2.2.&nbsp;Replication Per Suffix</h3></div></div></div><p>The primary unit of replication is the suffix, specified by a
-   base DN such as <code class="literal">dc=example,dc=com</code>.<sup>[<a name="d1710e6359" href="#ftn.d1710e6359" class="footnote">7</a>]</sup> Replication also depends on the directory schema, defined on
+   base DN such as <code class="literal">dc=example,dc=com</code>.<sup>[<a name="d1711e6359" href="#ftn.d1711e6359" class="footnote">7</a>]</sup> Replication also depends on the directory schema, defined on
    <code class="literal">cn=schema</code>, and the <code class="literal">cn=admin data</code>
    suffix with administrative identities and certificates for protecting
    communications. Thus that content gets replicated as well.</p><p>The set of OpenDJ servers replicating data for a given suffix is
@@ -1163,7 +1163,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
    each replication topology can change dynamically, a directory server can
    potentially reconnect to another replication server to balance the
    replication load in the topology. For this reason the server can also end
-   up connected to different replication servers for different suffixes.</p></div></div><div class="section" title="9.3.&nbsp;Configuring Replication"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configure-repl"></a>9.3.&nbsp;Configuring Replication</h2></div></div></div><div class="toc"><dl><dt><span class="section"><a href="chap-replication.html#enable-repl">9.3.1. Enabling Replication</a></span></dt><dt><span class="section"><a href="chap-replication.html#init-repl">9.3.2. Initializing Replicas</a></span></dt><dt><span class="section"><a href="chap-replication.html#stop-repl">9.3.3. Stopping Replication</a></span></dt><dt><span class="section"><a href="chap-replication.html#repl-dedicated-servers">9.3.4. Stand-alone Replication Servers</a></span></dt><dt><span class="section"><a href="chap-replication.html#repl-groups">9.3.5. Replication Groups</a></span></dt><dt><span class="section"><a href="chap-replication.html#read-only-repl">9.3.6. Read-Only Replicas</a></span></dt><dt><span class="section"><a href="chap-replication.html#repl-assured">9.3.7. Assured Replication</a></span></dt><dt><span class="section"><a href="chap-replication.html#repl-subtree">9.3.8. Subtree Replication</a></span></dt><dt><span class="section"><a href="chap-replication.html#repl-fractional">9.3.9. Fractional Replication</a></span></dt></dl></div><a class="indexterm" name="d1710e6470"></a><p>This section shows how to configure replication with command-line
+   up connected to different replication servers for different suffixes.</p></div></div><div class="section" title="9.3.&nbsp;Configuring Replication"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configure-repl"></a>9.3.&nbsp;Configuring Replication</h2></div></div></div><div class="toc"><dl><dt><span class="section"><a href="chap-replication.html#enable-repl">9.3.1. Enabling Replication</a></span></dt><dt><span class="section"><a href="chap-replication.html#init-repl">9.3.2. Initializing Replicas</a></span></dt><dt><span class="section"><a href="chap-replication.html#stop-repl">9.3.3. Stopping Replication</a></span></dt><dt><span class="section"><a href="chap-replication.html#repl-dedicated-servers">9.3.4. Stand-alone Replication Servers</a></span></dt><dt><span class="section"><a href="chap-replication.html#repl-groups">9.3.5. Replication Groups</a></span></dt><dt><span class="section"><a href="chap-replication.html#read-only-repl">9.3.6. Read-Only Replicas</a></span></dt><dt><span class="section"><a href="chap-replication.html#repl-assured">9.3.7. Assured Replication</a></span></dt><dt><span class="section"><a href="chap-replication.html#repl-subtree">9.3.8. Subtree Replication</a></span></dt><dt><span class="section"><a href="chap-replication.html#repl-fractional">9.3.9. Fractional Replication</a></span></dt></dl></div><a class="indexterm" name="d1711e6470"></a><p>This section shows how to configure replication with command-line
   tools.</p><div class="section" title="9.3.1.&nbsp;Enabling Replication"><div class="titlepage"><div><div><h3 class="title"><a name="enable-repl"></a>9.3.1.&nbsp;Enabling Replication</h3></div></div></div><p>You can start the replication process by using the
    <span class="command"><strong>dsreplication enable</strong></span> command.</p><div class="screen"><pre class="brush: plain;">$ dsreplication
  enable
@@ -1317,7 +1317,7 @@ for a detailed log of this operation.</pre></div><p>Contrary to the message from
      Replica</em></a>.</p><p>As long as you restore the database on the new replica before the
      replication purge delay runs out, updates processed by other servers after
      you created the backup are replicated to the new server after you restore
-     the data.</p></li></ol></div></div><div class="section" title="9.3.3.&nbsp;Stopping Replication"><div class="titlepage"><div><div><h3 class="title"><a name="stop-repl"></a>9.3.3.&nbsp;Stopping Replication</h3></div></div></div><a class="indexterm" name="d1710e6627"></a><p>How you stop replication depends on whether the change is meant to
+     the data.</p></li></ol></div></div><div class="section" title="9.3.3.&nbsp;Stopping Replication"><div class="titlepage"><div><div><h3 class="title"><a name="stop-repl"></a>9.3.3.&nbsp;Stopping Replication</h3></div></div></div><a class="indexterm" name="d1711e6627"></a><p>How you stop replication depends on whether the change is meant to
    be temporary or permanent.</p><div class="procedure" title="Procedure&nbsp;9.4.&nbsp;To Stop Replication Temporarily For a Replica"><a name="stop-repl-tmp"></a><div class="procedure-title">Procedure&nbsp;9.4.&nbsp;To Stop Replication Temporarily For a Replica</div><p>If you need to stop a server from replicating temporarily, you can
     do so using <span class="command"><strong>dsconfig</strong></span> command.</p><div class="warning" title="Warning" style="font-style: italic;"><h3 class="title">Warning</h3><p>Do not allow modifications on the replica for which replication is
      disabled, as no record of such changes is kept, and the changes cause
@@ -1369,7 +1369,7 @@ See
 for a detailed log of this operation.</pre></div><p>The <span class="command"><strong>dsreplication disable</strong></span> as shown completely
      removes the replication configuration information from the server.</p></li><li class="step" title="Step 2"><p>If you want to restart replication for the server, you need to run
      the <span class="command"><strong>dsreplication enable</strong></span> and <span class="command"><strong>dsreplication
-     initialize</strong></span> commands again.</p></li></ol></div></div><div class="section" title="9.3.4.&nbsp;Stand-alone Replication Servers"><div class="titlepage"><div><div><h3 class="title"><a name="repl-dedicated-servers"></a>9.3.4.&nbsp;Stand-alone Replication Servers</h3></div></div></div><a class="indexterm" name="d1710e6688"></a><p>Replication in OpenDJ is designed to be both easy to implement in
+     initialize</strong></span> commands again.</p></li></ol></div></div><div class="section" title="9.3.4.&nbsp;Stand-alone Replication Servers"><div class="titlepage"><div><div><h3 class="title"><a name="repl-dedicated-servers"></a>9.3.4.&nbsp;Stand-alone Replication Servers</h3></div></div></div><a class="indexterm" name="d1711e6688"></a><p>Replication in OpenDJ is designed to be both easy to implement in
    environments with a few servers, and also scalable in environments with
    many servers. You can enable the replication service on each OpenDJ
    directory server in your deployment, for example, to limit the number
@@ -1386,7 +1386,7 @@ for a detailed log of this operation.</pre></div><p>The <span class="command"><s
    replication servers. Directory servers are connected only to one replication
    server at a time, and their connections should be to replication servers on
    the same LAN. Therefore the total number of replication connections,
-   Total<sub>conn</sub> is expressed as follows.</p><div class="equation"><a name="d1710e6700"></a><div class="equation-title">Equation&nbsp;9.1.&nbsp;</div><div class="equation-contents"><span class="mathphrase">Total<sub>conn</sub> = (N<sub>RS</sub> *
+   Total<sub>conn</sub> is expressed as follows.</p><div class="equation"><a name="d1711e6700"></a><div class="equation-title">Equation&nbsp;9.1.&nbsp;</div><div class="equation-contents"><span class="mathphrase">Total<sub>conn</sub> = (N<sub>RS</sub> *
     N<sub>RS</sub>-1)/2 + N<sub>DS</sub></span></div></div><br class="equation-break"><p>Here, N<sub>RS</sub> is the number of replication servers,
    and N<sub>DS</sub> is the number of stand-alone directory
    servers. In other words, if you have only 3 servers, then
@@ -1523,7 +1523,7 @@ Base DN initialized successfully.
 
 See
 /var/.../opends-replication-7677303986403997574.log
-for a detailed log of this operation.</pre></div></li></ol></div></div><div class="section" title="9.3.5.&nbsp;Replication Groups"><div class="titlepage"><div><div><h3 class="title"><a name="repl-groups"></a>9.3.5.&nbsp;Replication Groups</h3></div></div></div><a class="indexterm" name="d1710e6788"></a><p>Replication lets you define groups so that replicas communicate
+for a detailed log of this operation.</pre></div></li></ol></div></div><div class="section" title="9.3.5.&nbsp;Replication Groups"><div class="titlepage"><div><div><h3 class="title"><a name="repl-groups"></a>9.3.5.&nbsp;Replication Groups</h3></div></div></div><a class="indexterm" name="d1711e6788"></a><p>Replication lets you define groups so that replicas communicate
    first with replication servers in the group before going to replication
    servers outside the group. Groups are identified with unique numeric
    group IDs.</p><p>Replication groups are designed for deployments across multiple data
@@ -1579,7 +1579,7 @@ $ dsconfig
  --provider-name "Multimaster Synchronization"
  --set group-id:2
  --trustAll
- --no-prompt</pre></div></li></ol></div></div><div class="section" title="9.3.6.&nbsp;Read-Only Replicas"><div class="titlepage"><div><div><h3 class="title"><a name="read-only-repl"></a>9.3.6.&nbsp;Read-Only Replicas</h3></div></div></div><a class="indexterm" name="d1710e6834"></a><p>By default all directory servers in a replication topology are
+ --no-prompt</pre></div></li></ol></div></div><div class="section" title="9.3.6.&nbsp;Read-Only Replicas"><div class="titlepage"><div><div><h3 class="title"><a name="read-only-repl"></a>9.3.6.&nbsp;Read-Only Replicas</h3></div></div></div><a class="indexterm" name="d1711e6834"></a><p>By default all directory servers in a replication topology are
    read-write. You can however choose to make replicas take updates only
    from the replication protocol, and refuse updates from client
    applications.</p><div class="screen"><pre class="brush: plain;">$ dsconfig
@@ -1590,7 +1590,7 @@ $ dsconfig
  --bindPassword password
  --set writability-mode:internal-only
  --trustAll
- --no-prompt</pre></div></div><div class="section" title="9.3.7.&nbsp;Assured Replication"><div class="titlepage"><div><div><h3 class="title"><a name="repl-assured"></a>9.3.7.&nbsp;Assured Replication</h3></div></div></div><a class="indexterm" name="d1710e6846"></a><p>In standard replication, when a client requests an update operation
+ --no-prompt</pre></div></div><div class="section" title="9.3.7.&nbsp;Assured Replication"><div class="titlepage"><div><div><h3 class="title"><a name="repl-assured"></a>9.3.7.&nbsp;Assured Replication</h3></div></div></div><a class="indexterm" name="d1711e6846"></a><p>In standard replication, when a client requests an update operation
    the directory server performs the update and, if the update is successful,
    sends information about the update to the replication service, and sends
    a result code to the client application right away. As a result, the
@@ -1657,7 +1657,7 @@ $ dsconfig
    <code class="literal">degraded-status-threshold</code> (default: 5000), sets the
    number of operations allowed to build up in the replication queue before
    the server is assigned degraded status. When a replication server has
-   degraded status, assured replication ceases to have an effect.</p></div><div class="section" title="9.3.8.&nbsp;Subtree Replication"><div class="titlepage"><div><div><h3 class="title"><a name="repl-subtree"></a>9.3.8.&nbsp;Subtree Replication</h3></div></div></div><a class="indexterm" name="d1710e6891"></a><p>OpenDJ can perform subtree replication, for example replicating
+   degraded status, assured replication ceases to have an effect.</p></div><div class="section" title="9.3.8.&nbsp;Subtree Replication"><div class="titlepage"><div><div><h3 class="title"><a name="repl-subtree"></a>9.3.8.&nbsp;Subtree Replication</h3></div></div></div><a class="indexterm" name="d1711e6891"></a><p>OpenDJ can perform subtree replication, for example replicating
    <code class="literal">ou=People,dc=example,dc=com</code>, but not the rest of
    <code class="literal">dc=example,dc=com</code>, by putting the subtree in a separate
    backend from the rest of the suffix.</p><p>For example, in this case you might have a <code class="literal">userRoot</code>
@@ -1665,7 +1665,7 @@ $ dsconfig
    except <code class="literal">ou=People,dc=example,dc=com</code>, and a separate
    <code class="literal">peopleRoot</code> backend for
    <code class="literal">ou=People,dc=example,dc=com</code>. Then you replicate
-   <code class="literal">ou=People,dc=example,dc=com</code> in its own topology.</p></div><div class="section" title="9.3.9.&nbsp;Fractional Replication"><div class="titlepage"><div><div><h3 class="title"><a name="repl-fractional"></a>9.3.9.&nbsp;Fractional Replication</h3></div></div></div><a class="indexterm" name="d1710e6927"></a><p>OpenDJ can perform fractional replication, whereby you specify
+   <code class="literal">ou=People,dc=example,dc=com</code> in its own topology.</p></div><div class="section" title="9.3.9.&nbsp;Fractional Replication"><div class="titlepage"><div><div><h3 class="title"><a name="repl-fractional"></a>9.3.9.&nbsp;Fractional Replication</h3></div></div></div><a class="indexterm" name="d1711e6927"></a><p>OpenDJ can perform fractional replication, whereby you specify
    the attributes to include in or to exclude from the replication
    process.</p><p>You set fractional replication configuration as
    <code class="literal">fractional-include</code> or
@@ -1706,7 +1706,7 @@ $ dsconfig
  --trustAll
  --no-prompt</pre></div><p>This last example only works if you first define a
    <code class="literal">sessionToken</code> attribute in the directory server
-   schema.</p></div></div><div class="section" title="9.4.&nbsp;Change Notification For Your Applications"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="repl-change-notification"></a>9.4.&nbsp;Change Notification For Your Applications</h2></div></div></div><a class="indexterm" name="d1710e6968"></a><a class="indexterm" name="d1710e6973"></a><p>Some applications require notification when directory data updates
+   schema.</p></div></div><div class="section" title="9.4.&nbsp;Change Notification For Your Applications"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="repl-change-notification"></a>9.4.&nbsp;Change Notification For Your Applications</h2></div></div></div><a class="indexterm" name="d1711e6968"></a><a class="indexterm" name="d1711e6973"></a><p>Some applications require notification when directory data updates
   occur. For example, an application might need to sync directory data with
   another database, or the application might need to kick off other processing
   when certain updates occur.</p><p>In addition to supporting persistent search operations, OpenDJ
@@ -1913,9 +1913,9 @@ modifyTimestamp: 20110613071210Z
   this legacy format. Such applications cannot however use the change log
   cookies that are shared across the replication topology, and therefore
   can continue to be used after failover to another replica in a multi-master
-  replication environment.</p><a class="indexterm" name="d1710e7100"></a></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.d1710e6343" href="#d1710e6343" class="para">6</a>] </sup>Assured replication can require, however,
+  replication environment.</p><a class="indexterm" name="d1711e7100"></a></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.d1711e6343" href="#d1711e6343" class="para">6</a>] </sup>Assured replication can require, however,
    that the convergence happen before the client application is notified that
-   the operation was successful.</p></div><div class="footnote"><p><sup>[<a id="ftn.d1710e6359" href="#d1710e6359" class="para">7</a>] </sup>When
+   the operation was successful.</p></div><div class="footnote"><p><sup>[<a id="ftn.d1711e6359" href="#d1711e6359" class="para">7</a>] </sup>When
    you configure partial and fractional replication, however, you can replicate
    only part of a suffix, or only certain attributes on entries. Also,
    if you split your suffix across multiple backends, then you need to set up

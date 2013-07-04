@@ -1068,7 +1068,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   lockout quickly. If ever replication is delayed, an attacker with direct
   access to multiple replicas could try to authenticate up to the specified
   number of times on each replica before being locked out on all replicas.</p></div><p>This chapter shows you how to set up account lockout policies,
- and how to intervene manually to lock and unlock accounts.</p><div class="section" title="12.1.&nbsp;Configuring Account Lockout"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configure-account-lockout"></a>12.1.&nbsp;Configuring Account Lockout</h2></div></div></div><a class="indexterm" name="d1710e7866"></a><p>Account lockout is configured as part of password policy. This section
+ and how to intervene manually to lock and unlock accounts.</p><div class="section" title="12.1.&nbsp;Configuring Account Lockout"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configure-account-lockout"></a>12.1.&nbsp;Configuring Account Lockout</h2></div></div></div><a class="indexterm" name="d1711e7866"></a><p>Account lockout is configured as part of password policy. This section
   demonstrates configuring account lockout as part of the default password
   policy. Users are allowed three consecutive failures before being locked out
   for five minutes. Failures themselves also expire after five minutes.</p><p>Change the default password policy to activate lockout using the
@@ -1137,7 +1137,7 @@ Result Code:  49 (Invalid Credentials)</pre></div></div><div class="section" tit
   has <code class="literal">ds-privilege-name: password-reset</code>, and the following
   ACI on <code class="literal">ou=People,dc=example,dc=com</code>.</p><pre class="literallayout">(target="ldap:///ou=People,dc=example,dc=com") (targetattr ="*||+")(
 version 3.0;acl "Admins can run amok"; allow(all) groupdn =
-"ldap:///cn=Directory Administrators,ou=Groups,dc=example,dc=com";)</pre><div class="procedure" title="Procedure&nbsp;12.1.&nbsp;To Disable an Account"><a name="disable-account"></a><div class="procedure-title">Procedure&nbsp;12.1.&nbsp;To Disable an Account</div><a class="indexterm" name="d1710e7905"></a><ul class="procedure"><li class="step" title="Step 1"><p>Set the account status to disabled with the
+"ldap:///cn=Directory Administrators,ou=Groups,dc=example,dc=com";)</pre><div class="procedure" title="Procedure&nbsp;12.1.&nbsp;To Disable an Account"><a name="disable-account"></a><div class="procedure-title">Procedure&nbsp;12.1.&nbsp;To Disable an Account</div><a class="indexterm" name="d1711e7905"></a><ul class="procedure"><li class="step" title="Step 1"><p>Set the account status to disabled with the
     <span class="command"><strong>manage-account</strong></span> command.</p><div class="screen"><pre class="brush: plain;">$ manage-account
  set-account-is-disabled
  --port 4444
@@ -1146,7 +1146,7 @@ version 3.0;acl "Admins can run amok"; allow(all) groupdn =
  --operationValue true
  --targetDN uid=bjensen,ou=people,dc=example,dc=com
  --trustAll
-Account Is Disabled:  true</pre></div></li></ul></div><div class="procedure" title="Procedure&nbsp;12.2.&nbsp;To Activate a Disabled Account"><a name="reactivate-account"></a><div class="procedure-title">Procedure&nbsp;12.2.&nbsp;To Activate a Disabled Account</div><a class="indexterm" name="d1710e7921"></a><ul class="procedure"><li class="step" title="Step 1"><p>Clear the disabled status using the <span class="command"><strong>manage-account</strong></span>
+Account Is Disabled:  true</pre></div></li></ul></div><div class="procedure" title="Procedure&nbsp;12.2.&nbsp;To Activate a Disabled Account"><a name="reactivate-account"></a><div class="procedure-title">Procedure&nbsp;12.2.&nbsp;To Activate a Disabled Account</div><a class="indexterm" name="d1711e7921"></a><ul class="procedure"><li class="step" title="Step 1"><p>Clear the disabled status using the <span class="command"><strong>manage-account</strong></span>
     command.</p><div class="screen"><pre class="brush: plain;">$ manage-account
  clear-account-is-disabled
  --port 4444
@@ -1154,7 +1154,7 @@ Account Is Disabled:  true</pre></div></li></ul></div><div class="procedure" tit
  --bindPassword bribery
  --targetDN uid=bjensen,ou=people,dc=example,dc=com
  --trustAll
-Account Is Disabled:  false</pre></div></li></ul></div></div><div class="section" title="12.3.&nbsp;Managing Account Status Notification"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="account-status-notification"></a>12.3.&nbsp;Managing Account Status Notification</h2></div></div></div><a class="indexterm" name="d1710e7937"></a><p>OpenDJ can send mail about account status changes. OpenDJ needs an
+Account Is Disabled:  false</pre></div></li></ul></div></div><div class="section" title="12.3.&nbsp;Managing Account Status Notification"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="account-status-notification"></a>12.3.&nbsp;Managing Account Status Notification</h2></div></div></div><a class="indexterm" name="d1711e7937"></a><p>OpenDJ can send mail about account status changes. OpenDJ needs an
   SMTP server to send messages, and needs templates for the mail it sends.
   By default, message templates are in English, under
   <code class="filename">/path/to/opendj/config/messages/</code>.</p><p>OpenDJ generates notifications only when OpenDJ writes to an entry or
@@ -1206,7 +1206,7 @@ Account Is Disabled:  false</pre></div></li></ul></div></div><div class="section
  --policy-name "Default Password Policy"
  --set account-status-notification-handler:"SMTP Handler"
  --trustAll
- --no-prompt</pre></div></li></ol></div><div class="variablelist" title="About Notification Message Templates"><a name="about-message-templates"></a><div class="variablelist-title">About Notification Message Templates</div><a class="indexterm" name="d1710e7999"></a><p>When editing the <code class="filename">config/messages</code> templates
+ --no-prompt</pre></div></li></ol></div><div class="variablelist" title="About Notification Message Templates"><a name="about-message-templates"></a><div class="variablelist-title">About Notification Message Templates</div><a class="indexterm" name="d1711e7999"></a><p>When editing the <code class="filename">config/messages</code> templates
    to suit your purposes, you can use the following tokens to have OpenDJ
    update the message text dynamically.</p><dl><dt><span class="term"><code class="literal">%%notification-type%%</code></span></dt><dd><p>This token is replaced with the name of the account status
      notification type for the notification.</p></dd><dt><span class="term"><code class="literal">%%notification-message%%</code></span></dt><dd><p>This token is replaced with the message for the account status

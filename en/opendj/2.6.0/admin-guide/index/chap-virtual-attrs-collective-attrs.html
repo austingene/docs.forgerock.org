@@ -1058,7 +1058,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
  OpenDJ also supports standard collective attributes as described in
  <a class="link" href="http://tools.ietf.org/html/rfc3671" target="_top">RFC 3671</a>,
  allowing entries to share common, read-only attribute values.</p><p>This chapter demonstrates how to define virtual and collective
- attributes, showing common solutions as examples of their use.</p><div class="section" title="18.1.&nbsp;Virtual Attributes"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="virtual-attributes"></a>18.1.&nbsp;Virtual Attributes</h2></div></div></div><a class="indexterm" name="d1710e9200"></a><p>OpenDJ defines a number of virtual attributes by default.</p><div class="variablelist"><dl><dt><span class="term"><code class="literal">entryDN</code></span></dt><dd><p>The value is the DN of the entry.</p></dd><dt><span class="term"><code class="literal">entryUUID</code></span></dt><dd><p>Provides a universally unique identifier for the
+ attributes, showing common solutions as examples of their use.</p><div class="section" title="18.1.&nbsp;Virtual Attributes"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="virtual-attributes"></a>18.1.&nbsp;Virtual Attributes</h2></div></div></div><a class="indexterm" name="d1711e9200"></a><p>OpenDJ defines a number of virtual attributes by default.</p><div class="variablelist"><dl><dt><span class="term"><code class="literal">entryDN</code></span></dt><dd><p>The value is the DN of the entry.</p></dd><dt><span class="term"><code class="literal">entryUUID</code></span></dt><dd><p>Provides a universally unique identifier for the
     entry.</p></dd><dt><span class="term"><code class="literal">etag</code></span></dt><dd><p>Entity tag as defined in <a class="link" href="http://tools.ietf.org/html/rfc2616#section-3.11" target="_blank">RFC 2616</a>, useful for checking whether an entry has changed since
      you last read it from the directory.</p></dd><dt><span class="term"><code class="literal">hasSubordinates</code></span></dt><dd><p>Boolean. Whether the entry has children.</p></dd><dt><span class="term"><code class="literal">numSubordinates</code></span></dt><dd><p>Provides the number of direct child entries.</p></dd><dt><span class="term"><code class="literal">isMemberOf</code></span></dt><dd><p>Identifies groups the entry belongs to.</p><p>By default OpenDJ generates <code class="literal">isMemberOf</code> on user
      entries (entries that have the object class <code class="literal">person</code>), and
@@ -1086,7 +1086,7 @@ objectClass: top
 $ ldapsearch --port 1389 --baseDN dc=example,dc=com dc=example numSubordinates
 dn: dc=example,dc=com
 numSubordinates: 4
-</pre></div><a class="indexterm" name="d1710e9339"></a><p>You can use the existing virtual attribute types to create your
+</pre></div><a class="indexterm" name="d1711e9339"></a><p>You can use the existing virtual attribute types to create your
   own virtual attributes, and you can also use the
   <code class="literal">user-defined</code> type to create your own. The virtual
   attribute is defined by the server configuration, which is not
@@ -1108,7 +1108,7 @@ $ ldapsearch --port 1389 --baseDN dc=example,dc=com uid=bjensen description
 dn: uid=bjensen,ou=People,dc=example,dc=com
 description: Served by OpenDJ.Example.com
 </pre></div><p>Collective attributes cover many use cases better than virtual
-  attributes.</p></div><div class="section" title="18.2.&nbsp;Collective Attributes"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="collective-attributes"></a>18.2.&nbsp;Collective Attributes</h2></div></div></div><a class="indexterm" name="d1710e9356"></a><p>Collective attributes provide a standard mechanism for defining
+  attributes.</p></div><div class="section" title="18.2.&nbsp;Collective Attributes"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="collective-attributes"></a>18.2.&nbsp;Collective Attributes</h2></div></div></div><a class="indexterm" name="d1711e9356"></a><p>Collective attributes provide a standard mechanism for defining
   attributes that appear on all the entries in a subtree potentially filtered
   by object class. Standard collective attribute type names have the prefix
   <code class="literal">c-</code>.</p><p>OpenDJ extends collective attributes to make them easier to use.
@@ -1309,7 +1309,7 @@ preferredLanguage: en-gb
 
 </pre><p>The subentry also specifies two attributes to inherit for preferred
    language and street address.</p><p>The object class <code class="literal">extensibleObject</code> is added to allow
-   the entry to take a preferred language.<sup>[<a name="d1710e9568" href="#ftn.d1710e9568" class="footnote">9</a>]</sup></p><p>Notice the last line of the collective attribute subentry:</p><pre class="literallayout">collectiveConflictBehavior: real-overrides-virtual</pre><p>This line says that if a collective attribute clashes with a real
+   the entry to take a preferred language.<sup>[<a name="d1711e9568" href="#ftn.d1711e9568" class="footnote">9</a>]</sup></p><p>Notice the last line of the collective attribute subentry:</p><pre class="literallayout">collectiveConflictBehavior: real-overrides-virtual</pre><p>This line says that if a collective attribute clashes with a real
    attribute, the real value takes precedence over the virtual, collective
    value. You can also set <code class="literal">collectiveConflictBehavior</code> to
    <code class="literal">virtual-overrides-real</code> for the opposite precedence, or to
@@ -1331,7 +1331,7 @@ l: San Francisco</pre><p>Babs inherits the street address from the San Francisco
  preferredLanguage street
 dn: uid=bjensen,ou=People,dc=example,dc=com
 preferredLanguage: en, ko;q=0.8
-street: 500 3rd Street</pre></div></div></div><br class="example-break"></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.d1710e9568" href="#d1710e9568" class="para">9</a>] </sup>The object class
+street: 500 3rd Street</pre></div></div></div><br class="example-break"></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.d1711e9568" href="#d1711e9568" class="para">9</a>] </sup>The object class
    <code class="literal">extensibleObject</code> means, "Let me add whatever attributes
    I want." It is usually better practice to add your own auxiliary object class
    if you need to decorate an entry with more attributes. The shortcut is taken

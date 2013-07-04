@@ -1056,7 +1056,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 </head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;6.&nbsp;Searching &amp; Comparing Directory Data</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-authenticating.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-getting-directory-info.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;6.&nbsp;Searching &amp; Comparing Directory Data"><div class="titlepage"><div><div><h2 class="title"><a name="chap-reading"></a>Chapter&nbsp;6.&nbsp;Searching &amp; Comparing Directory Data</h2></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="section"><a href="chap-reading.html#about-searching">6.1. About Searching</a></span></dt><dt><span class="section"><a href="chap-reading.html#basedn-and-scope">6.2. Setting Search Base &amp; Scope</a></span></dt><dt><span class="section"><a href="chap-reading.html#about-filters">6.3. Working With Search Filters</a></span></dt><dt><span class="section"><a href="chap-reading.html#send-search-request">6.4. Sending a Search Request</a></span></dt><dt><span class="section"><a href="chap-reading.html#get-search-results">6.5. Getting Search Results</a></span></dt><dt><span class="section"><a href="chap-reading.html#handle-entry-attributes">6.6. Working With Entry Attributes</a></span></dt><dt><span class="section"><a href="chap-reading.html#handle-ldap-urls">6.7. Working With LDAP URLs</a></span></dt><dt><span class="section"><a href="chap-reading.html#sort-search-results">6.8. Sorting Search Results</a></span></dt><dt><span class="section"><a href="chap-reading.html#about-comparisons">6.9. About Comparing</a></span></dt></dl></div><p>Traditionally directories excel at serving read requests. This chapter
  covers the read (search and compare) capabilities that OpenDJ LDAP Java SDK
  provides. The data used in examples here is <a class="link" href="http://opendj.forgerock.org/Example.ldif" target="_blank">available
- online</a>.</p><div class="section" title="6.1.&nbsp;About Searching"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="about-searching"></a>6.1.&nbsp;About Searching</h2></div></div></div><a class="indexterm" name="d566e1192"></a><div class="itemizedlist"><p>An LDAP search looks up entries based on the following
+ online</a>.</p><div class="section" title="6.1.&nbsp;About Searching"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="about-searching"></a>6.1.&nbsp;About Searching</h2></div></div></div><a class="indexterm" name="d567e1192"></a><div class="itemizedlist"><p>An LDAP search looks up entries based on the following
    parameters.</p><ul class="itemizedlist" type="disc"><li class="listitem"><p>A <em class="firstterm">filter</em> that indicates which attribute values
     to match</p></li><li class="listitem"><p>A <em class="firstterm">base DN</em> that specifies where in the
     directory information tree to look for matches</p></li><li class="listitem"><p>A <em class="firstterm">scope</em> that defines how far to go under
@@ -1114,7 +1114,7 @@ try {
     if (connection != null) {
         connection.close();
     }
-}</pre><p>For a complete example in context, see <a class="link" href="http://opendj.forgerock.org/opendj-ldap-sdk-examples/xref/org/forgerock/opendj/examples/SearchBind.html" target="_blank">SearchBind.java</a>, one of the <a class="link" href="http://opendj.forgerock.org/opendj-ldap-sdk-examples/" target="_blank">OpenDJ LDAP SDK examples</a>.</p></div><div class="section" title="6.2.&nbsp;Setting Search Base &amp; Scope"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="basedn-and-scope"></a>6.2.&nbsp;Setting Search Base &amp; Scope</h2></div></div></div><a class="indexterm" name="d566e1283"></a><a class="indexterm" name="d566e1288"></a><p>Directory servers organize entries somewhat like a file system.
+}</pre><p>For a complete example in context, see <a class="link" href="http://opendj.forgerock.org/opendj-ldap-sdk-examples/xref/org/forgerock/opendj/examples/SearchBind.html" target="_blank">SearchBind.java</a>, one of the <a class="link" href="http://opendj.forgerock.org/opendj-ldap-sdk-examples/" target="_blank">OpenDJ LDAP SDK examples</a>.</p></div><div class="section" title="6.2.&nbsp;Setting Search Base &amp; Scope"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="basedn-and-scope"></a>6.2.&nbsp;Setting Search Base &amp; Scope</h2></div></div></div><a class="indexterm" name="d567e1283"></a><a class="indexterm" name="d567e1288"></a><p>Directory servers organize entries somewhat like a file system.
   Directory data is often depicted as an upside-down tree.</p><div class="mediaobject" title="Directory data is often depicted as an upside-down tree."><a name="figure-ldap-tree"></a><img src="images/ldap-tree.png" longdesc="/Users/mark/Documents/workspace/2.6.0-docs/target/docbkx/html/dev-guide/index/figure-ldap-tree.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-ldap-tree.html" target="longdesc">D</a>]</span></div></div><p>In the figure shown above, entries are represented by the relevant
   parts of their DNs. The entry with DN <code class="literal">dc=example,dc=com</code>
   is the base entry for a suffix. Under the base entry, you see two
@@ -1142,7 +1142,7 @@ try {
     all entries below the base entry.</p><p>This scope can be useful if you know that the base DN for your search
     is an entry that you do not want to match.</p></li><li class="listitem"><p>For <code class="literal">SearchScope.WHOLE_SUBTREE</code> (default) the server
     considers the base entry and all entries below.</p></li></ul></div><p>In addition to a base DN and scope, a search request also calls for a
-  search filter.</p></div><div class="section" title="6.3.&nbsp;Working With Search Filters"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="about-filters"></a>6.3.&nbsp;Working With Search Filters</h2></div></div></div><a class="indexterm" name="d566e1378"></a><a class="indexterm" name="d566e1381"></a><p>When you look someone up in the telephone directory, you use the value
+  search filter.</p></div><div class="section" title="6.3.&nbsp;Working With Search Filters"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="about-filters"></a>6.3.&nbsp;Working With Search Filters</h2></div></div></div><a class="indexterm" name="d567e1378"></a><a class="indexterm" name="d567e1381"></a><p>When you look someone up in the telephone directory, you use the value
   of one attribute of a person's entry (last name), to recover the person's
   directory entry, which has other attributes (phone number, address). LDAP
   works the same way. In LDAP, search requests identify both the scope of the
@@ -1153,7 +1153,7 @@ try {
   For example, the following simple equality filter says, "Match all entries
   that have a surname attribute (sn) value equivalent to Jensen."</p><pre class="literallayout">(sn=Jensen)</pre><p>When you pass the directory server this filter as part of your search
   request, the directory server checks the entries in scope for your search to
-  see whether they match.<sup>[<a name="d566e1394" href="#ftn.d566e1394" class="footnote">7</a>]</sup> If the directory server finds entries that match,
+  see whether they match.<sup>[<a name="d567e1394" href="#ftn.d567e1394" class="footnote">7</a>]</sup> If the directory server finds entries that match,
   it returns those entries as it finds them.</p><p>The example, <code class="literal">(sn=Jensen)</code>, shows a string
   representation of the search filter. The OpenDJ LDAP SDK lets you express
   your filters as strings, or as <code class="literal">Filter</code> objects. In both
@@ -1256,7 +1256,7 @@ String userInput = getUserInput();
 // Filter.escapeAssertionValue() transforms user input of "*" to "\2A".
 SearchRequest request = Requests.newSearchRequest(
         baseDN, SearchScope.WHOLE_SUBTREE,
-        "(cn=" + Filter.escapeAssertionValue(userInput) + "*)", "cn", "mail");</pre></div><div class="section" title="6.4.&nbsp;Sending a Search Request"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="send-search-request"></a>6.4.&nbsp;Sending a Search Request</h2></div></div></div><a class="indexterm" name="d566e1714"></a><a class="indexterm" name="d566e1719"></a><p>As shown in the following excerpt with a synchronous connection, you
+        "(cn=" + Filter.escapeAssertionValue(userInput) + "*)", "cn", "mail");</pre></div><div class="section" title="6.4.&nbsp;Sending a Search Request"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="send-search-request"></a>6.4.&nbsp;Sending a Search Request</h2></div></div></div><a class="indexterm" name="d567e1714"></a><a class="indexterm" name="d567e1719"></a><p>As shown in the following excerpt with a synchronous connection, you
   get a <code class="literal">Connection</code> to the directory server from an
   <code class="literal">LDAPConnectionFactory</code>.</p><pre class="brush: java;">final LDAPConnectionFactory factory = new LDAPConnectionFactory(host,
         port);
@@ -1277,7 +1277,7 @@ try {
   <code class="literal">SearchRequest</code> object. If you are sure that the search only
   returns a single entry, you can read the entry with the
   <code class="literal">searchSingleEntry()</code> methods. If you have the distinguished
-  name, you can use <code class="literal">readEntry()</code> directly.</p><p>For a complete example in context, see <a class="link" href="http://opendj.forgerock.org/opendj-ldap-sdk-examples/xref/org/forgerock/opendj/examples/Search.html" target="_blank">Search.java</a>, one of the <a class="link" href="http://opendj.forgerock.org/opendj-ldap-sdk-examples/" target="_blank">OpenDJ LDAP SDK examples</a>.</p></div><div class="section" title="6.5.&nbsp;Getting Search Results"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="get-search-results"></a>6.5.&nbsp;Getting Search Results</h2></div></div></div><a class="indexterm" name="d566e1763"></a><p>Depending on the method you use to search, you handle results in
+  name, you can use <code class="literal">readEntry()</code> directly.</p><p>For a complete example in context, see <a class="link" href="http://opendj.forgerock.org/opendj-ldap-sdk-examples/xref/org/forgerock/opendj/examples/Search.html" target="_blank">Search.java</a>, one of the <a class="link" href="http://opendj.forgerock.org/opendj-ldap-sdk-examples/" target="_blank">OpenDJ LDAP SDK examples</a>.</p></div><div class="section" title="6.5.&nbsp;Getting Search Results"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="get-search-results"></a>6.5.&nbsp;Getting Search Results</h2></div></div></div><a class="indexterm" name="d567e1763"></a><p>Depending on the method you use to search, you handle results in
   different ways.</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>You can get a <code class="literal">ConnectionEntryReader</code>, and iterate
     over the reader to access individual search results.</p><pre class="brush: java;">Connection connection = ...;
 ConnectionEntryReader reader = connection.search("dc=example,dc=com",
@@ -1314,7 +1314,7 @@ finally
     results.</p></li><li class="listitem"><p>With <code class="literal">searchSingleEntry()</code> and
     <code class="literal">readEntry()</code>, you can get a single
     <code class="literal">SearchResultEntry</code> with methods to access the entry
-    content.</p></li></ul></div></div><div class="section" title="6.6.&nbsp;Working With Entry Attributes"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="handle-entry-attributes"></a>6.6.&nbsp;Working With Entry Attributes</h2></div></div></div><a class="indexterm" name="d566e1817"></a><p>When you get an entry object, chances are you want to handle attribute
+    content.</p></li></ul></div></div><div class="section" title="6.6.&nbsp;Working With Entry Attributes"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="handle-entry-attributes"></a>6.6.&nbsp;Working With Entry Attributes</h2></div></div></div><a class="indexterm" name="d567e1817"></a><p>When you get an entry object, chances are you want to handle attribute
   values as objects. The OpenDJ LDAP SDK provides the
   <code class="literal">Entry.parseAttribute()</code> method and an
   <code class="literal">AttributeParser</code> with methods for a variety of attribute
@@ -1350,7 +1350,7 @@ Calendar timestamp = entry
 
 // Do something with the objects.
 // ...
-</pre><p>For a complete example in context, see <a class="link" href="http://opendj.forgerock.org/opendj-ldap-sdk-examples/xref/org/forgerock/opendj/examples/ParseAttributes.html" target="_blank">ParseAttributes.java</a>, one of the <a class="link" href="http://opendj.forgerock.org/opendj-ldap-sdk-examples/" target="_blank">OpenDJ LDAP SDK examples</a>.</p></div><div class="section" title="6.7.&nbsp;Working With LDAP URLs"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="handle-ldap-urls"></a>6.7.&nbsp;Working With LDAP URLs</h2></div></div></div><a class="indexterm" name="d566e1841"></a><a class="indexterm" name="d566e1846"></a><p>LDAP URLs express search requests in URL form. In the directory data
+</pre><p>For a complete example in context, see <a class="link" href="http://opendj.forgerock.org/opendj-ldap-sdk-examples/xref/org/forgerock/opendj/examples/ParseAttributes.html" target="_blank">ParseAttributes.java</a>, one of the <a class="link" href="http://opendj.forgerock.org/opendj-ldap-sdk-examples/" target="_blank">OpenDJ LDAP SDK examples</a>.</p></div><div class="section" title="6.7.&nbsp;Working With LDAP URLs"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="handle-ldap-urls"></a>6.7.&nbsp;Working With LDAP URLs</h2></div></div></div><a class="indexterm" name="d567e1841"></a><a class="indexterm" name="d567e1846"></a><p>LDAP URLs express search requests in URL form. In the directory data
   you can find them used as <code class="literal">memberURL</code>
   attribute values for dynamic groups, for example. The following URL from the
   configuration for the administrative backend lets the directory server build
@@ -1359,7 +1359,7 @@ Calendar timestamp = entry
   URL string and returns an <code class="literal">LDAPUrl</code> object. You can then use
   the <code class="literal">LDAPUrl.asSearchRequest()</code> method to get the
   <code class="literal">SearchRequest</code> that you pass to one of the search methods
-  for the connection.</p></div><div class="section" title="6.8.&nbsp;Sorting Search Results"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="sort-search-results"></a>6.8.&nbsp;Sorting Search Results</h2></div></div></div><a class="indexterm" name="d566e1876"></a><a class="indexterm" name="d566e1881"></a><p>If you want to sort search results in your client application, then
+  for the connection.</p></div><div class="section" title="6.8.&nbsp;Sorting Search Results"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="sort-search-results"></a>6.8.&nbsp;Sorting Search Results</h2></div></div></div><a class="indexterm" name="d567e1876"></a><a class="indexterm" name="d567e1881"></a><p>If you want to sort search results in your client application, then
   make sure you have enough memory in the JVM to hold the results of the search,
   and use one of the search methods that lets you pass in a collection of
   <code class="literal">SearchResultEntry</code>s. After the collection is populated with
@@ -1372,7 +1372,7 @@ Calendar timestamp = entry
   search method, using <code class="literal">SearchRequest.addControl()</code> to attach
   the control before passing in the request.</p><p>If your application needs to scroll through search results a page at
   a time, work with your directory administrator to set up the virtual list
-  view indexes that facilitate scrolling through results.</p></div><div class="section" title="6.9.&nbsp;About Comparing"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="about-comparisons"></a>6.9.&nbsp;About Comparing</h2></div></div></div><a class="indexterm" name="d566e1902"></a><p>You use the LDAP compare operation to make an assertion about an
+  view indexes that facilitate scrolling through results.</p></div><div class="section" title="6.9.&nbsp;About Comparing"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="about-comparisons"></a>6.9.&nbsp;About Comparing</h2></div></div></div><a class="indexterm" name="d567e1902"></a><p>You use the LDAP compare operation to make an assertion about an
   attribute value on an entry. Unlike the search operation, you must know
   the distinguished name of the entry in advance to request a compare operation.
   You also specify the attribute type name and the value to compare to the
@@ -1380,7 +1380,7 @@ Calendar timestamp = entry
   depending on how you set up the operation.</p><p>Check the <code class="literal">ResultCode</code> from
   <code class="literal">CompareResult.getResultCode()</code> for
   <code class="literal">ResultCode.COMPARE_TRUE</code> or
-  <code class="literal">ResultCode.COMPARE_FALSE</code>.</p></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.d566e1394" href="#d566e1394" class="para">7</a>] </sup>In fact, the directory server probably
+  <code class="literal">ResultCode.COMPARE_FALSE</code>.</p></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.d567e1394" href="#d567e1394" class="para">7</a>] </sup>In fact, the directory server probably
   checks an index first, and might not even accept search requests unless it
   can use indexes to match your filter rather than checking all entries in
   scope.</p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-authenticating.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-getting-directory-info.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;5.&nbsp;Authenticating To the Directory&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;7.&nbsp;Getting Information About the Directory Service</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssue.jspa?pid=10040&components=10132&issuetype=1">Log a documentation bug.</a></p></div>

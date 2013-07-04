@@ -1057,7 +1057,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
  requests, replicating changes quickly both on the LAN and over the WAN.</p><p>For a complete example corresponding to the excerpts shown below, see
  <a class="link" href="http://opendj.forgerock.org/opendj-ldap-sdk-examples/xref/org/forgerock/opendj/examples/ShortLife.html" target="_blank">ShortLife.java</a>, one of the <a class="link" href="http://opendj.forgerock.org/opendj-ldap-sdk-examples/" target="_blank">OpenDJ LDAP SDK examples</a>.</p><div class="section" title="8.1.&nbsp;About Add, Modify, Rename, &amp; Delete"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="about-writes"></a>8.1.&nbsp;About Add, Modify, Rename, &amp; Delete</h2></div></div></div><p>The four basic CRUD operations &#8212; create, read, update, and delete
   &#8212; correspond to the LDAP operations add, search, modify (or modify DN),
-  and delete.<sup>[<a name="d566e2037" href="#ftn.d566e2037" class="footnote">8</a>]</sup></p><a class="indexterm" name="d566e2040"></a><a class="indexterm" name="d566e2043"></a><a class="indexterm" name="d566e2046"></a><a class="indexterm" name="d566e2049"></a><a class="indexterm" name="d566e2052"></a><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>An add request is used to create a new entry in an LDAP directory.
+  and delete.<sup>[<a name="d567e2037" href="#ftn.d567e2037" class="footnote">8</a>]</sup></p><a class="indexterm" name="d567e2040"></a><a class="indexterm" name="d567e2043"></a><a class="indexterm" name="d567e2046"></a><a class="indexterm" name="d567e2049"></a><a class="indexterm" name="d567e2052"></a><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>An add request is used to create a new entry in an LDAP directory.
     The entry must have a unique distinguished name that belongs under a base
     DN served by the directory. The entry must have a list of attributes that
     are valid according to the directory schema.</p></li><li class="listitem"><p>Search requests are described in the chapter on <a href="../../dev-guide/index/chap-reading.html" class="link"><em class="citetitle">Searching &amp;
@@ -1082,7 +1082,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
     delete request control.</p></li></ul></div><p>As a rule, your client application must be authorized to create,
   update, and delete directory data. Therefore to prepare to change directory
   data, you first get a connection, and then bind on that connection as a
-  user who is authorized to make the changes you plan to request.</p></div><div class="section" title="8.2.&nbsp;Adding Directory Entries"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="adding-entries"></a>8.2.&nbsp;Adding Directory Entries</h2></div></div></div><a class="indexterm" name="d566e2101"></a><p>The <code class="literal">Connection.add()</code> methods let you provide the
+  user who is authorized to make the changes you plan to request.</p></div><div class="section" title="8.2.&nbsp;Adding Directory Entries"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="adding-entries"></a>8.2.&nbsp;Adding Directory Entries</h2></div></div></div><a class="indexterm" name="d567e2101"></a><p>The <code class="literal">Connection.add()</code> methods let you provide the
   entry to add as an <code class="literal">AddRequest</code>, an <code class="literal">Entry</code>,
   or as LDIF. If the changes to make are already expressed in LDIF, then
   you can also use <code class="literal">ChangeRecordReader</code>s,
@@ -1115,7 +1115,7 @@ try {
     if (connection != null) {
         connection.close();
     }
-}</pre></div><div class="section" title="8.3.&nbsp;Modifying Directory Entry Attribute Values"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="modifying-attr-values"></a>8.3.&nbsp;Modifying Directory Entry Attribute Values</h2></div></div></div><a class="indexterm" name="d566e2134"></a><p>The <code class="literal">Connection.modify()</code> methods let you add, replace,
+}</pre></div><div class="section" title="8.3.&nbsp;Modifying Directory Entry Attribute Values"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="modifying-attr-values"></a>8.3.&nbsp;Modifying Directory Entry Attribute Values</h2></div></div></div><a class="indexterm" name="d567e2134"></a><p>The <code class="literal">Connection.modify()</code> methods let you add, replace,
   and delete attributes values on an entry. Either the modifications are
   expressed in LDIF, or you build a <code class="literal">ModifyRequest</code> to
   express the changes.</p><p>The following excerpt demonstrates how to replace one attribute value
@@ -1142,7 +1142,7 @@ try {
     if (connection != null) {
         connection.close();
     }
-}</pre></div><div class="section" title="8.4.&nbsp;Renaming Directory Entries"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="renaming-entries"></a>8.4.&nbsp;Renaming Directory Entries</h2></div></div></div><a class="indexterm" name="d566e2152"></a><p>The <code class="literal">Connection.modifyDN()</code> methods serve to rename
+}</pre></div><div class="section" title="8.4.&nbsp;Renaming Directory Entries"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="renaming-entries"></a>8.4.&nbsp;Renaming Directory Entries</h2></div></div></div><a class="indexterm" name="d567e2152"></a><p>The <code class="literal">Connection.modifyDN()</code> methods serve to rename
   entries and to move them around.</p><p>The following excerpt demonstrates how to rename an entry.</p><pre class="brush: java;">final LDAPConnectionFactory factory = new LDAPConnectionFactory(host, port);
 Connection connection = null;
 try {
@@ -1164,7 +1164,7 @@ try {
     }
 }</pre><p>If you must move rather than rename entries, have a look at the methods
   for <code class="literal">ModifyDNRequest</code>. You can get a new request by using
-  <code class="literal">Requests</code> static methods.</p></div><div class="section" title="8.5.&nbsp;Deleting Directory Entries"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="deleting-entries"></a>8.5.&nbsp;Deleting Directory Entries</h2></div></div></div><a class="indexterm" name="d566e2175"></a><p>The following excerpt demonstrates how to delete an entry with DN
+  <code class="literal">Requests</code> static methods.</p></div><div class="section" title="8.5.&nbsp;Deleting Directory Entries"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="deleting-entries"></a>8.5.&nbsp;Deleting Directory Entries</h2></div></div></div><a class="indexterm" name="d567e2175"></a><p>The following excerpt demonstrates how to delete an entry with DN
   <code class="literal">cn=Ted,ou=People,dc=example,dc=com</code>.</p><pre class="brush: java;">final LDAPConnectionFactory factory = new LDAPConnectionFactory(host, port);
 Connection connection = null;
 try {
@@ -1186,7 +1186,7 @@ try {
   leaf entry, build a <code class="literal">DeleteRequest</code> that includes the
   <code class="literal">SubtreeDeleteRequestControl</code>, as described in the
   section, <a href="../../dev-guide/index/chap-controls.html#use-subtree-delete-control" class="link"><em class="citetitle">Subtree Delete
-  Request Control</em></a>.</p></div><div class="section" title="8.6.&nbsp;Updating Static Groups"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="updating-static-groups"></a>8.6.&nbsp;Updating Static Groups</h2></div></div></div><a class="indexterm" name="d566e2200"></a><p>Static groups enumerate user entries. Static groups can grow large.
+  Request Control</em></a>.</p></div><div class="section" title="8.6.&nbsp;Updating Static Groups"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="updating-static-groups"></a>8.6.&nbsp;Updating Static Groups</h2></div></div></div><a class="indexterm" name="d567e2200"></a><p>Static groups enumerate user entries. Static groups can grow large.
   For an example, see the group entry at the end of <a class="link" href="http://opendj.forgerock.org/big-group.ldif" target="_blank">big-group.ldif</a>:</p><pre class="brush: ldif;">dn: cn=Static,ou=Groups,dc=example,dc=com
 objectClass: top
 objectClass: groupofnames
@@ -1327,7 +1327,7 @@ connection.modify(addMember);</pre></div></div><br class="example-break"><p>To t
   uid=user.5150,ou=People,dc=example,dc=com del</code>, the resulting output
   is <code class="literal">The entry with DN uid=user.5150,ou=People,dc=example,dc=com has
   been deleted from the group with DN
-  cn=Static,ou=Groups,dc=example,dc=com.</code>.</p></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.d566e2037" href="#d566e2037" class="para">8</a>] </sup>The LDAP bind operation can potentially result in
+  cn=Static,ou=Groups,dc=example,dc=com.</code>.</p></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.d567e2037" href="#d567e2037" class="para">8</a>] </sup>The LDAP bind operation can potentially result in
   an update. Some directory servers can be configured to write time stamps in
   order to track successful or failed binds for password policy reasons.</p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-getting-directory-info.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-ldif.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;7.&nbsp;Getting Information About the Directory Service&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;9.&nbsp;Working With LDIF</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssue.jspa?pid=10040&components=10132&issuetype=1">Log a documentation bug.</a></p></div>
 <script type="text/javascript">

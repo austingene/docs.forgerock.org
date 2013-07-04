@@ -1053,7 +1053,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 <!-- END SyntaxHighlighter 3.0.83 -->
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
-</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;1.&nbsp;Understanding LDAP</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="preface.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-best-practices.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;1.&nbsp;Understanding LDAP"><div class="titlepage"><div><div><h2 class="title"><a name="chap-understanding-ldap"></a>Chapter&nbsp;1.&nbsp;Understanding LDAP</h2></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="section"><a href="chap-understanding-ldap.html#ldap-directory-history">1.1. How Directories &amp; LDAP Evolved</a></span></dt><dt><span class="section"><a href="chap-understanding-ldap.html#directory-data">1.2. Data In LDAP Directories</a></span></dt><dt><span class="section"><a href="chap-understanding-ldap.html#ldap-client-server-communication">1.3. LDAP Client &amp; Server Communication</a></span></dt><dt><span class="section"><a href="chap-understanding-ldap.html#standard-ldapv3-extensions">1.4. Standard LDAPv3 &amp; Extensions</a></span></dt></dl></div><a class="indexterm" name="d566e208"></a><p>A directory resembles a dictionary or a phone book. If you know a
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;1.&nbsp;Understanding LDAP</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="preface.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-best-practices.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;1.&nbsp;Understanding LDAP"><div class="titlepage"><div><div><h2 class="title"><a name="chap-understanding-ldap"></a>Chapter&nbsp;1.&nbsp;Understanding LDAP</h2></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="section"><a href="chap-understanding-ldap.html#ldap-directory-history">1.1. How Directories &amp; LDAP Evolved</a></span></dt><dt><span class="section"><a href="chap-understanding-ldap.html#directory-data">1.2. Data In LDAP Directories</a></span></dt><dt><span class="section"><a href="chap-understanding-ldap.html#ldap-client-server-communication">1.3. LDAP Client &amp; Server Communication</a></span></dt><dt><span class="section"><a href="chap-understanding-ldap.html#standard-ldapv3-extensions">1.4. Standard LDAPv3 &amp; Extensions</a></span></dt></dl></div><a class="indexterm" name="d567e208"></a><p>A directory resembles a dictionary or a phone book. If you know a
  word, you can look it up its entry in the dictionary to learn its definition
  or its pronunciation. If you know a name, you can look it up its entry in the
  phone book to find the telephone number and street address associated with the
@@ -1093,7 +1093,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   update performance issue decided the cost of adapting the existing C-based
   directory technology for high performance updates would be higher than the
   cost of building a next generation, high performance directory using Java
-  technology.</p></div><div class="section" title="1.2.&nbsp;Data In LDAP Directories"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="directory-data"></a>1.2.&nbsp;Data In LDAP Directories</h2></div></div></div><a class="indexterm" name="d566e235"></a><a class="indexterm" name="d566e240"></a><p>LDAP directory data is organized into entries, similar to the entries
+  technology.</p></div><div class="section" title="1.2.&nbsp;Data In LDAP Directories"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="directory-data"></a>1.2.&nbsp;Data In LDAP Directories</h2></div></div></div><a class="indexterm" name="d567e235"></a><a class="indexterm" name="d567e240"></a><p>LDAP directory data is organized into entries, similar to the entries
   for words in the dictionary, or for subscriber names in the phone book.
   A sample entry follows.</p><pre class="brush: plain;">dn: uid=bjensen,ou=People,dc=example,dc=com
 uid: bjensen
@@ -1119,17 +1119,17 @@ uidNumber: 1076
 </pre><p>Barbara Jensen's entry has a number of attributes, such as
   <code class="literal">uid: bjensen</code>,
   <code class="literal">telephoneNumber: +1 408 555 1862</code>, and
-  <code class="literal">objectClass: posixAccount</code><sup>[<a name="d566e257" href="#ftn.d566e257" class="footnote">1</a>]</sup>. When you look up her entry
+  <code class="literal">objectClass: posixAccount</code><sup>[<a name="d567e257" href="#ftn.d567e257" class="footnote">1</a>]</sup>. When you look up her entry
   in the directory, you specify one or more attributes and values to match
   in the entries that come back as the result of your search. Typically the
   attributes you search for are indexed in the directory, so the directory
-  server can retrieve them more quickly.<sup>[<a name="d566e264" href="#ftn.d566e264" class="footnote">2</a>]</sup></p><p>The entry also has a unique identifier, shown at the top of the entry, 
+  server can retrieve them more quickly.<sup>[<a name="d567e264" href="#ftn.d567e264" class="footnote">2</a>]</sup></p><p>The entry also has a unique identifier, shown at the top of the entry, 
   <code class="literal">dn: uid=bjensen,ou=People,dc=example,dc=com</code>. DN stands
   for distinguished name. No two entries in the directory have the same
-  distinguished name.<sup>[<a name="d566e272" href="#ftn.d566e272" class="footnote">3</a>]</sup></p><p>LDAP entries are arranged hierarchically in the directory. The
+  distinguished name.<sup>[<a name="d567e272" href="#ftn.d567e272" class="footnote">3</a>]</sup></p><p>LDAP entries are arranged hierarchically in the directory. The
   hierarchical organization resembles a file system on a PC or a web server,
   often imagined as an upside-down tree structure, looking similar to a
-  pyramid.<sup>[<a name="d566e279" href="#ftn.d566e279" class="footnote">4</a>]</sup>The distinguished name consists of components
+  pyramid.<sup>[<a name="d567e279" href="#ftn.d567e279" class="footnote">4</a>]</sup>The distinguished name consists of components
   separated by commas,
   <code class="literal">uid=bjensen,ou=People,dc=example,dc=com</code>. Those components
   reflect the hierarchy of directory entries.</p><div class="mediaobject" title="Directory data hierarchy as seen in OpenDJ Control Panel."><a name="figure-data-organization"></a><img src="images/data-organization.png" longdesc="/Users/mark/Documents/workspace/2.6.0-docs/target/docbkx/html/dev-guide/index/figure-data-organization.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-data-organization.html" target="longdesc">D</a>]</span></div></div><p>Barbara Jensen's entry is located under an entry with DN
@@ -1143,12 +1143,12 @@ uidNumber: 1076
   <code class="literal">dc=mycompany,dc=com</code> or <code class="literal">o=myOrganization</code>.
   Thus when you look up entries, you specify the parent entry to look under
   in the same way you need to know whether to look in the New York, Paris,
-  or Tokyo phone book to find a telephone number.<sup>[<a name="d566e314" href="#ftn.d566e314" class="footnote">5</a>]</sup></p></div><div class="section" title="1.3.&nbsp;LDAP Client &amp; Server Communication"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ldap-client-server-communication"></a>1.3.&nbsp;LDAP Client &amp; Server Communication</h2></div></div></div><a class="indexterm" name="d566e323"></a><p>You may be used to web service client server communication, where
+  or Tokyo phone book to find a telephone number.<sup>[<a name="d567e314" href="#ftn.d567e314" class="footnote">5</a>]</sup></p></div><div class="section" title="1.3.&nbsp;LDAP Client &amp; Server Communication"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ldap-client-server-communication"></a>1.3.&nbsp;LDAP Client &amp; Server Communication</h2></div></div></div><a class="indexterm" name="d567e323"></a><p>You may be used to web service client server communication, where
   each time the web client has something to request of the web server, a
   connection is set up and then torn down. LDAP has a different model. In
   LDAP the client application connects to the server and authenticates, then
   requests any number of operations perhaps processing results in between
-  requests, and finally disconnects when done.</p><div class="mediaobject" title="Schematic of LDAP client-server session"><a name="figure-ldap-lifecycle"></a><img src="images/ldap-lifecycle.png" longdesc="/Users/mark/Documents/workspace/2.6.0-docs/target/docbkx/html/dev-guide/index/figure-ldap-lifecycle.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-ldap-lifecycle.html" target="longdesc">D</a>]</span></div></div><a class="indexterm" name="d566e338"></a><a class="indexterm" name="d566e341"></a><a class="indexterm" name="d566e344"></a><a class="indexterm" name="d566e347"></a><a class="indexterm" name="d566e350"></a><a class="indexterm" name="d566e353"></a><a class="indexterm" name="d566e356"></a><div class="itemizedlist"><a name="standard-ldap-operations"></a><p>The standard operations are as follows.</p><ul class="itemizedlist" type="disc"><li class="listitem"><p>Bind (authenticate). The first operation in an LDAP session involves
+  requests, and finally disconnects when done.</p><div class="mediaobject" title="Schematic of LDAP client-server session"><a name="figure-ldap-lifecycle"></a><img src="images/ldap-lifecycle.png" longdesc="/Users/mark/Documents/workspace/2.6.0-docs/target/docbkx/html/dev-guide/index/figure-ldap-lifecycle.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-ldap-lifecycle.html" target="longdesc">D</a>]</span></div></div><a class="indexterm" name="d567e338"></a><a class="indexterm" name="d567e341"></a><a class="indexterm" name="d567e344"></a><a class="indexterm" name="d567e347"></a><a class="indexterm" name="d567e350"></a><a class="indexterm" name="d567e353"></a><a class="indexterm" name="d567e356"></a><div class="itemizedlist"><a name="standard-ldap-operations"></a><p>The standard operations are as follows.</p><ul class="itemizedlist" type="disc"><li class="listitem"><p>Bind (authenticate). The first operation in an LDAP session involves
     the client binding to the LDAP server, with the server authenticating the
     client. Authentication identifies the client's identity in LDAP terms, the
     identity which is later used by the server to authorize (or not) access
@@ -1175,7 +1175,7 @@ uidNumber: 1076
     to consolidate <code class="literal">ou=Customers</code> and
     <code class="literal">ou=Employees</code> under <code class="literal">ou=People</code>
     instead, all the entries underneath much change distinguished names.
-    <sup>[<a name="d566e404" href="#ftn.d566e404" class="footnote">6</a>]</sup></p></li><li class="listitem"><p>Unbind. When done making requests, the client should request an
+    <sup>[<a name="d567e404" href="#ftn.d567e404" class="footnote">6</a>]</sup></p></li><li class="listitem"><p>Unbind. When done making requests, the client should request an
     unbind operation to release resources right away for other clients.</p></li><li class="listitem"><p>Abandon. When a request seems to be taking too long to complete,
     or when a search request returns many more matches than desired, the client
     can send an abandon request to the server to drop the operation in
@@ -1183,12 +1183,12 @@ uidNumber: 1076
     client.</p></li></ul></div></div><div class="section" title="1.4.&nbsp;Standard LDAPv3 &amp; Extensions"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="standard-ldapv3-extensions"></a>1.4.&nbsp;Standard LDAPv3 &amp; Extensions</h2></div></div></div><p>LDAP has standardized two mechanisms for extending the kinds of
   operations that directory servers can perform. One mechanism involves using
   LDAP controls. The other mechanism involves using LDAP extended
-  operations.</p><a class="indexterm" name="d566e418"></a><p>LDAP controls are information added to an LDAP message to further
+  operations.</p><a class="indexterm" name="d567e418"></a><p>LDAP controls are information added to an LDAP message to further
   specify how an LDAP operation should be processed. For example, the
   Server Side Sort Request Control modifies a search to request that the
   directory server return entries to the client in sorted order. The Subtree
   Delete Request Control modifies a delete to request that the server
-  also remove child entries of the entry targeted for deletion.</p><a class="indexterm" name="d566e425"></a><p>LDAP extended operations are additional LDAP operations not included
+  also remove child entries of the entry targeted for deletion.</p><a class="indexterm" name="d567e425"></a><p>LDAP extended operations are additional LDAP operations not included
   in the original standard list. For example, the Cancel Extended Operation
   works like an abandon operation, but finishes with a response from the
   server after the cancel is complete. The StartTLS Extended Operation allows
@@ -1196,15 +1196,15 @@ uidNumber: 1076
   Transport Layer Security negotiations to protect communications.</p><p>Both LDAP controls and extended operations are demonstrated later in
   this guide. OpenDJ directory server supports many LDAP controls and a few
   LDAP extended operations, controls and extended operations matching those
-  demonstrated in this guide.</p></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.d566e257" href="#d566e257" class="para">1</a>] </sup>The
+  demonstrated in this guide.</p></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.d567e257" href="#d567e257" class="para">1</a>] </sup>The
   <code class="literal">objectClass</code> attribute type indicates which types of
   attributes are allowed and optional for the entry. As the entries object
   classes can be updated online, and even the definitions of object classes
   and attributes are expressed as entries that can be updated online, directory
-  data is extensible on the fly.</p></div><div class="footnote"><p><sup>[<a id="ftn.d566e264" href="#d566e264" class="para">2</a>] </sup>Attribute values
+  data is extensible on the fly.</p></div><div class="footnote"><p><sup>[<a id="ftn.d567e264" href="#d567e264" class="para">2</a>] </sup>Attribute values
   do not have to be strings. The directory can use base64 encoding, however,
   to make binary attribute values, such as passwords, certificates, or photos,
-  portable in text format.</p></div><div class="footnote"><p><sup>[<a id="ftn.d566e272" href="#d566e272" class="para">3</a>] </sup>Sometimes your distinguished names include
+  portable in text format.</p></div><div class="footnote"><p><sup>[<a id="ftn.d567e272" href="#d567e272" class="para">3</a>] </sup>Sometimes your distinguished names include
   characters that you must escape. The following example shows an entry that
   includes escaped characters in the DN.</p><div class="screen"><pre class="brush: plain;">$ ldapsearch --port 1389 --baseDN dc=example,dc=com "(uid=escape)"
 dn: cn=\" # \+ \, \; \&lt; = \&gt; \\ DN Escape Characters,dc=example,dc=com
@@ -1216,11 +1216,11 @@ givenName: " # + , ; &lt; = &gt; \
 uid: escape
 cn: " # + , ; &lt; = &gt; \ DN Escape Characters
 sn: DN Escape Characters
-mail: escape@example.com</pre></div></div><div class="footnote"><p><sup>[<a id="ftn.d566e279" href="#d566e279" class="para">4</a>] </sup>Hence pyramid icons are associated with directory
-  servers.</p></div><div class="footnote"><p><sup>[<a id="ftn.d566e314" href="#d566e314" class="para">5</a>] </sup>The root entry for the directory, technically the entry with DN
+mail: escape@example.com</pre></div></div><div class="footnote"><p><sup>[<a id="ftn.d567e279" href="#d567e279" class="para">4</a>] </sup>Hence pyramid icons are associated with directory
+  servers.</p></div><div class="footnote"><p><sup>[<a id="ftn.d567e314" href="#d567e314" class="para">5</a>] </sup>The root entry for the directory, technically the entry with DN
   <code class="literal">""</code> (the empty string), is called the root DSE, and
   contains information about what the server supports, including the other
-  root entries it serves.</p></div><div class="footnote"><p><sup>[<a id="ftn.d566e404" href="#d566e404" class="para">6</a>] </sup>Renaming entire branches of entries can be a major
+  root entries it serves.</p></div><div class="footnote"><p><sup>[<a id="ftn.d567e404" href="#d567e404" class="para">6</a>] </sup>Renaming entire branches of entries can be a major
     operation for the directory, so avoid moving entire branches if you
     can.</p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="preface.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-best-practices.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Preface&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;2.&nbsp;Best Practices For LDAP Application Developers</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssue.jspa?pid=10040&components=10132&issuetype=1">Log a documentation bug.</a></p></div>
 <script type="text/javascript">

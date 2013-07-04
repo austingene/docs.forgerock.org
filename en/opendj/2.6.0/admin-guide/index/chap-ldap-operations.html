@@ -1055,7 +1055,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
 </head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;6.&nbsp;Performing LDAP Operations</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-privileges-acis.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-rest-operations.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;6.&nbsp;Performing LDAP Operations"><div class="titlepage"><div><div><h2 class="title"><a name="chap-ldap-operations"></a>Chapter&nbsp;6.&nbsp;Performing LDAP Operations</h2></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="section"><a href="chap-ldap-operations.html#search-ldap">6.1. Searching the Directory</a></span></dt><dt><span class="section"><a href="chap-ldap-operations.html#compare-ldap">6.2. Comparing Attribute Values</a></span></dt><dt><span class="section"><a href="chap-ldap-operations.html#write-ldap">6.3. Updating the Directory</a></span></dt><dt><span class="section"><a href="chap-ldap-operations.html#change-password">6.4. Changing Passwords</a></span></dt><dt><span class="section"><a href="chap-ldap-operations.html#tools-properties">6.5. Configuring Default Settings</a></span></dt><dt><span class="section"><a href="chap-ldap-operations.html#client-auth">6.6. Authenticating To the Directory Server</a></span></dt><dt><span class="section"><a href="chap-ldap-operations.html#proxied-authz">6.7. Configuring Proxied Authorization</a></span></dt><dt><span class="section"><a href="chap-ldap-operations.html#client-cert-auth">6.8. Authenticating Using a Certificate</a></span></dt></dl></div><p>OpenDJ comes with a Control Panel browser for managing entries and also
  command-line tools for performing LDAP operations. This chapter demonstrates
- how to use the command line tools to script LDAP operations.</p><div class="section" title="6.1.&nbsp;Searching the Directory"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="search-ldap"></a>6.1.&nbsp;Searching the Directory</h2></div></div></div><a class="indexterm" name="d1710e3678"></a><p>Searching the directory resembles searching for a phone number in
+ how to use the command line tools to script LDAP operations.</p><div class="section" title="6.1.&nbsp;Searching the Directory"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="search-ldap"></a>6.1.&nbsp;Searching the Directory</h2></div></div></div><a class="indexterm" name="d1711e3678"></a><p>Searching the directory resembles searching for a phone number in
   a paper phone book. You can look up a phone number because you know the
   last name of a subscriber's entry. In other words, you use the value of
   one attribute of the entry to find entries that have another attribute
@@ -1342,7 +1342,7 @@ Fred&eacute;rique Dupont</pre></div><div class="itemizedlist"><p>At the end of t
     </td><td valign="top">
      <p><code class="literal">"|(sn=Jensen)(sn=Johnson)"</code> matches entries with
      surname Jensen or surname Johnson.</p>
-    </td></tr></tbody></table></div></div><br class="table-break"></div><div class="section" title="6.2.&nbsp;Comparing Attribute Values"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="compare-ldap"></a>6.2.&nbsp;Comparing Attribute Values</h2></div></div></div><a class="indexterm" name="d1710e4243"></a><p>The compare operation checks whether an attribute value you specify
+    </td></tr></tbody></table></div></div><br class="table-break"></div><div class="section" title="6.2.&nbsp;Comparing Attribute Values"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="compare-ldap"></a>6.2.&nbsp;Comparing Attribute Values</h2></div></div></div><a class="indexterm" name="d1711e4243"></a><p>The compare operation checks whether an attribute value you specify
   matches the attribute value stored on one or more directory entries.</p><div class="example"><a name="compare-example"></a><div class="example-title">Example&nbsp;6.8.&nbsp;Compare: Checking <code class="literal">authPassword</code></div><div class="example-contents"><p>In this example, Kirsten Vaughan checks whether the hashed password
    value matches the stored value on <code class="literal">authPassword</code>.</p><div class="screen"><pre class="brush: plain;">$ ldapcompare
  --port 1389
@@ -1354,7 +1354,7 @@ Comparing type authPassword with value
  MD5$dFHgpDxXUT8=$qlC4xMXvmVlusJLz9/WJ5Q== in entry
  uid=kvaughan,ou=people,dc=example,dc=com
 Compare operation returned true for entry
- uid=kvaughan,ou=people,dc=example,dc=com</pre></div></div></div><br class="example-break"></div><div class="section" title="6.3.&nbsp;Updating the Directory"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="write-ldap"></a>6.3.&nbsp;Updating the Directory</h2></div></div></div><div class="toc"><dl><dt><span class="section"><a href="chap-ldap-operations.html#add-ldap">6.3.1. Adding Entries</a></span></dt><dt><span class="section"><a href="chap-ldap-operations.html#modify-ldap">6.3.2. Modifying Entry Attributes</a></span></dt><dt><span class="section"><a href="chap-ldap-operations.html#filter-adds-modifies">6.3.3. Filtering Add &amp; Modify Operations</a></span></dt><dt><span class="section"><a href="chap-ldap-operations.html#rename-ldap">6.3.4. Renaming Entries</a></span></dt><dt><span class="section"><a href="chap-ldap-operations.html#rename-moddn">6.3.5. Moving Entries</a></span></dt><dt><span class="section"><a href="chap-ldap-operations.html#delete-ldap">6.3.6. Deleting Entries</a></span></dt></dl></div><a class="indexterm" name="d1710e4266"></a><a class="indexterm" name="d1710e4269"></a><p>Authorized users can change directory data using the LDAP add, modify,
+ uid=kvaughan,ou=people,dc=example,dc=com</pre></div></div></div><br class="example-break"></div><div class="section" title="6.3.&nbsp;Updating the Directory"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="write-ldap"></a>6.3.&nbsp;Updating the Directory</h2></div></div></div><div class="toc"><dl><dt><span class="section"><a href="chap-ldap-operations.html#add-ldap">6.3.1. Adding Entries</a></span></dt><dt><span class="section"><a href="chap-ldap-operations.html#modify-ldap">6.3.2. Modifying Entry Attributes</a></span></dt><dt><span class="section"><a href="chap-ldap-operations.html#filter-adds-modifies">6.3.3. Filtering Add &amp; Modify Operations</a></span></dt><dt><span class="section"><a href="chap-ldap-operations.html#rename-ldap">6.3.4. Renaming Entries</a></span></dt><dt><span class="section"><a href="chap-ldap-operations.html#rename-moddn">6.3.5. Moving Entries</a></span></dt><dt><span class="section"><a href="chap-ldap-operations.html#delete-ldap">6.3.6. Deleting Entries</a></span></dt></dl></div><a class="indexterm" name="d1711e4266"></a><a class="indexterm" name="d1711e4269"></a><p>Authorized users can change directory data using the LDAP add, modify,
   modify DN, and delete operations.</p><div class="section" title="6.3.1.&nbsp;Adding Entries"><div class="titlepage"><div><div><h3 class="title"><a name="add-ldap"></a>6.3.1.&nbsp;Adding Entries</h3></div></div></div><p>With the <span class="command"><strong>ldapmodify -a</strong></span> command, authorized users
    can add entire entries from the same sort of LDIF file used to import
    and export data.</p><div class="example"><a name="add-two-users"></a><div class="example-title">Example&nbsp;6.9.&nbsp;Add: Two New Users</div><div class="example-contents"><div class="screen"><pre class="brush: plain;">$ cat new-users.ldif 
@@ -1486,7 +1486,7 @@ description: Employee of the Month
 telephoneNumber: +47 2108 1746
 roomNumber: 1389
 l: Grenoble
-ETag: 00000000e882c35e</pre></div></div><br class="example-break"></div><div class="section" title="6.3.3.&nbsp;Filtering Add &amp; Modify Operations"><div class="titlepage"><div><div><h3 class="title"><a name="filter-adds-modifies"></a>6.3.3.&nbsp;Filtering Add &amp; Modify Operations</h3></div></div></div><a class="indexterm" name="d1710e4361"></a><p>Some client applications send updates including attributes with names
+ETag: 00000000e882c35e</pre></div></div><br class="example-break"></div><div class="section" title="6.3.3.&nbsp;Filtering Add &amp; Modify Operations"><div class="titlepage"><div><div><h3 class="title"><a name="filter-adds-modifies"></a>6.3.3.&nbsp;Filtering Add &amp; Modify Operations</h3></div></div></div><a class="indexterm" name="d1711e4361"></a><p>Some client applications send updates including attributes with names
    that differ from the attribute names defined in OpenDJ. Other client
    applications might try to update attributes they should not update, such
    as the operational attributes <code class="literal">creatorsName</code>,
@@ -1700,8 +1700,8 @@ DELETE operation successful for DN ou=Employees,dc=example,dc=com</pre></div></d
  --bindPassword password
  --deleteSubtree "ou=Special Users,dc=example,dc=com"
 Processing DELETE request for ou=Special Users,dc=example,dc=com
-DELETE operation successful for DN ou=Special Users,dc=example,dc=com</pre></div></div></div><br class="example-break"></div></div><div class="section" title="6.4.&nbsp;Changing Passwords"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="change-password"></a>6.4.&nbsp;Changing Passwords</h2></div></div></div><a class="indexterm" name="d1710e4533"></a><p>With the <span class="command"><strong>ldappasswordmodify</strong></span> command, authorized
-  users can change and reset user passwords.</p><div class="example"><a name="password-reset"></a><div class="example-title">Example&nbsp;6.19.&nbsp;Password Reset</div><div class="example-contents"><a class="indexterm" name="d1710e4546"></a><p>The following example shows Kirsten Vaughan resetting Sam Carter's
+DELETE operation successful for DN ou=Special Users,dc=example,dc=com</pre></div></div></div><br class="example-break"></div></div><div class="section" title="6.4.&nbsp;Changing Passwords"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="change-password"></a>6.4.&nbsp;Changing Passwords</h2></div></div></div><a class="indexterm" name="d1711e4533"></a><p>With the <span class="command"><strong>ldappasswordmodify</strong></span> command, authorized
+  users can change and reset user passwords.</p><div class="example"><a name="password-reset"></a><div class="example-title">Example&nbsp;6.19.&nbsp;Password Reset</div><div class="example-contents"><a class="indexterm" name="d1711e4546"></a><p>The following example shows Kirsten Vaughan resetting Sam Carter's
    password. Kirsten has the appropriate privilege to reset Sam's
    password.</p><div class="screen"><pre class="brush: plain;">$ ldappasswordmodify
  --useStartTLS
@@ -1757,7 +1757,7 @@ dn: uid=bjensen,ou=People,dc=example,dc=com
 userPassword: {SSHA}k0eEeCxj9YRXUp8yJn0Z/mwqe+wrcFb1N1gg2g==
 cn: Barbara Jensen
 cn: Babs Jensen
-</pre></div></div></div><br class="example-break"></div><div class="section" title="6.5.&nbsp;Configuring Default Settings"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="tools-properties"></a>6.5.&nbsp;Configuring Default Settings</h2></div></div></div><a class="indexterm" name="d1710e4596"></a><p>You can use <code class="filename">~/.opendj/tools.properties</code> to set
+</pre></div></div></div><br class="example-break"></div><div class="section" title="6.5.&nbsp;Configuring Default Settings"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="tools-properties"></a>6.5.&nbsp;Configuring Default Settings</h2></div></div></div><a class="indexterm" name="d1711e4596"></a><p>You can use <code class="filename">~/.opendj/tools.properties</code> to set
   the defaults for bind DN, host name, and port number as in the following
   example.</p><pre class="brush: ini;">hostname=directory.example.com
 port=1389
@@ -1768,7 +1768,7 @@ ldapdelete.port=1389
 ldapmodify.port=1389
 ldappasswordmodify.port=1389
 ldapsearch.port=1389</pre><p>The location on Windows is
-  <code class="filename">%UserProfile%/.opendj/tools.properties</code>.</p></div><div class="section" title="6.6.&nbsp;Authenticating To the Directory Server"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="client-auth"></a>6.6.&nbsp;Authenticating To the Directory Server</h2></div></div></div><a class="indexterm" name="d1710e4616"></a><p>Authentication is the act of confirming the identity of a principal.
+  <code class="filename">%UserProfile%/.opendj/tools.properties</code>.</p></div><div class="section" title="6.6.&nbsp;Authenticating To the Directory Server"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="client-auth"></a>6.6.&nbsp;Authenticating To the Directory Server</h2></div></div></div><a class="indexterm" name="d1711e4616"></a><p>Authentication is the act of confirming the identity of a principal.
   Authorization is the act of determining whether to grant or to deny access to
   a principal. Authentication is done to make authorization decisions.</p><p>As explained in <a href="../../admin-guide/index/chap-privileges-acis.html" class="link"><em class="citetitle">Configuring
   Privileges &amp; Access Control</em></a>, OpenDJ directory server
@@ -1808,7 +1808,7 @@ ldapsearch.port=1389</pre><p>The location on Windows is
   might know to extract the user ID <code class="literal">bjensen</code> from the address,
   and then build the corresponding DN,
   <code class="literal">uid=bjensen,ou=people,dc=example,dc=com</code> in order to
-  bind.</p><a class="indexterm" name="d1710e4659"></a><p>When an identifier string provided by the user can readily be mapped to
+  bind.</p><a class="indexterm" name="d1711e4659"></a><p>When an identifier string provided by the user can readily be mapped to
   the user's entry DN, OpenDJ directory server can do the translation between
   the identifier string and the entry DN. This translation is the job of a
   component called an identity mapper. Identity mappers are used to perform
@@ -1900,7 +1900,7 @@ userPassword: {SSHA}7S4Si+vPE513cYQ7otiqb8hjiCzU7XNTv0RPBA==</pre></div><p>Try t
   with <code class="literal">match-pattern</code> and <code class="literal">replace-pattern</code>
   settings for the Regular Expression identity mapper. The
   <code class="literal">match-pattern</code> can be any regular expression supported by
-  <code class="literal">javax.util.regex.Pattern</code>.</p></div><div class="section" title="6.7.&nbsp;Configuring Proxied Authorization"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="proxied-authz"></a>6.7.&nbsp;Configuring Proxied Authorization</h2></div></div></div><a class="indexterm" name="d1710e4717"></a><p>Proxied authorization provides a standard control as defined in <a class="link" href="http://tools.ietf.org/html/rfc4370" target="_top">RFC 4370</a> (and an
+  <code class="literal">javax.util.regex.Pattern</code>.</p></div><div class="section" title="6.7.&nbsp;Configuring Proxied Authorization"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="proxied-authz"></a>6.7.&nbsp;Configuring Proxied Authorization</h2></div></div></div><a class="indexterm" name="d1711e4717"></a><p>Proxied authorization provides a standard control as defined in <a class="link" href="http://tools.ietf.org/html/rfc4370" target="_top">RFC 4370</a> (and an
   earlier Internet-Draft) for binding with the user credentials of a proxy, who
   carries out LDAP operations on behalf of other users. You might use proxied
   authorization, for example, to have your application bind with its
@@ -1955,7 +1955,7 @@ MODIFY operation successful for DN uid=bjensen,ou=People,dc=example,dc=com</pre>
   get user ID values from the client, such as <code class="literal">bjensen</code>, you
   can use the Exact Match Identity Mapper to match those to DNs based on an
   attribute of the entry. Use the <span class="command"><strong>dsconfig</strong></span> command
-  interactively to investigate the settings you need.</p></div><div class="section" title="6.8.&nbsp;Authenticating Using a Certificate"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="client-cert-auth"></a>6.8.&nbsp;Authenticating Using a Certificate</h2></div></div></div><a class="indexterm" name="d1710e4773"></a><a class="indexterm" name="d1710e4776"></a><a class="indexterm" name="d1710e4779"></a><p>One alternative to simple binds with user name/password combinations
+  interactively to investigate the settings you need.</p></div><div class="section" title="6.8.&nbsp;Authenticating Using a Certificate"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="client-cert-auth"></a>6.8.&nbsp;Authenticating Using a Certificate</h2></div></div></div><a class="indexterm" name="d1711e4773"></a><a class="indexterm" name="d1711e4776"></a><a class="indexterm" name="d1711e4779"></a><p>One alternative to simple binds with user name/password combinations
   consists in storing a digital certificate on the user entry, and then using
   the certificate as credentials during the bind. You can use this mechanism for
   example to let applications bind without using passwords.</p><p>Simply by setting up a secure connection with a certificate, the client
@@ -2117,7 +2117,7 @@ KeyIdentifier [
 
 Trust this certificate? [no]:  yes
 Certificate was added to keystore</pre></div></li><li class="step" title="Step 8"><p>When using a certificate signed by a CA whose certificate is not
-    delivered with the Java runtime environment<sup>[<a name="d1710e4867" href="#ftn.d1710e4867" class="footnote">4</a>]</sup>, import the CA certificate either
+    delivered with the Java runtime environment<sup>[<a name="d1711e4867" href="#ftn.d1711e4867" class="footnote">4</a>]</sup>, import the CA certificate either
      into the Java runtime environment trust store, or into the OpenDJ trust
      store as shown in the following example.</p><div class="screen"><pre class="brush: plain;">$ keytool
  -import
@@ -2353,7 +2353,7 @@ $ ldapsearch
  --trustStorePasswordFile keystore.pin
  "(cn=My App)" userPassword
 dn: cn=My App,ou=Apps,dc=example,dc=com
-userPassword: {SSHA}vy/vTthOQoV/wH3MciTOBKKR4OX+0dSN/a09Ew==</pre></div></div></div><br class="example-break"></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.d1710e4867" href="#d1710e4867" class="para">4</a>] </sup><code class="filename">$JAVA_HOME/jre/lib/security/cacerts</code> holds the
+userPassword: {SSHA}vy/vTthOQoV/wH3MciTOBKKR4OX+0dSN/a09Ew==</pre></div></div></div><br class="example-break"></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.d1711e4867" href="#d1711e4867" class="para">4</a>] </sup><code class="filename">$JAVA_HOME/jre/lib/security/cacerts</code> holds the
      certificates for many CAs. To get the full list, use the following
      command.</p><div class="screen"><pre class="brush: plain;">$ keytool
  -list
