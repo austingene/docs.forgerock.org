@@ -13,6 +13,22 @@ var minus = "<img alt=\"minus\" class=\"toggle\" width=\"18\" height=\"10\" src=
 var plus = "<img alt=\"plus\" class=\"toggle\" width=\"18\" height=\"10\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAKCAYAAAC5Sw6hAAADHmlDQ1BJQ0MgUHJvZmlsZQAAeAGFVN9r01AU/tplnbDhizpnEQk+aJFuZFN0Q5y2a1e6zVrqNrchSJumbVyaxiTtfrAH2YtvOsV38Qc++QcM2YNve5INxhRh+KyIIkz2IrOemzRNJ1MDufe73/nuOSfn5F6g+XFa0xQvDxRVU0/FwvzE5BTf8gFeHEMr/GhNi4YWSiZHQA/Tsnnvs/MOHsZsdO5v36v+Y9WalQwR8BwgvpQ1xCLhWaBpXNR0E+DWie+dMTXCzUxzWKcECR9nOG9jgeGMjSOWZjQ1QJoJwgfFQjpLuEA4mGng8w3YzoEU5CcmqZIuizyrRVIv5WRFsgz28B9zg/JfsKiU6Zut5xCNbZoZTtF8it4fOX1wjOYA1cE/Xxi9QbidcFg246M1fkLNJK4RJr3n7nRpmO1lmpdZKRIlHCS8YlSuM2xp5gsDiZrm0+30UJKwnzS/NDNZ8+PtUJUE6zHF9fZLRvS6vdfbkZMH4zU+pynWf0D+vff1corleZLw67QejdX0W5I6Vtvb5M2mI8PEd1E/A0hCgo4cZCjgkUIMYZpjxKr4TBYZIkqk0ml0VHmyONY7KJOW7RxHeMlfDrheFvVbsrj24Pue3SXXjrwVhcW3o9hR7bWB6bqyE5obf3VhpaNu4Te55ZsbbasLCFH+iuWxSF5lyk+CUdd1NuaQU5f8dQvPMpTuJXYSWAy6rPBe+CpsCk+FF8KXv9TIzt6tEcuAcSw+q55TzcbsJdJM0utkuL+K9ULGGPmQMUNanb4kTZyKOfLaUAsnBneC6+biXC/XB567zF3h+rkIrS5yI47CF/VFfCHwvjO+Pl+3b4hhp9u+02TrozFa67vTkbqisXqUj9sn9j2OqhMZsrG+sX5WCCu0omNqSrN0TwADJW1Ol/MFk+8RhAt8iK4tiY+rYleQTysKb5kMXpcMSa9I2S6wO4/tA7ZT1l3maV9zOfMqcOkb/cPrLjdVBl4ZwNFzLhegM3XkCbB8XizrFdsfPJ63gJE722OtPW1huos+VqvbdC5bHgG7D6vVn8+q1d3n5H8LeKP8BqkjCtbCoV8yAAAAYElEQVQoFWO8HyrynwEKFFa9ZoSxiaEfhInC9TKADAICBlz4Q67UfxDGJQ8SB5nBRIzNxKihmkEs2Gz7mCeN8DtUAbIY/6SnGGFJWxch2whzCbIYNl9QzUVUM4iRWgkSAKcsS/O6iJF0AAAAAElFTkSuQmCC\">";
 
 $(document).ready(function() {
+
+  /*
+   * DOCS-36: HTML output should wrap large images in links to themselves at
+   *          full size
+   *
+   * It would be cool if when you click (large) images in HTML output, you get
+   * the same effect as right-click &gt; copy image location + new tab &gt;
+   * paste copied image location and go.
+   *
+   * Run this before inserting [-] and [+] images below, otherwise clicking
+   * [-] opens a new browser tab with the [-] image.
+   */
+  $("img").wrap(function() {
+    return "<a target=\"_blank\" href=\"" + $(this).attr('src') + "\" />";
+  });
+
    /*
     Include both a wrapped (.screen) and unwrapped (.flat) version of
     each screen element, with [-] image to collapse and [+] image
@@ -46,18 +62,6 @@ $(document).ready(function() {
     }).mouseleave(function() {
       $(this).children('a.showlink').hide();
     });
-  });
-
-  /*
-   * DOCS-36: HTML output should wrap large images in links to themselves at
-   *          full size
-   *
-   * It would be cool if when you click (large) images in HTML output, you get
-   * the same effect as right-click &gt; copy image location + new tab &gt;
-   * paste copied image location and go.
-   */
-  $("img").wrap(function() {
-    return "<a target=\"_blank\" href=\"" + $(this).attr('src') + "\" />";
   });
 
 });
@@ -1005,7 +1009,11 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 <!-- END SyntaxHighlighter 3.0.83 -->
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
-</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div><p class="cornerBanner"><a target="_blank" href="http://docs.forgerock.org/en/opendj/2.6.0/">v2.6.0 available</a></p></div><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">About OpenDJ</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="index.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-whats-new.html">Next</a></td></tr></table><hr></div><div class="preface" title="About OpenDJ"><div class="titlepage"><div><div><h2 class="title"><a name="d0e88"></a>About OpenDJ</h2></div></div></div><p>OpenDJ is an LDAPv3 compliant directory service, developed for
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div><p class="cornerBanner"><a target="_blank" href="http://docs.forgerock.org/en/opendj/2.6.0/">v2.6.0 available</a></p></div><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">About OpenDJ</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="index.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-whats-new.html">Next</a></td></tr></table><hr></div><div class="preface" title="About OpenDJ"><div class="titlepage"><div><div><h2 class="title"><a name="d0e88"></a>About OpenDJ</h2></div></div></div><div class="important" title="Important" style="font-style: italic;"><h3 class="title">Important</h3><p>
+    In October 2013 OpenDJ 2.5.0-Xpress1 reached <a class="link" href="https://forgerock.zendesk.com/entries/24898647-Product-release-and-EOSL-dates" target="_blank">End of Service Life</a> (EOSL).
+   </p><p>
+    ForgeRock customers must upgrade OpenDJ in order to receive continued support.
+   </p></div><p>OpenDJ is an LDAPv3 compliant directory service, developed for
   the Java platform, providing a high performance, highly available,
   and secure store for the identities managed by your organization. Its
   easy installation process, combined with the power of the Java
