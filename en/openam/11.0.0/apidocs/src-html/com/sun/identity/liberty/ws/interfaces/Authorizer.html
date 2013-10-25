@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/**<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.<a name="line.2"></a>
+<span class="sourceLineNo">003</span> *<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * Copyright (c) 2006 Sun Microsystems Inc. All Rights Reserved<a name="line.4"></a>
+<span class="sourceLineNo">005</span> *<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * The contents of this file are subject to the terms<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * of the Common Development and Distribution License<a name="line.7"></a>
+<span class="sourceLineNo">008</span> * (the License). You may not use this file except in<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * compliance with the License.<a name="line.9"></a>
+<span class="sourceLineNo">010</span> *<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * You can obtain a copy of the License at<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * https://opensso.dev.java.net/public/CDDLv1.0.html or<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * opensso/legal/CDDLv1.0.txt<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * See the License for the specific language governing<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * permission and limitations under the License.<a name="line.15"></a>
+<span class="sourceLineNo">016</span> *<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * When distributing Covered Code, include this CDDL<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * Header Notice in each file and include the License file<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * at opensso/legal/CDDLv1.0.txt.<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * If applicable, add the following below the CDDL Header,<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * with the fields enclosed by brackets [] replaced by<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * your own identifying information:<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * "Portions Copyrighted [year] [name of copyright owner]"<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * $Id: Authorizer.java,v 1.2 2008/06/25 05:47:18 qcheng Exp $<a name="line.25"></a>
+<span class="sourceLineNo">026</span> *<a name="line.26"></a>
+<span class="sourceLineNo">027</span> */<a name="line.27"></a>
+<span class="sourceLineNo">028</span><a name="line.28"></a>
+<span class="sourceLineNo">029</span>package com.sun.identity.liberty.ws.interfaces;<a name="line.29"></a>
+<span class="sourceLineNo">030</span><a name="line.30"></a>
+<span class="sourceLineNo">031</span>/**<a name="line.31"></a>
+<span class="sourceLineNo">032</span> * This class &lt;code&gt;Authorizer&lt;/code&gt; is an interface for identity service<a name="line.32"></a>
+<span class="sourceLineNo">033</span> * to check authorization of a &lt;code&gt;WSC&lt;/code&gt;.<a name="line.33"></a>
+<span class="sourceLineNo">034</span> * @supported.all.api<a name="line.34"></a>
+<span class="sourceLineNo">035</span> */<a name="line.35"></a>
+<span class="sourceLineNo">036</span>public interface Authorizer {<a name="line.36"></a>
+<span class="sourceLineNo">037</span><a name="line.37"></a>
+<span class="sourceLineNo">038</span>    /**<a name="line.38"></a>
+<span class="sourceLineNo">039</span>     * Key of a parameter Map which contains information useful for policy<a name="line.39"></a>
+<span class="sourceLineNo">040</span>     * evaluation. The value of this key is id of the user whose resource id<a name="line.40"></a>
+<span class="sourceLineNo">041</span>     * being accessed.<a name="line.41"></a>
+<span class="sourceLineNo">042</span>     */<a name="line.42"></a>
+<span class="sourceLineNo">043</span>    public static final String USER_ID = "userID";<a name="line.43"></a>
+<span class="sourceLineNo">044</span><a name="line.44"></a>
+<span class="sourceLineNo">045</span>    /**<a name="line.45"></a>
+<span class="sourceLineNo">046</span>     * Key of a parameter Map which contains information useful for policy<a name="line.46"></a>
+<span class="sourceLineNo">047</span>     * evaluation. The value of this key is the authentication mechanism<a name="line.47"></a>
+<span class="sourceLineNo">048</span>     * web service consumer used.<a name="line.48"></a>
+<span class="sourceLineNo">049</span>     */<a name="line.49"></a>
+<span class="sourceLineNo">050</span>    public static final String AUTH_TYPE = "authType";<a name="line.50"></a>
+<span class="sourceLineNo">051</span><a name="line.51"></a>
+<span class="sourceLineNo">052</span>    /**<a name="line.52"></a>
+<span class="sourceLineNo">053</span>     * Key of a parameter Map which contains information useful for policy<a name="line.53"></a>
+<span class="sourceLineNo">054</span>     * evaluation. The value of this key is<a name="line.54"></a>
+<span class="sourceLineNo">055</span>     * &lt;code&gt;com.sun.identity.liberty.ws.soapbinding.Message&lt;/code&gt;.<a name="line.55"></a>
+<span class="sourceLineNo">056</span>     */<a name="line.56"></a>
+<span class="sourceLineNo">057</span>    public static final String MESSAGE = "message";<a name="line.57"></a>
+<span class="sourceLineNo">058</span><a name="line.58"></a>
+<span class="sourceLineNo">059</span><a name="line.59"></a>
+<span class="sourceLineNo">060</span>    /**<a name="line.60"></a>
+<span class="sourceLineNo">061</span>     * Checks if the &lt;code&gt;WSC&lt;/code&gt; is authorized to query or modify the<a name="line.61"></a>
+<span class="sourceLineNo">062</span>     * select data.<a name="line.62"></a>
+<span class="sourceLineNo">063</span>     *<a name="line.63"></a>
+<span class="sourceLineNo">064</span>     * @param credential credential of a &lt;code&gt;WSC&lt;/code&gt;.<a name="line.64"></a>
+<span class="sourceLineNo">065</span>     * @param action request action.<a name="line.65"></a>
+<span class="sourceLineNo">066</span>     * @param data Object who is being accessed.<a name="line.66"></a>
+<span class="sourceLineNo">067</span>     * @param env A Map contains information useful for policy evaluation.<a name="line.67"></a>
+<span class="sourceLineNo">068</span>     *          The following key is defined and its value should be <a name="line.68"></a>
+<span class="sourceLineNo">069</span>     *          passed in:<a name="line.69"></a>
+<span class="sourceLineNo">070</span>     *          Key: &lt;code&gt;USER_ID&lt;/code&gt;<a name="line.70"></a>
+<span class="sourceLineNo">071</span>     *          Value: id of the user whose resource is being accessed.<a name="line.71"></a>
+<span class="sourceLineNo">072</span>     *          Key: &lt;code&gt;AUTH_TYPE&lt;/code&gt;<a name="line.72"></a>
+<span class="sourceLineNo">073</span>     *          Value: The authentication mechanism &lt;code&gt;WSC&lt;/code&gt; used.<a name="line.73"></a>
+<span class="sourceLineNo">074</span>     *          Key: &lt;code&gt;MESSAGE&lt;/code&gt;<a name="line.74"></a>
+<span class="sourceLineNo">075</span>     *          Value:<a name="line.75"></a>
+<span class="sourceLineNo">076</span>     *          &lt;code&gt;com.sun.identity.liberty.ws.soapbinding.Message<a name="line.76"></a>
+<span class="sourceLineNo">077</span>     *          &lt;/code&gt;.<a name="line.77"></a>
+<span class="sourceLineNo">078</span>     * @return true if the &lt;code&gt;WSC&lt;/code&gt; is authorized.<a name="line.78"></a>
+<span class="sourceLineNo">079</span>     */<a name="line.79"></a>
+<span class="sourceLineNo">080</span>    public boolean isAuthorized(Object credential, String action, <a name="line.80"></a>
+<span class="sourceLineNo">081</span>                                Object data, java.util.Map env);<a name="line.81"></a>
+<span class="sourceLineNo">082</span><a name="line.82"></a>
+<span class="sourceLineNo">083</span>    /**<a name="line.83"></a>
+<span class="sourceLineNo">084</span>     * Returns authorization decision for the given action(query or modify)<a name="line.84"></a>
+<span class="sourceLineNo">085</span>     * and to the given select data <a name="line.85"></a>
+<span class="sourceLineNo">086</span>     * @param credential credential of a &lt;code&gt;WSC&lt;/code&gt;.<a name="line.86"></a>
+<span class="sourceLineNo">087</span>     * @param action request action.<a name="line.87"></a>
+<span class="sourceLineNo">088</span>     * @param data Object who is being accessed.<a name="line.88"></a>
+<span class="sourceLineNo">089</span>     * @param env A Map contains information useful for policy evaluation.<a name="line.89"></a>
+<span class="sourceLineNo">090</span>     *          The following key is defined and its value should be passed in:<a name="line.90"></a>
+<span class="sourceLineNo">091</span>     *          Key: &lt;code&gt;USER_ID&lt;/code&gt;<a name="line.91"></a>
+<span class="sourceLineNo">092</span>     *          Value: id of the user whose resource is being accessed.<a name="line.92"></a>
+<span class="sourceLineNo">093</span>     *          Key: &lt;code&gt;AUTH_TYPE&lt;/code&gt;<a name="line.93"></a>
+<span class="sourceLineNo">094</span>     *          Value: The authentication mechanism &lt;code&gt;WSC&lt;/code&gt; used.<a name="line.94"></a>
+<span class="sourceLineNo">095</span>     *          Key: &lt;code&gt;MESSAGE&lt;/code&gt;<a name="line.95"></a>
+<span class="sourceLineNo">096</span>     *          Value:<a name="line.96"></a>
+<span class="sourceLineNo">097</span>     *          &lt;code&gt;com.sun.identity.liberty.ws.soapbinding.Message&lt;/code&gt;.<a name="line.97"></a>
+<span class="sourceLineNo">098</span>     * @return &lt;code&gt;AuthorizationDecision&lt;/code&gt; object contains authorization <a name="line.98"></a>
+<span class="sourceLineNo">099</span>     *             decision information for the given resource.<a name="line.99"></a>
+<span class="sourceLineNo">100</span>     * @exception Exception<a name="line.100"></a>
+<span class="sourceLineNo">101</span>     */<a name="line.101"></a>
+<span class="sourceLineNo">102</span>    public Object getAuthorizationDecision(<a name="line.102"></a>
+<span class="sourceLineNo">103</span>                  Object credential,<a name="line.103"></a>
+<span class="sourceLineNo">104</span>                  String action,<a name="line.104"></a>
+<span class="sourceLineNo">105</span>                  Object data,<a name="line.105"></a>
+<span class="sourceLineNo">106</span>                  java.util.Map env)<a name="line.106"></a>
+<span class="sourceLineNo">107</span>    throws Exception;<a name="line.107"></a>
+<span class="sourceLineNo">108</span><a name="line.108"></a>
+<span class="sourceLineNo">109</span>}<a name="line.109"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>
