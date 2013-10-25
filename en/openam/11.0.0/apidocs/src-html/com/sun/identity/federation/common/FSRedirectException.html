@@ -1,0 +1,446 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/**<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.<a name="line.2"></a>
+<span class="sourceLineNo">003</span> *<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * Copyright (c) 2006 Sun Microsystems Inc. All Rights Reserved<a name="line.4"></a>
+<span class="sourceLineNo">005</span> *<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * The contents of this file are subject to the terms<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * of the Common Development and Distribution License<a name="line.7"></a>
+<span class="sourceLineNo">008</span> * (the License). You may not use this file except in<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * compliance with the License.<a name="line.9"></a>
+<span class="sourceLineNo">010</span> *<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * You can obtain a copy of the License at<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * https://opensso.dev.java.net/public/CDDLv1.0.html or<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * opensso/legal/CDDLv1.0.txt<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * See the License for the specific language governing<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * permission and limitations under the License.<a name="line.15"></a>
+<span class="sourceLineNo">016</span> *<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * When distributing Covered Code, include this CDDL<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * Header Notice in each file and include the License file<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * at opensso/legal/CDDLv1.0.txt.<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * If applicable, add the following below the CDDL Header,<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * with the fields enclosed by brackets [] replaced by<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * your own identifying information:<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * "Portions Copyrighted [year] [name of copyright owner]"<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * $Id: FSRedirectException.java,v 1.2 2008/06/25 05:46:40 qcheng Exp $<a name="line.25"></a>
+<span class="sourceLineNo">026</span> *<a name="line.26"></a>
+<span class="sourceLineNo">027</span> */<a name="line.27"></a>
+<span class="sourceLineNo">028</span><a name="line.28"></a>
+<span class="sourceLineNo">029</span>/*<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * Portions Copyright 2013 ForgeRock AS<a name="line.30"></a>
+<span class="sourceLineNo">031</span> */<a name="line.31"></a>
+<span class="sourceLineNo">032</span>package com.sun.identity.federation.common;<a name="line.32"></a>
+<span class="sourceLineNo">033</span><a name="line.33"></a>
+<span class="sourceLineNo">034</span>import com.sun.identity.shared.locale.L10NMessageImpl;<a name="line.34"></a>
+<span class="sourceLineNo">035</span>import java.io.PrintWriter;<a name="line.35"></a>
+<span class="sourceLineNo">036</span>import java.io.StringWriter;<a name="line.36"></a>
+<span class="sourceLineNo">037</span><a name="line.37"></a>
+<span class="sourceLineNo">038</span>/**<a name="line.38"></a>
+<span class="sourceLineNo">039</span> * &lt;PRE&gt;<a name="line.39"></a>
+<span class="sourceLineNo">040</span> * This class is the super-class for all Federation &lt;B&gt;checked&lt;/B&gt; exceptions.<a name="line.40"></a>
+<span class="sourceLineNo">041</span> *<a name="line.41"></a>
+<span class="sourceLineNo">042</span> *<a name="line.42"></a>
+<span class="sourceLineNo">043</span> * Some Exception throwing guidelines:<a name="line.43"></a>
+<span class="sourceLineNo">044</span> * -------------------------------------<a name="line.44"></a>
+<span class="sourceLineNo">045</span> *<a name="line.45"></a>
+<span class="sourceLineNo">046</span> * &lt;B&gt; Checked exceptions &lt;/B&gt; are sub-classes of java.lang.Exception; methods<a name="line.46"></a>
+<span class="sourceLineNo">047</span> * throwing this type of exception are forced to define a throws clause<a name="line.47"></a>
+<span class="sourceLineNo">048</span> * in the method signature and client programmers need to catch and<a name="line.48"></a>
+<span class="sourceLineNo">049</span> * handle the exception with a try/catch block or declare the throws clause<a name="line.49"></a>
+<span class="sourceLineNo">050</span> * in their methods.<a name="line.50"></a>
+<span class="sourceLineNo">051</span> * &lt;B&gt; Unchecked exceptions &lt;/B&gt; are sub-classes of java.lang.RuntimeException.<a name="line.51"></a>
+<span class="sourceLineNo">052</span> * Client programmers don't have to deal with the exception using a<a name="line.52"></a>
+<span class="sourceLineNo">053</span> * try/catch block and the method throwing it does not have to define it<a name="line.53"></a>
+<span class="sourceLineNo">054</span> * in its signature.<a name="line.54"></a>
+<span class="sourceLineNo">055</span> *<a name="line.55"></a>
+<span class="sourceLineNo">056</span> * - If your method encounters an abnormal condition which causes it<a name="line.56"></a>
+<span class="sourceLineNo">057</span> *   to be unable to fulfill its contract, or throw a checked or<a name="line.57"></a>
+<span class="sourceLineNo">058</span> *   unchecked exception (either FSRedirectException or RuntimeException).<a name="line.58"></a>
+<span class="sourceLineNo">059</span> *<a name="line.59"></a>
+<span class="sourceLineNo">060</span> * - If your method discovers that a client has breached its contract,<a name="line.60"></a>
+<span class="sourceLineNo">061</span> *   for example, passing a null as a parameter where a non-null value is<a name="line.61"></a>
+<span class="sourceLineNo">062</span> *   required, throw an unchecked exception (RuntimeException).<a name="line.62"></a>
+<span class="sourceLineNo">063</span> *<a name="line.63"></a>
+<span class="sourceLineNo">064</span> * - If your method is unable to fulfill its contract and you feel client<a name="line.64"></a>
+<span class="sourceLineNo">065</span> *   programmers should consciously decide how to handle, throw checked<a name="line.65"></a>
+<span class="sourceLineNo">066</span> *   exceptions (FSRedirectException).<a name="line.66"></a>
+<span class="sourceLineNo">067</span> *<a name="line.67"></a>
+<span class="sourceLineNo">068</span> *<a name="line.68"></a>
+<span class="sourceLineNo">069</span> * Embedded/Nested Exceptions:<a name="line.69"></a>
+<span class="sourceLineNo">070</span> * --------------------------<a name="line.70"></a>
+<span class="sourceLineNo">071</span> *<a name="line.71"></a>
+<span class="sourceLineNo">072</span> *  An exception of type FSRedirectException can embed any<a name="line.72"></a>
+<span class="sourceLineNo">073</span> *  exception of type Throwable. Embedded exceptions ensure traceability<a name="line.73"></a>
+<span class="sourceLineNo">074</span> *  of errors in a multi-tiered application. For example, in a simple 3-<a name="line.74"></a>
+<span class="sourceLineNo">075</span> *  Tier model - presentation/client tier, middle/domain tier and<a name="line.75"></a>
+<span class="sourceLineNo">076</span> *  database/persistence tier - the real cause of error might be lost by the<a name="line.76"></a>
+<span class="sourceLineNo">077</span> *  time control, which is passed back from the persistence tier to the client<a name="line.77"></a>
+<span class="sourceLineNo">078</span> *  tier. To ensure tracking info, the constructor FSRedirectException(<a name="line.78"></a>
+<span class="sourceLineNo">079</span> *  message,Throwable) should be used while throwing the exception.<a name="line.79"></a>
+<span class="sourceLineNo">080</span> *  Client programs can then invoke the #getRootCause() method<a name="line.80"></a>
+<span class="sourceLineNo">081</span> *  to get the underlying cause.<a name="line.81"></a>
+<span class="sourceLineNo">082</span> *<a name="line.82"></a>
+<span class="sourceLineNo">083</span> * Exception hierarchy should be defined:<a name="line.83"></a>
+<span class="sourceLineNo">084</span> * -------------------------------------<a name="line.84"></a>
+<span class="sourceLineNo">085</span> * An exception for each abnormal cause should be created.<a name="line.85"></a>
+<span class="sourceLineNo">086</span> * FSRedirectException should probably be thrown only by external API's.<a name="line.86"></a>
+<span class="sourceLineNo">087</span> * Even these should have embedded exceptions from lower level tiers.<a name="line.87"></a>
+<span class="sourceLineNo">088</span> * Every package should define its own exception hierarchies specific<a name="line.88"></a>
+<span class="sourceLineNo">089</span> * to its context, for example, account management exceptions should be<a name="line.89"></a>
+<span class="sourceLineNo">090</span> * defined in the accountmgmt package.<a name="line.90"></a>
+<span class="sourceLineNo">091</span> *<a name="line.91"></a>
+<span class="sourceLineNo">092</span> * Localizing Error Messages<a name="line.92"></a>
+<span class="sourceLineNo">093</span> * -------------------------<a name="line.93"></a>
+<span class="sourceLineNo">094</span> * The java resource bundle mechanism is used to implement localization.<a name="line.94"></a>
+<span class="sourceLineNo">095</span> * The ResourceSet and ResourceSetManager classes are used to implement<a name="line.95"></a>
+<span class="sourceLineNo">096</span> * localization.<a name="line.96"></a>
+<span class="sourceLineNo">097</span> *<a name="line.97"></a>
+<span class="sourceLineNo">098</span> * Steps for creating FSRedirectException Sub-classes and messages<a name="line.98"></a>
+<span class="sourceLineNo">099</span> * ------------------------------------------------------<a name="line.99"></a>
+<span class="sourceLineNo">100</span> *<a name="line.100"></a>
+<span class="sourceLineNo">101</span> * 1. Identify the package this exception will belong to.<a name="line.101"></a>
+<span class="sourceLineNo">102</span> *      account management related exception<a name="line.102"></a>
+<span class="sourceLineNo">103</span> *      should be part of the accountmgmt package.<a name="line.103"></a>
+<span class="sourceLineNo">104</span> *<a name="line.104"></a>
+<span class="sourceLineNo">105</span> * 2. Each package should have its own properties file to store<a name="line.105"></a>
+<span class="sourceLineNo">106</span> *      error messages.<a name="line.106"></a>
+<span class="sourceLineNo">107</span> *      For example accountmgmt.properties in package accountmgmt<a name="line.107"></a>
+<span class="sourceLineNo">108</span> <a name="line.108"></a>
+<span class="sourceLineNo">109</span> * 3. Create a sub-class of FSRedirectException and override the constructors.<a name="line.109"></a>
+<span class="sourceLineNo">110</span> *<a name="line.110"></a>
+<span class="sourceLineNo">111</span> *    public class FSAccountManagementException extends FSRedirectException {<a name="line.111"></a>
+<span class="sourceLineNo">112</span> *        public FSAccountManagementException() {<a name="line.112"></a>
+<span class="sourceLineNo">113</span> *                super();<a name="line.113"></a>
+<span class="sourceLineNo">114</span> *        }<a name="line.114"></a>
+<span class="sourceLineNo">115</span> *        public FSAccountManagementException(String msg) {<a name="line.115"></a>
+<span class="sourceLineNo">116</span> *                super(msg);<a name="line.116"></a>
+<span class="sourceLineNo">117</span> *        }<a name="line.117"></a>
+<span class="sourceLineNo">118</span> *        public FSAccountManagementException(String msg, Throwable t) {<a name="line.118"></a>
+<span class="sourceLineNo">119</span> *                super(msg,t);<a name="line.119"></a>
+<span class="sourceLineNo">120</span> *        }<a name="line.120"></a>
+<span class="sourceLineNo">121</span> *<a name="line.121"></a>
+<span class="sourceLineNo">122</span> *<a name="line.122"></a>
+<span class="sourceLineNo">123</span> * Throwing/Catching Exception Examples:<a name="line.123"></a>
+<span class="sourceLineNo">124</span> * ------------------------------------<a name="line.124"></a>
+<span class="sourceLineNo">125</span> *<a name="line.125"></a>
+<span class="sourceLineNo">126</span> * 1. Throwing a non-nested Exception<a name="line.126"></a>
+<span class="sourceLineNo">127</span> *      &lt;B&gt;(not recommended, use Ex. 3 below)&lt;/B&gt;<a name="line.127"></a>
+<span class="sourceLineNo">128</span> *       FSRedirectException ux = <a name="line.128"></a>
+<span class="sourceLineNo">129</span> *           new FSRedirectException("Some weird error!...");<a name="line.129"></a>
+<span class="sourceLineNo">130</span> *       throw ux;<a name="line.130"></a>
+<span class="sourceLineNo">131</span> *<a name="line.131"></a>
+<span class="sourceLineNo">132</span> * 2. Throwing a nested Exception<a name="line.132"></a>
+<span class="sourceLineNo">133</span> *      &lt;B&gt;(not recommended, use Ex. 3 below)&lt;/B&gt;<a name="line.133"></a>
+<span class="sourceLineNo">134</span> *       try {<a name="line.134"></a>
+<span class="sourceLineNo">135</span> *               .......<a name="line.135"></a>
+<span class="sourceLineNo">136</span> *               .......<a name="line.136"></a>
+<span class="sourceLineNo">137</span> *       } catch (UMSException umse) {<a name="line.137"></a>
+<span class="sourceLineNo">138</span> *         FSRedirectException fse =<a name="line.138"></a>
+<span class="sourceLineNo">139</span> *                       new FSRedirectException("Some weird error!...", le);<a name="line.139"></a>
+<span class="sourceLineNo">140</span> *        throw ux;<a name="line.140"></a>
+<span class="sourceLineNo">141</span> *       }<a name="line.141"></a>
+<span class="sourceLineNo">142</span> *<a name="line.142"></a>
+<span class="sourceLineNo">143</span> * 3. Throwing an Exception using the ResourceSetManager<a name="line.143"></a>
+<span class="sourceLineNo">144</span> * &lt;TBD : write some eg &amp; format for properties file&gt;<a name="line.144"></a>
+<span class="sourceLineNo">145</span> * <a name="line.145"></a>
+<span class="sourceLineNo">146</span> * - Logging/Dealing with an Exception, inclunding all nested exceptions<a name="line.146"></a>
+<span class="sourceLineNo">147</span> *       try {<a name="line.147"></a>
+<span class="sourceLineNo">148</span> *               .......<a name="line.148"></a>
+<span class="sourceLineNo">149</span> *               .......<a name="line.149"></a>
+<span class="sourceLineNo">150</span> *       } catch (FSRedirectException fse) {<a name="line.150"></a>
+<span class="sourceLineNo">151</span> *<a name="line.151"></a>
+<span class="sourceLineNo">152</span> *               if (fse.getRootCause() instanceof UMSException) {<a name="line.152"></a>
+<span class="sourceLineNo">153</span> *                       PrintWriter pw = new PrintWriter(&lt;some file stream&gt;);<a name="line.153"></a>
+<span class="sourceLineNo">154</span> *                       fse.log(pw);<a name="line.154"></a>
+<span class="sourceLineNo">155</span> *               } else {<a name="line.155"></a>
+<span class="sourceLineNo">156</span> *                      System.out.println(fse.getMessage());<a name="line.156"></a>
+<span class="sourceLineNo">157</span> *               }<a name="line.157"></a>
+<span class="sourceLineNo">158</span> *       }<a name="line.158"></a>
+<span class="sourceLineNo">159</span> *<a name="line.159"></a>
+<span class="sourceLineNo">160</span> * &lt;/PRE&gt;<a name="line.160"></a>
+<span class="sourceLineNo">161</span> *<a name="line.161"></a>
+<span class="sourceLineNo">162</span> * @see #FSRedirectException(String, Object[], Throwable)<a name="line.162"></a>
+<span class="sourceLineNo">163</span> * @see #getRootCause()<a name="line.163"></a>
+<span class="sourceLineNo">164</span> * @see java.lang.Exception<a name="line.164"></a>
+<span class="sourceLineNo">165</span> * @see java.lang.RuntimeException<a name="line.165"></a>
+<span class="sourceLineNo">166</span> *<a name="line.166"></a>
+<span class="sourceLineNo">167</span> * @supported.api<a name="line.167"></a>
+<span class="sourceLineNo">168</span> */<a name="line.168"></a>
+<span class="sourceLineNo">169</span>public class FSRedirectException extends L10NMessageImpl {<a name="line.169"></a>
+<span class="sourceLineNo">170</span>    protected String _message = null;<a name="line.170"></a>
+<span class="sourceLineNo">171</span>    protected Throwable rootCause = null;<a name="line.171"></a>
+<span class="sourceLineNo">172</span><a name="line.172"></a>
+<span class="sourceLineNo">173</span>    /**<a name="line.173"></a>
+<span class="sourceLineNo">174</span>     * Constructor<a name="line.174"></a>
+<span class="sourceLineNo">175</span>     *<a name="line.175"></a>
+<span class="sourceLineNo">176</span>     * @param errorCode Key of the error message in resource bundle.<a name="line.176"></a>
+<span class="sourceLineNo">177</span>     * @param args Arguments to the message.<a name="line.177"></a>
+<span class="sourceLineNo">178</span>     */<a name="line.178"></a>
+<span class="sourceLineNo">179</span>    public FSRedirectException(String errorCode, Object[] args) {<a name="line.179"></a>
+<span class="sourceLineNo">180</span>        super(FSUtils.BUNDLE_NAME, errorCode, args);<a name="line.180"></a>
+<span class="sourceLineNo">181</span>    }<a name="line.181"></a>
+<span class="sourceLineNo">182</span><a name="line.182"></a>
+<span class="sourceLineNo">183</span>    /**<a name="line.183"></a>
+<span class="sourceLineNo">184</span>     * Constructor<a name="line.184"></a>
+<span class="sourceLineNo">185</span>     *<a name="line.185"></a>
+<span class="sourceLineNo">186</span>     * @param errorCode Key of the error message in resource bundle.<a name="line.186"></a>
+<span class="sourceLineNo">187</span>     * @param args Arguments to the message.<a name="line.187"></a>
+<span class="sourceLineNo">188</span>     * @param rootCause  An embedded exception<a name="line.188"></a>
+<span class="sourceLineNo">189</span>     */<a name="line.189"></a>
+<span class="sourceLineNo">190</span>    public FSRedirectException(String errorCode, Object[] args,<a name="line.190"></a>
+<span class="sourceLineNo">191</span>        Throwable rootCause) {<a name="line.191"></a>
+<span class="sourceLineNo">192</span>        super(FSUtils.BUNDLE_NAME, errorCode, args);<a name="line.192"></a>
+<span class="sourceLineNo">193</span>        this.rootCause = rootCause;<a name="line.193"></a>
+<span class="sourceLineNo">194</span>    }<a name="line.194"></a>
+<span class="sourceLineNo">195</span><a name="line.195"></a>
+<span class="sourceLineNo">196</span>    /**<a name="line.196"></a>
+<span class="sourceLineNo">197</span>     * Constructor <a name="line.197"></a>
+<span class="sourceLineNo">198</span>     * Constructs a &lt;code&gt;FSRedirectException&lt;/code&gt; with a detailed message.<a name="line.198"></a>
+<span class="sourceLineNo">199</span>     *<a name="line.199"></a>
+<span class="sourceLineNo">200</span>     * @param message<a name="line.200"></a>
+<span class="sourceLineNo">201</span>     * Detailed message for this exception.<a name="line.201"></a>
+<span class="sourceLineNo">202</span>     * @supported.api<a name="line.202"></a>
+<span class="sourceLineNo">203</span>     */<a name="line.203"></a>
+<span class="sourceLineNo">204</span>    public FSRedirectException(String message) {<a name="line.204"></a>
+<span class="sourceLineNo">205</span>        super(message);<a name="line.205"></a>
+<span class="sourceLineNo">206</span>        _message = message;<a name="line.206"></a>
+<span class="sourceLineNo">207</span>    }<a name="line.207"></a>
+<span class="sourceLineNo">208</span>    <a name="line.208"></a>
+<span class="sourceLineNo">209</span>    /**<a name="line.209"></a>
+<span class="sourceLineNo">210</span>     * Constructor<a name="line.210"></a>
+<span class="sourceLineNo">211</span>     * Constructs a &lt;code&gt;FSRedirectException&lt;/code&gt; with a message and<a name="line.211"></a>
+<span class="sourceLineNo">212</span>     * an embedded exception.<a name="line.212"></a>
+<span class="sourceLineNo">213</span>     *<a name="line.213"></a>
+<span class="sourceLineNo">214</span>     * @param message  Detailed message for this exception.<a name="line.214"></a>
+<span class="sourceLineNo">215</span>     * @param rootCause  An embedded exception<a name="line.215"></a>
+<span class="sourceLineNo">216</span>     * @supported.api<a name="line.216"></a>
+<span class="sourceLineNo">217</span>     */<a name="line.217"></a>
+<span class="sourceLineNo">218</span>    public FSRedirectException(Throwable rootCause, String message) {<a name="line.218"></a>
+<span class="sourceLineNo">219</span>        super(message);<a name="line.219"></a>
+<span class="sourceLineNo">220</span>        _message = message;<a name="line.220"></a>
+<span class="sourceLineNo">221</span>        this.rootCause = rootCause;<a name="line.221"></a>
+<span class="sourceLineNo">222</span>    }<a name="line.222"></a>
+<span class="sourceLineNo">223</span>   <a name="line.223"></a>
+<span class="sourceLineNo">224</span>    /**<a name="line.224"></a>
+<span class="sourceLineNo">225</span>     * Constructor<a name="line.225"></a>
+<span class="sourceLineNo">226</span>     * Constructs a &lt;code&gt;FSRedirectException&lt;/code&gt; with an exception.<a name="line.226"></a>
+<span class="sourceLineNo">227</span>     *<a name="line.227"></a>
+<span class="sourceLineNo">228</span>     * @param ex  Exception<a name="line.228"></a>
+<span class="sourceLineNo">229</span>     * @supported.api<a name="line.229"></a>
+<span class="sourceLineNo">230</span>     */<a name="line.230"></a>
+<span class="sourceLineNo">231</span>    public FSRedirectException(Exception ex) {<a name="line.231"></a>
+<span class="sourceLineNo">232</span>       super(ex);<a name="line.232"></a>
+<span class="sourceLineNo">233</span>    }<a name="line.233"></a>
+<span class="sourceLineNo">234</span>    <a name="line.234"></a>
+<span class="sourceLineNo">235</span>    /**<a name="line.235"></a>
+<span class="sourceLineNo">236</span>     * Returns the embedded exception.<a name="line.236"></a>
+<span class="sourceLineNo">237</span>     *<a name="line.237"></a>
+<span class="sourceLineNo">238</span>     * @return the embedded exception.<a name="line.238"></a>
+<span class="sourceLineNo">239</span>     * @supported.api<a name="line.239"></a>
+<span class="sourceLineNo">240</span>     */<a name="line.240"></a>
+<span class="sourceLineNo">241</span>    public Throwable getRootCause() {<a name="line.241"></a>
+<span class="sourceLineNo">242</span>        return rootCause;<a name="line.242"></a>
+<span class="sourceLineNo">243</span>    }<a name="line.243"></a>
+<span class="sourceLineNo">244</span>    <a name="line.244"></a>
+<span class="sourceLineNo">245</span>    /**<a name="line.245"></a>
+<span class="sourceLineNo">246</span>     * Formats this &lt;code&gt;FSRedirectException&lt;/code&gt; to a <a name="line.246"></a>
+<span class="sourceLineNo">247</span>     * &lt;code&gt;PrintWriter&lt;/code&gt;.<a name="line.247"></a>
+<span class="sourceLineNo">248</span>     *<a name="line.248"></a>
+<span class="sourceLineNo">249</span>     * @param out &lt;code&gt;PrintWriter&lt;/code&gt; to write exception to.<a name="line.249"></a>
+<span class="sourceLineNo">250</span>     * @return The out parameter passed in.<a name="line.250"></a>
+<span class="sourceLineNo">251</span>     * @see java.io.PrintWriter<a name="line.251"></a>
+<span class="sourceLineNo">252</span>     * @supported.api<a name="line.252"></a>
+<span class="sourceLineNo">253</span>     */<a name="line.253"></a>
+<span class="sourceLineNo">254</span>    public PrintWriter log(PrintWriter out) {<a name="line.254"></a>
+<span class="sourceLineNo">255</span>        return log(this, out);<a name="line.255"></a>
+<span class="sourceLineNo">256</span>    }<a name="line.256"></a>
+<span class="sourceLineNo">257</span>    <a name="line.257"></a>
+<span class="sourceLineNo">258</span>    /**<a name="line.258"></a>
+<span class="sourceLineNo">259</span>     * Formats an Exception to a &lt;code&gt;PrintWriter&lt;/code&gt;.<a name="line.259"></a>
+<span class="sourceLineNo">260</span>     *<a name="line.260"></a>
+<span class="sourceLineNo">261</span>     * @param xcpt &lt;code&gt;Exception&lt;/code&gt; to log.<a name="line.261"></a>
+<span class="sourceLineNo">262</span>     * @param out &lt;code&gt;PrintWriter&lt;/code&gt; to write exception to.<a name="line.262"></a>
+<span class="sourceLineNo">263</span>     * @return The out parameter passed in.<a name="line.263"></a>
+<span class="sourceLineNo">264</span>     * @see java.io.PrintWriter<a name="line.264"></a>
+<span class="sourceLineNo">265</span>     * @supported.api<a name="line.265"></a>
+<span class="sourceLineNo">266</span>     */<a name="line.266"></a>
+<span class="sourceLineNo">267</span>    static public PrintWriter log(Throwable xcpt, PrintWriter out) {<a name="line.267"></a>
+<span class="sourceLineNo">268</span>        <a name="line.268"></a>
+<span class="sourceLineNo">269</span>        out.println("-----------");<a name="line.269"></a>
+<span class="sourceLineNo">270</span>        out.println(xcpt.toString());<a name="line.270"></a>
+<span class="sourceLineNo">271</span>        out.println("Stack Trace:");<a name="line.271"></a>
+<span class="sourceLineNo">272</span>        out.print(getStackTrace(xcpt));<a name="line.272"></a>
+<span class="sourceLineNo">273</span>        out.println("-----------");<a name="line.273"></a>
+<span class="sourceLineNo">274</span>        out.flush();<a name="line.274"></a>
+<span class="sourceLineNo">275</span>        return out;<a name="line.275"></a>
+<span class="sourceLineNo">276</span>    }<a name="line.276"></a>
+<span class="sourceLineNo">277</span>    <a name="line.277"></a>
+<span class="sourceLineNo">278</span>    /**<a name="line.278"></a>
+<span class="sourceLineNo">279</span>     * Returns a formatted &lt;code&gt;FSRedirectException&lt;/code&gt; exception message;<a name="line.279"></a>
+<span class="sourceLineNo">280</span>     * includes embedded exceptions.<a name="line.280"></a>
+<span class="sourceLineNo">281</span>     *<a name="line.281"></a>
+<span class="sourceLineNo">282</span>     * @return a formatted &lt;code&gt;FSRedirectException&lt;/code&gt; exception message.<a name="line.282"></a>
+<span class="sourceLineNo">283</span>     * @supported.api<a name="line.283"></a>
+<span class="sourceLineNo">284</span>     */<a name="line.284"></a>
+<span class="sourceLineNo">285</span>    public String toString() {<a name="line.285"></a>
+<span class="sourceLineNo">286</span>        <a name="line.286"></a>
+<span class="sourceLineNo">287</span>        StringBuffer buf = new StringBuffer();<a name="line.287"></a>
+<span class="sourceLineNo">288</span>        buf.append("--------------------------------------");<a name="line.288"></a>
+<span class="sourceLineNo">289</span>        buf.append("Got Federation Exception\n");<a name="line.289"></a>
+<span class="sourceLineNo">290</span>        <a name="line.290"></a>
+<span class="sourceLineNo">291</span>        String msg = getMessage();<a name="line.291"></a>
+<span class="sourceLineNo">292</span>        if(msg != null &amp;&amp; msg.length() &gt; 0) {<a name="line.292"></a>
+<span class="sourceLineNo">293</span>            buf.append("Message: ").append(getMessage());<a name="line.293"></a>
+<span class="sourceLineNo">294</span>        }<a name="line.294"></a>
+<span class="sourceLineNo">295</span>        <a name="line.295"></a>
+<span class="sourceLineNo">296</span>        // Invoke toString() of rootCause first<a name="line.296"></a>
+<span class="sourceLineNo">297</span>        if (rootCause != null) {<a name="line.297"></a>
+<span class="sourceLineNo">298</span>            buf.append("\nLower level exception: ");<a name="line.298"></a>
+<span class="sourceLineNo">299</span>            buf.append(getRootCause());<a name="line.299"></a>
+<span class="sourceLineNo">300</span>        }<a name="line.300"></a>
+<span class="sourceLineNo">301</span>        <a name="line.301"></a>
+<span class="sourceLineNo">302</span>        return buf.toString();<a name="line.302"></a>
+<span class="sourceLineNo">303</span>    }<a name="line.303"></a>
+<span class="sourceLineNo">304</span>    <a name="line.304"></a>
+<span class="sourceLineNo">305</span>    /**<a name="line.305"></a>
+<span class="sourceLineNo">306</span>     * Prints this exception's stack trace to &lt;tt&gt;System.err&lt;/tt&gt;.<a name="line.306"></a>
+<span class="sourceLineNo">307</span>     * If this exception has a root exception; the stack trace of the<a name="line.307"></a>
+<span class="sourceLineNo">308</span>     * root exception is printed to &lt;tt&gt;System.err&lt;/tt&gt; instead.<a name="line.308"></a>
+<span class="sourceLineNo">309</span>     * @supported.api<a name="line.309"></a>
+<span class="sourceLineNo">310</span>     */<a name="line.310"></a>
+<span class="sourceLineNo">311</span>    public void printStackTrace() {<a name="line.311"></a>
+<span class="sourceLineNo">312</span>        printStackTrace( System.err );<a name="line.312"></a>
+<span class="sourceLineNo">313</span>    }<a name="line.313"></a>
+<span class="sourceLineNo">314</span>    <a name="line.314"></a>
+<span class="sourceLineNo">315</span>    /**<a name="line.315"></a>
+<span class="sourceLineNo">316</span>     * Prints this exception's stack trace to a print stream.<a name="line.316"></a>
+<span class="sourceLineNo">317</span>     * If this exception has a root exception, the stack trace of the<a name="line.317"></a>
+<span class="sourceLineNo">318</span>     * root exception is printed to the print stream instead.<a name="line.318"></a>
+<span class="sourceLineNo">319</span>     * @param ps The non-null print stream to which to print.<a name="line.319"></a>
+<span class="sourceLineNo">320</span>     * @supported.api<a name="line.320"></a>
+<span class="sourceLineNo">321</span>     */<a name="line.321"></a>
+<span class="sourceLineNo">322</span>    public void printStackTrace(java.io.PrintStream ps) {<a name="line.322"></a>
+<span class="sourceLineNo">323</span>        if ( rootCause != null ) {<a name="line.323"></a>
+<span class="sourceLineNo">324</span>            String superString = super.toString();<a name="line.324"></a>
+<span class="sourceLineNo">325</span>            synchronized ( ps ) {<a name="line.325"></a>
+<span class="sourceLineNo">326</span>                ps.print(superString<a name="line.326"></a>
+<span class="sourceLineNo">327</span>                + (superString.endsWith(".") ? "" : ".")<a name="line.327"></a>
+<span class="sourceLineNo">328</span>                + "  Root exception is ");<a name="line.328"></a>
+<span class="sourceLineNo">329</span>                rootCause.printStackTrace( ps );<a name="line.329"></a>
+<span class="sourceLineNo">330</span>            }<a name="line.330"></a>
+<span class="sourceLineNo">331</span>        } else {<a name="line.331"></a>
+<span class="sourceLineNo">332</span>            super.printStackTrace( ps );<a name="line.332"></a>
+<span class="sourceLineNo">333</span>        }<a name="line.333"></a>
+<span class="sourceLineNo">334</span>    }<a name="line.334"></a>
+<span class="sourceLineNo">335</span>    <a name="line.335"></a>
+<span class="sourceLineNo">336</span>    /**<a name="line.336"></a>
+<span class="sourceLineNo">337</span>     * Prints this exception's stack trace to a print writer.<a name="line.337"></a>
+<span class="sourceLineNo">338</span>     * If this exception has a root exception; the stack trace of the<a name="line.338"></a>
+<span class="sourceLineNo">339</span>     * root exception is printed to the print writer instead.<a name="line.339"></a>
+<span class="sourceLineNo">340</span>     * @param pw The non-null print writer to which to print.<a name="line.340"></a>
+<span class="sourceLineNo">341</span>     * @supported.api<a name="line.341"></a>
+<span class="sourceLineNo">342</span>     */<a name="line.342"></a>
+<span class="sourceLineNo">343</span>    public void printStackTrace(java.io.PrintWriter pw) {<a name="line.343"></a>
+<span class="sourceLineNo">344</span>        if ( rootCause != null ) {<a name="line.344"></a>
+<span class="sourceLineNo">345</span>            String superString = super.toString();<a name="line.345"></a>
+<span class="sourceLineNo">346</span>            synchronized (pw) {<a name="line.346"></a>
+<span class="sourceLineNo">347</span>                pw.print(superString<a name="line.347"></a>
+<span class="sourceLineNo">348</span>                + (superString.endsWith(".") ? "" : ".")<a name="line.348"></a>
+<span class="sourceLineNo">349</span>                + "  Root exception is ");<a name="line.349"></a>
+<span class="sourceLineNo">350</span>                rootCause.printStackTrace( pw );<a name="line.350"></a>
+<span class="sourceLineNo">351</span>            }<a name="line.351"></a>
+<span class="sourceLineNo">352</span>        } else {<a name="line.352"></a>
+<span class="sourceLineNo">353</span>            super.printStackTrace( pw );<a name="line.353"></a>
+<span class="sourceLineNo">354</span>        }<a name="line.354"></a>
+<span class="sourceLineNo">355</span>    }<a name="line.355"></a>
+<span class="sourceLineNo">356</span>    <a name="line.356"></a>
+<span class="sourceLineNo">357</span>    /**<a name="line.357"></a>
+<span class="sourceLineNo">358</span>     * Gets exception stack trace as a string.<a name="line.358"></a>
+<span class="sourceLineNo">359</span>     * &lt;pre&gt;<a name="line.359"></a>
+<span class="sourceLineNo">360</span>     *   java.lang.Throwable<a name="line.360"></a>
+<span class="sourceLineNo">361</span>     *   java.lang.Exception<a name="line.361"></a>
+<span class="sourceLineNo">362</span>     *   FSRedirectException<a name="line.362"></a>
+<span class="sourceLineNo">363</span>     *   &lt;name of exception being thrown&gt;<a name="line.363"></a>
+<span class="sourceLineNo">364</span>     * &lt;/pre&gt;<a name="line.364"></a>
+<span class="sourceLineNo">365</span>     */<a name="line.365"></a>
+<span class="sourceLineNo">366</span>    static private String getStackTrace(Throwable xcpt) {<a name="line.366"></a>
+<span class="sourceLineNo">367</span>        StringWriter sw = new StringWriter();<a name="line.367"></a>
+<span class="sourceLineNo">368</span>        PrintWriter pw = new PrintWriter(sw);<a name="line.368"></a>
+<span class="sourceLineNo">369</span>        <a name="line.369"></a>
+<span class="sourceLineNo">370</span>        xcpt.printStackTrace(pw);<a name="line.370"></a>
+<span class="sourceLineNo">371</span>        <a name="line.371"></a>
+<span class="sourceLineNo">372</span>        return sw.toString();<a name="line.372"></a>
+<span class="sourceLineNo">373</span>    }<a name="line.373"></a>
+<span class="sourceLineNo">374</span>}<a name="line.374"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

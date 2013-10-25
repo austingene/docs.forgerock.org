@@ -1,0 +1,389 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/**<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.<a name="line.2"></a>
+<span class="sourceLineNo">003</span> *<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * Copyright (c) 2005 Sun Microsystems Inc. All Rights Reserved<a name="line.4"></a>
+<span class="sourceLineNo">005</span> *<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * The contents of this file are subject to the terms<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * of the Common Development and Distribution License<a name="line.7"></a>
+<span class="sourceLineNo">008</span> * (the License). You may not use this file except in<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * compliance with the License.<a name="line.9"></a>
+<span class="sourceLineNo">010</span> *<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * You can obtain a copy of the License at<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * https://opensso.dev.java.net/public/CDDLv1.0.html or<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * opensso/legal/CDDLv1.0.txt<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * See the License for the specific language governing<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * permission and limitations under the License.<a name="line.15"></a>
+<span class="sourceLineNo">016</span> *<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * When distributing Covered Code, include this CDDL<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * Header Notice in each file and include the License file<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * at opensso/legal/CDDLv1.0.txt.<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * If applicable, add the following below the CDDL Header,<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * with the fields enclosed by brackets [] replaced by<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * your own identifying information:<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * "Portions Copyrighted [year] [name of copyright owner]"<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * $Id: DataEncryptor.java,v 1.1 2009/02/26 23:58:41 exu Exp $<a name="line.25"></a>
+<span class="sourceLineNo">026</span> *<a name="line.26"></a>
+<span class="sourceLineNo">027</span> */<a name="line.27"></a>
+<span class="sourceLineNo">028</span><a name="line.28"></a>
+<span class="sourceLineNo">029</span>package com.sun.identity.security;<a name="line.29"></a>
+<span class="sourceLineNo">030</span><a name="line.30"></a>
+<span class="sourceLineNo">031</span>import java.util.Map;<a name="line.31"></a>
+<span class="sourceLineNo">032</span>import java.util.HashMap;<a name="line.32"></a>
+<span class="sourceLineNo">033</span>import javax.crypto.Cipher;<a name="line.33"></a>
+<span class="sourceLineNo">034</span>import javax.crypto.KeyGenerator;<a name="line.34"></a>
+<span class="sourceLineNo">035</span>import javax.crypto.SecretKey;<a name="line.35"></a>
+<span class="sourceLineNo">036</span>import java.security.NoSuchAlgorithmException;<a name="line.36"></a>
+<span class="sourceLineNo">037</span>import javax.crypto.NoSuchPaddingException;<a name="line.37"></a>
+<span class="sourceLineNo">038</span>import java.security.Key;<a name="line.38"></a>
+<span class="sourceLineNo">039</span>import java.security.InvalidKeyException;<a name="line.39"></a>
+<span class="sourceLineNo">040</span>import java.io.UnsupportedEncodingException;<a name="line.40"></a>
+<span class="sourceLineNo">041</span>import javax.crypto.SecretKeyFactory;<a name="line.41"></a>
+<span class="sourceLineNo">042</span>import javax.crypto.spec.PBEKeySpec;<a name="line.42"></a>
+<span class="sourceLineNo">043</span>import javax.crypto.spec.PBEParameterSpec;<a name="line.43"></a>
+<span class="sourceLineNo">044</span><a name="line.44"></a>
+<span class="sourceLineNo">045</span>import com.sun.identity.shared.encode.Base64;<a name="line.45"></a>
+<span class="sourceLineNo">046</span><a name="line.46"></a>
+<span class="sourceLineNo">047</span><a name="line.47"></a>
+<span class="sourceLineNo">048</span>/**<a name="line.48"></a>
+<span class="sourceLineNo">049</span> * This class &lt;code&gt;DataEncryptor&lt;/code&gt; is used to encrypt the data<a name="line.49"></a>
+<span class="sourceLineNo">050</span> * with symmetric and asymmetric keys.<a name="line.50"></a>
+<span class="sourceLineNo">051</span> * @supported.all.api<a name="line.51"></a>
+<span class="sourceLineNo">052</span> */<a name="line.52"></a>
+<span class="sourceLineNo">053</span>public class DataEncryptor {<a name="line.53"></a>
+<span class="sourceLineNo">054</span><a name="line.54"></a>
+<span class="sourceLineNo">055</span>    private static final String ENCRYPTED_DATA = "EncryptedData";<a name="line.55"></a>
+<span class="sourceLineNo">056</span>    <a name="line.56"></a>
+<span class="sourceLineNo">057</span>    private static final String ENCRYPTED_KEY = "EncryptedKey";<a name="line.57"></a>
+<span class="sourceLineNo">058</span>    private static final byte[] ___y = { 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,<a name="line.58"></a>
+<span class="sourceLineNo">059</span>            0x01, 0x01 };<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    private static final int ITERATION_COUNT = 5;<a name="line.60"></a>
+<span class="sourceLineNo">061</span>    private static PBEParameterSpec pbeParameterSpec = new PBEParameterSpec(<a name="line.61"></a>
+<span class="sourceLineNo">062</span>            ___y, ITERATION_COUNT);<a name="line.62"></a>
+<span class="sourceLineNo">063</span><a name="line.63"></a>
+<span class="sourceLineNo">064</span>    /**<a name="line.64"></a>
+<span class="sourceLineNo">065</span>     * Encrypts the given data with an asymmetric key. The asymmetric <a name="line.65"></a>
+<span class="sourceLineNo">066</span>     * encryption uses symmetric secret key for data encryption and sends<a name="line.66"></a>
+<span class="sourceLineNo">067</span>     * the secret key to the recipient by encrypting the same with given<a name="line.67"></a>
+<span class="sourceLineNo">068</span>     * transport key (publick key). <a name="line.68"></a>
+<span class="sourceLineNo">069</span>     * @param data the data to be encrypted.<a name="line.69"></a>
+<span class="sourceLineNo">070</span>     * @param encryptionAlgorithm the encryption algorithm to be used.<a name="line.70"></a>
+<span class="sourceLineNo">071</span>     *        The encryption algorithm must be one of the supported<a name="line.71"></a>
+<span class="sourceLineNo">072</span>     *        algorithm by the underlying JCE encryption provider.<a name="line.72"></a>
+<span class="sourceLineNo">073</span>     *        Examples of encryption algorithms are "DES", "AES" etc. <a name="line.73"></a>
+<span class="sourceLineNo">074</span>     * @param encryptionStrength the encryption strength for a given<a name="line.74"></a>
+<span class="sourceLineNo">075</span>     *                           encryption algorithm.<a name="line.75"></a>
+<span class="sourceLineNo">076</span>     * @param encKey the encryption key to be used. For PKI, this<a name="line.76"></a>
+<span class="sourceLineNo">077</span>     *               key should be public key of the intended recipient.  <a name="line.77"></a>
+<span class="sourceLineNo">078</span>     * @return the encrypted data in Base64 encoded format.<a name="line.78"></a>
+<span class="sourceLineNo">079</span>     */<a name="line.79"></a>
+<span class="sourceLineNo">080</span>    public static String encryptWithAsymmetricKey(String data,<a name="line.80"></a>
+<span class="sourceLineNo">081</span>                   String encryptionAlgorithm,<a name="line.81"></a>
+<span class="sourceLineNo">082</span>                   int encryptionStrength,<a name="line.82"></a>
+<span class="sourceLineNo">083</span>                   Key encKey) throws Exception {<a name="line.83"></a>
+<span class="sourceLineNo">084</span>        try {<a name="line.84"></a>
+<span class="sourceLineNo">085</span>            KeyGenerator keygen = KeyGenerator.getInstance(encryptionAlgorithm);<a name="line.85"></a>
+<span class="sourceLineNo">086</span>            if(encryptionStrength != 0) {<a name="line.86"></a>
+<span class="sourceLineNo">087</span>               keygen.init(encryptionStrength);<a name="line.87"></a>
+<span class="sourceLineNo">088</span>            }<a name="line.88"></a>
+<span class="sourceLineNo">089</span>            SecretKey sKey = keygen.generateKey();<a name="line.89"></a>
+<span class="sourceLineNo">090</span>            Cipher cipher = Cipher.getInstance(encryptionAlgorithm); <a name="line.90"></a>
+<span class="sourceLineNo">091</span>            cipher.init(Cipher.ENCRYPT_MODE, sKey);<a name="line.91"></a>
+<span class="sourceLineNo">092</span>            byte[] encData = cipher.doFinal(data.getBytes("UTF-8")); <a name="line.92"></a>
+<span class="sourceLineNo">093</span>            cipher = Cipher.getInstance(encKey.getAlgorithm());<a name="line.93"></a>
+<span class="sourceLineNo">094</span>            cipher.init(Cipher.WRAP_MODE, encKey);<a name="line.94"></a>
+<span class="sourceLineNo">095</span>            byte[] keyWrap = cipher.wrap(sKey);<a name="line.95"></a>
+<span class="sourceLineNo">096</span>            byte[] encDataPad = wrapKeyWithEncryptedData(encData, keyWrap);<a name="line.96"></a>
+<span class="sourceLineNo">097</span>            return Base64.encode(encDataPad);<a name="line.97"></a>
+<span class="sourceLineNo">098</span>        } catch (NoSuchAlgorithmException nse) {<a name="line.98"></a>
+<span class="sourceLineNo">099</span>            throw new Exception(nse.getMessage());<a name="line.99"></a>
+<span class="sourceLineNo">100</span>        } catch (NoSuchPaddingException npe) {<a name="line.100"></a>
+<span class="sourceLineNo">101</span>            throw new Exception(npe.getMessage());<a name="line.101"></a>
+<span class="sourceLineNo">102</span>        } catch (InvalidKeyException ike) {<a name="line.102"></a>
+<span class="sourceLineNo">103</span>            throw new Exception(ike.getMessage());<a name="line.103"></a>
+<span class="sourceLineNo">104</span>        } catch (UnsupportedEncodingException uae) {<a name="line.104"></a>
+<span class="sourceLineNo">105</span>            throw new Exception(uae.getMessage());<a name="line.105"></a>
+<span class="sourceLineNo">106</span>        } <a name="line.106"></a>
+<span class="sourceLineNo">107</span>    }<a name="line.107"></a>
+<span class="sourceLineNo">108</span><a name="line.108"></a>
+<span class="sourceLineNo">109</span>    /**<a name="line.109"></a>
+<span class="sourceLineNo">110</span>     * Decrypts the given data with asymmetric key.<a name="line.110"></a>
+<span class="sourceLineNo">111</span>     * @param data the data to be decrypted.<a name="line.111"></a>
+<span class="sourceLineNo">112</span>     * @param encAlgorithm the encryption algorithm was used for encrypted<a name="line.112"></a>
+<span class="sourceLineNo">113</span>     *                     data. <a name="line.113"></a>
+<span class="sourceLineNo">114</span>     * @param encKey the private key for decrypting the data.<a name="line.114"></a>
+<span class="sourceLineNo">115</span>     * @return the decrypted data.<a name="line.115"></a>
+<span class="sourceLineNo">116</span>     */<a name="line.116"></a>
+<span class="sourceLineNo">117</span>    public static String decryptWithAsymmetricKey(<a name="line.117"></a>
+<span class="sourceLineNo">118</span>              String data, String encAlgorithm, Key encKey) throws Exception {<a name="line.118"></a>
+<span class="sourceLineNo">119</span><a name="line.119"></a>
+<span class="sourceLineNo">120</span>        try {<a name="line.120"></a>
+<span class="sourceLineNo">121</span>            byte[] tmp = Base64.decode(data);<a name="line.121"></a>
+<span class="sourceLineNo">122</span>            Map map = unwrapKeyWithEncodedData(tmp);<a name="line.122"></a>
+<span class="sourceLineNo">123</span>            byte[] encData = (byte[])map.get(ENCRYPTED_DATA);<a name="line.123"></a>
+<span class="sourceLineNo">124</span>            byte[] keyData = (byte[])map.get(ENCRYPTED_KEY);<a name="line.124"></a>
+<span class="sourceLineNo">125</span>            Cipher cipher = Cipher.getInstance(encKey.getAlgorithm());<a name="line.125"></a>
+<span class="sourceLineNo">126</span>            cipher.init(Cipher.UNWRAP_MODE, encKey); <a name="line.126"></a>
+<span class="sourceLineNo">127</span>            Key secretKey = cipher.unwrap(keyData, encAlgorithm, <a name="line.127"></a>
+<span class="sourceLineNo">128</span>                   Cipher.SECRET_KEY);<a name="line.128"></a>
+<span class="sourceLineNo">129</span>            cipher = Cipher.getInstance(encAlgorithm);<a name="line.129"></a>
+<span class="sourceLineNo">130</span>            cipher.init(Cipher.DECRYPT_MODE, secretKey);<a name="line.130"></a>
+<span class="sourceLineNo">131</span>            byte[] decryptedData =  cipher.doFinal(encData);<a name="line.131"></a>
+<span class="sourceLineNo">132</span>            return Base64.encode(decryptedData);<a name="line.132"></a>
+<span class="sourceLineNo">133</span>        } catch (NoSuchAlgorithmException nse) {<a name="line.133"></a>
+<span class="sourceLineNo">134</span>            throw new Exception(nse.getMessage());<a name="line.134"></a>
+<span class="sourceLineNo">135</span>        } catch (InvalidKeyException ike) {<a name="line.135"></a>
+<span class="sourceLineNo">136</span>            throw new Exception(ike.getMessage());<a name="line.136"></a>
+<span class="sourceLineNo">137</span>        }<a name="line.137"></a>
+<span class="sourceLineNo">138</span>    }<a name="line.138"></a>
+<span class="sourceLineNo">139</span><a name="line.139"></a>
+<span class="sourceLineNo">140</span>    /**<a name="line.140"></a>
+<span class="sourceLineNo">141</span>     * Encrypts the given data with a symmetric key that was generated<a name="line.141"></a>
+<span class="sourceLineNo">142</span>     * using given shared secret. <a name="line.142"></a>
+<span class="sourceLineNo">143</span>     * @param data the data to be encrypted.<a name="line.143"></a>
+<span class="sourceLineNo">144</span>     * @param encAlgorithm the encryption algorithm to be used.<a name="line.144"></a>
+<span class="sourceLineNo">145</span>     *        The encryption algorithm must be one of the supported<a name="line.145"></a>
+<span class="sourceLineNo">146</span>     *        algorithm by the underlying JCE encryption provider.<a name="line.146"></a>
+<span class="sourceLineNo">147</span>     *        For password based encryptions, the encryption algorithm<a name="line.147"></a>
+<span class="sourceLineNo">148</span>     *        PBEWithMD5AndDES is commonly used. <a name="line.148"></a>
+<span class="sourceLineNo">149</span>     * @param secret the shared secret to be used for symmetric encryption.<a name="line.149"></a>
+<span class="sourceLineNo">150</span>     * @return the encrypted data in Base64 encoded format. <a name="line.150"></a>
+<span class="sourceLineNo">151</span>     */<a name="line.151"></a>
+<span class="sourceLineNo">152</span>    public static String encryptWithSymmetricKey(String data, <a name="line.152"></a>
+<span class="sourceLineNo">153</span>               String encAlgorithm, String secret) throws Exception {<a name="line.153"></a>
+<span class="sourceLineNo">154</span>        try {<a name="line.154"></a>
+<span class="sourceLineNo">155</span>            String algorithm = encAlgorithm;<a name="line.155"></a>
+<span class="sourceLineNo">156</span>            if(!algorithm.startsWith("PBEWith")) {<a name="line.156"></a>
+<span class="sourceLineNo">157</span>               algorithm = "PBEWithMD5And" + encAlgorithm;<a name="line.157"></a>
+<span class="sourceLineNo">158</span>            }<a name="line.158"></a>
+<span class="sourceLineNo">159</span>            SecretKeyFactory skFactory = <a name="line.159"></a>
+<span class="sourceLineNo">160</span>                     SecretKeyFactory.getInstance(algorithm);<a name="line.160"></a>
+<span class="sourceLineNo">161</span>            PBEKeySpec pbeKeySpec = new PBEKeySpec(secret.toCharArray());<a name="line.161"></a>
+<span class="sourceLineNo">162</span>            SecretKey sKey = skFactory.generateSecret(pbeKeySpec);<a name="line.162"></a>
+<span class="sourceLineNo">163</span>            Cipher cipher = Cipher.getInstance(algorithm);<a name="line.163"></a>
+<span class="sourceLineNo">164</span>            cipher.init(Cipher.ENCRYPT_MODE, sKey, pbeParameterSpec );<a name="line.164"></a>
+<span class="sourceLineNo">165</span>            byte[] encData = cipher.doFinal(data.getBytes("UTF-8")); <a name="line.165"></a>
+<span class="sourceLineNo">166</span>            encData = addPrefix(encData); <a name="line.166"></a>
+<span class="sourceLineNo">167</span>            return Base64.encode(encData);<a name="line.167"></a>
+<span class="sourceLineNo">168</span>        } catch (NoSuchAlgorithmException nse) {<a name="line.168"></a>
+<span class="sourceLineNo">169</span>            throw new Exception(nse.getMessage());<a name="line.169"></a>
+<span class="sourceLineNo">170</span>        } <a name="line.170"></a>
+<span class="sourceLineNo">171</span>    }<a name="line.171"></a>
+<span class="sourceLineNo">172</span><a name="line.172"></a>
+<span class="sourceLineNo">173</span>    /**<a name="line.173"></a>
+<span class="sourceLineNo">174</span>     * Decrypts the given data with a symmetric key generated using shared<a name="line.174"></a>
+<span class="sourceLineNo">175</span>     * secret.<a name="line.175"></a>
+<span class="sourceLineNo">176</span>     * @param data the data to be decrypted with symmetric key.<a name="line.176"></a>
+<span class="sourceLineNo">177</span>     * @param encAlgorithm the encryption algorithm was used for<a name="line.177"></a>
+<span class="sourceLineNo">178</span>     *        encrypting the data.<a name="line.178"></a>
+<span class="sourceLineNo">179</span>     * @param secret the shared secret to be used for decrypting the data.<a name="line.179"></a>
+<span class="sourceLineNo">180</span>     * @return the decrypted data. <a name="line.180"></a>
+<span class="sourceLineNo">181</span>     */<a name="line.181"></a>
+<span class="sourceLineNo">182</span>    public static String decryptWithSymmetricKey(String data, <a name="line.182"></a>
+<span class="sourceLineNo">183</span>             String encAlgorithm, String secret) throws Exception {<a name="line.183"></a>
+<span class="sourceLineNo">184</span>        try {<a name="line.184"></a>
+<span class="sourceLineNo">185</span>            String algorithm = encAlgorithm;<a name="line.185"></a>
+<span class="sourceLineNo">186</span>            if(!algorithm.startsWith("PBEWith")) {<a name="line.186"></a>
+<span class="sourceLineNo">187</span>               algorithm = "PBEWithMD5And" + encAlgorithm;<a name="line.187"></a>
+<span class="sourceLineNo">188</span>            }<a name="line.188"></a>
+<span class="sourceLineNo">189</span>            SecretKeyFactory skFactory = <a name="line.189"></a>
+<span class="sourceLineNo">190</span>                     SecretKeyFactory.getInstance(algorithm);<a name="line.190"></a>
+<span class="sourceLineNo">191</span>            PBEKeySpec pbeKeySpec = new PBEKeySpec(secret.toCharArray());<a name="line.191"></a>
+<span class="sourceLineNo">192</span>            SecretKey sKey = skFactory.generateSecret(pbeKeySpec);<a name="line.192"></a>
+<span class="sourceLineNo">193</span>            Cipher cipher = Cipher.getInstance(algorithm);<a name="line.193"></a>
+<span class="sourceLineNo">194</span>            cipher.init(Cipher.DECRYPT_MODE, sKey, pbeParameterSpec);<a name="line.194"></a>
+<span class="sourceLineNo">195</span>            byte[] tmp = Base64.decode(data);<a name="line.195"></a>
+<span class="sourceLineNo">196</span>            byte[] encData = removePrefix(tmp);<a name="line.196"></a>
+<span class="sourceLineNo">197</span>            byte[] decData = cipher.doFinal(encData);<a name="line.197"></a>
+<span class="sourceLineNo">198</span>            return Base64.encode(decData);<a name="line.198"></a>
+<span class="sourceLineNo">199</span>         } catch (NoSuchAlgorithmException nse) {<a name="line.199"></a>
+<span class="sourceLineNo">200</span>            throw new Exception(nse.getMessage());<a name="line.200"></a>
+<span class="sourceLineNo">201</span>         }<a name="line.201"></a>
+<span class="sourceLineNo">202</span>    }<a name="line.202"></a>
+<span class="sourceLineNo">203</span><a name="line.203"></a>
+<span class="sourceLineNo">204</span>    private static byte[] addPrefix(byte[] encData) {<a name="line.204"></a>
+<span class="sourceLineNo">205</span>        int length = encData.length;<a name="line.205"></a>
+<span class="sourceLineNo">206</span>        byte[] result = new byte[9 + length]; <a name="line.206"></a>
+<span class="sourceLineNo">207</span>        byte[] encrypted = new String("ENCRYPTED").getBytes();<a name="line.207"></a>
+<span class="sourceLineNo">208</span>        for (int i=0; i &lt; 9; i++) {<a name="line.208"></a>
+<span class="sourceLineNo">209</span>             result[i] = encrypted[i];<a name="line.209"></a>
+<span class="sourceLineNo">210</span>        }<a name="line.210"></a>
+<span class="sourceLineNo">211</span>        for (int i=0; i &lt;  length; i++) {<a name="line.211"></a>
+<span class="sourceLineNo">212</span>            result[9 + i] = encData[i];<a name="line.212"></a>
+<span class="sourceLineNo">213</span>        }<a name="line.213"></a>
+<span class="sourceLineNo">214</span>        return result;<a name="line.214"></a>
+<span class="sourceLineNo">215</span>    }<a name="line.215"></a>
+<span class="sourceLineNo">216</span><a name="line.216"></a>
+<span class="sourceLineNo">217</span>    private static byte[] removePrefix(byte[] data) {<a name="line.217"></a>
+<span class="sourceLineNo">218</span>        int length = data.length - 9;<a name="line.218"></a>
+<span class="sourceLineNo">219</span>        byte[] result = new byte[length];<a name="line.219"></a>
+<span class="sourceLineNo">220</span>        for (int i=0; i &lt; length; i++) {<a name="line.220"></a>
+<span class="sourceLineNo">221</span>            result[i] = data[9 + i];<a name="line.221"></a>
+<span class="sourceLineNo">222</span>        }<a name="line.222"></a>
+<span class="sourceLineNo">223</span>        return result;<a name="line.223"></a>
+<span class="sourceLineNo">224</span>    }<a name="line.224"></a>
+<span class="sourceLineNo">225</span><a name="line.225"></a>
+<span class="sourceLineNo">226</span>    private static byte[] wrapKeyWithEncryptedData(byte[] data, <a name="line.226"></a>
+<span class="sourceLineNo">227</span>                         byte[] key) {<a name="line.227"></a>
+<span class="sourceLineNo">228</span><a name="line.228"></a>
+<span class="sourceLineNo">229</span>        int dataLength = data.length;<a name="line.229"></a>
+<span class="sourceLineNo">230</span>        int keyLength = key.length;<a name="line.230"></a>
+<span class="sourceLineNo">231</span>        byte[] result = new byte[17 + data.length + key.length];<a name="line.231"></a>
+<span class="sourceLineNo">232</span>        byte[] encrypted = new String("ENCRYPTED").getBytes();<a name="line.232"></a>
+<span class="sourceLineNo">233</span>        for (int i=0; i &lt; 9; i++) {<a name="line.233"></a>
+<span class="sourceLineNo">234</span>             result[i] = encrypted[i];<a name="line.234"></a>
+<span class="sourceLineNo">235</span>        }<a name="line.235"></a>
+<span class="sourceLineNo">236</span>        byte[] datasize = intToByteArray(dataLength);<a name="line.236"></a>
+<span class="sourceLineNo">237</span>        for (int i =0; i &lt; 4; i++) {<a name="line.237"></a>
+<span class="sourceLineNo">238</span>            result[i+9] = datasize[i];<a name="line.238"></a>
+<span class="sourceLineNo">239</span>        }<a name="line.239"></a>
+<span class="sourceLineNo">240</span><a name="line.240"></a>
+<span class="sourceLineNo">241</span>        for (int i=0; i &lt; dataLength; i++) {<a name="line.241"></a>
+<span class="sourceLineNo">242</span>             result[i+13] = data[i];<a name="line.242"></a>
+<span class="sourceLineNo">243</span>        }<a name="line.243"></a>
+<span class="sourceLineNo">244</span><a name="line.244"></a>
+<span class="sourceLineNo">245</span>        byte[] keysize = intToByteArray(keyLength);<a name="line.245"></a>
+<span class="sourceLineNo">246</span>        for (int i =0; i &lt; 4; i++) {<a name="line.246"></a>
+<span class="sourceLineNo">247</span>            result[i+13+dataLength] = keysize[i];<a name="line.247"></a>
+<span class="sourceLineNo">248</span>        }<a name="line.248"></a>
+<span class="sourceLineNo">249</span><a name="line.249"></a>
+<span class="sourceLineNo">250</span>        for (int i=0; i &lt; keyLength; i++) {<a name="line.250"></a>
+<span class="sourceLineNo">251</span>             result[i+17+dataLength] = key[i];<a name="line.251"></a>
+<span class="sourceLineNo">252</span>        }<a name="line.252"></a>
+<span class="sourceLineNo">253</span><a name="line.253"></a>
+<span class="sourceLineNo">254</span>        return result;<a name="line.254"></a>
+<span class="sourceLineNo">255</span>    }<a name="line.255"></a>
+<span class="sourceLineNo">256</span><a name="line.256"></a>
+<span class="sourceLineNo">257</span>    private static Map unwrapKeyWithEncodedData(byte[] decodeData) {<a name="line.257"></a>
+<span class="sourceLineNo">258</span>        Map map = new HashMap();<a name="line.258"></a>
+<span class="sourceLineNo">259</span>        <a name="line.259"></a>
+<span class="sourceLineNo">260</span>        byte[] dataLength = new byte[4]; <a name="line.260"></a>
+<span class="sourceLineNo">261</span>        int j = 0;<a name="line.261"></a>
+<span class="sourceLineNo">262</span>        for (int i = 9; i &lt; 13; i++) {<a name="line.262"></a>
+<span class="sourceLineNo">263</span>             dataLength[j] = decodeData[i];<a name="line.263"></a>
+<span class="sourceLineNo">264</span>             j++;<a name="line.264"></a>
+<span class="sourceLineNo">265</span>        }<a name="line.265"></a>
+<span class="sourceLineNo">266</span><a name="line.266"></a>
+<span class="sourceLineNo">267</span>        int encDataLength = byteArrayToInt(dataLength); <a name="line.267"></a>
+<span class="sourceLineNo">268</span>        byte[] encData = new byte[encDataLength];<a name="line.268"></a>
+<span class="sourceLineNo">269</span>        j = 0;<a name="line.269"></a>
+<span class="sourceLineNo">270</span>        for (int i=13; i &lt; encDataLength + 13; i++) {<a name="line.270"></a>
+<span class="sourceLineNo">271</span>             encData[j] = decodeData[i];<a name="line.271"></a>
+<span class="sourceLineNo">272</span>             j++;<a name="line.272"></a>
+<span class="sourceLineNo">273</span>        }<a name="line.273"></a>
+<span class="sourceLineNo">274</span><a name="line.274"></a>
+<span class="sourceLineNo">275</span>        map.put(ENCRYPTED_DATA, encData);<a name="line.275"></a>
+<span class="sourceLineNo">276</span>        byte[] keyLen = new byte[4];<a name="line.276"></a>
+<span class="sourceLineNo">277</span>        int startIndex = 13 + encDataLength;<a name="line.277"></a>
+<span class="sourceLineNo">278</span>        int endIndex = startIndex + 4;<a name="line.278"></a>
+<span class="sourceLineNo">279</span>        j = 0;<a name="line.279"></a>
+<span class="sourceLineNo">280</span>        for (int i=startIndex; i &lt; endIndex; i++) {<a name="line.280"></a>
+<span class="sourceLineNo">281</span>             keyLen[j] = decodeData[i]; <a name="line.281"></a>
+<span class="sourceLineNo">282</span>             j++;<a name="line.282"></a>
+<span class="sourceLineNo">283</span>        }<a name="line.283"></a>
+<span class="sourceLineNo">284</span><a name="line.284"></a>
+<span class="sourceLineNo">285</span>        int keyDataLength = byteArrayToInt(keyLen);<a name="line.285"></a>
+<span class="sourceLineNo">286</span>        startIndex = startIndex + 4; <a name="line.286"></a>
+<span class="sourceLineNo">287</span>        endIndex = startIndex + keyDataLength; <a name="line.287"></a>
+<span class="sourceLineNo">288</span>        byte[] keyData = new byte[keyDataLength];<a name="line.288"></a>
+<span class="sourceLineNo">289</span>        j = 0;<a name="line.289"></a>
+<span class="sourceLineNo">290</span>        for (int i=startIndex; i &lt; endIndex; i++) {<a name="line.290"></a>
+<span class="sourceLineNo">291</span>             keyData[j] = decodeData[i]; <a name="line.291"></a>
+<span class="sourceLineNo">292</span>             j++;<a name="line.292"></a>
+<span class="sourceLineNo">293</span>        }<a name="line.293"></a>
+<span class="sourceLineNo">294</span>        map.put(ENCRYPTED_KEY, keyData);<a name="line.294"></a>
+<span class="sourceLineNo">295</span>        return map;<a name="line.295"></a>
+<span class="sourceLineNo">296</span>    }<a name="line.296"></a>
+<span class="sourceLineNo">297</span><a name="line.297"></a>
+<span class="sourceLineNo">298</span><a name="line.298"></a>
+<span class="sourceLineNo">299</span>    private static final byte[] intToByteArray(int value) {<a name="line.299"></a>
+<span class="sourceLineNo">300</span>        return new byte[] {<a name="line.300"></a>
+<span class="sourceLineNo">301</span>                (byte)(value &gt;&gt;&gt; 24),<a name="line.301"></a>
+<span class="sourceLineNo">302</span>                (byte)(value &gt;&gt;&gt; 16),<a name="line.302"></a>
+<span class="sourceLineNo">303</span>                (byte)(value &gt;&gt;&gt; 8),<a name="line.303"></a>
+<span class="sourceLineNo">304</span>                (byte)value<a name="line.304"></a>
+<span class="sourceLineNo">305</span>        };<a name="line.305"></a>
+<span class="sourceLineNo">306</span>    }<a name="line.306"></a>
+<span class="sourceLineNo">307</span><a name="line.307"></a>
+<span class="sourceLineNo">308</span>    private static final int byteArrayToInt(byte [] b) {<a name="line.308"></a>
+<span class="sourceLineNo">309</span>        return (b[0] &lt;&lt; 24)<a name="line.309"></a>
+<span class="sourceLineNo">310</span>                + ((b[1] &amp; 0xFF) &lt;&lt; 16)<a name="line.310"></a>
+<span class="sourceLineNo">311</span>                + ((b[2] &amp; 0xFF) &lt;&lt; 8)<a name="line.311"></a>
+<span class="sourceLineNo">312</span>                + (b[3] &amp; 0xFF);<a name="line.312"></a>
+<span class="sourceLineNo">313</span>    }<a name="line.313"></a>
+<span class="sourceLineNo">314</span><a name="line.314"></a>
+<span class="sourceLineNo">315</span><a name="line.315"></a>
+<span class="sourceLineNo">316</span><a name="line.316"></a>
+<span class="sourceLineNo">317</span>}<a name="line.317"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

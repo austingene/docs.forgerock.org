@@ -1,0 +1,353 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/**<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.<a name="line.2"></a>
+<span class="sourceLineNo">003</span> *<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * Copyright (c) 2005 Sun Microsystems Inc. All Rights Reserved<a name="line.4"></a>
+<span class="sourceLineNo">005</span> *<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * The contents of this file are subject to the terms<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * of the Common Development and Distribution License<a name="line.7"></a>
+<span class="sourceLineNo">008</span> * (the License). You may not use this file except in<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * compliance with the License.<a name="line.9"></a>
+<span class="sourceLineNo">010</span> *<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * You can obtain a copy of the License at<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * https://opensso.dev.java.net/public/CDDLv1.0.html or<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * opensso/legal/CDDLv1.0.txt<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * See the License for the specific language governing<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * permission and limitations under the License.<a name="line.15"></a>
+<span class="sourceLineNo">016</span> *<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * When distributing Covered Code, include this CDDL<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * Header Notice in each file and include the License file<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * at opensso/legal/CDDLv1.0.txt.<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * If applicable, add the following below the CDDL Header,<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * with the fields enclosed by brackets [] replaced by<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * your own identifying information:<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * "Portions Copyrighted [year] [name of copyright owner]"<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * $Id: AMSearchControl.java,v 1.4 2008/06/25 05:41:22 qcheng Exp $<a name="line.25"></a>
+<span class="sourceLineNo">026</span> *<a name="line.26"></a>
+<span class="sourceLineNo">027</span> */<a name="line.27"></a>
+<span class="sourceLineNo">028</span><a name="line.28"></a>
+<span class="sourceLineNo">029</span>package com.iplanet.am.sdk;<a name="line.29"></a>
+<span class="sourceLineNo">030</span><a name="line.30"></a>
+<span class="sourceLineNo">031</span>import java.util.Set;<a name="line.31"></a>
+<span class="sourceLineNo">032</span><a name="line.32"></a>
+<span class="sourceLineNo">033</span>import com.iplanet.ums.SearchControl;<a name="line.33"></a>
+<span class="sourceLineNo">034</span><a name="line.34"></a>
+<span class="sourceLineNo">035</span>/**<a name="line.35"></a>
+<span class="sourceLineNo">036</span> * This class provides a way to customize Search behaviors. Common behaviors are<a name="line.36"></a>
+<span class="sourceLineNo">037</span> * time limit, result limit and Virtual list view. In future, we will provide<a name="line.37"></a>
+<span class="sourceLineNo">038</span> * ways for client to define different hierarchical tree through<a name="line.38"></a>
+<span class="sourceLineNo">039</span> * &lt;code&gt;AMSearchControl&lt;/code&gt;.<a name="line.39"></a>
+<span class="sourceLineNo">040</span> *<a name="line.40"></a>
+<span class="sourceLineNo">041</span> * @deprecated  As of Sun Java System Access Manager 7.1.<a name="line.41"></a>
+<span class="sourceLineNo">042</span> * @supported.all.api<a name="line.42"></a>
+<span class="sourceLineNo">043</span> */<a name="line.43"></a>
+<span class="sourceLineNo">044</span>public class AMSearchControl {<a name="line.44"></a>
+<span class="sourceLineNo">045</span><a name="line.45"></a>
+<span class="sourceLineNo">046</span>    private SearchControl searchControl;<a name="line.46"></a>
+<span class="sourceLineNo">047</span><a name="line.47"></a>
+<span class="sourceLineNo">048</span>    private Set returnAttributes = null;<a name="line.48"></a>
+<span class="sourceLineNo">049</span><a name="line.49"></a>
+<span class="sourceLineNo">050</span>    // Disabled by default<a name="line.50"></a>
+<span class="sourceLineNo">051</span>    private static boolean getAllAttributesEnabled = false;<a name="line.51"></a>
+<span class="sourceLineNo">052</span><a name="line.52"></a>
+<span class="sourceLineNo">053</span>    /**<a name="line.53"></a>
+<span class="sourceLineNo">054</span>     * Creates the &lt;code&gt;AMSearchControl&lt;/code&gt; object<a name="line.54"></a>
+<span class="sourceLineNo">055</span>     */<a name="line.55"></a>
+<span class="sourceLineNo">056</span>    public AMSearchControl() {<a name="line.56"></a>
+<span class="sourceLineNo">057</span>        searchControl = new SearchControl();<a name="line.57"></a>
+<span class="sourceLineNo">058</span>    }<a name="line.58"></a>
+<span class="sourceLineNo">059</span><a name="line.59"></a>
+<span class="sourceLineNo">060</span>    protected SearchControl getSearchControl() {<a name="line.60"></a>
+<span class="sourceLineNo">061</span>        return searchControl;<a name="line.61"></a>
+<span class="sourceLineNo">062</span>    }<a name="line.62"></a>
+<span class="sourceLineNo">063</span><a name="line.63"></a>
+<span class="sourceLineNo">064</span>    /**<a name="line.64"></a>
+<span class="sourceLineNo">065</span>     * Set the return attribute names, if attributes of the entries need to be<a name="line.65"></a>
+<span class="sourceLineNo">066</span>     * obtained as part of the search.<a name="line.66"></a>
+<span class="sourceLineNo">067</span>     * <a name="line.67"></a>
+<span class="sourceLineNo">068</span>     * NOTE: If the return attribute values are specified as part of<a name="line.68"></a>
+<span class="sourceLineNo">069</span>     * &lt;code&gt;AMSearchControl&lt;/code&gt;, there could be a significant performance<a name="line.69"></a>
+<span class="sourceLineNo">070</span>     * overhead compared to when none are specified. When the return attributes<a name="line.70"></a>
+<span class="sourceLineNo">071</span>     * are set, the return attributes can be obtained as a map with DN as<a name="line.71"></a>
+<span class="sourceLineNo">072</span>     * map-key and set of attribute values as map-value from<a name="line.72"></a>
+<span class="sourceLineNo">073</span>     * &lt;code&gt;AMSearchResults&lt;/code&gt; object.<a name="line.73"></a>
+<span class="sourceLineNo">074</span>     * <a name="line.74"></a>
+<span class="sourceLineNo">075</span>     * @param attributeNames<a name="line.75"></a>
+<span class="sourceLineNo">076</span>     *            Set of attribute names whose values need to be obtained as<a name="line.76"></a>
+<span class="sourceLineNo">077</span>     *            part of the search.<a name="line.77"></a>
+<span class="sourceLineNo">078</span>     * <a name="line.78"></a>
+<span class="sourceLineNo">079</span>     */<a name="line.79"></a>
+<span class="sourceLineNo">080</span>    public void setReturnAttributes(Set attributeNames) {<a name="line.80"></a>
+<span class="sourceLineNo">081</span>        returnAttributes = attributeNames;<a name="line.81"></a>
+<span class="sourceLineNo">082</span>    }<a name="line.82"></a>
+<span class="sourceLineNo">083</span><a name="line.83"></a>
+<span class="sourceLineNo">084</span>    /**<a name="line.84"></a>
+<span class="sourceLineNo">085</span>     * Returns the list of attributes requested to be read when the search is<a name="line.85"></a>
+<span class="sourceLineNo">086</span>     * performed.<a name="line.86"></a>
+<span class="sourceLineNo">087</span>     * <a name="line.87"></a>
+<span class="sourceLineNo">088</span>     * @return list of attributes requested to be read.<a name="line.88"></a>
+<span class="sourceLineNo">089</span>     */<a name="line.89"></a>
+<span class="sourceLineNo">090</span>    public String[] getReturnAttributes() {<a name="line.90"></a>
+<span class="sourceLineNo">091</span>        String returnAttrs[] = null;<a name="line.91"></a>
+<span class="sourceLineNo">092</span>        if (returnAttributes != null &amp;&amp; !returnAttributes.isEmpty()) {<a name="line.92"></a>
+<span class="sourceLineNo">093</span>            returnAttrs = (String[]) returnAttributes<a name="line.93"></a>
+<span class="sourceLineNo">094</span>                    .toArray(new String[returnAttributes.size()]);<a name="line.94"></a>
+<span class="sourceLineNo">095</span><a name="line.95"></a>
+<span class="sourceLineNo">096</span>        }<a name="line.96"></a>
+<span class="sourceLineNo">097</span>        return returnAttrs;<a name="line.97"></a>
+<span class="sourceLineNo">098</span>    }<a name="line.98"></a>
+<span class="sourceLineNo">099</span><a name="line.99"></a>
+<span class="sourceLineNo">100</span>    /**<a name="line.100"></a>
+<span class="sourceLineNo">101</span>     * Sets the specified boolean value to the variable. Boolean value is set to<a name="line.101"></a>
+<span class="sourceLineNo">102</span>     * true, if all attributes of the entries need to be obtained as part of the<a name="line.102"></a>
+<span class="sourceLineNo">103</span>     * search.<a name="line.103"></a>
+<span class="sourceLineNo">104</span>     * <a name="line.104"></a>
+<span class="sourceLineNo">105</span>     * NOTE: If this &lt;code&gt;getAllReturnAttributes&lt;/code&gt; boolean is set to<a name="line.105"></a>
+<span class="sourceLineNo">106</span>     * true as part of &lt;code&gt;AMSearchControl&lt;/code&gt;, it overrides any other<a name="line.106"></a>
+<span class="sourceLineNo">107</span>     * &lt;code&gt;setReturnAttributes&lt;/code&gt; set as part of the<a name="line.107"></a>
+<span class="sourceLineNo">108</span>     * &lt;code&gt;AMSearchControl&lt;/code&gt;. This is similar to using a wildcard '*'<a name="line.108"></a>
+<span class="sourceLineNo">109</span>     * in search.<a name="line.109"></a>
+<span class="sourceLineNo">110</span>     * <a name="line.110"></a>
+<span class="sourceLineNo">111</span>     * When the option for getting all attributes is set to true, the search<a name="line.111"></a>
+<span class="sourceLineNo">112</span>     * results will return a Map, where the Key is the DN of the search results,<a name="line.112"></a>
+<span class="sourceLineNo">113</span>     * and value is another Map of attribute names for keys and Sets for values<a name="line.113"></a>
+<span class="sourceLineNo">114</span>     * of those attributes.<a name="line.114"></a>
+<span class="sourceLineNo">115</span>     * <a name="line.115"></a>
+<span class="sourceLineNo">116</span>     * @param getAllAttributes<a name="line.116"></a>
+<span class="sourceLineNo">117</span>     *            Boolean value set to true as part of the<a name="line.117"></a>
+<span class="sourceLineNo">118</span>     *            &lt;code&gt;AMSearchControl&lt;/code&gt; to obtain all attributes as<a name="line.118"></a>
+<span class="sourceLineNo">119</span>     *            part of the search.<a name="line.119"></a>
+<span class="sourceLineNo">120</span>     * <a name="line.120"></a>
+<span class="sourceLineNo">121</span>     * <a name="line.121"></a>
+<span class="sourceLineNo">122</span>     */<a name="line.122"></a>
+<span class="sourceLineNo">123</span>    public void setAllReturnAttributes(boolean getAllAttributes) {<a name="line.123"></a>
+<span class="sourceLineNo">124</span>        SearchControl sc = getSearchControl();<a name="line.124"></a>
+<span class="sourceLineNo">125</span>        sc.setAllReturnAttributes(getAllAttributes);<a name="line.125"></a>
+<span class="sourceLineNo">126</span>        getAllAttributesEnabled = getAllAttributes;<a name="line.126"></a>
+<span class="sourceLineNo">127</span>    }<a name="line.127"></a>
+<span class="sourceLineNo">128</span><a name="line.128"></a>
+<span class="sourceLineNo">129</span>    /**<a name="line.129"></a>
+<span class="sourceLineNo">130</span>     * Returns true if the option for getting all attributes has been enabled.<a name="line.130"></a>
+<span class="sourceLineNo">131</span>     * <a name="line.131"></a>
+<span class="sourceLineNo">132</span>     * @return true if the option for getting all attributes has been enabled.<a name="line.132"></a>
+<span class="sourceLineNo">133</span>     */<a name="line.133"></a>
+<span class="sourceLineNo">134</span>    public boolean isGetAllReturnAttributesEnabled() {<a name="line.134"></a>
+<span class="sourceLineNo">135</span>        return getAllAttributesEnabled;<a name="line.135"></a>
+<span class="sourceLineNo">136</span>    }<a name="line.136"></a>
+<span class="sourceLineNo">137</span><a name="line.137"></a>
+<span class="sourceLineNo">138</span>    /**<a name="line.138"></a>
+<span class="sourceLineNo">139</span>     * Set sort order based on attribute names.<a name="line.139"></a>
+<span class="sourceLineNo">140</span>     * <a name="line.140"></a>
+<span class="sourceLineNo">141</span>     * @param attributeNames<a name="line.141"></a>
+<span class="sourceLineNo">142</span>     *            array of attribute names to sort on<a name="line.142"></a>
+<span class="sourceLineNo">143</span>     * <a name="line.143"></a>
+<span class="sourceLineNo">144</span>     */<a name="line.144"></a>
+<span class="sourceLineNo">145</span>    public void setSortKeys(String[] attributeNames) {<a name="line.145"></a>
+<span class="sourceLineNo">146</span>        searchControl.setSortKeys(attributeNames);<a name="line.146"></a>
+<span class="sourceLineNo">147</span>    }<a name="line.147"></a>
+<span class="sourceLineNo">148</span><a name="line.148"></a>
+<span class="sourceLineNo">149</span>    /**<a name="line.149"></a>
+<span class="sourceLineNo">150</span>     * Set range for retrieving VLV data.<a name="line.150"></a>
+<span class="sourceLineNo">151</span>     * <a name="line.151"></a>
+<span class="sourceLineNo">152</span>     * @param startIndex<a name="line.152"></a>
+<span class="sourceLineNo">153</span>     *            starting position.<a name="line.153"></a>
+<span class="sourceLineNo">154</span>     * @param beforeCount<a name="line.154"></a>
+<span class="sourceLineNo">155</span>     *            Number of entries before the &lt;code&gt;startIndex&lt;/code&gt;.<a name="line.155"></a>
+<span class="sourceLineNo">156</span>     * @param afterCount<a name="line.156"></a>
+<span class="sourceLineNo">157</span>     *            Number of entries after the &lt;code&gt;startIndex&lt;/code&gt;.<a name="line.157"></a>
+<span class="sourceLineNo">158</span>     */<a name="line.158"></a>
+<span class="sourceLineNo">159</span>    protected void setVLVRange(int startIndex, int beforeCount, int afterCount) <a name="line.159"></a>
+<span class="sourceLineNo">160</span>    {<a name="line.160"></a>
+<span class="sourceLineNo">161</span>        searchControl.setVLVRange(startIndex, beforeCount, afterCount);<a name="line.161"></a>
+<span class="sourceLineNo">162</span>    }<a name="line.162"></a>
+<span class="sourceLineNo">163</span><a name="line.163"></a>
+<span class="sourceLineNo">164</span>    /**<a name="line.164"></a>
+<span class="sourceLineNo">165</span>     * Set range for retrieving VLV data.<a name="line.165"></a>
+<span class="sourceLineNo">166</span>     * <a name="line.166"></a>
+<span class="sourceLineNo">167</span>     * @param jumpTo<a name="line.167"></a>
+<span class="sourceLineNo">168</span>     *            Search expression defining the result set return.<a name="line.168"></a>
+<span class="sourceLineNo">169</span>     * @param beforeCount<a name="line.169"></a>
+<span class="sourceLineNo">170</span>     *            Number of entries before the &lt;code&gt;startIndex&lt;/code&gt;.<a name="line.170"></a>
+<span class="sourceLineNo">171</span>     * @param afterCount<a name="line.171"></a>
+<span class="sourceLineNo">172</span>     *            Number of entries after the &lt;code&gt;startIndex&lt;/code&gt;.<a name="line.172"></a>
+<span class="sourceLineNo">173</span>     */<a name="line.173"></a>
+<span class="sourceLineNo">174</span>    protected void setVLVRange(String jumpTo, int beforeCount, int afterCount) <a name="line.174"></a>
+<span class="sourceLineNo">175</span>    {<a name="line.175"></a>
+<span class="sourceLineNo">176</span>        searchControl.setVLVRange(jumpTo, beforeCount, afterCount);<a name="line.176"></a>
+<span class="sourceLineNo">177</span>    }<a name="line.177"></a>
+<span class="sourceLineNo">178</span><a name="line.178"></a>
+<span class="sourceLineNo">179</span>    /**<a name="line.179"></a>
+<span class="sourceLineNo">180</span>     * Get range for current VLV setting.<a name="line.180"></a>
+<span class="sourceLineNo">181</span>     * <a name="line.181"></a>
+<span class="sourceLineNo">182</span>     * @return array of integers which contain &lt;code&gt;startIndex&lt;/code&gt;,<a name="line.182"></a>
+<span class="sourceLineNo">183</span>     *         &lt;code&gt;beforeCount&lt;/code&gt; and &lt;code&gt;afterCount&lt;/code&gt;.<a name="line.183"></a>
+<span class="sourceLineNo">184</span>     */<a name="line.184"></a>
+<span class="sourceLineNo">185</span>    protected int[] getVLVRange() {<a name="line.185"></a>
+<span class="sourceLineNo">186</span>        return searchControl.getVLVRange();<a name="line.186"></a>
+<span class="sourceLineNo">187</span>    }<a name="line.187"></a>
+<span class="sourceLineNo">188</span><a name="line.188"></a>
+<span class="sourceLineNo">189</span>    /**<a name="line.189"></a>
+<span class="sourceLineNo">190</span>     * Returns &lt;code&gt;jumpTo&lt;/code&gt; value for VLV range.<a name="line.190"></a>
+<span class="sourceLineNo">191</span>     * <a name="line.191"></a>
+<span class="sourceLineNo">192</span>     * @return &lt;code&gt;jumpTo&lt;/code&gt; value.<a name="line.192"></a>
+<span class="sourceLineNo">193</span>     * <a name="line.193"></a>
+<span class="sourceLineNo">194</span>     */<a name="line.194"></a>
+<span class="sourceLineNo">195</span>    protected String getVLVJumpTo() {<a name="line.195"></a>
+<span class="sourceLineNo">196</span>        return searchControl.getVLVJumpTo();<a name="line.196"></a>
+<span class="sourceLineNo">197</span>    }<a name="line.197"></a>
+<span class="sourceLineNo">198</span><a name="line.198"></a>
+<span class="sourceLineNo">199</span>    /**<a name="line.199"></a>
+<span class="sourceLineNo">200</span>     * Sets the maximum number of milliseconds to wait for any operation for the<a name="line.200"></a>
+<span class="sourceLineNo">201</span>     * search.<a name="line.201"></a>
+<span class="sourceLineNo">202</span>     * <a name="line.202"></a>
+<span class="sourceLineNo">203</span>     * @param timeOut<a name="line.203"></a>
+<span class="sourceLineNo">204</span>     *            Max number of milliseconds<a name="line.204"></a>
+<span class="sourceLineNo">205</span>     * <a name="line.205"></a>
+<span class="sourceLineNo">206</span>     */<a name="line.206"></a>
+<span class="sourceLineNo">207</span>    public void setTimeOut(int timeOut) {<a name="line.207"></a>
+<span class="sourceLineNo">208</span>        searchControl.setTimeOut(timeOut);<a name="line.208"></a>
+<span class="sourceLineNo">209</span>    }<a name="line.209"></a>
+<span class="sourceLineNo">210</span><a name="line.210"></a>
+<span class="sourceLineNo">211</span>    /**<a name="line.211"></a>
+<span class="sourceLineNo">212</span>     * Returns current time out setting.<a name="line.212"></a>
+<span class="sourceLineNo">213</span>     * <a name="line.213"></a>
+<span class="sourceLineNo">214</span>     * @return current time out setting.<a name="line.214"></a>
+<span class="sourceLineNo">215</span>     */<a name="line.215"></a>
+<span class="sourceLineNo">216</span>    public int getTimeOut() {<a name="line.216"></a>
+<span class="sourceLineNo">217</span>        return searchControl.getTimeOut();<a name="line.217"></a>
+<span class="sourceLineNo">218</span>    }<a name="line.218"></a>
+<span class="sourceLineNo">219</span><a name="line.219"></a>
+<span class="sourceLineNo">220</span>    /**<a name="line.220"></a>
+<span class="sourceLineNo">221</span>     * Sets the maximum number of search results to return; 0 means there is no<a name="line.221"></a>
+<span class="sourceLineNo">222</span>     * limit.<a name="line.222"></a>
+<span class="sourceLineNo">223</span>     * <a name="line.223"></a>
+<span class="sourceLineNo">224</span>     * @param maxNumber<a name="line.224"></a>
+<span class="sourceLineNo">225</span>     *            Max number of results<a name="line.225"></a>
+<span class="sourceLineNo">226</span>     */<a name="line.226"></a>
+<span class="sourceLineNo">227</span>    public void setMaxResults(int maxNumber) {<a name="line.227"></a>
+<span class="sourceLineNo">228</span>        searchControl.setMaxResults(maxNumber);<a name="line.228"></a>
+<span class="sourceLineNo">229</span>    }<a name="line.229"></a>
+<span class="sourceLineNo">230</span><a name="line.230"></a>
+<span class="sourceLineNo">231</span>    /**<a name="line.231"></a>
+<span class="sourceLineNo">232</span>     * Returns the maximum number of search results. return 0 means there is no<a name="line.232"></a>
+<span class="sourceLineNo">233</span>     * limit.<a name="line.233"></a>
+<span class="sourceLineNo">234</span>     * <a name="line.234"></a>
+<span class="sourceLineNo">235</span>     * @return the maximum number of search results.<a name="line.235"></a>
+<span class="sourceLineNo">236</span>     */<a name="line.236"></a>
+<span class="sourceLineNo">237</span>    public int getMaxResults() {<a name="line.237"></a>
+<span class="sourceLineNo">238</span>        return searchControl.getMaxResults();<a name="line.238"></a>
+<span class="sourceLineNo">239</span>    }<a name="line.239"></a>
+<span class="sourceLineNo">240</span><a name="line.240"></a>
+<span class="sourceLineNo">241</span>    /**<a name="line.241"></a>
+<span class="sourceLineNo">242</span>     * Sets the search scope in &lt;code&gt;AMSearchControl&lt;/code&gt;.<a name="line.242"></a>
+<span class="sourceLineNo">243</span>     * <a name="line.243"></a>
+<span class="sourceLineNo">244</span>     * @param scope<a name="line.244"></a>
+<span class="sourceLineNo">245</span>     *            Search scope defined in the &lt;code&gt;AMSearchControl&lt;/code&gt; to<a name="line.245"></a>
+<span class="sourceLineNo">246</span>     *            be used with the search API<a name="line.246"></a>
+<span class="sourceLineNo">247</span>     */<a name="line.247"></a>
+<span class="sourceLineNo">248</span>    public void setSearchScope(int scope) {<a name="line.248"></a>
+<span class="sourceLineNo">249</span>        searchControl.setSearchScope(scope);<a name="line.249"></a>
+<span class="sourceLineNo">250</span>    }<a name="line.250"></a>
+<span class="sourceLineNo">251</span><a name="line.251"></a>
+<span class="sourceLineNo">252</span>    /**<a name="line.252"></a>
+<span class="sourceLineNo">253</span>     * Gets the search scope defined in the &lt;code&gt;AMSearchControl&lt;/code&gt;.<a name="line.253"></a>
+<span class="sourceLineNo">254</span>     * <a name="line.254"></a>
+<span class="sourceLineNo">255</span>     * @return search scope defined in the &lt;code&gt;AMSearchControl&lt;/code&gt;. If<a name="line.255"></a>
+<span class="sourceLineNo">256</span>     *         search scope is never defined in the<a name="line.256"></a>
+<span class="sourceLineNo">257</span>     *         &lt;code&gt;AMSearchControl&lt;/code&gt; &lt;code&gt;SCOPE_SUB&lt;/code&gt; for<a name="line.257"></a>
+<span class="sourceLineNo">258</span>     *         subtree type of search is assumed.<a name="line.258"></a>
+<span class="sourceLineNo">259</span>     */<a name="line.259"></a>
+<span class="sourceLineNo">260</span>    public int getSearchScope() {<a name="line.260"></a>
+<span class="sourceLineNo">261</span>        return searchControl.getSearchScope();<a name="line.261"></a>
+<span class="sourceLineNo">262</span>    }<a name="line.262"></a>
+<span class="sourceLineNo">263</span><a name="line.263"></a>
+<span class="sourceLineNo">264</span>    /**<a name="line.264"></a>
+<span class="sourceLineNo">265</span>     * Gets the search scope defined in the &lt;code&gt;AMSearchControl&lt;/code&gt;.<a name="line.265"></a>
+<span class="sourceLineNo">266</span>     * Allows a user to specify default search scope if nothing has been defined<a name="line.266"></a>
+<span class="sourceLineNo">267</span>     * in the &lt;code&gt;AMSearchControl&lt;/code&gt; yet.<a name="line.267"></a>
+<span class="sourceLineNo">268</span>     * <a name="line.268"></a>
+<span class="sourceLineNo">269</span>     * @param defaultScope<a name="line.269"></a>
+<span class="sourceLineNo">270</span>     *            Scope value to be used in case the<a name="line.270"></a>
+<span class="sourceLineNo">271</span>     *            &lt;code&gt;AMSearchControl&lt;/code&gt; is not set up with a search<a name="line.271"></a>
+<span class="sourceLineNo">272</span>     *            scope<a name="line.272"></a>
+<span class="sourceLineNo">273</span>     * <a name="line.273"></a>
+<span class="sourceLineNo">274</span>     * @return Search scope defined in the &lt;code&gt;AMSearchControl&lt;/code&gt;.<a name="line.274"></a>
+<span class="sourceLineNo">275</span>     *         Return &lt;code&gt;defaultScope&lt;/code&gt; if scope is not defined in the<a name="line.275"></a>
+<span class="sourceLineNo">276</span>     *         control.<a name="line.276"></a>
+<span class="sourceLineNo">277</span>     */<a name="line.277"></a>
+<span class="sourceLineNo">278</span>    public int getSearchScope(int defaultScope) {<a name="line.278"></a>
+<span class="sourceLineNo">279</span>        return searchControl.getSearchScope(defaultScope);<a name="line.279"></a>
+<span class="sourceLineNo">280</span>    }<a name="line.280"></a>
+<span class="sourceLineNo">281</span>}<a name="line.281"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

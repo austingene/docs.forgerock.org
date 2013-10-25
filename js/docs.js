@@ -33,6 +33,7 @@ var products = {
         "10.0.0"
     ],
     "openam-pa": [
+        "3.3.0",
         "3.1.0-Xpress"
     ],
     "opendj": [
