@@ -1058,10 +1058,13 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   OpenAM. It is strongly recommended that you update to this release to
   make your deployment more secure, and to take advantage of important
   functional fixes. ForgeRock customers can contact support for help and
-  further information.</p></div><div class="itemizedlist" title="Major New Features"><div class="itemizedlist-title">Major New Features</div><ul class="itemizedlist" type="disc"><li class="listitem"><p>This release uses the new OpenAM Core Token Service (CTS) internally,
-    with a more generalized token storage format for sessions, SAML Tokens, and
-    OAuth Tokens. The LDAP schema have been extended for the CTS objects.</p></li><li class="listitem"><p>OpenAM now includes a preview of the cloud Dashboard service, part of
-   allowing user self-management of web based applications. (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-2019" target="_blank">OPENAM-2019</a>).</p></li><li class="listitem"><p>OpenAM now fully supports OAuth 2.0 and OpenID Connect 1.0 as well as
+  further information.</p></div><div class="itemizedlist" title="Major New Features"><div class="itemizedlist-title">Major New Features</div><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+     This release uses the new OpenAM Core Token Service (CTS),
+     with a more generalized token storage format
+     for sessions, SAML Tokens, and OAuth Tokens.
+
+     The LDAP schema have been extended for the CTS objects.
+    </p></li><li class="listitem"><p>OpenAM now fully supports OAuth 2.0 and OpenID Connect 1.0 as well as
    the required building blocks such as WebFinger, and JWT and related emerging
    standards.</p><p>In addition to playing the role of OAuth 2.0 client and resource server,
    OpenAM can play the role of OAuth 2.0 authorization server. See <a href="../../admin-guide/index/chap-oauth2.html" class="link"><em class="citetitle">Managing OAuth
@@ -1100,8 +1103,14 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
    OpenAM now writes session data to the configuration data store instead.
    This implementation also can be used to make sessions persist across restart
    for single OpenAM servers. The current implementation requires that you use
-   OpenDJ for the configuration data store.</p></li><li class="listitem"><p>OpenAM now bundles OpenDJ 2.6.</p></li><li class="listitem"><p>A new UI is available for experimental, non-production use. Informally known as the XUI,
-      it uses LESS CSS for UI configuration.</p></li></ul></div><div class="itemizedlist" title="Additional New Features"><div class="itemizedlist-title">Additional New Features</div><ul class="itemizedlist" type="disc"><li class="listitem"><p>IBM WebSphere 8 is now a supported platform. See <a href="../../install-guide/index/chap-prepare-install.html#prepare-ibm-websphere" class="link"><em class="citetitle">Preparing IBM
+   OpenDJ for the configuration data store.</p></li><li class="listitem"><p>OpenAM now includes a preview of the cloud Dashboard service, part of
+   allowing user self-management of web based applications. (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-2019" target="_blank">OPENAM-2019</a>).</p></li><li class="listitem"><p>OpenAM now bundles OpenDJ 2.6.</p></li><li class="listitem"><p>
+       A new UI is available for experimental, non-production use.
+
+       Informally known as the XUI, this JavaScript based UI uses
+       LESS CSS for UI configuration.
+      </p></li></ul></div><div class="itemizedlist" title="Additional New Features"><div class="itemizedlist-title">Additional New Features</div><ul class="itemizedlist" type="disc"><li class="listitem"><p>The Persistent Cookie module has been added to support configuration of cookie lifetimes,
+   based on requests and a maximum time.</p></li><li class="listitem"><p>IBM WebSphere 8 is now a supported platform. See <a href="../../install-guide/index/chap-prepare-install.html#prepare-ibm-websphere" class="link"><em class="citetitle">Preparing IBM
    WebSphere</em></a> in the <em class="citetitle">Installation Guide</em>
    for details on how to setup WebSphere 8.0 and 8.5 before deploying
    OpenAM.</p></li><li class="listitem"><p>The policy tree index has been updated so that resources first check the root

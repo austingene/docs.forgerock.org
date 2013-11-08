@@ -1053,7 +1053,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 <!-- END SyntaxHighlighter 3.0.83 -->
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
-</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;1.&nbsp;Preparing For Installation</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="preface.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-install-core.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;1.&nbsp;Preparing For Installation"><div class="titlepage"><div><div><h2 class="title"><a name="chap-prepare-install"></a>Chapter&nbsp;1.&nbsp;Preparing For Installation</h2></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="section"><a href="chap-prepare-install.html#prepare-networking">1.1. Preparing a Fully-Qualified Domain Name</a></span></dt><dt><span class="section"><a href="chap-prepare-install.html#prepare-java">1.2. Preparing a Java Environment</a></span></dt><dt><span class="section"><a href="chap-prepare-install.html#prerequisites-file-descriptors">1.3. Setting Maximum File Descriptors</a></span></dt><dt><span class="section"><a href="chap-prepare-install.html#prepare-configuration-store">1.4. Preparing a Configuration Data Store</a></span></dt><dt><span class="section"><a href="chap-prepare-install.html#prepare-identity-repository">1.5. Preparing an Identity Repository</a></span></dt><dt><span class="section"><a href="chap-prepare-install.html#download-openam-software">1.6. Obtaining OpenAM Software</a></span></dt><dt><span class="section"><a href="chap-prepare-install.html#prepare-apache-tomcat">1.7. Preparing Apache Tomcat</a></span></dt><dt><span class="section"><a href="chap-prepare-install.html#prepare-glassfish-v2">1.8. Preparing GlassFish v2</a></span></dt><dt><span class="section"><a href="chap-prepare-install.html#prepare-jboss-5">1.9. Preparing OpenAM &amp; JBoss 4 or 5</a></span></dt><dt><span class="section"><a href="chap-prepare-install.html#prepare-jboss-7">1.10. Preparing OpenAM &amp; JBoss AS 7 / EAP 6</a></span></dt><dt><span class="section"><a href="chap-prepare-install.html#prepare-jetty">1.11. Preparing Jetty</a></span></dt><dt><span class="section"><a href="chap-prepare-install.html#prepare-oracle-weblogic">1.12. Preparing Oracle WebLogic</a></span></dt><dt><span class="section"><a href="chap-prepare-install.html#prepare-ibm-websphere">1.13. Preparing IBM WebSphere</a></span></dt></dl></div><a class="indexterm" name="d14655e223"></a><p>This chapter covers prerequisites for installing OpenAM software,
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;1.&nbsp;Preparing For Installation</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="preface.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-install-core.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;1.&nbsp;Preparing For Installation"><div class="titlepage"><div><div><h2 class="title"><a name="chap-prepare-install"></a>Chapter&nbsp;1.&nbsp;Preparing For Installation</h2></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl><dt><span class="section"><a href="chap-prepare-install.html#prepare-networking">1.1. Preparing a Fully-Qualified Domain Name</a></span></dt><dt><span class="section"><a href="chap-prepare-install.html#prepare-java">1.2. Preparing a Java Environment</a></span></dt><dt><span class="section"><a href="chap-prepare-install.html#prerequisites-file-descriptors">1.3. Setting Maximum File Descriptors</a></span></dt><dt><span class="section"><a href="chap-prepare-install.html#prepare-configuration-store">1.4. Preparing a Configuration Data Store</a></span></dt><dt><span class="section"><a href="chap-prepare-install.html#prepare-identity-repository">1.5. Preparing an Identity Repository</a></span></dt><dt><span class="section"><a href="chap-prepare-install.html#download-openam-software">1.6. Obtaining OpenAM Software</a></span></dt><dt><span class="section"><a href="chap-prepare-install.html#prepare-apache-tomcat">1.7. Preparing Apache Tomcat</a></span></dt><dt><span class="section"><a href="chap-prepare-install.html#prepare-glassfish">1.8. Preparing GlassFish</a></span></dt><dt><span class="section"><a href="chap-prepare-install.html#prepare-jboss-5">1.9. Preparing OpenAM &amp; JBoss 4 or 5</a></span></dt><dt><span class="section"><a href="chap-prepare-install.html#prepare-jboss-7">1.10. Preparing OpenAM &amp; JBoss AS 7 / EAP 6</a></span></dt><dt><span class="section"><a href="chap-prepare-install.html#prepare-jetty">1.11. Preparing Jetty</a></span></dt><dt><span class="section"><a href="chap-prepare-install.html#prepare-oracle-weblogic">1.12. Preparing Oracle WebLogic</a></span></dt><dt><span class="section"><a href="chap-prepare-install.html#prepare-ibm-websphere">1.13. Preparing IBM WebSphere</a></span></dt></dl></div><a class="indexterm" name="d14685e223"></a><p>This chapter covers prerequisites for installing OpenAM software,
  including how to prepare your application server to run OpenAM, how to prepare
  directory services to store configuration data, and how to prepare an identity
  repository to handle OpenAM identities.</p><div class="note" title="Note" style="font-style: italic;"><h3 class="title">Note</h3><p>If a Java Security Manager is enabled for your application server,
@@ -1068,16 +1068,20 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   for testing purposes. OpenAM relies on browser cookies, which are returned
   based on domain name. Furthermore, use a domain name that contains at least 2
   <code class="literal">.</code> (dot) characters, such
-  <code class="literal">openam.example.com</code>.</p></div><div class="section" title="1.2.&nbsp;Preparing a Java Environment"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="prepare-java"></a>1.2.&nbsp;Preparing a Java Environment</h2></div></div></div><div class="toc"><dl><dt><span class="section"><a href="chap-prepare-install.html#prepare-java-sun">1.2.1. Settings For Sun/Oracle Java Environments</a></span></dt><dt><span class="section"><a href="chap-prepare-install.html#prepare-java-ibm">1.2.2. Settings For IBM Java Environments</a></span></dt></dl></div><a class="indexterm" name="d14655e260"></a><p>OpenAM software depends on a Java runtime environment. Check the output
+  <code class="literal">openam.example.com</code>.</p></div><div class="section" title="1.2.&nbsp;Preparing a Java Environment"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="prepare-java"></a>1.2.&nbsp;Preparing a Java Environment</h2></div></div></div><div class="toc"><dl><dt><span class="section"><a href="chap-prepare-install.html#prepare-java-sun">1.2.1. Settings For Sun/Oracle Java Environments</a></span></dt><dt><span class="section"><a href="chap-prepare-install.html#prepare-java-ibm">1.2.2. Settings For IBM Java Environments</a></span></dt></dl></div><a class="indexterm" name="d14685e260"></a><p>OpenAM software depends on a Java runtime environment. Check the output
   of <span class="command"><strong>java -version</strong></span> to make sure your the version is supported
   according to the <em class="citetitle">Release Notes</em> section on <a href="../../release-notes/index/chap-before-you-install.html#java-requirements" class="link"><em class="citetitle">Java
   Requirements</em></a>.</p><div class="section" title="1.2.1.&nbsp;Settings For Sun/Oracle Java Environments"><div class="titlepage"><div><div><h3 class="title"><a name="prepare-java-sun"></a>1.2.1.&nbsp;Settings For Sun/Oracle Java Environments</h3></div></div></div><div class="variablelist"><p>When using a Sun or Oracle Java environment set at least the
     following options.</p><dl><dt><span class="term"><code class="literal">-server</code></span></dt><dd><p>Use <code class="literal">-server</code> rather than
-      <code class="literal">-client</code>.</p></dd><dt><span class="term"><code class="literal">-XX:MaxPermSize=256m</code></span></dt><dd><p>Set the permanent generation size to 256 MB.</p></dd><dt><span class="term"><code class="literal">-Xmx1024m</code> (minimum)</span></dt><dd><p>OpenAM requires at least a 1 GB heap. Higher volume and higher
-      performance deployments require additional heap space.</p></dd></dl></div><p>For additional JVM tuning recommendations, see <a href="../../admin-guide/index/chap-tuning.html#tuning-jvm-for-openam" class="link"><em class="citetitle">Java Virtual
+      <code class="literal">-client</code>.</p></dd><dt><span class="term"><code class="literal">-XX:MaxPermSize=256m</code></span></dt><dd><p>Set the permanent generation size to 256 MB.</p></dd><dt><span class="term"><code class="literal">-Xmx1024m</code> (minimum)</span></dt><dd><p>OpenAM requires at least a 1 GB heap. If you are including the embedded
+      OpenDJ directory, OpenAM requires at least a 2 GB heap, as 50% of that space
+      is allocated to OpenDJ. Higher volume and higher performance
+      deployments require additional heap space.</p></dd></dl></div><p>For additional JVM tuning recommendations, see <a href="../../admin-guide/index/chap-tuning.html#tuning-jvm-for-openam" class="link"><em class="citetitle">Java Virtual
    Machine Settings</em></a>.</p></div><div class="section" title="1.2.2.&nbsp;Settings For IBM Java Environments"><div class="titlepage"><div><div><h3 class="title"><a name="prepare-java-ibm"></a>1.2.2.&nbsp;Settings For IBM Java Environments</h3></div></div></div><div class="variablelist"><p>When using an IBM Java environment set at least the following
-    options.</p><dl><dt><span class="term"><code class="literal">-DamCryptoDescriptor.provider=IBMJCE</code>, </span><span class="term"><code class="literal">-DamKeyGenDescriptor.provider=IBMJCE</code></span></dt><dd><p>Use the IBM Java Cryptography Extensions.</p></dd><dt><span class="term"><code class="literal">-Xmx1024m</code> (minimum)</span></dt><dd><p>OpenAM requires at least a 1 GB heap. Higher volume and higher
-      performance deployments require additional heap space.</p></dd></dl></div></div></div><div class="section" title="1.3.&nbsp;Setting Maximum File Descriptors"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="prerequisites-file-descriptors"></a>1.3.&nbsp;Setting Maximum File Descriptors</h2></div></div></div><a class="indexterm" name="d14655e342"></a><p>
+    options.</p><dl><dt><span class="term"><code class="literal">-DamCryptoDescriptor.provider=IBMJCE</code>, </span><span class="term"><code class="literal">-DamKeyGenDescriptor.provider=IBMJCE</code></span></dt><dd><p>Use the IBM Java Cryptography Extensions.</p></dd><dt><span class="term"><code class="literal">-Xmx1024m</code> (minimum)</span></dt><dd><p>OpenAM requires at least a 1 GB heap. If you are including the embedded
+      OpenDJ directory, OpenAM requires at least a 2 GB heap, as 50% of that space
+      is allocated to OpenDJ. Higher volume and higher
+      performance deployments require additional heap space.</p></dd></dl></div></div></div><div class="section" title="1.3.&nbsp;Setting Maximum File Descriptors"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="prerequisites-file-descriptors"></a>1.3.&nbsp;Setting Maximum File Descriptors</h2></div></div></div><a class="indexterm" name="d14685e342"></a><p>
    If you use the embedded OpenDJ directory, make sure OpenDJ has enough
    file descriptors. OpenDJ needs to be able to open many files,
    especially when handling many client connections.
@@ -1114,7 +1118,7 @@ openam hard nofile 131072
    </p></li><li class="listitem"><p>
     Read <code class="filename">/proc/sys/fs/file-max</code> again to confirm
     that it now corresponds to the new maximum.
-   </p></li></ol></div></div><div class="section" title="1.4.&nbsp;Preparing a Configuration Data Store"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="prepare-configuration-store"></a>1.4.&nbsp;Preparing a Configuration Data Store</h2></div></div></div><a class="indexterm" name="d14655e401"></a><p>OpenAM stores configuration, session, and token data in an LDAP
+   </p></li></ol></div></div><div class="section" title="1.4.&nbsp;Preparing a Configuration Data Store"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="prepare-configuration-store"></a>1.4.&nbsp;Preparing a Configuration Data Store</h2></div></div></div><a class="indexterm" name="d14685e401"></a><p>OpenAM stores configuration, session, and token data in an LDAP
   directory service. This data is private to OpenAM. In other words, OpenAM
   controls this data and other applications should access it, if necessary,
   only through OpenAM.</p><p>OpenAM ships with an embedded OpenDJ directory server that you can
@@ -1168,7 +1172,7 @@ aci: (version 3.0;acl "Add config entry"; allow (add)(userdn = "ldap:///
  uid=openam,ou=admins,dc=example,dc=com");)
 aci: (version 3.0;acl "Delete config entry"; allow (delete)(userdn = "ldap:///
  uid=openam,ou=admins,dc=example,dc=com");)</pre></li></ul></div><p>In addition, the directory administrator should index the following
-  attributes used by OpenAM.</p><div class="table"><a name="prepare-configuration-store-indexes"></a><div class="table-title">Table&nbsp;1.1.&nbsp;Configuration Data Store Indexes</div><div class="table-contents"><table summary="Configuration Data Store Indexes" border="0"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Attribute</th><th>Indexes Required</th></tr></thead><tbody><tr><td><code class="literal">coreTokenDate01</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenDate02</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenDate03</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenDate04</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenDate05</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenExpirationDate</code></td><td>ordering</td></tr><tr><td><code class="literal">coreTokenInteger01</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenInteger02</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenInteger03</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenInteger04</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenInteger05</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenInteger06</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenInteger07</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenInteger08</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenInteger09</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenInteger10</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenString01</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenString02</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenString03</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenString04</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenString05</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenString06</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenString07</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenString08</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenString09</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenString10</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenString11</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenString12</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenString13</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenString14</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenString15</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenUserId</code></td><td>equality</td></tr><tr><td><code class="literal">iplanet-am-user-federation-info-key</code></td><td>equality</td></tr><tr><td><code class="literal">sun-fm-saml2-nameid-infokey</code></td><td>equality</td></tr><tr><td><code class="literal">sunxmlkeyvalue</code></td><td>equality, substring</td></tr></tbody></table></div></div><br class="table-break"></div><div class="section" title="1.5.&nbsp;Preparing an Identity Repository"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="prepare-identity-repository"></a>1.5.&nbsp;Preparing an Identity Repository</h2></div></div></div><a class="indexterm" name="d14655e688"></a><p>OpenAM stores user identity data in one or more identity repositories.
+  attributes used by OpenAM.</p><div class="table"><a name="prepare-configuration-store-indexes"></a><div class="table-title">Table&nbsp;1.1.&nbsp;Configuration Data Store Indexes</div><div class="table-contents"><table summary="Configuration Data Store Indexes" border="0"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Attribute</th><th>Indexes Required</th></tr></thead><tbody><tr><td><code class="literal">coreTokenDate01</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenDate02</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenDate03</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenDate04</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenDate05</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenExpirationDate</code></td><td>ordering</td></tr><tr><td><code class="literal">coreTokenInteger01</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenInteger02</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenInteger03</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenInteger04</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenInteger05</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenInteger06</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenInteger07</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenInteger08</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenInteger09</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenInteger10</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenString01</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenString02</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenString03</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenString04</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenString05</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenString06</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenString07</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenString08</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenString09</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenString10</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenString11</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenString12</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenString13</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenString14</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenString15</code></td><td>equality</td></tr><tr><td><code class="literal">coreTokenUserId</code></td><td>equality</td></tr><tr><td><code class="literal">iplanet-am-user-federation-info-key</code></td><td>equality</td></tr><tr><td><code class="literal">sun-fm-saml2-nameid-infokey</code></td><td>equality</td></tr><tr><td><code class="literal">sunxmlkeyvalue</code></td><td>equality, substring</td></tr></tbody></table></div></div><br class="table-break"></div><div class="section" title="1.5.&nbsp;Preparing an Identity Repository"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="prepare-identity-repository"></a>1.5.&nbsp;Preparing an Identity Repository</h2></div></div></div><a class="indexterm" name="d14685e688"></a><p>OpenAM stores user identity data in one or more identity repositories.
   In many deployments OpenAM connects to existing LDAP directory services
   for user identity data. OpenAM is designed therefore to share data in an
   identity repository with other applications.</p><p>OpenAM ships with an embedded OpenDJ directory server that you can
@@ -1212,7 +1216,7 @@ aci: (version 3.0;acl "Add identity"; allow (add)(userdn = "ldap:///
 aci: (version 3.0;acl "Delete identity"; allow (delete)(userdn = "ldap:///
  uid=openam,ou=admins,dc=example,dc=com");)</pre></li><li class="listitem"><p>Allow the OpenAM user to reset other users' passwords.</p><p>To grant this privilege in OpenDJ for example, set the following
     attribute on the OpenAM user entry.</p><pre class="brush: ldif;">ds-privilege-name: password-reset</pre></li></ul></div><p>In addition for external directory services, the directory administrator
-  should index the following attributes used by OpenAM.</p><div class="table"><a name="prepare-identity-repository-indexes"></a><div class="table-title">Table&nbsp;1.2.&nbsp;Identity Repository Indexes</div><div class="table-contents"><table summary="Identity Repository Indexes" border="0"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Attribute</th><th>Indexes Required</th></tr></thead><tbody><tr><td><code class="literal">iplanet-am-user-federation-info-key</code></td><td>equality</td></tr><tr><td><code class="literal">sun-fm-saml2-nameid-infokey</code></td><td>equality</td></tr></tbody></table></div></div><br class="table-break"></div><div class="section" title="1.6.&nbsp;Obtaining OpenAM Software"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="download-openam-software"></a>1.6.&nbsp;Obtaining OpenAM Software</h2></div></div></div><a class="indexterm" name="d14655e774"></a><p>Download OpenAM releases from one of the following locations:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><a class="link" href="http://forgerock.com/download-stack/" target="_blank"><em class="citetitle">Enterprise Downloads</em></a> has the latest stable version of OpenAM, including
+  should index the following attributes used by OpenAM.</p><div class="table"><a name="prepare-identity-repository-indexes"></a><div class="table-title">Table&nbsp;1.2.&nbsp;Identity Repository Indexes</div><div class="table-contents"><table summary="Identity Repository Indexes" border="0"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Attribute</th><th>Indexes Required</th></tr></thead><tbody><tr><td><code class="literal">iplanet-am-user-federation-info-key</code></td><td>equality</td></tr><tr><td><code class="literal">sun-fm-saml2-nameid-infokey</code></td><td>equality</td></tr></tbody></table></div></div><br class="table-break"></div><div class="section" title="1.6.&nbsp;Obtaining OpenAM Software"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="download-openam-software"></a>1.6.&nbsp;Obtaining OpenAM Software</h2></div></div></div><a class="indexterm" name="d14685e774"></a><p>Download OpenAM releases from one of the following locations:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><a class="link" href="http://forgerock.com/download-stack/" target="_blank"><em class="citetitle">Enterprise Downloads</em></a> has the latest stable version of OpenAM, including
      a <code class="filename">.zip</code> file with all of the OpenAM components, the
      <code class="filename">.war</code> file, OpenAM tools, the configurator, policy
      agents, OpenIG, and documentation. Make sure you review the Software License and 
@@ -1247,7 +1251,9 @@ $ unzip ~/Downloads/OpenAM-11.0.0.zip</pre></div><div class="variablelist"><p>Wh
   <code class="filename">/etc/init.d/tomcat</code> manages the service at system
   startup and shutdown. This script assumes you run OpenAM as the user
   <code class="literal">openam</code>.</p><p>OpenAM core services require a minimum JVM heap size of 1 GB, and a
-  permanent generation size of 256 MB. See <a class="xref" href="chap-prepare-install.html#prepare-java" title="1.2.&nbsp;Preparing a Java Environment">Section&nbsp;1.2, &#8220;Preparing a Java Environment&#8221;</a> for
+  permanent generation size of 256 MB. If you are including the embedded
+  OpenDJ directory, OpenAM requires at least a 2 GB heap, as 50% of that space
+  is allocated to OpenDJ. See <a class="xref" href="chap-prepare-install.html#prepare-java" title="1.2.&nbsp;Preparing a Java Environment">Section&nbsp;1.2, &#8220;Preparing a Java Environment&#8221;</a> for
   details.</p><pre class="brush: shell;">#!/bin/sh
 #
 # tomcat
@@ -1258,7 +1264,7 @@ CATALINA_HOME="/path/to/tomcat"
 export CATALINA_HOME
 JAVA_HOME=/path/to/jdk
 export JAVA_HOME
-CATALINA_OPTS="-server -Xmx1024m -XX:MaxPermSize=256m"
+CATALINA_OPTS="-server -Xmx2048m -XX:MaxPermSize=256m"
 export CATALINA_OPTS
 
 case "${1}" in
@@ -1275,15 +1281,22 @@ stop)
   exit 1
   ;;
 esac
-</pre></div><div class="section" title="1.8.&nbsp;Preparing GlassFish v2"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="prepare-glassfish-v2"></a>1.8.&nbsp;Preparing GlassFish v2</h2></div></div></div><p>Before you deploy OpenAM, update the JVM options as described in
-  <a class="xref" href="chap-prepare-install.html#prepare-java" title="1.2.&nbsp;Preparing a Java Environment">Section&nbsp;1.2, &#8220;Preparing a Java Environment&#8221;</a>. The settings are accessible in the
-  administration console under Application Server &gt; JVM Settings &gt;
-  JVM Options.</p><div class="orderedlist"><p>In addition, after downloading the OpenAM server .war file, edit the
-   application configuration to make sure that classes from OpenAM libraries
-   are loaded before GlassFish bundled libraries.</p><ol class="orderedlist" type="1"><li class="listitem"><p>Extract the OpenAM server .war file content to a working
-    directory.</p><div class="screen"><pre class="brush: plain;">$ mkdir /tmp/openam ; cd /tmp/openam
+</pre></div><div class="section" title="1.8.&nbsp;Preparing GlassFish"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="prepare-glassfish"></a>1.8.&nbsp;Preparing GlassFish</h2></div></div></div><div class="toc"><dl><dt><span class="section"><a href="chap-prepare-install.html#prepare-glassfish-v2">1.8.1. Preparing GlassFish v2</a></span></dt><dt><span class="section"><a href="chap-prepare-install.html#prepare-glassfish-v3">1.8.2. Preparing GlassFish v3</a></span></dt></dl></div><p>
+   Before you deploy OpenAM, update the JVM options as described in
+   <a class="xref" href="chap-prepare-install.html#prepare-java" title="1.2.&nbsp;Preparing a Java Environment">Section&nbsp;1.2, &#8220;Preparing a Java Environment&#8221;</a>.
+
+   The settings are accessible in the administration console
+   under Application Server &gt; JVM Settings &gt; JVM Options for v2, or
+   under Configurations &gt; server-config &gt; JVM Settings &gt; JVM Options for v3.
+  </p><div class="section" title="1.8.1.&nbsp;Preparing GlassFish v2"><div class="titlepage"><div><div><h3 class="title"><a name="prepare-glassfish-v2"></a>1.8.1.&nbsp;Preparing GlassFish v2</h3></div></div></div><div class="orderedlist"><p>
+     In addition to setting JVM options,
+     after downloading the OpenAM server .war file,
+     edit the application configuration to make sure that
+     classes from OpenAM libraries are loaded before GlassFish bundled libraries.
+    </p><ol class="orderedlist" type="1"><li class="listitem"><p>Extract the OpenAM server .war file content to a working
+     directory.</p><div class="screen"><pre class="brush: plain;">$ mkdir /tmp/openam ; cd /tmp/openam
 $ jar -xf ~/Downloads/openam.war</pre></div></li><li class="listitem"><p>Add a <code class="filename">WEB-INF/sun-web.xml</code> file to set
-    class-loading delegation to false.</p><div class="screen"><pre class="brush: plain;">$ vi WEB-INF/sun-web.xml
+     class-loading delegation to false.</p><div class="screen"><pre class="brush: plain;">$ vi WEB-INF/sun-web.xml
 $ cat WEB-INF/sun-web.xml
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;!DOCTYPE sun-web-app PUBLIC
@@ -1292,7 +1305,32 @@ $ cat WEB-INF/sun-web.xml
 &lt;sun-web-app error-url=""&gt;
   &lt;class-loader delegate="false"/&gt;
 &lt;/sun-web-app&gt;</pre></div></li><li class="listitem"><p>Pack the updated .war file to deploy.</p><div class="screen"><pre class="brush: plain;">$ jar -cf ../openam.war *</pre></div></li><li class="listitem"><p>Deploy the updated .war file in place of the server .war file
-    delivered with the release.</p></li></ol></div></div><div class="section" title="1.9.&nbsp;Preparing OpenAM &amp; JBoss 4 or 5"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="prepare-jboss-5"></a>1.9.&nbsp;Preparing OpenAM &amp; JBoss 4 or 5</h2></div></div></div><p>OpenAM must be able to store its configuration between restarts. If
+     delivered with the release.</p></li></ol></div></div><div class="section" title="1.8.2.&nbsp;Preparing GlassFish v3"><div class="titlepage"><div><div><h3 class="title"><a name="prepare-glassfish-v3"></a>1.8.2.&nbsp;Preparing GlassFish v3</h3></div></div></div><div class="orderedlist"><p>
+     In addition to setting JVM options,
+     remove the <code class="literal">glassfish-full-profile</code>
+     and <code class="literal">metro</code> packages
+     to resolve library conflicts before you deploy OpenAM.
+    </p><ol class="orderedlist" type="1"><li class="listitem"><p>
+      Stop GlassFish if it is running.
+     </p><div class="screen"><pre class="brush: plain;">$ /path/to/glassfish3/bin/asadmin stop-domain domain1
+Waiting for the domain to stop ....
+Command stop-domain executed successfully.</pre></div></li><li class="listitem"><p>
+      Remove the packages by using the <span class="command"><strong>pkg</strong></span> command.
+     </p><div class="screen"><pre class="brush: plain;">$ cd /path/to/glassfish3/bin/
+./pkg uninstall glassfish-full-profile metro
+PHASE                                        ACTIONS
+Removal Phase                                  56/56</pre></div></li><li class="listitem"><p>
+      Start GlassFish.
+     </p><div class="screen"><pre class="brush: plain;">$ /path/to/glassfish3/bin/asadmin start-domain domain1
+Waiting for domain1 to start ...
+Successfully started the domain : domain1
+domain  Location: /path/to/glassfish3/glassfish/domains/domain1
+Log File: /path/to/glassfish3/glassfish/domains/domain1/logs/server.log
+Admin Port: 4848
+Command start-domain executed successfully.</pre></div><p>
+      If the domain fails to start the first time you run the command,
+      then run the <span class="command"><strong>asadmin start-domain</strong></span> command again.
+     </p></li></ol></div></div></div><div class="section" title="1.9.&nbsp;Preparing OpenAM &amp; JBoss 4 or 5"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="prepare-jboss-5"></a>1.9.&nbsp;Preparing OpenAM &amp; JBoss 4 or 5</h2></div></div></div><p>OpenAM must be able to store its configuration between restarts. If
   you plan to deploy OpenAM as a single archive file, then unpack the .war,
   edit <code class="filename">WEB-INF/classes/bootstrap.properties</code> to set the
   <code class="literal">configuration.dir</code> property to the location where OpenAM
@@ -1400,7 +1438,8 @@ $ cat WEB-INF/jboss-web.xml</pre></div><pre class="brush: xml;">&lt;!DOCTYPE jbo
                     directory for JBoss in standalone mode.</p></li><li class="step" title="Step 3"><p>Check the JVM settings associated with <code class="literal">JAVA_OPTS</code>. For JBoss AS 7.1.0 and AS 7.1.1,
                     you should change the JVM heap size to <code class="literal">-Xmx1024m</code>. The default JVM heap size and permanent
                     generation settings for later versions of JBoss may already exceed recommended values (-Xmx1024m,
-                    -XX:MaxPermSize=256m).</p></li><li class="step" title="Step 4"><p>Set the following JVM <code class="literal">JAVA_OPTS</code> setting in the same file.</p><pre class="brush: plain;">-Dorg.apache.tomcat.util.http.ServerCookie.ALWAYS_ADD_EXPIRES=true</pre><p>Make sure that headers include the <code class="literal">Expires</code>
+                    -XX:MaxPermSize=256m). If you are using the embedded version of OpenDJ, the minimum heap size may
+                    be higher. For details on the JVM options to use, see <a class="xref" href="chap-prepare-install.html#prepare-java" title="1.2.&nbsp;Preparing a Java Environment">Section&nbsp;1.2, &#8220;Preparing a Java Environment&#8221;</a>.</p></li><li class="step" title="Step 4"><p>Set the following JVM <code class="literal">JAVA_OPTS</code> setting in the same file.</p><pre class="brush: plain;">-Dorg.apache.tomcat.util.http.ServerCookie.ALWAYS_ADD_EXPIRES=true</pre><p>Make sure that headers include the <code class="literal">Expires</code>
                     attribute rather than only <code class="literal">Max-Age</code>, as some versions
                     of Internet Explorer do not support <code class="literal">Max-Age</code>.</p></li><li class="step" title="Step 5"><p>Now deploy the <code class="filename">openam.war</code> file into the appropriate JBoss deployment directory.
                     The directory varies depending on whether you are running in standalone or domain mode.</p></li><li class="step" title="Step 6"><p>You do not need to make any of the other changes to XML files described in this section.
@@ -1421,7 +1460,8 @@ $ jar xvf ~/Downloads/OpenAM-11.0.0.war</pre></div></li><li class="step" title="
 
 configuration.dir=$HOME/openamJboss</pre></div></li><li class="step" title="Step 3"><p>Rebuild the <code class="filename">openam.war</code> file.</p><div class="screen"><pre class="brush: plain;">$ jar cvf ../openam.war *</pre></div></li></ol></div></div><div class="section" title="1.11.&nbsp;Preparing Jetty"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="prepare-jetty"></a>1.11.&nbsp;Preparing Jetty</h2></div></div></div><p>When you deploy OpenAM, make sure you start Jetty with enough
   memory.</p><div class="screen"><pre class="brush: plain;">$ cd /path/to/jetty
-$ java -server -Xmx1024m -XX:MaxPermSize=256m -jar start.jar</pre></div><p>For details on the JVM options to use, see
+$ java -server -Xmx1024m -XX:MaxPermSize=256m -jar start.jar</pre></div><p>If you are using the embedded version of OpenDJ, the required
+  JVM memory may be higher. For details on the JVM options to use, see
   <a class="xref" href="chap-prepare-install.html#prepare-java" title="1.2.&nbsp;Preparing a Java Environment">Section&nbsp;1.2, &#8220;Preparing a Java Environment&#8221;</a>.</p></div><div class="section" title="1.12.&nbsp;Preparing Oracle WebLogic"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="prepare-oracle-weblogic"></a>1.12.&nbsp;Preparing Oracle WebLogic</h2></div></div></div><p>Before you deploy OpenAM, update the JVM options as described in
   <a class="xref" href="chap-prepare-install.html#prepare-java" title="1.2.&nbsp;Preparing a Java Environment">Section&nbsp;1.2, &#8220;Preparing a Java Environment&#8221;</a>.</p><div class="orderedlist"><p>
     In addition, edit the WebLogic domain configuration
@@ -1445,7 +1485,34 @@ $ java -server -Xmx1024m -XX:MaxPermSize=256m -jar start.jar</pre></div><p>For d
   &lt;/security-configuration&gt;
      </pre></div></li><li class="listitem"><p>
      Start WebLogic server.
-    </p></li></ol></div></div><div class="section" title="1.13.&nbsp;Preparing IBM WebSphere"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="prepare-ibm-websphere"></a>1.13.&nbsp;Preparing IBM WebSphere</h2></div></div></div><p>Before you deploy OpenAM, use the Administrator console to update
+    </p></li></ol></div><p>
+    When deploying OpenAM on WebLogic 11g (version 10.3.x),
+    use the SOAP with Attachments API for Java (SAAJ) implementation
+    from the Java Runtime Environment, rather than the WebLogic implementation.
+
+    The WebLogic implementation can cause OpenAM to throw exceptions with the
+    message <code class="literal">java.lang.UnsupportedOperationException:
+    This class does not support SAAJ 1.1</code>,
+    and to fail to authenticate users in some cases.
+
+    No change is necessary when deploying OpenAM on WebLogic 12c.
+   </p><p>
+    To use the Sun/Oracle Java SAAJ implementation,
+    edit the WebLogic start up script for the domain where OpenAM runs, such as
+    <code class="filename">/path/to/weblogic/user_projects/domains/wlsdomain/bin/startWebLogic.sh</code>.
+
+    Change the following line:
+
+    </p><pre class="brush: shell;">${DOMAIN_HOME}/bin/startWebLogic.sh $*</pre><p>
+
+    To set the <code class="literal">javax.xml.soap.MessageFactory</code> property:
+
+    </p><pre class="brush: shell;">${DOMAIN_HOME}/bin/startWebLogic.sh \
+-Djavax.xml.soap.MessageFactory=\
+com.sun.xml.internal.messaging.saaj.soap.ver1_1.SOAPMessageFactory1_1Impl $*</pre><p>
+   </p><p>
+    Restart WebLogic for the change to take effect.
+   </p></div><div class="section" title="1.13.&nbsp;Preparing IBM WebSphere"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="prepare-ibm-websphere"></a>1.13.&nbsp;Preparing IBM WebSphere</h2></div></div></div><p>Before you deploy OpenAM, use the Administrator console to update
   JVM options as described in <a class="xref" href="chap-prepare-install.html#prepare-java" title="1.2.&nbsp;Preparing a Java Environment">Section&nbsp;1.2, &#8220;Preparing a Java Environment&#8221;</a>.</p><div class="orderedlist"><p>In addition, configure WebSphere to load classes from OpenAM bundled
    libraries before loading classes from libraries delivered with WebSphere.
    The following steps must be completed after you deploy OpenAM into

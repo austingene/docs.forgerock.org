@@ -1235,15 +1235,15 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
   Otherwise, the policy agent redirects the user-agent
   to the first URL in the list.
  </p><p>
-  Property: <code class="literal">com.forgerock.agents.conditional.login.url</code>
+  Property: <code class="literal">com.sun.identity.agents.config.conditional.login.url</code>
  </p><p>
   Examples:
 
-  <code class="literal">com.forgerock.agents.conditional.login.url[0]=
+  <code class="literal">com.sun.identity.agents.config.conditional.login.url[0]=
   login.example.com|http://openam1.example.com/openam/UI/Login,
   http://openam2.example.com/openam/UI/Login</code>,
 
-  <code class="literal">com.forgerock.agents.conditional.login.url[1]=
+  <code class="literal">com.sun.identity.agents.config.conditional.login.url[1]=
   signin.example.com|http://openam3.example.com/openam/UI/Login,
   http://openam4.example.com/openam/UI/Login</code>
  </p><p>
@@ -1254,14 +1254,22 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
  </p><p>
   CDSSO examples:
 
-  <code class="literal">com.forgerock.agents.conditional.login.url[0]=
+  <code class="literal">com.sun.identity.agents.config.conditional.login.url[0]=
   login.example.com|http://openam1.example.com/openam/cdcservlet,
   http://openam2.example.com/openam/cdcservlet</code>,
 
-  <code class="literal">com.forgerock.agents.conditional.login.url[1]=
+  <code class="literal">com.sun.identity.agents.config.conditional.login.url[1]=
   signin.example.com|http://openam3.example.com/openam/cdcservlet,
   http://openam4.example.com/openam/cdcservlet</code>
- </p></dd><dt><span class="term"><code class="literal">com.sun.identity.agents.config.cookie.reset.domain</code></span></dt><dd><p>Specifies how names from
+ </p></dd><dt><span class="term"><code class="literal">com.sun.identity.agents.config.conditional.logout.url</code></span></dt><dd><p>
+      The values take the incoming request URL to match
+      and a comma-separated list of URLs to which to redirect users logging out.
+     </p><p>
+      Example:
+      <code class="literal">com.sun.identity.agents.config.conditional.logout.url[0]=
+      logout.example.com|http://openam1.example.com/openam/UI/Logout,
+      http://openam2.example.com/openam/UI/Logout</code>
+     </p></dd><dt><span class="term"><code class="literal">com.sun.identity.agents.config.cookie.reset.domain</code></span></dt><dd><p>Specifies how names from
      <code class="literal">com.sun.identity.agents.config.cookie.reset.name</code>
      correspond to cookie domain values when the cookie is reset.</p><p>For centralized configurations this property is configured under
      Access Control &gt; <em class="replaceable"><code>Realm Name</code></em> &gt; Agents &gt;
