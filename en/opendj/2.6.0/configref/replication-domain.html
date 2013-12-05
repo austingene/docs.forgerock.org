@@ -1,0 +1,494 @@
+<div style="font-size:11px;margin-top:-10px;margin-bottom:-10px; text-align:right"><a href="index.html" target="_top">Configuration Reference Home</a></div><html>
+<head>
+<meta http-equiv="content-type"
+content="text/html; charset=ISO-8859-1">
+<title>OpenDJ - Replication Domain</title>
+<link rel="stylesheet" type="text/css"
+href="opendj-config.css">
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+<meta name="date generated" content="Thu Jun 27 15:01:55 CEST 2013">
+</head>
+<body>
+<h2><a name="Replication Domain"></a>Replication Domain</h2>
+<p   >A Replication Domain comprises of several Directory Servers sharing the same synchronized set of data.</p>
+<h3><a name="Relations From this Component"></a>Relations From this Component</h3>
+<p   >The following components have a direct COMPOSITION relation FROM Replication Domains :</p>
+<ul>
+<li><a href="external-changelog-domain.html">External Changelog Domain</a></li>
+</ul>
+<h3><a name="Relations To this Component"></a>Relations To this Component</h3>
+<p   >The following components have a direct COMPOSITION relation TO Replication Domains :</p>
+<ul>
+<li><a href="replication-synchronization-provider.html">Replication Synchronization Provider</a></li>
+</ul>
+<h3><a name="Properties"></a>Properties</h3>
+<p   >A description of each property follows.</p>
+<br>
+<table border="0" cellspacing="0" class="jump-table">
+  <tr>
+    <th>Basic Properties:</th>
+    <th>Advanced Properties:</th>
+  </tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#assured-sd-level">assured-sd-level</a></td>
+  <td>&darr;&nbsp;<a href="#changetime-heartbeat-interval">changetime-heartbeat-interval</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#assured-timeout">assured-timeout</a></td>
+  <td>&darr;&nbsp;<a href="#solve-conflicts">solve-conflicts</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#assured-type">assured-type</a></td>
+  <td>&darr;&nbsp;<a href="#window-size">window-size</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#base-dn">base-dn</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#conflicts-historical-purge-delay">conflicts-historical-purge-delay</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#fractional-exclude">fractional-exclude</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#fractional-include">fractional-include</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#group-id">group-id</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#heartbeat-interval">heartbeat-interval</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#initialization-window-size">initialization-window-size</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#isolation-policy">isolation-policy</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#log-changenumber">log-changenumber</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#referrals-url">referrals-url</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#replication-server">replication-server</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#server-id">server-id</a></td>
+</tr>
+</table>
+<h4><a name="Basic Properties"></a>Basic Properties</h4>
+<p   class=propertyname><a name="assured-sd-level"></a>assured-sd-level</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">The level of acknowledgment for Safe Data assured sub mode. When assured replication is configured in Safe Data mode, this value defines the number of replication servers (with the same group ID of the local server) that should acknowledge the sent update before the LDAP client call can return.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">1<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">An integer value. Lower value is 1. Upper value is 127 .<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="assured-timeout"></a>assured-timeout</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">The timeout value when waiting for assured replication acknowledgments. Defines the amount of milliseconds the server will wait for assured acknowledgments (in either Safe Data or Safe Read assured replication modes) before returning anyway the LDAP client call.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">2000ms<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; "><a href="duration-syntax.html">A duration Syntax</a>. Lower limit is 1 milliseconds. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="assured-type"></a>assured-type</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Defines the assured replication mode of the replicated domain. The assured replication can be disabled or enabled. When enabled, two modes are available: Safe Data or Safe Read modes.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">not-assured<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">not-assured - Assured replication is not enabled. Updates sent for replication (for being replayed on other LDAP servers in the topology) are sent without waiting for any acknowledgment and the LDAP client call returns immediately.<br>
+<br>
+safe-data - Assured replication is enabled in Safe Data mode: updates sent for replication are subject to acknowledgment from the replication servers that have the same group ID as the local server (defined with the group-id property). The number of acknowledgments to expect is defined by the assured-sd-level property. After acknowledgments are received, LDAP client call returns.<br>
+<br>
+safe-read - Assured replication is enabled in Safe Read mode: updates sent for replication are subject to acknowledgments from the LDAP servers in the topology that have the same group ID as the local server (defined with the group-id property). After acknowledgments are received, LDAP client call returns.<br>
+<br>
+<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="base-dn"></a>base-dn</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the base DN of the replicated data. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">A valid DN.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="conflicts-historical-purge-delay"></a>conflicts-historical-purge-delay</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">This delay indicates the time (in minutes) the domain keeps the historical information necessary to solve conflicts.When a change stored in the historical part of the user entry has a date (from its replication ChangeNumber) older than this delay, it is candidate to be purged. The purge is applied on 2 events: modify of the entry, dedicated purge task. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">1440m<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; "><a href="duration-syntax.html">A duration Syntax</a>. Lower limit is 0 minutes. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="fractional-exclude"></a>fractional-exclude</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Allows to exclude some attributes to replicate to this server. If fractional-exclude configuration attribute is used, attributes specified in this attribute will be ignored (not added/modified/deleted) when an operation performed from another directory server is being replayed in the local server. Note that the usage of this configuration attribute is mutually exclusive with the usage of the fractional-include attribute.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">The name of one or more attribute types in the named object class to be excluded. The object class may be "*" indicating that the attribute type(s) should be excluded regardless of the type of entry they belong to.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="fractional-include"></a>fractional-include</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Allows to include some attributes to replicate to this server. If fractional-include configuration attribute is used, only attributes specified in this attribute will be added/modified/deleted when an operation performed from another directory server is being replayed in the local server. Note that the usage of this configuration attribute is mutually exclusive with the usage of the fractional-exclude attribute.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">The name of one or more attribute types in the named object class to be included. The object class may be "*" indicating that the attribute type(s) should be included regardless of the type of entry they belong to.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="group-id"></a>group-id</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">The group ID associated with this replicated domain. This value defines the group ID of the replicated domain. The replication system will preferably connect and send updates to replicate to a replication server with the same group ID as its own one (the local server group ID).<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">1<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">An integer value. Lower value is 1. Upper value is 127 .<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="heartbeat-interval"></a>heartbeat-interval</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the heart-beat interval that the directory server will use when communicating with Replication Servers. The directory server expects a regular heart-beat coming from the Replication Server within the specified interval. If a heartbeat is not received within the interval, the Directory Server closes its connection and connects to another Replication Server.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">10000ms<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; "><a href="duration-syntax.html">A duration Syntax</a>. Lower limit is 100 milliseconds. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="initialization-window-size"></a>initialization-window-size</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the window size that this directory server may use when communicating with remote Directory Servers for initialization. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">100<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">An integer value. Lower value is 0.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="isolation-policy"></a>isolation-policy</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the behavior of the directory server if a write operation is attempted on the data within the Replication Domain when none of the configured Replication Servers are available. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">reject-all-updates<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">accept-all-updates - Indicates that updates should be accepted even though it is not possible to send them to any Replication Server. Best effort is made to re-send those updates to a Replication Servers when one of them is available, however those changes are at risk because they are only available from the historical information. This mode can also introduce high replication latency.<br>
+<br>
+reject-all-updates - Indicates that all updates attempted on this Replication Domain are rejected when no Replication Server is available.<br>
+<br>
+<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="log-changenumber"></a>log-changenumber</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Indicates if this server logs the ChangeNumber in access log. This boolean indicates if the domain should log the ChangeNumber of replicated operations in the access log.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">false<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">true<br>
+false<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="referrals-url"></a>referrals-url</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">The URLs other LDAP servers should use to refer to the local server. URLs used by peer servers in the topology to refer to the local server through LDAP referrals. If this attribute is not defined, every URLs available to access this server will be used. If defined, only URLs specified here will be used.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">A LDAP URL compliant with RFC 2255.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="replication-server"></a>replication-server</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the addresses of the Replication Servers within the Replication Domain to which the directory server should try to connect at startup time. Addresses must be specified using the syntax: hostname:port<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">A host name followed by a ":" and a port number.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="server-id"></a>server-id</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies a unique identifier for the directory server within the Replication Domain. Each directory server within the same Replication Domain must have a different server ID. A directory server which is a member of multiple Replication Domains may use the same server ID for each of its Replication Domain configurations.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">An integer value. Lower value is 1. Upper value is 65535 .<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+</tbody>
+</table>
+<br>
+<br>
+<h4><a name="Advanced Properties"></a>Advanced Properties</h4>
+<p   class=propertyname><a name="changetime-heartbeat-interval"></a>changetime-heartbeat-interval</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the heart-beat interval that the directory server will use when sending its local change time to the Replication Server. The directory server sends a regular heart-beat to the Replication within the specified interval. The heart-beat indicates the change time of the directory server to the Replication Server.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">1000ms<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; "><a href="duration-syntax.html">A duration Syntax</a>. Lower limit is 0 milliseconds. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="solve-conflicts"></a>solve-conflicts</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Indicates if this server solves conflict. This boolean indicates if this domain keeps the historical information necessary to solve conflicts. When set to false the server will not maintain historical information and will therefore not be able to solve conflict. This should therefore be done only if the replication is used in a single master type of deployment.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">true<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">true<br>
+false<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="window-size"></a>window-size</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the window size that the directory server will use when communicating with Replication Servers. This option may be deprecated and removed in future releases.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">100000<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">An integer value. Lower value is 0.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<br>
+</body>
+</html>

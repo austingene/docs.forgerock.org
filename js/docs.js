@@ -27,14 +27,17 @@
  */
 var products = {
     "openam": [
+        "11.0.0",
         "10.1.0",
         "10.0.1",
         "10.0.0"
     ],
     "openam-pa": [
+        "3.3.0",
         "3.1.0-Xpress"
     ],
     "opendj": [
+        "2.6.0",
         "2.5.0-Xpress1"
     ],
     "openicf": [

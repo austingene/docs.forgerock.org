@@ -1,0 +1,438 @@
+<div style="font-size:11px;margin-top:-10px;margin-bottom:-10px; text-align:right"><a href="index.html" target="_top">Configuration Reference Home</a></div><html>
+<head>
+<meta http-equiv="content-type"
+content="text/html; charset=ISO-8859-1">
+<title>OpenDJ - SNMP Connection Handler</title>
+<link rel="stylesheet" type="text/css"
+href="opendj-config.css">
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+<meta name="date generated" content="Thu Jun 27 15:01:55 CEST 2013">
+</head>
+<body>
+<h2><a name="SNMP Connection Handler"></a>SNMP Connection Handler</h2>
+<p   >The SNMP Connection Handler can be used to process SNMP requests to retrieve monitoring information described by the MIB 2605. Supported protocol are SNMP V1, V2c and V3.</p>
+<p   >The SNMP connection handler will process SNMP requests sent by SNMP Managers to retrieve information described the MIB 2605. To enable the SNMP Connection Handler, the ds-cfg-opendmk-jarfile parameter has to be set to the OpenDMK jar files location.</p>
+<h3><a name="Parent Component"></a>Parent Component</h3>
+<p   >The SNMP Connection Handler component inherits from the <a href="connection-handler.html">Connection Handler</a></p>
+<h3><a name="Properties"></a>Properties</h3>
+<p   >A description of each property follows.</p>
+<br>
+<table border="0" cellspacing="0" class="jump-table">
+  <tr>
+    <th>Basic Properties:</th>
+    <th>Advanced Properties:</th>
+  </tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#allowed-client">allowed-client</a></td>
+  <td>&darr;&nbsp;<a href="#java-class">java-class</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#allowed-manager">allowed-manager</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#allowed-user">allowed-user</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#community">community</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#denied-client">denied-client</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#enabled">enabled</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#listen-address">listen-address</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#listen-port">listen-port</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#opendmk-jarfile">opendmk-jarfile</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#registered-mbean">registered-mbean</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#security-agent-file">security-agent-file</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#security-level">security-level</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#trap-port">trap-port</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#traps-community">traps-community</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#traps-destination">traps-destination</a></td>
+</tr>
+</table>
+<h4><a name="Basic Properties"></a>Basic Properties</h4>
+<p   class=propertyname><a name="allowed-client"></a>allowed-client</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies a set of host names or address masks that determine the clients that are allowed to establish connections to this Connection Handler. Valid values include a host name, a fully qualified domain name, a domain name, an IP address, or a subnetwork with subnetwork mask.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">All clients with addresses that do not match an address on the deny list are allowed. If there is no deny list, then all clients are allowed.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">An IP address mask<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None. Changes to this property take effect immediately and do not interfere with connections that may have already been established.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="allowed-manager"></a>allowed-manager</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the hosts of the managers to be granted the access rights. This property is required for SNMP v1 and v2 security configuration. An asterisk (*) opens access to all managers. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">*<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">A String<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">The SNMP Connection Handler must be disabled and re-enabled for changes to this setting to take effect<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="allowed-user"></a>allowed-user</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the users to be granted the access rights. This property is required for SNMP v3 security configuration. An asterisk (*) opens access to all users. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">*<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">A String<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">The SNMP Connection Handler must be disabled and re-enabled for changes to this setting to take effect<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="community"></a>community</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the v1,v2 community or the v3 context name allowed to access the MIB 2605 monitoring information or the USM MIB. The mapping between "community" and "context name" is set. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">OpenDJ<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">A String<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">The SNMP Connection Handler must be disabled and re-enabled for changes to this setting to take effect<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="denied-client"></a>denied-client</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies a set of host names or address masks that determine the clients that are not allowed to establish connections to this Connection Handler. Valid values include a host name, a fully qualified domain name, a domain name, an IP address, or a subnetwork with subnetwork mask. If both allowed and denied client masks are defined and a client connection matches one or more masks in both lists, then the connection is denied. If only a denied list is specified, then any client not matching a mask in that list is allowed.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">If an allow list is specified, then only clients with addresses on the allow list are allowed. Otherwise, all clients are allowed.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">An IP address mask<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None. Changes to this property take effect immediately and do not interfere with connections that may have already been established.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="enabled"></a>enabled</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Indicates whether the Connection Handler is enabled. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">true<br>
+false<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="listen-address"></a>listen-address</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the address or set of addresses on which this SNMP Connection Handler should listen for connections from SNMP clients. Multiple addresses may be provided as separate values for this attribute. If no values are provided, then the SNMP Connection Handler listens on all interfaces.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">0.0.0.0<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">An IP address<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">Restart the server<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="listen-port"></a>listen-port</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the port number on which the SNMP Connection Handler will listen for connections from clients. Only a single port number may be provided.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">An integer value. Lower value is 1. Upper value is 65535 .<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">The SNMP Connection Handler must be disabled and re-enabled for changes to this setting to take effect<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="opendmk-jarfile"></a>opendmk-jarfile</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Indicates the OpenDMK runtime jar file location <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">A String<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">The SNMP Connection Handler must be disabled and re-enabled for changes to this setting to take effect<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="registered-mbean"></a>registered-mbean</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Indicates whether the SNMP objects have to be registered in the directory server MBeanServer or not allowing to access SNMP Objects with RMI connector if enabled. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">false<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">true<br>
+false<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">The SNMP Connection Handler must be disabled and re-enabled for changes to this setting to take effect<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="security-agent-file"></a>security-agent-file</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the USM security configuration to receive authenticated only SNMP requests. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">config/snmp/security/opendj-snmp.security<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">A String<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">The SNMP Connection Handler must be disabled and re-enabled for changes to this setting to take effect<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="security-level"></a>security-level</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the type of security level : NoAuthNoPriv : No security mechanisms activated, AuthNoPriv : Authentication activated with no privacy, AuthPriv : Authentication with privacy activated. This property is required for SNMP V3 security configuration. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">authnopriv<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">authnopriv - Authentication activated with no privacy.<br>
+<br>
+authpriv - Authentication with privacy activated.<br>
+<br>
+noauthnopriv - No security mechanisms activated.<br>
+<br>
+<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">The SNMP Connection Handler must be disabled and re-enabled for changes to this setting to take effect<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="trap-port"></a>trap-port</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the port to use to send SNMP Traps. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">An integer value. Lower value is 0.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">The SNMP Connection Handler must be disabled and re-enabled for changes to this setting to take effect<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="traps-community"></a>traps-community</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the community string that must be included in the traps sent to define managers (trap-destinations). This property is used in the context of SNMP v1, v2 and v3. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">OpenDJ<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">A String<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">The SNMP Connection Handler must be disabled and re-enabled for changes to this setting to take effect<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="traps-destination"></a>traps-destination</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the hosts to which V1 traps will be sent. V1 Traps are sent to every host listed. If this list is empty, V1 traps are sent to "localhost". Each host in the list must be identifed by its name or complete IP Addess.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">If the list is empty, V1 traps are sent to "localhost".<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">A String<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">The SNMP Connection Handler must be disabled and re-enabled for changes to this setting to take effect<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<br>
+<h4><a name="Advanced Properties"></a>Advanced Properties</h4>
+<p   class=propertyname><a name="java-class"></a>java-class</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the fully-qualified name of the Java class that provides the SNMP Connection Handler implementation. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">org.opends.server.snmp.SNMPConnectionHandler<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">A java class that implements or extends the class(es) :<br>
+org.opends.server.api.ConnectionHandler<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">The SNMP Connection Handler must be disabled and re-enabled for changes to this setting to take effect<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<br>
+</body>
+</html>

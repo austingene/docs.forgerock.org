@@ -1,0 +1,565 @@
+<div style="font-size:11px;margin-top:-10px;margin-bottom:-10px; text-align:right"><a href="index.html" target="_top">Configuration Reference Home</a></div><html>
+<head>
+<meta http-equiv="content-type"
+content="text/html; charset=ISO-8859-1">
+<title>OpenDJ - LDAP Pass Through Authentication Policy</title>
+<link rel="stylesheet" type="text/css"
+href="opendj-config.css">
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+<meta name="date generated" content="Thu Jun 27 15:01:55 CEST 2013">
+</head>
+<body>
+<h2><a name="LDAP Pass Through Authentication Policy"></a>LDAP Pass Through Authentication Policy</h2>
+<p   >An authentication policy for users whose credentials are managed by a remote LDAP directory service.</p>
+<p   >Authentication attempts will be redirected to the remote LDAP directory service based on a combination of the criteria specified in this policy and the content of the user's entry in this directory server.</p>
+<h3><a name="Parent Component"></a>Parent Component</h3>
+<p   >The LDAP Pass Through Authentication Policy component inherits from the <a href="authentication-policy.html">Authentication Policy</a></p>
+<h3><a name="Relations From this Component"></a>Relations From this Component</h3>
+<p   >The following components have a direct AGGREGATION relation FROM LDAP Pass Through Authentication Policies :</p>
+<ul>
+<li><a href="password-storage-scheme.html">Password Storage Scheme</a></li>
+</ul>
+<ul>
+<li><a href="trust-manager-provider.html">Trust Manager Provider</a></li>
+</ul>
+<h3><a name="Properties"></a>Properties</h3>
+<p   >A description of each property follows.</p>
+<br>
+<table border="0" cellspacing="0" class="jump-table">
+  <tr>
+    <th>Basic Properties:</th>
+    <th>Advanced Properties:</th>
+  </tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#cached-password-storage-scheme">cached-password-storage-scheme</a></td>
+  <td>&darr;&nbsp;<a href="#java-class">java-class</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#cached-password-ttl">cached-password-ttl</a></td>
+  <td>&darr;&nbsp;<a href="#ssl-cipher-suite">ssl-cipher-suite</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#connection-timeout">connection-timeout</a></td>
+  <td>&darr;&nbsp;<a href="#ssl-protocol">ssl-protocol</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#mapped-attribute">mapped-attribute</a></td>
+  <td>&darr;&nbsp;<a href="#use-tcp-keep-alive">use-tcp-keep-alive</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#mapped-search-base-dn">mapped-search-base-dn</a></td>
+  <td>&darr;&nbsp;<a href="#use-tcp-no-delay">use-tcp-no-delay</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#mapped-search-bind-dn">mapped-search-bind-dn</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#mapped-search-bind-password">mapped-search-bind-password</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#mapped-search-bind-password-environment-variable">mapped-search-bind-password-environment-variable</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#mapped-search-bind-password-file">mapped-search-bind-password-file</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#mapped-search-bind-password-property">mapped-search-bind-password-property</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#mapping-policy">mapping-policy</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#primary-remote-ldap-server">primary-remote-ldap-server</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#secondary-remote-ldap-server">secondary-remote-ldap-server</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#trust-manager-provider">trust-manager-provider</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#use-password-caching">use-password-caching</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#use-ssl">use-ssl</a></td>
+</tr>
+</table>
+<h4><a name="Basic Properties"></a>Basic Properties</h4>
+<p   class=propertyname><a name="cached-password-storage-scheme"></a>cached-password-storage-scheme</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the name of a password storage scheme which should be used for encoding cached passwords. Changing the password storage scheme will cause all existing cached passwords to be discarded.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">The DN of any <a href="password-storage-scheme.html">Password Storage Scheme</a>. The referenced password storage schemes must be enabled.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="cached-password-ttl"></a>cached-password-ttl</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the maximum length of time that a locally cached password may be used for authentication before it is refreshed from the remote LDAP service. This property represents a cache timeout. Increasing the timeout period decreases the frequency that bind operations are delegated to the remote LDAP service, but increases the risk of users authenticating using stale passwords. Note that authentication attempts which fail because the provided password does not match the locally cached password will always be retried against the remote LDAP service.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">8 hours<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; "><a href="duration-syntax.html">A duration Syntax</a>. Lower limit is 0 seconds. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="connection-timeout"></a>connection-timeout</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the timeout used when connecting to remote LDAP directory servers, performing SSL negotiation, and for individual search and bind requests. If the timeout expires then the current operation will be aborted and retried against another LDAP server if one is available.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">3 seconds<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; "><a href="duration-syntax.html">A duration Syntax</a>. Lower limit is 0 milliseconds. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="mapped-attribute"></a>mapped-attribute</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies one or more attributes in the user's entry whose value(s) will determine the bind DN used when authenticating to the remote LDAP directory service. This property is mandatory when using the "mapped-bind" or "mapped-search" mapping policies. At least one value must be provided. All values must refer to the name or OID of an attribute type defined in the directory server schema. At least one of the named attributes must exist in a user's local entry in order for authentication to proceed. When multiple attributes or values are found in the user's entry then the behavior is determined by the mapping policy.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">The name of an attribute type defined in the server schema.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="mapped-search-base-dn"></a>mapped-search-base-dn</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the set of base DNs below which to search for users in the remote LDAP directory service. This property is mandatory when using the "mapped-search" mapping policy. If multiple values are given, searches are performed below all specified base DNs.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">A valid DN.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="mapped-search-bind-dn"></a>mapped-search-bind-dn</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the bind DN which should be used to perform user searches in the remote LDAP directory service. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">Searches will be performed anonymously.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">A valid DN.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="mapped-search-bind-password"></a>mapped-search-bind-password</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the bind password which should be used to perform user searches in the remote LDAP directory service. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">A String<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="mapped-search-bind-password-environment-variable"></a>mapped-search-bind-password-environment-variable</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the name of an environment variable containing the bind password which should be used to perform user searches in the remote LDAP directory service. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">A String<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="mapped-search-bind-password-file"></a>mapped-search-bind-password-file</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the name of a file containing the bind password which should be used to perform user searches in the remote LDAP directory service. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">A String<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="mapped-search-bind-password-property"></a>mapped-search-bind-password-property</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the name of a Java property containing the bind password which should be used to perform user searches in the remote LDAP directory service. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">A String<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="mapping-policy"></a>mapping-policy</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the mapping algorithm for obtaining the bind DN from the user's entry. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">unmapped<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">mapped-bind - Bind to the remote LDAP directory service using a DN obtained from an attribute in the user's entry. This policy will check each attribute named in the "mapped-attribute" property. If more than one attribute or value is present then the first one will be used.<br>
+<br>
+mapped-search - Bind to the remote LDAP directory service using the DN of an entry obtained using a search against the remote LDAP directory service. The search filter will comprise of an equality matching filter whose attribute type is the "mapped-attribute" property, and whose assertion value is the attribute value obtained from the user's entry. If more than one attribute or value is present then the filter will be composed of multiple equality filters combined using a logical OR (union).<br>
+<br>
+unmapped - Bind to the remote LDAP directory service using the DN of the user's entry in this directory server.<br>
+<br>
+<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="primary-remote-ldap-server"></a>primary-remote-ldap-server</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the primary list of remote LDAP servers which should be used for pass through authentication. If more than one LDAP server is specified then operations may be distributed across them. If all of the primary LDAP servers are unavailable then operations will fail-over to the set of secondary LDAP servers, if defined.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">A host name followed by a ":" and a port number.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="secondary-remote-ldap-server"></a>secondary-remote-ldap-server</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the secondary list of remote LDAP servers which should be used for pass through authentication in the event that the primary LDAP servers are unavailable. If more than one LDAP server is specified then operations may be distributed across them. Operations will be rerouted to the primary LDAP servers as soon as they are determined to be available.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">No secondary LDAP servers.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">A host name followed by a ":" and a port number.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="trust-manager-provider"></a>trust-manager-provider</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the name of the trust manager that should be used when negotiating SSL connections with remote LDAP directory servers. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">By default, no trust manager is specified indicating that only certificates signed by the authorities associated with this JVM will be accepted.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">The DN of any <a href="trust-manager-provider.html">Trust Manager Provider</a>. The referenced trust manager provider must be enabled when SSL is enabled.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None. Changes to this property take effect immediately, but only impact subsequent SSL connection negotiations.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="use-password-caching"></a>use-password-caching</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Indicates whether passwords should be cached locally within the user's entry. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">false<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">true<br>
+false<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="use-ssl"></a>use-ssl</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Indicates whether the LDAP Pass Through Authentication Policy should use SSL. If enabled, the LDAP Pass Through Authentication Policy will use SSL to encrypt communication with the clients.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">false<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">true<br>
+false<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">The LDAP Pass Through Authentication Policy must be disabled and re-enabled for changes to this setting to take effect<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<br>
+<h4><a name="Advanced Properties"></a>Advanced Properties</h4>
+<p   class=propertyname><a name="java-class"></a>java-class</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the fully-qualified name of the Java class which provides the LDAP Pass Through Authentication Policy implementation. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">org.opends.server.extensions.LDAPPassThroughAuthenticationPolicyFactory<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">A java class that implements or extends the class(es) :<br>
+org.opends.server.api.AuthenticationPolicyFactory<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">The LDAP Pass Through Authentication Policy must be disabled and re-enabled for changes to this setting to take effect<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="ssl-cipher-suite"></a>ssl-cipher-suite</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the names of the SSL cipher suites that are allowed for use in SSL based LDAP connections. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">Uses the default set of SSL cipher suites provided by the server's JVM.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">A String<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None. Changes to this property take effect immediately but will only impact new SSL LDAP connections created after the change.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="ssl-protocol"></a>ssl-protocol</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the names of the SSL protocols which are allowed for use in SSL based LDAP connections. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">Uses the default set of SSL protocols provided by the server's JVM.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">A String<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None. Changes to this property take effect immediately but will only impact new SSL LDAP connections created after the change.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="use-tcp-keep-alive"></a>use-tcp-keep-alive</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Indicates whether LDAP connections should use TCP keep-alive. If enabled, the SO_KEEPALIVE socket option is used to indicate that TCP keepalive messages should periodically be sent to the client to verify that the associated connection is still valid. This may also help prevent cases in which intermediate network hardware could silently drop an otherwise idle client connection, provided that the keepalive interval configured in the underlying operating system is smaller than the timeout enforced by the network hardware.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">true<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">true<br>
+false<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="use-tcp-no-delay"></a>use-tcp-no-delay</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Indicates whether LDAP connections should use TCP no-delay. If enabled, the TCP_NODELAY socket option is used to ensure that response messages to the client are sent immediately rather than potentially waiting to determine whether additional response messages can be sent in the same packet. In most cases, using the TCP_NODELAY socket option provides better performance and lower response times, but disabling it may help for some cases in which the server sends a large number of entries to a client in response to a search request.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">true<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">true<br>
+false<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<br>
+</body>
+</html>

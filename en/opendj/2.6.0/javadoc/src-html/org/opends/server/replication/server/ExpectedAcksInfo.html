@@ -1,0 +1,255 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * CDDL HEADER START<a name="line.2"></a>
+<span class="sourceLineNo">003</span> *<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * The contents of this file are subject to the terms of the<a name="line.4"></a>
+<span class="sourceLineNo">005</span> * Common Development and Distribution License, Version 1.0 only<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * (the "License").  You may not use this file except in compliance<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * with the License.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * You can obtain a copy of the license at<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * trunk/opends/resource/legal-notices/OpenDS.LICENSE<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * or https://OpenDS.dev.java.net/OpenDS.LICENSE.<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * See the License for the specific language governing permissions<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * and limitations under the License.<a name="line.13"></a>
+<span class="sourceLineNo">014</span> *<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * When distributing Covered Code, include this CDDL HEADER in each<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * file and include the License file at<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * trunk/opends/resource/legal-notices/OpenDS.LICENSE.  If applicable,<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * add the following below this CDDL HEADER, with the fields enclosed<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * by brackets "[]" replaced with your own identifying information:<a name="line.19"></a>
+<span class="sourceLineNo">020</span> *      Portions Copyright [yyyy] [name of copyright owner]<a name="line.20"></a>
+<span class="sourceLineNo">021</span> *<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * CDDL HEADER END<a name="line.22"></a>
+<span class="sourceLineNo">023</span> *<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *<a name="line.24"></a>
+<span class="sourceLineNo">025</span> *      Copyright 2008-2009 Sun Microsystems, Inc.<a name="line.25"></a>
+<span class="sourceLineNo">026</span> *      Portions Copyright 2013 ForgeRock AS.<a name="line.26"></a>
+<span class="sourceLineNo">027</span> */<a name="line.27"></a>
+<span class="sourceLineNo">028</span><a name="line.28"></a>
+<span class="sourceLineNo">029</span>package org.opends.server.replication.server;<a name="line.29"></a>
+<span class="sourceLineNo">030</span><a name="line.30"></a>
+<span class="sourceLineNo">031</span>import java.util.HashMap;<a name="line.31"></a>
+<span class="sourceLineNo">032</span>import java.util.List;<a name="line.32"></a>
+<span class="sourceLineNo">033</span>import java.util.Map;<a name="line.33"></a>
+<span class="sourceLineNo">034</span>import org.opends.server.replication.common.AssuredMode;<a name="line.34"></a>
+<span class="sourceLineNo">035</span>import org.opends.server.replication.common.ChangeNumber;<a name="line.35"></a>
+<span class="sourceLineNo">036</span>import org.opends.server.replication.protocol.AckMsg;<a name="line.36"></a>
+<span class="sourceLineNo">037</span><a name="line.37"></a>
+<span class="sourceLineNo">038</span>/**<a name="line.38"></a>
+<span class="sourceLineNo">039</span> * This class is the mother class for sub-classes holding any information needed<a name="line.39"></a>
+<span class="sourceLineNo">040</span> * about the acks that the replication server will wait for, when he receives an<a name="line.40"></a>
+<span class="sourceLineNo">041</span> * update message with the assured flag on (assured replication acknowledgments<a name="line.41"></a>
+<span class="sourceLineNo">042</span> * expected).<a name="line.42"></a>
+<span class="sourceLineNo">043</span> * It also includes info/routines for constructing the final ack to be sent to<a name="line.43"></a>
+<span class="sourceLineNo">044</span> * the sender of the update message.<a name="line.44"></a>
+<span class="sourceLineNo">045</span> *<a name="line.45"></a>
+<span class="sourceLineNo">046</span> * It is expected to have one sub-class per assured replication sub mode.<a name="line.46"></a>
+<span class="sourceLineNo">047</span> */<a name="line.47"></a>
+<span class="sourceLineNo">048</span>public abstract class ExpectedAcksInfo<a name="line.48"></a>
+<span class="sourceLineNo">049</span>{<a name="line.49"></a>
+<span class="sourceLineNo">050</span>  // The server handler of the server that sent the assured update message and<a name="line.50"></a>
+<span class="sourceLineNo">051</span>  // to who we want to return the final ack<a name="line.51"></a>
+<span class="sourceLineNo">052</span>  private ServerHandler requesterServerHandler = null;<a name="line.52"></a>
+<span class="sourceLineNo">053</span><a name="line.53"></a>
+<span class="sourceLineNo">054</span>  // The requested assured mode of matching update message<a name="line.54"></a>
+<span class="sourceLineNo">055</span>  private AssuredMode assuredMode = null;<a name="line.55"></a>
+<span class="sourceLineNo">056</span><a name="line.56"></a>
+<span class="sourceLineNo">057</span>  /**<a name="line.57"></a>
+<span class="sourceLineNo">058</span>   * The change number of the assured update message we want acks for.<a name="line.58"></a>
+<span class="sourceLineNo">059</span>   */<a name="line.59"></a>
+<span class="sourceLineNo">060</span>  protected ChangeNumber changeNumber = null;<a name="line.60"></a>
+<span class="sourceLineNo">061</span><a name="line.61"></a>
+<span class="sourceLineNo">062</span>  /**<a name="line.62"></a>
+<span class="sourceLineNo">063</span>   * Is the treatment of the acks for the update message completed or not ?<a name="line.63"></a>
+<span class="sourceLineNo">064</span>   * This is used for concurrent access to this object by either the assured<a name="line.64"></a>
+<span class="sourceLineNo">065</span>   * timeout task or the code for processing an ack for the matching update<a name="line.65"></a>
+<span class="sourceLineNo">066</span>   * message. This should be set to true when the treatment of the expected<a name="line.66"></a>
+<span class="sourceLineNo">067</span>   * acks is completed or an ack timeout has occurred and we are going to<a name="line.67"></a>
+<span class="sourceLineNo">068</span>   * remove this object from the map where it is stored.<a name="line.68"></a>
+<span class="sourceLineNo">069</span>   */<a name="line.69"></a>
+<span class="sourceLineNo">070</span>  private boolean completed = false;<a name="line.70"></a>
+<span class="sourceLineNo">071</span><a name="line.71"></a>
+<span class="sourceLineNo">072</span>  /**<a name="line.72"></a>
+<span class="sourceLineNo">073</span>   * This gives the list of servers we are willing to wait acks from and the<a name="line.73"></a>
+<span class="sourceLineNo">074</span>   * information about the ack from the servers.<a name="line.74"></a>
+<span class="sourceLineNo">075</span>   * key: the id of the server.<a name="line.75"></a>
+<span class="sourceLineNo">076</span>   * value: a boolean true if we received the ack from the server,<a name="line.76"></a>
+<span class="sourceLineNo">077</span>   * false otherwise.<a name="line.77"></a>
+<span class="sourceLineNo">078</span>   */<a name="line.78"></a>
+<span class="sourceLineNo">079</span>  protected Map&lt;Integer,Boolean&gt; expectedServersAckStatus =<a name="line.79"></a>
+<span class="sourceLineNo">080</span>    new HashMap&lt;Integer,Boolean&gt;();<a name="line.80"></a>
+<span class="sourceLineNo">081</span><a name="line.81"></a>
+<span class="sourceLineNo">082</span>  /**<a name="line.82"></a>
+<span class="sourceLineNo">083</span>   * Facility for monitoring:<a name="line.83"></a>
+<span class="sourceLineNo">084</span>   * If the timeout occurs for the original update, we call createAck(true)<a name="line.84"></a>
+<span class="sourceLineNo">085</span>   * in the timeout code for sending back an error ack to the original server.<a name="line.85"></a>
+<span class="sourceLineNo">086</span>   * We use this call to also save the list of server ids for server we did not<a name="line.86"></a>
+<span class="sourceLineNo">087</span>   * have time to receive an ack from. For updating its counters, the timeout<a name="line.87"></a>
+<span class="sourceLineNo">088</span>   * code can then call getTimeoutServers() method to now which servers did not<a name="line.88"></a>
+<span class="sourceLineNo">089</span>   * respond in time.<a name="line.89"></a>
+<span class="sourceLineNo">090</span>   */<a name="line.90"></a>
+<span class="sourceLineNo">091</span>  protected List&lt;Integer&gt; serversInTimeout = null;<a name="line.91"></a>
+<span class="sourceLineNo">092</span><a name="line.92"></a>
+<span class="sourceLineNo">093</span>  /**<a name="line.93"></a>
+<span class="sourceLineNo">094</span>   * Creates a new ExpectedAcksInfo.<a name="line.94"></a>
+<span class="sourceLineNo">095</span>   * @param changeNumber The change number of the assured update message<a name="line.95"></a>
+<span class="sourceLineNo">096</span>   * @param requesterServerHandler The server handler of the server that sent<a name="line.96"></a>
+<span class="sourceLineNo">097</span>   * the assured update message<a name="line.97"></a>
+<span class="sourceLineNo">098</span>   * @param assuredMode The assured mode requested by the assured update message<a name="line.98"></a>
+<span class="sourceLineNo">099</span>   * @param expectedServers The list of servers we want an ack from<a name="line.99"></a>
+<span class="sourceLineNo">100</span>   */<a name="line.100"></a>
+<span class="sourceLineNo">101</span>  protected ExpectedAcksInfo(ChangeNumber changeNumber,<a name="line.101"></a>
+<span class="sourceLineNo">102</span>    ServerHandler requesterServerHandler, AssuredMode assuredMode,<a name="line.102"></a>
+<span class="sourceLineNo">103</span>    List&lt;Integer&gt; expectedServers)<a name="line.103"></a>
+<span class="sourceLineNo">104</span>  {<a name="line.104"></a>
+<span class="sourceLineNo">105</span>    this.requesterServerHandler = requesterServerHandler;<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    this.assuredMode = assuredMode;<a name="line.106"></a>
+<span class="sourceLineNo">107</span>    this.changeNumber = changeNumber;<a name="line.107"></a>
+<span class="sourceLineNo">108</span><a name="line.108"></a>
+<span class="sourceLineNo">109</span>    // Initialize list of servers we expect acks from<a name="line.109"></a>
+<span class="sourceLineNo">110</span>    for (Integer serverId : expectedServers)<a name="line.110"></a>
+<span class="sourceLineNo">111</span>    {<a name="line.111"></a>
+<span class="sourceLineNo">112</span>      expectedServersAckStatus.put(serverId, false);<a name="line.112"></a>
+<span class="sourceLineNo">113</span>    }<a name="line.113"></a>
+<span class="sourceLineNo">114</span>  }<a name="line.114"></a>
+<span class="sourceLineNo">115</span><a name="line.115"></a>
+<span class="sourceLineNo">116</span>  /**<a name="line.116"></a>
+<span class="sourceLineNo">117</span>   * Gets the server handler of the server which requested the acknowledgments.<a name="line.117"></a>
+<span class="sourceLineNo">118</span>   * @return The server handler of the server which requested the<a name="line.118"></a>
+<span class="sourceLineNo">119</span>   * acknowledgments.<a name="line.119"></a>
+<span class="sourceLineNo">120</span>   */<a name="line.120"></a>
+<span class="sourceLineNo">121</span>  public ServerHandler getRequesterServer()<a name="line.121"></a>
+<span class="sourceLineNo">122</span>  {<a name="line.122"></a>
+<span class="sourceLineNo">123</span>    return requesterServerHandler;<a name="line.123"></a>
+<span class="sourceLineNo">124</span>  }<a name="line.124"></a>
+<span class="sourceLineNo">125</span><a name="line.125"></a>
+<span class="sourceLineNo">126</span>  /**<a name="line.126"></a>
+<span class="sourceLineNo">127</span>   * Gets the list of expected servers that did not respond in time.<a name="line.127"></a>
+<span class="sourceLineNo">128</span>   * @return The list of expected servers that did not respond in time.<a name="line.128"></a>
+<span class="sourceLineNo">129</span>   */<a name="line.129"></a>
+<span class="sourceLineNo">130</span>  public List&lt;Integer&gt; getTimeoutServers()<a name="line.130"></a>
+<span class="sourceLineNo">131</span>  {<a name="line.131"></a>
+<span class="sourceLineNo">132</span>    return serversInTimeout;<a name="line.132"></a>
+<span class="sourceLineNo">133</span>  }<a name="line.133"></a>
+<span class="sourceLineNo">134</span><a name="line.134"></a>
+<span class="sourceLineNo">135</span>  /**<a name="line.135"></a>
+<span class="sourceLineNo">136</span>   * Gets the requested assured mode for the matching update message.<a name="line.136"></a>
+<span class="sourceLineNo">137</span>   * @return The requested assured mode for the matching update message.<a name="line.137"></a>
+<span class="sourceLineNo">138</span>   */<a name="line.138"></a>
+<span class="sourceLineNo">139</span>  public AssuredMode getAssuredMode()<a name="line.139"></a>
+<span class="sourceLineNo">140</span>  {<a name="line.140"></a>
+<span class="sourceLineNo">141</span>    return assuredMode;<a name="line.141"></a>
+<span class="sourceLineNo">142</span>  }<a name="line.142"></a>
+<span class="sourceLineNo">143</span><a name="line.143"></a>
+<span class="sourceLineNo">144</span>  /**<a name="line.144"></a>
+<span class="sourceLineNo">145</span>   * Process the received ack from a server we are waiting an ack from.<a name="line.145"></a>
+<span class="sourceLineNo">146</span>   * @param ackingServer The server handler of the server that sent the ack<a name="line.146"></a>
+<span class="sourceLineNo">147</span>   * @param ackMsg The ack message to process<a name="line.147"></a>
+<span class="sourceLineNo">148</span>   * @return True if the expected number of acks has just been reached<a name="line.148"></a>
+<span class="sourceLineNo">149</span>   */<a name="line.149"></a>
+<span class="sourceLineNo">150</span>  public abstract boolean processReceivedAck(ServerHandler ackingServer,<a name="line.150"></a>
+<span class="sourceLineNo">151</span>    AckMsg ackMsg);<a name="line.151"></a>
+<span class="sourceLineNo">152</span><a name="line.152"></a>
+<span class="sourceLineNo">153</span>  /**<a name="line.153"></a>
+<span class="sourceLineNo">154</span>   * Creates the ack message to be returned to the requester server, taking into<a name="line.154"></a>
+<span class="sourceLineNo">155</span>   * account the information in the received acks from every servers.<a name="line.155"></a>
+<span class="sourceLineNo">156</span>   * @param timeout True if we call this method when the timeout occurred, that<a name="line.156"></a>
+<span class="sourceLineNo">157</span>   * is we did not received every expected acks in time, and thus, the timeout<a name="line.157"></a>
+<span class="sourceLineNo">158</span>   * flag should also be enabled in the returned ack message.<a name="line.158"></a>
+<span class="sourceLineNo">159</span>   * @return The ack message ready to be sent to the requester server<a name="line.159"></a>
+<span class="sourceLineNo">160</span>   */<a name="line.160"></a>
+<span class="sourceLineNo">161</span>  public abstract AckMsg createAck(boolean timeout);<a name="line.161"></a>
+<span class="sourceLineNo">162</span><a name="line.162"></a>
+<span class="sourceLineNo">163</span>  /**<a name="line.163"></a>
+<span class="sourceLineNo">164</span>   * Has the treatment of this object been completed or not?<a name="line.164"></a>
+<span class="sourceLineNo">165</span>   * If true is returned, one must not modify this object (useless) nor remove<a name="line.165"></a>
+<span class="sourceLineNo">166</span>   * it from the map where it is stored (will be or has already been done by the<a name="line.166"></a>
+<span class="sourceLineNo">167</span>   * other code (ack timeout code, or ack processing code)).<a name="line.167"></a>
+<span class="sourceLineNo">168</span>   * @return True if treatment of this object has been completed.<a name="line.168"></a>
+<span class="sourceLineNo">169</span>   */<a name="line.169"></a>
+<span class="sourceLineNo">170</span>  public boolean isCompleted()<a name="line.170"></a>
+<span class="sourceLineNo">171</span>  {<a name="line.171"></a>
+<span class="sourceLineNo">172</span>    return completed;<a name="line.172"></a>
+<span class="sourceLineNo">173</span>  }<a name="line.173"></a>
+<span class="sourceLineNo">174</span><a name="line.174"></a>
+<span class="sourceLineNo">175</span>  /**<a name="line.175"></a>
+<span class="sourceLineNo">176</span>   * Signal that treatment of this object has been completed and that it is<a name="line.176"></a>
+<span class="sourceLineNo">177</span>   * going to be removed from the map where it is stored.<a name="line.177"></a>
+<span class="sourceLineNo">178</span>   */<a name="line.178"></a>
+<span class="sourceLineNo">179</span>  public void completed()<a name="line.179"></a>
+<span class="sourceLineNo">180</span>  {<a name="line.180"></a>
+<span class="sourceLineNo">181</span>    completed = true;<a name="line.181"></a>
+<span class="sourceLineNo">182</span>  }<a name="line.182"></a>
+<span class="sourceLineNo">183</span>}<a name="line.183"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

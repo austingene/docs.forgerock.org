@@ -1,0 +1,660 @@
+<div style="font-size:11px;margin-top:-10px;margin-bottom:-10px; text-align:right"><a href="index.html" target="_top">Configuration Reference Home</a></div><html>
+<head>
+<meta http-equiv="content-type"
+content="text/html; charset=ISO-8859-1">
+<title>OpenDJ - LDAP Connection Handler</title>
+<link rel="stylesheet" type="text/css"
+href="opendj-config.css">
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+<meta name="date generated" content="Thu Jun 27 15:01:55 CEST 2013">
+</head>
+<body>
+<h2><a name="LDAP Connection Handler"></a>LDAP Connection Handler</h2>
+<p   >The LDAP Connection Handler is used to interact with clients using LDAP.</p>
+<p   >It provides full support for LDAPv3 and limited support for LDAPv2.</p>
+<h3><a name="Parent Component"></a>Parent Component</h3>
+<p   >The LDAP Connection Handler component inherits from the <a href="connection-handler.html">Connection Handler</a></p>
+<h3><a name="Relations From this Component"></a>Relations From this Component</h3>
+<p   >The following components have a direct AGGREGATION relation FROM LDAP Connection Handlers :</p>
+<ul>
+<li><a href="key-manager-provider.html">Key Manager Provider</a></li>
+</ul>
+<ul>
+<li><a href="trust-manager-provider.html">Trust Manager Provider</a></li>
+</ul>
+<h3><a name="Properties"></a>Properties</h3>
+<p   >A description of each property follows.</p>
+<br>
+<table border="0" cellspacing="0" class="jump-table">
+  <tr>
+    <th>Basic Properties:</th>
+    <th>Advanced Properties:</th>
+  </tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#allow-ldap-v2">allow-ldap-v2</a></td>
+  <td>&darr;&nbsp;<a href="#accept-backlog">accept-backlog</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#allow-start-tls">allow-start-tls</a></td>
+  <td>&darr;&nbsp;<a href="#allow-tcp-reuse-address">allow-tcp-reuse-address</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#allowed-client">allowed-client</a></td>
+  <td>&darr;&nbsp;<a href="#buffer-size">buffer-size</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#denied-client">denied-client</a></td>
+  <td>&darr;&nbsp;<a href="#java-class">java-class</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#enabled">enabled</a></td>
+  <td>&darr;&nbsp;<a href="#max-blocked-write-time-limit">max-blocked-write-time-limit</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#keep-stats">keep-stats</a></td>
+  <td>&darr;&nbsp;<a href="#max-request-size">max-request-size</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#key-manager-provider">key-manager-provider</a></td>
+  <td>&darr;&nbsp;<a href="#num-request-handlers">num-request-handlers</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#listen-address">listen-address</a></td>
+  <td>&darr;&nbsp;<a href="#send-rejection-notice">send-rejection-notice</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#listen-port">listen-port</a></td>
+  <td>&darr;&nbsp;<a href="#use-tcp-keep-alive">use-tcp-keep-alive</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#ssl-cert-nickname">ssl-cert-nickname</a></td>
+  <td>&darr;&nbsp;<a href="#use-tcp-no-delay">use-tcp-no-delay</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#ssl-cipher-suite">ssl-cipher-suite</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#ssl-client-auth-policy">ssl-client-auth-policy</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#ssl-protocol">ssl-protocol</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#trust-manager-provider">trust-manager-provider</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#use-ssl">use-ssl</a></td>
+</tr>
+</table>
+<h4><a name="Basic Properties"></a>Basic Properties</h4>
+<p   class=propertyname><a name="allow-ldap-v2"></a>allow-ldap-v2</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Indicates whether connections from LDAPv2 clients are allowed. If LDAPv2 clients are allowed, then only a minimal degree of special support are provided for them to ensure that LDAPv3-specific protocol elements (for example, Configuration Guide 25 controls, extended response messages, intermediate response messages, referrals) are not sent to an LDAPv2 client.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">true<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">true<br>
+false<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="allow-start-tls"></a>allow-start-tls</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Indicates whether clients are allowed to use StartTLS. If enabled, the LDAP Connection Handler allows clients to use the StartTLS extended operation to initiate secure communication over an otherwise insecure channel. Note that this is only allowed if the LDAP Connection Handler is not configured to use SSL, and if the server is configured with a valid key manager provider and a valid trust manager provider.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">false<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">true<br>
+false<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="allowed-client"></a>allowed-client</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies a set of host names or address masks that determine the clients that are allowed to establish connections to this Connection Handler. Valid values include a host name, a fully qualified domain name, a domain name, an IP address, or a subnetwork with subnetwork mask.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">All clients with addresses that do not match an address on the deny list are allowed. If there is no deny list, then all clients are allowed.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">An IP address mask<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None. Changes to this property take effect immediately and do not interfere with connections that may have already been established.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="denied-client"></a>denied-client</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies a set of host names or address masks that determine the clients that are not allowed to establish connections to this Connection Handler. Valid values include a host name, a fully qualified domain name, a domain name, an IP address, or a subnetwork with subnetwork mask. If both allowed and denied client masks are defined and a client connection matches one or more masks in both lists, then the connection is denied. If only a denied list is specified, then any client not matching a mask in that list is allowed.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">If an allow list is specified, then only clients with addresses on the allow list are allowed. Otherwise, all clients are allowed.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">An IP address mask<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None. Changes to this property take effect immediately and do not interfere with connections that may have already been established.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="enabled"></a>enabled</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Indicates whether the Connection Handler is enabled. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">true<br>
+false<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="keep-stats"></a>keep-stats</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Indicates whether the LDAP Connection Handler should keep statistics. If enabled, the LDAP Connection Handler maintains statistics about the number and types of operations requested over LDAP and the amount of data sent and received.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">true<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">true<br>
+false<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="key-manager-provider"></a>key-manager-provider</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the name of the key manager that should be used with this LDAP Connection Handler . <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">The DN of any <a href="key-manager-provider.html">Key Manager Provider</a>. The referenced key manager provider must be enabled when the LDAP Connection Handler is enabled and configured to use SSL or StartTLS.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None. Changes to this property take effect immediately, but only for subsequent attempts to access the key manager provider for associated client connections.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="listen-address"></a>listen-address</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the address or set of addresses on which this LDAP Connection Handler should listen for connections from LDAP clients. Multiple addresses may be provided as separate values for this attribute. If no values are provided, then the LDAP Connection Handler listens on all interfaces.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">0.0.0.0<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">An IP address<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">The LDAP Connection Handler must be disabled and re-enabled for changes to this setting to take effect<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="listen-port"></a>listen-port</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the port number on which the LDAP Connection Handler will listen for connections from clients. Only a single port number may be provided.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">An integer value. Lower value is 1. Upper value is 65535 .<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">The LDAP Connection Handler must be disabled and re-enabled for changes to this setting to take effect<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="ssl-cert-nickname"></a>ssl-cert-nickname</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the nickname (also called the alias) of the certificate that the LDAP Connection Handler should use when performing SSL communication. This is only applicable when the LDAP Connection Handler is configured to use SSL.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">Let the server decide.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">A String<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">The LDAP Connection Handler must be disabled and re-enabled for changes to this setting to take effect<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="ssl-cipher-suite"></a>ssl-cipher-suite</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the names of the SSL cipher suites that are allowed for use in SSL or StartTLS communication. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">Uses the default set of SSL cipher suites provided by the server's JVM.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">A String<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None. Changes to this property take effect immediately but will only impact new SSL/TLS-based sessions created after the change.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="ssl-client-auth-policy"></a>ssl-client-auth-policy</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the policy that the LDAP Connection Handler should use regarding client SSL certificates. Clients can use the SASL EXTERNAL mechanism only if the policy is set to "optional" or "required". This is only applicable if clients are allowed to use SSL.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">optional<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">disabled - Clients must not provide their own certificates when performing SSL negotiation.<br>
+<br>
+optional - Clients are requested to provide their own certificates when performing SSL negotiation. The connection is nevertheless accepted if the client does not provide a certificate.<br>
+<br>
+required - Clients are required to provide their own certificates when performing SSL negotiation and are refused access if they do not provide a certificate.<br>
+<br>
+<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">The LDAP Connection Handler must be disabled and re-enabled for changes to this setting to take effect<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="ssl-protocol"></a>ssl-protocol</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the names of the SSL protocols that are allowed for use in SSL or StartTLS communication. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">Uses the default set of SSL protocols provided by the server's JVM.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">A String<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None. Changes to this property take effect immediately but only impact new SSL/TLS-based sessions created after the change.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="trust-manager-provider"></a>trust-manager-provider</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the name of the trust manager that should be used with the LDAP Connection Handler . <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">The DN of any <a href="trust-manager-provider.html">Trust Manager Provider</a>. The referenced trust manager provider must be enabled when the LDAP Connection Handler is enabled and configured to use SSL or StartTLS.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None. Changes to this property take effect immediately, but only for subsequent attempts to access the trust manager provider for associated client connections.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="use-ssl"></a>use-ssl</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Indicates whether the LDAP Connection Handler should use SSL. If enabled, the LDAP Connection Handler will use SSL to encrypt communication with the clients.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">false<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">true<br>
+false<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">The LDAP Connection Handler must be disabled and re-enabled for changes to this setting to take effect<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<br>
+<h4><a name="Advanced Properties"></a>Advanced Properties</h4>
+<p   class=propertyname><a name="accept-backlog"></a>accept-backlog</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the maximum number of pending connection attempts that are allowed to queue up in the accept backlog before the server starts rejecting new connection attempts. This is primarily an issue for cases in which a large number of connections are established to the server in a very short period of time (for example, a benchmark utility that creates a large number of client threads that each have their own connection to the server) and the connection handler is unable to keep up with the rate at which the new connections are established.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">128<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">An integer value. Lower value is 1.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">The LDAP Connection Handler must be disabled and re-enabled for changes to this setting to take effect<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="allow-tcp-reuse-address"></a>allow-tcp-reuse-address</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Indicates whether the LDAP Connection Handler should reuse socket descriptors. If enabled, the SO_REUSEADDR socket option is used on the server listen socket to potentially allow the reuse of socket descriptors for clients in a TIME_WAIT state. This may help the server avoid temporarily running out of socket descriptors in cases in which a very large number of short-lived connections have been established from the same client system.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">true<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">true<br>
+false<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">The LDAP Connection Handler must be disabled and re-enabled for changes to this setting to take effect<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="buffer-size"></a>buffer-size</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the size in bytes of the LDAP response message write buffer. This property specifies write buffer size allocated by the server for each client connection and used to buffer LDAP response messages data when writing.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">4096 bytes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">A positive integer representing a size. Lower value is 1. Upper value is 2147483647 .<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="java-class"></a>java-class</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the fully-qualified name of the Java class that provides the LDAP Connection Handler implementation. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">org.opends.server.protocols.ldap.LDAPConnectionHandler<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">A java class that implements or extends the class(es) :<br>
+org.opends.server.api.ConnectionHandler<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">The LDAP Connection Handler must be disabled and re-enabled for changes to this setting to take effect<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="max-blocked-write-time-limit"></a>max-blocked-write-time-limit</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the maximum length of time that attempts to write data to LDAP clients should be allowed to block. If an attempt to write data to a client takes longer than this length of time, then the client connection is terminated.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">2 minutes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; "><a href="duration-syntax.html">A duration Syntax</a>. Lower limit is 0 milliseconds. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="max-request-size"></a>max-request-size</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the size in bytes of the largest LDAP request message that will be allowed by this LDAP Connection handler. This property is analogous to the maxBERSize configuration attribute of the Sun Java System Directory Server. This can help prevent denial-of-service attacks by clients that indicate they send extremely large requests to the server causing it to attempt to allocate large amounts of memory.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">5 megabytes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">A positive integer representing a size. Upper value is 2147483647 .<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="num-request-handlers"></a>num-request-handlers</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the number of request handlers that are used to read requests from clients. The LDAP Connection Handler uses one thread to accept new connections from clients, but uses one or more additional threads to read requests from existing client connections. This ensures that new requests are read efficiently and that the connection handler itself does not become a bottleneck when the server is under heavy load from many clients at the same time.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">Let the server decide.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">An integer value. Lower value is 1.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">The LDAP Connection Handler must be disabled and re-enabled for changes to this setting to take effect<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="send-rejection-notice"></a>send-rejection-notice</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Indicates whether the LDAP Connection Handler should send a notice of disconnection extended response message to the client if a new connection is rejected for some reason. The extended response message may provide an explanation indicating the reason that the connection was rejected.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">true<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">true<br>
+false<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="use-tcp-keep-alive"></a>use-tcp-keep-alive</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Indicates whether the LDAP Connection Handler should use TCP keep-alive. If enabled, the SO_KEEPALIVE socket option is used to indicate that TCP keepalive messages should periodically be sent to the client to verify that the associated connection is still valid. This may also help prevent cases in which intermediate network hardware could silently drop an otherwise idle client connection, provided that the keepalive interval configured in the underlying operating system is smaller than the timeout enforced by the network hardware.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">true<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">true<br>
+false<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="use-tcp-no-delay"></a>use-tcp-no-delay</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Indicates whether the LDAP Connection Handler should use TCP no-delay. If enabled, the TCP_NODELAY socket option is used to ensure that response messages to the client are sent immediately rather than potentially waiting to determine whether additional response messages can be sent in the same packet. In most cases, using the TCP_NODELAY socket option provides better performance and lower response times, but disabling it may help for some cases in which the server sends a large number of entries to a client in response to a search request.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">true<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">true<br>
+false<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<br>
+</body>
+</html>

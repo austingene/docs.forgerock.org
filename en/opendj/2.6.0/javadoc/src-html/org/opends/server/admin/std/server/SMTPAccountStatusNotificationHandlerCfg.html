@@ -1,0 +1,261 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * CDDL HEADER START<a name="line.2"></a>
+<span class="sourceLineNo">003</span> *<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * The contents of this file are subject to the terms of the<a name="line.4"></a>
+<span class="sourceLineNo">005</span> * Common Development and Distribution License, Version 1.0 only<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * (the "License").  You may not use this file except in compliance<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * with the License.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * You can obtain a copy of the license at<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * trunk/opends/resource/legal-notices/OpenDS.LICENSE<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * or https://OpenDS.dev.java.net/OpenDS.LICENSE.<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * See the License for the specific language governing permissions<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * and limitations under the License.<a name="line.13"></a>
+<span class="sourceLineNo">014</span> *<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * When distributing Covered Code, include this CDDL HEADER in each<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * file and include the License file at<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * trunk/opends/resource/legal-notices/OpenDS.LICENSE.  If applicable,<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * add the following below this CDDL HEADER, with the fields enclosed<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * by brackets "[]" replaced with your own identifying information:<a name="line.19"></a>
+<span class="sourceLineNo">020</span> *      Portions Copyright [yyyy] [name of copyright owner]<a name="line.20"></a>
+<span class="sourceLineNo">021</span> *<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * CDDL HEADER END<a name="line.22"></a>
+<span class="sourceLineNo">023</span> *<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *<a name="line.24"></a>
+<span class="sourceLineNo">025</span> *      Copyright 2008 Sun Microsystems, Inc.<a name="line.25"></a>
+<span class="sourceLineNo">026</span> */<a name="line.26"></a>
+<span class="sourceLineNo">027</span>package org.opends.server.admin.std.server;<a name="line.27"></a>
+<span class="sourceLineNo">028</span><a name="line.28"></a>
+<span class="sourceLineNo">029</span><a name="line.29"></a>
+<span class="sourceLineNo">030</span><a name="line.30"></a>
+<span class="sourceLineNo">031</span>import java.util.SortedSet;<a name="line.31"></a>
+<span class="sourceLineNo">032</span>import org.opends.server.admin.server.ConfigurationChangeListener;<a name="line.32"></a>
+<span class="sourceLineNo">033</span>import org.opends.server.types.AttributeType;<a name="line.33"></a>
+<span class="sourceLineNo">034</span><a name="line.34"></a>
+<span class="sourceLineNo">035</span><a name="line.35"></a>
+<span class="sourceLineNo">036</span><a name="line.36"></a>
+<span class="sourceLineNo">037</span>/**<a name="line.37"></a>
+<span class="sourceLineNo">038</span> * A server-side interface for querying SMTP Account Status<a name="line.38"></a>
+<span class="sourceLineNo">039</span> * Notification Handler settings.<a name="line.39"></a>
+<span class="sourceLineNo">040</span> * &lt;p&gt;<a name="line.40"></a>
+<span class="sourceLineNo">041</span> * The SMTP Account Status Notification Handler is a notification<a name="line.41"></a>
+<span class="sourceLineNo">042</span> * handler that sends email messages to end users and/or administrators<a name="line.42"></a>
+<span class="sourceLineNo">043</span> * whenever an account status notification is generated.<a name="line.43"></a>
+<span class="sourceLineNo">044</span> */<a name="line.44"></a>
+<span class="sourceLineNo">045</span>public interface SMTPAccountStatusNotificationHandlerCfg extends AccountStatusNotificationHandlerCfg {<a name="line.45"></a>
+<span class="sourceLineNo">046</span><a name="line.46"></a>
+<span class="sourceLineNo">047</span>  /**<a name="line.47"></a>
+<span class="sourceLineNo">048</span>   * Gets the configuration class associated with this SMTP Account Status Notification Handler.<a name="line.48"></a>
+<span class="sourceLineNo">049</span>   *<a name="line.49"></a>
+<span class="sourceLineNo">050</span>   * @return Returns the configuration class associated with this SMTP Account Status Notification Handler.<a name="line.50"></a>
+<span class="sourceLineNo">051</span>   */<a name="line.51"></a>
+<span class="sourceLineNo">052</span>  Class&lt;? extends SMTPAccountStatusNotificationHandlerCfg&gt; configurationClass();<a name="line.52"></a>
+<span class="sourceLineNo">053</span><a name="line.53"></a>
+<span class="sourceLineNo">054</span><a name="line.54"></a>
+<span class="sourceLineNo">055</span><a name="line.55"></a>
+<span class="sourceLineNo">056</span>  /**<a name="line.56"></a>
+<span class="sourceLineNo">057</span>   * Register to be notified when this SMTP Account Status Notification Handler is changed.<a name="line.57"></a>
+<span class="sourceLineNo">058</span>   *<a name="line.58"></a>
+<span class="sourceLineNo">059</span>   * @param listener<a name="line.59"></a>
+<span class="sourceLineNo">060</span>   *          The SMTP Account Status Notification Handler configuration change listener.<a name="line.60"></a>
+<span class="sourceLineNo">061</span>   */<a name="line.61"></a>
+<span class="sourceLineNo">062</span>  void addSMTPChangeListener(ConfigurationChangeListener&lt;SMTPAccountStatusNotificationHandlerCfg&gt; listener);<a name="line.62"></a>
+<span class="sourceLineNo">063</span><a name="line.63"></a>
+<span class="sourceLineNo">064</span><a name="line.64"></a>
+<span class="sourceLineNo">065</span><a name="line.65"></a>
+<span class="sourceLineNo">066</span>  /**<a name="line.66"></a>
+<span class="sourceLineNo">067</span>   * Deregister an existing SMTP Account Status Notification Handler configuration change listener.<a name="line.67"></a>
+<span class="sourceLineNo">068</span>   *<a name="line.68"></a>
+<span class="sourceLineNo">069</span>   * @param listener<a name="line.69"></a>
+<span class="sourceLineNo">070</span>   *          The SMTP Account Status Notification Handler configuration change listener.<a name="line.70"></a>
+<span class="sourceLineNo">071</span>   */<a name="line.71"></a>
+<span class="sourceLineNo">072</span>  void removeSMTPChangeListener(ConfigurationChangeListener&lt;SMTPAccountStatusNotificationHandlerCfg&gt; listener);<a name="line.72"></a>
+<span class="sourceLineNo">073</span><a name="line.73"></a>
+<span class="sourceLineNo">074</span><a name="line.74"></a>
+<span class="sourceLineNo">075</span><a name="line.75"></a>
+<span class="sourceLineNo">076</span>  /**<a name="line.76"></a>
+<span class="sourceLineNo">077</span>   * Gets the "email-address-attribute-type" property.<a name="line.77"></a>
+<span class="sourceLineNo">078</span>   * &lt;p&gt;<a name="line.78"></a>
+<span class="sourceLineNo">079</span>   * Specifies which attribute in the user's entries may be used to<a name="line.79"></a>
+<span class="sourceLineNo">080</span>   * obtain the email address when notifying the end user.<a name="line.80"></a>
+<span class="sourceLineNo">081</span>   * &lt;p&gt;<a name="line.81"></a>
+<span class="sourceLineNo">082</span>   * You can specify more than one email address as separate values.<a name="line.82"></a>
+<span class="sourceLineNo">083</span>   * In this case, the OpenDJ server sends a notification to all email<a name="line.83"></a>
+<span class="sourceLineNo">084</span>   * addresses identified.<a name="line.84"></a>
+<span class="sourceLineNo">085</span>   *<a name="line.85"></a>
+<span class="sourceLineNo">086</span>   * @return Returns an unmodifiable set containing the values of the "email-address-attribute-type" property.<a name="line.86"></a>
+<span class="sourceLineNo">087</span>   */<a name="line.87"></a>
+<span class="sourceLineNo">088</span>  SortedSet&lt;AttributeType&gt; getEmailAddressAttributeType();<a name="line.88"></a>
+<span class="sourceLineNo">089</span><a name="line.89"></a>
+<span class="sourceLineNo">090</span><a name="line.90"></a>
+<span class="sourceLineNo">091</span><a name="line.91"></a>
+<span class="sourceLineNo">092</span>  /**<a name="line.92"></a>
+<span class="sourceLineNo">093</span>   * Gets the "java-class" property.<a name="line.93"></a>
+<span class="sourceLineNo">094</span>   * &lt;p&gt;<a name="line.94"></a>
+<span class="sourceLineNo">095</span>   * Specifies the fully-qualified name of the Java class that<a name="line.95"></a>
+<span class="sourceLineNo">096</span>   * provides the SMTP Account Status Notification Handler<a name="line.96"></a>
+<span class="sourceLineNo">097</span>   * implementation.<a name="line.97"></a>
+<span class="sourceLineNo">098</span>   *<a name="line.98"></a>
+<span class="sourceLineNo">099</span>   * @return Returns the value of the "java-class" property.<a name="line.99"></a>
+<span class="sourceLineNo">100</span>   */<a name="line.100"></a>
+<span class="sourceLineNo">101</span>  String getJavaClass();<a name="line.101"></a>
+<span class="sourceLineNo">102</span><a name="line.102"></a>
+<span class="sourceLineNo">103</span><a name="line.103"></a>
+<span class="sourceLineNo">104</span><a name="line.104"></a>
+<span class="sourceLineNo">105</span>  /**<a name="line.105"></a>
+<span class="sourceLineNo">106</span>   * Gets the "message-subject" property.<a name="line.106"></a>
+<span class="sourceLineNo">107</span>   * &lt;p&gt;<a name="line.107"></a>
+<span class="sourceLineNo">108</span>   * Specifies the subject that should be used for email messages<a name="line.108"></a>
+<span class="sourceLineNo">109</span>   * generated by this account status notification handler.<a name="line.109"></a>
+<span class="sourceLineNo">110</span>   * &lt;p&gt;<a name="line.110"></a>
+<span class="sourceLineNo">111</span>   * The values for this property should begin with the name of an<a name="line.111"></a>
+<span class="sourceLineNo">112</span>   * account status notification type followed by a colon and the<a name="line.112"></a>
+<span class="sourceLineNo">113</span>   * subject that should be used for the associated notification<a name="line.113"></a>
+<span class="sourceLineNo">114</span>   * message. If an email message is generated for an account status<a name="line.114"></a>
+<span class="sourceLineNo">115</span>   * notification type for which no subject is defined, then that<a name="line.115"></a>
+<span class="sourceLineNo">116</span>   * message is given a generic subject.<a name="line.116"></a>
+<span class="sourceLineNo">117</span>   *<a name="line.117"></a>
+<span class="sourceLineNo">118</span>   * @return Returns an unmodifiable set containing the values of the "message-subject" property.<a name="line.118"></a>
+<span class="sourceLineNo">119</span>   */<a name="line.119"></a>
+<span class="sourceLineNo">120</span>  SortedSet&lt;String&gt; getMessageSubject();<a name="line.120"></a>
+<span class="sourceLineNo">121</span><a name="line.121"></a>
+<span class="sourceLineNo">122</span><a name="line.122"></a>
+<span class="sourceLineNo">123</span><a name="line.123"></a>
+<span class="sourceLineNo">124</span>  /**<a name="line.124"></a>
+<span class="sourceLineNo">125</span>   * Gets the "message-template-file" property.<a name="line.125"></a>
+<span class="sourceLineNo">126</span>   * &lt;p&gt;<a name="line.126"></a>
+<span class="sourceLineNo">127</span>   * Specifies the path to the file containing the message template to<a name="line.127"></a>
+<span class="sourceLineNo">128</span>   * generate the email notification messages.<a name="line.128"></a>
+<span class="sourceLineNo">129</span>   * &lt;p&gt;<a name="line.129"></a>
+<span class="sourceLineNo">130</span>   * The values for this property should begin with the name of an<a name="line.130"></a>
+<span class="sourceLineNo">131</span>   * account status notification type followed by a colon and the path<a name="line.131"></a>
+<span class="sourceLineNo">132</span>   * to the template file that should be used for that notification<a name="line.132"></a>
+<span class="sourceLineNo">133</span>   * type. If an account status notification has a notification type<a name="line.133"></a>
+<span class="sourceLineNo">134</span>   * that is not associated with a message template file, then no email<a name="line.134"></a>
+<span class="sourceLineNo">135</span>   * message is generated for that notification.<a name="line.135"></a>
+<span class="sourceLineNo">136</span>   *<a name="line.136"></a>
+<span class="sourceLineNo">137</span>   * @return Returns an unmodifiable set containing the values of the "message-template-file" property.<a name="line.137"></a>
+<span class="sourceLineNo">138</span>   */<a name="line.138"></a>
+<span class="sourceLineNo">139</span>  SortedSet&lt;String&gt; getMessageTemplateFile();<a name="line.139"></a>
+<span class="sourceLineNo">140</span><a name="line.140"></a>
+<span class="sourceLineNo">141</span><a name="line.141"></a>
+<span class="sourceLineNo">142</span><a name="line.142"></a>
+<span class="sourceLineNo">143</span>  /**<a name="line.143"></a>
+<span class="sourceLineNo">144</span>   * Gets the "recipient-address" property.<a name="line.144"></a>
+<span class="sourceLineNo">145</span>   * &lt;p&gt;<a name="line.145"></a>
+<span class="sourceLineNo">146</span>   * Specifies an email address to which notification messages are<a name="line.146"></a>
+<span class="sourceLineNo">147</span>   * sent, either instead of or in addition to the end user for whom<a name="line.147"></a>
+<span class="sourceLineNo">148</span>   * the notification has been generated.<a name="line.148"></a>
+<span class="sourceLineNo">149</span>   * &lt;p&gt;<a name="line.149"></a>
+<span class="sourceLineNo">150</span>   * This may be used to ensure that server administrators also<a name="line.150"></a>
+<span class="sourceLineNo">151</span>   * receive a copy of any notification messages that are generated.<a name="line.151"></a>
+<span class="sourceLineNo">152</span>   *<a name="line.152"></a>
+<span class="sourceLineNo">153</span>   * @return Returns an unmodifiable set containing the values of the "recipient-address" property.<a name="line.153"></a>
+<span class="sourceLineNo">154</span>   */<a name="line.154"></a>
+<span class="sourceLineNo">155</span>  SortedSet&lt;String&gt; getRecipientAddress();<a name="line.155"></a>
+<span class="sourceLineNo">156</span><a name="line.156"></a>
+<span class="sourceLineNo">157</span><a name="line.157"></a>
+<span class="sourceLineNo">158</span><a name="line.158"></a>
+<span class="sourceLineNo">159</span>  /**<a name="line.159"></a>
+<span class="sourceLineNo">160</span>   * Gets the "sender-address" property.<a name="line.160"></a>
+<span class="sourceLineNo">161</span>   * &lt;p&gt;<a name="line.161"></a>
+<span class="sourceLineNo">162</span>   * Specifies the email address from which the message is sent. Note<a name="line.162"></a>
+<span class="sourceLineNo">163</span>   * that this does not necessarily have to be a legitimate email<a name="line.163"></a>
+<span class="sourceLineNo">164</span>   * address.<a name="line.164"></a>
+<span class="sourceLineNo">165</span>   *<a name="line.165"></a>
+<span class="sourceLineNo">166</span>   * @return Returns the value of the "sender-address" property.<a name="line.166"></a>
+<span class="sourceLineNo">167</span>   */<a name="line.167"></a>
+<span class="sourceLineNo">168</span>  String getSenderAddress();<a name="line.168"></a>
+<span class="sourceLineNo">169</span><a name="line.169"></a>
+<span class="sourceLineNo">170</span><a name="line.170"></a>
+<span class="sourceLineNo">171</span><a name="line.171"></a>
+<span class="sourceLineNo">172</span>  /**<a name="line.172"></a>
+<span class="sourceLineNo">173</span>   * Gets the "send-message-without-end-user-address" property.<a name="line.173"></a>
+<span class="sourceLineNo">174</span>   * &lt;p&gt;<a name="line.174"></a>
+<span class="sourceLineNo">175</span>   * Indicates whether an email notification message should be<a name="line.175"></a>
+<span class="sourceLineNo">176</span>   * generated and sent to the set of notification recipients even if<a name="line.176"></a>
+<span class="sourceLineNo">177</span>   * the user entry does not contain any values for any of the email<a name="line.177"></a>
+<span class="sourceLineNo">178</span>   * address attributes (that is, in cases when it is not be possible<a name="line.178"></a>
+<span class="sourceLineNo">179</span>   * to notify the end user).<a name="line.179"></a>
+<span class="sourceLineNo">180</span>   * &lt;p&gt;<a name="line.180"></a>
+<span class="sourceLineNo">181</span>   * This is only applicable if both one or more email address<a name="line.181"></a>
+<span class="sourceLineNo">182</span>   * attribute types and one or more additional recipient addresses are<a name="line.182"></a>
+<span class="sourceLineNo">183</span>   * specified.<a name="line.183"></a>
+<span class="sourceLineNo">184</span>   *<a name="line.184"></a>
+<span class="sourceLineNo">185</span>   * @return Returns the value of the "send-message-without-end-user-address" property.<a name="line.185"></a>
+<span class="sourceLineNo">186</span>   */<a name="line.186"></a>
+<span class="sourceLineNo">187</span>  boolean isSendMessageWithoutEndUserAddress();<a name="line.187"></a>
+<span class="sourceLineNo">188</span><a name="line.188"></a>
+<span class="sourceLineNo">189</span>}<a name="line.189"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

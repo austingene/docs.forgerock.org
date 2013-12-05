@@ -1,0 +1,140 @@
+<div style="font-size:11px;margin-top:-10px;margin-bottom:-10px; text-align:right"><a href="index.html" target="_top">Configuration Reference Home</a></div><html>
+<head>
+<meta http-equiv="content-type"
+content="text/html; charset=ISO-8859-1">
+<title>OpenDJ - Connection Handler</title>
+<link rel="stylesheet" type="text/css"
+href="opendj-config.css">
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+<meta name="date generated" content="Thu Jun 27 15:01:55 CEST 2013">
+</head>
+<body>
+<h2><a name="Connection Handler"></a>Connection Handler</h2>
+<p  style="font-style: italic;" >Note: this is an abstract component, that cannot be instantiated.</p>
+<p   >Connection Handlers are responsible for handling all interaction with the clients, including accepting the connections, reading requests, and sending responses.</p>
+<h3><a name="Direct Subcomponents"></a>Direct Subcomponents</h3>
+<p   >The following Connection Handlers are available in the server :</p>
+<ul>
+<li><a href="http-connection-handler.html">HTTP Connection Handler</a></li>
+<li><a href="jmx-connection-handler.html">JMX Connection Handler</a></li>
+<li><a href="ldap-connection-handler.html">LDAP Connection Handler</a></li>
+<li><a href="ldif-connection-handler.html">LDIF Connection Handler</a></li>
+<li><a href="snmp-connection-handler.html">SNMP Connection Handler</a></li>
+</ul>
+<p   >These Connection Handlers inherit from the properties described below.</p>
+<h3><a name="Properties"></a>Properties</h3>
+<p   >A description of each property follows.</p>
+<br>
+<table border="0" cellspacing="0" class="jump-table">
+  <tr>
+    <th>Basic Properties:</th>
+    <th>Advanced Properties:</th>
+  </tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#allowed-client">allowed-client</a></td>
+  <td>&nbsp;None</td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#denied-client">denied-client</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#enabled">enabled</a></td>
+</tr>
+<tr>
+  <td>&darr;&nbsp;<a href="#java-class">java-class</a></td>
+</tr>
+</table>
+<h4><a name="Basic Properties"></a>Basic Properties</h4>
+<p   class=propertyname><a name="allowed-client"></a>allowed-client</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies a set of host names or address masks that determine the clients that are allowed to establish connections to this Connection Handler. Valid values include a host name, a fully qualified domain name, a domain name, an IP address, or a subnetwork with subnetwork mask.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">All clients with addresses that do not match an address on the deny list are allowed. If there is no deny list, then all clients are allowed.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">An IP address mask<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None. Changes to this property take effect immediately and do not interfere with connections that may have already been established.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="denied-client"></a>denied-client</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies a set of host names or address masks that determine the clients that are not allowed to establish connections to this Connection Handler. Valid values include a host name, a fully qualified domain name, a domain name, an IP address, or a subnetwork with subnetwork mask. If both allowed and denied client masks are defined and a client connection matches one or more masks in both lists, then the connection is denied. If only a denied list is specified, then any client not matching a mask in that list is allowed.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">If an allow list is specified, then only clients with addresses on the allow list are allowed. Otherwise, all clients are allowed.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">An IP address mask<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None. Changes to this property take effect immediately and do not interfere with connections that may have already been established.<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="enabled"></a>enabled</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Indicates whether the Connection Handler is enabled. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">true<br>
+false<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<p   class=propertyname><a name="java-class"></a>java-class</p>
+<table style="width: 100%; text-align: left;"border="1"cellpadding="1"cellspacing="0">
+<tbody>
+<tr>
+<td style="vertical-align: top; width: 20%;">Description<br></td><td style="vertical-align: top; ">Specifies the fully-qualified name of the Java class that provides the Connection Handler implementation. <br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Default Value<br></td><td style="vertical-align: top; ">None<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Allowed Values<br></td><td style="vertical-align: top; ">A java class that implements or extends the class(es) :<br>
+org.opends.server.api.ConnectionHandler<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Multi-valued<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Required<br></td><td style="vertical-align: top; ">Yes<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Admin Action Required<br></td><td style="vertical-align: top; ">The Connection Handler must be disabled and re-enabled for changes to this setting to take effect<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Advanced Property<br></td><td style="vertical-align: top; ">No<br></td></tr>
+<tr>
+<td style="vertical-align: top; width: 20%;">Read-only<br></td><td style="vertical-align: top; ">No<br></td></tr>
+</tbody>
+</table>
+<br>
+<br>
+</body>
+</html>

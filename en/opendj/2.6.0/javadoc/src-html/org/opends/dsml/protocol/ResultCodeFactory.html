@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * CDDL HEADER START<a name="line.2"></a>
+<span class="sourceLineNo">003</span> *<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * The contents of this file are subject to the terms of the<a name="line.4"></a>
+<span class="sourceLineNo">005</span> * Common Development and Distribution License, Version 1.0 only<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * (the "License").  You may not use this file except in compliance<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * with the License.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * You can obtain a copy of the license at<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * trunk/opends/resource/legal-notices/OpenDS.LICENSE<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * or https://OpenDS.dev.java.net/OpenDS.LICENSE.<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * See the License for the specific language governing permissions<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * and limitations under the License.<a name="line.13"></a>
+<span class="sourceLineNo">014</span> *<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * When distributing Covered Code, include this CDDL HEADER in each<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * file and include the License file at<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * trunk/opends/resource/legal-notices/OpenDS.LICENSE.  If applicable,<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * add the following below this CDDL HEADER, with the fields enclosed<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * by brackets "[]" replaced with your own identifying information:<a name="line.19"></a>
+<span class="sourceLineNo">020</span> *      Portions Copyright [yyyy] [name of copyright owner]<a name="line.20"></a>
+<span class="sourceLineNo">021</span> *<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * CDDL HEADER END<a name="line.22"></a>
+<span class="sourceLineNo">023</span> *<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *<a name="line.24"></a>
+<span class="sourceLineNo">025</span> *      Copyright 2012 ForgeRock AS.<a name="line.25"></a>
+<span class="sourceLineNo">026</span> */<a name="line.26"></a>
+<span class="sourceLineNo">027</span>package org.opends.dsml.protocol;<a name="line.27"></a>
+<span class="sourceLineNo">028</span><a name="line.28"></a>
+<span class="sourceLineNo">029</span><a name="line.29"></a>
+<span class="sourceLineNo">030</span><a name="line.30"></a>
+<span class="sourceLineNo">031</span>import java.util.HashMap;<a name="line.31"></a>
+<span class="sourceLineNo">032</span><a name="line.32"></a>
+<span class="sourceLineNo">033</span>/**<a name="line.33"></a>
+<span class="sourceLineNo">034</span> * A utility class to help creating ResultCode objects containing a<a name="line.34"></a>
+<span class="sourceLineNo">035</span> * code value (integer) and a descr value (String).<a name="line.35"></a>
+<span class="sourceLineNo">036</span> */<a name="line.36"></a>
+<span class="sourceLineNo">037</span>public class ResultCodeFactory<a name="line.37"></a>
+<span class="sourceLineNo">038</span>{<a name="line.38"></a>
+<span class="sourceLineNo">039</span>  static HashMap&lt;Integer,LDAPResultCode&gt; codeToDescr =<a name="line.39"></a>
+<span class="sourceLineNo">040</span>    new HashMap&lt;Integer,LDAPResultCode&gt;();<a name="line.40"></a>
+<span class="sourceLineNo">041</span>  static<a name="line.41"></a>
+<span class="sourceLineNo">042</span>  {<a name="line.42"></a>
+<span class="sourceLineNo">043</span>    codeToDescr.put(new Integer(0), LDAPResultCode.SUCCESS);<a name="line.43"></a>
+<span class="sourceLineNo">044</span>    codeToDescr.put(new Integer(1), LDAPResultCode.OPERATIONS_ERROR);<a name="line.44"></a>
+<span class="sourceLineNo">045</span>    codeToDescr.put(new Integer(2), LDAPResultCode.PROTOCOL_ERROR);<a name="line.45"></a>
+<span class="sourceLineNo">046</span>    codeToDescr.put(new Integer(3), LDAPResultCode.TIME_LIMIT_EXCEEDED);<a name="line.46"></a>
+<span class="sourceLineNo">047</span>    codeToDescr.put(new Integer(4), LDAPResultCode.SIZE_LIMIT_EXCEEDED);<a name="line.47"></a>
+<span class="sourceLineNo">048</span>    codeToDescr.put(new Integer(5), LDAPResultCode.COMPARE_FALSE);<a name="line.48"></a>
+<span class="sourceLineNo">049</span>    codeToDescr.put(new Integer(6), LDAPResultCode.COMPARE_TRUE);<a name="line.49"></a>
+<span class="sourceLineNo">050</span>    codeToDescr.put(new Integer(7), LDAPResultCode.AUTH_METHOD_NOT_SUPPORTED);<a name="line.50"></a>
+<span class="sourceLineNo">051</span>    // Note not STRONGER_AUTH_REQUIRED, that's the RFC 4511 name<a name="line.51"></a>
+<span class="sourceLineNo">052</span>    codeToDescr.put(new Integer(8), LDAPResultCode.STRONG_AUTH_REQUIRED);<a name="line.52"></a>
+<span class="sourceLineNo">053</span>    codeToDescr.put(new Integer(10), LDAPResultCode.REFERRAL);<a name="line.53"></a>
+<span class="sourceLineNo">054</span>    codeToDescr.put(new Integer(11), LDAPResultCode.ADMIN_LIMIT_EXCEEDED);<a name="line.54"></a>
+<span class="sourceLineNo">055</span>    codeToDescr.put(new Integer(12),<a name="line.55"></a>
+<span class="sourceLineNo">056</span>      LDAPResultCode.UNAVAILABLE_CRITICAL_EXTENSION);<a name="line.56"></a>
+<span class="sourceLineNo">057</span>    codeToDescr.put(new Integer(13), LDAPResultCode.CONFIDENTIALITY_REQUIRED);<a name="line.57"></a>
+<span class="sourceLineNo">058</span>    codeToDescr.put(new Integer(14), LDAPResultCode.SASL_BIND_IN_PROGRESS);<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    codeToDescr.put(new Integer(16), LDAPResultCode.NO_SUCH_ATTRIBUTE);<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    codeToDescr.put(new Integer(17), LDAPResultCode.UNDEFINED_ATTRIBUTE_TYPE);<a name="line.60"></a>
+<span class="sourceLineNo">061</span>    codeToDescr.put(new Integer(18), LDAPResultCode.INAPPROPRIATE_MATCHING);<a name="line.61"></a>
+<span class="sourceLineNo">062</span>    codeToDescr.put(new Integer(19), LDAPResultCode.CONSTRAINT_VIOLATION);<a name="line.62"></a>
+<span class="sourceLineNo">063</span>    codeToDescr.put(new Integer(20), LDAPResultCode.ATTRIBUTE_OR_VALUE_EXISTS);<a name="line.63"></a>
+<span class="sourceLineNo">064</span>    codeToDescr.put(new Integer(21), LDAPResultCode.INVALID_ATTRIBUTE_SYNTAX);<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    codeToDescr.put(new Integer(32), LDAPResultCode.NO_SUCH_OBJECT);<a name="line.65"></a>
+<span class="sourceLineNo">066</span>    codeToDescr.put(new Integer(33), LDAPResultCode.ALIAS_PROBLEM);<a name="line.66"></a>
+<span class="sourceLineNo">067</span>    codeToDescr.put(new Integer(34), LDAPResultCode.INVALID_DN_SYNTAX);<a name="line.67"></a>
+<span class="sourceLineNo">068</span>    codeToDescr.put(new Integer(36),<a name="line.68"></a>
+<span class="sourceLineNo">069</span>      LDAPResultCode.ALIAS_DEREFERENCING_PROBLEM);<a name="line.69"></a>
+<span class="sourceLineNo">070</span>    codeToDescr.put(new Integer(48),<a name="line.70"></a>
+<span class="sourceLineNo">071</span>      LDAPResultCode.INAPPROPRIATE_AUTHENTICATION);<a name="line.71"></a>
+<span class="sourceLineNo">072</span>    codeToDescr.put(new Integer(49), LDAPResultCode.INVALID_CREDENTIALS);<a name="line.72"></a>
+<span class="sourceLineNo">073</span>    codeToDescr.put(new Integer(50), LDAPResultCode.INSUFFICIENT_ACCESS_RIGHTS);<a name="line.73"></a>
+<span class="sourceLineNo">074</span>    codeToDescr.put(new Integer(51), LDAPResultCode.BUSY);<a name="line.74"></a>
+<span class="sourceLineNo">075</span>    codeToDescr.put(new Integer(52), LDAPResultCode.UNAVAILABLE);<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    codeToDescr.put(new Integer(53), LDAPResultCode.UNWILLING_TO_PERFORM);<a name="line.76"></a>
+<span class="sourceLineNo">077</span>    codeToDescr.put(new Integer(54), LDAPResultCode.LOOP_DETECT);<a name="line.77"></a>
+<span class="sourceLineNo">078</span>    codeToDescr.put(new Integer(64), LDAPResultCode.NAMING_VIOLATION);<a name="line.78"></a>
+<span class="sourceLineNo">079</span>    codeToDescr.put(new Integer(65), LDAPResultCode.OBJECT_CLASS_VIOLATION);<a name="line.79"></a>
+<span class="sourceLineNo">080</span>    codeToDescr.put(new Integer(66), LDAPResultCode.NOT_ALLOWED_ON_NON_LEAF);<a name="line.80"></a>
+<span class="sourceLineNo">081</span>    codeToDescr.put(new Integer(67), LDAPResultCode.NOT_ALLOWED_ON_RDN);<a name="line.81"></a>
+<span class="sourceLineNo">082</span>    codeToDescr.put(new Integer(68), LDAPResultCode.ENTRY_ALREADY_EXISTS);<a name="line.82"></a>
+<span class="sourceLineNo">083</span>    codeToDescr.put(new Integer(69),<a name="line.83"></a>
+<span class="sourceLineNo">084</span>      LDAPResultCode.OBJECT_CLASS_MODS_PROHIBITED);<a name="line.84"></a>
+<span class="sourceLineNo">085</span>    // Note not AFFECTS_MULTIPLE_DSAS, xjc mangles the string.<a name="line.85"></a>
+<span class="sourceLineNo">086</span>    codeToDescr.put(new Integer(71), LDAPResultCode.AFFECT_MULTIPLE_DS_AS);<a name="line.86"></a>
+<span class="sourceLineNo">087</span>    codeToDescr.put(new Integer(80), LDAPResultCode.OTHER);<a name="line.87"></a>
+<span class="sourceLineNo">088</span>  }<a name="line.88"></a>
+<span class="sourceLineNo">089</span><a name="line.89"></a>
+<span class="sourceLineNo">090</span>  /**<a name="line.90"></a>
+<span class="sourceLineNo">091</span>   * Create a ResultCode object that contains the resultCode, and, if valid,<a name="line.91"></a>
+<span class="sourceLineNo">092</span>   * a text description (from RFC 2251) of the resultCode.<a name="line.92"></a>
+<span class="sourceLineNo">093</span>   *<a name="line.93"></a>
+<span class="sourceLineNo">094</span>   * @param objFactory<a name="line.94"></a>
+<span class="sourceLineNo">095</span>   *                  The JAXB factory used to create the underlying object.<a name="line.95"></a>
+<span class="sourceLineNo">096</span>   * @param resultCode<a name="line.96"></a>
+<span class="sourceLineNo">097</span>   *                  The LDAP result code.<a name="line.97"></a>
+<span class="sourceLineNo">098</span>   * @return A ResultCode object with a code and possibly a description.<a name="line.98"></a>
+<span class="sourceLineNo">099</span>   */<a name="line.99"></a>
+<span class="sourceLineNo">100</span>  public static ResultCode create(ObjectFactory objFactory, int resultCode)<a name="line.100"></a>
+<span class="sourceLineNo">101</span>  {<a name="line.101"></a>
+<span class="sourceLineNo">102</span>    ResultCode result = objFactory.createResultCode();<a name="line.102"></a>
+<span class="sourceLineNo">103</span>    result.setCode(resultCode);<a name="line.103"></a>
+<span class="sourceLineNo">104</span>    Integer r = new Integer(resultCode);<a name="line.104"></a>
+<span class="sourceLineNo">105</span>    if (ResultCodeFactory.codeToDescr.containsKey(r))<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    {<a name="line.106"></a>
+<span class="sourceLineNo">107</span>      result.setDescr(ResultCodeFactory.codeToDescr.get(r));<a name="line.107"></a>
+<span class="sourceLineNo">108</span>    }<a name="line.108"></a>
+<span class="sourceLineNo">109</span>    return result;<a name="line.109"></a>
+<span class="sourceLineNo">110</span>  }<a name="line.110"></a>
+<span class="sourceLineNo">111</span>}<a name="line.111"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

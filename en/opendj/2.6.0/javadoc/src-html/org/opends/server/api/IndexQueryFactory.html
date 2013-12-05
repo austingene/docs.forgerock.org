@@ -1,0 +1,207 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * CDDL HEADER START<a name="line.2"></a>
+<span class="sourceLineNo">003</span> *<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * The contents of this file are subject to the terms of the<a name="line.4"></a>
+<span class="sourceLineNo">005</span> * Common Development and Distribution License, Version 1.0 only<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * (the "License").  You may not use this file except in compliance<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * with the License.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * You can obtain a copy of the license at<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * trunk/opends/resource/legal-notices/OpenDS.LICENSE<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * or https://OpenDS.dev.java.net/OpenDS.LICENSE.<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * See the License for the specific language governing permissions<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * and limitations under the License.<a name="line.13"></a>
+<span class="sourceLineNo">014</span> *<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * When distributing Covered Code, include this CDDL HEADER in each<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * file and include the License file at<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * trunk/opends/resource/legal-notices/OpenDS.LICENSE.  If applicable,<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * add the following below this CDDL HEADER, with the fields enclosed<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * by brackets "[]" replaced with your own identifying information:<a name="line.19"></a>
+<span class="sourceLineNo">020</span> *      Portions Copyright [yyyy] [name of copyright owner]<a name="line.20"></a>
+<span class="sourceLineNo">021</span> *<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * CDDL HEADER END<a name="line.22"></a>
+<span class="sourceLineNo">023</span> *<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *<a name="line.24"></a>
+<span class="sourceLineNo">025</span> *      Copyright 2009 Sun Microsystems, Inc.<a name="line.25"></a>
+<span class="sourceLineNo">026</span> */<a name="line.26"></a>
+<span class="sourceLineNo">027</span>package org.opends.server.api;<a name="line.27"></a>
+<span class="sourceLineNo">028</span><a name="line.28"></a>
+<span class="sourceLineNo">029</span><a name="line.29"></a>
+<span class="sourceLineNo">030</span><a name="line.30"></a>
+<span class="sourceLineNo">031</span>import java.util.Collection;<a name="line.31"></a>
+<span class="sourceLineNo">032</span><a name="line.32"></a>
+<span class="sourceLineNo">033</span>import org.opends.server.types.ByteSequence;<a name="line.33"></a>
+<span class="sourceLineNo">034</span><a name="line.34"></a>
+<span class="sourceLineNo">035</span><a name="line.35"></a>
+<span class="sourceLineNo">036</span><a name="line.36"></a>
+<span class="sourceLineNo">037</span>/**<a name="line.37"></a>
+<span class="sourceLineNo">038</span> * A factory for creating arbitrarily complex index queries. This<a name="line.38"></a>
+<span class="sourceLineNo">039</span> * interface is implemented by the underlying backend implementation<a name="line.39"></a>
+<span class="sourceLineNo">040</span> * and passed to extensible matching rules so that they can construct<a name="line.40"></a>
+<span class="sourceLineNo">041</span> * arbitrarily complex index queries.<a name="line.41"></a>
+<span class="sourceLineNo">042</span> *<a name="line.42"></a>
+<span class="sourceLineNo">043</span> * @param &lt;T&gt;<a name="line.43"></a>
+<span class="sourceLineNo">044</span> *          The type of query created by this factory.<a name="line.44"></a>
+<span class="sourceLineNo">045</span> */<a name="line.45"></a>
+<span class="sourceLineNo">046</span>@org.opends.server.types.PublicAPI(<a name="line.46"></a>
+<span class="sourceLineNo">047</span>    stability = org.opends.server.types.StabilityLevel.VOLATILE,<a name="line.47"></a>
+<span class="sourceLineNo">048</span>    mayInstantiate = false,<a name="line.48"></a>
+<span class="sourceLineNo">049</span>    mayExtend = true,<a name="line.49"></a>
+<span class="sourceLineNo">050</span>    mayInvoke = false)<a name="line.50"></a>
+<span class="sourceLineNo">051</span>public interface IndexQueryFactory&lt;T&gt;<a name="line.51"></a>
+<span class="sourceLineNo">052</span>{<a name="line.52"></a>
+<span class="sourceLineNo">053</span><a name="line.53"></a>
+<span class="sourceLineNo">054</span>  /**<a name="line.54"></a>
+<span class="sourceLineNo">055</span>   * Returns a query requesting an index record matching the provided<a name="line.55"></a>
+<span class="sourceLineNo">056</span>   * key.<a name="line.56"></a>
+<span class="sourceLineNo">057</span>   *<a name="line.57"></a>
+<span class="sourceLineNo">058</span>   * @param indexID<a name="line.58"></a>
+<span class="sourceLineNo">059</span>   *          An identifier of the index type.<a name="line.59"></a>
+<span class="sourceLineNo">060</span>   * @param key<a name="line.60"></a>
+<span class="sourceLineNo">061</span>   *          A byte sequence containing the key.<a name="line.61"></a>
+<span class="sourceLineNo">062</span>   * @return A query requesting the index record matching the key.<a name="line.62"></a>
+<span class="sourceLineNo">063</span>   */<a name="line.63"></a>
+<span class="sourceLineNo">064</span>  T createExactMatchQuery(String indexID, ByteSequence key);<a name="line.64"></a>
+<span class="sourceLineNo">065</span><a name="line.65"></a>
+<span class="sourceLineNo">066</span><a name="line.66"></a>
+<span class="sourceLineNo">067</span><a name="line.67"></a>
+<span class="sourceLineNo">068</span>  /**<a name="line.68"></a>
+<span class="sourceLineNo">069</span>   * Returns a query requesting all index records. A backend<a name="line.69"></a>
+<span class="sourceLineNo">070</span>   * implementation may choose to return all or no records as part of<a name="line.70"></a>
+<span class="sourceLineNo">071</span>   * the optimization.<a name="line.71"></a>
+<span class="sourceLineNo">072</span>   *<a name="line.72"></a>
+<span class="sourceLineNo">073</span>   * @return A query requesting all index records.<a name="line.73"></a>
+<span class="sourceLineNo">074</span>   */<a name="line.74"></a>
+<span class="sourceLineNo">075</span>  T createMatchAllQuery();<a name="line.75"></a>
+<span class="sourceLineNo">076</span><a name="line.76"></a>
+<span class="sourceLineNo">077</span><a name="line.77"></a>
+<span class="sourceLineNo">078</span><a name="line.78"></a>
+<span class="sourceLineNo">079</span>  /**<a name="line.79"></a>
+<span class="sourceLineNo">080</span>   * Returns a query requesting all index records in the specified<a name="line.80"></a>
+<span class="sourceLineNo">081</span>   * range.<a name="line.81"></a>
+<span class="sourceLineNo">082</span>   *<a name="line.82"></a>
+<span class="sourceLineNo">083</span>   * @param indexID<a name="line.83"></a>
+<span class="sourceLineNo">084</span>   *          An identifier of the index type.<a name="line.84"></a>
+<span class="sourceLineNo">085</span>   * @param lower<a name="line.85"></a>
+<span class="sourceLineNo">086</span>   *          The lower bound of the range. A 0 length byte array<a name="line.86"></a>
+<span class="sourceLineNo">087</span>   *          indicates no lower bound and the range will start from<a name="line.87"></a>
+<span class="sourceLineNo">088</span>   *          the smallest key.<a name="line.88"></a>
+<span class="sourceLineNo">089</span>   * @param upper<a name="line.89"></a>
+<span class="sourceLineNo">090</span>   *          The upper bound of the range. A 0 length byte array<a name="line.90"></a>
+<span class="sourceLineNo">091</span>   *          indicates no upper bound and the range will end at the<a name="line.91"></a>
+<span class="sourceLineNo">092</span>   *          largest key.<a name="line.92"></a>
+<span class="sourceLineNo">093</span>   * @param lowerIncluded<a name="line.93"></a>
+<span class="sourceLineNo">094</span>   *          true if a key exactly matching the lower bound is<a name="line.94"></a>
+<span class="sourceLineNo">095</span>   *          included in the range, false if only keys strictly<a name="line.95"></a>
+<span class="sourceLineNo">096</span>   *          greater than the lower bound are included.This value<a name="line.96"></a>
+<span class="sourceLineNo">097</span>   *          is ignored if the lower bound is not specified.<a name="line.97"></a>
+<span class="sourceLineNo">098</span>   * @param upperIncluded<a name="line.98"></a>
+<span class="sourceLineNo">099</span>   *          true if a key exactly matching the upper bound is<a name="line.99"></a>
+<span class="sourceLineNo">100</span>   *          included in the range, false if only keys strictly<a name="line.100"></a>
+<span class="sourceLineNo">101</span>   *          less than the upper bound are included. This value is<a name="line.101"></a>
+<span class="sourceLineNo">102</span>   *          ignored if the upper bound is not specified.<a name="line.102"></a>
+<span class="sourceLineNo">103</span>   * @return A query requesting all index records in the specified<a name="line.103"></a>
+<span class="sourceLineNo">104</span>   *         range.<a name="line.104"></a>
+<span class="sourceLineNo">105</span>   */<a name="line.105"></a>
+<span class="sourceLineNo">106</span>  T createRangeMatchQuery(String indexID, ByteSequence lower,<a name="line.106"></a>
+<span class="sourceLineNo">107</span>      ByteSequence upper, boolean lowerIncluded,<a name="line.107"></a>
+<span class="sourceLineNo">108</span>      boolean upperIncluded);<a name="line.108"></a>
+<span class="sourceLineNo">109</span><a name="line.109"></a>
+<span class="sourceLineNo">110</span><a name="line.110"></a>
+<span class="sourceLineNo">111</span><a name="line.111"></a>
+<span class="sourceLineNo">112</span>  /**<a name="line.112"></a>
+<span class="sourceLineNo">113</span>   * Returns a query which returns the intersection of a collection of<a name="line.113"></a>
+<span class="sourceLineNo">114</span>   * sub-queries.<a name="line.114"></a>
+<span class="sourceLineNo">115</span>   *<a name="line.115"></a>
+<span class="sourceLineNo">116</span>   * @param subquery<a name="line.116"></a>
+<span class="sourceLineNo">117</span>   *          A collection of sub-queries.<a name="line.117"></a>
+<span class="sourceLineNo">118</span>   * @return A query which returns the intersection of a collection of<a name="line.118"></a>
+<span class="sourceLineNo">119</span>   *         sub-queries.<a name="line.119"></a>
+<span class="sourceLineNo">120</span>   */<a name="line.120"></a>
+<span class="sourceLineNo">121</span>  T createIntersectionQuery(Collection&lt;T&gt; subquery);<a name="line.121"></a>
+<span class="sourceLineNo">122</span><a name="line.122"></a>
+<span class="sourceLineNo">123</span><a name="line.123"></a>
+<span class="sourceLineNo">124</span><a name="line.124"></a>
+<span class="sourceLineNo">125</span>  /**<a name="line.125"></a>
+<span class="sourceLineNo">126</span>   * Returns a query which combines the results of a collection of<a name="line.126"></a>
+<span class="sourceLineNo">127</span>   * sub-queries.<a name="line.127"></a>
+<span class="sourceLineNo">128</span>   *<a name="line.128"></a>
+<span class="sourceLineNo">129</span>   * @param subquery<a name="line.129"></a>
+<span class="sourceLineNo">130</span>   *          A collection of sub-queries.<a name="line.130"></a>
+<span class="sourceLineNo">131</span>   * @return A query which combines the results of a collection of<a name="line.131"></a>
+<span class="sourceLineNo">132</span>   *         sub-queries.<a name="line.132"></a>
+<span class="sourceLineNo">133</span>   */<a name="line.133"></a>
+<span class="sourceLineNo">134</span>  T createUnionQuery(Collection&lt;T&gt; subquery);<a name="line.134"></a>
+<span class="sourceLineNo">135</span>}<a name="line.135"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

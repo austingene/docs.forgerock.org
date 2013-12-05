@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/**<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.<a name="line.2"></a>
+<span class="sourceLineNo">003</span> *<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * Copyright (c) 2006 Sun Microsystems Inc. All Rights Reserved<a name="line.4"></a>
+<span class="sourceLineNo">005</span> *<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * The contents of this file are subject to the terms<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * of the Common Development and Distribution License<a name="line.7"></a>
+<span class="sourceLineNo">008</span> * (the License). You may not use this file except in<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * compliance with the License.<a name="line.9"></a>
+<span class="sourceLineNo">010</span> *<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * You can obtain a copy of the License at<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * https://opensso.dev.java.net/public/CDDLv1.0.html or<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * opensso/legal/CDDLv1.0.txt<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * See the License for the specific language governing<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * permission and limitations under the License.<a name="line.15"></a>
+<span class="sourceLineNo">016</span> *<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * When distributing Covered Code, include this CDDL<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * Header Notice in each file and include the License file<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * at opensso/legal/CDDLv1.0.txt.<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * If applicable, add the following below the CDDL Header,<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * with the fields enclosed by brackets [] replaced by<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * your own identifying information:<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * "Portions Copyrighted [year] [name of copyright owner]"<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * $Id: ActionMapper.java,v 1.4 2008/08/19 19:11:13 veiming Exp $<a name="line.25"></a>
+<span class="sourceLineNo">026</span> *<a name="line.26"></a>
+<span class="sourceLineNo">027</span> */<a name="line.27"></a>
+<span class="sourceLineNo">028</span><a name="line.28"></a>
+<span class="sourceLineNo">029</span><a name="line.29"></a>
+<span class="sourceLineNo">030</span>package com.sun.identity.saml.plugins;<a name="line.30"></a>
+<span class="sourceLineNo">031</span><a name="line.31"></a>
+<span class="sourceLineNo">032</span>import com.sun.identity.saml.assertion.Assertion;<a name="line.32"></a>
+<span class="sourceLineNo">033</span>import com.sun.identity.saml.common.SAMLException;<a name="line.33"></a>
+<span class="sourceLineNo">034</span>import com.sun.identity.saml.protocol.AuthorizationDecisionQuery;<a name="line.34"></a>
+<span class="sourceLineNo">035</span><a name="line.35"></a>
+<span class="sourceLineNo">036</span>import java.util.Map;<a name="line.36"></a>
+<span class="sourceLineNo">037</span>import java.util.Set;<a name="line.37"></a>
+<span class="sourceLineNo">038</span><a name="line.38"></a>
+<span class="sourceLineNo">039</span>/**<a name="line.39"></a>
+<span class="sourceLineNo">040</span> * The class &lt;code&gt;ActionMapper&lt;/code&gt; is an interface that is <a name="line.40"></a>
+<span class="sourceLineNo">041</span> * implemented to get SSO information and map partner actions to<a name="line.41"></a>
+<span class="sourceLineNo">042</span> * OpenSSO authorization decisions.<a name="line.42"></a>
+<span class="sourceLineNo">043</span> * &lt;p&gt;<a name="line.43"></a>
+<span class="sourceLineNo">044</span> * A different implementation of the interface may be developed for different<a name="line.44"></a>
+<span class="sourceLineNo">045</span> * partner. The mapping between the partner source ID and the implementation<a name="line.45"></a>
+<span class="sourceLineNo">046</span> * class are configured at the &lt;code&gt;Trusted Partner Sites&lt;/code&gt; field<a name="line.46"></a>
+<span class="sourceLineNo">047</span> * in SAML service.<a name="line.47"></a>
+<span class="sourceLineNo">048</span> *<a name="line.48"></a>
+<span class="sourceLineNo">049</span> * @supported.all.api<a name="line.49"></a>
+<span class="sourceLineNo">050</span> */<a name="line.50"></a>
+<span class="sourceLineNo">051</span>public interface ActionMapper {<a name="line.51"></a>
+<span class="sourceLineNo">052</span><a name="line.52"></a>
+<span class="sourceLineNo">053</span>    /**<a name="line.53"></a>
+<span class="sourceLineNo">054</span>     * Key to hold a list of actions that are permitted.<a name="line.54"></a>
+<span class="sourceLineNo">055</span>     */<a name="line.55"></a>
+<span class="sourceLineNo">056</span>    public static final String PERMIT = "Permit";<a name="line.56"></a>
+<span class="sourceLineNo">057</span><a name="line.57"></a>
+<span class="sourceLineNo">058</span>    /**<a name="line.58"></a>
+<span class="sourceLineNo">059</span>     * Key to hold a list of actions that are denied.<a name="line.59"></a>
+<span class="sourceLineNo">060</span>     */<a name="line.60"></a>
+<span class="sourceLineNo">061</span>    public static final String DENY = "Deny";<a name="line.61"></a>
+<span class="sourceLineNo">062</span><a name="line.62"></a>
+<span class="sourceLineNo">063</span>    /**<a name="line.63"></a>
+<span class="sourceLineNo">064</span>     * Key to hold a list of actions that are indeterminate.<a name="line.64"></a>
+<span class="sourceLineNo">065</span>     */<a name="line.65"></a>
+<span class="sourceLineNo">066</span>    public static final String INDETERMINATE = "Indeterminate";<a name="line.66"></a>
+<span class="sourceLineNo">067</span><a name="line.67"></a>
+<span class="sourceLineNo">068</span>    /**<a name="line.68"></a>
+<span class="sourceLineNo">069</span>     * Returns the single sign on token id to OpenSSO from the query.<a name="line.69"></a>
+<span class="sourceLineNo">070</span>     *<a name="line.70"></a>
+<span class="sourceLineNo">071</span>     * @param query The received &lt;code&gt;AuthorizationDecisionQuery&lt;/code&gt;.<a name="line.71"></a>
+<span class="sourceLineNo">072</span>     * @return String which is the single sign on token ID. Return null if the<a name="line.72"></a>
+<span class="sourceLineNo">073</span>     *         OpenSSO single sign on token id could not be obtained<a name="line.73"></a>
+<span class="sourceLineNo">074</span>     *         from the query.<a name="line.74"></a>
+<span class="sourceLineNo">075</span>     */<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    public String getSSOTokenID(AuthorizationDecisionQuery query);<a name="line.76"></a>
+<span class="sourceLineNo">077</span><a name="line.77"></a>
+<span class="sourceLineNo">078</span>    /**<a name="line.78"></a>
+<span class="sourceLineNo">079</span>     * Returns the Assertion that contains Authentication information that<a name="line.79"></a>
+<span class="sourceLineNo">080</span>     * can be used to obtain single sign on token.<a name="line.80"></a>
+<span class="sourceLineNo">081</span>     *<a name="line.81"></a>
+<span class="sourceLineNo">082</span>     * @param query The received &lt;code&gt;AuthorizationDecisionQuery&lt;/code&gt;.<a name="line.82"></a>
+<span class="sourceLineNo">083</span>     * @param sourceID The &lt;code&gt;SourceID&lt;/code&gt; from which this query is<a name="line.83"></a>
+<span class="sourceLineNo">084</span>     *        coming from.<a name="line.84"></a>
+<span class="sourceLineNo">085</span>     * @return Assertion The assertion contained inside the query.<a name="line.85"></a>
+<span class="sourceLineNo">086</span>     */<a name="line.86"></a>
+<span class="sourceLineNo">087</span>    public Assertion getSSOAssertion(AuthorizationDecisionQuery query,<a name="line.87"></a>
+<span class="sourceLineNo">088</span>         String sourceID);<a name="line.88"></a>
+<span class="sourceLineNo">089</span><a name="line.89"></a>
+<span class="sourceLineNo">090</span>    /**<a name="line.90"></a>
+<span class="sourceLineNo">091</span>     * Returns Action Decisions for the user.<a name="line.91"></a>
+<span class="sourceLineNo">092</span>     * The returned Map is subject to changes per SAML specification.<a name="line.92"></a>
+<span class="sourceLineNo">093</span>     *<a name="line.93"></a>
+<span class="sourceLineNo">094</span>     * @param query The received &lt;code&gt;AuthorizationDecisionQuery&lt;/code&gt;.<a name="line.94"></a>
+<span class="sourceLineNo">095</span>     * @param token User sessioin to retrieve the decisions.<a name="line.95"></a>
+<span class="sourceLineNo">096</span>     * @param sourceID The &lt;code&gt;sourceID&lt;/code&gt; from which the query is coming<a name="line.96"></a>
+<span class="sourceLineNo">097</span>     *        from.<a name="line.97"></a>
+<span class="sourceLineNo">098</span>     * @return Map which contains the following possible key value pairs:<a name="line.98"></a>
+<span class="sourceLineNo">099</span>     *         &lt;ul&gt;<a name="line.99"></a>
+<span class="sourceLineNo">100</span>     *         &lt;li&gt;&lt;code&gt;PERMIT&lt;/code&gt; List of permitted actions, or<a name="line.100"></a>
+<span class="sourceLineNo">101</span>     *         &lt;li&gt;&lt;code&gt;DENY&lt;/code&gt; List of denied actions, or<a name="line.101"></a>
+<span class="sourceLineNo">102</span>     *         &lt;li&gt;&lt;code&gt;INDETERMINATE&lt;/code&gt; List of indeterminate actions<a name="line.102"></a>
+<span class="sourceLineNo">103</span>     *         &lt;/ul&gt;<a name="line.103"></a>
+<span class="sourceLineNo">104</span>     * @exception SAMLException if an error occurs<a name="line.104"></a>
+<span class="sourceLineNo">105</span>     */<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    public Map getAuthorizationDecisions(AuthorizationDecisionQuery query,<a name="line.106"></a>
+<span class="sourceLineNo">107</span>        Object token, String sourceID) throws SAMLException;<a name="line.107"></a>
+<span class="sourceLineNo">108</span>}<a name="line.108"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

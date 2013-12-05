@@ -1,0 +1,245 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * CDDL HEADER START<a name="line.2"></a>
+<span class="sourceLineNo">003</span> *<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * The contents of this file are subject to the terms of the<a name="line.4"></a>
+<span class="sourceLineNo">005</span> * Common Development and Distribution License, Version 1.0 only<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * (the "License").  You may not use this file except in compliance<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * with the License.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * You can obtain a copy of the license at legal-notices/CDDLv1_0.txt<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * or http://forgerock.org/license/CDDLv1.0.html.<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * See the License for the specific language governing permissions<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * and limitations under the License.<a name="line.12"></a>
+<span class="sourceLineNo">013</span> *<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * When distributing Covered Code, include this CDDL HEADER in each<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * file and include the License file at legal-notices/CDDLv1_0.txt.<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * If applicable, add the following below this CDDL HEADER, with the<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * fields enclosed by brackets "[]" replaced with your own identifying<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * information:<a name="line.18"></a>
+<span class="sourceLineNo">019</span> *      Portions Copyright [yyyy] [name of copyright owner]<a name="line.19"></a>
+<span class="sourceLineNo">020</span> *<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * CDDL HEADER END<a name="line.21"></a>
+<span class="sourceLineNo">022</span> *<a name="line.22"></a>
+<span class="sourceLineNo">023</span> *<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *      Copyright 2010 Sun Microsystems, Inc.<a name="line.24"></a>
+<span class="sourceLineNo">025</span> *      Portions copyright 2012 ForgeRock AS.<a name="line.25"></a>
+<span class="sourceLineNo">026</span> */<a name="line.26"></a>
+<span class="sourceLineNo">027</span><a name="line.27"></a>
+<span class="sourceLineNo">028</span>package org.forgerock.opendj.ldap;<a name="line.28"></a>
+<span class="sourceLineNo">029</span><a name="line.29"></a>
+<span class="sourceLineNo">030</span>import java.util.LinkedHashMap;<a name="line.30"></a>
+<span class="sourceLineNo">031</span><a name="line.31"></a>
+<span class="sourceLineNo">032</span>import org.forgerock.i18n.LocalizedIllegalArgumentException;<a name="line.32"></a>
+<span class="sourceLineNo">033</span>import org.forgerock.opendj.ldap.requests.Requests;<a name="line.33"></a>
+<span class="sourceLineNo">034</span><a name="line.34"></a>
+<span class="sourceLineNo">035</span>import com.forgerock.opendj.util.Validator;<a name="line.35"></a>
+<span class="sourceLineNo">036</span><a name="line.36"></a>
+<span class="sourceLineNo">037</span>/**<a name="line.37"></a>
+<span class="sourceLineNo">038</span> * An implementation of the {@code Entry} interface which uses a<a name="line.38"></a>
+<span class="sourceLineNo">039</span> * {@code LinkedHashMap} for storing attributes. Attributes are returned in the<a name="line.39"></a>
+<span class="sourceLineNo">040</span> * same order that they were added to the entry. All operations are supported by<a name="line.40"></a>
+<span class="sourceLineNo">041</span> * this implementation. For example, you can build an entry like this:<a name="line.41"></a>
+<span class="sourceLineNo">042</span> *<a name="line.42"></a>
+<span class="sourceLineNo">043</span> * &lt;pre&gt;<a name="line.43"></a>
+<span class="sourceLineNo">044</span> * Entry entry = new LinkedHashMapEntry("cn=Bob,ou=People,dc=example,dc=com")<a name="line.44"></a>
+<span class="sourceLineNo">045</span> *    .addAttribute("cn", "Bob")<a name="line.45"></a>
+<span class="sourceLineNo">046</span> *    .addAttribute("objectclass", "top")<a name="line.46"></a>
+<span class="sourceLineNo">047</span> *    .addAttribute("objectclass", "person")<a name="line.47"></a>
+<span class="sourceLineNo">048</span> *    .addAttribute("objectclass", "organizationalPerson")<a name="line.48"></a>
+<span class="sourceLineNo">049</span> *    .addAttribute("objectclass", "inetOrgPerson")<a name="line.49"></a>
+<span class="sourceLineNo">050</span> *    .addAttribute("mail", "subgenius@example.com")<a name="line.50"></a>
+<span class="sourceLineNo">051</span> *    .addAttribute("sn", "Dobbs");<a name="line.51"></a>
+<span class="sourceLineNo">052</span> * &lt;/pre&gt;<a name="line.52"></a>
+<span class="sourceLineNo">053</span> *<a name="line.53"></a>
+<span class="sourceLineNo">054</span> * A {@code LinkedHashMapEntry} stores references to attributes which have been<a name="line.54"></a>
+<span class="sourceLineNo">055</span> * added using the {@link #addAttribute} methods. Attributes sharing the same<a name="line.55"></a>
+<span class="sourceLineNo">056</span> * attribute description are merged by adding the values of the new attribute to<a name="line.56"></a>
+<span class="sourceLineNo">057</span> * the existing attribute. More specifically, the existing attribute must be<a name="line.57"></a>
+<span class="sourceLineNo">058</span> * modifiable for the merge to succeed. Similarly, the {@link #removeAttribute}<a name="line.58"></a>
+<span class="sourceLineNo">059</span> * methods remove the specified values from the existing attribute. The<a name="line.59"></a>
+<span class="sourceLineNo">060</span> * {@link #replaceAttribute} methods remove the existing attribute (if present)<a name="line.60"></a>
+<span class="sourceLineNo">061</span> * and store a reference to the new attribute - neither the new or existing<a name="line.61"></a>
+<span class="sourceLineNo">062</span> * attribute need to be modifiable in this case.<a name="line.62"></a>
+<span class="sourceLineNo">063</span> */<a name="line.63"></a>
+<span class="sourceLineNo">064</span>public final class LinkedHashMapEntry extends AbstractMapEntry {<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    /**<a name="line.65"></a>
+<span class="sourceLineNo">066</span>     * An entry factory which can be used to create new linked hash map entries.<a name="line.66"></a>
+<span class="sourceLineNo">067</span>     */<a name="line.67"></a>
+<span class="sourceLineNo">068</span>    public static final EntryFactory FACTORY = new EntryFactory() {<a name="line.68"></a>
+<span class="sourceLineNo">069</span>        public Entry newEntry(final DN name) {<a name="line.69"></a>
+<span class="sourceLineNo">070</span>            return new LinkedHashMapEntry(name);<a name="line.70"></a>
+<span class="sourceLineNo">071</span>        }<a name="line.71"></a>
+<span class="sourceLineNo">072</span>    };<a name="line.72"></a>
+<span class="sourceLineNo">073</span><a name="line.73"></a>
+<span class="sourceLineNo">074</span>    /**<a name="line.74"></a>
+<span class="sourceLineNo">075</span>     * Creates an entry having the same distinguished name, attributes, and<a name="line.75"></a>
+<span class="sourceLineNo">076</span>     * object classes of the provided entry. This constructor performs a deep<a name="line.76"></a>
+<span class="sourceLineNo">077</span>     * copy of {@code entry} and will copy each attribute as a<a name="line.77"></a>
+<span class="sourceLineNo">078</span>     * {@link LinkedAttribute}.<a name="line.78"></a>
+<span class="sourceLineNo">079</span>     * &lt;p&gt;<a name="line.79"></a>
+<span class="sourceLineNo">080</span>     * A shallow copy constructor is provided by<a name="line.80"></a>
+<span class="sourceLineNo">081</span>     * {@link #LinkedHashMapEntry(Entry)}.<a name="line.81"></a>
+<span class="sourceLineNo">082</span>     *<a name="line.82"></a>
+<span class="sourceLineNo">083</span>     * @param entry<a name="line.83"></a>
+<span class="sourceLineNo">084</span>     *            The entry to be copied.<a name="line.84"></a>
+<span class="sourceLineNo">085</span>     * @return A deep copy of {@code entry}.<a name="line.85"></a>
+<span class="sourceLineNo">086</span>     * @throws NullPointerException<a name="line.86"></a>
+<span class="sourceLineNo">087</span>     *             If {@code entry} was {@code null}.<a name="line.87"></a>
+<span class="sourceLineNo">088</span>     * @see #LinkedHashMapEntry(Entry)<a name="line.88"></a>
+<span class="sourceLineNo">089</span>     */<a name="line.89"></a>
+<span class="sourceLineNo">090</span>    public static LinkedHashMapEntry deepCopyOfEntry(final Entry entry) {<a name="line.90"></a>
+<span class="sourceLineNo">091</span>        LinkedHashMapEntry copy = new LinkedHashMapEntry(entry.getName());<a name="line.91"></a>
+<span class="sourceLineNo">092</span>        for (final Attribute attribute : entry.getAllAttributes()) {<a name="line.92"></a>
+<span class="sourceLineNo">093</span>            copy.addAttribute(new LinkedAttribute(attribute));<a name="line.93"></a>
+<span class="sourceLineNo">094</span>        }<a name="line.94"></a>
+<span class="sourceLineNo">095</span>        return copy;<a name="line.95"></a>
+<span class="sourceLineNo">096</span>    }<a name="line.96"></a>
+<span class="sourceLineNo">097</span><a name="line.97"></a>
+<span class="sourceLineNo">098</span>    /**<a name="line.98"></a>
+<span class="sourceLineNo">099</span>     * Creates an entry with an empty (root) distinguished name and no<a name="line.99"></a>
+<span class="sourceLineNo">100</span>     * attributes.<a name="line.100"></a>
+<span class="sourceLineNo">101</span>     */<a name="line.101"></a>
+<span class="sourceLineNo">102</span>    public LinkedHashMapEntry() {<a name="line.102"></a>
+<span class="sourceLineNo">103</span>        this(DN.rootDN());<a name="line.103"></a>
+<span class="sourceLineNo">104</span>    }<a name="line.104"></a>
+<span class="sourceLineNo">105</span><a name="line.105"></a>
+<span class="sourceLineNo">106</span>    /**<a name="line.106"></a>
+<span class="sourceLineNo">107</span>     * Creates an empty entry using the provided distinguished name and no<a name="line.107"></a>
+<span class="sourceLineNo">108</span>     * attributes.<a name="line.108"></a>
+<span class="sourceLineNo">109</span>     *<a name="line.109"></a>
+<span class="sourceLineNo">110</span>     * @param name<a name="line.110"></a>
+<span class="sourceLineNo">111</span>     *            The distinguished name of this entry.<a name="line.111"></a>
+<span class="sourceLineNo">112</span>     * @throws NullPointerException<a name="line.112"></a>
+<span class="sourceLineNo">113</span>     *             If {@code name} was {@code null}.<a name="line.113"></a>
+<span class="sourceLineNo">114</span>     */<a name="line.114"></a>
+<span class="sourceLineNo">115</span>    public LinkedHashMapEntry(final DN name) {<a name="line.115"></a>
+<span class="sourceLineNo">116</span>        super(Validator.ensureNotNull(name), new LinkedHashMap&lt;AttributeDescription, Attribute&gt;());<a name="line.116"></a>
+<span class="sourceLineNo">117</span>    }<a name="line.117"></a>
+<span class="sourceLineNo">118</span><a name="line.118"></a>
+<span class="sourceLineNo">119</span>    /**<a name="line.119"></a>
+<span class="sourceLineNo">120</span>     * Creates an entry having the same distinguished name, attributes, and<a name="line.120"></a>
+<span class="sourceLineNo">121</span>     * object classes of the provided entry. This constructor performs a shallow<a name="line.121"></a>
+<span class="sourceLineNo">122</span>     * copy of {@code entry} and will not copy the attributes contained in<a name="line.122"></a>
+<span class="sourceLineNo">123</span>     * {@code entry}.<a name="line.123"></a>
+<span class="sourceLineNo">124</span>     * &lt;p&gt;<a name="line.124"></a>
+<span class="sourceLineNo">125</span>     * A deep copy constructor is provided by {@link #deepCopyOfEntry(Entry)}<a name="line.125"></a>
+<span class="sourceLineNo">126</span>     *<a name="line.126"></a>
+<span class="sourceLineNo">127</span>     * @param entry<a name="line.127"></a>
+<span class="sourceLineNo">128</span>     *            The entry to be copied.<a name="line.128"></a>
+<span class="sourceLineNo">129</span>     * @throws NullPointerException<a name="line.129"></a>
+<span class="sourceLineNo">130</span>     *             If {@code entry} was {@code null}.<a name="line.130"></a>
+<span class="sourceLineNo">131</span>     * @see #deepCopyOfEntry(Entry)<a name="line.131"></a>
+<span class="sourceLineNo">132</span>     */<a name="line.132"></a>
+<span class="sourceLineNo">133</span>    public LinkedHashMapEntry(final Entry entry) {<a name="line.133"></a>
+<span class="sourceLineNo">134</span>        this(entry.getName());<a name="line.134"></a>
+<span class="sourceLineNo">135</span>        for (final Attribute attribute : entry.getAllAttributes()) {<a name="line.135"></a>
+<span class="sourceLineNo">136</span>            addAttribute(attribute);<a name="line.136"></a>
+<span class="sourceLineNo">137</span>        }<a name="line.137"></a>
+<span class="sourceLineNo">138</span>    }<a name="line.138"></a>
+<span class="sourceLineNo">139</span><a name="line.139"></a>
+<span class="sourceLineNo">140</span>    /**<a name="line.140"></a>
+<span class="sourceLineNo">141</span>     * Creates an empty entry using the provided distinguished name decoded<a name="line.141"></a>
+<span class="sourceLineNo">142</span>     * using the default schema.<a name="line.142"></a>
+<span class="sourceLineNo">143</span>     *<a name="line.143"></a>
+<span class="sourceLineNo">144</span>     * @param name<a name="line.144"></a>
+<span class="sourceLineNo">145</span>     *            The distinguished name of this entry.<a name="line.145"></a>
+<span class="sourceLineNo">146</span>     * @throws LocalizedIllegalArgumentException<a name="line.146"></a>
+<span class="sourceLineNo">147</span>     *             If {@code name} could not be decoded using the default<a name="line.147"></a>
+<span class="sourceLineNo">148</span>     *             schema.<a name="line.148"></a>
+<span class="sourceLineNo">149</span>     * @throws NullPointerException<a name="line.149"></a>
+<span class="sourceLineNo">150</span>     *             If {@code name} was {@code null}.<a name="line.150"></a>
+<span class="sourceLineNo">151</span>     */<a name="line.151"></a>
+<span class="sourceLineNo">152</span>    public LinkedHashMapEntry(final String name) {<a name="line.152"></a>
+<span class="sourceLineNo">153</span>        this(DN.valueOf(name));<a name="line.153"></a>
+<span class="sourceLineNo">154</span>    }<a name="line.154"></a>
+<span class="sourceLineNo">155</span><a name="line.155"></a>
+<span class="sourceLineNo">156</span>    /**<a name="line.156"></a>
+<span class="sourceLineNo">157</span>     * Creates a new entry using the provided lines of LDIF decoded using the<a name="line.157"></a>
+<span class="sourceLineNo">158</span>     * default schema.<a name="line.158"></a>
+<span class="sourceLineNo">159</span>     *<a name="line.159"></a>
+<span class="sourceLineNo">160</span>     * @param ldifLines<a name="line.160"></a>
+<span class="sourceLineNo">161</span>     *            Lines of LDIF containing the an LDIF add change record or an<a name="line.161"></a>
+<span class="sourceLineNo">162</span>     *            LDIF entry record.<a name="line.162"></a>
+<span class="sourceLineNo">163</span>     * @throws LocalizedIllegalArgumentException<a name="line.163"></a>
+<span class="sourceLineNo">164</span>     *             If {@code ldifLines} was empty, or contained invalid LDIF, or<a name="line.164"></a>
+<span class="sourceLineNo">165</span>     *             could not be decoded using the default schema.<a name="line.165"></a>
+<span class="sourceLineNo">166</span>     * @throws NullPointerException<a name="line.166"></a>
+<span class="sourceLineNo">167</span>     *             If {@code ldifLines} was {@code null} .<a name="line.167"></a>
+<span class="sourceLineNo">168</span>     */<a name="line.168"></a>
+<span class="sourceLineNo">169</span>    public LinkedHashMapEntry(final String... ldifLines) {<a name="line.169"></a>
+<span class="sourceLineNo">170</span>        this(Requests.newAddRequest(ldifLines));<a name="line.170"></a>
+<span class="sourceLineNo">171</span>    }<a name="line.171"></a>
+<span class="sourceLineNo">172</span><a name="line.172"></a>
+<span class="sourceLineNo">173</span>}<a name="line.173"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

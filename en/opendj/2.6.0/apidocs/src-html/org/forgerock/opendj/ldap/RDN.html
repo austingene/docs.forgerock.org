@@ -1,0 +1,458 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * CDDL HEADER START<a name="line.2"></a>
+<span class="sourceLineNo">003</span> *<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * The contents of this file are subject to the terms of the<a name="line.4"></a>
+<span class="sourceLineNo">005</span> * Common Development and Distribution License, Version 1.0 only<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * (the "License").  You may not use this file except in compliance<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * with the License.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * You can obtain a copy of the license at legal-notices/CDDLv1_0.txt<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * or http://forgerock.org/license/CDDLv1.0.html.<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * See the License for the specific language governing permissions<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * and limitations under the License.<a name="line.12"></a>
+<span class="sourceLineNo">013</span> *<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * When distributing Covered Code, include this CDDL HEADER in each<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * file and include the License file at legal-notices/CDDLv1_0.txt.<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * If applicable, add the following below this CDDL HEADER, with the<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * fields enclosed by brackets "[]" replaced with your own identifying<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * information:<a name="line.18"></a>
+<span class="sourceLineNo">019</span> *      Portions Copyright [yyyy] [name of copyright owner]<a name="line.19"></a>
+<span class="sourceLineNo">020</span> *<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * CDDL HEADER END<a name="line.21"></a>
+<span class="sourceLineNo">022</span> *<a name="line.22"></a>
+<span class="sourceLineNo">023</span> *<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *      Copyright 2009-2010 Sun Microsystems, Inc.<a name="line.24"></a>
+<span class="sourceLineNo">025</span> *      Portions copyright 2011-2012 ForgeRock AS.<a name="line.25"></a>
+<span class="sourceLineNo">026</span> */<a name="line.26"></a>
+<span class="sourceLineNo">027</span><a name="line.27"></a>
+<span class="sourceLineNo">028</span>package org.forgerock.opendj.ldap;<a name="line.28"></a>
+<span class="sourceLineNo">029</span><a name="line.29"></a>
+<span class="sourceLineNo">030</span>import static org.forgerock.opendj.ldap.CoreMessages.ERR_RDN_TYPE_NOT_FOUND;<a name="line.30"></a>
+<span class="sourceLineNo">031</span><a name="line.31"></a>
+<span class="sourceLineNo">032</span>import java.util.ArrayList;<a name="line.32"></a>
+<span class="sourceLineNo">033</span>import java.util.Arrays;<a name="line.33"></a>
+<span class="sourceLineNo">034</span>import java.util.Iterator;<a name="line.34"></a>
+<span class="sourceLineNo">035</span>import java.util.List;<a name="line.35"></a>
+<span class="sourceLineNo">036</span><a name="line.36"></a>
+<span class="sourceLineNo">037</span>import org.forgerock.i18n.LocalizableMessage;<a name="line.37"></a>
+<span class="sourceLineNo">038</span>import org.forgerock.i18n.LocalizedIllegalArgumentException;<a name="line.38"></a>
+<span class="sourceLineNo">039</span>import org.forgerock.opendj.ldap.schema.AttributeType;<a name="line.39"></a>
+<span class="sourceLineNo">040</span>import org.forgerock.opendj.ldap.schema.Schema;<a name="line.40"></a>
+<span class="sourceLineNo">041</span>import org.forgerock.opendj.ldap.schema.UnknownSchemaElementException;<a name="line.41"></a>
+<span class="sourceLineNo">042</span><a name="line.42"></a>
+<span class="sourceLineNo">043</span>import com.forgerock.opendj.util.Iterators;<a name="line.43"></a>
+<span class="sourceLineNo">044</span>import com.forgerock.opendj.util.SubstringReader;<a name="line.44"></a>
+<span class="sourceLineNo">045</span><a name="line.45"></a>
+<span class="sourceLineNo">046</span>/**<a name="line.46"></a>
+<span class="sourceLineNo">047</span> * A relative distinguished name (RDN) as defined in RFC 4512 section 2.3 is the<a name="line.47"></a>
+<span class="sourceLineNo">048</span> * name of an entry relative to its immediate superior. An RDN is composed of an<a name="line.48"></a>
+<span class="sourceLineNo">049</span> * unordered set of one or more attribute value assertions (AVA) consisting of<a name="line.49"></a>
+<span class="sourceLineNo">050</span> * an attribute description with zero options and an attribute value. These AVAs<a name="line.50"></a>
+<span class="sourceLineNo">051</span> * are chosen to match attribute values (each a distinguished value) of the<a name="line.51"></a>
+<span class="sourceLineNo">052</span> * entry.<a name="line.52"></a>
+<span class="sourceLineNo">053</span> * &lt;p&gt;<a name="line.53"></a>
+<span class="sourceLineNo">054</span> * An entry's relative distinguished name must be unique among all immediate<a name="line.54"></a>
+<span class="sourceLineNo">055</span> * subordinates of the entry's immediate superior (i.e. all siblings).<a name="line.55"></a>
+<span class="sourceLineNo">056</span> * &lt;p&gt;<a name="line.56"></a>
+<span class="sourceLineNo">057</span> * The following are examples of string representations of RDNs:<a name="line.57"></a>
+<span class="sourceLineNo">058</span> *<a name="line.58"></a>
+<span class="sourceLineNo">059</span> * &lt;pre&gt;<a name="line.59"></a>
+<span class="sourceLineNo">060</span> * uid=12345<a name="line.60"></a>
+<span class="sourceLineNo">061</span> * ou=Engineering<a name="line.61"></a>
+<span class="sourceLineNo">062</span> * cn=Kurt Zeilenga+L=Redwood Shores<a name="line.62"></a>
+<span class="sourceLineNo">063</span> * &lt;/pre&gt;<a name="line.63"></a>
+<span class="sourceLineNo">064</span> *<a name="line.64"></a>
+<span class="sourceLineNo">065</span> * The last is an example of a multi-valued RDN; that is, an RDN composed of<a name="line.65"></a>
+<span class="sourceLineNo">066</span> * multiple AVAs.<a name="line.66"></a>
+<span class="sourceLineNo">067</span> *<a name="line.67"></a>
+<span class="sourceLineNo">068</span> * @see &lt;a href="http://tools.ietf.org/html/rfc4512#section-2.3"&gt;RFC 4512 -<a name="line.68"></a>
+<span class="sourceLineNo">069</span> *      Lightweight Directory Access Protocol (LDAP): Directory Information<a name="line.69"></a>
+<span class="sourceLineNo">070</span> *      Models &lt;/a&gt;<a name="line.70"></a>
+<span class="sourceLineNo">071</span> */<a name="line.71"></a>
+<span class="sourceLineNo">072</span>public final class RDN implements Iterable&lt;AVA&gt;, Comparable&lt;RDN&gt; {<a name="line.72"></a>
+<span class="sourceLineNo">073</span><a name="line.73"></a>
+<span class="sourceLineNo">074</span>    // A constant holding a special RDN having zero AVAs and which always<a name="line.74"></a>
+<span class="sourceLineNo">075</span>    // compares greater than any other RDN other than itself.<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    private static final RDN MAX_VALUE = new RDN(new AVA[0], "");<a name="line.76"></a>
+<span class="sourceLineNo">077</span><a name="line.77"></a>
+<span class="sourceLineNo">078</span>    /**<a name="line.78"></a>
+<span class="sourceLineNo">079</span>     * Returns a constant containing a special RDN which is greater than any<a name="line.79"></a>
+<span class="sourceLineNo">080</span>     * other RDN other than itself. This RDN may be used in order to perform<a name="line.80"></a>
+<span class="sourceLineNo">081</span>     * range queries on DN keyed collections such as {@code SortedSet}s and<a name="line.81"></a>
+<span class="sourceLineNo">082</span>     * {@code SortedMap}s. For example, the following code can be used to<a name="line.82"></a>
+<span class="sourceLineNo">083</span>     * construct a range whose contents is a sub-tree of entries:<a name="line.83"></a>
+<span class="sourceLineNo">084</span>     *<a name="line.84"></a>
+<span class="sourceLineNo">085</span>     * &lt;pre&gt;<a name="line.85"></a>
+<span class="sourceLineNo">086</span>     * SortedMap&lt;DN, Entry&gt; entries = ...;<a name="line.86"></a>
+<span class="sourceLineNo">087</span>     * DN baseDN = ...;<a name="line.87"></a>
+<span class="sourceLineNo">088</span>     *<a name="line.88"></a>
+<span class="sourceLineNo">089</span>     * // Returns a map containing the baseDN and all of its subordinates.<a name="line.89"></a>
+<span class="sourceLineNo">090</span>     * SortedMap&lt;DN,Entry&gt; subtree = entries.subMap(baseDN, baseDN.child(RDN.maxValue));<a name="line.90"></a>
+<span class="sourceLineNo">091</span>     * &lt;/pre&gt;<a name="line.91"></a>
+<span class="sourceLineNo">092</span>     *<a name="line.92"></a>
+<span class="sourceLineNo">093</span>     * @return A constant containing a special RDN which is greater than any<a name="line.93"></a>
+<span class="sourceLineNo">094</span>     *         other RDN other than itself.<a name="line.94"></a>
+<span class="sourceLineNo">095</span>     */<a name="line.95"></a>
+<span class="sourceLineNo">096</span>    public static RDN maxValue() {<a name="line.96"></a>
+<span class="sourceLineNo">097</span>        return MAX_VALUE;<a name="line.97"></a>
+<span class="sourceLineNo">098</span>    }<a name="line.98"></a>
+<span class="sourceLineNo">099</span><a name="line.99"></a>
+<span class="sourceLineNo">100</span>    /**<a name="line.100"></a>
+<span class="sourceLineNo">101</span>     * Parses the provided LDAP string representation of an RDN using the<a name="line.101"></a>
+<span class="sourceLineNo">102</span>     * default schema.<a name="line.102"></a>
+<span class="sourceLineNo">103</span>     *<a name="line.103"></a>
+<span class="sourceLineNo">104</span>     * @param rdn<a name="line.104"></a>
+<span class="sourceLineNo">105</span>     *            The LDAP string representation of a RDN.<a name="line.105"></a>
+<span class="sourceLineNo">106</span>     * @return The parsed RDN.<a name="line.106"></a>
+<span class="sourceLineNo">107</span>     * @throws LocalizedIllegalArgumentException<a name="line.107"></a>
+<span class="sourceLineNo">108</span>     *             If {@code rdn} is not a valid LDAP string representation of a<a name="line.108"></a>
+<span class="sourceLineNo">109</span>     *             RDN.<a name="line.109"></a>
+<span class="sourceLineNo">110</span>     * @throws NullPointerException<a name="line.110"></a>
+<span class="sourceLineNo">111</span>     *             If {@code rdn} was {@code null}.<a name="line.111"></a>
+<span class="sourceLineNo">112</span>     */<a name="line.112"></a>
+<span class="sourceLineNo">113</span>    public static RDN valueOf(final String rdn) {<a name="line.113"></a>
+<span class="sourceLineNo">114</span>        return valueOf(rdn, Schema.getDefaultSchema());<a name="line.114"></a>
+<span class="sourceLineNo">115</span>    }<a name="line.115"></a>
+<span class="sourceLineNo">116</span><a name="line.116"></a>
+<span class="sourceLineNo">117</span>    /**<a name="line.117"></a>
+<span class="sourceLineNo">118</span>     * Parses the provided LDAP string representation of a RDN using the<a name="line.118"></a>
+<span class="sourceLineNo">119</span>     * provided schema.<a name="line.119"></a>
+<span class="sourceLineNo">120</span>     *<a name="line.120"></a>
+<span class="sourceLineNo">121</span>     * @param rdn<a name="line.121"></a>
+<span class="sourceLineNo">122</span>     *            The LDAP string representation of a RDN.<a name="line.122"></a>
+<span class="sourceLineNo">123</span>     * @param schema<a name="line.123"></a>
+<span class="sourceLineNo">124</span>     *            The schema to use when parsing the RDN.<a name="line.124"></a>
+<span class="sourceLineNo">125</span>     * @return The parsed RDN.<a name="line.125"></a>
+<span class="sourceLineNo">126</span>     * @throws LocalizedIllegalArgumentException<a name="line.126"></a>
+<span class="sourceLineNo">127</span>     *             If {@code rdn} is not a valid LDAP string representation of a<a name="line.127"></a>
+<span class="sourceLineNo">128</span>     *             RDN.<a name="line.128"></a>
+<span class="sourceLineNo">129</span>     * @throws NullPointerException<a name="line.129"></a>
+<span class="sourceLineNo">130</span>     *             If {@code rdn} or {@code schema} was {@code null}.<a name="line.130"></a>
+<span class="sourceLineNo">131</span>     */<a name="line.131"></a>
+<span class="sourceLineNo">132</span>    public static RDN valueOf(final String rdn, final Schema schema) {<a name="line.132"></a>
+<span class="sourceLineNo">133</span>        final SubstringReader reader = new SubstringReader(rdn);<a name="line.133"></a>
+<span class="sourceLineNo">134</span>        try {<a name="line.134"></a>
+<span class="sourceLineNo">135</span>            return decode(rdn, reader, schema);<a name="line.135"></a>
+<span class="sourceLineNo">136</span>        } catch (final UnknownSchemaElementException e) {<a name="line.136"></a>
+<span class="sourceLineNo">137</span>            final LocalizableMessage message =<a name="line.137"></a>
+<span class="sourceLineNo">138</span>                    ERR_RDN_TYPE_NOT_FOUND.get(rdn, e.getMessageObject());<a name="line.138"></a>
+<span class="sourceLineNo">139</span>            throw new LocalizedIllegalArgumentException(message);<a name="line.139"></a>
+<span class="sourceLineNo">140</span>        }<a name="line.140"></a>
+<span class="sourceLineNo">141</span>    }<a name="line.141"></a>
+<span class="sourceLineNo">142</span><a name="line.142"></a>
+<span class="sourceLineNo">143</span>    // FIXME: ensure that the decoded RDN does not contain multiple AVAs<a name="line.143"></a>
+<span class="sourceLineNo">144</span>    // with the same type.<a name="line.144"></a>
+<span class="sourceLineNo">145</span>    static RDN decode(final String rdnString, final SubstringReader reader, final Schema schema) {<a name="line.145"></a>
+<span class="sourceLineNo">146</span>        final AVA firstAVA = AVA.decode(reader, schema);<a name="line.146"></a>
+<span class="sourceLineNo">147</span><a name="line.147"></a>
+<span class="sourceLineNo">148</span>        // Skip over any spaces that might be after the attribute value.<a name="line.148"></a>
+<span class="sourceLineNo">149</span>        reader.skipWhitespaces();<a name="line.149"></a>
+<span class="sourceLineNo">150</span><a name="line.150"></a>
+<span class="sourceLineNo">151</span>        reader.mark();<a name="line.151"></a>
+<span class="sourceLineNo">152</span>        if (reader.remaining() &gt; 0 &amp;&amp; reader.read() == '+') {<a name="line.152"></a>
+<span class="sourceLineNo">153</span>            final List&lt;AVA&gt; avas = new ArrayList&lt;AVA&gt;();<a name="line.153"></a>
+<span class="sourceLineNo">154</span>            avas.add(firstAVA);<a name="line.154"></a>
+<span class="sourceLineNo">155</span><a name="line.155"></a>
+<span class="sourceLineNo">156</span>            do {<a name="line.156"></a>
+<span class="sourceLineNo">157</span>                avas.add(AVA.decode(reader, schema));<a name="line.157"></a>
+<span class="sourceLineNo">158</span><a name="line.158"></a>
+<span class="sourceLineNo">159</span>                // Skip over any spaces that might be after the attribute value.<a name="line.159"></a>
+<span class="sourceLineNo">160</span>                reader.skipWhitespaces();<a name="line.160"></a>
+<span class="sourceLineNo">161</span><a name="line.161"></a>
+<span class="sourceLineNo">162</span>                reader.mark();<a name="line.162"></a>
+<span class="sourceLineNo">163</span>            } while (reader.remaining() &gt; 0 &amp;&amp; reader.read() == '+');<a name="line.163"></a>
+<span class="sourceLineNo">164</span><a name="line.164"></a>
+<span class="sourceLineNo">165</span>            reader.reset();<a name="line.165"></a>
+<span class="sourceLineNo">166</span>            return new RDN(avas.toArray(new AVA[avas.size()]), null);<a name="line.166"></a>
+<span class="sourceLineNo">167</span>        } else {<a name="line.167"></a>
+<span class="sourceLineNo">168</span>            reader.reset();<a name="line.168"></a>
+<span class="sourceLineNo">169</span>            return new RDN(new AVA[] { firstAVA }, null);<a name="line.169"></a>
+<span class="sourceLineNo">170</span>        }<a name="line.170"></a>
+<span class="sourceLineNo">171</span>    }<a name="line.171"></a>
+<span class="sourceLineNo">172</span><a name="line.172"></a>
+<span class="sourceLineNo">173</span>    // In original order.<a name="line.173"></a>
+<span class="sourceLineNo">174</span>    private final AVA[] avas;<a name="line.174"></a>
+<span class="sourceLineNo">175</span><a name="line.175"></a>
+<span class="sourceLineNo">176</span>    // We need to store the original string value if provided in order to<a name="line.176"></a>
+<span class="sourceLineNo">177</span>    // preserve the original whitespace.<a name="line.177"></a>
+<span class="sourceLineNo">178</span>    private String stringValue;<a name="line.178"></a>
+<span class="sourceLineNo">179</span><a name="line.179"></a>
+<span class="sourceLineNo">180</span>    /**<a name="line.180"></a>
+<span class="sourceLineNo">181</span>     * Creates a new RDN using the provided attribute type and value.<a name="line.181"></a>
+<span class="sourceLineNo">182</span>     * &lt;p&gt;<a name="line.182"></a>
+<span class="sourceLineNo">183</span>     * If {@code attributeValue} is not an instance of {@code ByteString} then<a name="line.183"></a>
+<span class="sourceLineNo">184</span>     * it will be converted using the {@link ByteString#valueOf(Object)} method.<a name="line.184"></a>
+<span class="sourceLineNo">185</span>     *<a name="line.185"></a>
+<span class="sourceLineNo">186</span>     * @param attributeType<a name="line.186"></a>
+<span class="sourceLineNo">187</span>     *            The attribute type.<a name="line.187"></a>
+<span class="sourceLineNo">188</span>     * @param attributeValue<a name="line.188"></a>
+<span class="sourceLineNo">189</span>     *            The attribute value.<a name="line.189"></a>
+<span class="sourceLineNo">190</span>     * @throws NullPointerException<a name="line.190"></a>
+<span class="sourceLineNo">191</span>     *             If {@code attributeType} or {@code attributeValue} was<a name="line.191"></a>
+<span class="sourceLineNo">192</span>     *             {@code null}.<a name="line.192"></a>
+<span class="sourceLineNo">193</span>     */<a name="line.193"></a>
+<span class="sourceLineNo">194</span>    public RDN(final AttributeType attributeType, final Object attributeValue) {<a name="line.194"></a>
+<span class="sourceLineNo">195</span>        this.avas = new AVA[] { new AVA(attributeType, attributeValue) };<a name="line.195"></a>
+<span class="sourceLineNo">196</span>    }<a name="line.196"></a>
+<span class="sourceLineNo">197</span><a name="line.197"></a>
+<span class="sourceLineNo">198</span>    /**<a name="line.198"></a>
+<span class="sourceLineNo">199</span>     * Creates a new RDN using the provided attribute type and value decoded<a name="line.199"></a>
+<span class="sourceLineNo">200</span>     * using the default schema.<a name="line.200"></a>
+<span class="sourceLineNo">201</span>     * &lt;p&gt;<a name="line.201"></a>
+<span class="sourceLineNo">202</span>     * If {@code attributeValue} is not an instance of {@code ByteString} then<a name="line.202"></a>
+<span class="sourceLineNo">203</span>     * it will be converted using the {@link ByteString#valueOf(Object)} method.<a name="line.203"></a>
+<span class="sourceLineNo">204</span>     *<a name="line.204"></a>
+<span class="sourceLineNo">205</span>     * @param attributeType<a name="line.205"></a>
+<span class="sourceLineNo">206</span>     *            The attribute type.<a name="line.206"></a>
+<span class="sourceLineNo">207</span>     * @param attributeValue<a name="line.207"></a>
+<span class="sourceLineNo">208</span>     *            The attribute value.<a name="line.208"></a>
+<span class="sourceLineNo">209</span>     * @throws UnknownSchemaElementException<a name="line.209"></a>
+<span class="sourceLineNo">210</span>     *             If {@code attributeType} was not found in the default schema.<a name="line.210"></a>
+<span class="sourceLineNo">211</span>     * @throws NullPointerException<a name="line.211"></a>
+<span class="sourceLineNo">212</span>     *             If {@code attributeType} or {@code attributeValue} was<a name="line.212"></a>
+<span class="sourceLineNo">213</span>     *             {@code null}.<a name="line.213"></a>
+<span class="sourceLineNo">214</span>     */<a name="line.214"></a>
+<span class="sourceLineNo">215</span>    public RDN(final String attributeType, final Object attributeValue) {<a name="line.215"></a>
+<span class="sourceLineNo">216</span>        this.avas = new AVA[] { new AVA(attributeType, attributeValue) };<a name="line.216"></a>
+<span class="sourceLineNo">217</span>    }<a name="line.217"></a>
+<span class="sourceLineNo">218</span><a name="line.218"></a>
+<span class="sourceLineNo">219</span>    private RDN(final AVA[] avas, final String stringValue) {<a name="line.219"></a>
+<span class="sourceLineNo">220</span>        this.avas = avas;<a name="line.220"></a>
+<span class="sourceLineNo">221</span>        this.stringValue = stringValue;<a name="line.221"></a>
+<span class="sourceLineNo">222</span>    }<a name="line.222"></a>
+<span class="sourceLineNo">223</span><a name="line.223"></a>
+<span class="sourceLineNo">224</span>    /**<a name="line.224"></a>
+<span class="sourceLineNo">225</span>     * {@inheritDoc}<a name="line.225"></a>
+<span class="sourceLineNo">226</span>     */<a name="line.226"></a>
+<span class="sourceLineNo">227</span>    public int compareTo(final RDN rdn) {<a name="line.227"></a>
+<span class="sourceLineNo">228</span>        // Identity.<a name="line.228"></a>
+<span class="sourceLineNo">229</span>        if (this == rdn) {<a name="line.229"></a>
+<span class="sourceLineNo">230</span>            return 0;<a name="line.230"></a>
+<span class="sourceLineNo">231</span>        }<a name="line.231"></a>
+<span class="sourceLineNo">232</span><a name="line.232"></a>
+<span class="sourceLineNo">233</span>        // MAX_VALUE is always greater than any other RDN other than itself.<a name="line.233"></a>
+<span class="sourceLineNo">234</span>        if (this == MAX_VALUE) {<a name="line.234"></a>
+<span class="sourceLineNo">235</span>            return 1;<a name="line.235"></a>
+<span class="sourceLineNo">236</span>        }<a name="line.236"></a>
+<span class="sourceLineNo">237</span><a name="line.237"></a>
+<span class="sourceLineNo">238</span>        if (rdn == MAX_VALUE) {<a name="line.238"></a>
+<span class="sourceLineNo">239</span>            return -1;<a name="line.239"></a>
+<span class="sourceLineNo">240</span>        }<a name="line.240"></a>
+<span class="sourceLineNo">241</span><a name="line.241"></a>
+<span class="sourceLineNo">242</span>        // Compare number of AVAs first as this is quick and easy.<a name="line.242"></a>
+<span class="sourceLineNo">243</span>        final int sz1 = avas.length;<a name="line.243"></a>
+<span class="sourceLineNo">244</span>        final int sz2 = rdn.avas.length;<a name="line.244"></a>
+<span class="sourceLineNo">245</span>        if (sz1 != sz2) {<a name="line.245"></a>
+<span class="sourceLineNo">246</span>            return sz1 - sz2 &gt; 0 ? 1 : -1;<a name="line.246"></a>
+<span class="sourceLineNo">247</span>        }<a name="line.247"></a>
+<span class="sourceLineNo">248</span><a name="line.248"></a>
+<span class="sourceLineNo">249</span>        // Fast path for common case.<a name="line.249"></a>
+<span class="sourceLineNo">250</span>        if (sz1 == 1) {<a name="line.250"></a>
+<span class="sourceLineNo">251</span>            return avas[0].compareTo(rdn.avas[0]);<a name="line.251"></a>
+<span class="sourceLineNo">252</span>        }<a name="line.252"></a>
+<span class="sourceLineNo">253</span><a name="line.253"></a>
+<span class="sourceLineNo">254</span>        // Need to sort the AVAs before comparing.<a name="line.254"></a>
+<span class="sourceLineNo">255</span>        final AVA[] a1 = new AVA[sz1];<a name="line.255"></a>
+<span class="sourceLineNo">256</span>        System.arraycopy(avas, 0, a1, 0, sz1);<a name="line.256"></a>
+<span class="sourceLineNo">257</span>        Arrays.sort(a1);<a name="line.257"></a>
+<span class="sourceLineNo">258</span><a name="line.258"></a>
+<span class="sourceLineNo">259</span>        final AVA[] a2 = new AVA[sz1];<a name="line.259"></a>
+<span class="sourceLineNo">260</span>        System.arraycopy(rdn.avas, 0, a2, 0, sz1);<a name="line.260"></a>
+<span class="sourceLineNo">261</span>        Arrays.sort(a2);<a name="line.261"></a>
+<span class="sourceLineNo">262</span><a name="line.262"></a>
+<span class="sourceLineNo">263</span>        for (int i = 0; i &lt; sz1; i++) {<a name="line.263"></a>
+<span class="sourceLineNo">264</span>            final int result = a1[i].compareTo(a2[i]);<a name="line.264"></a>
+<span class="sourceLineNo">265</span>            if (result != 0) {<a name="line.265"></a>
+<span class="sourceLineNo">266</span>                return result;<a name="line.266"></a>
+<span class="sourceLineNo">267</span>            }<a name="line.267"></a>
+<span class="sourceLineNo">268</span>        }<a name="line.268"></a>
+<span class="sourceLineNo">269</span><a name="line.269"></a>
+<span class="sourceLineNo">270</span>        return 0;<a name="line.270"></a>
+<span class="sourceLineNo">271</span>    }<a name="line.271"></a>
+<span class="sourceLineNo">272</span><a name="line.272"></a>
+<span class="sourceLineNo">273</span>    /**<a name="line.273"></a>
+<span class="sourceLineNo">274</span>     * {@inheritDoc}<a name="line.274"></a>
+<span class="sourceLineNo">275</span>     */<a name="line.275"></a>
+<span class="sourceLineNo">276</span>    @Override<a name="line.276"></a>
+<span class="sourceLineNo">277</span>    public boolean equals(final Object obj) {<a name="line.277"></a>
+<span class="sourceLineNo">278</span>        if (this == obj) {<a name="line.278"></a>
+<span class="sourceLineNo">279</span>            return true;<a name="line.279"></a>
+<span class="sourceLineNo">280</span>        } else if (obj instanceof RDN) {<a name="line.280"></a>
+<span class="sourceLineNo">281</span>            return compareTo((RDN) obj) == 0;<a name="line.281"></a>
+<span class="sourceLineNo">282</span>        } else {<a name="line.282"></a>
+<span class="sourceLineNo">283</span>            return false;<a name="line.283"></a>
+<span class="sourceLineNo">284</span>        }<a name="line.284"></a>
+<span class="sourceLineNo">285</span>    }<a name="line.285"></a>
+<span class="sourceLineNo">286</span><a name="line.286"></a>
+<span class="sourceLineNo">287</span>    /**<a name="line.287"></a>
+<span class="sourceLineNo">288</span>     * Returns the attribute value contained in this RDN which is associated<a name="line.288"></a>
+<span class="sourceLineNo">289</span>     * with the provided attribute type, or {@code null} if this RDN does not<a name="line.289"></a>
+<span class="sourceLineNo">290</span>     * include such an attribute value.<a name="line.290"></a>
+<span class="sourceLineNo">291</span>     *<a name="line.291"></a>
+<span class="sourceLineNo">292</span>     * @param attributeType<a name="line.292"></a>
+<span class="sourceLineNo">293</span>     *            The attribute type.<a name="line.293"></a>
+<span class="sourceLineNo">294</span>     * @return The attribute value.<a name="line.294"></a>
+<span class="sourceLineNo">295</span>     */<a name="line.295"></a>
+<span class="sourceLineNo">296</span>    public ByteString getAttributeValue(final AttributeType attributeType) {<a name="line.296"></a>
+<span class="sourceLineNo">297</span>        for (final AVA ava : avas) {<a name="line.297"></a>
+<span class="sourceLineNo">298</span>            if (ava.getAttributeType().equals(attributeType)) {<a name="line.298"></a>
+<span class="sourceLineNo">299</span>                return ava.getAttributeValue();<a name="line.299"></a>
+<span class="sourceLineNo">300</span>            }<a name="line.300"></a>
+<span class="sourceLineNo">301</span>        }<a name="line.301"></a>
+<span class="sourceLineNo">302</span>        return null;<a name="line.302"></a>
+<span class="sourceLineNo">303</span>    }<a name="line.303"></a>
+<span class="sourceLineNo">304</span><a name="line.304"></a>
+<span class="sourceLineNo">305</span>    /**<a name="line.305"></a>
+<span class="sourceLineNo">306</span>     * Returns the first AVA contained in this RDN.<a name="line.306"></a>
+<span class="sourceLineNo">307</span>     *<a name="line.307"></a>
+<span class="sourceLineNo">308</span>     * @return The first AVA contained in this RDN.<a name="line.308"></a>
+<span class="sourceLineNo">309</span>     */<a name="line.309"></a>
+<span class="sourceLineNo">310</span>    public AVA getFirstAVA() {<a name="line.310"></a>
+<span class="sourceLineNo">311</span>        return avas[0];<a name="line.311"></a>
+<span class="sourceLineNo">312</span>    }<a name="line.312"></a>
+<span class="sourceLineNo">313</span><a name="line.313"></a>
+<span class="sourceLineNo">314</span>    /**<a name="line.314"></a>
+<span class="sourceLineNo">315</span>     * {@inheritDoc}<a name="line.315"></a>
+<span class="sourceLineNo">316</span>     */<a name="line.316"></a>
+<span class="sourceLineNo">317</span>    @Override<a name="line.317"></a>
+<span class="sourceLineNo">318</span>    public int hashCode() {<a name="line.318"></a>
+<span class="sourceLineNo">319</span>        // Avoid an algorithm that requires the AVAs to be sorted.<a name="line.319"></a>
+<span class="sourceLineNo">320</span>        int hash = 0;<a name="line.320"></a>
+<span class="sourceLineNo">321</span>        for (final AVA ava : avas) {<a name="line.321"></a>
+<span class="sourceLineNo">322</span>            hash += ava.hashCode();<a name="line.322"></a>
+<span class="sourceLineNo">323</span>        }<a name="line.323"></a>
+<span class="sourceLineNo">324</span>        return hash;<a name="line.324"></a>
+<span class="sourceLineNo">325</span>    }<a name="line.325"></a>
+<span class="sourceLineNo">326</span><a name="line.326"></a>
+<span class="sourceLineNo">327</span>    /**<a name="line.327"></a>
+<span class="sourceLineNo">328</span>     * Returns {@code true} if this RDN contains more than one AVA.<a name="line.328"></a>
+<span class="sourceLineNo">329</span>     *<a name="line.329"></a>
+<span class="sourceLineNo">330</span>     * @return {@code true} if this RDN contains more than one AVA, otherwise<a name="line.330"></a>
+<span class="sourceLineNo">331</span>     *         {@code false}.<a name="line.331"></a>
+<span class="sourceLineNo">332</span>     */<a name="line.332"></a>
+<span class="sourceLineNo">333</span>    public boolean isMultiValued() {<a name="line.333"></a>
+<span class="sourceLineNo">334</span>        return avas.length &gt; 1;<a name="line.334"></a>
+<span class="sourceLineNo">335</span>    }<a name="line.335"></a>
+<span class="sourceLineNo">336</span><a name="line.336"></a>
+<span class="sourceLineNo">337</span>    /**<a name="line.337"></a>
+<span class="sourceLineNo">338</span>     * Returns an iterator of the AVAs contained in this RDN. The AVAs will be<a name="line.338"></a>
+<span class="sourceLineNo">339</span>     * returned in the user provided order.<a name="line.339"></a>
+<span class="sourceLineNo">340</span>     * &lt;p&gt;<a name="line.340"></a>
+<span class="sourceLineNo">341</span>     * Attempts to remove AVAs using an iterator's {@code remove()} method are<a name="line.341"></a>
+<span class="sourceLineNo">342</span>     * not permitted and will result in an {@code UnsupportedOperationException}<a name="line.342"></a>
+<span class="sourceLineNo">343</span>     * being thrown.<a name="line.343"></a>
+<span class="sourceLineNo">344</span>     *<a name="line.344"></a>
+<span class="sourceLineNo">345</span>     * @return An iterator of the AVAs contained in this RDN.<a name="line.345"></a>
+<span class="sourceLineNo">346</span>     */<a name="line.346"></a>
+<span class="sourceLineNo">347</span>    public Iterator&lt;AVA&gt; iterator() {<a name="line.347"></a>
+<span class="sourceLineNo">348</span>        return Iterators.arrayIterator(avas);<a name="line.348"></a>
+<span class="sourceLineNo">349</span>    }<a name="line.349"></a>
+<span class="sourceLineNo">350</span><a name="line.350"></a>
+<span class="sourceLineNo">351</span>    /**<a name="line.351"></a>
+<span class="sourceLineNo">352</span>     * Returns the number of AVAs in this RDN.<a name="line.352"></a>
+<span class="sourceLineNo">353</span>     *<a name="line.353"></a>
+<span class="sourceLineNo">354</span>     * @return The number of AVAs in this RDN.<a name="line.354"></a>
+<span class="sourceLineNo">355</span>     */<a name="line.355"></a>
+<span class="sourceLineNo">356</span>    public int size() {<a name="line.356"></a>
+<span class="sourceLineNo">357</span>        return avas.length;<a name="line.357"></a>
+<span class="sourceLineNo">358</span>    }<a name="line.358"></a>
+<span class="sourceLineNo">359</span><a name="line.359"></a>
+<span class="sourceLineNo">360</span>    /**<a name="line.360"></a>
+<span class="sourceLineNo">361</span>     * Returns the RFC 4514 string representation of this RDN.<a name="line.361"></a>
+<span class="sourceLineNo">362</span>     *<a name="line.362"></a>
+<span class="sourceLineNo">363</span>     * @return The RFC 4514 string representation of this RDN.<a name="line.363"></a>
+<span class="sourceLineNo">364</span>     * @see &lt;a href="http://tools.ietf.org/html/rfc4514"&gt;RFC 4514 - Lightweight<a name="line.364"></a>
+<span class="sourceLineNo">365</span>     *      Directory Access Protocol (LDAP): String Representation of<a name="line.365"></a>
+<span class="sourceLineNo">366</span>     *      Distinguished Names &lt;/a&gt;<a name="line.366"></a>
+<span class="sourceLineNo">367</span>     */<a name="line.367"></a>
+<span class="sourceLineNo">368</span>    @Override<a name="line.368"></a>
+<span class="sourceLineNo">369</span>    public String toString() {<a name="line.369"></a>
+<span class="sourceLineNo">370</span>        // We don't care about potential race conditions here.<a name="line.370"></a>
+<span class="sourceLineNo">371</span>        if (stringValue == null) {<a name="line.371"></a>
+<span class="sourceLineNo">372</span>            final StringBuilder builder = new StringBuilder();<a name="line.372"></a>
+<span class="sourceLineNo">373</span>            avas[0].toString(builder);<a name="line.373"></a>
+<span class="sourceLineNo">374</span>            for (int i = 1; i &lt; avas.length; i++) {<a name="line.374"></a>
+<span class="sourceLineNo">375</span>                builder.append('+');<a name="line.375"></a>
+<span class="sourceLineNo">376</span>                avas[i].toString(builder);<a name="line.376"></a>
+<span class="sourceLineNo">377</span>            }<a name="line.377"></a>
+<span class="sourceLineNo">378</span>            stringValue = builder.toString();<a name="line.378"></a>
+<span class="sourceLineNo">379</span>        }<a name="line.379"></a>
+<span class="sourceLineNo">380</span>        return stringValue;<a name="line.380"></a>
+<span class="sourceLineNo">381</span>    }<a name="line.381"></a>
+<span class="sourceLineNo">382</span><a name="line.382"></a>
+<span class="sourceLineNo">383</span>    StringBuilder toString(final StringBuilder builder) {<a name="line.383"></a>
+<span class="sourceLineNo">384</span>        return builder.append(toString());<a name="line.384"></a>
+<span class="sourceLineNo">385</span>    }<a name="line.385"></a>
+<span class="sourceLineNo">386</span>}<a name="line.386"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

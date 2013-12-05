@@ -1,0 +1,541 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * CDDL HEADER START<a name="line.2"></a>
+<span class="sourceLineNo">003</span> *<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * The contents of this file are subject to the terms of the<a name="line.4"></a>
+<span class="sourceLineNo">005</span> * Common Development and Distribution License, Version 1.0 only<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * (the "License").  You may not use this file except in compliance<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * with the License.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * You can obtain a copy of the license at<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * trunk/opends/resource/legal-notices/OpenDS.LICENSE<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * or https://OpenDS.dev.java.net/OpenDS.LICENSE.<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * See the License for the specific language governing permissions<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * and limitations under the License.<a name="line.13"></a>
+<span class="sourceLineNo">014</span> *<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * When distributing Covered Code, include this CDDL HEADER in each<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * file and include the License file at<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * trunk/opends/resource/legal-notices/OpenDS.LICENSE.  If applicable,<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * add the following below this CDDL HEADER, with the fields enclosed<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * by brackets "[]" replaced with your own identifying information:<a name="line.19"></a>
+<span class="sourceLineNo">020</span> *      Portions Copyright [yyyy] [name of copyright owner]<a name="line.20"></a>
+<span class="sourceLineNo">021</span> *<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * CDDL HEADER END<a name="line.22"></a>
+<span class="sourceLineNo">023</span> *<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *<a name="line.24"></a>
+<span class="sourceLineNo">025</span> *      Copyright 2008-2009 Sun Microsystems, Inc.<a name="line.25"></a>
+<span class="sourceLineNo">026</span> *      Portions copyright 2011-2013 ForgeRock AS<a name="line.26"></a>
+<span class="sourceLineNo">027</span> */<a name="line.27"></a>
+<span class="sourceLineNo">028</span>package org.opends.server.replication.protocol;<a name="line.28"></a>
+<span class="sourceLineNo">029</span><a name="line.29"></a>
+<span class="sourceLineNo">030</span>import java.io.ByteArrayOutputStream;<a name="line.30"></a>
+<span class="sourceLineNo">031</span>import java.io.IOException;<a name="line.31"></a>
+<span class="sourceLineNo">032</span>import java.io.UnsupportedEncodingException;<a name="line.32"></a>
+<span class="sourceLineNo">033</span>import java.util.ArrayList;<a name="line.33"></a>
+<span class="sourceLineNo">034</span>import java.util.HashSet;<a name="line.34"></a>
+<span class="sourceLineNo">035</span>import java.util.List;<a name="line.35"></a>
+<span class="sourceLineNo">036</span>import java.util.Set;<a name="line.36"></a>
+<span class="sourceLineNo">037</span>import java.util.zip.DataFormatException;<a name="line.37"></a>
+<span class="sourceLineNo">038</span><a name="line.38"></a>
+<span class="sourceLineNo">039</span>import org.opends.server.protocols.asn1.ASN1;<a name="line.39"></a>
+<span class="sourceLineNo">040</span>import org.opends.server.protocols.asn1.ASN1Reader;<a name="line.40"></a>
+<span class="sourceLineNo">041</span>import org.opends.server.protocols.asn1.ASN1Writer;<a name="line.41"></a>
+<span class="sourceLineNo">042</span>import org.opends.server.replication.common.AssuredMode;<a name="line.42"></a>
+<span class="sourceLineNo">043</span>import org.opends.server.replication.common.ServerStatus;<a name="line.43"></a>
+<span class="sourceLineNo">044</span>import org.opends.server.types.ByteSequenceReader;<a name="line.44"></a>
+<span class="sourceLineNo">045</span>import org.opends.server.types.ByteString;<a name="line.45"></a>
+<span class="sourceLineNo">046</span>import org.opends.server.types.ByteStringBuilder;<a name="line.46"></a>
+<span class="sourceLineNo">047</span><a name="line.47"></a>
+<span class="sourceLineNo">048</span>/**<a name="line.48"></a>
+<span class="sourceLineNo">049</span> * This message is used by DS to confirm a RS he wants to connect to him (open<a name="line.49"></a>
+<span class="sourceLineNo">050</span> * a session):<a name="line.50"></a>
+<span class="sourceLineNo">051</span> * Handshake sequence between DS and RS is like this:<a name="line.51"></a>
+<span class="sourceLineNo">052</span> * DS --- ServerStartMsg ---&gt; RS<a name="line.52"></a>
+<span class="sourceLineNo">053</span> * DS &lt;--- ReplServerStartMsg --- RS<a name="line.53"></a>
+<span class="sourceLineNo">054</span> * DS --- StartSessionMsg ---&gt; RS<a name="line.54"></a>
+<span class="sourceLineNo">055</span> * DS &lt;--- TopologyMsg --- RS<a name="line.55"></a>
+<span class="sourceLineNo">056</span> *<a name="line.56"></a>
+<span class="sourceLineNo">057</span> * This message contains:<a name="line.57"></a>
+<span class="sourceLineNo">058</span> * - status: the status we are entering the topology with<a name="line.58"></a>
+<span class="sourceLineNo">059</span> * - referrals URLs: the referrals URLs we allow peer DSs to use to refer to<a name="line.59"></a>
+<span class="sourceLineNo">060</span> * our domain when needed.<a name="line.60"></a>
+<span class="sourceLineNo">061</span> */<a name="line.61"></a>
+<span class="sourceLineNo">062</span>public class StartSessionMsg extends ReplicationMsg<a name="line.62"></a>
+<span class="sourceLineNo">063</span>{<a name="line.63"></a>
+<span class="sourceLineNo">064</span>  // The list of referrals URLs to the sending DS<a name="line.64"></a>
+<span class="sourceLineNo">065</span>  private List&lt;String&gt; referralsURLs = new ArrayList&lt;String&gt;();<a name="line.65"></a>
+<span class="sourceLineNo">066</span>  // The initial status the DS starts with<a name="line.66"></a>
+<span class="sourceLineNo">067</span>  private ServerStatus status = ServerStatus.INVALID_STATUS;<a name="line.67"></a>
+<span class="sourceLineNo">068</span>  // Assured replication enabled on DS or not<a name="line.68"></a>
+<span class="sourceLineNo">069</span>  private boolean assuredFlag = false;<a name="line.69"></a>
+<span class="sourceLineNo">070</span>  // DS assured mode (relevant if assured replication enabled)<a name="line.70"></a>
+<span class="sourceLineNo">071</span>  private AssuredMode assuredMode = AssuredMode.SAFE_DATA_MODE;<a name="line.71"></a>
+<span class="sourceLineNo">072</span>  // DS safe data level (relevant if assured mode is safe data)<a name="line.72"></a>
+<span class="sourceLineNo">073</span>  private byte safeDataLevel = (byte) 1;<a name="line.73"></a>
+<span class="sourceLineNo">074</span><a name="line.74"></a>
+<span class="sourceLineNo">075</span>  private Set&lt;String&gt; eclIncludes = new HashSet&lt;String&gt;();<a name="line.75"></a>
+<span class="sourceLineNo">076</span><a name="line.76"></a>
+<span class="sourceLineNo">077</span>  private Set&lt;String&gt; eclIncludesForDeletes = new HashSet&lt;String&gt;();<a name="line.77"></a>
+<span class="sourceLineNo">078</span><a name="line.78"></a>
+<span class="sourceLineNo">079</span>  /**<a name="line.79"></a>
+<span class="sourceLineNo">080</span>   * Creates a new StartSessionMsg message from its encoded form.<a name="line.80"></a>
+<span class="sourceLineNo">081</span>   *<a name="line.81"></a>
+<span class="sourceLineNo">082</span>   * @param in The byte array containing the encoded form of the message.<a name="line.82"></a>
+<span class="sourceLineNo">083</span>   * @param version The protocol version to use to decode the msg.<a name="line.83"></a>
+<span class="sourceLineNo">084</span>   * @throws java.util.zip.DataFormatException If the byte array does not<a name="line.84"></a>
+<span class="sourceLineNo">085</span>   * contain a valid encoded form of the message.<a name="line.85"></a>
+<span class="sourceLineNo">086</span>   */<a name="line.86"></a>
+<span class="sourceLineNo">087</span>  public StartSessionMsg(byte[] in, short version) throws DataFormatException<a name="line.87"></a>
+<span class="sourceLineNo">088</span>  {<a name="line.88"></a>
+<span class="sourceLineNo">089</span>    if (version &lt;= ProtocolVersion.REPLICATION_PROTOCOL_V3)<a name="line.89"></a>
+<span class="sourceLineNo">090</span>    {<a name="line.90"></a>
+<span class="sourceLineNo">091</span>      decode_V23(in);<a name="line.91"></a>
+<span class="sourceLineNo">092</span>    }<a name="line.92"></a>
+<span class="sourceLineNo">093</span>    else<a name="line.93"></a>
+<span class="sourceLineNo">094</span>    {<a name="line.94"></a>
+<span class="sourceLineNo">095</span>      decode_V45(in, version);<a name="line.95"></a>
+<span class="sourceLineNo">096</span>    }<a name="line.96"></a>
+<span class="sourceLineNo">097</span>  }<a name="line.97"></a>
+<span class="sourceLineNo">098</span><a name="line.98"></a>
+<span class="sourceLineNo">099</span>  /**<a name="line.99"></a>
+<span class="sourceLineNo">100</span>   * Creates a new  message with the given required parameters.<a name="line.100"></a>
+<span class="sourceLineNo">101</span>   * @param status Status we are starting with<a name="line.101"></a>
+<span class="sourceLineNo">102</span>   * @param referralsURLs Referrals URLs to be used by peer DSs<a name="line.102"></a>
+<span class="sourceLineNo">103</span>   * @param assuredFlag If assured mode is enabled or not<a name="line.103"></a>
+<span class="sourceLineNo">104</span>   * @param assuredMode Assured type<a name="line.104"></a>
+<span class="sourceLineNo">105</span>   * @param safeDataLevel Assured mode safe data level<a name="line.105"></a>
+<span class="sourceLineNo">106</span>   */<a name="line.106"></a>
+<span class="sourceLineNo">107</span>  public StartSessionMsg(ServerStatus status, List&lt;String&gt; referralsURLs,<a name="line.107"></a>
+<span class="sourceLineNo">108</span>    boolean assuredFlag, AssuredMode assuredMode, byte safeDataLevel)<a name="line.108"></a>
+<span class="sourceLineNo">109</span>  {<a name="line.109"></a>
+<span class="sourceLineNo">110</span>    this.referralsURLs = referralsURLs;<a name="line.110"></a>
+<span class="sourceLineNo">111</span>    this.status = status;<a name="line.111"></a>
+<span class="sourceLineNo">112</span>    this.assuredFlag = assuredFlag;<a name="line.112"></a>
+<span class="sourceLineNo">113</span>    this.assuredMode = assuredMode;<a name="line.113"></a>
+<span class="sourceLineNo">114</span>    this.safeDataLevel = safeDataLevel;<a name="line.114"></a>
+<span class="sourceLineNo">115</span>  }<a name="line.115"></a>
+<span class="sourceLineNo">116</span><a name="line.116"></a>
+<span class="sourceLineNo">117</span>  /**<a name="line.117"></a>
+<span class="sourceLineNo">118</span>   * Creates a new message with the given required parameters.<a name="line.118"></a>
+<span class="sourceLineNo">119</span>   * Assured mode is false.<a name="line.119"></a>
+<span class="sourceLineNo">120</span>   * @param status Status we are starting with<a name="line.120"></a>
+<span class="sourceLineNo">121</span>   * @param referralsURLs Referrals URLs to be used by peer DSs<a name="line.121"></a>
+<span class="sourceLineNo">122</span>   */<a name="line.122"></a>
+<span class="sourceLineNo">123</span>  public StartSessionMsg(ServerStatus status, List&lt;String&gt; referralsURLs)<a name="line.123"></a>
+<span class="sourceLineNo">124</span>  {<a name="line.124"></a>
+<span class="sourceLineNo">125</span>    this.referralsURLs = referralsURLs;<a name="line.125"></a>
+<span class="sourceLineNo">126</span>    this.status = status;<a name="line.126"></a>
+<span class="sourceLineNo">127</span>    this.assuredFlag = false;<a name="line.127"></a>
+<span class="sourceLineNo">128</span>  }<a name="line.128"></a>
+<span class="sourceLineNo">129</span><a name="line.129"></a>
+<span class="sourceLineNo">130</span>  // ============<a name="line.130"></a>
+<span class="sourceLineNo">131</span>  // Msg encoding<a name="line.131"></a>
+<span class="sourceLineNo">132</span>  // ============<a name="line.132"></a>
+<span class="sourceLineNo">133</span><a name="line.133"></a>
+<span class="sourceLineNo">134</span>  /**<a name="line.134"></a>
+<span class="sourceLineNo">135</span>   * {@inheritDoc}<a name="line.135"></a>
+<span class="sourceLineNo">136</span>   */<a name="line.136"></a>
+<span class="sourceLineNo">137</span>  @Override<a name="line.137"></a>
+<span class="sourceLineNo">138</span>  public byte[] getBytes(short reqProtocolVersion)<a name="line.138"></a>
+<span class="sourceLineNo">139</span>    throws UnsupportedEncodingException<a name="line.139"></a>
+<span class="sourceLineNo">140</span>  {<a name="line.140"></a>
+<span class="sourceLineNo">141</span>    if (reqProtocolVersion &lt;= ProtocolVersion.REPLICATION_PROTOCOL_V3)<a name="line.141"></a>
+<span class="sourceLineNo">142</span>    {<a name="line.142"></a>
+<span class="sourceLineNo">143</span>      return getBytes_V23();<a name="line.143"></a>
+<span class="sourceLineNo">144</span>    }<a name="line.144"></a>
+<span class="sourceLineNo">145</span>    else<a name="line.145"></a>
+<span class="sourceLineNo">146</span>    {<a name="line.146"></a>
+<span class="sourceLineNo">147</span>      return getBytes_V45(reqProtocolVersion);<a name="line.147"></a>
+<span class="sourceLineNo">148</span>    }<a name="line.148"></a>
+<span class="sourceLineNo">149</span>  }<a name="line.149"></a>
+<span class="sourceLineNo">150</span><a name="line.150"></a>
+<span class="sourceLineNo">151</span>  private byte[] getBytes_V45(short version)<a name="line.151"></a>
+<span class="sourceLineNo">152</span>  {<a name="line.152"></a>
+<span class="sourceLineNo">153</span>    try<a name="line.153"></a>
+<span class="sourceLineNo">154</span>    {<a name="line.154"></a>
+<span class="sourceLineNo">155</span>      ByteStringBuilder byteBuilder = new ByteStringBuilder();<a name="line.155"></a>
+<span class="sourceLineNo">156</span>      ASN1Writer writer = ASN1.getWriter(byteBuilder);<a name="line.156"></a>
+<span class="sourceLineNo">157</span><a name="line.157"></a>
+<span class="sourceLineNo">158</span>      byteBuilder.append(MSG_TYPE_START_SESSION);<a name="line.158"></a>
+<span class="sourceLineNo">159</span>      byteBuilder.append(status.getValue());<a name="line.159"></a>
+<span class="sourceLineNo">160</span>      byteBuilder.append(assuredFlag ? (byte) 1 : (byte) 0);<a name="line.160"></a>
+<span class="sourceLineNo">161</span>      byteBuilder.append(assuredMode.getValue());<a name="line.161"></a>
+<span class="sourceLineNo">162</span>      byteBuilder.append(safeDataLevel);<a name="line.162"></a>
+<span class="sourceLineNo">163</span><a name="line.163"></a>
+<span class="sourceLineNo">164</span>      writer.writeStartSequence();<a name="line.164"></a>
+<span class="sourceLineNo">165</span>      for (String url : referralsURLs)<a name="line.165"></a>
+<span class="sourceLineNo">166</span>        writer.writeOctetString(url);<a name="line.166"></a>
+<span class="sourceLineNo">167</span>      writer.writeEndSequence();<a name="line.167"></a>
+<span class="sourceLineNo">168</span><a name="line.168"></a>
+<span class="sourceLineNo">169</span>      writer.writeStartSequence();<a name="line.169"></a>
+<span class="sourceLineNo">170</span>      for (String attrDef : eclIncludes)<a name="line.170"></a>
+<span class="sourceLineNo">171</span>      {<a name="line.171"></a>
+<span class="sourceLineNo">172</span>        writer.writeOctetString(attrDef);<a name="line.172"></a>
+<span class="sourceLineNo">173</span>      }<a name="line.173"></a>
+<span class="sourceLineNo">174</span>      writer.writeEndSequence();<a name="line.174"></a>
+<span class="sourceLineNo">175</span><a name="line.175"></a>
+<span class="sourceLineNo">176</span>      if (version &gt;= ProtocolVersion.REPLICATION_PROTOCOL_V5)<a name="line.176"></a>
+<span class="sourceLineNo">177</span>      {<a name="line.177"></a>
+<span class="sourceLineNo">178</span>        writer.writeStartSequence();<a name="line.178"></a>
+<span class="sourceLineNo">179</span>        for (String attrDef : eclIncludesForDeletes)<a name="line.179"></a>
+<span class="sourceLineNo">180</span>        {<a name="line.180"></a>
+<span class="sourceLineNo">181</span>          writer.writeOctetString(attrDef);<a name="line.181"></a>
+<span class="sourceLineNo">182</span>        }<a name="line.182"></a>
+<span class="sourceLineNo">183</span>        writer.writeEndSequence();<a name="line.183"></a>
+<span class="sourceLineNo">184</span>      }<a name="line.184"></a>
+<span class="sourceLineNo">185</span><a name="line.185"></a>
+<span class="sourceLineNo">186</span>      return byteBuilder.toByteArray();<a name="line.186"></a>
+<span class="sourceLineNo">187</span>    }<a name="line.187"></a>
+<span class="sourceLineNo">188</span>    catch (Exception e)<a name="line.188"></a>
+<span class="sourceLineNo">189</span>    {<a name="line.189"></a>
+<span class="sourceLineNo">190</span>      throw new RuntimeException(e);<a name="line.190"></a>
+<span class="sourceLineNo">191</span>    }<a name="line.191"></a>
+<span class="sourceLineNo">192</span>  }<a name="line.192"></a>
+<span class="sourceLineNo">193</span><a name="line.193"></a>
+<span class="sourceLineNo">194</span>  private byte[] getBytes_V23()<a name="line.194"></a>
+<span class="sourceLineNo">195</span>  {<a name="line.195"></a>
+<span class="sourceLineNo">196</span>    /*<a name="line.196"></a>
+<span class="sourceLineNo">197</span>     * The message is stored in the form:<a name="line.197"></a>
+<span class="sourceLineNo">198</span>     * &lt;message type&gt;&lt;status&gt;&lt;assured flag&gt;&lt;assured mode&gt;&lt;safe data level&gt;<a name="line.198"></a>
+<span class="sourceLineNo">199</span>     * &lt;list of referrals urls&gt;<a name="line.199"></a>
+<span class="sourceLineNo">200</span>     * (each referral url terminates with 0)<a name="line.200"></a>
+<span class="sourceLineNo">201</span>     */<a name="line.201"></a>
+<span class="sourceLineNo">202</span><a name="line.202"></a>
+<span class="sourceLineNo">203</span>    try<a name="line.203"></a>
+<span class="sourceLineNo">204</span>    {<a name="line.204"></a>
+<span class="sourceLineNo">205</span>      ByteArrayOutputStream oStream = new ByteArrayOutputStream();<a name="line.205"></a>
+<span class="sourceLineNo">206</span><a name="line.206"></a>
+<span class="sourceLineNo">207</span>      /* Put the message type */<a name="line.207"></a>
+<span class="sourceLineNo">208</span>      oStream.write(MSG_TYPE_START_SESSION);<a name="line.208"></a>
+<span class="sourceLineNo">209</span><a name="line.209"></a>
+<span class="sourceLineNo">210</span>      // Put the status<a name="line.210"></a>
+<span class="sourceLineNo">211</span>      oStream.write(status.getValue());<a name="line.211"></a>
+<span class="sourceLineNo">212</span><a name="line.212"></a>
+<span class="sourceLineNo">213</span>      // Put the assured flag<a name="line.213"></a>
+<span class="sourceLineNo">214</span>      oStream.write(assuredFlag ? (byte) 1 : (byte) 0);<a name="line.214"></a>
+<span class="sourceLineNo">215</span><a name="line.215"></a>
+<span class="sourceLineNo">216</span>      // Put assured mode<a name="line.216"></a>
+<span class="sourceLineNo">217</span>      oStream.write(assuredMode.getValue());<a name="line.217"></a>
+<span class="sourceLineNo">218</span><a name="line.218"></a>
+<span class="sourceLineNo">219</span>      // Put safe data level<a name="line.219"></a>
+<span class="sourceLineNo">220</span>      oStream.write(safeDataLevel);<a name="line.220"></a>
+<span class="sourceLineNo">221</span><a name="line.221"></a>
+<span class="sourceLineNo">222</span>      // Put the referrals URLs<a name="line.222"></a>
+<span class="sourceLineNo">223</span>      if (referralsURLs.size() &gt;= 1)<a name="line.223"></a>
+<span class="sourceLineNo">224</span>      {<a name="line.224"></a>
+<span class="sourceLineNo">225</span>        for (String url : referralsURLs)<a name="line.225"></a>
+<span class="sourceLineNo">226</span>        {<a name="line.226"></a>
+<span class="sourceLineNo">227</span>          byte[] byteArrayURL = url.getBytes("UTF-8");<a name="line.227"></a>
+<span class="sourceLineNo">228</span>          oStream.write(byteArrayURL);<a name="line.228"></a>
+<span class="sourceLineNo">229</span>          oStream.write(0);<a name="line.229"></a>
+<span class="sourceLineNo">230</span>        }<a name="line.230"></a>
+<span class="sourceLineNo">231</span>      }<a name="line.231"></a>
+<span class="sourceLineNo">232</span>      return oStream.toByteArray();<a name="line.232"></a>
+<span class="sourceLineNo">233</span>    } catch (IOException e)<a name="line.233"></a>
+<span class="sourceLineNo">234</span>    {<a name="line.234"></a>
+<span class="sourceLineNo">235</span>      // never happens<a name="line.235"></a>
+<span class="sourceLineNo">236</span>      return null;<a name="line.236"></a>
+<span class="sourceLineNo">237</span>    }<a name="line.237"></a>
+<span class="sourceLineNo">238</span>  }<a name="line.238"></a>
+<span class="sourceLineNo">239</span><a name="line.239"></a>
+<span class="sourceLineNo">240</span>  // ============<a name="line.240"></a>
+<span class="sourceLineNo">241</span>  // Msg decoding<a name="line.241"></a>
+<span class="sourceLineNo">242</span>  // ============<a name="line.242"></a>
+<span class="sourceLineNo">243</span><a name="line.243"></a>
+<span class="sourceLineNo">244</span>  private void decode_V45(byte[] in, short version)<a name="line.244"></a>
+<span class="sourceLineNo">245</span>  throws DataFormatException<a name="line.245"></a>
+<span class="sourceLineNo">246</span>  {<a name="line.246"></a>
+<span class="sourceLineNo">247</span>    ByteSequenceReader reader = ByteString.wrap(in).asReader();<a name="line.247"></a>
+<span class="sourceLineNo">248</span>    try<a name="line.248"></a>
+<span class="sourceLineNo">249</span>    {<a name="line.249"></a>
+<span class="sourceLineNo">250</span>      if (reader.get() != MSG_TYPE_START_SESSION)<a name="line.250"></a>
+<span class="sourceLineNo">251</span>        throw new DataFormatException("input is not a valid " +<a name="line.251"></a>
+<span class="sourceLineNo">252</span>            this.getClass().getCanonicalName());<a name="line.252"></a>
+<span class="sourceLineNo">253</span><a name="line.253"></a>
+<span class="sourceLineNo">254</span>      /*<a name="line.254"></a>
+<span class="sourceLineNo">255</span>      status = ServerStatus.valueOf(asn1Reader.readOctetString().byteAt(0));<a name="line.255"></a>
+<span class="sourceLineNo">256</span>      assuredFlag = (asn1Reader.readOctetString().byteAt(0) == 1);<a name="line.256"></a>
+<span class="sourceLineNo">257</span>      assuredMode=AssuredMode.valueOf((asn1Reader.readOctetString().byteAt(0)));<a name="line.257"></a>
+<span class="sourceLineNo">258</span>      safeDataLevel = asn1Reader.readOctetString().byteAt(0);<a name="line.258"></a>
+<span class="sourceLineNo">259</span>      */<a name="line.259"></a>
+<span class="sourceLineNo">260</span>      status = ServerStatus.valueOf(reader.get());<a name="line.260"></a>
+<span class="sourceLineNo">261</span>      assuredFlag = (reader.get() == 1);<a name="line.261"></a>
+<span class="sourceLineNo">262</span>      assuredMode = AssuredMode.valueOf(reader.get());<a name="line.262"></a>
+<span class="sourceLineNo">263</span>      safeDataLevel = reader.get();<a name="line.263"></a>
+<span class="sourceLineNo">264</span><a name="line.264"></a>
+<span class="sourceLineNo">265</span>      ASN1Reader asn1Reader = ASN1.getReader(reader);<a name="line.265"></a>
+<span class="sourceLineNo">266</span><a name="line.266"></a>
+<span class="sourceLineNo">267</span>      asn1Reader.readStartSequence();<a name="line.267"></a>
+<span class="sourceLineNo">268</span>      while(asn1Reader.hasNextElement())<a name="line.268"></a>
+<span class="sourceLineNo">269</span>      {<a name="line.269"></a>
+<span class="sourceLineNo">270</span>        String s = asn1Reader.readOctetStringAsString();<a name="line.270"></a>
+<span class="sourceLineNo">271</span>        this.referralsURLs.add(s);<a name="line.271"></a>
+<span class="sourceLineNo">272</span>      }<a name="line.272"></a>
+<span class="sourceLineNo">273</span>      asn1Reader.readEndSequence();<a name="line.273"></a>
+<span class="sourceLineNo">274</span><a name="line.274"></a>
+<span class="sourceLineNo">275</span>      asn1Reader.readStartSequence();<a name="line.275"></a>
+<span class="sourceLineNo">276</span>      while(asn1Reader.hasNextElement())<a name="line.276"></a>
+<span class="sourceLineNo">277</span>      {<a name="line.277"></a>
+<span class="sourceLineNo">278</span>        String s = asn1Reader.readOctetStringAsString();<a name="line.278"></a>
+<span class="sourceLineNo">279</span>        this.eclIncludes.add(s);<a name="line.279"></a>
+<span class="sourceLineNo">280</span>      }<a name="line.280"></a>
+<span class="sourceLineNo">281</span>      asn1Reader.readEndSequence();<a name="line.281"></a>
+<span class="sourceLineNo">282</span><a name="line.282"></a>
+<span class="sourceLineNo">283</span>      if (version &gt;= ProtocolVersion.REPLICATION_PROTOCOL_V5)<a name="line.283"></a>
+<span class="sourceLineNo">284</span>      {<a name="line.284"></a>
+<span class="sourceLineNo">285</span>        asn1Reader.readStartSequence();<a name="line.285"></a>
+<span class="sourceLineNo">286</span>        while (asn1Reader.hasNextElement())<a name="line.286"></a>
+<span class="sourceLineNo">287</span>        {<a name="line.287"></a>
+<span class="sourceLineNo">288</span>          String s = asn1Reader.readOctetStringAsString();<a name="line.288"></a>
+<span class="sourceLineNo">289</span>          this.eclIncludesForDeletes.add(s);<a name="line.289"></a>
+<span class="sourceLineNo">290</span>        }<a name="line.290"></a>
+<span class="sourceLineNo">291</span>        asn1Reader.readEndSequence();<a name="line.291"></a>
+<span class="sourceLineNo">292</span>      }<a name="line.292"></a>
+<span class="sourceLineNo">293</span>      else<a name="line.293"></a>
+<span class="sourceLineNo">294</span>      {<a name="line.294"></a>
+<span class="sourceLineNo">295</span>        // Default to using the same set of attributes for deletes.<a name="line.295"></a>
+<span class="sourceLineNo">296</span>        this.eclIncludesForDeletes.addAll(eclIncludes);<a name="line.296"></a>
+<span class="sourceLineNo">297</span>      }<a name="line.297"></a>
+<span class="sourceLineNo">298</span>    }<a name="line.298"></a>
+<span class="sourceLineNo">299</span>    catch (Exception e)<a name="line.299"></a>
+<span class="sourceLineNo">300</span>    {<a name="line.300"></a>
+<span class="sourceLineNo">301</span>      throw new RuntimeException(e);<a name="line.301"></a>
+<span class="sourceLineNo">302</span>    }<a name="line.302"></a>
+<span class="sourceLineNo">303</span>  }<a name="line.303"></a>
+<span class="sourceLineNo">304</span><a name="line.304"></a>
+<span class="sourceLineNo">305</span>  private void decode_V23(byte[] in)<a name="line.305"></a>
+<span class="sourceLineNo">306</span>  throws DataFormatException<a name="line.306"></a>
+<span class="sourceLineNo">307</span>  {<a name="line.307"></a>
+<span class="sourceLineNo">308</span>    /*<a name="line.308"></a>
+<span class="sourceLineNo">309</span>     * The message is stored in the form:<a name="line.309"></a>
+<span class="sourceLineNo">310</span>     * &lt;message type&gt;&lt;status&gt;&lt;assured flag&gt;&lt;assured mode&gt;&lt;safe data level&gt;<a name="line.310"></a>
+<span class="sourceLineNo">311</span>     * &lt;list of referrals urls&gt;<a name="line.311"></a>
+<span class="sourceLineNo">312</span>     * (each referral url terminates with 0)<a name="line.312"></a>
+<span class="sourceLineNo">313</span>     */<a name="line.313"></a>
+<span class="sourceLineNo">314</span><a name="line.314"></a>
+<span class="sourceLineNo">315</span>    try<a name="line.315"></a>
+<span class="sourceLineNo">316</span>    {<a name="line.316"></a>
+<span class="sourceLineNo">317</span>      /* first byte is the type */<a name="line.317"></a>
+<span class="sourceLineNo">318</span>      if (in.length &lt; 1 || in[0] != MSG_TYPE_START_SESSION)<a name="line.318"></a>
+<span class="sourceLineNo">319</span>      {<a name="line.319"></a>
+<span class="sourceLineNo">320</span>        throw new DataFormatException(<a name="line.320"></a>
+<span class="sourceLineNo">321</span>          "Input is not a valid " + this.getClass().getCanonicalName());<a name="line.321"></a>
+<span class="sourceLineNo">322</span>      }<a name="line.322"></a>
+<span class="sourceLineNo">323</span><a name="line.323"></a>
+<span class="sourceLineNo">324</span>      /* Read the status */<a name="line.324"></a>
+<span class="sourceLineNo">325</span>      status = ServerStatus.valueOf(in[1]);<a name="line.325"></a>
+<span class="sourceLineNo">326</span><a name="line.326"></a>
+<span class="sourceLineNo">327</span>      /* Read the assured flag */<a name="line.327"></a>
+<span class="sourceLineNo">328</span>      assuredFlag = in[2] == 1;<a name="line.328"></a>
+<span class="sourceLineNo">329</span><a name="line.329"></a>
+<span class="sourceLineNo">330</span>      /* Read the assured mode */<a name="line.330"></a>
+<span class="sourceLineNo">331</span>      assuredMode = AssuredMode.valueOf(in[3]);<a name="line.331"></a>
+<span class="sourceLineNo">332</span><a name="line.332"></a>
+<span class="sourceLineNo">333</span>      /* Read the safe data level */<a name="line.333"></a>
+<span class="sourceLineNo">334</span>      safeDataLevel = in[4];<a name="line.334"></a>
+<span class="sourceLineNo">335</span><a name="line.335"></a>
+<span class="sourceLineNo">336</span>      /* Read the referrals URLs */<a name="line.336"></a>
+<span class="sourceLineNo">337</span>      int pos = 5;<a name="line.337"></a>
+<span class="sourceLineNo">338</span>      referralsURLs = new ArrayList&lt;String&gt;();<a name="line.338"></a>
+<span class="sourceLineNo">339</span>      while (pos &lt; in.length)<a name="line.339"></a>
+<span class="sourceLineNo">340</span>      {<a name="line.340"></a>
+<span class="sourceLineNo">341</span>        /*<a name="line.341"></a>
+<span class="sourceLineNo">342</span>         * Read the next URL<a name="line.342"></a>
+<span class="sourceLineNo">343</span>         * first calculate the length then construct the string<a name="line.343"></a>
+<span class="sourceLineNo">344</span>         */<a name="line.344"></a>
+<span class="sourceLineNo">345</span>        int length = getNextLength(in, pos);<a name="line.345"></a>
+<span class="sourceLineNo">346</span>        referralsURLs.add(new String(in, pos, length, "UTF-8"));<a name="line.346"></a>
+<span class="sourceLineNo">347</span>        pos += length + 1;<a name="line.347"></a>
+<span class="sourceLineNo">348</span>      }<a name="line.348"></a>
+<span class="sourceLineNo">349</span>    } catch (UnsupportedEncodingException e)<a name="line.349"></a>
+<span class="sourceLineNo">350</span>    {<a name="line.350"></a>
+<span class="sourceLineNo">351</span>      throw new DataFormatException("UTF-8 is not supported by this jvm.");<a name="line.351"></a>
+<span class="sourceLineNo">352</span>    } catch (IllegalArgumentException e)<a name="line.352"></a>
+<span class="sourceLineNo">353</span>    {<a name="line.353"></a>
+<span class="sourceLineNo">354</span>      throw new DataFormatException(e.getMessage());<a name="line.354"></a>
+<span class="sourceLineNo">355</span>    }<a name="line.355"></a>
+<span class="sourceLineNo">356</span>  }<a name="line.356"></a>
+<span class="sourceLineNo">357</span><a name="line.357"></a>
+<span class="sourceLineNo">358</span>  /**<a name="line.358"></a>
+<span class="sourceLineNo">359</span>   * Get the list of referrals URLs.<a name="line.359"></a>
+<span class="sourceLineNo">360</span>   *<a name="line.360"></a>
+<span class="sourceLineNo">361</span>   * @return The list of referrals URLs.<a name="line.361"></a>
+<span class="sourceLineNo">362</span>   */<a name="line.362"></a>
+<span class="sourceLineNo">363</span>  public List&lt;String&gt; getReferralsURLs()<a name="line.363"></a>
+<span class="sourceLineNo">364</span>  {<a name="line.364"></a>
+<span class="sourceLineNo">365</span>    return referralsURLs;<a name="line.365"></a>
+<span class="sourceLineNo">366</span>  }<a name="line.366"></a>
+<span class="sourceLineNo">367</span><a name="line.367"></a>
+<span class="sourceLineNo">368</span>  /**<a name="line.368"></a>
+<span class="sourceLineNo">369</span>   * Get the status from this message.<a name="line.369"></a>
+<span class="sourceLineNo">370</span>   * @return The status.<a name="line.370"></a>
+<span class="sourceLineNo">371</span>   */<a name="line.371"></a>
+<span class="sourceLineNo">372</span>  public ServerStatus getStatus()<a name="line.372"></a>
+<span class="sourceLineNo">373</span>  {<a name="line.373"></a>
+<span class="sourceLineNo">374</span>    return status;<a name="line.374"></a>
+<span class="sourceLineNo">375</span>  }<a name="line.375"></a>
+<span class="sourceLineNo">376</span><a name="line.376"></a>
+<span class="sourceLineNo">377</span>  /**<a name="line.377"></a>
+<span class="sourceLineNo">378</span>   * {@inheritDoc}<a name="line.378"></a>
+<span class="sourceLineNo">379</span>   */<a name="line.379"></a>
+<span class="sourceLineNo">380</span>  @Override<a name="line.380"></a>
+<span class="sourceLineNo">381</span>  public String toString()<a name="line.381"></a>
+<span class="sourceLineNo">382</span>  {<a name="line.382"></a>
+<span class="sourceLineNo">383</span>    String urls = "";<a name="line.383"></a>
+<span class="sourceLineNo">384</span>    for (String s : referralsURLs)<a name="line.384"></a>
+<span class="sourceLineNo">385</span>    {<a name="line.385"></a>
+<span class="sourceLineNo">386</span>      urls += s + " | ";<a name="line.386"></a>
+<span class="sourceLineNo">387</span>    }<a name="line.387"></a>
+<span class="sourceLineNo">388</span>    return ("StartSessionMsg content:\nstatus: " + status +<a name="line.388"></a>
+<span class="sourceLineNo">389</span>      "\nassuredFlag: " + assuredFlag +<a name="line.389"></a>
+<span class="sourceLineNo">390</span>      "\nassuredMode: " + assuredMode +<a name="line.390"></a>
+<span class="sourceLineNo">391</span>      "\nsafeDataLevel: " + safeDataLevel +<a name="line.391"></a>
+<span class="sourceLineNo">392</span>      "\nreferralsURLs: " + urls +<a name="line.392"></a>
+<span class="sourceLineNo">393</span>      "\nEclIncludes " + eclIncludes +<a name="line.393"></a>
+<span class="sourceLineNo">394</span>      "\nEclIncludeForDeletes: " + eclIncludesForDeletes);<a name="line.394"></a>
+<span class="sourceLineNo">395</span>  }<a name="line.395"></a>
+<span class="sourceLineNo">396</span><a name="line.396"></a>
+<span class="sourceLineNo">397</span>  /**<a name="line.397"></a>
+<span class="sourceLineNo">398</span>   * Returns true if assured mode is enabled.<a name="line.398"></a>
+<span class="sourceLineNo">399</span>   * @return true if assured mode is enabled.<a name="line.399"></a>
+<span class="sourceLineNo">400</span>   */<a name="line.400"></a>
+<span class="sourceLineNo">401</span>  public boolean isAssured()<a name="line.401"></a>
+<span class="sourceLineNo">402</span>  {<a name="line.402"></a>
+<span class="sourceLineNo">403</span>    return assuredFlag;<a name="line.403"></a>
+<span class="sourceLineNo">404</span>  }<a name="line.404"></a>
+<span class="sourceLineNo">405</span><a name="line.405"></a>
+<span class="sourceLineNo">406</span>  /**<a name="line.406"></a>
+<span class="sourceLineNo">407</span>   * Get the assured mode.<a name="line.407"></a>
+<span class="sourceLineNo">408</span>   * @return the assured mode.<a name="line.408"></a>
+<span class="sourceLineNo">409</span>   */<a name="line.409"></a>
+<span class="sourceLineNo">410</span>  public AssuredMode getAssuredMode()<a name="line.410"></a>
+<span class="sourceLineNo">411</span>  {<a name="line.411"></a>
+<span class="sourceLineNo">412</span>    return assuredMode;<a name="line.412"></a>
+<span class="sourceLineNo">413</span>  }<a name="line.413"></a>
+<span class="sourceLineNo">414</span><a name="line.414"></a>
+<span class="sourceLineNo">415</span>  /**<a name="line.415"></a>
+<span class="sourceLineNo">416</span>   * Get the safe data level.<a name="line.416"></a>
+<span class="sourceLineNo">417</span>   * @return the safe data level.<a name="line.417"></a>
+<span class="sourceLineNo">418</span>   */<a name="line.418"></a>
+<span class="sourceLineNo">419</span>  public byte getSafeDataLevel()<a name="line.419"></a>
+<span class="sourceLineNo">420</span>  {<a name="line.420"></a>
+<span class="sourceLineNo">421</span>    return safeDataLevel;<a name="line.421"></a>
+<span class="sourceLineNo">422</span>  }<a name="line.422"></a>
+<span class="sourceLineNo">423</span><a name="line.423"></a>
+<span class="sourceLineNo">424</span>  /**<a name="line.424"></a>
+<span class="sourceLineNo">425</span>   * Set the attributes configured on a server to be included in the ECL.<a name="line.425"></a>
+<span class="sourceLineNo">426</span>   *<a name="line.426"></a>
+<span class="sourceLineNo">427</span>   * @param includeAttributes<a name="line.427"></a>
+<span class="sourceLineNo">428</span>   *          attributes to be included with all change records.<a name="line.428"></a>
+<span class="sourceLineNo">429</span>   * @param includeAttributesForDeletes<a name="line.429"></a>
+<span class="sourceLineNo">430</span>   *          additional attributes to be included with delete change records.<a name="line.430"></a>
+<span class="sourceLineNo">431</span>   */<a name="line.431"></a>
+<span class="sourceLineNo">432</span>  public void setEclIncludes(<a name="line.432"></a>
+<span class="sourceLineNo">433</span>      Set&lt;String&gt; includeAttributes,<a name="line.433"></a>
+<span class="sourceLineNo">434</span>      Set&lt;String&gt; includeAttributesForDeletes)<a name="line.434"></a>
+<span class="sourceLineNo">435</span>  {<a name="line.435"></a>
+<span class="sourceLineNo">436</span>    if (includeAttributes != null)<a name="line.436"></a>
+<span class="sourceLineNo">437</span>    {<a name="line.437"></a>
+<span class="sourceLineNo">438</span>      eclIncludes = includeAttributes;<a name="line.438"></a>
+<span class="sourceLineNo">439</span>    }<a name="line.439"></a>
+<span class="sourceLineNo">440</span><a name="line.440"></a>
+<span class="sourceLineNo">441</span>    if (includeAttributesForDeletes != null)<a name="line.441"></a>
+<span class="sourceLineNo">442</span>    {<a name="line.442"></a>
+<span class="sourceLineNo">443</span>      eclIncludesForDeletes = includeAttributesForDeletes;<a name="line.443"></a>
+<span class="sourceLineNo">444</span>    }<a name="line.444"></a>
+<span class="sourceLineNo">445</span>  }<a name="line.445"></a>
+<span class="sourceLineNo">446</span><a name="line.446"></a>
+<span class="sourceLineNo">447</span>  /**<a name="line.447"></a>
+<span class="sourceLineNo">448</span>   * Get the attributes to include in each change for the ECL.<a name="line.448"></a>
+<span class="sourceLineNo">449</span>   *<a name="line.449"></a>
+<span class="sourceLineNo">450</span>   * @return The attributes to include in each change for the ECL.<a name="line.450"></a>
+<span class="sourceLineNo">451</span>   */<a name="line.451"></a>
+<span class="sourceLineNo">452</span>  public Set&lt;String&gt; getEclIncludes()<a name="line.452"></a>
+<span class="sourceLineNo">453</span>  {<a name="line.453"></a>
+<span class="sourceLineNo">454</span>    return eclIncludes;<a name="line.454"></a>
+<span class="sourceLineNo">455</span>  }<a name="line.455"></a>
+<span class="sourceLineNo">456</span><a name="line.456"></a>
+<span class="sourceLineNo">457</span><a name="line.457"></a>
+<span class="sourceLineNo">458</span><a name="line.458"></a>
+<span class="sourceLineNo">459</span>  /**<a name="line.459"></a>
+<span class="sourceLineNo">460</span>   * Get the attributes to include in each delete change for the ECL.<a name="line.460"></a>
+<span class="sourceLineNo">461</span>   *<a name="line.461"></a>
+<span class="sourceLineNo">462</span>   * @return The attributes to include in each delete change for the ECL.<a name="line.462"></a>
+<span class="sourceLineNo">463</span>   */<a name="line.463"></a>
+<span class="sourceLineNo">464</span>  public Set&lt;String&gt; getEclIncludesForDeletes()<a name="line.464"></a>
+<span class="sourceLineNo">465</span>  {<a name="line.465"></a>
+<span class="sourceLineNo">466</span>    return eclIncludesForDeletes;<a name="line.466"></a>
+<span class="sourceLineNo">467</span>  }<a name="line.467"></a>
+<span class="sourceLineNo">468</span><a name="line.468"></a>
+<span class="sourceLineNo">469</span>}<a name="line.469"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

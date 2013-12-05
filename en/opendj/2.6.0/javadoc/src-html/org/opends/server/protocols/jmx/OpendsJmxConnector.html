@@ -1,0 +1,451 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * CDDL HEADER START<a name="line.2"></a>
+<span class="sourceLineNo">003</span> *<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * The contents of this file are subject to the terms of the<a name="line.4"></a>
+<span class="sourceLineNo">005</span> * Common Development and Distribution License, Version 1.0 only<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * (the "License").  You may not use this file except in compliance<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * with the License.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * You can obtain a copy of the license at<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * trunk/opends/resource/legal-notices/OpenDS.LICENSE<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * or https://OpenDS.dev.java.net/OpenDS.LICENSE.<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * See the License for the specific language governing permissions<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * and limitations under the License.<a name="line.13"></a>
+<span class="sourceLineNo">014</span> *<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * When distributing Covered Code, include this CDDL HEADER in each<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * file and include the License file at<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * trunk/opends/resource/legal-notices/OpenDS.LICENSE.  If applicable,<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * add the following below this CDDL HEADER, with the fields enclosed<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * by brackets "[]" replaced with your own identifying information:<a name="line.19"></a>
+<span class="sourceLineNo">020</span> *      Portions Copyright [yyyy] [name of copyright owner]<a name="line.20"></a>
+<span class="sourceLineNo">021</span> *<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * CDDL HEADER END<a name="line.22"></a>
+<span class="sourceLineNo">023</span> *<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *<a name="line.24"></a>
+<span class="sourceLineNo">025</span> *      Copyright 2006-2008 Sun Microsystems, Inc.<a name="line.25"></a>
+<span class="sourceLineNo">026</span> */<a name="line.26"></a>
+<span class="sourceLineNo">027</span><a name="line.27"></a>
+<span class="sourceLineNo">028</span>package org.opends.server.protocols.jmx;<a name="line.28"></a>
+<span class="sourceLineNo">029</span><a name="line.29"></a>
+<span class="sourceLineNo">030</span>import java.io.IOException;<a name="line.30"></a>
+<span class="sourceLineNo">031</span>import java.util.Map;<a name="line.31"></a>
+<span class="sourceLineNo">032</span>import javax.management.ListenerNotFoundException;<a name="line.32"></a>
+<span class="sourceLineNo">033</span>import javax.management.MBeanServerConnection;<a name="line.33"></a>
+<span class="sourceLineNo">034</span>import javax.management.NotificationFilter;<a name="line.34"></a>
+<span class="sourceLineNo">035</span>import javax.management.NotificationListener;<a name="line.35"></a>
+<span class="sourceLineNo">036</span>import javax.management.remote.JMXConnector;<a name="line.36"></a>
+<span class="sourceLineNo">037</span>import javax.management.remote.JMXConnectorFactory;<a name="line.37"></a>
+<span class="sourceLineNo">038</span>import javax.management.remote.JMXServiceURL;<a name="line.38"></a>
+<span class="sourceLineNo">039</span>import javax.security.auth.Subject;<a name="line.39"></a>
+<span class="sourceLineNo">040</span><a name="line.40"></a>
+<span class="sourceLineNo">041</span>/**<a name="line.41"></a>
+<span class="sourceLineNo">042</span> * Wrapper class for the JMX's RMI connector. This class has the exact same<a name="line.42"></a>
+<span class="sourceLineNo">043</span> * functionnalities but maintain inner variables which are used during the<a name="line.43"></a>
+<span class="sourceLineNo">044</span> * connection phase.<a name="line.44"></a>
+<span class="sourceLineNo">045</span> * &lt;p&gt;<a name="line.45"></a>
+<span class="sourceLineNo">046</span> * Note that the javadoc has been copied from the<a name="line.46"></a>
+<span class="sourceLineNo">047</span> * javax.management.remote.JMXConnector interface.<a name="line.47"></a>
+<span class="sourceLineNo">048</span> */<a name="line.48"></a>
+<span class="sourceLineNo">049</span>public class OpendsJmxConnector implements JMXConnector<a name="line.49"></a>
+<span class="sourceLineNo">050</span><a name="line.50"></a>
+<span class="sourceLineNo">051</span>{<a name="line.51"></a>
+<span class="sourceLineNo">052</span><a name="line.52"></a>
+<span class="sourceLineNo">053</span>  /**<a name="line.53"></a>
+<span class="sourceLineNo">054</span>   * the wrapped JMX RMI connector.<a name="line.54"></a>
+<span class="sourceLineNo">055</span>   */<a name="line.55"></a>
+<span class="sourceLineNo">056</span>  private JMXConnector jmxc = null;<a name="line.56"></a>
+<span class="sourceLineNo">057</span><a name="line.57"></a>
+<span class="sourceLineNo">058</span>  /**<a name="line.58"></a>
+<span class="sourceLineNo">059</span>   * the connection environment set at creation.<a name="line.59"></a>
+<span class="sourceLineNo">060</span>   */<a name="line.60"></a>
+<span class="sourceLineNo">061</span>  private Map&lt;String,Object&gt; environment = null;<a name="line.61"></a>
+<span class="sourceLineNo">062</span><a name="line.62"></a>
+<span class="sourceLineNo">063</span>  /**<a name="line.63"></a>
+<span class="sourceLineNo">064</span>   * the JMX Service URL.<a name="line.64"></a>
+<span class="sourceLineNo">065</span>   */<a name="line.65"></a>
+<span class="sourceLineNo">066</span>  private JMXServiceURL serviceURL = null;<a name="line.66"></a>
+<span class="sourceLineNo">067</span><a name="line.67"></a>
+<span class="sourceLineNo">068</span>  /**<a name="line.68"></a>
+<span class="sourceLineNo">069</span>   * the host to connect to.<a name="line.69"></a>
+<span class="sourceLineNo">070</span>   */<a name="line.70"></a>
+<span class="sourceLineNo">071</span>  private String serverHostname = null;<a name="line.71"></a>
+<span class="sourceLineNo">072</span><a name="line.72"></a>
+<span class="sourceLineNo">073</span><a name="line.73"></a>
+<span class="sourceLineNo">074</span><a name="line.74"></a>
+<span class="sourceLineNo">075</span>  /**<a name="line.75"></a>
+<span class="sourceLineNo">076</span>   * Creates a connector client for the connector server at the<a name="line.76"></a>
+<span class="sourceLineNo">077</span>   * given host and port.  The resultant client is not connected until its<a name="line.77"></a>
+<span class="sourceLineNo">078</span>   *  connect method is called.<a name="line.78"></a>
+<span class="sourceLineNo">079</span>   *<a name="line.79"></a>
+<span class="sourceLineNo">080</span>   * @param serverHostname the target server hostname<a name="line.80"></a>
+<span class="sourceLineNo">081</span>   *<a name="line.81"></a>
+<span class="sourceLineNo">082</span>   * @param serverPort the target server port<a name="line.82"></a>
+<span class="sourceLineNo">083</span>   *<a name="line.83"></a>
+<span class="sourceLineNo">084</span>   * @param environment a set of attributes to determine how the<a name="line.84"></a>
+<span class="sourceLineNo">085</span>   * connection is made.  This parameter can be null.  Keys in this<a name="line.85"></a>
+<span class="sourceLineNo">086</span>   * map must be Strings.  The appropriate type of each associated<a name="line.86"></a>
+<span class="sourceLineNo">087</span>   * value depends on the attribute.  The contents of<a name="line.87"></a>
+<span class="sourceLineNo">088</span>   * &lt;code&gt;environment&lt;/code&gt; are not changed by this call.<a name="line.88"></a>
+<span class="sourceLineNo">089</span>   *<a name="line.89"></a>
+<span class="sourceLineNo">090</span>   * @exception IOException if the connector client cannot be made<a name="line.90"></a>
+<span class="sourceLineNo">091</span>   * because of a communication problem.<a name="line.91"></a>
+<span class="sourceLineNo">092</span>   *<a name="line.92"></a>
+<span class="sourceLineNo">093</span>   */<a name="line.93"></a>
+<span class="sourceLineNo">094</span>  public OpendsJmxConnector(String serverHostname, int serverPort,<a name="line.94"></a>
+<span class="sourceLineNo">095</span>      Map&lt;String,Object&gt; environment) throws IOException<a name="line.95"></a>
+<span class="sourceLineNo">096</span>  {<a name="line.96"></a>
+<span class="sourceLineNo">097</span>    serviceURL = new JMXServiceURL(<a name="line.97"></a>
+<span class="sourceLineNo">098</span>        "service:jmx:rmi:///jndi/rmi://" + serverHostname + ":" + serverPort<a name="line.98"></a>
+<span class="sourceLineNo">099</span>            + "/org.opends.server.protocols.jmx.client-unknown");<a name="line.99"></a>
+<span class="sourceLineNo">100</span><a name="line.100"></a>
+<span class="sourceLineNo">101</span>    this.jmxc = JMXConnectorFactory.newJMXConnector(serviceURL, environment);<a name="line.101"></a>
+<span class="sourceLineNo">102</span>    this.serverHostname = serverHostname;<a name="line.102"></a>
+<span class="sourceLineNo">103</span>    this.environment = environment ;<a name="line.103"></a>
+<span class="sourceLineNo">104</span>  }<a name="line.104"></a>
+<span class="sourceLineNo">105</span>//  /**<a name="line.105"></a>
+<span class="sourceLineNo">106</span>//   * Sets this connector's connection environment.<a name="line.106"></a>
+<span class="sourceLineNo">107</span>//   *<a name="line.107"></a>
+<span class="sourceLineNo">108</span>//   * @param environment the new connection env<a name="line.108"></a>
+<span class="sourceLineNo">109</span>//   */<a name="line.109"></a>
+<span class="sourceLineNo">110</span>//  public void setConnectionEnv(Map connectionEnv)<a name="line.110"></a>
+<span class="sourceLineNo">111</span>//  {<a name="line.111"></a>
+<span class="sourceLineNo">112</span>//    this.environment = environment;<a name="line.112"></a>
+<span class="sourceLineNo">113</span>//  }<a name="line.113"></a>
+<span class="sourceLineNo">114</span><a name="line.114"></a>
+<span class="sourceLineNo">115</span>  /**<a name="line.115"></a>
+<span class="sourceLineNo">116</span>   * Returns the connection environment.<a name="line.116"></a>
+<span class="sourceLineNo">117</span>   *<a name="line.117"></a>
+<span class="sourceLineNo">118</span>   * @return Map the connection environment used by new connections<a name="line.118"></a>
+<span class="sourceLineNo">119</span>   */<a name="line.119"></a>
+<span class="sourceLineNo">120</span>  public Map getConnectionEnv()<a name="line.120"></a>
+<span class="sourceLineNo">121</span>  {<a name="line.121"></a>
+<span class="sourceLineNo">122</span>    return environment;<a name="line.122"></a>
+<span class="sourceLineNo">123</span>  }<a name="line.123"></a>
+<span class="sourceLineNo">124</span><a name="line.124"></a>
+<span class="sourceLineNo">125</span>  /**<a name="line.125"></a>
+<span class="sourceLineNo">126</span>   * Establishes the connection to the connector server. This method is<a name="line.126"></a>
+<span class="sourceLineNo">127</span>   * equivalent to connect(null).<a name="line.127"></a>
+<span class="sourceLineNo">128</span>   *<a name="line.128"></a>
+<span class="sourceLineNo">129</span>   * @throws IOException<a name="line.129"></a>
+<span class="sourceLineNo">130</span>   *         if the connection could not be made because of a communication<a name="line.130"></a>
+<span class="sourceLineNo">131</span>   *         problem.<a name="line.131"></a>
+<span class="sourceLineNo">132</span>   * @throws SecurityException<a name="line.132"></a>
+<span class="sourceLineNo">133</span>   *         if the connection could not be made for security reasons.<a name="line.133"></a>
+<span class="sourceLineNo">134</span>   */<a name="line.134"></a>
+<span class="sourceLineNo">135</span>  public void connect() throws IOException, SecurityException<a name="line.135"></a>
+<span class="sourceLineNo">136</span>  {<a name="line.136"></a>
+<span class="sourceLineNo">137</span>    this.connect(null);<a name="line.137"></a>
+<span class="sourceLineNo">138</span>  }<a name="line.138"></a>
+<span class="sourceLineNo">139</span><a name="line.139"></a>
+<span class="sourceLineNo">140</span> /**<a name="line.140"></a>
+<span class="sourceLineNo">141</span>   * Establishes the connection to the connector server. If connect has<a name="line.141"></a>
+<span class="sourceLineNo">142</span>   * already been called successfully on this object, calling it again has<a name="line.142"></a>
+<span class="sourceLineNo">143</span>   * no effect. If, however, close() was called after connect, the new<a name="line.143"></a>
+<span class="sourceLineNo">144</span>   * connect will throw an IOException. Otherwise, either connect has never<a name="line.144"></a>
+<span class="sourceLineNo">145</span>   * been called on this object, or it has been called but produced an<a name="line.145"></a>
+<span class="sourceLineNo">146</span>   * exception. Then calling connect will attempt to establish a connection<a name="line.146"></a>
+<span class="sourceLineNo">147</span>   * to the connector server.<a name="line.147"></a>
+<span class="sourceLineNo">148</span>   *<a name="line.148"></a>
+<span class="sourceLineNo">149</span>   * @param env<a name="line.149"></a>
+<span class="sourceLineNo">150</span>   *        the properties of the connection. Properties in this map<a name="line.150"></a>
+<span class="sourceLineNo">151</span>   *        override properties in the map specified when the JMXConnector<a name="line.151"></a>
+<span class="sourceLineNo">152</span>   *        was created, if any. This parameter can be null, which is<a name="line.152"></a>
+<span class="sourceLineNo">153</span>   *        equivalent to an empty map.<a name="line.153"></a>
+<span class="sourceLineNo">154</span>   * @throws IOException<a name="line.154"></a>
+<span class="sourceLineNo">155</span>   *         if the connection could not be made because of a communication<a name="line.155"></a>
+<span class="sourceLineNo">156</span>   *         problem.<a name="line.156"></a>
+<span class="sourceLineNo">157</span>   * @throws SecurityException -<a name="line.157"></a>
+<span class="sourceLineNo">158</span>   *         if the connection could not be made for security reasons.<a name="line.158"></a>
+<span class="sourceLineNo">159</span>   */<a name="line.159"></a>
+<span class="sourceLineNo">160</span>  public void connect(Map&lt;String,?&gt; env) throws IOException, SecurityException<a name="line.160"></a>
+<span class="sourceLineNo">161</span>  {<a name="line.161"></a>
+<span class="sourceLineNo">162</span>    // set the real target hostname<a name="line.162"></a>
+<span class="sourceLineNo">163</span>    DirectoryRMIClientSocketFactory.setServerHostname(serverHostname);<a name="line.163"></a>
+<span class="sourceLineNo">164</span><a name="line.164"></a>
+<span class="sourceLineNo">165</span>    // configure the thread-local connection environment<a name="line.165"></a>
+<span class="sourceLineNo">166</span>    if (env != null)<a name="line.166"></a>
+<span class="sourceLineNo">167</span>    {<a name="line.167"></a>
+<span class="sourceLineNo">168</span>      // encode credentials if necessary<a name="line.168"></a>
+<span class="sourceLineNo">169</span>      updateCredentials(env);<a name="line.169"></a>
+<span class="sourceLineNo">170</span>    }<a name="line.170"></a>
+<span class="sourceLineNo">171</span>    DirectoryRMIClientSocketFactory.setConnectionEnv(environment);<a name="line.171"></a>
+<span class="sourceLineNo">172</span><a name="line.172"></a>
+<span class="sourceLineNo">173</span><a name="line.173"></a>
+<span class="sourceLineNo">174</span>    jmxc.connect(env);<a name="line.174"></a>
+<span class="sourceLineNo">175</span>  }<a name="line.175"></a>
+<span class="sourceLineNo">176</span><a name="line.176"></a>
+<span class="sourceLineNo">177</span>  /**<a name="line.177"></a>
+<span class="sourceLineNo">178</span>   * Returns an MBeanServerConnection object representing a remote MBean<a name="line.178"></a>
+<span class="sourceLineNo">179</span>   * server. For a given JMXConnector, two successful calls to this method<a name="line.179"></a>
+<span class="sourceLineNo">180</span>   * will usually return the same MBeanServerConnection object, though this<a name="line.180"></a>
+<span class="sourceLineNo">181</span>   * is not required. For each method in the returned<a name="line.181"></a>
+<span class="sourceLineNo">182</span>   * MBeanServerConnection, calling the method causes the corresponding<a name="line.182"></a>
+<span class="sourceLineNo">183</span>   * method to be called in the remote MBean server. The value returned by<a name="line.183"></a>
+<span class="sourceLineNo">184</span>   * the MBean server method is the value returned to the client. If the<a name="line.184"></a>
+<span class="sourceLineNo">185</span>   * MBean server method produces an Exception, the same Exception is seen<a name="line.185"></a>
+<span class="sourceLineNo">186</span>   * by the client. If the MBean server method, or the attempt to call it,<a name="line.186"></a>
+<span class="sourceLineNo">187</span>   * produces an Error, the Error is wrapped in a JMXServerErrorException,<a name="line.187"></a>
+<span class="sourceLineNo">188</span>   * which is seen by the client. Calling this method is equivalent to<a name="line.188"></a>
+<span class="sourceLineNo">189</span>   * calling getMBeanServerConnection(null) meaning that no delegation<a name="line.189"></a>
+<span class="sourceLineNo">190</span>   * subject is specified and that all the operations called on the<a name="line.190"></a>
+<span class="sourceLineNo">191</span>   * MBeanServerConnection must use the authenticated subject, if any.<a name="line.191"></a>
+<span class="sourceLineNo">192</span>   *<a name="line.192"></a>
+<span class="sourceLineNo">193</span>   * @return an object that implements the MBeanServerConnection interface<a name="line.193"></a>
+<span class="sourceLineNo">194</span>   *         by forwarding its methods to the remote MBean server.<a name="line.194"></a>
+<span class="sourceLineNo">195</span>   * @throws IOException -<a name="line.195"></a>
+<span class="sourceLineNo">196</span>   *         if a valid MBeanServerConnection cannot be created, for<a name="line.196"></a>
+<span class="sourceLineNo">197</span>   *         instance because the connection to the remote MBean server has<a name="line.197"></a>
+<span class="sourceLineNo">198</span>   *         not yet been established (with the connect method), or it has<a name="line.198"></a>
+<span class="sourceLineNo">199</span>   *         been closed, or it has broken.<a name="line.199"></a>
+<span class="sourceLineNo">200</span>   */<a name="line.200"></a>
+<span class="sourceLineNo">201</span>  public MBeanServerConnection getMBeanServerConnection() throws IOException<a name="line.201"></a>
+<span class="sourceLineNo">202</span>  {<a name="line.202"></a>
+<span class="sourceLineNo">203</span>    return jmxc.getMBeanServerConnection();<a name="line.203"></a>
+<span class="sourceLineNo">204</span>  }<a name="line.204"></a>
+<span class="sourceLineNo">205</span><a name="line.205"></a>
+<span class="sourceLineNo">206</span>  /**<a name="line.206"></a>
+<span class="sourceLineNo">207</span>   * Returns an MBeanServerConnection object representing a remote MBean<a name="line.207"></a>
+<span class="sourceLineNo">208</span>   * server on which operations are performed on behalf of the supplied<a name="line.208"></a>
+<span class="sourceLineNo">209</span>   * delegation subject. For a given JMXConnector and Subject, two<a name="line.209"></a>
+<span class="sourceLineNo">210</span>   * successful calls to this method will usually return the same<a name="line.210"></a>
+<span class="sourceLineNo">211</span>   * MBeanServerConnection object, though this is not required. For each<a name="line.211"></a>
+<span class="sourceLineNo">212</span>   * method in the returned MBeanServerConnection, calling the method<a name="line.212"></a>
+<span class="sourceLineNo">213</span>   * causes the corresponding method to be called in the remote MBean<a name="line.213"></a>
+<span class="sourceLineNo">214</span>   * server on behalf of the given delegation subject instead of the<a name="line.214"></a>
+<span class="sourceLineNo">215</span>   * authenticated subject. The value returned by the MBean server method<a name="line.215"></a>
+<span class="sourceLineNo">216</span>   * is the value returned to the client. If the MBean server method<a name="line.216"></a>
+<span class="sourceLineNo">217</span>   * produces an Exception, the same Exception is seen by the client. If<a name="line.217"></a>
+<span class="sourceLineNo">218</span>   * the MBean server method, or the attempt to call it, produces an Error,<a name="line.218"></a>
+<span class="sourceLineNo">219</span>   * the Error is wrapped in a JMXServerErrorException, which is seen by<a name="line.219"></a>
+<span class="sourceLineNo">220</span>   * the client.<a name="line.220"></a>
+<span class="sourceLineNo">221</span>   *<a name="line.221"></a>
+<span class="sourceLineNo">222</span>   * @param delegationSubject<a name="line.222"></a>
+<span class="sourceLineNo">223</span>   *        the Subject on behalf of which requests will be performed. Can<a name="line.223"></a>
+<span class="sourceLineNo">224</span>   *        be null, in which case requests will be performed on behalf of<a name="line.224"></a>
+<span class="sourceLineNo">225</span>   *        the authenticated Subject, if any.<a name="line.225"></a>
+<span class="sourceLineNo">226</span>   * @return an object that implements the MBeanServerConnection interface<a name="line.226"></a>
+<span class="sourceLineNo">227</span>   *         by forwarding its methods to the remote MBean server on behalf<a name="line.227"></a>
+<span class="sourceLineNo">228</span>   *         of a given delegation subject.<a name="line.228"></a>
+<span class="sourceLineNo">229</span>   * @throws IOException<a name="line.229"></a>
+<span class="sourceLineNo">230</span>   *         if a valid MBeanServerConnection cannot be created, for<a name="line.230"></a>
+<span class="sourceLineNo">231</span>   *         instance because the connection to the remote MBean server has<a name="line.231"></a>
+<span class="sourceLineNo">232</span>   *         not yet been established (with the connect method), or it has<a name="line.232"></a>
+<span class="sourceLineNo">233</span>   *         been closed, or it has broken.<a name="line.233"></a>
+<span class="sourceLineNo">234</span>   */<a name="line.234"></a>
+<span class="sourceLineNo">235</span>  public MBeanServerConnection getMBeanServerConnection(<a name="line.235"></a>
+<span class="sourceLineNo">236</span>      Subject delegationSubject) throws IOException<a name="line.236"></a>
+<span class="sourceLineNo">237</span>  {<a name="line.237"></a>
+<span class="sourceLineNo">238</span>    return jmxc.getMBeanServerConnection(delegationSubject);<a name="line.238"></a>
+<span class="sourceLineNo">239</span>  }<a name="line.239"></a>
+<span class="sourceLineNo">240</span><a name="line.240"></a>
+<span class="sourceLineNo">241</span>  /**<a name="line.241"></a>
+<span class="sourceLineNo">242</span>   * Closes the client connection to its server. Any ongoing or new request<a name="line.242"></a>
+<span class="sourceLineNo">243</span>   * using the MBeanServerConnection returned by getMBeanServerConnection()<a name="line.243"></a>
+<span class="sourceLineNo">244</span>   * will get an IOException. If close has already been called successfully<a name="line.244"></a>
+<span class="sourceLineNo">245</span>   * on this object, calling it again has no effect. If close has never<a name="line.245"></a>
+<span class="sourceLineNo">246</span>   * been called, or if it was called but produced an exception, an attempt<a name="line.246"></a>
+<span class="sourceLineNo">247</span>   * will be made to close the connection. This attempt can succeed, in<a name="line.247"></a>
+<span class="sourceLineNo">248</span>   * which case close will return normally, or it can generate an<a name="line.248"></a>
+<span class="sourceLineNo">249</span>   * exception. Closing a connection is a potentially slow operation. For<a name="line.249"></a>
+<span class="sourceLineNo">250</span>   * example, if the server has crashed, the close operation might have to<a name="line.250"></a>
+<span class="sourceLineNo">251</span>   * wait for a network protocol timeout. Callers that do not want to block<a name="line.251"></a>
+<span class="sourceLineNo">252</span>   * in a close operation should do it in a separate thread.<a name="line.252"></a>
+<span class="sourceLineNo">253</span>   *<a name="line.253"></a>
+<span class="sourceLineNo">254</span>   * @throws IOException<a name="line.254"></a>
+<span class="sourceLineNo">255</span>   *         if the connection cannot be closed cleanly. If this exception<a name="line.255"></a>
+<span class="sourceLineNo">256</span>   *         is thrown, it is not known whether the server end of the<a name="line.256"></a>
+<span class="sourceLineNo">257</span>   *         connection has been cleanly closed.<a name="line.257"></a>
+<span class="sourceLineNo">258</span>   */<a name="line.258"></a>
+<span class="sourceLineNo">259</span>  public void close() throws IOException<a name="line.259"></a>
+<span class="sourceLineNo">260</span>  {<a name="line.260"></a>
+<span class="sourceLineNo">261</span>    jmxc.close();<a name="line.261"></a>
+<span class="sourceLineNo">262</span>  }<a name="line.262"></a>
+<span class="sourceLineNo">263</span><a name="line.263"></a>
+<span class="sourceLineNo">264</span>  /**<a name="line.264"></a>
+<span class="sourceLineNo">265</span>   * Adds a listener to be informed of changes in connection status. The<a name="line.265"></a>
+<span class="sourceLineNo">266</span>   * listener will receive notifications of type JMXConnectionNotification.<a name="line.266"></a>
+<span class="sourceLineNo">267</span>   * An implementation can send other types of notifications too. Any<a name="line.267"></a>
+<span class="sourceLineNo">268</span>   * number of listeners can be added with this method. The same listener<a name="line.268"></a>
+<span class="sourceLineNo">269</span>   * can be added more than once with the same or different values for the<a name="line.269"></a>
+<span class="sourceLineNo">270</span>   * filter and handback. There is no special treatment of a duplicate<a name="line.270"></a>
+<span class="sourceLineNo">271</span>   * entry. For example, if a listener is registered twice with no filter,<a name="line.271"></a>
+<span class="sourceLineNo">272</span>   * then its handleNotification method will be called twice for each<a name="line.272"></a>
+<span class="sourceLineNo">273</span>   * notification.<a name="line.273"></a>
+<span class="sourceLineNo">274</span>   *<a name="line.274"></a>
+<span class="sourceLineNo">275</span>   * @param listener<a name="line.275"></a>
+<span class="sourceLineNo">276</span>   *        a listener to receive connection status notifications.<a name="line.276"></a>
+<span class="sourceLineNo">277</span>   * @param filter<a name="line.277"></a>
+<span class="sourceLineNo">278</span>   *        a filter to select which notifications are to be delivered to<a name="line.278"></a>
+<span class="sourceLineNo">279</span>   *        the listener, or null if all notifications are to be delivered.<a name="line.279"></a>
+<span class="sourceLineNo">280</span>   * @param handback<a name="line.280"></a>
+<span class="sourceLineNo">281</span>   *        an object to be given to the listener along with each<a name="line.281"></a>
+<span class="sourceLineNo">282</span>   *        notification. Can be null.<a name="line.282"></a>
+<span class="sourceLineNo">283</span>   * @throws NullPointerException<a name="line.283"></a>
+<span class="sourceLineNo">284</span>   *         if listener is null.<a name="line.284"></a>
+<span class="sourceLineNo">285</span>   */<a name="line.285"></a>
+<span class="sourceLineNo">286</span>  public void addConnectionNotificationListener(<a name="line.286"></a>
+<span class="sourceLineNo">287</span>      NotificationListener listener, NotificationFilter filter,<a name="line.287"></a>
+<span class="sourceLineNo">288</span>      Object handback) throws NullPointerException<a name="line.288"></a>
+<span class="sourceLineNo">289</span>  {<a name="line.289"></a>
+<span class="sourceLineNo">290</span>    jmxc.addConnectionNotificationListener(listener, filter, handback);<a name="line.290"></a>
+<span class="sourceLineNo">291</span>  }<a name="line.291"></a>
+<span class="sourceLineNo">292</span><a name="line.292"></a>
+<span class="sourceLineNo">293</span>  /**<a name="line.293"></a>
+<span class="sourceLineNo">294</span>   * Removes a listener from the list to be informed of changes in status.<a name="line.294"></a>
+<span class="sourceLineNo">295</span>   * The listener must previously have been added. If there is more than<a name="line.295"></a>
+<span class="sourceLineNo">296</span>   * one matching listener, all are removed.<a name="line.296"></a>
+<span class="sourceLineNo">297</span>   *<a name="line.297"></a>
+<span class="sourceLineNo">298</span>   * @param listener -<a name="line.298"></a>
+<span class="sourceLineNo">299</span>   *        a listener to receive connection status notifications.<a name="line.299"></a>
+<span class="sourceLineNo">300</span>   * @throws NullPointerException<a name="line.300"></a>
+<span class="sourceLineNo">301</span>   *         if listener is null.<a name="line.301"></a>
+<span class="sourceLineNo">302</span>   * @throws ListenerNotFoundException<a name="line.302"></a>
+<span class="sourceLineNo">303</span>   *         if the listener is not registered with this JMXConnector.<a name="line.303"></a>
+<span class="sourceLineNo">304</span>   */<a name="line.304"></a>
+<span class="sourceLineNo">305</span>  public void removeConnectionNotificationListener(<a name="line.305"></a>
+<span class="sourceLineNo">306</span>      NotificationListener listener) throws ListenerNotFoundException,<a name="line.306"></a>
+<span class="sourceLineNo">307</span>      NullPointerException<a name="line.307"></a>
+<span class="sourceLineNo">308</span>  {<a name="line.308"></a>
+<span class="sourceLineNo">309</span>    jmxc.removeConnectionNotificationListener(listener);<a name="line.309"></a>
+<span class="sourceLineNo">310</span>  }<a name="line.310"></a>
+<span class="sourceLineNo">311</span><a name="line.311"></a>
+<span class="sourceLineNo">312</span>  /**<a name="line.312"></a>
+<span class="sourceLineNo">313</span>   * Removes a listener from the list to be informed of changes in status.<a name="line.313"></a>
+<span class="sourceLineNo">314</span>   * The listener must previously have been added with the same three<a name="line.314"></a>
+<span class="sourceLineNo">315</span>   * parameters. If there is more than one matching listener, only one is<a name="line.315"></a>
+<span class="sourceLineNo">316</span>   * removed.<a name="line.316"></a>
+<span class="sourceLineNo">317</span>   *<a name="line.317"></a>
+<span class="sourceLineNo">318</span>   * @param l<a name="line.318"></a>
+<span class="sourceLineNo">319</span>   *        a listener to receive connection status notifications.<a name="line.319"></a>
+<span class="sourceLineNo">320</span>   * @param f<a name="line.320"></a>
+<span class="sourceLineNo">321</span>   *        a filter to select which notifications are to be delivered to<a name="line.321"></a>
+<span class="sourceLineNo">322</span>   *        the listener. Can be null. handback - an object to be given to<a name="line.322"></a>
+<span class="sourceLineNo">323</span>   *        the listener along with each notification. Can be null.<a name="line.323"></a>
+<span class="sourceLineNo">324</span>   * @param handback<a name="line.324"></a>
+<span class="sourceLineNo">325</span>   *        an object to be given to the listener along with each<a name="line.325"></a>
+<span class="sourceLineNo">326</span>   *        notification. Can be null.<a name="line.326"></a>
+<span class="sourceLineNo">327</span>   * @throws ListenerNotFoundException<a name="line.327"></a>
+<span class="sourceLineNo">328</span>   *         if the listener is not registered with this JMXConnector, or<a name="line.328"></a>
+<span class="sourceLineNo">329</span>   *         is not registered with the given filter and handback.<a name="line.329"></a>
+<span class="sourceLineNo">330</span>   */<a name="line.330"></a>
+<span class="sourceLineNo">331</span>  public void removeConnectionNotificationListener(<a name="line.331"></a>
+<span class="sourceLineNo">332</span>      NotificationListener l, NotificationFilter f, Object handback)<a name="line.332"></a>
+<span class="sourceLineNo">333</span>      throws ListenerNotFoundException<a name="line.333"></a>
+<span class="sourceLineNo">334</span>  {<a name="line.334"></a>
+<span class="sourceLineNo">335</span>    jmxc.removeConnectionNotificationListener(l, f, handback);<a name="line.335"></a>
+<span class="sourceLineNo">336</span>  }<a name="line.336"></a>
+<span class="sourceLineNo">337</span><a name="line.337"></a>
+<span class="sourceLineNo">338</span>  /**<a name="line.338"></a>
+<span class="sourceLineNo">339</span>   * Gets this connection's ID from the connector server. For a given<a name="line.339"></a>
+<span class="sourceLineNo">340</span>   * connector server, every connection will have a unique id which does<a name="line.340"></a>
+<span class="sourceLineNo">341</span>   * not change during the lifetime of the connection.<a name="line.341"></a>
+<span class="sourceLineNo">342</span>   *<a name="line.342"></a>
+<span class="sourceLineNo">343</span>   * @return the unique ID of this connection. This is the same as the ID<a name="line.343"></a>
+<span class="sourceLineNo">344</span>   *         that the connector server includes in its<a name="line.344"></a>
+<span class="sourceLineNo">345</span>   *         JMXConnectionNotifications. The package description describes<a name="line.345"></a>
+<span class="sourceLineNo">346</span>   *         the conventions for connection IDs.<a name="line.346"></a>
+<span class="sourceLineNo">347</span>   * @throws IOException<a name="line.347"></a>
+<span class="sourceLineNo">348</span>   *         if the connection ID cannot be obtained, for instance because<a name="line.348"></a>
+<span class="sourceLineNo">349</span>   *         the connection is closed or broken.<a name="line.349"></a>
+<span class="sourceLineNo">350</span>   */<a name="line.350"></a>
+<span class="sourceLineNo">351</span>  public String getConnectionId() throws IOException<a name="line.351"></a>
+<span class="sourceLineNo">352</span>  {<a name="line.352"></a>
+<span class="sourceLineNo">353</span>    return jmxc.getConnectionId();<a name="line.353"></a>
+<span class="sourceLineNo">354</span>  }<a name="line.354"></a>
+<span class="sourceLineNo">355</span><a name="line.355"></a>
+<span class="sourceLineNo">356</span>  /**<a name="line.356"></a>
+<span class="sourceLineNo">357</span>   * Update if necessary the credentials of the given map using<a name="line.357"></a>
+<span class="sourceLineNo">358</span>   * information coming from the map given when the connector was created.<a name="line.358"></a>
+<span class="sourceLineNo">359</span>   * This method is called from the connect method when it has received<a name="line.359"></a>
+<span class="sourceLineNo">360</span>   * a non null map holding potentially new credentials. It calls this<a name="line.360"></a>
+<span class="sourceLineNo">361</span>   * method BEFORE actually trying to connect to the server.<a name="line.361"></a>
+<span class="sourceLineNo">362</span>   *<a name="line.362"></a>
+<span class="sourceLineNo">363</span>   * @param Map given to the connect method<a name="line.363"></a>
+<span class="sourceLineNo">364</span>   */<a name="line.364"></a>
+<span class="sourceLineNo">365</span>  private void updateCredentials(Map env) throws IOException<a name="line.365"></a>
+<span class="sourceLineNo">366</span>  {<a name="line.366"></a>
+<span class="sourceLineNo">367</span>    // credential to update ??<a name="line.367"></a>
+<span class="sourceLineNo">368</span>    if (!env.containsKey(JMXConnector.CREDENTIALS))<a name="line.368"></a>
+<span class="sourceLineNo">369</span>    {<a name="line.369"></a>
+<span class="sourceLineNo">370</span>      // NO : nothing to update<a name="line.370"></a>
+<span class="sourceLineNo">371</span>      return;<a name="line.371"></a>
+<span class="sourceLineNo">372</span>    }<a name="line.372"></a>
+<span class="sourceLineNo">373</span>    else<a name="line.373"></a>
+<span class="sourceLineNo">374</span>    {<a name="line.374"></a>
+<span class="sourceLineNo">375</span>      Object cred  =  env.get(JMXConnector.CREDENTIALS);<a name="line.375"></a>
+<span class="sourceLineNo">376</span>      environment.put(JMXConnector.CREDENTIALS, cred);<a name="line.376"></a>
+<span class="sourceLineNo">377</span>    }<a name="line.377"></a>
+<span class="sourceLineNo">378</span>  }<a name="line.378"></a>
+<span class="sourceLineNo">379</span>}<a name="line.379"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

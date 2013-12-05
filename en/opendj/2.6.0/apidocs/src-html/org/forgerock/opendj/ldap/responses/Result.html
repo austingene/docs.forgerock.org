@@ -1,0 +1,270 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * CDDL HEADER START<a name="line.2"></a>
+<span class="sourceLineNo">003</span> *<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * The contents of this file are subject to the terms of the<a name="line.4"></a>
+<span class="sourceLineNo">005</span> * Common Development and Distribution License, Version 1.0 only<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * (the "License").  You may not use this file except in compliance<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * with the License.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * You can obtain a copy of the license at legal-notices/CDDLv1_0.txt<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * or http://forgerock.org/license/CDDLv1.0.html.<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * See the License for the specific language governing permissions<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * and limitations under the License.<a name="line.12"></a>
+<span class="sourceLineNo">013</span> *<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * When distributing Covered Code, include this CDDL HEADER in each<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * file and include the License file at legal-notices/CDDLv1_0.txt.<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * If applicable, add the following below this CDDL HEADER, with the<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * fields enclosed by brackets "[]" replaced with your own identifying<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * information:<a name="line.18"></a>
+<span class="sourceLineNo">019</span> *      Portions Copyright [yyyy] [name of copyright owner]<a name="line.19"></a>
+<span class="sourceLineNo">020</span> *<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * CDDL HEADER END<a name="line.21"></a>
+<span class="sourceLineNo">022</span> *<a name="line.22"></a>
+<span class="sourceLineNo">023</span> *<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *      Copyright 2009 Sun Microsystems, Inc.<a name="line.24"></a>
+<span class="sourceLineNo">025</span> *      Portions copyright 2012 ForgeRock AS.<a name="line.25"></a>
+<span class="sourceLineNo">026</span> */<a name="line.26"></a>
+<span class="sourceLineNo">027</span><a name="line.27"></a>
+<span class="sourceLineNo">028</span>package org.forgerock.opendj.ldap.responses;<a name="line.28"></a>
+<span class="sourceLineNo">029</span><a name="line.29"></a>
+<span class="sourceLineNo">030</span>import java.util.List;<a name="line.30"></a>
+<span class="sourceLineNo">031</span><a name="line.31"></a>
+<span class="sourceLineNo">032</span>import org.forgerock.opendj.ldap.DecodeException;<a name="line.32"></a>
+<span class="sourceLineNo">033</span>import org.forgerock.opendj.ldap.DecodeOptions;<a name="line.33"></a>
+<span class="sourceLineNo">034</span>import org.forgerock.opendj.ldap.ResultCode;<a name="line.34"></a>
+<span class="sourceLineNo">035</span>import org.forgerock.opendj.ldap.controls.Control;<a name="line.35"></a>
+<span class="sourceLineNo">036</span>import org.forgerock.opendj.ldap.controls.ControlDecoder;<a name="line.36"></a>
+<span class="sourceLineNo">037</span><a name="line.37"></a>
+<span class="sourceLineNo">038</span>/**<a name="line.38"></a>
+<span class="sourceLineNo">039</span> * A Result is used to indicate the status of an operation performed by the<a name="line.39"></a>
+<span class="sourceLineNo">040</span> * server. A Result is comprised of several fields:<a name="line.40"></a>
+<span class="sourceLineNo">041</span> * &lt;ul&gt;<a name="line.41"></a>
+<span class="sourceLineNo">042</span> * &lt;li&gt;The &lt;b&gt;result code&lt;/b&gt; can be retrieved using the method<a name="line.42"></a>
+<span class="sourceLineNo">043</span> * {@link #getResultCode}. This indicates the overall outcome of the operation.<a name="line.43"></a>
+<span class="sourceLineNo">044</span> * In particular, whether or not it succeeded which is indicated using a value<a name="line.44"></a>
+<span class="sourceLineNo">045</span> * of {@link ResultCode#SUCCESS}.<a name="line.45"></a>
+<span class="sourceLineNo">046</span> * &lt;li&gt;The optional &lt;b&gt;diagnostic message&lt;/b&gt; can be retrieved using the method<a name="line.46"></a>
+<span class="sourceLineNo">047</span> * {@link #getDiagnosticMessage}. At the server's discretion, a diagnostic<a name="line.47"></a>
+<span class="sourceLineNo">048</span> * message may be included in a Result in order to supplement the result code<a name="line.48"></a>
+<span class="sourceLineNo">049</span> * with additional human-readable information.<a name="line.49"></a>
+<span class="sourceLineNo">050</span> * &lt;li&gt;The optional &lt;b&gt;matched DN&lt;/b&gt; can be retrieved using the method<a name="line.50"></a>
+<span class="sourceLineNo">051</span> * {@link #getMatchedDN}. For certain result codes, this is used to indicate to<a name="line.51"></a>
+<span class="sourceLineNo">052</span> * the client the last entry used in finding the Request's target (or base)<a name="line.52"></a>
+<span class="sourceLineNo">053</span> * entry.<a name="line.53"></a>
+<span class="sourceLineNo">054</span> * &lt;li&gt;The optional &lt;b&gt;referrals&lt;/b&gt; can be retrieved using the method<a name="line.54"></a>
+<span class="sourceLineNo">055</span> * {@link #getReferralURIs}. Referrals are present in a Result if the result<a name="line.55"></a>
+<span class="sourceLineNo">056</span> * code is set to {@link ResultCode#REFERRAL}, and it are absent with all other<a name="line.56"></a>
+<span class="sourceLineNo">057</span> * result codes.<a name="line.57"></a>
+<span class="sourceLineNo">058</span> * &lt;/ul&gt;<a name="line.58"></a>
+<span class="sourceLineNo">059</span> */<a name="line.59"></a>
+<span class="sourceLineNo">060</span>public interface Result extends Response {<a name="line.60"></a>
+<span class="sourceLineNo">061</span><a name="line.61"></a>
+<span class="sourceLineNo">062</span>    @Override<a name="line.62"></a>
+<span class="sourceLineNo">063</span>    Result addControl(Control control);<a name="line.63"></a>
+<span class="sourceLineNo">064</span><a name="line.64"></a>
+<span class="sourceLineNo">065</span>    /**<a name="line.65"></a>
+<span class="sourceLineNo">066</span>     * Adds the provided referral URI to this result.<a name="line.66"></a>
+<span class="sourceLineNo">067</span>     *<a name="line.67"></a>
+<span class="sourceLineNo">068</span>     * @param uri<a name="line.68"></a>
+<span class="sourceLineNo">069</span>     *            The referral URI to be added.<a name="line.69"></a>
+<span class="sourceLineNo">070</span>     * @return This result.<a name="line.70"></a>
+<span class="sourceLineNo">071</span>     * @throws UnsupportedOperationException<a name="line.71"></a>
+<span class="sourceLineNo">072</span>     *             If this result does not permit referrals to be added.<a name="line.72"></a>
+<span class="sourceLineNo">073</span>     * @throws NullPointerException<a name="line.73"></a>
+<span class="sourceLineNo">074</span>     *             If {@code uri} was {@code null}.<a name="line.74"></a>
+<span class="sourceLineNo">075</span>     */<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    Result addReferralURI(String uri);<a name="line.76"></a>
+<span class="sourceLineNo">077</span><a name="line.77"></a>
+<span class="sourceLineNo">078</span>    /**<a name="line.78"></a>
+<span class="sourceLineNo">079</span>     * Returns the throwable cause associated with this result if available. A<a name="line.79"></a>
+<span class="sourceLineNo">080</span>     * cause may be provided in cases where a result indicates a failure due to<a name="line.80"></a>
+<span class="sourceLineNo">081</span>     * a client-side error.<a name="line.81"></a>
+<span class="sourceLineNo">082</span>     *<a name="line.82"></a>
+<span class="sourceLineNo">083</span>     * @return The throwable cause, or {@code null} if none was provided.<a name="line.83"></a>
+<span class="sourceLineNo">084</span>     */<a name="line.84"></a>
+<span class="sourceLineNo">085</span>    Throwable getCause();<a name="line.85"></a>
+<span class="sourceLineNo">086</span><a name="line.86"></a>
+<span class="sourceLineNo">087</span>    @Override<a name="line.87"></a>
+<span class="sourceLineNo">088</span>    &lt;C extends Control&gt; C getControl(ControlDecoder&lt;C&gt; decoder, DecodeOptions options)<a name="line.88"></a>
+<span class="sourceLineNo">089</span>            throws DecodeException;<a name="line.89"></a>
+<span class="sourceLineNo">090</span><a name="line.90"></a>
+<span class="sourceLineNo">091</span>    @Override<a name="line.91"></a>
+<span class="sourceLineNo">092</span>    List&lt;Control&gt; getControls();<a name="line.92"></a>
+<span class="sourceLineNo">093</span><a name="line.93"></a>
+<span class="sourceLineNo">094</span>    /**<a name="line.94"></a>
+<span class="sourceLineNo">095</span>     * Returns the diagnostic message associated with this result.<a name="line.95"></a>
+<span class="sourceLineNo">096</span>     *<a name="line.96"></a>
+<span class="sourceLineNo">097</span>     * @return The diagnostic message, which may be empty if none was provided<a name="line.97"></a>
+<span class="sourceLineNo">098</span>     *         (never {@code null}).<a name="line.98"></a>
+<span class="sourceLineNo">099</span>     */<a name="line.99"></a>
+<span class="sourceLineNo">100</span>    String getDiagnosticMessage();<a name="line.100"></a>
+<span class="sourceLineNo">101</span><a name="line.101"></a>
+<span class="sourceLineNo">102</span>    /**<a name="line.102"></a>
+<span class="sourceLineNo">103</span>     * Returns the matched DN associated with this result.<a name="line.103"></a>
+<span class="sourceLineNo">104</span>     *<a name="line.104"></a>
+<span class="sourceLineNo">105</span>     * @return The matched DN, which may be empty if none was provided (never<a name="line.105"></a>
+<span class="sourceLineNo">106</span>     *         {@code null}).<a name="line.106"></a>
+<span class="sourceLineNo">107</span>     */<a name="line.107"></a>
+<span class="sourceLineNo">108</span>    String getMatchedDN();<a name="line.108"></a>
+<span class="sourceLineNo">109</span><a name="line.109"></a>
+<span class="sourceLineNo">110</span>    /**<a name="line.110"></a>
+<span class="sourceLineNo">111</span>     * Returns a {@code List} containing the referral URIs included with this<a name="line.111"></a>
+<span class="sourceLineNo">112</span>     * result. The returned {@code List} may be modified if permitted by this<a name="line.112"></a>
+<span class="sourceLineNo">113</span>     * result.<a name="line.113"></a>
+<span class="sourceLineNo">114</span>     *<a name="line.114"></a>
+<span class="sourceLineNo">115</span>     * @return A {@code List} containing the referral URIs.<a name="line.115"></a>
+<span class="sourceLineNo">116</span>     */<a name="line.116"></a>
+<span class="sourceLineNo">117</span>    List&lt;String&gt; getReferralURIs();<a name="line.117"></a>
+<span class="sourceLineNo">118</span><a name="line.118"></a>
+<span class="sourceLineNo">119</span>    /**<a name="line.119"></a>
+<span class="sourceLineNo">120</span>     * Returns the result code associated with this result.<a name="line.120"></a>
+<span class="sourceLineNo">121</span>     *<a name="line.121"></a>
+<span class="sourceLineNo">122</span>     * @return The result code.<a name="line.122"></a>
+<span class="sourceLineNo">123</span>     */<a name="line.123"></a>
+<span class="sourceLineNo">124</span>    ResultCode getResultCode();<a name="line.124"></a>
+<span class="sourceLineNo">125</span><a name="line.125"></a>
+<span class="sourceLineNo">126</span>    /**<a name="line.126"></a>
+<span class="sourceLineNo">127</span>     * Indicates whether or not a referral needs to be chased in order to<a name="line.127"></a>
+<span class="sourceLineNo">128</span>     * complete the operation.<a name="line.128"></a>
+<span class="sourceLineNo">129</span>     * &lt;p&gt;<a name="line.129"></a>
+<span class="sourceLineNo">130</span>     * Specifically, this method returns {@code true} if the result code is<a name="line.130"></a>
+<span class="sourceLineNo">131</span>     * equal to {@link ResultCode#REFERRAL}.<a name="line.131"></a>
+<span class="sourceLineNo">132</span>     *<a name="line.132"></a>
+<span class="sourceLineNo">133</span>     * @return {@code true} if a referral needs to be chased, otherwise<a name="line.133"></a>
+<span class="sourceLineNo">134</span>     *         {@code false}.<a name="line.134"></a>
+<span class="sourceLineNo">135</span>     */<a name="line.135"></a>
+<span class="sourceLineNo">136</span>    boolean isReferral();<a name="line.136"></a>
+<span class="sourceLineNo">137</span><a name="line.137"></a>
+<span class="sourceLineNo">138</span>    /**<a name="line.138"></a>
+<span class="sourceLineNo">139</span>     * Indicates whether or not the request succeeded or not. This method will<a name="line.139"></a>
+<span class="sourceLineNo">140</span>     * return {code true} for all non-error responses.<a name="line.140"></a>
+<span class="sourceLineNo">141</span>     *<a name="line.141"></a>
+<span class="sourceLineNo">142</span>     * @return {@code true} if the request succeeded, otherwise {@code false}.<a name="line.142"></a>
+<span class="sourceLineNo">143</span>     */<a name="line.143"></a>
+<span class="sourceLineNo">144</span>    boolean isSuccess();<a name="line.144"></a>
+<span class="sourceLineNo">145</span><a name="line.145"></a>
+<span class="sourceLineNo">146</span>    /**<a name="line.146"></a>
+<span class="sourceLineNo">147</span>     * Sets the throwable cause associated with this result if available. A<a name="line.147"></a>
+<span class="sourceLineNo">148</span>     * cause may be provided in cases where a result indicates a failure due to<a name="line.148"></a>
+<span class="sourceLineNo">149</span>     * a client-side error.<a name="line.149"></a>
+<span class="sourceLineNo">150</span>     *<a name="line.150"></a>
+<span class="sourceLineNo">151</span>     * @param cause<a name="line.151"></a>
+<span class="sourceLineNo">152</span>     *            The throwable cause, which may be {@code null} indicating that<a name="line.152"></a>
+<span class="sourceLineNo">153</span>     *            none was provided.<a name="line.153"></a>
+<span class="sourceLineNo">154</span>     * @return This result.<a name="line.154"></a>
+<span class="sourceLineNo">155</span>     * @throws UnsupportedOperationException<a name="line.155"></a>
+<span class="sourceLineNo">156</span>     *             If this result does not permit the cause to be set.<a name="line.156"></a>
+<span class="sourceLineNo">157</span>     */<a name="line.157"></a>
+<span class="sourceLineNo">158</span>    Result setCause(Throwable cause);<a name="line.158"></a>
+<span class="sourceLineNo">159</span><a name="line.159"></a>
+<span class="sourceLineNo">160</span>    /**<a name="line.160"></a>
+<span class="sourceLineNo">161</span>     * Sets the diagnostic message associated with this result.<a name="line.161"></a>
+<span class="sourceLineNo">162</span>     *<a name="line.162"></a>
+<span class="sourceLineNo">163</span>     * @param message<a name="line.163"></a>
+<span class="sourceLineNo">164</span>     *            The diagnostic message, which may be empty or {@code null}<a name="line.164"></a>
+<span class="sourceLineNo">165</span>     *            indicating that none was provided.<a name="line.165"></a>
+<span class="sourceLineNo">166</span>     * @return This result.<a name="line.166"></a>
+<span class="sourceLineNo">167</span>     * @throws UnsupportedOperationException<a name="line.167"></a>
+<span class="sourceLineNo">168</span>     *             If this result does not permit the diagnostic message to be<a name="line.168"></a>
+<span class="sourceLineNo">169</span>     *             set.<a name="line.169"></a>
+<span class="sourceLineNo">170</span>     */<a name="line.170"></a>
+<span class="sourceLineNo">171</span>    Result setDiagnosticMessage(String message);<a name="line.171"></a>
+<span class="sourceLineNo">172</span><a name="line.172"></a>
+<span class="sourceLineNo">173</span>    /**<a name="line.173"></a>
+<span class="sourceLineNo">174</span>     * Sets the matched DN associated with this result.<a name="line.174"></a>
+<span class="sourceLineNo">175</span>     *<a name="line.175"></a>
+<span class="sourceLineNo">176</span>     * @param dn<a name="line.176"></a>
+<span class="sourceLineNo">177</span>     *            The matched DN associated, which may be empty or {@code null}<a name="line.177"></a>
+<span class="sourceLineNo">178</span>     *            indicating that none was provided.<a name="line.178"></a>
+<span class="sourceLineNo">179</span>     * @return This result.<a name="line.179"></a>
+<span class="sourceLineNo">180</span>     * @throws UnsupportedOperationException<a name="line.180"></a>
+<span class="sourceLineNo">181</span>     *             If this result does not permit the matched DN to be set.<a name="line.181"></a>
+<span class="sourceLineNo">182</span>     */<a name="line.182"></a>
+<span class="sourceLineNo">183</span>    Result setMatchedDN(String dn);<a name="line.183"></a>
+<span class="sourceLineNo">184</span><a name="line.184"></a>
+<span class="sourceLineNo">185</span>    /**<a name="line.185"></a>
+<span class="sourceLineNo">186</span>     * Sets the result code associated with this result.<a name="line.186"></a>
+<span class="sourceLineNo">187</span>     *<a name="line.187"></a>
+<span class="sourceLineNo">188</span>     * @param resultCode<a name="line.188"></a>
+<span class="sourceLineNo">189</span>     *            The result code.<a name="line.189"></a>
+<span class="sourceLineNo">190</span>     * @return This result.<a name="line.190"></a>
+<span class="sourceLineNo">191</span>     * @throws UnsupportedOperationException<a name="line.191"></a>
+<span class="sourceLineNo">192</span>     *             If this result does not permit the result code to be set.<a name="line.192"></a>
+<span class="sourceLineNo">193</span>     * @throws NullPointerException<a name="line.193"></a>
+<span class="sourceLineNo">194</span>     *             If {@code resultCode} was {@code null}.<a name="line.194"></a>
+<span class="sourceLineNo">195</span>     */<a name="line.195"></a>
+<span class="sourceLineNo">196</span>    Result setResultCode(ResultCode resultCode);<a name="line.196"></a>
+<span class="sourceLineNo">197</span><a name="line.197"></a>
+<span class="sourceLineNo">198</span>}<a name="line.198"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

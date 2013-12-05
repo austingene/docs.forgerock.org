@@ -1,0 +1,259 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * CDDL HEADER START<a name="line.2"></a>
+<span class="sourceLineNo">003</span> *<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * The contents of this file are subject to the terms of the<a name="line.4"></a>
+<span class="sourceLineNo">005</span> * Common Development and Distribution License, Version 1.0 only<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * (the "License").  You may not use this file except in compliance<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * with the License.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * You can obtain a copy of the license at<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * trunk/opends/resource/legal-notices/OpenDS.LICENSE<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * or https://OpenDS.dev.java.net/OpenDS.LICENSE.<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * See the License for the specific language governing permissions<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * and limitations under the License.<a name="line.13"></a>
+<span class="sourceLineNo">014</span> *<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * When distributing Covered Code, include this CDDL HEADER in each<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * file and include the License file at<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * trunk/opends/resource/legal-notices/OpenDS.LICENSE.  If applicable,<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * add the following below this CDDL HEADER, with the fields enclosed<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * by brackets "[]" replaced with your own identifying information:<a name="line.19"></a>
+<span class="sourceLineNo">020</span> *      Portions Copyright [yyyy] [name of copyright owner]<a name="line.20"></a>
+<span class="sourceLineNo">021</span> *<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * CDDL HEADER END<a name="line.22"></a>
+<span class="sourceLineNo">023</span> *<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *<a name="line.24"></a>
+<span class="sourceLineNo">025</span> *      Copyright 2008-2010 Sun Microsystems, Inc.<a name="line.25"></a>
+<span class="sourceLineNo">026</span> */<a name="line.26"></a>
+<span class="sourceLineNo">027</span>package org.opends.server.core;<a name="line.27"></a>
+<span class="sourceLineNo">028</span><a name="line.28"></a>
+<span class="sourceLineNo">029</span><a name="line.29"></a>
+<span class="sourceLineNo">030</span>import org.opends.messages.Message;<a name="line.30"></a>
+<span class="sourceLineNo">031</span>import org.opends.messages.MessageBuilder;<a name="line.31"></a>
+<span class="sourceLineNo">032</span>import org.opends.server.core.networkgroups.NetworkGroupNamingContexts;<a name="line.32"></a>
+<span class="sourceLineNo">033</span>import org.opends.server.types.*;<a name="line.33"></a>
+<span class="sourceLineNo">034</span><a name="line.34"></a>
+<span class="sourceLineNo">035</span><a name="line.35"></a>
+<span class="sourceLineNo">036</span>/**<a name="line.36"></a>
+<span class="sourceLineNo">037</span> * This class implements the workflow node that handles the root DSE entry.<a name="line.37"></a>
+<span class="sourceLineNo">038</span> * As opposed to the WorkflowTopologyNode class, the root DSE node has no<a name="line.38"></a>
+<span class="sourceLineNo">039</span> * parent node nor subordinate nodes. Instead, the root DSE node has a set<a name="line.39"></a>
+<span class="sourceLineNo">040</span> * of naming contexts, each of which is a WorkflowTopologyNode object with<a name="line.40"></a>
+<span class="sourceLineNo">041</span> * no parent.<a name="line.41"></a>
+<span class="sourceLineNo">042</span> */<a name="line.42"></a>
+<span class="sourceLineNo">043</span>public class RootDseWorkflowTopology extends WorkflowTopology<a name="line.43"></a>
+<span class="sourceLineNo">044</span>{<a name="line.44"></a>
+<span class="sourceLineNo">045</span><a name="line.45"></a>
+<span class="sourceLineNo">046</span>  // The naming contexts known by the root DSE. These naming contexts<a name="line.46"></a>
+<span class="sourceLineNo">047</span>  // are defined in the scope of a network group.<a name="line.47"></a>
+<span class="sourceLineNo">048</span>  private NetworkGroupNamingContexts namingContexts = null;<a name="line.48"></a>
+<span class="sourceLineNo">049</span><a name="line.49"></a>
+<span class="sourceLineNo">050</span><a name="line.50"></a>
+<span class="sourceLineNo">051</span>  /**<a name="line.51"></a>
+<span class="sourceLineNo">052</span>   * Creates a workflow node to handle the root DSE entry.<a name="line.52"></a>
+<span class="sourceLineNo">053</span>   *<a name="line.53"></a>
+<span class="sourceLineNo">054</span>   * @param workflowImpl    the workflow which contains the processing for<a name="line.54"></a>
+<span class="sourceLineNo">055</span>   *                        the root DSE backend<a name="line.55"></a>
+<span class="sourceLineNo">056</span>   * @param namingContexts  the list of naming contexts being registered<a name="line.56"></a>
+<span class="sourceLineNo">057</span>   *                        with the network group the root DSE belongs to<a name="line.57"></a>
+<span class="sourceLineNo">058</span>   */<a name="line.58"></a>
+<span class="sourceLineNo">059</span>  public RootDseWorkflowTopology(<a name="line.59"></a>
+<span class="sourceLineNo">060</span>      WorkflowImpl               workflowImpl,<a name="line.60"></a>
+<span class="sourceLineNo">061</span>      NetworkGroupNamingContexts namingContexts<a name="line.61"></a>
+<span class="sourceLineNo">062</span>      )<a name="line.62"></a>
+<span class="sourceLineNo">063</span>  {<a name="line.63"></a>
+<span class="sourceLineNo">064</span>    super(workflowImpl);<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    this.namingContexts = namingContexts;<a name="line.65"></a>
+<span class="sourceLineNo">066</span>  }<a name="line.66"></a>
+<span class="sourceLineNo">067</span><a name="line.67"></a>
+<span class="sourceLineNo">068</span><a name="line.68"></a>
+<span class="sourceLineNo">069</span>  /**<a name="line.69"></a>
+<span class="sourceLineNo">070</span>   * Executes an operation on the root DSE entry.<a name="line.70"></a>
+<span class="sourceLineNo">071</span>   *<a name="line.71"></a>
+<span class="sourceLineNo">072</span>   * @param operation the operation to execute<a name="line.72"></a>
+<span class="sourceLineNo">073</span>   *<a name="line.73"></a>
+<span class="sourceLineNo">074</span>   * @throws CanceledOperationException if this operation should<a name="line.74"></a>
+<span class="sourceLineNo">075</span>   * be cancelled.<a name="line.75"></a>
+<span class="sourceLineNo">076</span>   */<a name="line.76"></a>
+<span class="sourceLineNo">077</span>  public void execute(Operation operation)<a name="line.77"></a>
+<span class="sourceLineNo">078</span>      throws CanceledOperationException {<a name="line.78"></a>
+<span class="sourceLineNo">079</span>    // Execute the operation.<a name="line.79"></a>
+<span class="sourceLineNo">080</span>    OperationType operationType = operation.getOperationType();<a name="line.80"></a>
+<span class="sourceLineNo">081</span>    if (operationType != OperationType.SEARCH)<a name="line.81"></a>
+<span class="sourceLineNo">082</span>    {<a name="line.82"></a>
+<span class="sourceLineNo">083</span>      // Execute the operation<a name="line.83"></a>
+<span class="sourceLineNo">084</span>      getWorkflowImpl().execute(operation);<a name="line.84"></a>
+<span class="sourceLineNo">085</span>    }<a name="line.85"></a>
+<span class="sourceLineNo">086</span>    else<a name="line.86"></a>
+<span class="sourceLineNo">087</span>    {<a name="line.87"></a>
+<span class="sourceLineNo">088</span>      // Execute the SEARCH operation<a name="line.88"></a>
+<span class="sourceLineNo">089</span>      executeSearch((SearchOperation) operation);<a name="line.89"></a>
+<span class="sourceLineNo">090</span>    }<a name="line.90"></a>
+<span class="sourceLineNo">091</span>  }<a name="line.91"></a>
+<span class="sourceLineNo">092</span><a name="line.92"></a>
+<span class="sourceLineNo">093</span><a name="line.93"></a>
+<span class="sourceLineNo">094</span>  /**<a name="line.94"></a>
+<span class="sourceLineNo">095</span>   * Executes a search operation on the the root DSE entry.<a name="line.95"></a>
+<span class="sourceLineNo">096</span>   *<a name="line.96"></a>
+<span class="sourceLineNo">097</span>   * @param searchOp the operation to execute<a name="line.97"></a>
+<span class="sourceLineNo">098</span>   *<a name="line.98"></a>
+<span class="sourceLineNo">099</span>   * @throws CanceledOperationException if this operation should<a name="line.99"></a>
+<span class="sourceLineNo">100</span>   * be cancelled.<a name="line.100"></a>
+<span class="sourceLineNo">101</span>   */<a name="line.101"></a>
+<span class="sourceLineNo">102</span>  private void executeSearch(SearchOperation searchOp)<a name="line.102"></a>
+<span class="sourceLineNo">103</span>      throws CanceledOperationException {<a name="line.103"></a>
+<span class="sourceLineNo">104</span>    // Keep a the original search scope because we will alter it in the<a name="line.104"></a>
+<span class="sourceLineNo">105</span>    // operation.<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    SearchScope originalScope = searchOp.getScope();<a name="line.106"></a>
+<span class="sourceLineNo">107</span><a name="line.107"></a>
+<span class="sourceLineNo">108</span>    // Search base?<a name="line.108"></a>
+<span class="sourceLineNo">109</span>    // The root DSE entry itself is never returned unless the operation<a name="line.109"></a>
+<span class="sourceLineNo">110</span>    // is a search base on the null suffix.<a name="line.110"></a>
+<span class="sourceLineNo">111</span>    if (originalScope == SearchScope.BASE_OBJECT)<a name="line.111"></a>
+<span class="sourceLineNo">112</span>    {<a name="line.112"></a>
+<span class="sourceLineNo">113</span>      getWorkflowImpl().execute(searchOp);<a name="line.113"></a>
+<span class="sourceLineNo">114</span>      return;<a name="line.114"></a>
+<span class="sourceLineNo">115</span>    }<a name="line.115"></a>
+<span class="sourceLineNo">116</span><a name="line.116"></a>
+<span class="sourceLineNo">117</span>    // Create a workflow result code in case we need to perform search in<a name="line.117"></a>
+<span class="sourceLineNo">118</span>    // subordinate workflows.<a name="line.118"></a>
+<span class="sourceLineNo">119</span>    WorkflowResultCode workflowResultCode = new WorkflowResultCode(<a name="line.119"></a>
+<span class="sourceLineNo">120</span>        searchOp.getResultCode(), searchOp.getErrorMessage());<a name="line.120"></a>
+<span class="sourceLineNo">121</span><a name="line.121"></a>
+<span class="sourceLineNo">122</span>    // The search scope is not 'base', so let's do a search on all the public<a name="line.122"></a>
+<span class="sourceLineNo">123</span>    // naming contexts with appropriate new search scope and new base DN.<a name="line.123"></a>
+<span class="sourceLineNo">124</span>    SearchScope newScope = elaborateScopeForSearchInSubordinates(originalScope);<a name="line.124"></a>
+<span class="sourceLineNo">125</span>    searchOp.setScope(newScope);<a name="line.125"></a>
+<span class="sourceLineNo">126</span>    DN originalBaseDN = searchOp.getBaseDN();<a name="line.126"></a>
+<span class="sourceLineNo">127</span><a name="line.127"></a>
+<span class="sourceLineNo">128</span>    Iterable&lt;WorkflowTopologyNode&gt; ncToSearch =<a name="line.128"></a>
+<span class="sourceLineNo">129</span>      DirectoryServer.getRootDSEBackend().getSubordinateNamingContexts(<a name="line.129"></a>
+<span class="sourceLineNo">130</span>          namingContexts.getPublicNamingContexts());<a name="line.130"></a>
+<span class="sourceLineNo">131</span><a name="line.131"></a>
+<span class="sourceLineNo">132</span>    for (WorkflowTopologyNode namingContext: ncToSearch)<a name="line.132"></a>
+<span class="sourceLineNo">133</span>    {<a name="line.133"></a>
+<span class="sourceLineNo">134</span>      // We have to change the operation request base DN to match the<a name="line.134"></a>
+<span class="sourceLineNo">135</span>      // subordinate workflow base DN. Otherwise the workflow will<a name="line.135"></a>
+<span class="sourceLineNo">136</span>      // return a no such entry result code as the operation request<a name="line.136"></a>
+<span class="sourceLineNo">137</span>      // base DN is a superior of the workflow base DN!<a name="line.137"></a>
+<span class="sourceLineNo">138</span>      DN ncDN = namingContext.getBaseDN();<a name="line.138"></a>
+<span class="sourceLineNo">139</span><a name="line.139"></a>
+<span class="sourceLineNo">140</span>      // Set the new request base DN then do execute the operation<a name="line.140"></a>
+<span class="sourceLineNo">141</span>      // in the naming context workflow.<a name="line.141"></a>
+<span class="sourceLineNo">142</span>      searchOp.setBaseDN(ncDN);<a name="line.142"></a>
+<span class="sourceLineNo">143</span>      namingContext.execute(searchOp);<a name="line.143"></a>
+<span class="sourceLineNo">144</span>      boolean sendReferenceEntry =<a name="line.144"></a>
+<span class="sourceLineNo">145</span>        workflowResultCode.elaborateGlobalResultCode(<a name="line.145"></a>
+<span class="sourceLineNo">146</span>          searchOp.getResultCode(), searchOp.getErrorMessage());<a name="line.146"></a>
+<span class="sourceLineNo">147</span>      if (sendReferenceEntry)<a name="line.147"></a>
+<span class="sourceLineNo">148</span>      {<a name="line.148"></a>
+<span class="sourceLineNo">149</span>        // TODO jdemendi - turn a referral result code into a reference entry<a name="line.149"></a>
+<span class="sourceLineNo">150</span>        // and send the reference entry to the client application<a name="line.150"></a>
+<span class="sourceLineNo">151</span>      }<a name="line.151"></a>
+<span class="sourceLineNo">152</span>    }<a name="line.152"></a>
+<span class="sourceLineNo">153</span><a name="line.153"></a>
+<span class="sourceLineNo">154</span>    // Now restore the original request base DN and original search scope<a name="line.154"></a>
+<span class="sourceLineNo">155</span>    searchOp.setBaseDN(originalBaseDN);<a name="line.155"></a>
+<span class="sourceLineNo">156</span>    searchOp.setScope(originalScope);<a name="line.156"></a>
+<span class="sourceLineNo">157</span><a name="line.157"></a>
+<span class="sourceLineNo">158</span>    // If the result code is still uninitialized (ie no naming context),<a name="line.158"></a>
+<span class="sourceLineNo">159</span>    // we should return NO_SUCH_OBJECT<a name="line.159"></a>
+<span class="sourceLineNo">160</span>    workflowResultCode.elaborateGlobalResultCode(<a name="line.160"></a>
+<span class="sourceLineNo">161</span>      ResultCode.NO_SUCH_OBJECT, new MessageBuilder(Message.EMPTY));<a name="line.161"></a>
+<span class="sourceLineNo">162</span><a name="line.162"></a>
+<span class="sourceLineNo">163</span>    // Set the operation result code and error message<a name="line.163"></a>
+<span class="sourceLineNo">164</span>    searchOp.setResultCode(workflowResultCode.resultCode());<a name="line.164"></a>
+<span class="sourceLineNo">165</span>    searchOp.setErrorMessage(workflowResultCode.errorMessage());<a name="line.165"></a>
+<span class="sourceLineNo">166</span>  }<a name="line.166"></a>
+<span class="sourceLineNo">167</span><a name="line.167"></a>
+<span class="sourceLineNo">168</span><a name="line.168"></a>
+<span class="sourceLineNo">169</span>  /**<a name="line.169"></a>
+<span class="sourceLineNo">170</span>   * Dumps info from the current workflow for debug purpose.<a name="line.170"></a>
+<span class="sourceLineNo">171</span>   *<a name="line.171"></a>
+<span class="sourceLineNo">172</span>   * @param leftMargin  white spaces used to indent the traces<a name="line.172"></a>
+<span class="sourceLineNo">173</span>   * @return a string buffer that contains trace information<a name="line.173"></a>
+<span class="sourceLineNo">174</span>   */<a name="line.174"></a>
+<span class="sourceLineNo">175</span>  public StringBuilder toString(String leftMargin)<a name="line.175"></a>
+<span class="sourceLineNo">176</span>  {<a name="line.176"></a>
+<span class="sourceLineNo">177</span>    StringBuilder sb = new StringBuilder();<a name="line.177"></a>
+<span class="sourceLineNo">178</span><a name="line.178"></a>
+<span class="sourceLineNo">179</span>    // display the identifier and baseDN<a name="line.179"></a>
+<span class="sourceLineNo">180</span>    String workflowID = this.getWorkflowImpl().getWorkflowId();<a name="line.180"></a>
+<span class="sourceLineNo">181</span>    sb.append(leftMargin + "Workflow ID = " + workflowID + "\n");<a name="line.181"></a>
+<span class="sourceLineNo">182</span>    sb.append(leftMargin + "         baseDN:[ \"\" ]\n");<a name="line.182"></a>
+<span class="sourceLineNo">183</span><a name="line.183"></a>
+<span class="sourceLineNo">184</span>    return sb;<a name="line.184"></a>
+<span class="sourceLineNo">185</span>  }<a name="line.185"></a>
+<span class="sourceLineNo">186</span><a name="line.186"></a>
+<span class="sourceLineNo">187</span>}<a name="line.187"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

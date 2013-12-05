@@ -1009,12 +1009,15 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 <!-- END SyntaxHighlighter 3.0.83 -->
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
-</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;3.&nbsp;Installing OpenAM Tools</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-install-core.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-install-das.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;3.&nbsp;Installing OpenAM Tools"><div class="titlepage"><div><div><h2 class="title"><a name="chap-install-tools"></a>Chapter&nbsp;3.&nbsp;Installing OpenAM Tools</h2></div></div></div><a class="indexterm" name="d1686e1320"></a><p>OpenAM tools are found in three <code class="filename">.zip</code> files where you 
-  unpacked the archive of the entire package, such as 
-  <code class="filename">~/Downloads/openam</code>.</p><div class="variablelist"><dl><dt><span class="term"><code class="filename">openam-distribution-ssoadmintools-10.1.0-Xpress.zip</code></span></dt><dd><p>Administration tools: <span class="command"><strong>ampassword</strong></span>,
-    <span class="command"><strong>ssoadm</strong></span> and <span class="command"><strong>amverifyarchive</strong></span></p></dd><dt><span class="term"><code class="filename">openam-distribution-ssoconfiguratortools-10.1.0-Xpress.zip</code></span></dt><dd><p>Tool to check for command line installation, upgrade, and initial
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div><p class="cornerBanner"><a target="_blank" href="http://docs.forgerock.org/en/openam/11.0.0/">v11.0.0 available</a></p></div><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;3.&nbsp;Installing OpenAM Tools</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-install-core.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-install-das.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter" title="Chapter&nbsp;3.&nbsp;Installing OpenAM Tools"><div class="titlepage"><div><div><h2 class="title"><a name="chap-install-tools"></a>Chapter&nbsp;3.&nbsp;Installing OpenAM Tools</h2></div></div></div><a class="indexterm" name="d1686e1320"></a><p>OpenAM tools are found in three <code class="filename">.zip</code> files inside
+ the archive of the entire OpenAM zip download package,
+ <code class="filename">openam_10.1.0.zip</code>. When you unpack the full
+ zip package, you find these files.</p><div class="variablelist"><dl><dt><span class="term"><code class="filename">openam-distribution-ssoadmintools-10.1.0-Xpress.zip</code></span></dt><dd><p>Administration tools: <span class="command"><strong>ampassword</strong></span>,
+    <span class="command"><strong>ssoadm</strong></span> and <span class="command"><strong>amverifyarchive</strong></span></p><p>This administration tools package can be downloaded separately as
+    <code class="filename">ssoAdminTools_10.1.0.zip</code>.</p></dd><dt><span class="term"><code class="filename">openam-distribution-ssoconfiguratortools-10.1.0-Xpress.zip</code></span></dt><dd><p>Tool to check for command line installation, upgrade, and initial
     configuration, as well as serving as a command line alternative to using
-    the GUI configuration wizard </p></dd><dt><span class="term"><code class="filename">openam-distribution-diagnostics-10.1.0-Xpress.zip</code></span></dt><dd><p>Tool to check for problems with your deployment and
+    the GUI configuration wizard</p><p>This configurator package can be downloaded separately as
+    <code class="filename">ssoconfiguratortools_10.1.0.zip</code>.</p></dd><dt><span class="term"><code class="filename">openam-distribution-diagnostics-10.1.0-Xpress.zip</code></span></dt><dd><p>Tool to check for problems with your deployment and
     configuration</p></dd></dl></div><div class="procedure" title="Procedure&nbsp;3.1.&nbsp;To Set Up Administration Tools"><a name="install-openam-admin-tools"></a><div class="procedure-title">Procedure&nbsp;3.1.&nbsp;To Set Up Administration Tools</div><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Make sure OpenAM is installed on the system before proceeding.</p></li><li class="step" title="Step 2"><p>Make sure the <code class="literal">JAVA_HOME</code> environment variable
    is properly set.</p><div class="screen"><pre class="brush: plain;">$ echo $JAVA_HOME
 /path/to/jdk1.6</pre></div></li><li class="step" title="Step 3"><p>Unpack the tools from where you unzipped OpenAM.</p><div class="screen"><pre class="brush: plain;">$ cd /path/to/openam-tools/admin
@@ -1068,7 +1071,7 @@ http://openam.example.com:8080/openam</pre></div><p>The <span class="command"><s
    the following property to the <span class="command"><strong>java</strong></span> command (without
    line breaks).</p><pre class="literallayout">-D"com.iplanet.am.naming.map.site.to.server=
    https://lb.example.com:443/openam=http://openam1.example.com:8080/openam,
-   https://lb.example.com:443/openam=http://openam2.example.com:8080/openam"</pre></li></ol></div><div class="procedure" title="Procedure&nbsp;3.2.&nbsp;To Set Up Configuration Tools"><a name="install-openam-config-tools"></a><div class="procedure-title">Procedure&nbsp;3.2.&nbsp;To Set Up Configuration Tools</div><a class="indexterm" name="d1686e1508"></a><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Make sure the <code class="literal">JAVA_HOME</code> environment variable
+   https://lb.example.com:443/openam=http://openam2.example.com:8080/openam"</pre></li></ol></div><div class="procedure" title="Procedure&nbsp;3.2.&nbsp;To Set Up Configuration Tools"><a name="install-openam-config-tools"></a><div class="procedure-title">Procedure&nbsp;3.2.&nbsp;To Set Up Configuration Tools</div><a class="indexterm" name="d1686e1519"></a><ol class="procedure" type="1"><li class="step" title="Step 1"><p>Make sure the <code class="literal">JAVA_HOME</code> environment variable
    is properly set.</p><div class="screen"><pre class="brush: plain;">$ echo $JAVA_HOME
 /path/to/jdk1.6</pre></div></li><li class="step" title="Step 2"><p>Unpack the tools from where you unzipped OpenAM.</p><div class="screen"><pre class="brush: plain;">$ cd /path/to/openam-tools/config
 $ unzip ~/Downloads/openam/
@@ -1100,7 +1103,7 @@ $ unzip ~/Downloads/openam/openam-distribution-ssoadmintools-10.1.0-Xpress.zip
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-23412190-7']);
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
   _gaq.push(['_trackPageview']);
 
   (function() {
