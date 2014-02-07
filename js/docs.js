@@ -17,7 +17,7 @@
  *
  * CCPL HEADER END
  *
- *     Copyright 2011-2013 ForgeRock AS
+ *     Copyright 2011-2014 ForgeRock AS
  *
  */
 
@@ -38,6 +38,7 @@ var products = {
         "3.1.0-Xpress"
     ],
     "opendj": [
+        "2.6.1",
         "2.6.0",
         "2.5.0-Xpress1"
     ],
