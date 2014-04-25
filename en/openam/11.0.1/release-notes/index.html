@@ -16,7 +16,13 @@
    Before you install OpenAM or update your existing OpenAM installation,
    read these release notes.
    Then update or install OpenAM.</p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
-    If you have already installed OpenAM, see <a href="../release-notes/index.html#update-from-earlier-release" class="link"><em class="citetitle">To Update OpenAM 11.0.0</em></a>.
+    If you have already installed OpenAM, see <a href="../release-notes/index.html#update-from-earlier-release" class="link"><em class="citetitle">To Update OpenAM From 11.0.0</em></a>.
+   </p><p>
+    Do <span class="emphasis"><em>not</em></span> perform an upgrade
+    by deploying the new version
+    and then importing an existing configuration
+    by running the <span class="command"><strong>ssoadm import-svc-config</strong></span> command.
+    Importing an outdated configuration can result in a corrupted installation.
    </p></li><li class="listitem"><p>
     If you are installing OpenAM for the first time, see <a href="../release-notes/index.html#install-fresh" class="link"><em class="citetitle">To Install OpenAM</em></a>.
    </p></li></ul></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="product-enhancements"></a>1.1.&nbsp;Product Enhancements</h2></div></div></div><p>
@@ -74,7 +80,7 @@
      </p></li><li class="listitem"><p>
       <a class="link" href="http://docs.forgerock.org/en/openam/11.0.0/reference/" target="_blank">OpenAM 11.0.0 Reference</a>
      </p></li><li class="listitem"><p>
-      <a class="link" href="http://docs.forgerock.org/en/openam/11.0.0/javadoc/" target="_blank">OpenAM 11.0.0 Javadoc</a>
+      <a class="link" href="http://docs.forgerock.org/en/openam/11.0.0/apidocs/" target="_blank">OpenAM 11.0.0 Javadoc</a>
      </p></li></ul></div></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-before-you-install"></a>Chapter&nbsp;2.&nbsp;Before You Install OpenAM 11.0.1 Software</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="#java-requirements">2.1. Java Requirements</a></span></dt><dt><span class="section"><a href="#web-container-requirements">2.2. Web Application Container Requirements</a></span></dt><dt><span class="section"><a href="#data-store-requirements">2.3. Data Store Requirements</a></span></dt><dt><span class="section"><a href="#browsers-tested">2.4. Browsers Tested</a></span></dt><dt><span class="section"><a href="#platform-requirements">2.5. Platform Requirements</a></span></dt><dt><span class="section"><a href="#hardware-requirements">2.6. Hardware Requirements</a></span></dt><dt><span class="section"><a href="#special-requests">2.7. Special Requests</a></span></dt></dl></div><p>This chapter covers software and hardware prerequisites for installing
  and running OpenAM software.</p><div class="note"><h3 class="title">Note</h3><p>
    The content of this chapter has not changed since OpenAM 11.0.0.
@@ -244,10 +250,7 @@
      and the <code class="literal">Object session</code> argument.
     </p></li></ul></div><div class="itemizedlist"><p>
     The following changes were listed for OpenAM 11.0.0.
-   </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>When you create a new OpenAM custom configuration that uses an
-    external LDAP directory server for the configuration data store, you must
-    use a root suffix DN with at least two domain components, such as
-    <code class="literal">dc=example,dc=com</code>.</p></li><li class="listitem"><p>The advanced server property used to set the HTTP header name,
+   </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>The advanced server property used to set the HTTP header name,
       <code class="literal">com.sun.identity.authentication.client.ipAddressHeader</code>,
       has replaced the legacy OpenSSO property
       <code class="literal">com.sun.identity.session.httpClientIPHeader</code> (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-1879" target="_blank">OPENAM-1879</a>).</p></li><li class="listitem"><p>Legacy naming conventions have been changed to conform to the
@@ -302,7 +305,7 @@
     Core Authentication module persistent cookie options are deprecated and are
     likely to be removed in a future release.</p></li><li class="listitem"><p>Older REST services relying on the following end points are
     deprecated.</p><table border="0" summary="Simple list" class="simplelist"><tr><td>/identity/attributes</td><td>/identity/logout</td></tr><tr><td>/identity/authenticate</td><td>/identity/read</td></tr><tr><td>/identity/create</td><td>/identity/search</td></tr><tr><td>/identity/delete</td><td>/identity/update</td></tr></table><p>The following table shows how legacy and newer end points
-    correspond.</p><div class="table"><a name="d175e808"></a><div class="table-title">Table&nbsp;4.1.&nbsp;REST End Points</div><div class="table-contents"><table summary="REST End Points" border="0"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Deprecated URIs</th><th>Newer Evolving URIs</th></tr></thead><tbody><tr><td>/identity/attributes</td><td>/json/users</td></tr><tr><td>/identity/authenticate</td><td>/json/authenticate</td></tr><tr><td>/identity/create, /identity/delete, /identity/read,
+    correspond.</p><div class="table"><a name="d177e809"></a><div class="table-title">Table&nbsp;4.1.&nbsp;REST End Points</div><div class="table-contents"><table summary="REST End Points" border="0"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Deprecated URIs</th><th>Newer Evolving URIs</th></tr></thead><tbody><tr><td>/identity/attributes</td><td>/json/users</td></tr><tr><td>/identity/authenticate</td><td>/json/authenticate</td></tr><tr><td>/identity/create, /identity/delete, /identity/read,
         /identity/search, /identity/update</td><td>/json/agents, /json/groups, /json/realms, /json/users</td></tr><tr><td>/identity/logout</td><td>/json/sessions/?_action=logout</td></tr><tr><td>N/A</td><td>/json/dashboard</td></tr><tr><td>N/A</td><td>/json/serverinfo</td></tr></tbody></table></div></div><br class="table-break"><p>Find examples in the <em class="citetitle">Developer Guide</em> chapter on
     <em class="citetitle">Using RESTful Web Services</em> OpenAM.</p><p>Support for the older REST services is likely to be removed in a
     future release in favor of the newer REST services. Older REST services
