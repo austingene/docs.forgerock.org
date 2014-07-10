@@ -134,7 +134,6 @@ $(document).ready(function () {
      * If the projectName/projectVersion is not equal to
      * the latest published projectName/projectVersion,
      * then show a link.
-     */
     var project = "opendj";       // E.g. "OpenAM"
     var version = "2.6.0";    // E.g. "11.0.0"
     var jsonUrl = "http://docs.forgerock.org/latest.json";        // E.g. "http://docs.forgerock.org/latest.php"
@@ -151,6 +150,7 @@ $(document).ready(function () {
                 appendTo("body");
         }
     });
+     */
 
 });
 
