@@ -23,7 +23,7 @@
 
 /**
  * Format is "product": [ "version", ...].
- * The latest version of a product is the first element of the array.
+ * The latest version of a product is usually the first element of the array.
  */
 var products = {
     "openam": [
@@ -40,6 +40,7 @@ var products = {
         "3.1.0-Xpress"
     ],
     "opendj": [
+        "2.6.9",
         "2.6.1",
         "2.6.0",
         "2.5.0-Xpress1"
