@@ -1,0 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>OpenDJ LDAP SDK Release Notes</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><meta name="description" content="Notes covering OpenDJ LDAP SDK software requirements, fixes, known issues. The OpenDJ project offers open source LDAP directory services in Java."><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div lang="en" class="book"><div class="titlepage"><div><div><h1 class="title"><a name="release-notes"></a>OpenDJ LDAP SDK Release Notes</h1></div><div><h2 class="subtitle">Version 2.6.9</h2></div><div><div class="authorgroup"><div class="author"><h3 class="author"><span class="firstname">Mark </span> <span class="surname">Craig</span></h3></div><div class="author"><h3 class="author"><span class="firstname">Chris </span> <span class="surname">Ridd</span></h3><div lang="en" class="affiliation"><span class="orgname">ForgeRock AS<br></span><div class="address"><p><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="street">33&nbsp;New&nbsp;Montgomery&nbsp;St.</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="otheraddr">Suite&nbsp;1500</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="city">San&nbsp;Francisco</span>,&nbsp;<span class="state">CA</span>&nbsp;<span class="postcode">94105</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="country">USA</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="phone">+1&nbsp;415-523-0772</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<code class="uri">www.forgerock.com</code><br>
+&nbsp;&nbsp;&nbsp;</p></div></div></div></div></div><div><p class="releaseinfo">Software release date: July 11, 2014</p></div><div><p class="copyright">Copyright &copy; 2014 ForgeRock AS</p></div><div><a href="legalnotice.html">Legal Notice</a></div><div><p class="pubdate">Publication date: July 11, 2014</p></div><div><div class="abstract"><div class="abstract-title">Abstract</div><p>
+    Notes covering OpenDJ LDAP SDK software requirements, fixes, known issues.
+    The OpenDJ project offers open source LDAP directory services in Java.
+   </p></div></div></div><hr></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="preface"><a href="#preface">Preface</a></span></dt><dt><span class="chapter"><a href="#chap-get-sdk">1. Getting OpenDJ LDAP SDK</a></span></dt><dt><span class="chapter"><a href="#chap-whats-new">2. What's New in OpenDJ LDAP SDK 2.6.9</a></span></dt><dt><span class="chapter"><a href="#chap-before-you-install">3. Before You Install OpenDJ LDAP SDK Software</a></span></dt><dt><span class="chapter"><a href="#chap-compatibility">4. Compatibility</a></span></dt><dt><span class="chapter"><a href="#chap-issues">5. OpenDJ LDAP SDK Fixes, Limitations, &amp; Known Issues</a></span></dt><dt><span class="chapter"><a href="#chap-feedback">6. How to Report Problems &amp; Provide Feedback</a></span></dt><dt><span class="chapter"><a href="#chap-support">7. Support</a></span></dt></dl></div><div class="preface"><div class="titlepage"><div><div><h1 class="title"><a name="preface"></a>Preface</h1></div></div></div><p>
+   OpenDJ LDAP SDK provides a set of modern, developer-friendly Java APIs
+   as part of the OpenDJ product suite.
+   The product suite includes the client SDK
+   alongside command-line tools and sample code,
+   a 100% pure Java directory server, and more.
+   You can use OpenDJ LDAP SDK to create client applications
+   for use with any server that complies with the
+   <em class="citetitle">Lightweight Directory Access Protocol (LDAP):
+    Technical Specification Road Map</em>,
+   <a class="link" href="http://tools.ietf.org/html/rfc4510" target="_blank">RFC 4510</a>.
+  </p><p>
+   OpenDJ LDAP SDK brings you easy-to-use connection management,
+   connection pooling, load balancing, and all the standard LDAP operations
+   to read and write directory entries.
+   OpenDJ LDAP SDK also lets you build applications with capabilities
+   defined in additional draft and experimental RFCs
+   that are supported by modern LDAP servers.
+  </p></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-get-sdk"></a>Chapter&nbsp;1.&nbsp;Getting OpenDJ LDAP SDK</h1></div></div></div><p>
+  OpenDJ LDAP SDK is available from the ForgeRock repository,
+  <a class="link" href="http://maven.forgerock.org/repo/" target="_blank">http://maven.forgerock.org/repo/</a>.
+ </p><p>
+  To include OpenDJ LDAP SDK as a Maven dependency,
+  include the ForgeRock repository in your list,
+  and include the SDK as a dependency.
+ </p><pre class="brush: xml;">
+&lt;repositories&gt;
+  &lt;repository&gt;
+    &lt;id&gt;forgerock-staging-repository&lt;/id&gt;
+    &lt;name&gt;ForgeRock Release Repository&lt;/name&gt;
+    &lt;url&gt;http://maven.forgerock.org/repo/releases&lt;/url&gt;
+    &lt;snapshots&gt;
+      &lt;enabled&gt;false&lt;/enabled&gt;
+    &lt;/snapshots&gt;
+  &lt;/repository&gt;
+  &lt;repository&gt;
+    &lt;id&gt;forgerock-snapshots-repository&lt;/id&gt;
+    &lt;name&gt;ForgeRock Snapshot Repository&lt;/name&gt;
+    &lt;url&gt;http://maven.forgerock.org/repo/snapshots&lt;/url&gt;
+    &lt;releases&gt;
+      &lt;enabled&gt;false&lt;/enabled&gt;
+    &lt;/releases&gt;
+  &lt;/repository&gt;
+&lt;/repositories&gt;
+
+&lt;dependencies&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.forgerock.opendj&lt;/groupId&gt;
+    &lt;artifactId&gt;opendj-ldap-sdk&lt;/artifactId&gt;
+    &lt;version&gt;2.6.9&lt;/version&gt;
+  &lt;/dependency&gt;
+&lt;/dependencies&gt;
+
+ </pre></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-whats-new"></a>Chapter&nbsp;2.&nbsp;What's New in OpenDJ LDAP SDK 2.6.9</h1></div></div></div><p>
+   This release provides the following new features and enhancements.
+  </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1508" target="_blank">OPENDJ-1508</a>: Allow "=" in malformed attribute options</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1466" target="_blank">OPENDJ-1466</a>: Improve initialization of InetSocketAddress in SDK to prevent cached DNS data.</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1152" target="_blank">OPENDJ-1152</a>: Provide the ability to debug leaked pooled connections</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1124" target="_blank">OPENDJ-1124</a>: Connection.search() return value not mockable</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1112" target="_blank">OPENDJ-1112</a>: LoadBalancing connection factories need better diagnostic messages</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1091" target="_blank">OPENDJ-1091</a>: Implement a cached connection pool</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1033" target="_blank">OPENDJ-1033</a>: The Rest2LDAP servlet does not support SSL</p></li></ul></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-before-you-install"></a>Chapter&nbsp;3.&nbsp;Before You Install OpenDJ LDAP SDK Software</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="#prerequisites-java">3.1. Java Environment</a></span></dt></dl></div><p>
+  This chapter covers requirements to consider before you run OpenDJ LDAP SDK.
+ </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="prerequisites-java"></a>3.1.&nbsp;Java Environment</h2></div></div></div><p>
+   OpenDJ LDAP SDK is a pure Java library.
+   OpenDJ LDAP SDK therefore should run on any system with full Java support.
+   OpenDJ software runs on a variety of operating systems,
+   including but not limited to Solaris SPARC and x86,
+   various Linux distributions,
+   Microsoft Windows,
+   and Apple Mac OS X.
+  </p><p>
+   OpenDJ software requires Java 6 or 7,
+   specifically at least the Java Standard Edition runtime environment.
+   To build applications with OpenDJ LDAP SDK,
+   you need the corresponding Java SDK.
+  </p><p>
+   ForgeRock recommends that you keep your Java installation up to date
+   with the latest security fixes.
+  </p></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-compatibility"></a>Chapter&nbsp;4.&nbsp;Compatibility</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="#changes">4.1. Major Changes</a></span></dt><dt><span class="section"><a href="#deprecation">4.2. Deprecation</a></span></dt><dt><span class="section"><a href="#removals">4.3. Removals</a></span></dt></dl></div><p>
+  This chapter covers major changes to existing APIs,
+  and deprecated and removed APIs.
+ </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="changes"></a>4.1.&nbsp;Major Changes</h2></div></div></div><p>
+   This maintenance release is binary-compatible with
+   OpenDJ LDAP SDK 2.6.0.
+   It does not introduce major changes.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="deprecation"></a>4.2.&nbsp;Deprecation</h2></div></div></div><p>
+   Deprecated APIs are listed in the API Specification, on the
+   <a class="link" href="http://docs.forgerock.org/en/opendj/2.6.9/apidocs//index.html?deprecated-list.html" target="_blank">Deprecated list</a> page.
+  </p><p>
+   Deprecated APIs are likely to be removed in a future release.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="removals"></a>4.3.&nbsp;Removals</h2></div></div></div><p>
+   Nothing has been removed from the public APIs in this release.
+  </p></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-issues"></a>Chapter&nbsp;5.&nbsp;OpenDJ LDAP SDK Fixes, Limitations, &amp; Known Issues</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="#fixes">5.1. Key Fixes</a></span></dt><dt><span class="section"><a href="#limitations">5.2. Limitations</a></span></dt><dt><span class="section"><a href="#known-issues">5.3. Known Issues</a></span></dt></dl></div><p>
+  This chapter covers the status of key issues and limitations
+  for this version of OpenDJ LDAP SDK.
+  For detailed information regarding a particular issue, see the
+  <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ" target="_blank">OpenDJ issue tracker</a>.
+ </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="fixes"></a>5.1.&nbsp;Key Fixes</h2></div></div></div><p>
+   The following bugs were fixed in this release.
+  </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1491" target="_blank">OPENDJ-1491</a>: NPE can occur during connection failover</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1396" target="_blank">OPENDJ-1396</a>: newHeartBeatConnectionFactory uses wrong units for DEFAULT_TIMEOUT_IN_SECONDS</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1348" target="_blank">OPENDJ-1348</a>: Various connection pool implementations do not recover if the target server is powered off and restarted</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1320" target="_blank">OPENDJ-1320</a>: Fix ABI compatibility breaks between 2.6.6 and 2.6.0 SDK</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1270" target="_blank">OPENDJ-1270</a>: Avoid unnecessary DNS lookups when performing bind requests</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1258" target="_blank">OPENDJ-1258</a>: Default heartbeat timeout of 500ms is too aggressive</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1249" target="_blank">OPENDJ-1249</a>: ConnectionFactory timeout setting is applied for Active Directory persistent search requests</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1247" target="_blank">OPENDJ-1247</a>: Client side timeouts do not cancel bind or startTLS requests properly</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1209" target="_blank">OPENDJ-1209</a>: Impossible to use OpenDJ SDK 2.6.4  with OpenDJ server 2.6.0</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1203" target="_blank">OPENDJ-1203</a>: MemoryBackend does not raise an error when trying to delete non-existent attribute</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1197" target="_blank">OPENDJ-1197</a>: API is lacking functionality to specify TCP connect timeout as well as various TCP socket options (e.g. TcpNoDelay).</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1168" target="_blank">OPENDJ-1168</a>: Warning message displayed when heartbeat check fails with a bind connection pool</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1156" target="_blank">OPENDJ-1156</a>: NPE in ReferenceCountedObject after shutting down directory</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1137" target="_blank">OPENDJ-1137</a>: ConnectionEntryReader does not provide a means for accessing controls in the search result</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1121" target="_blank">OPENDJ-1121</a>: Closing a connection after closing the connectionfactory causes NPE</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1105" target="_blank">OPENDJ-1105</a>: Rest2LDAP never returns a response when invalid parameters or content are provided on Jetty 8</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1058" target="_blank">OPENDJ-1058</a>: HeartbeatConnectionFactory does not actively shutdown dead connections</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1049" target="_blank">OPENDJ-1049</a>: ReferenceCountedObject can be released twice in some circumstances</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1044" target="_blank">OPENDJ-1044</a>: Doing a PUT with JSON data identical to what is on the server results in 400 status code</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-973" target="_blank">OPENDJ-973</a>: Create resource using PUT results in 500 Internal Server Error</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-734" target="_blank">OPENDJ-734</a>: NPE when attempting SSL connect with client certs</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-672" target="_blank">OPENDJ-672</a>: LDAP SDK SSL connect attempts fail with horrible stack trace when handshake fails</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-661" target="_blank">OPENDJ-661</a>: TimeoutChecker throws NullPointerException on application shutdown</p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="limitations"></a>5.2.&nbsp;Limitations</h2></div></div></div><p>
+   No limitations are noted for this release.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="known-issues"></a>5.3.&nbsp;Known Issues</h2></div></div></div><p>
+   The following important issues remained open
+   at the time this release became available.
+  </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1477" target="_blank">OPENDJ-1477</a>: Constant re-allocation of DN per-schema caches</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1475" target="_blank">OPENDJ-1475</a>: Allow checking for alternative DNS names in server certificates when setting up secure connections</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1024" target="_blank">OPENDJ-1024</a>: modrate/searchrate: provide --warmUpDuration parameter</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1023" target="_blank">OPENDJ-1023</a>: modrate/searchrate: provide --duration parameter</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-1022" target="_blank">OPENDJ-1022</a>: modrate/searchrate: provide --numOperations parameter</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-860" target="_blank">OPENDJ-860</a>: Returning false from SearchResultHandler.handleXXX should prevent subsequent notifications.</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-674" target="_blank">OPENDJ-674</a>: OpenDJ LDAP SDK should not leave app threads indefinitely waiting on futures when unexpected internal errors occur.</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-607" target="_blank">OPENDJ-607</a>: RoundRobinLoadBalancingAlgorithm balancing is not optimum after failure of a connection factory</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-514" target="_blank">OPENDJ-514</a>: OpenDJ SDK SASL integrity/confidentiality violates protocol</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-442" target="_blank">OPENDJ-442</a>: ldapsearch asking for password with GSSAPI when it should not need to</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-174" target="_blank">OPENDJ-174</a>: Investigate and fix performance regression introduced in fix for OPENDJ-127</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-155" target="_blank">OPENDJ-155</a>: Add support for OpenDJ extended matching rules and syntaxes</p></li></ul></div></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-feedback"></a>Chapter&nbsp;6.&nbsp;How to Report Problems &amp; Provide Feedback</h1></div></div></div><p>
+  If you have questions regarding OpenDJ LDAP SDK
+  that are not answered by the documentation,
+  there is a mailing list which can be found at
+  <a class="link" href="https://lists.forgerock.org/mailman/listinfo/opendj" target="_blank">https://lists.forgerock.org/mailman/listinfo/opendj</a>
+  where you are likely to find an answer.
+ </p><p>
+  If you have found issues or reproducible bugs
+  within this release of OpenDJ LDAP SDK, report them in the
+  <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ" target="_blank">OpenDJ issue tracker</a>.
+ </p><p>
+  When requesting help with a problem, please include the following information:
+ </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+    Description of the problem, including when the problem occurs
+    and its impact on your operation
+   </p></li><li class="listitem"><div class="itemizedlist"><p>
+     Description of the environment, including the following information:
+    </p><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+      Machine type
+     </p></li><li class="listitem"><p>
+      Operating system &amp; version
+     </p></li><li class="listitem"><p>
+      Storage type &amp; version
+     </p></li><li class="listitem"><p>
+      Java version
+     </p></li><li class="listitem"><p>
+      OpenDJ LDAP SDK release version
+     </p></li><li class="listitem"><p>
+      Any patches or other software that might be affecting the problem
+     </p></li></ul></div></li><li class="listitem"><p>
+    Steps to reproduce the problem
+   </p></li><li class="listitem"><p>
+    Any relevant access and error logs, and stack traces
+   </p></li></ul></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-support"></a>Chapter&nbsp;7.&nbsp;Support</h1></div></div></div><p>
+  You can purchase OpenDJ LDAP SDK support subscriptions from ForgeRock
+  and from consulting partners around the world and in your area.
+ </p><p>
+  To contact ForgeRock, send mail to
+  <a class="link" href="mailto:info@forgerock.com" target="_top">info@forgerock.com</a>.
+ </p><p>
+  To find a partner in your area, see
+  <a class="link" href="http://forgerock.com/partners/find-a-partner/" target="_blank">http://forgerock.com/partners/find-a-partner/</a>.
+ </p></div></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10040&components=10132&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>
