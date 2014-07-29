@@ -17,16 +17,17 @@
  *
  * CCPL HEADER END
  *
- *     Copyright 2011-2013 ForgeRock AS
+ *     Copyright 2011-2014 ForgeRock AS
  *
  */
 
 /**
  * Format is "product": [ "version", ...].
- * The latest version of a product is the first element of the array.
+ * The latest version of a product is usually the first element of the array.
  */
 var products = {
     "openam": [
+        "11.0.1",
         "11.0.0",
         "10.1.0",
         "10.0.2",
@@ -34,10 +35,13 @@ var products = {
         "10.0.0"
     ],
     "openam-pa": [
+        "3.3.1",
         "3.3.0",
         "3.1.0-Xpress"
     ],
     "opendj": [
+        "2.6.9",
+        "2.6.1",
         "2.6.0",
         "2.5.0-Xpress1"
     ],

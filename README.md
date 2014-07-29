@@ -55,6 +55,20 @@ more recent release is available. Therefore, when you publish docs for a new
 release, update existing HTML docs to make sure there is a banner pointing to
 your new version.
 
+## For Doc Tools 2.1.0 & Later
+
+Update `latest.php` when you update your documentation,
+and make sure it shows up as JSON rather than PHP source
+at <http://docs.forgerock.org/latest.php>.
+
+The doc build plugin includes JavaScript in the HTML source
+that retrieves the list of latest versions,
+compares the latest with the current version,
+and if the current version is different,
+shows a banner pointing to the latest version.
+
+## For Doc Tools 2.0.0 & Earlier
+
 You do this by adding a `<div>` just after the `<body>` tag in all the
 published HTML docs for the product, which looks like this:
 
@@ -97,4 +111,4 @@ To view a copy of this license, visit
 or send a letter to Creative Commons, 444 Castro Street,
 Suite 900, Mountain View, California, 94041, USA.
 
-Copyright 2011-2013 ForgeRock AS
+Copyright 2011-2014 ForgeRock AS
