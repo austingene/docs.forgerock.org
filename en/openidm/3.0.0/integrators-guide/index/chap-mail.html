@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;19.&nbsp;Sending Email</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenIDM Integrator's Guide"><link rel="up" href="index.html" title="OpenIDM Integrator's Guide"><link rel="prev" href="chap-cluster.html" title="Chapter&nbsp;18.&nbsp;Configuring OpenIDM to Work in a Cluster"><link rel="next" href="chap-external-rest.html" title="Chapter&nbsp;20.&nbsp;Accessing External REST Services"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;19.&nbsp;Sending Email</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-cluster.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-external-rest.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-mail"></a>Chapter&nbsp;19.&nbsp;Sending Email</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-mail.html#send-mail-rest">19.1. Sending Mail Over REST</a></span></dt><dt><span class="section"><a href="chap-mail.html#send-mail-script">19.2. Sending Mail From a Script</a></span></dt></dl></div><a class="indexterm" name="d0e17913"></a><a class="indexterm" name="d0e17918"></a><p>
+  This chapter shows you how to configure the outbound email service, so that
+  you can send email through OpenIDM either by script or through the REST API.
+ </p><div class="procedure"><a name="setup-outbound-email"></a><div class="procedure-title">Procedure&nbsp;19.1.&nbsp;To Set Up Outbound Email</div><p>
+   The outbound email service relies on a configuration object to identify the
+   email account used to send messages. A sample configuration is provided in
+   <code class="filename">/path/to/openidm/samples/misc/external.email.json</code>. To
+   set up the external email service, follow these steps.
+  </p><ol class="procedure" type="1"><li class="step"><p>
+    Shut down OpenIDM.
+   </p></li><li class="step"><p>
+    Copy the sample configuration to the <code class="filename">conf</code> directory.
+   </p><div class="screen"><pre>$ cd /path/to/openidm/
+$ cp samples/misc/external.email.json conf/</pre></div></li><li class="step"><p>
+    Edit <code class="filename">external.email.json</code> to reflect the account that is
+    used to send messages.
+   </p><pre class="brush: javascript;">
+{
+        "host" : "smtp.example.com",
+        "port" : "25",
+        "username" : "openidm",
+        "password" : "secret12",
+        "mail.smtp.auth" : "true",
+        "mail.smtp.starttls.enable" : "true"
+}</pre><p>OpenIDM encrypts the password you provide.</p><div class="variablelist"><p>Follow these hints when editing the configuration.</p><dl class="variablelist"><dt><span class="term"><code class="literal">"host"</code></span></dt><dd><p>SMTP server host name or IP address. This can be
+      <code class="literal">"localhost"</code> if the server is on the same system as
+      OpenIDM.</p></dd><dt><span class="term"><code class="literal">"port"</code></span></dt><dd><p>SMTP server port number such as 25, or 587</p></dd><dt><span class="term"><code class="literal">"username"</code></span></dt><dd><p>Mail account user name needed when <code class="literal">"mail.smtp.auth" :
+      "true"</code></p></dd><dt><span class="term"><code class="literal">"password"</code></span></dt><dd><p>Mail account user password needed when <code class="literal">"mail.smtp.auth" :
+      "true"</code></p></dd><dt><span class="term"><code class="literal">"mail.smtp.auth"</code></span></dt><dd><p>If <code class="literal">"true"</code>, use SMTP authentication</p></dd><dt><span class="term"><code class="literal">"mail.smtp.starttls.enable"</code></span></dt><dd><p>If <code class="literal">"true"</code>, use TLS</p></dd><dt><span class="term"><code class="literal">"from"</code></span></dt><dd><p>Optional default <code class="literal">From:</code> address</p></dd></dl></div></li><li class="step"><p>Start up OpenIDM.</p></li><li class="step"><p>Check that the email service is active.</p><div class="screen"><pre>-&gt; scr list
+...
+[   6] [active       ] org.forgerock.openidm.external.email
+...</pre></div></li></ol></div><div class="note"><h3 class="title">Note</h3><p>
+   The REST call described in the section that follows may use the local
+   SMTP server. For a "quick and dirty" test, you could use the default
+   port, disable authentication, and TLS:
+  </p><pre class="brush: plain;">
+"host" : "localhost",
+"port" : "25,
+"username" : "xxxxxx",
+"password" : "xxxxxx",
+"mail.smtp.auth" : "false",
+"mail.smtp.starttls.enable" : "false"
+  </pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="send-mail-rest"></a>19.1.&nbsp;Sending Mail Over REST</h2></div></div></div><p>Although you are more likely to send mail from a script in production,
+  you can send email using the REST API by sending an HTTP POST to
+  <code class="literal">/openidm/external/email</code> in order to test that your
+  configuration works. You pass the message parameters as POST parameters,
+  URL encoding the content as necessary.</p><p>The following example sends a test email using the REST API.</p><div class="screen"><pre>
+$ <strong>curl \
+ --cacert self-signed.crt \
+ --header "Content-Type: application/json" \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request POST \
+ --data '{"from":"openidm@example.com",
+   "to":"admin@example.com",
+   "subject":"Test",
+   "body":"Test"}' \
+ "https://localhost:8443/openidm/external/email?_action=send"</strong></pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="send-mail-script"></a>19.2.&nbsp;Sending Mail From a Script</h2></div></div></div><p>
+   You can send email by using the resource API <a href="../../integrators-guide/index/appendix-scripting.html#function-ref" class="link">functions</a> with
+  the <code class="literal">external/email</code> context, as in the following
+  example, where <code class="literal">params</code> is an object that contains the
+  POST parameters.
+  </p><pre class="brush: javascript;">
+var params =  new Object();
+params.from = "openidm@example.com";
+params.to = "admin@example.com";
+params.cc = "wally@example.com,dilbert@example.com";
+params.subject = "OpenIDM recon report";
+params.type = "text/html";
+params.body = "&lt;html&gt;&lt;body&gt;&lt;p&gt;Recon report follows...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;";
+
+openidm.action("external/email", "send", params);</pre><div class="variablelist"><p>OpenIDM supports the following POST parameters.</p><dl class="variablelist"><dt><span class="term"><code class="literal">from</code></span></dt><dd><p>Sender mail address</p></dd><dt><span class="term"><code class="literal">to</code></span></dt><dd><p>Comma-separated list of recipient mail addresses</p></dd><dt><span class="term"><code class="literal">cc</code></span></dt><dd><p>Optional comma-separated list of copy recipient mail addresses</p></dd><dt><span class="term"><code class="literal">bcc</code></span></dt><dd><p>Optional comma-separated list of blind copy recipient mail
+     addresses</p></dd><dt><span class="term"><code class="literal">subject</code></span></dt><dd><p>Email subject</p></dd><dt><span class="term"><code class="literal">body</code></span></dt><dd><p>Email body text</p></dd><dt><span class="term"><code class="literal">type</code></span></dt><dd><p>Optional MIME type. One of <code class="literal">"text/plain"</code>,
+     <code class="literal">"text/html"</code>, or <code class="literal">"text/xml"</code>.</p></dd></dl></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-cluster.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-external-rest.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;18.&nbsp;Configuring OpenIDM to Work in a Cluster&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;20.&nbsp;Accessing External REST Services</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10020&components=10164&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-9']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

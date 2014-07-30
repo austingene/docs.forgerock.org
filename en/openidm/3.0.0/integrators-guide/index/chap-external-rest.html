@@ -1,0 +1,250 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;20.&nbsp;Accessing External REST Services</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenIDM Integrator's Guide"><link rel="up" href="index.html" title="OpenIDM Integrator's Guide"><link rel="prev" href="chap-mail.html" title="Chapter&nbsp;19.&nbsp;Sending Email"><link rel="next" href="chap-best-practices.html" title="Chapter&nbsp;21.&nbsp;OpenIDM Project Best Practices"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;20.&nbsp;Accessing External REST Services</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-mail.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-best-practices.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-external-rest"></a>Chapter&nbsp;20.&nbsp;Accessing External REST Services</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-external-rest.html#invocation-parameters">20.1. Invocation Parameters</a></span></dt><dt><span class="section"><a href="chap-external-rest.html#non-json-responses">20.2. Support for Non-JSON Responses</a></span></dt></dl></div><a class="indexterm" name="d0e18128"></a><p>
+  You can access remote REST services by using the
+  <code class="literal">openidm/external/rest</code> endpoint, or by specifying the
+  <code class="literal">external/rest</code> resource in your scripts. Note that this
+  service is not intended as a full connector to synchronize or reconcile
+  identity data, but as a way to make dynamic HTTP calls as part of the OpenIDM
+  logic. For more declarative and encapsulated interaction with remote REST
+  services, and for synchronization or reconciliation operations, you should
+  rather use the scripted REST connector.
+ </p><p>
+  An external REST call via a script might look something like the following:
+ </p><pre class="brush: plain;">openidm.action("external/rest", "call", params);</pre><p>
+  The <code class="literal">"call"</code> parameter specifies the action name to be used
+  for this invocation, and is the standard method signature for the
+  <code class="literal">openidm.action</code> method in OpenIDM 3.0.0.
+ </p><p>
+  An external REST call over REST might look something like the following:
+ </p><div class="screen"><pre>$ <strong>curl \
+ --cacert self-signed.crt \
+ --header "Content-Type: application/json" \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request POST \
+ --data '{
+  "url": "http://www.december.com/html/demo/hello.html",
+  "method": "GET",
+  "detectResultFormat": false,
+  "headers": { "custom-header": "custom-header-value" }
+  }' \
+ "https://localhost:8443/openidm/external/rest?_action=call"</strong>
+<em>{
+  "body": "&lt;!DOCTYPE html PUBLIC \"-//IETF//DTD HTML 2.0//EN\"&gt;\r\n
+           &lt;html&gt;\r\n
+           &lt;head&gt;\r\n
+           &lt;title&gt;\r\n   Hello World Demonstration Document\r\n  &lt;/title&gt;\r\n
+           &lt;/head&gt;\r\n
+           &lt;body&gt;\r\n
+           &lt;h1&gt;\r\n   Hello, World!\r\n  &lt;/h1&gt;
+           &#8230;
+           &lt;/html&gt;\r\n",
+  "headers": {
+    "Server": "Apache",
+    "ETag": "\"299-4175ff09d1140\"",
+    "Date": "Mon, 28 Jul 2014 08:21:25 GMT",
+    "Content-Length": "665",
+    "Last-Modified": "Thu, 29 Jun 2006 17:05:33 GMT",
+    "Keep-Alive": "timeout=15, max=100",
+    "Content-Type": "text/html",
+    "Connection": "Keep-Alive",
+    "Accept-Ranges": "bytes"
+  }
+}</em></pre></div><p>
+  Note that attributes in the POST body <span class="emphasis"><em>do not</em></span> have
+  underscore prefixes. This is different to the OpenIDM 2.1 implementation, in
+  which underscores were required.
+ </p><p>
+  HTTP 2xx responses are represented as regular, successful responses to the
+  invocation. All other responses, including redirections, are returned as
+  exceptions, with the HTTP status code in the exception
+  <code class="literal">"code"</code>, and the response body in the exception
+  <code class="literal">"detail"</code>, within the "content" element.
+ </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="invocation-parameters"></a>20.1.&nbsp;Invocation Parameters</h2></div></div></div><p>
+   The following parameters are passed in the resource API parameters map. These
+   parameters can override the static configuration (if present) on a
+   per-invocation basis.
+  </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     <code class="literal">url</code>. The target URL to invoke, in string format.
+    </p></li><li class="listitem"><p>
+     <code class="literal">method</code>. The HTTP action to invoke, in string format.
+    </p><p>
+     Possible actions include <code class="literal">"POST"</code>, <code class="literal">"GET"</code>,
+     <code class="literal">"PUT"</code>, <code class="literal">"DELETE"</code>,
+     <code class="literal">"HEAD"</code> and <code class="literal">"OPTIONS"</code>.
+    </p></li><li class="listitem"><p>
+     <code class="literal">authenticate</code>. The login details with which to
+     authenticate. For example:
+    </p><pre class="brush: plain;">"authenticate" : {"type": "basic", "user" : "john", "password" : "Passw0rd"}</pre><p>
+     If no <code class="literal">authenticate</code> parameter is specified, no
+     authentication is used. Currently, only basic authentication is supported.
+    </p></li><li class="listitem"><p>
+     <code class="literal">headers</code>. The HTTP headers to set, in a map format from
+     string (<em class="replaceable"><code>header-name</code></em>) to string
+     (<em class="replaceable"><code>header-value</code></em>). For example,
+     <code class="literal">Accept-Language: en-US</code>.
+    </p></li><li class="listitem"><p>
+     <code class="literal">content-type</code>. The media type of the data that is sent,
+     for example <code class="literal">Content-Type: application/json</code> or
+     <code class="literal">Content-Type: application/xml</code>.
+    </p></li><li class="listitem"><p>
+     <code class="literal">body</code>. The body/resource representation to send (for PUT
+     and POST operations), in string format.
+    </p></li><li class="listitem"><p>
+     <code class="literal">detectResultFormat</code>. Specifies whether JSON or non-JSON
+     results are expected. Boolean, defaults to <code class="literal">true</code>.
+    </p><p>
+     For all responses other than 2xx, the result is returned as an exception,
+     with the HTTP code in the exception <code class="literal">"code"</code>. Any details
+     are returned in the exception <code class="literal">"detail"</code> under the
+     <code class="literal">"content"</code> element. For example:
+    </p><div class="screen"><pre>$ <strong>curl \
+ --cacert self-signed.crt \
+ --header "Content-Type: application/json" \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request POST \
+ --data '{
+     "url":"http://december.com/non_existing_page",
+     "method":"GET",
+     "content-type":"application/xml"
+   }' \
+ "https://localhost:8443/openidm/external/rest?_action=call"</strong>
+<em>{
+    "detail": {
+        "content": "&lt;html&gt;&lt;head&gt;&lt;title&gt;December Communications, Inc. Missing Page&lt;/title&gt; (...) &lt;/html&gt;\n"
+    },
+    "message": "Error while processing GET request: Not Found",
+    "reason": "Not Found",
+    "code": 404
+}</em></pre></div><p>
+     For more information about non-JSON results, see
+     <a class="xref" href="chap-external-rest.html#non-json-responses" title="20.2.&nbsp;Support for Non-JSON Responses">Section&nbsp;20.2, &#8220;Support for Non-JSON Responses&#8221;</a>.
+    </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="non-json-responses"></a>20.2.&nbsp;Support for Non-JSON Responses</h2></div></div></div><p>
+   The external REST service supports any arbitrary payload (currently in
+   stringified format). The <code class="literal">"detectResultFormat"</code> parameter
+   specifies whether the server should attempt to detect the response format
+   and, if the format is known, parse that format.
+  </p><p>
+   Currently, the only known response format is JSON. So, if the service that is
+   requested returns results in JSON format, and
+   <code class="literal">"detectResultFormat"</code> is set to <code class="literal">true</code>
+   (the default), the response from the call to external/rest will be the
+   identical JSON data that was returned from the remote system. This enables
+   JSON clients to interact with the external REST service with minimal changes
+   to account for in the response.
+  </p><p>
+   If the service returns results in JSON format and
+   <code class="literal">"detectResultFormat"</code> is set to <code class="literal">false</code>,
+   results are represented as a stringified entry.
+  </p><p>
+   If <code class="literal">"detectResultFormat"</code> is set to <code class="literal">true</code>
+   and the mime type is not recognized (currently any type other than JSON) the
+   result is the same as if <code class="literal">"detectResultFormat"</code> were set to
+   <code class="literal">false</code>. Set <code class="literal">"detectResultFormat"</code> to
+   <code class="literal">false</code> if the remote system returns non-JSON data, or if
+   you require details in addition to the literal JSON response body (for
+   example, if you need to access a specific response header, such as a cookie).
+  </p><p>
+   The representation as parsed JSON differs from the stringified format as
+   follows:
+  </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     The parsed JSON representation returns the message payload directly in the
+     body, with no wrapper. Currently, for parsed JSON responses, additional
+     meta-data is not returned in the body. For example:
+    </p><div class="screen"><pre>$ <strong>curl \
+ --cacert self-signed.crt \
+ --header "Content-Type: application/json" \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request POST \
+ --data '{
+     "url": "http://localhost:8080/openidm/info/ping",
+     "method": "GET",
+     "detectResultFormat": true,
+     "headers": { "X-OpenIDM-Username": "anonymous", "X-OpenIDM-Password": "anonymous" }
+   }' \
+ "https://localhost:8443/openidm/external/rest?_action=call"</strong>
+<em>{
+  "shortDesc": "OpenIDM ready",
+  "state": "ACTIVE_READY"
+}</em></pre></div></li><li class="listitem"><p>
+     The stringified format includes a wrapper that represents other meta-data,
+     such as returned headers. For example:
+    </p><div class="screen"><pre>$ <strong>curl \
+ --cacert self-signed.crt \
+ --header "Content-Type: application/json" \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request POST \
+ --data '{
+     "url": "http://localhost:8080/openidm/info/ping",
+     "method": "GET",
+     "detectResultFormat": false,
+     "headers": { "X-OpenIDM-Username": "anonymous", "X-OpenIDM-Password": "anonymous" }
+   }' \
+ "https://localhost:8443/openidm/external/rest?_action=call"</strong>
+<em>{
+  "body": "{\"state\":\"ACTIVE_READY\",\"shortDesc\":\"OpenIDM ready\"}",
+  "headers": {
+    "Cache-Control": "no-cache",
+    "Server": "Jetty(8.y.z-SNAPSHOT)",
+    "Content-Type": "application/json;charset=UTF-8",
+    "Set-Cookie": "session-jwt=eyAiYWxn...-cQ.3QT4zT4ZZTj8LH8Oo_zx3w;Path=/",
+    "Expires": "Thu, 01 Jan 1970 00:00:00 GMT",
+    "Content-Length": "52",
+    "Vary": "Accept-Encoding, User-Agent"
+  }
+}</em></pre></div><p>
+     A sample non-JSON response would be similar:
+    </p><div class="screen"><pre>$ <strong>curl \
+ --cacert self-signed.crt \
+ --header "Content-Type: application/json" \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request POST \
+ --data '{
+     "url":"http://december.com",
+     "method":"GET",
+     "content-type":"application/xml",
+     "detectResultFormat":false
+   }' \
+ "https://localhost:8443/openidm/external/rest?_action=call"</strong>
+<em>{
+  "body": "&lt;!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"
+          \"http://www.w3.org/TR/html4/loose.dtd\"&gt; \n
+          &lt;html&gt;&lt;head&gt;&lt;title&gt;December Communications, Inc.
+          december.com&lt;/title&gt;\n
+          &lt;meta http-equiv=\"Content-Type\" content=\"text/html;
+          charset=iso-8859-1\"&gt;
+          ..."
+  "headers": {
+  "Server": "Apache",
+  "ETag": "\"4c3c-4f06c64da3980\"",
+  "Date": "Mon, 28 Jul 2014 19:16:33 GMT",
+  "Content-Length": "19516",
+  "Last-Modified": "Mon, 20 Jan 2014 20:04:06 GMT",
+  "Keep-Alive": "timeout=15, max=100",
+  "Content-Type": "text/html",
+  "Connection": "Keep-Alive",
+  "Accept-Ranges": "bytes"
+  }
+}</em></pre></div></li></ul></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-mail.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-best-practices.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;19.&nbsp;Sending Email&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;21.&nbsp;OpenIDM Project Best Practices</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10020&components=10164&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-9']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

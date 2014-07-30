@@ -1,0 +1,2078 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;16.&nbsp;Integrating Business Processes and Workflows</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenIDM Integrator's Guide"><link rel="up" href="index.html" title="OpenIDM Integrator's Guide"><link rel="prev" href="chap-security.html" title="Chapter&nbsp;15.&nbsp;Securing &amp; Hardening OpenIDM"><link rel="next" href="chap-auditing.html" title="Chapter&nbsp;17.&nbsp;Using Audit Logs"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;16.&nbsp;Integrating Business Processes and Workflows</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-security.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-auditing.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-workflow"></a>Chapter&nbsp;16.&nbsp;Integrating Business Processes and Workflows</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-workflow.html#about-bmpm-2-activiti">16.1. BPMN 2.0 and the Activiti Tools</a></span></dt><dt><span class="section"><a href="chap-workflow.html#setting-up-activiti">16.2. Setting Up Activiti Integration With OpenIDM</a></span></dt><dt><span class="section"><a href="chap-workflow.html#activiti-custom-templates">16.3. Using Custom Templates for Activiti Workflows</a></span></dt><dt><span class="section"><a href="chap-workflow.html#workflows-REST">16.4. Managing Workflows Over the REST Interface</a></span></dt><dt><span class="section"><a href="chap-workflow.html#sample-activiti-workflows">16.5. Example Activiti Workflows With OpenIDM</a></span></dt><dt><span class="section"><a href="chap-workflow.html#workflow-use-cases">16.6. Workflow Use Cases</a></span></dt></dl></div><a class="indexterm" name="d0e14669"></a><a class="indexterm" name="d0e14672"></a><p>Key to any identity management solution is the ability to provide
+ workflow-driven provisioning activities, whether for self-service actions
+ such as requests for entitlements, roles or resources, running sunrise or
+ sunset processes, handling approvals with escalations, or performing
+ maintenance.</p><p>OpenIDM provides an embedded workflow and business process engine
+ based on Activiti and the Business Process Model and Notation (BPMN) 2.0
+ standard.</p><p>More information about Activiti and the Activiti project can be found
+ at <a class="link" href="http://www.activiti.org" target="_blank">http://www.activiti.org</a>.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="about-bmpm-2-activiti"></a>16.1.&nbsp;BPMN 2.0 and the Activiti Tools</h2></div></div></div><p>Business Process Model and Notation 2.0 is the result of consensus
+  among Business Process Management (BPM) system vendors. The <a class="link" href="http://omg.org/" target="_blank">Object Management Group</a>
+  (OMG) has developed and maintained the <a class="link" href="http://www.omg.org/spec/BPMN/" target="_blank">BPMN</a> standard since
+  2004.</p><p>The first version of the BPMN specification focused only on graphical
+  notation, and quickly became popular with the business analyst audience.
+  BPMN 1.x defines how constructs such as human tasks, executable scripts, and
+  automated decisions are visualized in a vendor-neutral, standard way. The
+  second version of BPMN extends that focus to include execution semantics,
+  and a common exchange format. Thus, BPMN 2.0 process definition models
+  can be exchanged not only between different graphical editors, but can also
+  be executed as is on any BPMN 2.0-compliant engine, such as the engine
+  embedded in OpenIDM.</p><p>Using BPMN 2.0, you can add artifacts describing workflow and business
+  process behavior to OpenIDM for provisioning and other purposes. For example,
+  you can craft the actual artifacts defining business processes and workflow
+  in a text editor, or using a special Eclipse plugin. The Eclipse plugin 
+  provides visual design capabilities, simplifying packaging and deployment of 
+  the artifact to OpenIDM. See the <a class="link" href="http://docs.codehaus.org/display/ACT/Activiti+BPMN+2.0+Eclipse+Plugin" target="_blank">Activiti BPMN 2.0 Eclipse Plugin</a> documentation for
+  instructions on installing Activiti Eclipse BPMN 2.0 Designer.</p><p>Also, read the Activiti <em class="citetitle">User Guide</em> section
+  covering <a class="link" href="http://www.activiti.org/userguide/#bpmnConstructs" target="_blank"><em class="citetitle">BPMN 2.0 Constructs</em></a>, which
+  describes in detail the graphical notations and XML representations for
+  events, flows, gateways, tasks, and process constructs.</p><p>
+   With the latest version of Activiti, JavaScript tasks can be added to
+   workflow definitions. However, OpenIDM functions cannot be called from a
+   JavaScript task in a workflow. Therefore, you can use JavaScript for
+   non-OpenIDM workflow tasks, but you must use the
+   <code class="literal">activiti:expression</code> construct to call OpenIDM functions.
+   </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="setting-up-activiti"></a>16.2.&nbsp;Setting Up Activiti Integration With OpenIDM</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-workflow.html#configuring-activiti-engine">16.2.1. Configuring the Activiti Engine</a></span></dt><dt><span class="section"><a href="chap-workflow.html#defining-activiti-workflows">16.2.2. Defining Activiti Workflows</a></span></dt><dt><span class="section"><a href="chap-workflow.html#invoking-activiti-workflows">16.2.3. Invoking Activiti Workflows</a></span></dt><dt><span class="section"><a href="chap-workflow.html#querying-activiti-workflows">16.2.4. Querying Activiti Workflows</a></span></dt></dl></div><p>
+   OpenIDM embeds an Activiti Process Engine that is started in the OpenIDM OSGi
+   container.
+  </p><p>
+   After OpenIDM has been installed (as described in the
+   <a href="../../install-guide/index/chap-install.html" class="link"><em class="citetitle">Installation
+   Guide</em></a>), start OpenIDM, and run the
+   <span class="command"><strong>scr list</strong></span> command at the console to check that the workflow
+   bundle is active.
+  </p><div class="screen"><pre>-&gt; OpenIDM ready
+<strong>scr list</strong>
+   Id   State          Name
+...
+[  39] [active       ] org.forgerock.openidm.workflow
+...</pre></div><p>
+   OpenIDM reads workflow definitions from the
+   <code class="literal">/path/to/openidm/workflow</code> directory. To test workflow
+   integration, at least one workflow definition must exist in this directory.
+  </p><p>
+   A sample workflow (<code class="filename">example.bpmn20.xml</code>) is provided in
+   the <code class="literal">/path/to/openidm/samples/misc</code> directory. Copy this
+   workflow to the <code class="literal">/path/to/openidm/workflow</code> directory to
+   test the workflow integration.
+  </p><div class="screen"><pre>$ cd /path/to/openidm
+$ cp samples/misc/example.bpmn20.xml workflow/</pre></div><p>
+   Verify the workflow integration by using the REST API. The following
+   REST call lists the defined workflows:
+  </p><div class="screen"><pre>$ <strong>curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ "https://localhost:8443/openidm/workflow/processdefinition?_queryId=query-all-ids"
+  </strong></pre></div><p>
+   The sample workflow definition that you copied in the previous step is named
+   <code class="literal">osgiProcess</code>. The result of the preceding REST call
+   therefore includes output similar to the following:
+  </p><div class="screen"><pre><em>{
+...
+  "result":[
+     {
+        ...
+        "key": "osgiProcess",
+        ...
+        "name":"Osgi process",
+        ...
+        "_id":"osgiProcess:1:3",
+        ...
+     }
+        ]
+}</em></pre></div><p>
+   The <code class="literal">osgiProcess</code> workflow calls OpenIDM, queries the
+   available workflow definitions from Activiti, then prints the list of
+   workflow definitions to the OpenIDM logs. Invoke the <code class="literal">osgiProcess
+  </code> workflow with the following REST call:
+  </p><div class="screen"><pre>$ <strong>curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --header "Content-Type: application/json" \
+ --request POST \
+ --data '{"_key":"osgiProcess"}' \
+ "https://localhost:8443/openidm/workflow/processinstance?_action=create"</strong></pre></div><p>
+   The workflow prints the list of workflow definitions to the OpenIDM console.
+   With the default sample, you should see something like this on the console:
+  </p><div class="screen"><pre><em>
+script task using resolver: [
+  pagedResultsCookie:null,
+  remainingPagedResults:-1,
+  result:[
+    [
+	  tenantId:,
+	  candidateStarterGroupIdExpressions:[],
+	  candidateStarterUserIdExpressions:[],
+	  participantProcess:null,
+	  processDiagramResourceName:null,
+	  historyLevel:null,
+	  hasStartFormKey:false,
+	  laneSets:[],
+	  version:1, _id:osgiProcess:1:3,
+	  description:null,
+	  name:Osgi process,
+	  executionListeners:[:],
+	  key:osgiProcess,
+	  resourceName:OSGI-INF/activiti/example.bpmn20.xml,
+	  ioSpecification:null,
+	  taskDefinitions:null,
+	  suspensionState:1,
+	  deploymentId:1,
+	  properties:[:],
+	  startFormHandler:null,
+	  suspended:false,
+	  variables:null,
+	  _rev:1,
+	  revisionNext:2,
+	  category:Examples,
+	  eventSupport:[:],
+	  graphicalNotationDefined:false
+	]
+  ]
+]
+script task using expression resolver: [
+  pagedResultsCookie:null,
+  remainingPagedResults:-1,
+  result:[
+    [
+	  tenantId:,
+	  candidateStarterGroupIdExpressions:[],
+      ...
+]</em></pre></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="configuring-activiti-engine"></a>16.2.1.&nbsp;Configuring the Activiti Engine</h3></div></div></div><p>
+   The OpenIDM Activiti module is configured in a file named
+   <code class="filename">conf/workflow.json</code>. If this file is absent from the
+   configuration, the workflow module is unavailable for use. In the default
+   OpenIDM installation, the <code class="filename">workflow.json</code> file has the
+   following basic configuration:
+  </p><pre class="brush: javascript;">
+{
+   "enabled"  : true
+}
+  </pre><p>
+   You can disable the workflow module by setting the
+   <code class="literal">"enabled"</code> property to <code class="literal">false</code>.
+  </p><p>
+   There are several additional configuration properties for the Activiti
+   module. A sample <code class="filename">workflow.json</code> file that includes all
+   configurable properties, is provided in <code class="literal">samples/misc</code>. To
+   configure an Activiti engine beyond the default configuration, edit this
+   sample file and copy it to the <code class="literal">/path/to/openidm/conf</code>
+   directory.
+  </p><p>
+   The sample <code class="literal">workflow.json</code> file contains the following
+   configuration:
+  </p><pre class="brush: javascript;">
+  {
+    "enabled"  : true,
+    "location" : "remote",
+    "engine" : {
+        "url" : "http://localhost:9090/openidm-workflow-remote-3.0.0",
+        "username" : "youractivitiuser",
+        "password" : "youractivitipassword"
+    },
+    "mail" : {
+        "host" : "yourserver.smtp.com",
+        "port" : 587,
+        "username" : "yourusername",
+        "password" : "yourpassword",
+        "starttls" : true
+    },
+    "history" : "audit"
+}
+  </pre><div class="itemizedlist"><p>
+    These fields have the following meaning:
+   </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     <code class="literal">enabled</code>. Indicates whether the Activiti module is
+     enabled for use. Possible values are <code class="literal">true</code> or
+     <code class="literal">false</code>. The default value is <code class="literal">true</code>.
+    </p></li><li class="listitem"><p>
+     <code class="literal">mail</code>. Specifies the details of the mail server that
+     Activiti will use to send email notifications. By default, Activiti uses
+     the mail server <code class="literal">localhost:25</code>. To specify a different
+     mail server, enter the details of the mail server here.
+    </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+       <code class="literal">host</code>. The host of the mail server.
+      </p></li><li class="listitem"><p>
+       <code class="literal">port</code>. The port number of the mail server.
+      </p></li><li class="listitem"><p>
+       <code class="literal">username</code>. The user name of the account that connects
+       to the mail server.
+      </p></li><li class="listitem"><p>
+       <code class="literal">password</code>. The password for the user specified above.
+      </p></li><li class="listitem"><p>
+       <code class="literal">startTLS</code>. Whether startTLS should be used to secure
+       the connection.
+      </p></li></ul></div></li><li class="listitem"><p>
+     <code class="literal">history</code>. Determines the history level that should be
+     used for the Activiti engine. For more information, see
+     <a class="link" href="chap-workflow.html#activiti-history-level" title="16.2.1.1.&nbsp;Configuring the Activiti History Level">Configuring the Activiti History
+     Level</a>.
+    </p></li></ul></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="activiti-history-level"></a>16.2.1.1.&nbsp;Configuring the Activiti History Level</h4></div></div></div><p>
+     The Activiti history level determines how much historical information is
+     retained when workflows are executed. You can configure the history level
+     by setting the <code class="literal">history</code> property in the
+     <code class="literal">workflow.json</code> file, for example:
+    </p><pre class="brush: plain;">"history" : "audit"</pre><div class="itemizedlist"><p>
+      The following history levels can be configured:
+     </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+       <code class="literal">none</code>. No history archiving is done. This level results
+       in the best performance for workflow execution, but no historical
+       information is available.
+      </p></li><li class="listitem"><p>
+       <code class="literal">activity</code>. Archives all process instances and activity
+       instances. No details are archived.
+      </p></li><li class="listitem"><p>
+       <code class="literal">audit</code>. This is the default level. All process
+       instances, activity instances and submitted form properties are archived
+       so that all user interaction through forms is traceable and can be
+       audited.
+      </p></li><li class="listitem"><p>
+       <code class="literal">full</code>. This is the highest level of history archiving
+       and has the greatest performance impact. This history level stores all
+       the information that is stored for the <code class="literal">audit</code> level, as
+       well as any process variable updates.
+      </p></li></ul></div></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="defining-activiti-workflows"></a>16.2.2.&nbsp;Defining Activiti Workflows</h3></div></div></div><p>
+   The following section outlines the process to follow when you create an
+   Activiti workflow for OpenIDM. Before you start creating workflows, you must
+   configure the Activiti engine, as described in <a class="link" href="chap-workflow.html#configuring-activiti-engine" title="16.2.1.&nbsp;Configuring the Activiti Engine">Configuring the Activiti Engine</a>.
+  </p><div class="procedure"><ol class="procedure" type="1"><li class="step"><p>
+     Define your workflow in a text file, either using an editor, such as
+     Activiti Eclipse BPMN 2.0 Designer, or a simple text editor.
+    </p></li><li class="step"><p>
+     Package the workflow definition file as a <code class="literal">.bar</code> file
+     (Business Archive File). If you are using Eclipse to define the workflow, a
+     <code class="literal">.bar</code> file is created when you select "Create deployment
+     artifacts". A <code class="literal">.bar</code> file is essentially the same as a
+     <code class="literal">.zip</code> file, but with the <code class="literal">.bar</code>
+     extension.
+    </p></li><li class="step"><p>
+     Copy the <code class="literal">.bar</code> file to the
+     <code class="literal">openidm/workflow</code> directory.
+    </p></li><li class="step"><p>
+     Invoke the workflow using a script (in <code class="literal">openidm/script/</code>)
+     or directly using the REST interface. For more information, see <a class="link" href="chap-workflow.html#invoking-activiti-workflows" title="16.2.3.&nbsp;Invoking Activiti Workflows">Invoking Activiti Workflows</a>.
+    </p><p>
+     You can also schedule the workflow to be invoked repeatedly, or at a future
+     time. For more information, see the <span class="olink"><em class="citetitle">Scheduler
+     Reference</em></span>.
+    </p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="invoking-activiti-workflows"></a>16.2.3.&nbsp;Invoking Activiti Workflows</h3></div></div></div><p>
+   You can invoke workflows and business processes from any trigger point within
+   OpenIDM, including reacting to situations discovered during reconciliation.
+   Workflows can be invoked from script files, using the
+   <code class="literal">openidm.create()</code> function, or directly from the REST
+   interface.
+  </p><p>
+   The following sample script extract shows how to invoke a workflow from a
+   script file:
+  </p><pre class="brush: javascript;">
+/*
+ * Calling 'myWorkflow' workflow
+ */
+
+var params = {
+ "_key": "myWorkflow"
+};
+
+openidm.create('workflow/processinstance', null, params);
+  </pre><p>
+   The <code class="literal">null</code> in this example indicates that you do not want to
+   specify an ID as part of the create call. For more information, see the
+   <a href="../../integrators-guide/index/appendix-scripting.html#function-create" class="link"><em class="citetitle">Function
+   Reference</em></a>.
+  </p><p>
+   You can invoke the same workflow from the REST interface by sending the
+   following REST call to OpenIDM:
+  </p><div class="screen"><pre><strong>$ curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --header "Content-Type: application/json" \
+ --request POST \
+ --data '{"_key":"myWorkflow"}' \
+ "https://localhost:8443/openidm/workflow/processinstance?_action=create"</strong>
+  </pre></div><div class="itemizedlist"><p>
+    There are two ways in which you can specify the workflow definition that is
+    used when a new workflow instance is started.
+   </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     <code class="literal">_key</code> specifies the <code class="literal">id</code> attribute of
+     the workflow process definition, for example:
+    </p><pre class="brush: javascript;">
+&lt;process id="sendNotificationProcess" name="Send Notification Process"&gt;
+    </pre><p>
+     If there is more than one workflow definition with the same
+     <code class="literal">_key</code> parameter, the latest deployed version of the
+     workflow definition is invoked.
+    </p></li><li class="listitem"><p>
+     <code class="literal">_processDefinitionId</code> specifies the ID that is generated
+     by the Activiti Process Engine when a workflow definition is deployed, for
+     example:
+    </p><pre class="brush: javascript;">
+"sendNotificationProcess:1:104";
+    </pre><p>
+     You can obtain the <code class="literal">processDefinitionId</code> by querying the
+     available workflows, for example:
+    </p><pre class="brush: javascript;">
+ {
+  "result": [
+    {
+      "name": "Process Start Auto Generated Task Auto Generated",
+      "_id": "ProcessSAGTAG:1:728"
+    },
+    {
+      "name": "Process Start Auto Generated Task Empty",
+      "_id": "ProcessSAGTE:1:725"
+    },
+    ...     
+    </pre><p>
+     If you specify a <code class="literal">_key</code> and a
+     <code class="literal">_processDefinitionId</code>, the
+     <code class="literal">_processDefinitionId</code> is used because it is more precise.
+    </p></li></ul></div><p>
+   You can use the optional <code class="literal">_businessKey</code> parameter to add
+   specific business logic information to the workflow when it is invoked. For
+   example, the following workflow invocation assigns the workflow a business
+   key of <code class="literal">"newOrder"</code>. This business key can later be used to
+   query "newOrder" processes.
+  </p><div class="screen"><pre><strong>$ curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request POST \
+ --data '{"_key":"myWorkflow", "_businessKey":"newOrder"}' \
+ "https://localhost:8443/openidm/workflow/processinstance?_action=create"</strong></pre></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="querying-activiti-workflows"></a>16.2.4.&nbsp;Querying Activiti Workflows</h3></div></div></div><p>
+   The Activiti implementation supports filtered queries that enable you to
+   query the running process instances and tasks, based on specific query
+   parameters. To perform a filtered query send a GET request to the
+   <code class="literal">workflow/processinstance</code> context path, including the query
+   in the URL.
+  </p><p>
+   For example, the following query returns all process instances
+   with the business key <code class="literal">"newOrder"</code>, as invoked in the
+   previous example.
+  </p><div class="screen"><pre><strong>$ curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ "https://localhost:8443/openidm/workflow/processinstance?_queryId=filtered-query&amp;businessKey=newOrder"</strong>
+  </pre></div><p>
+   Any Activiti properties can be queried using the same notation, for example,
+   <code class="literal">processDefinitionId=managedUserApproval:1:6405</code>. The query
+   syntax applies to all queries with <code class="literal">_queryId=filtered-query</code>.
+   The following query returns all process instances that were started by the
+   user <code class="literal">openidm-admin</code>:
+  </p><div class="screen"><pre><strong>$ curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ "https://localhost:8443/openidm/workflow/processinstance?_queryId=filtered-query&amp;startUserId=openidm-admin"</strong>
+  </pre></div><p>
+   You can also query process instances based on the value of any process
+   instance variable, by prefixing the variable name with
+   <code class="literal">var-</code>. For example:
+  </p><div class="screen"><pre>var-processvariablename=processvariablevalue</pre></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="activiti-custom-templates"></a>16.3.&nbsp;Using Custom Templates for Activiti Workflows</h2></div></div></div><p>
+   The embedded Activiti engine is integrated with the default user interface.
+   For simple workflows, you can use the standard Activiti form properties, and
+   have the UI render the corresponding generic forms automatically. If you
+   require a more complex form template, (including input validation,
+   rich input field types, complex CSS, and so forth) you must define a custom
+   form template.
+  </p><div class="itemizedlist"><p>
+    There are two ways in which you can define custom form templates for your
+    workflows:
+   </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     Create an HTML template, and refer to that template in the workflow
+     definition.
+    </p><p>
+     This is the recommended method of creating custom form templates. To refer
+     to the HTML template in the workflow definition, use the
+     <code class="literal">activiti:formKey</code> attribute, for example
+     <code class="literal">activiti:formKey="nUCStartForm.xhtml"</code>.
+    </p><p>The HTML file must be deployed as part of the workflow definition.
+     Create a .zip file that contains the HTML template and the workflow
+     definition file. Rename the .zip file with a .bar extension.
+    </p><p>
+     For a sample workflow that uses external, referenced form templates, see
+     <code class="literal">samples/usecase/workflow/newUserCreate.bpmn20.xml</code>. The
+     HTML templates, and the corresponding .bar file are included in that
+     directory.
+    </p></li><li class="listitem"><p>
+     Use an embedded template within the workflow definition.
+    </p><p>
+     This method is not ideal, because the HTML code must be escaped, and is
+     difficult to read, edit, or maintain, as a result. Also, sections of HTML
+     code will most likely need to be duplicated if your workflow includes
+     multiple task stages. However, you might want to use this method if your
+     form is small, not too complex and you do not want to bother with creating
+     a separate HTML file and .bar deployment.
+    </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="workflows-REST"></a>16.4.&nbsp;Managing Workflows Over the REST Interface</h2></div></div></div><p>
+   In addition to the queries described previously, the following examples show
+   the context paths that are exposed for managing workflows over the REST
+   interface. The example output is based on the sample workflow that is
+   provided in <code class="literal">openidm/samples/sample9</code>.
+  </p><h3><a name="d0e15150"></a>openidm/workflow/processdefinition</h3><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     List the available workflow definitions:
+    </p><div class="screen"><pre><strong>$ curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ "https://localhost:8443/openidm/workflow/processdefinition?_queryId=query-all-ids"</strong>
+    <em>
+{
+  "result" : [ {
+    "tenantId" : "",
+    "candidateStarterGroupIdExpressions" : [ ],
+    "candidateStarterUserIdExpressions" : [ ],
+    "participantProcess" : null,
+    "processDiagramResourceName" : null,
+    "historyLevel" : null,
+    "hasStartFormKey" : false,
+    "laneSets" : [ ],
+    "version" : 1,
+    "_id" : "managedUserApproval:1:3",
+    "description" : null,
+    "name" : "Managed User Approval Workflow",
+    "executionListeners" : { },
+    "key" : "managedUserApproval",
+    "resourceName" : "OSGI-INF/activiti/managedUserApproval.bpmn20.xml",
+    "ioSpecification" : null,
+    "taskDefinitions" : null,
+    "suspensionState" : 1,
+    "deploymentId" : "1",
+    "properties" : { },
+    "startFormHandler" : null,
+    "suspended" : false,
+    "variables" : null,
+    "_rev" : 1,
+    "revisionNext" : 2,
+    "category" : "Examples",
+    "eventSupport" : { },
+    "graphicalNotationDefined" : false
+  } ],
+  "resultCount" : 1,
+  "pagedResultsCookie" : null,
+  "remainingPagedResults" : -1
+}     </em>
+    </pre></div></li><li class="listitem"><p>
+     List the workflow definitions, based on certain filter criteria:
+    </p><div class="screen"><pre><strong>$ curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ "https://localhost:8443/openidm/workflow/processdefinition?_queryId=filtered-query&amp;category=Examples"
+      </strong>
+      <em>
+{
+  "result": [
+    {
+      ...
+      "name": "Managed User Approval Workflow",
+      "_id": "managedUserApproval:1:3",
+      ...
+      "category" : "Examples",
+      ...
+    }
+  ]
+}</em>
+    </pre></div></li></ul></div><h3><a name="d0e15175"></a>openidm/workflow/processdefinition/{id}</h3><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     Obtain detailed information for a process definition, based on the ID. You
+     can determine the ID by querying all the available process definitions, as
+     described in the first example in this section.
+    </p><div class="screen"><pre><strong>$ curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ "https://localhost:8443/openidm/workflow/processdefinition/managedUserApproval:1:3"
+     </strong>
+     <em>
+{
+  "tenantId" : "",
+  "candidateStarterGroupIdExpressions" : [ ],
+  "candidateStarterUserIdExpressions" : [ ],
+  "participantProcess" : null,
+  "processDiagramResourceName" : null,
+  "historyLevel" : null,
+  "hasStartFormKey" : false,
+  "laneSets" : [ ],
+  "version" : 1,
+  "formProperties" : [ ],
+  "_id" : "managedUserApproval:1:3",
+  "description" : null,
+  "name" : "Managed User Approval Workflow",
+  "executionListeners" : {
+    "end" : [ { } ]
+  },
+  "key" : "managedUserApproval",
+  "resourceName" : "OSGI-INF/activiti/managedUserApproval.bpmn20.xml",
+  "ioSpecification" : null,
+  "taskDefinitions" : {
+    "evaluateRequest" : {
+      "assigneeExpression" : {
+        "expressionText" : "openidm-admin"
+      },
+      "candidateGroupIdExpressions" : [ ],
+      "candidateUserIdExpressions" : [ ],
+      "categoryExpression" : null,
+      "descriptionExpression" : null,
+      "dueDateExpression" : null,
+      "key" : "evaluateRequest",
+      "nameExpression" : {
+        "expressionText" : "Evaluate request"
+      },
+      "ownerExpression" : null,
+      "priorityExpression" : null,
+      "taskFormHandler" : {
+        "deploymentId" : "1",
+        "formKey" : null,
+        "formPropertyHandlers" : [ {
+          "defaultExpression" : null,
+          "id" : "requesterName",
+          "name" : "Requester's name",
+          "readable" : true,
+          "required" : false,
+          "type" : null,
+          "variableExpression" : {
+            "expressionText" : "${sourceId}"
+          },
+          "variableName" : null,
+          "writable" : false
+        }, {
+          "defaultExpression" : null,
+          "id" : "requestApproved",
+          "name" : "Do you approve the request?",
+          "readable" : true,
+          "required" : true,
+          "type" : {
+            "name" : "enum",
+            "values" : {
+              "true" : "Yes",
+              "false" : "No"
+            }
+          },
+          "variableExpression" : null,
+          "variableName" : null,
+          "writable" : true
+        } ]
+      },
+      "taskListeners" : {
+        "assignment" : [ { } ],
+        "create" : [ { } ]
+      }
+    }
+  },
+  "suspensionState" : 1,
+  "deploymentId" : "1",
+  "properties" : {
+    "documentation" : null
+  },
+  "startFormHandler" : {
+    "deploymentId" : "1",
+    "formKey" : null,
+    "formPropertyHandlers" : [ ]
+  },
+  "suspended" : false,
+  "variables" : { },
+  "_rev" : 2,
+  "revisionNext" : 3,
+  "category" : "Examples",
+  "eventSupport" : { },
+  "graphicalNotationDefined" : false
+}       </em>
+    </pre></div></li><li class="listitem"><p>
+     Delete a workflow process definition, based on its ID. Note that you
+     cannot delete a process definition if there are currently running
+     instances of that process definition.
+    </p><p>
+     OpenIDM picks up workflow definitions from the files located in the
+     <code class="filename">/path/to/openidm/workflow</code> directory. If you delete the
+     workflow definition (<code class="filename">.xml</code> file) from this directory,
+     the OSGI bundle is deleted. However, deleting this file does not remove the
+     workflow definition from the Activiti engine. You must therefore delete the
+     definition over REST, as shown in the following example.
+    </p><p>
+     Note that, although there is only one representation of a workflow
+     definition in the file system, there might be several versions of the same
+     definition in Activiti. If you want to delete redundant process
+     definitions, delete the definition over REST, <span class="emphasis"><em>making sure that
+     you do not delete the latest version</em></span>.
+    </p><div class="screen"><pre><strong>$ curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --header "If-Match: *" \
+ --request DELETE \
+ "http://localhost:8080/openidm/workflow/processdefinition/managedUserApproval:1:3"
+    </strong>
+    </pre></div><p>
+     The delete request returns the contents of the deleted workflow definition.
+    </p></li></ul></div><h3><a name="d0e15211"></a>openidm/workflow/processinstance</h3><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     Start a workflow process instance. For example:
+    </p><div class="screen"><pre><strong>$ curl \
+ --cacert self-signed.crt \
+ --header "Content-Type: application/json" \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --data '{"_key":"managedUserApproval"}' \
+ --request POST \
+ "https://localhost:8443/openidm/workflow/processinstance?_action=create"</strong>
+     <em>
+{
+  "_id" : "4",
+  "processInstanceId" : "4",
+  "status" : "suspended",
+  "businessKey" : null,
+  "processDefinitionId" : "managedUserApproval:1:3"
+}</em>
+    </pre></div></li><li class="listitem"><p>
+     Obtain the list of running workflows (process instances). The query returns
+     a list of IDs. For example:
+    </p><div class="screen"><pre><strong>$ curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ "https://localhost:8443/openidm/workflow/processinstance?_queryId=query-all-ids"
+      </strong>
+      <em>
+{
+  "result" : [ {
+    "tenantId" : "",
+    "businessKey" : null,
+    "queryVariables" : null,
+    "durationInMillis" : null,
+    "processVariables" : { },
+    "endTime" : null,
+    "superProcessInstanceId" : null,
+    "startActivityId" : "start",
+    "startTime" : "2014-04-25T09:54:30.035+02:00",
+    "startUserId" : "openidm-admin",
+    "_id" : "4",
+    "endActivityId" : null,
+    "processInstanceId" : "4",
+    "processDefinitionId" : "managedUserApproval:1:3",
+    "deleteReason" : null
+  } ],
+  "resultCount" : 1,
+  "pagedResultsCookie" : null,
+  "remainingPagedResults" : -1
+}</em>
+    </pre></div></li><li class="listitem"><p>
+     Obtain the list of running workflows based on specific filter criteria.
+    </p><div class="screen"><pre><strong>$ curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ "https://localhost:8443/openidm/workflow/processinstance?_queryId=filtered-query&amp;businessKey=myBusinessKey"</strong>
+    </pre></div></li></ul></div><h3><a name="d0e15243"></a>openidm/workflow/processinstance/{id}</h3><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     Obtain the details of the specified process instance. For example:
+    </p><div class="screen"><pre><strong>$ curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ "https://localhost:8443/openidm/workflow/processinstance/4"
+     </strong>
+     <em>{
+  "tenantId" : "",
+  "businessKey" : null,
+  "queryVariables" : null,
+  "durationInMillis" : null,
+  "processVariables" : { },
+  "endTime" : null,
+  "superProcessInstanceId" : null,
+  "startActivityId" : "start",
+  "startTime" : "2014-05-12T20:56:25.415+02:00",
+  "startUserId" : "openidm-admin",
+  "_id" : "4",
+  "endActivityId" : null,
+  "processInstanceId" : "4",
+  "processDefinitionId" : "managedUserApproval:1:3",
+  "deleteReason" : null
+}</em>
+    </pre></div></li><li class="listitem"><p>
+     Stop the specified process instance. For example:
+    </p><div class="screen"><pre><strong>$ curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request DELETE \
+ "https://localhost:8443/openidm/workflow/processinstance/4"</strong>
+    <em>{
+  "deleteReason": null,
+  "processDefinitionId": "managedUserApproval:1:3",
+  "processInstanceId": "4",
+  "endActivityId": null,
+  "_id": "4",
+  "startUserId": "openidm-admin",
+  "startTime": "2014-06-18T10:33:40.955+02:00",
+  "tenantId": "",
+  "businessKey": null,
+  "queryVariables": null,
+  "durationInMillis": null,
+  "processVariables": {},
+  "endTime": null,
+  "superProcessInstanceId": null,
+  "startActivityId": "start"
+}</em></pre></div><p>
+     The delete request returns the contents of the deleted process instance.
+    </p></li></ul></div><h3><a name="d0e15267"></a>openidm/workflow/processdefinition/{id}/taskdefinition</h3><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     Query the list of tasks defined for a specific process definition. For
+     example:
+    </p><div class="screen"><pre><strong>$ curl \
+ --cacert self-signed.crt \
+ --header X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ "https://localhost:8443/openidm/workflow/processdefinition/managedUserApproval:1:3/taskdefinition?_queryId=query-all-ids"</strong>
+     <em>
+{
+  "result" : [ {
+    "taskCandidateGroup" : [ ],
+    "ownerExpression" : null,
+    "assignee" : {
+      "expressionText" : "openidm-admin"
+    },
+    "categoryExpression" : null,
+    "taskListeners" : {
+      "assignment" : [ { } ],
+      "create" : [ { } ]
+    },
+    "formProperties" : {
+      "deploymentId" : "1",
+      "formKey" : null,
+      "formPropertyHandlers" : [ {
+        "_id" : "requesterName",
+        "defaultExpression" : null,
+        "name" : "Requester's name",
+        "readable" : true,
+        "required" : false,
+        "type" : null,
+        "variableExpression" : {
+          "expressionText" : "${sourceId}"
+        },
+        "variableName" : null,
+        "writable" : false
+      }, {
+        "_id" : "requestApproved",
+        "defaultExpression" : null,
+        "name" : "Do you approve the request?",
+        "readable" : true,
+        "required" : true,
+        "type" : {
+          "name" : "enum",
+          "values" : {
+            "true" : "Yes",
+            "false" : "No"
+          }
+        },
+        "variableExpression" : null,
+        "variableName" : null,
+        "writable" : true
+      } ]
+    },
+    "taskCandidateUser" : [ ],
+    "formResourceKey" : null,
+    "_id" : "evaluateRequest",
+    "priority" : null,
+    "descriptionExpression" : null,
+    "name" : {
+      "expressionText" : "Evaluate request"
+    },
+    "dueDate" : null
+  } ],
+  "resultCount" : 1,
+  "pagedResultsCookie" : null,
+  "remainingPagedResults" : -1
+}      </em>
+    </pre></div></li><li class="listitem"><p>
+     Query a task definition based on the process definition ID and the task
+     name (<code class="literal">taskDefinitionKey</code>). For example:
+    </p><div class="screen"><pre><strong>$ curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ "https://localhost:8443/openidm/workflow/processdefinition/managedUserApproval:1:3/taskdefinition/evaluateRequest"
+      </strong>
+      <em>{
+  "taskCandidateGroup" : [ ],
+  "ownerExpression" : null,
+  "formProperties" : {
+    "deploymentId" : "1",
+    "formKey" : null,
+    "formPropertyHandlers" : [ {
+      "_id" : "requesterName",
+      "defaultExpression" : null,
+      "name" : "Requester's name",
+      "readable" : true,
+      "required" : false,
+      "type" : null,
+      "variableExpression" : {
+        "expressionText" : "${sourceId}"
+      },
+      "variableName" : null,
+      "writable" : false
+    }, {
+      "_id" : "requestApproved",
+      "defaultExpression" : null,
+      "name" : "Do you approve the request?",
+      "readable" : true,
+      "required" : true,
+      "type" : {
+        "name" : "enum",
+        "values" : {
+          "true" : "Yes",
+          "false" : "No"
+        }
+      },
+      "variableExpression" : null,
+      "variableName" : null,
+      "writable" : true
+    } ]
+  },
+  "taskCandidateUser" : [ ],
+  "_id" : "evaluateRequest",
+  "priority" : null,
+  "name" : {
+    "expressionText" : "Evaluate request"
+  },
+  "descriptionExpression" : null,
+  "categoryExpression" : null,
+  "assignee" : {
+    "expressionText" : "openidm-admin"
+  },
+  "taskListeners" : {
+    "assignment" : [ { } ],
+    "create" : [ { } ]
+  },
+  "dueDate" : null
+}</em>
+    </pre></div></li></ul></div><h3><a name="d0e15293"></a>openidm/workflow/taskinstance</h3><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     Query all running task instances. For example:
+    </p><div class="screen"><pre><strong>$ curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ "https://localhost:8443/openidm/workflow/taskinstance?_queryId=query-all-ids"
+      </strong>
+      <em>{
+  "result" : [ {
+    "tenantId" : "",
+    "createTime" : "2014-05-12T21:17:10.054+02:00",
+    "executionId" : "10",
+    "delegationStateString" : null,
+    "processVariables" : { },
+    "_id" : "15",
+    "processInstanceId" : "10",
+    "description" : null,
+    "priority" : 50,
+    "name" : "Evaluate request",
+    "dueDate" : null,
+    "parentTaskId" : null,
+    "processDefinitionId" : "managedUserApproval:1:3",
+    "taskLocalVariables" : { },
+    "suspensionState" : 1,
+    "assignee" : "openidm-admin",
+    "cachedElContext" : null,
+    "queryVariables" : null,
+    "activityInstanceVariables" : { },
+    "deleted" : false,
+    "suspended" : false,
+    "_rev" : 1,
+    "revisionNext" : 2,
+    "category" : null,
+    "taskDefinitionKey" : "evaluateRequest",
+    "owner" : null,
+    "eventName" : null,
+    "delegationState" : null
+  } ],
+  "resultCount" : 1,
+  "pagedResultsCookie" : null,
+  "remainingPagedResults" : -1
+}</em>
+    </pre></div></li><li class="listitem"><p>
+     Query task instances based on candidate users or candidate groups. For
+     example:
+    </p><div class="screen"><pre><strong>$ curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ "https://localhost:8443/openidm/workflow/taskinstance?_queryId=filtered-query&amp;taskCandidateUser=manager1"
+      </strong>
+    </pre></div><p>
+     or
+    </p><div class="screen"><pre><strong>$ curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ "https://localhost:8443/openidm/workflow/taskinstance?_queryId=filtered-query&amp;taskCandidateGroup=management"
+      </strong>
+    </pre></div><p>
+     Note that you can include both users and groups in the same query.
+    </p></li></ul></div><h3><a name="d0e15324"></a>openidm/workflow/taskinstance/{id}</h3><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     Obtain detailed information for a running task, based on the task ID. For
+     example:
+    </p><div class="screen"><pre><strong>$ curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ "https://localhost:8443/openidm/workflow/taskinstance/15"
+     </strong>
+     <em>{
+  "dueDate": null,
+  "processDefinitionId": "managedUserApproval:1:3",
+  "owner": null,
+  "taskDefinitionKey": "evaluateRequest",
+  "name": "Evaluate request",
+...</em>
+    </pre></div></li><li class="listitem"><p>
+     Update task-related data stored in the Activiti workflow engine. For
+     example:
+    </p><div class="screen"><pre><strong>$ curl \
+ --cacert self-signed.crt \
+ --header "Content-Type: application/json" \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --header "If-Match : *" \
+ --request PUT \
+ --data '{"description":"Evaluate the new managed user request"}' \
+ "https://localhost:8443/openidm/workflow/taskinstance/15" </strong>
+    </pre></div></li><li class="listitem"><p>
+     Complete the specified task. The variables required by the task are
+     provided in the request body. For example:
+    </p><div class="screen"><pre><strong>$ curl \
+ --cacert self-signed.crt \
+ --header "Content-Type: application/json" \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request POST \
+ --data '{"requestApproved":"true"}' \
+ "https://localhost:8443/openidm/workflow/taskinstance/15?_action=complete"</strong></pre></div></li><li class="listitem"><p>
+     Claim the specified task. A user who claims a task has that task inserted
+     into his list of pending tasks. The ID of the user who claims the task is
+     provided in the request body. For example:
+    </p><div class="screen"><pre><strong>$ curl \
+ --cacert self-signed.crt \
+ --header "Content-Type: application/json" \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request POST \
+ --data '{"userId":"manager1"}' \
+ "https://localhost:8443/openidm/workflow/taskinstance/15?_action=claim"</strong></pre></div></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="sample-activiti-workflows"></a>16.5.&nbsp;Example Activiti Workflows With OpenIDM</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-workflow.html#example-activiti-email-notification-flow">16.5.1. Example Email Notification Workflow</a></span></dt><dt><span class="section"><a href="chap-workflow.html#example-provisioning-workflow">16.5.2. Sample Workflow - Provisioning User Accounts</a></span></dt></dl></div><p>
+   This section describes two example workflows - an email notification
+   workflow, and a workflow that demonstrates provisioning, using the
+   browser-based user interface.
+  </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="example-activiti-email-notification-flow"></a>16.5.1.&nbsp;Example Email Notification Workflow</h3></div></div></div><p>
+    This example uses the Activiti Eclipse BPMN 2.0 Designer to set up an email
+    notification business process. The example relies on an SMTP server
+    listening on <code class="literal">localhost</code>, port 25.
+   </p><div class="variablelist"><p>
+     The example sets up a workflow that can accept parameters used to specify
+     the sender and recipient of the mail.
+    </p><dl class="variablelist"><dt><span class="term"><code class="literal">${fromSender}</code></span></dt><dd><p>
+       Specifies the sender
+      </p></dd><dt><span class="term"><code class="literal">${toEmail}</code></span></dt><dd><p>
+       Specifies the recipient
+      </p></dd></dl></div><p>
+    Create a new BPMN2 diagram in Eclipse, then drag and drop components to
+    create the workflow. This simple example uses a
+    <code class="literal">StartEvent</code>, <code class="literal">MailTask</code>, and
+    <code class="literal">EndEvent</code>.
+   </p><div class="mediaobject" align="center"><a name="figure-bpmn-email-notification"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/bpmn-email-notification.png" align="middle" height="360" alt="Email notification process"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-bpmn-email-notification.html" target="longdesc">D</a>]</span></div></div><p>
+    When you have created the workflow definition, edit the generated XML
+    source code, adding the <code class="literal">&lt;extensionElements&gt;</code> to
+    the <code class="literal">&lt;serviceTask&gt;</code> tag, as follows.
+   </p><pre class="brush: xml;">
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;definitions
+ xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:activiti="http://activiti.org/bpmn"
+ xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+ xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+ xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+ typeLanguage="http://www.w3.org/2001/XMLSchema"
+ expressionLanguage="http://www.w3.org/1999/XPath"
+ targetNamespace="http://www.activiti.org/test"&gt;
+ &lt;process id="EmailNotification" name="emailNotification"&gt;
+   &lt;documentation&gt;Simple Email Notification Task&lt;/documentation&gt;
+   &lt;startEvent id="startevent1" name="Start"&gt;&lt;/startEvent&gt;
+   &lt;sequenceFlow id="flow1" name="" sourceRef="startevent1"
+     targetRef="mailtask1"&gt;&lt;/sequenceFlow&gt;
+   &lt;endEvent id="endevent1" name="End"&gt;&lt;/endEvent&gt;
+   &lt;sequenceFlow id="flow2" name="" sourceRef="mailtask1"
+     targetRef="endevent1"&gt;&lt;/sequenceFlow&gt;
+   &lt;serviceTask id="mailtask1" name="Email Notification"
+     activiti:type="mail"&gt;
+     &lt;extensionElements&gt;
+       &lt;activiti:field name="to" expression="${toEmail}"
+       &gt;&lt;/activiti:field&gt;
+       &lt;activiti:field name="from" expression="${fromSender}"
+       &gt;&lt;/activiti:field&gt;
+       &lt;activiti:field name="subject" expression="Simple Email Notification"
+       &gt;&lt;/activiti:field&gt;
+       &lt;activiti:field name="text"&gt;
+         &lt;activiti:expression&gt;&lt;![CDATA[Here is a simple Email Notification
+         from ${fromSender}.]]&gt;&lt;/activiti:expression&gt;
+       &lt;/activiti:field&gt;
+     &lt;/extensionElements&gt;
+   &lt;/serviceTask&gt;
+ &lt;/process&gt;
+ &lt;bpmndi:BPMNDiagram id="BPMNDiagram_EmailNotification"&gt;
+   &lt;bpmndi:BPMNPlane bpmnElement="EmailNotification"
+     id="BPMNPlane_EmailNotification"&gt;
+     &lt;bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1"&gt;
+       &lt;omgdc:Bounds height="35" width="35" x="170" y="250"&gt;&lt;/omgdc:Bounds&gt;
+     &lt;/bpmndi:BPMNShape&gt;
+     &lt;bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1"&gt;
+       &lt;omgdc:Bounds height="35" width="35" x="410" y="250"&gt;&lt;/omgdc:Bounds&gt;
+     &lt;/bpmndi:BPMNShape&gt;
+     &lt;bpmndi:BPMNShape bpmnElement="mailtask1" id="BPMNShape_mailtask1"&gt;
+       &lt;omgdc:Bounds height="55" width="105" x="250" y="240"&gt;&lt;/omgdc:Bounds&gt;
+     &lt;/bpmndi:BPMNShape&gt;
+     &lt;bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1"&gt;
+       &lt;omgdi:waypoint x="205" y="267"&gt;&lt;/omgdi:waypoint&gt;
+       &lt;omgdi:waypoint x="250" y="267"&gt;&lt;/omgdi:waypoint&gt;
+     &lt;/bpmndi:BPMNEdge&gt;
+     &lt;bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2"&gt;
+       &lt;omgdi:waypoint x="355" y="267"&gt;&lt;/omgdi:waypoint&gt;
+       &lt;omgdi:waypoint x="410" y="267"&gt;&lt;/omgdi:waypoint&gt;
+     &lt;/bpmndi:BPMNEdge&gt;
+   &lt;/bpmndi:BPMNPlane&gt;
+ &lt;/bpmndi:BPMNDiagram&gt;
+&lt;/definitions&gt;</pre><p>
+    Save the workflow definition as a <code class="literal">bpmn20.xml</code> file
+    (<code class="filename">email-notification.bpmn20.xml</code>) in the
+    <code class="filename">openidm/workflow</code> directory.
+   </p><p>
+    After you have deployed the workflow, create a script named
+    <code class="filename">openidm/script/triggerEmailNotification.js</code>. The script
+    invokes the workflow.
+   </p><pre class="brush: javascript;">
+/*
+ * Calling 'EmailNotification' workflow
+ */
+
+var params = {
+ "_key" : "EmailNotification",
+ "fromSender" : "noreply@openidm",
+ "toEmail" : "jdoe@example.com"
+};
+
+openidm.action('workflow/processinstance', {"_action" : "createProcessInstance"}, params);
+   </pre><p>
+    You can also invoke the workflow over the REST interface with the following
+    REST command:
+   </p><div class="screen"><pre>$ <strong>curl \
+ --cacert self-signed.crt \
+ --header "Content-Type: application/json" \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --data '{
+    "_key":"EmailNotification",
+    "fromSender":"noreply@openidm",
+    "toEmail":"jdoe@example.com"
+ }' \
+ --request POST \
+ "https://localhost:8443/openidm/workflow/processinstance?_action=create"</strong></pre></div><p>
+    To schedule the workflow to be invoked regularly, create a schedule
+    configuration object named
+    <code class="filename">openidm/conf/schedule-EmailNotification.json</code>. The
+    following schedule invokes the workflow once per minute.
+   </p><pre class="brush: javascript;">
+{
+   "enabled" : true,
+   "type" : "cron",
+   "schedule" : "0 0/1 * * * ?",
+   "invokeService" : "script",
+   "invokeContext" : {
+       "script" : {
+           "type" : "text/javascript",
+           "file" : "script/triggerEmailNotification.js"
+       },
+   }
+}
+   </pre></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="example-provisioning-workflow"></a>16.5.2.&nbsp;Sample Workflow - Provisioning User Accounts</h3></div></div></div><p>
+    This example, provided in <code class="filename">openidm/samples/workflow</code>,
+    uses workflows to provision user accounts. The example demonstrates the use
+    of the browser-based user interface to manage workflows.
+   </p><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="provisioning-sample-overview"></a>16.5.2.1.&nbsp;Overview of the Sample</h4></div></div></div><p>
+     The sample starts with a reconciliation process that loads user accounts
+     from an XML file into the managed users repository. The reconciliation
+     creates two users, with UIDs <code class="literal">user1</code> and
+     <code class="literal">manager1</code>. Both users have the same password
+     (<code class="literal">Welcome1</code>).
+    </p><p>
+     The sample adds two new business roles to the configuration -
+     <code class="literal">employee</code> (assigned to <code class="literal">user1</code>) and
+     <code class="literal">manager</code> (assigned to <code class="literal">manager1</code>).
+    </p><p>
+     As part of the provisioning, employees are required to initiate a
+     "Contract Onboarding" process. This process is a request to add a
+     contractor to the managed users repository, with an option to include the
+     contractor in the original data source (the XML file).
+    </p><p>
+     When the employee has completed the required form, the request is sent to
+     the manager for approval. Any user with the role
+     <code class="literal">"manager"</code> can claim the approval task. If the request is
+     approved, the user is created in the managed users repository. If a request
+     was made to add the user to the original data source (the XML file) this is
+     done in a subsequent step.
+    </p><p>
+     The workflow uses embedded templates to build a more sophisticated input
+     form.  The form is validated with the server-side policy rules, described
+     in <a href="../../integrators-guide/index/chap-policies.html" class="link"><em class="citetitle">Using
+     Policies to Validate Data</em></a>.
+    </p></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="provisioning-sample-running"></a>16.5.2.2.&nbsp;Running the Sample</h4></div></div></div><div class="procedure"><ol class="procedure" type="1"><li class="step"><p>
+       Start OpenIDM with the configuration for the workflow sample.
+      </p><div class="screen"><pre>$ cd /path/to/openidm
+$ ./startup.sh -p samples/workflow</pre></div></li><li class="step"><p>
+       Run reconciliation over the REST interface.
+      </p><div class="screen"><pre>$ curl \
+ --cacert self-signed.crt \
+ --header "Content-Type: application/json" \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request POST \
+ "https://localhost:8443/openidm/recon?_action=recon&amp;mapping=systemXmlfileAccounts_managedUser"</pre></div><p>
+       Successful reconciliation returns an "_id" object, such as the following:
+      </p><div class="screen"><pre>{"_id":"aea493f5-29ee-423d-b4b1-10449c60886c"}</pre></div><p>
+       The two users are added to the repository. You can test this with the
+       following REST query, which shows the two users,
+       <code class="literal">manager1</code> and <code class="literal">user1</code>.
+      </p><div class="screen"><pre><strong>$ curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ "https://localhost:8443/openidm/managed/user/?_queryId=query-all-ids"
+      </strong>
+      <em>{
+  "result" : [ {
+    "_id" : "manager1",
+    "_rev" : "0"
+  }, {
+    "_id" : "user1",
+    "_rev" : "0"
+  } ],
+  "resultCount" : 2,
+  "pagedResultsCookie" : null,
+  "remainingPagedResults" : -1
+}</em>
+      </pre></div></li><li class="step"><p>
+       Log into the user interface as <code class="literal">user1</code>, with password
+       <code class="literal">Welcome1</code>. For information about logging in to the user
+       interface, see <a href="../../integrators-guide/index/chap-ui.html#ui-overview" class="link"><em class="citetitle">Overview of
+       the Default User Interface</em></a>.
+      </p></li><li class="step"><p>
+       Under "Processes" click "Contractor onboarding process".
+      </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/ui-processes.png" align="middle" height="360" alt="User interface - processes"></td></tr></table></div></li><li class="step"><p>
+       Complete the details of the new user, then click Start.
+      </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/ui-workflow.png" align="middle" height="360" alt="Contractor onboarding process form"></td></tr></table></div></li><li class="step"><p>
+       Log out of the UI.
+      </p></li><li class="step"><p>
+       Log into the UI as <code class="literal">manager1</code>, with password
+       <code class="literal">Welcome1</code>.
+      </p></li><li class="step"><p>
+       Under "Tasks that are in my group's queue" click "Contractor Approval".
+      </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/ui-contractor-approval.png" align="middle" height="360" alt="Contractor approval"></td></tr></table></div></li><li class="step"><p>
+       From the drop-down list, select "Assign to me".
+      </p><p>
+       Note that the "Contractor Approval" task has now moved under "My tasks".
+      </p></li><li class="step"><p>
+       Under "My tasks" click "Contractor Approval".
+      </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/ui-my-tasks.png" align="middle" height="360" alt="My tasks"></td></tr></table></div></li><li class="step"><p>
+       Under Actions, click Details.
+      </p><p>
+       The form containing the details of the contractor is displayed.
+      </p></li><li class="step"><p>
+       At the bottom of the form, select a decision from the drop-down list
+       (either "Accept" or "Reject"), then click Complete.
+      </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/ui-workflow-complete.png" align="middle" height="360" alt="Accept new user account"></td></tr></table></div><p>
+       When you Accept the new contractor details, the user account is created
+       in the repository. You can check the new account by running the following
+       REST command:
+      </p><div class="screen"><pre><strong>$ curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ "https://localhost:8443/openidm/managed/user/?_queryId=query-all-ids"
+      </strong>
+      <em>
+{
+  "result" : [ {
+    "_id" : "manager1",
+    "_rev" : "0"
+  }, {
+    "_id" : "user1",
+    "_rev" : "0"
+  }, {
+    "_id" : "96a9513b-7896-4d22-83cc-6b35a709f0a8",
+    "_rev" : "0"
+  } ],
+  "resultCount" : 3,
+  "pagedResultsCookie" : null,
+  "remainingPagedResults" : -1
+}</em></pre></div><p>
+       Display the details of the new user, by running a REST query on the user
+       ID, as follows:
+      </p><div class="screen"><pre><strong>$ curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ "https://localhost:8443/openidm/managed/user/96a9513b-7896-4d22-83cc-6b35a709f0a8"
+      </strong>
+      <em>
+{
+  "_id" : "96a9513b-7896-4d22-83cc-6b35a709f0a8",
+  "_rev" : "1",
+  "startDate" : "05/13/2014",
+  "manager" : "user1",
+  "passwordAttempts" : "0",
+  "department" : "Finance",
+  "address2" : "",
+  "endDate" : "06/13/2014",
+  "givenName" : "John",
+  "effectiveRoles" : [ "openidm-authorized" ],
+  "city" : "",
+  "lastPasswordSet" : "",
+  "postalCode" : "",
+  "description" : "Accountant",
+  "accountStatus" : "active",
+  "userName" : "johnb",
+  "stateProvince" : "",
+  "jobTitle" : "Contract Accountant",
+  "mail" : "johnb@example.com",
+  "sn" : "Brand",
+  "provisionToXML" : "1",
+  "lastPasswordAttempt" : "Tue May 13 2014 09:56:49 GMT+0200 (SAST)",
+  "country" : "",
+  "telephoneNumber" : "8934794578",
+  "roles" : [ "openidm-authorized" ],
+  "effectiveAssignments" : { },
+  "postalAddress" : ""
+}</em></pre></div><p>
+       You can now log into the UI as the new user (with the details that you
+       specified in Step 5). Under "Notifications" you will see a welcome
+       message indicating the working dates of the new user. If you log in as
+       <code class="literal">user1</code> you are notified of the result of the manager's
+       decision.
+      </p><p>
+       If you specified that the new user should be added to the original data
+       source, you will see that the account was added to the XML file:
+      </p><div class="screen"><pre><strong>$ cd /path/to/openidm
+$ cat samples/workflow/data/xmlConnectorData.xml </strong>
+      <em>...
+   &lt;ri:__ACCOUNT__&gt;
+      &lt;icf:__DESCRIPTION__&gt;Accountant&lt;/icf:__DESCRIPTION__&gt;
+      &lt;ri:roles&gt;openidm-authorized&lt;/ri:roles&gt;
+      &lt;ri:mobileTelephoneNumber&gt;8934794578&lt;/ri:mobileTelephoneNumber&gt;
+      &lt;ri:firstname&gt;John&lt;/ri:firstname&gt;
+      &lt;ri:manager&gt;user1&lt;/ri:manager&gt;
+      &lt;ri:startDate&gt;05/13/2014&lt;/ri:startDate&gt;
+      &lt;ri:jobTitle&gt;Contract Accountant&lt;/ri:jobTitle&gt;
+      &lt;icf:__UID__&gt;67b6bb5f-5457-4ac6-bb49-5d98f2b1f3f8&lt;/icf:__UID__&gt;
+      &lt;icf:__NAME__&gt;johnb&lt;/icf:__NAME__&gt;
+      &lt;ri:email&gt;johnb@example.com&lt;/ri:email&gt;
+      &lt;icf:__PASSWORD__&gt;Welcome1&lt;/icf:__PASSWORD__&gt;
+      &lt;ri:department&gt;Finance&lt;/ri:department&gt;
+      &lt;ri:endDate&gt;06/13/2014&lt;/ri:endDate&gt;
+      &lt;ri:lastname&gt;Brand&lt;/ri:lastname&gt;
+   &lt;/ri:__ACCOUNT__&gt;
+...   </em>
+      </pre></div><p>
+       If you declined the approval request, the user will not be created in
+       either data source.
+      </p></li></ol></div><p>
+     You can see the details of the workflow definition in
+     <code class="filename">samples/workflow/workflow/contractorOnboarding.bpmn20.xml</code>.
+    </p></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="workflow-use-cases"></a>16.6.&nbsp;Workflow Use Cases</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-workflow.html#use-case-1">16.6.1. Use Case 1 - Initial Reconciliation</a></span></dt><dt><span class="section"><a href="chap-workflow.html#use-case-2">16.6.2. Use Case 2 - New User Onboarding</a></span></dt><dt><span class="section"><a href="chap-workflow.html#use-case-3">16.6.3. Use Case 3 - User Access Request</a></span></dt><dt><span class="section"><a href="chap-workflow.html#use-case-4">16.6.4. Use Case 4 - Orphan Account Detection</a></span></dt><dt><span class="section"><a href="chap-workflow.html#use-case-5">16.6.5. Use Case 5 - Certification</a></span></dt><dt><span class="section"><a href="chap-workflow.html#use-case-6">16.6.6. Use Case 6 - Password Change Reminder</a></span></dt></dl></div><p>
+   This section describes a number of sample workflows, that demonstrate typical
+   use cases for OpenIDM. The use cases, provided in
+   <code class="filename">/path/to/openidm/samples/usecase</code>, work together to
+   provide a complete business story, with the same set of sample data. Each of
+   the use cases is integrated with the default UI.
+  </p><p>
+   The use cases can be run independently, but rely on the data set that is
+   imported during use case 1 - so you <span class="emphasis"><em>must</em></span> run use case 1
+   before running any of the other use cases.
+  </p><p>
+   The use cases assume an initial data set of twenty "ordinary" managed users
+   in OpenIDM (user.0 - user.19). The users are divided as follows:
+  </p><div class="informaltable"><table border="0"><colgroup><col width="25%" class="c1"><col width="25%" class="c2"><col width="12%" class="c3"><col width="25%" class="c4"><col width="13%" class="c5"></colgroup><thead><tr><th>Users</th><th>Department</th><th>Manager</th><th>Employees</th><th>Contractors</th></tr></thead><tbody><tr><td>user.0-user.4</td><td>Human Resources</td><td>user.0</td><td>user.0-user.3</td><td>user.4</td></tr><tr><td>user.5-user.9</td><td>Production Planning</td><td>user.5</td><td>user.5-user.8</td><td>user.9</td></tr><tr><td>user.10-user.14</td><td>Sales &amp; Distribution</td><td>user.10</td><td>user.10-user.13</td><td>user.14</td></tr><tr><td>user.15-user.19</td><td>Treasury &amp; Payments</td><td>user.15</td><td>user.15-user.18</td><td>user.19</td></tr></tbody></table></div><div class="itemizedlist"><p>
+    In addition, the following "special" users are defined:
+   </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     <code class="literal">hradmin</code> - represents the human interaction of the HR
+     department
+    </p></li><li class="listitem"><p>
+     <code class="literal">systemadmin</code> - represents the human interaction of the
+     populated systems (Business and Project)
+    </p></li><li class="listitem"><p>
+     <code class="literal">superadmin</code> - represents the manager of the managers
+    </p></li></ul></div><p>
+   Note that the <span class="command"><strong>curl</strong></span> commands in this section use the secure
+   port for OpenIDM (8443) and assume a self-signed certificate named
+   <code class="literal">self-signed.crt</code>, located in the directory from which the
+   command is launched. For instructions on using the self-signed certificate
+   that is generated when OpenIDM first starts up, see
+   <a href="../../integrators-guide/index/chap-security.html#rest-over-https" class="link"><em class="citetitle">Restrict REST
+   Access to the HTTPS Port</em></a>.
+  </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="use-case-1"></a>16.6.1.&nbsp;Use Case 1 - Initial Reconciliation</h3></div></div></div><p>
+    This use case assumes an OpenDJ server and populates the managed user
+    repository with users from OpenDJ.
+   </p><div class="itemizedlist"><p>
+     To prepare the sample:
+    </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+      Download and install OpenDJ, as described in <a class="link" href="http://docs.forgerock.org/en/opendj/2.6.0/install-guide/index.html#chap-install-gui" target="_blank">Installing
+      OpenDJ With the QuickSetup Wizard</a>.
+     </p><p>
+      This sample assumes that OpenDJ is listening on port 1389, the standard
+      LDAP port for users who cannot use privileged ports.
+     </p></li><li class="listitem"><p>
+      During the install, import the user data from the LDIF file
+      <code class="filename">/path/to/openidm/samples/usecase/data/hr_data.ldif</code>.
+     </p></li><li class="listitem"><p>
+      The use case assumes a user with DN <code class="literal">cn=Directory Manager</code>
+      and password <code class="literal">password</code> who will bind to the directory
+      server.
+     </p></li></ul></div><p>
+    The OpenDJ server now contains the users required for all the workflow use
+    cases.
+   </p><div class="procedure"><ol class="procedure" type="1"><li class="step"><p>
+      Start OpenIDM with the configuration for use case 1.
+     </p><div class="screen"><pre>$ cd /path/to/openidm
+$ ./startup.sh -p samples/usecase/usecase1
+     </pre></div></li><li class="step"><p>
+      Run reconciliation to populate the managed user repository with the users
+      from the OpenDJ server.
+     </p><div class="screen"><pre>$ curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --header "Content-Type: application/json" \
+ --request POST \
+ "https://localhost:8443/openidm/recon?_action=recon&amp;mapping=systemHRAccounts_managedUser"
+     </pre></div></li><li class="step"><p>
+      Query the managed users that were created by the reconciliation process.
+     </p><div class="screen"><pre><strong>$ curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ "https://localhost:8443/openidm/managed/user?_queryId=query-all-ids"
+      </strong>
+      <em>{
+  "result" : [ {
+    "_id" : "user.5",
+    "_rev" : "0"
+  }, {
+    "_id" : "user.10",
+    "_rev" : "0"
+  }, {
+    "_id" : "user.1",
+    "_rev" : "0"
+  },
+ ...
+ {
+    "_id" : "hradmin",
+    "_rev" : "0"
+  }, {
+    "_id" : "systemadmin",
+    "_rev" : "0"
+  }, {
+    "_id" : "superadmin",
+    "_rev" : "0"
+  } ],
+  "resultCount" : 23,
+  "pagedResultsCookie" : null,
+  "remainingPagedResults" : -1
+}</em>
+     </pre></div><p>
+      23 users will have been created by the reconciliation process. The default
+      password of all the newly created users is <code class="literal">Passw0rd</code>.
+     </p></li><li class="step"><p>
+      Shut down OpenIDM before you proceed with the next use case.
+     </p><div class="screen"><pre>$ cd /path/to/openidm
+$ ./shutdown.sh
+     </pre></div></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="use-case-2"></a>16.6.2.&nbsp;Use Case 2 - New User Onboarding</h3></div></div></div><p>
+    This use case demonstrates a new user onboarding process. The process can be
+    initiated by any of the users created in the previous reconciliation
+    process. In this example, we use <code class="literal">user.1</code> to initiate the
+    process. <code class="literal">user.1</code> captures the details of a new user, and
+    then submits the new user entry for approval by the prospective manager of
+    that new user.
+   </p><p>
+    The use case includes three separate workflows - onboarding (creation of the
+    new user), sunrise (commencement of the new user work period) and sunset
+    (termination of the user contract).
+   </p><p>
+    The use case also demonstrates email notification with the optional
+    configuration of an external email service. If you want to use email
+    notification, you must configure the external email service, as described in
+    <a class="xref" href="chap-workflow.html#configure-email-notification" title="Procedure&nbsp;16.2.&nbsp;Configuring Email Notification">Procedure&nbsp;16.2, &#8220;Configuring Email Notification&#8221;</a>, before you start the
+    workflow.
+   </p><p>
+    The use case works with the OpenIDM UI, accessible at the following URL by
+    default: <code class="literal">https://localhost:8443/openidmui/</code>.
+   </p><div class="procedure"><a name="initiate-onboarding"></a><div class="procedure-title">Procedure&nbsp;16.1.&nbsp;Initiating the Onboarding Workflow</div><ol class="procedure" type="1"><li class="step"><p>
+      Start OpenIDM with the configuration for use case 2.
+     </p><div class="screen"><pre>$ cd /path/to/openidm
+$ ./startup.sh -p samples/usecase/usecase2
+     </pre></div></li><li class="step"><p>
+      Log into the UI as <code class="literal">user.1</code> with password
+      <code class="literal">Passw0rd</code>.
+     </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/login-user1.png" align="middle" height="360" alt="Log into the UI"></td></tr></table></div></li><li class="step"><p>
+      In this use case, the processes associated with the new user onboarding
+      workflow are visible to any user who logs into the UI.
+     </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/processes-user1.png" align="middle" height="360" alt="Processes available to user.1"></td></tr></table></div><p>
+      Click on the User Onboarding Process and complete the fields for a sample
+      new user. Complete at least all mandatory fields.
+     </p><p>
+      <span class="emphasis"><em>Department</em></span>. Specifies one of four departments to
+      which the new user will belong (Human Resources, Production Planning,
+      Sales &amp; Distribution, or Treasury &amp; Payments). The value you
+      select here determines the "manager" of the new user, to which the request
+      will be sent for approval. (See the previous table of users for a list of
+      the managers of the various departments.)
+     </p><p>
+      <span class="emphasis"><em>User Type</em></span>. Governs user access to specific accounts.
+      If the User Type is "Employee", the new user will have access to an
+      account named "Business". This access is represented as an attribute of
+      the managed user entry in the OpenIDM repository, as follows:
+      <code class="literal">accounts : ["Business"]</code>. If the User Type is
+      "Contractor", the new user will have no accounts associated with its
+      managed user representation in OpenIDM.
+     </p><p>
+      <span class="emphasis"><em>Send Email Notification</em></span>. Indicates whether an email
+      should be sent to alert the manager of the new required approval. The
+      email details used here are defined when you configure email notification,
+      as described in <a class="xref" href="chap-workflow.html#configure-email-notification" title="Procedure&nbsp;16.2.&nbsp;Configuring Email Notification">Procedure&nbsp;16.2, &#8220;Configuring Email Notification&#8221;</a>. If you
+      select not to send an email notification, the notification is simply added
+      to the OpenIDM repository, and appears when the manager logs into the UI.
+     </p></li><li class="step"><p>
+      Click Start to initiate the onboarding workflow.
+     </p><p>
+      This action sends the new user request to the corresponding "management"
+      users (the department manager, as well as the
+      <code class="literal">superadmin</code> user, who is an overall manager).
+     </p></li><li class="step"><p>
+      Log out of the UI, and log back in as the management user of the
+      department that you selected when you completed the new user form. For
+      example, if you selected "Human Resources", log in as
+      <code class="literal">user.0</code>, which simulates the management user for the HR
+      department. All users have the password <code class="literal">Passw0rd</code>.
+     </p><p>
+      Notice that this user now has an Onboarding Approval task in the queue of
+      tasks assigned to his group.
+     </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/approval-task.png" align="middle" height="360" alt="Approval task in group queue"></td></tr></table></div></li><li class="step"><p>
+      Click on the Onboarding Approval task and select "Assign to Me".
+     </p><p>
+      This action "claims" the task for <code class="literal">user.0</code>, removes it
+      from the group queue, and places it in the list of pending tasks for
+      <code class="literal">user.0</code>.
+     </p></li><li class="step"><p>
+      Click on the Onboarding Approval task under the My Tasks list and click
+      Details.
+     </p><p>
+      The complete new user request is displayed for the manager's approval. As
+      the manager, you can add any information that was missing from the
+      original request.
+     </p><p>
+      In addition, you can specify the following information for the new user.
+     </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+        <span class="emphasis"><em>Start Date</em></span>. Completing this field results in the
+        user being created, with a <code class="literal">"startDate"</code> added to that
+        user's managed user entry. The status of the user is
+        <code class="literal">inactive</code>. This field is optional, and is used by
+        the task scanner to trigger the Sunrise workflow.
+       </p></li><li class="listitem"><p>
+        <span class="emphasis"><em>End Date</em></span>. Completing this field results in the user
+        being created, with an <code class="literal">"endDate"</code> added to that user's
+        managed user entry. The field is optional, and is used by the task
+        scanner to trigger the Sunset workflow.
+       </p></li><li class="listitem"><p>
+        <span class="emphasis"><em>Manager</em></span>. Selecting "Yes" here adds a
+        <code class="literal">"title"</code> property, with a value of
+        <code class="literal">"manager"</code>, to the new managed user entry.
+       </p></li><li class="listitem"><p>
+        <span class="emphasis"><em>Decision</em></span>. Selecting "Reject" here terminates the
+        workflow and sends a notification to the user who initiated the
+        workflow. Selecting "Accept" creates the managed user entry in OpenIDM.
+        The password of the new user is <code class="literal">Passw0rd</code>.
+       </p><p>
+        Two notifications are created when the request is accepted - one for the
+        user who initiated the workflow, and one for the newly created user.
+        The notifications are visible in the UI after login. If you selected
+        email notification, one email is sent to the user defined when you
+        configured email notification, as described in
+        <a class="xref" href="chap-workflow.html#configure-email-notification" title="Procedure&nbsp;16.2.&nbsp;Configuring Email Notification">Procedure&nbsp;16.2, &#8220;Configuring Email Notification&#8221;</a>.
+       </p></li></ul></div></li><li class="step"><p>
+      At the bottom of the form, there is an option either to Requeue the
+      request or to Complete it. Click Complete.
+     </p><p>
+      If you click Requeue here, the task is removed from the list of My Tasks
+      for that user, and returned to the list of tasks pending for that group.
+      The task can then be claimed by any member of that group.
+     </p><p>
+      When the new user request has been approved, the user is created in the
+      OpenIDM repository. If you did not include a Start Date in the manager
+      approval, you should now be able to log into the UI with the details of
+      the new user. If you included a Start Date, you need to complete the
+      sunrise workflow before the user account is active (which will enable you
+      to log in as this user).
+     </p></li></ol></div><div class="procedure"><a name="configure-email-notification"></a><div class="procedure-title">Procedure&nbsp;16.2.&nbsp;Configuring Email Notification</div><p>
+     This step is optional, and required only if you want to use email
+     notification with this workflow.
+    </p><ol class="procedure" type="1"><li class="step"><p>
+      Edit the settings in the file
+      <code class="filename">/path/to/openidm/samples/usecase/usecase2/conf/external.email.json</code>
+      to match the settings of your mail server. For example:
+     </p><div class="screen"><pre><strong>$ cd /path/to/openidm
+$ more samples/usecase/usecase2/conf/external.email.json
+     </strong>
+     <em>{
+        "host" : "smtp.gmail.com",
+        "port" : "587",
+        "username" : "my-username"
+        "password" : "my-password",
+        "mail.smtp.auth" : "true",
+        "mail.smtp.starttls.enable" : "true"
+}</em></pre></div></li><li class="step"><p>
+      Change the notification email parameters in the workflow definition file
+      (<code class="filename">samples/usecase/usecase2/workflow/newUserCreate.bpmn20.xml</code>).
+     </p><p>
+      The email parameters are towards the end of this file:
+     </p><div class="screen"><pre><strong>$ cd /path/to/openidm/samples/usecase/usecase2/workflow/newUserCreate.bpmn20.xml
+$ grep emailParams newUserCreate.bpmn20.xml</strong>
+     <em>
+emailParams = [from : 'usecasetest@forgerock.com', to : 'notification@example.com',
+openidm.action("external/email", 'sendEmail',  emailParams);
+emailParams.body = 'Welcome! Your work days are from ' + startDate + ' to ' + endDate;
+openidm.action("external/email", 'sendEmail', emailParams);
+emailParams = [from : 'usecasetest@forgerock.com', to : 'notification@example.com',
+openidm.action("external/email", 'sendEmail', emailParams);</em>
+     </pre></div><p>
+      Change the <code class="literal">from</code> and <code class="literal">to</code> parameters
+      to reflect valid email addresses.
+     </p></li></ol></div><div class="procedure"><a name="initiate-sunrise"></a><div class="procedure-title">Procedure&nbsp;16.3.&nbsp;Initiating the Sunrise Workflow</div><p>
+     If a sunrise date is specified for the new user, the user is created in
+     the repository, with an <code class="literal">inactive</code> account status.
+    </p><ul class="procedure"><li class="step"><p>
+      To trigger the sunrise workflow (which activates the account), enable the
+      sunrise task scanning schedule. The schedule is disabled by default.
+     </p><p>
+      Modify the schedule configuration file
+      (<code class="filename">samples/usecase/usecase2/conf/schedule-taskscan_sunrise.json</code>),
+      setting the <code class="literal">"enabled"</code> property to <code class="literal">true</code>.
+     </p><div class="screen"><pre><strong>$ cd /path/to/openidm
+$ grep "enabled" samples/usecase/usecase2/conf/schedule-taskscan_sunrise.json</strong>
+<em>"enabled" : true,</em></pre></div><p>
+      The scan runs every minute, and checks the repository for users that have
+      a sunrise date that is anything up to one day after the current date.
+      When the scan is triggered, it locates the newly created user and starts
+      the sunrise workflow on this user. The workflow takes the following
+      actions:
+     </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+        Changes the account status of the user to <code class="literal">active</code>.
+       </p></li><li class="listitem"><p>
+        Generates a notification for the new user, which is visible when the
+        user logs into the UI.
+       </p></li></ul></div><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/workflow-notifications.png" align="middle" height="360" alt="Notifications for newly activated user"></td></tr></table></div></li></ul></div><div class="procedure"><a name="initiate-sunset"></a><div class="procedure-title">Procedure&nbsp;16.4.&nbsp;Initiating the Sunset Workflow</div><p>
+     If a sunset date is set for the new user, you can trigger the sunset
+     workflow to deactivate the user account when the end of his work period is
+     reached.
+    </p><ol class="procedure" type="1"><li class="step"><p>
+      To trigger the sunset workflow, enable the sunset task scanning schedule.
+      The schedule is disabled by default.
+     </p><p>
+      Modify the schedule configuration file
+      (<code class="filename">samples/usecase/usecase2/conf/schedule-taskscan_sunset.json</code>),
+      setting the <code class="literal">"enabled"</code> property to <code class="literal">true</code>.
+     </p><div class="screen"><pre><strong>$ cd /path/to/openidm
+$ grep "enabled" samples/usecase/usecase2/conf/schedule-taskscan_sunset.json
+     </strong>
+<em>"enabled" : true,</em></pre></div><p>
+      The scan runs every minute, and checks the repository for users that have
+      a sunset date that is anything up to one day after the current date.
+      When the scan is triggered, it locates users whose contracts are about to
+      end, and starts the sunset workflow on these users. When the workflow is
+      initiated, it assigns a task to the manager of the affected user. In this
+      example, the task is assigned to <code class="literal">user.0</code>.
+       </p></li><li class="step"><p>
+      When the sunset schedule has been enabled, log into OpenIDM UI as
+      <code class="literal">user.0</code> (with password <code class="literal">Passw0rd</code>). If
+      the user's sunset date is within one day of the current date, a "Contract
+      Termination" task becomes available under the 'My tasks' section for the
+      manager of that user.
+     </p><p>
+      Select the contract termination task and click Details.
+     </p></li><li class="step"><p>
+      In the Decision field, select either "Accept termination" or
+      "Modify date", then click Complete.
+     </p><p>
+      When you accept the termination, the user's account status is set to
+      <code class="literal">inactive</code> and the HR administrative user receives a
+      notification to that effect, next time that user logs into the UI. The
+      deactivated user is no longer able to log into the UI.
+     </p><p>
+      If you select to modify the date, the sunset date of that user is changed
+      to the value that you specify in the End Date field on that form. The
+      management user receives a UI notification that the employee's contract
+      has been extended.
+     </p></li><li class="step"><p>
+      Shut down OpenIDM before you proceed with the next use case.
+     </p><div class="screen"><pre>$ cd /path/to/openidm
+$ ./shutdown.sh
+     </pre></div></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="use-case-3"></a>16.6.3.&nbsp;Use Case 3 - User Access Request</h3></div></div></div><p>
+    This use case simulates a user access request, with two levels of approval
+    for the request.
+   </p><p>
+    If you want to use email notification with this workflow, follow the
+    instructions in <a class="xref" href="chap-workflow.html#configure-email-notification" title="Procedure&nbsp;16.2.&nbsp;Configuring Email Notification">Procedure&nbsp;16.2, &#8220;Configuring Email Notification&#8221;</a> before you
+    start the workflow, substituting
+    <code class="filename">usecase3/conf/external.email.json</code> and
+    <code class="filename">usecase3/workflow/accessRequest.bpmn20.xml</code> for the
+    files described in that procedure.
+   </p><div class="procedure"><ol class="procedure" type="1"><li class="step"><p>
+      Start OpenIDM with the configuration for use case 3.
+     </p><div class="screen"><pre>$ cd /path/to/openidm
+$ ./startup.sh -p samples/usecase/usecase3
+     </pre></div></li><li class="step"><p>
+      Log into the UI as <code class="literal">user.1</code> with password
+      <code class="literal">Passw0rd</code>.
+     </p><p>
+      <code class="literal">user.1</code> belongs to the HR department and, in this
+      workflow, is requesting access to a Project system.
+     </p></li><li class="step"><p>
+      Click on the Access Request Process in the list of available processes and
+      click Start to start the workflow.
+     </p><p>
+      A User Access Request appears in the list of tasks for
+      <code class="literal">user.1</code>.
+     </p></li><li class="step"><p>
+      Select the User Access Request task and click Details.
+     </p><p>
+      The resulting form indicates the various systems to which the user may
+      request access.
+     </p><p>
+      <span class="emphasis"><em>Access to Business system</em></span>. This field reflects the
+      current value of the <code class="literal">"accounts"</code> property for that user
+      in the repository. If the value includes <code class="literal">"Business"</code>
+      this field is True.
+     </p><p>
+      <span class="emphasis"><em>Access to Project system</em></span>. Set this field to True to
+      request Project access for <code class="literal">user.1</code>.
+     </p><p>
+      <span class="emphasis"><em>Send Email Notification</em></span>. Indicates whether an email
+      should be sent to alert the manager of the new access request. The
+      email details used here are defined when you configure email notification,
+      as described in <a class="xref" href="chap-workflow.html#configure-email-notification" title="Procedure&nbsp;16.2.&nbsp;Configuring Email Notification">Procedure&nbsp;16.2, &#8220;Configuring Email Notification&#8221;</a>. If you
+      select not to send an email notification, the notification is simply added
+      to the OpenIDM repository, and appears when the manager logs into the UI.
+     </p><p>
+      Select either Cancel, to terminate the process, or Request, to start a
+      user task, assigned to the manager of the user requesting access
+      (<code class="literal">user.0</code> in this example).
+     </p></li><li class="step"><p>
+      Log out of the UI and log back in as the manager (<code class="literal">user.0</code>
+      with password <code class="literal">Passw0rd</code>).
+     </p></li><li class="step"><p>
+      Under "Tasks that are in my group's queue" click "User Access Request
+      Approval" and select "Assign to me".
+     </p><p>
+      Note that the "User Access Request Approval" task has now moved under
+      "My tasks".
+     </p></li><li class="step"><p>
+      Under "My tasks" click "User Access Request Approval" and click Details.
+     </p></li><li class="step"><p>
+      The details of the access request are displayed. The manager is able to
+      modify the access rights. Select Accept or Reject to approve or deny the
+      request.
+     </p><p>
+      Rejecting the request results in a notification being sent to the user
+      who made the request. If you have enabled email notification, a single
+      email is sent to the account defined when you configure email notification,
+      as described in <a class="xref" href="chap-workflow.html#configure-email-notification" title="Procedure&nbsp;16.2.&nbsp;Configuring Email Notification">Procedure&nbsp;16.2, &#8220;Configuring Email Notification&#8221;</a>.
+     </p><p>
+      Accepting the request initiates a second approval task, assigned to the
+      <code class="literal">systemadmin</code> user.
+     </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/ui-access-request.png" align="middle" height="360" alt="Accepting an access request"></td></tr></table></div><p>
+      Click Complete to complete the task.
+     </p></li><li class="step"><p>
+      Log out of the UI and log in as the <code class="literal">systemadmin</code> user
+      (with password <code class="literal">Passw0rd</code>).
+     </p><p>
+      This user now has one User Access Request Approval task in his queue.
+     </p></li><li class="step"><p>
+      Select the task and click Details.
+     </p><p>
+      This task interface is similar to that of the task that was assigned to
+      the manager.
+     </p><p>
+      Rejecting the request results in a notification being sent to the user
+      who made the request.
+     </p><p>
+      Accepting the request updates the managed/user record in OpenIDM, to
+      reflect the approved access changes.
+     </p><p>
+      If you have enabled email notification, a single email is sent to the
+      account defined when you configured the external email service
+      (<a class="xref" href="chap-workflow.html#configure-email-notification" title="Procedure&nbsp;16.2.&nbsp;Configuring Email Notification">Procedure&nbsp;16.2, &#8220;Configuring Email Notification&#8221;</a>), indicating whether the
+      request has been accepted or rejected.
+     </p></li></ol></div><p>
+    Note that this sample includes an <span class="emphasis"><em>escalation</em></span> step that
+    is attached to the manager approval task. If the manager does not complete
+    assessment of the user task within ten minutes of its initiation, a new user
+    task is created and assigned to the <code class="literal">superadmin</code> user. This
+    task has the same interface and functionality as the task assigned to the
+    manager. Accordingly, when the <code class="literal">superadmin</code> user completes
+    the task, the execution is passed to the <code class="literal">systemadmin</code> user
+    for approval.
+   </p><p>
+    Shut down OpenIDM before you proceed with the next use case.
+   </p><div class="screen"><pre>$ cd /path/to/openidm
+$ ./shutdown.sh</pre></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="use-case-4"></a>16.6.4.&nbsp;Use Case 4 - Orphan Account Detection</h3></div></div></div><p>
+    This use case demonstrates two asynchronous tasks, started from a
+    reconciliation process:
+   </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+      Detecting orphan accounts on a target object set
+     </p></li><li class="listitem"><p>
+      Handling ambiguous results during correlation
+     </p></li></ul></div><p>
+    This use case relies on a customized synchronization configuration (mapping)
+    file, named <code class="filename">syncManagedBusiness.json</code>, in the
+    <code class="filename">/path/to/openidm/samples/usecase/usecase4/conf</code>
+    directory.
+   </p><p>
+    This file defines a mapping (<code class="literal">recon_managedUser_systemBusiness</code>)
+    between a source (managed users) and a target object set. The target object
+    set is defined in the file
+    <code class="literal">samples/usecase/usecase4/data/business.csv</code>. The
+    <code class="filename">business.csv</code> file includes all users from the initial
+    reconciliation (described in <a class="xref" href="chap-workflow.html#use-case-1" title="16.6.1.&nbsp;Use Case 1 - Initial Reconciliation">Section&nbsp;16.6.1, &#8220;Use Case 1 - Initial Reconciliation&#8221;</a>). These users are
+    categorized as <code class="literal">employees</code>, and therefore include the
+    property <code class="literal">"accounts" : ["Business"]</code> in their managed user
+    entry     (see <a class="xref" href="chap-workflow.html#use-case-2" title="16.6.2.&nbsp;Use Case 2 - New User Onboarding">Section&nbsp;16.6.2, &#8220;Use Case 2 - New User Onboarding&#8221;</a> for an explanation of the User
+    Type).
+   </p><p>
+    The mapping includes the following <code class="literal">"validSource"</code> field:
+   </p><pre class="brush: plain;">"validSource" : {
+    "type" : "text/javascript",
+    "file" : "script/isSourceValidBusiness.js"
+}, </pre><p>
+    This field references a script which specifies that only those users who
+    are employees are taken into account during the reconciliation.
+   </p><p>
+    In addition, the <code class="literal">business.csv</code> file includes the following
+    users:
+   </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+      <code class="literal">user.50</code>. This user is defined <span class="emphasis"><em>only</em></span>
+      in the .csv file, and not in the managed/user repository. When a
+      reconciliation operation is run, this user is detected as an
+      <span class="emphasis"><em>orphan account</em></span>. The orphan account workflow is
+      triggered when an "UNQUALIFIED" or "UNASSIGNED" situation is encountered,
+      as indicated in this section of the mapping:
+     </p><pre class="brush: plain;">{
+    "situation" : "UNQUALIFIED",
+    "action" : {
+        "workflowName" : "orphanAccountReport",
+        "type" : "text/javascript",
+        "file" : "workflow/triggerWorkflowFromSync.js"
+    }
+},
+{
+    "situation" : "UNASSIGNED",
+    "action" : {
+        "workflowName" : "orphanAccountReport",
+        "type" : "text/javascript",
+        "file" : "workflow/triggerWorkflowFromSync.js"
+    }
+}</pre></li><li class="listitem"><p>
+      <code class="literal">user.33</code>. This user has a <code class="literal">"userName"</code>
+      attribute of <code class="literal">"user.3"</code> (which is the same as the
+      <code class="literal">"userName"</code> attribute of the user,
+      <code class="literal">user.3</code>). The correlation query of the reconciliation
+      operation is based on the <code class="literal">"userName"</code> attribute. During
+      the correlation query, two candidate users are therefore correlated with
+      the same managed user (<code class="literal">user.3</code>), and the result is
+      ambiguous. The manual match workflow is triggered when an "AMBIGUOUS"
+      situation is encountered, as indicated in this section of the mapping:
+     </p><pre class="brush: plain;">{
+    "situation" : "AMBIGUOUS",
+    "action" : {
+        "workflowName" : "manualMatch",
+        "type" : "text/javascript",
+        "file" : "workflow/triggerWorkflowFromSync.js"
+    }
+}</pre></li></ul></div><div class="procedure"><ol class="procedure" type="1"><li class="step"><p>
+      Before you start with this use case, rename the mapping file to
+      <code class="filename">sync.json</code>.
+     </p><div class="screen"><pre>$ cd /path/to/openidm/samples/usecase/usecase4/conf
+$ mv syncManagedBusiness.json sync.json</pre></div></li><li class="step"><p>
+      Start OpenIDM with the configuration for use case 4.
+     </p><div class="screen"><pre>$ cd /path/to/openidm
+$ ./startup.sh -p samples/usecase/usecase4
+     </pre></div><p>
+      You will see a warning in the Felix console about a password not being
+      defined in the CSV file (<code class="literal">WARN Password attribute is not defined.
+      [CSVFileConfiguration]</code>). You can ignore this warning.
+     </p></li><li class="step"><p>
+      Run a reconciliation operation, according to the mapping defined in
+      <code class="filename">sync.json</code>.
+     </p><div class="screen"><pre>$ curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --header "Content-Type: application/json" \
+ --request POST \
+ "https://localhost:8443/openidm/recon?_action=recon&amp;mapping=recon_managedUser_systemBusiness"</pre></div><p>
+      When the reconciliation operation finds the ambiguous entry
+      (<code class="literal">user.3</code>) and the orphan entry (<code class="literal">user.50</code>)
+      in the CSV file, two asynchronous workflows are launched
+      (<code class="literal">manualMatch</code> and <code class="literal">orphanAccountReport</code>),
+      as indicated in the mapping file, described previously.
+     </p></li><li class="step"><p>
+      Log into the UI as the <code class="literal">systemadmin</code> user, with password
+      <code class="literal">Passw0rd</code>.
+     </p></li><li class="step"><p>
+      Select the Manual Linking task from the My tasks list and click Details.
+     </p><p>
+      The <span class="emphasis"><em>Possible targets</em></span> field presents a list of target
+      entries to which the ambiguous record can be linked. In this example,
+      <code class="literal">user.3 - Atrc, Aaron</code> and
+      <code class="literal">user.33 - Atrc, Aaron</code> are the two candidate users found
+      in the target object set by the correlation query. When you select one of
+      these values, the workflow manually links the managed user
+      (<code class="literal">user.3</code>) to the selected user.
+     </p><p>
+      If you select Ignore, here, no action is taken (no link is created), and
+      the workflow terminates.
+     </p></li><li class="step"><p>
+      Select the Orphan Account task from the My tasks list and click Details.
+     </p><p>
+      The <span class="emphasis"><em>Link to</em></span> field enables you to enter an existing
+      managed user ID to which this orphan account should be linked. For the
+      purposes of this example, enter <code class="literal">user.5</code>.
+     </p><p>
+      The <span class="emphasis"><em>Delete</em></span> option deletes the user from the target
+      object set (the CSV file in this case) and terminates the workflow.
+     </p></li><li class="step"><p>
+      Shut down OpenIDM before you proceed with the next use case.
+     </p><div class="screen"><pre>$ cd /path/to/openidm
+$ ./shutdown.sh</pre></div></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="use-case-5"></a>16.6.5.&nbsp;Use Case 5 - Certification</h3></div></div></div><p>
+    This use case demonstrates a scheduled task that retrieves all managed users
+    and starts a certification workflow for each one.
+   </p><div class="procedure"><ol class="procedure" type="1"><li class="step"><p>
+      Start OpenIDM with the configuration for use case 5.
+     </p><div class="screen"><pre>$ cd /path/to/openidm
+$ ./startup.sh -p samples/usecase/usecase5</pre></div></li><li class="step"><p>
+      To start the scheduled task, enable the schedule in
+      <code class="filename">schedule-certification.json</code>.
+     </p><div class="screen"><pre>$ cd /path/to/openidm
+$ more samples/usecase/usecase5/conf/schedule-certification.json
+{
+    "enabled" : true,
+...  </pre></div></li><li class="step"><p>
+      Log into the UI as <code class="literal">user.0</code> with password
+      <code class="literal">Passw0rd</code>.
+     </p><p>
+      <code class="literal">user.0</code> represents the manager of the users who are
+      being certified.
+     </p></li><li class="step"><p>
+      Under "Tasks that are in my group's queue" click "Certification Process"
+      and select "Assign to me".
+     </p><p>
+      The "Certification Process" task moves under "My tasks".
+     </p></li><li class="step"><p>
+      Under "My tasks" click "Certification Process" and click Details.
+     </p></li><li class="step"><p>
+      On the "Access Status Check" task, click Details.
+     </p><p>
+      The <span class="emphasis"><em>Access to Business system</em></span> and <span class="emphasis"><em>Access to
+      Project system</em></span> fields reflect the values of the
+      <code class="literal">"accounts"</code> property of the managed user that is being
+      certified. These values can be changed on this form, which changes the
+      corresponding values in the managed user object.
+     </p></li><li class="step"><p>
+      Select a Decision.
+     </p><p>
+      If you select <span class="emphasis"><em>Certify</em></span>, no action
+      is taken, the certified user is not modified and the workflow terminates.
+     </p><p>
+      Selecting <span class="emphasis"><em>Change</em></span> results in a new user task being
+      created, and assigned to the <code class="literal">systemadmin</code> user.
+     </p><p>
+      Click Complete after you have selected one of the previous options.
+     </p></li><li class="step"><p>
+      If you selected <span class="emphasis"><em>Change</em></span> in the previous step, log in
+      to the UI as the <code class="literal">systemadmin</code> user with password
+      <code class="literal">Passw0rd</code>.
+     </p></li><li class="step"><p>
+      Select the Access Status Check task and click Details.
+     </p><p>
+      The <span class="emphasis"><em>Access to Business system</em></span> and
+      <span class="emphasis"><em>Access to Project system</em></span> fields can be modified on
+      this form, if required.
+     </p></li><li class="step"><p>
+      Select a Decision.
+     </p><p>
+      If you select <span class="emphasis"><em>Accept</em></span>, the managed user object of the
+      user being certified is updated with values of the access fields on this
+      form. A notification regarding the change is sent to the affected user,
+      visible in the UI when the user next logs in.
+     </p><p>
+      If you select <span class="emphasis"><em>Reject</em></span>, the managed user object of the
+      user is not changed. A notification is sent to the manager of the user,
+      indicating that the certification change request has been rejected by
+      the <code class="literal">systemadmin</code> user.
+     </p><p>
+      Click Complete after you have selected one of the previous options.
+     </p></li><li class="step"><p>
+      Shut down OpenIDM before you proceed with the next use case.
+     </p><div class="screen"><pre>$ cd /path/to/openidm
+$ ./shutdown.sh</pre></div></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="use-case-6"></a>16.6.6.&nbsp;Use Case 6 - Password Change Reminder</h3></div></div></div><p>
+    This use case demonstrates using the task scanner to trigger a password
+    change reminder workflow for managed users.
+   </p><p>
+    In this example, each managed user entry in OpenIDM has a dedicated
+    attribute, <code class="literal">lastPasswordSet</code>, that stores the date on which
+    the password was last changed. The value of this attribute is updated by an
+    <code class="literal">onStore</code> script, defined in the managed user configuration
+    file (<code class="filename">conf/managed.json</code>), as follows:
+   </p><pre class="brush: plain;">
+"onStore" : {
+    "type" : "text/javascript",
+    "file" : "script/onStoreManagedUser.js"
+},
+   </pre><p>
+    When a new password is stored for a user, the script sets the date on which
+    this change was made. The task scanner periodically scans the
+    <code class="literal">lastPasswordSet</code> attribute, and starts the workflow if the
+    password was changed more than an hour ago. This condition is configured in
+    the schedule configuration file
+    (<code class="filename">schedule-taskscan_passwordchange.json</code>):
+   </p><div class="screen"><pre><strong>$ cd /path/to/openidm
+$ more samples/usecase/usecase6/conf/schedule-taskscan_passwordchange.json</strong>
+<em>
+...
+"condition" : {
+    "before" : "${Time.now - 1h}"
+},
+....</em>
+   </pre></div><p>
+    Obviously, in a real deployment, the period between required password
+    changes would be longer, and this value would need to be set accordingly.
+    For the purposes of testing this use case, you might want to set the value
+    to a shorter period, such as <code class="literal">"${Time.now - 1m}"</code>, which
+    will send the notification one minute after a password change.
+   </p><p>
+    By default, the workflow sends notifications to the user entry, visible when
+    the user logs into the UI. If you want notifications sent by email,
+    configure the external email service, as follows:
+   </p><div class="procedure"><ol class="procedure" type="1"><li class="step"><p>
+      Edit the settings in the file
+      <code class="filename">/path/to/openidm/samples/usecase/usecase6/conf/external.email.json</code>
+      to match the settings of your mail server. For example:
+     </p><div class="screen"><pre><strong>$ cd /path/to/openidm
+$ more samples/usecase/usecase6/conf/external.email.json</strong>
+<em>
+{
+        "host" : "smtp.gmail.com",
+        "port" : "587",
+        "username" : "my-username"
+        "password" : "my-password",
+        "mail.smtp.auth" : "true",
+        "mail.smtp.starttls.enable" : "true"
+}</em>
+     </pre></div></li><li class="step"><p>
+      Enable email notification in the script file that starts the workflow
+      (<code class="filename">samples/usecase/usecase6/script/passwordchange.js</code>).
+      For example:
+     </p><div class="screen"><pre><strong>$ cd /path/to/openidm
+$ more samples/usecase/usecase6/script/passwordchange.js</strong>
+<em>
+/*global  objectID*/
+
+(function () {
+    var params = {
+ "userId" : objectID,
+ "emailEnabled" : "true",
+ "_key": "passwordChangeReminder"
+};</em>
+     </pre></div></li><li class="step"><p>
+      Make sure that all users have a valid email address as the value of their
+      <code class="literal">mail</code> attribute, in the OpenIDM repository.
+     </p></li></ol></div><p>
+    The task scanning schedule is disabled by default. To test this use case,
+    follow these steps:
+   </p><div class="procedure"><ol class="procedure" type="1"><li class="step"><p>
+      Enable the task scanning schedule by setting <code class="literal">enabled</code> to
+      <code class="literal">true</code> in the schedule configuration file
+      (<code class="filename">schedule-taskscan_passwordchange.json</code>).
+     </p><div class="screen"><pre><strong>$ cd /path/to/openidm
+$ more samples/usecase/usecase6/conf/schedule-taskscan_passwordchange.json</strong>
+      <em>
+{
+    "enabled" : true,
+...
+      </em>
+     </pre></div></li><li class="step"><p>Start OpenIDM with the configuration for use case 6.
+     </p><div class="screen"><pre>$ cd /path/to/openidm
+$ ./startup.sh -p samples/usecase/usecase6</pre></div><p>
+     </p></li><li class="step"><p>
+      Log into the UI as any of the users listed in the introduction to this
+      section (for example, <code class="literal">user.4</code>, with password
+      <code class="literal">Passw0rd</code>).
+     </p><p>
+      The user sees the following notification upon login:
+     </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/pwd-expiry.png" align="middle" height="360" alt="Password expiry notification"></td></tr></table></div><p>
+      If the password has not been changed after five minutes, a second
+      notification is sent to the user.
+     </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/pwd-expiry2.png" align="middle" height="360" alt="Second password expiry notification"></td></tr></table></div><p>
+      If the password has not been changed two minutes after this second
+      notification, the user's account is deactivated and that user is no longer
+      able to log into the UI.
+     </p></li><li class="step"><p>
+      To avoid the second notification, or the account deactivation, you can
+      change the user password through the UI, as follows:
+     </p><ol type="a" class="substeps"><li class="step"><p>
+        Log into the UI as the user whose password you want to change and click
+        Change Security Data at the top right of the page.
+       </p></li><li class="step"><p>
+        Enter the existing password (in this case <code class="literal">Passw0rd</code>).
+       </p></li><li class="step"><p>
+        Enter a new password that conforms to the requirements of the password
+        policy.
+       </p></li></ol></li></ol></div></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-security.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-auditing.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;15.&nbsp;Securing &amp; Hardening OpenIDM&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;17.&nbsp;Using Audit Logs</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10020&components=10164&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-9']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

@@ -1,0 +1,269 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;6.&nbsp;Accessing Data Objects</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenIDM Integrator's Guide"><link rel="up" href="index.html" title="OpenIDM Integrator's Guide"><link rel="prev" href="chap-configuration.html" title="Chapter&nbsp;5.&nbsp;Configuring OpenIDM"><link rel="next" href="chap-users-groups-roles.html" title="Chapter&nbsp;7.&nbsp;Managing Users, Groups, and Roles"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;6.&nbsp;Accessing Data Objects</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-configuration.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-users-groups-roles.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-data"></a>Chapter&nbsp;6.&nbsp;Accessing Data Objects</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-data.html#data-scripts">6.1. Accessing Data Objects by Using Scripts</a></span></dt><dt><span class="section"><a href="chap-data.html#data-rest">6.2. Accessing Data Objects by Using the REST API</a></span></dt><dt><span class="section"><a href="chap-data.html#queries">6.3. Defining and Calling Queries</a></span></dt></dl></div><a class="indexterm" name="d0e3507"></a><p>
+  OpenIDM supports a variety of objects that can be addressed via a URL or URI.
+  You can access data objects by using scripts (through the Resource API) or by
+  using direct HTTP calls (through the REST API).
+ </p><p>
+  The following sections describe these two methods of accessing data objects,
+  and provide information on constructing and calling data queries.
+ </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="data-scripts"></a>6.1.&nbsp;Accessing Data Objects by Using Scripts</h2></div></div></div><a class="indexterm" name="d0e3519"></a><p>
+   OpenIDM's uniform programming model means that all objects are queried and
+   manipulated in the same way, using the Resource API. The URL or URI that is
+   used to identify the target object for an operation depends on the object
+   type. For an explanation of object types, see the
+   <span class="olink"><em class="citetitle">Data Models and
+   Objects Reference</em></span>. For more information about scripts and
+   the objects available to scripts, see the
+   <a href="../../integrators-guide/index/appendix-scripting.html" class="link"><em class="citetitle">Scripting
+   Reference</em></a>.
+  </p><p>
+   You can use the Resource API to obtain managed objects, configuration
+   objects, and repository objects, as follows:
+  </p><pre class="brush: javascript;">
+val = openidm.read("managed/organization/mysampleorg")
+val = openidm.read("config/custom/mylookuptable")
+val = openidm.read("repo/custom/mylookuptable")
+  </pre><p>
+   For information about constructing an object ID, see <a href="../../integrators-guide/index/appendix-rest.html#rest-uri-scheme" class="link"><em class="citetitle">URI Scheme</em></a>
+   in the <em class="citetitle">REST API Reference</em>.
+  </p><p>
+   You can update entire objects with the <code class="literal">update()</code> function,
+   as follows.
+  </p><pre class="brush: javascript;">
+openidm.update("managed/organization/mysampleorg", mymap)
+openidm.update("config/custom/mylookuptable", mymap)
+openidm.update("repo/custom/mylookuptable", mymap)
+  </pre><p>
+   For managed objects, you can partially update an object with the
+   <code class="literal">patch()</code> function.
+  </p><pre class="brush: javascript;">
+openidm.patch("managed/organization/mysampleorg", rev, value)
+  </pre><p>
+   The <code class="literal">create()</code>, <code class="literal">delete()</code>, and
+   <code class="literal">query()</code> functions work the same way.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="data-rest"></a>6.2.&nbsp;Accessing Data Objects by Using the REST API</h2></div></div></div><p>
+   OpenIDM provides RESTful access to data objects via a REST API. To access
+   objects over REST, you can use a browser-based REST client, such as the
+   <a class="link" href="https://chrome.google.com/webstore/detail/simple-rest-client/fhjcajmcbmldlhcimfajhfbgofnpcjmb" target="_top">
+   Simple REST Client</a> for Chrome, or <a class="link" href="https://addons.mozilla.org/en-US/firefox/addon/restclient/" target="_top">
+   RESTClient</a> for Firefox. Alternatively you can use the <a class="link" href="http://curl.haxx.se/" target="_blank"><span class="command"><strong>curl</strong></span>
+   </a> command-line utility.
+  </p><p>
+   For a comprehensive overview of the REST API, see the <a href="../../integrators-guide/index/appendix-rest.html" class="link"><em class="citetitle">REST API
+   Reference</em></a> appendix.
+  </p><p>
+   To obtain a managed object through the REST API, depending on your security
+   settings and authentication configuration, perform an HTTP GET on the
+   corresponding URL, for example
+   <code class="literal">https://localhost:8443/openidm/managed/organization/mysampleorg</code>.
+  </p><p>
+   By default, the HTTP GET returns a JSON representation of the object.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="queries"></a>6.3.&nbsp;Defining and Calling Queries</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-data.html#parameterized-queries">6.3.1. Parameterized Queries</a></span></dt><dt><span class="section"><a href="chap-data.html#native-queries">6.3.2. Native Query Expressions</a></span></dt><dt><span class="section"><a href="chap-data.html#constructing-queries">6.3.3. Constructing Queries</a></span></dt></dl></div><p>
+   OpenIDM supports an advanced query model that enables you to define queries,
+   and to call them over the REST or Resource API.
+  </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="parameterized-queries"></a>6.3.1.&nbsp;Parameterized Queries</h3></div></div></div><p>
+    Managed objects in the supported OpenIDM repositories can be accessed using
+    a parameterized query mechanism. Parameterized queries on repositories are
+    defined in the repository configuration (<code class="filename">repo.*.json</code>)
+    and are called by their <code class="literal">_queryId</code>.
+   </p><p>
+    Parameterized queries provide security and portability for the query call
+    signature, regardless of the back-end implementation. Queries that are
+    exposed over the REST interface <span class="emphasis"><em>must</em></span> be parameterized
+    queries to guard against injection attacks and other misuse. Queries on the
+    officially supported repositories have been reviewed and hardened against
+    injection attacks.
+   </p><p>
+    For system objects, support for parameterized queries is restricted to
+    <code class="literal">_queryId=query-all-ids</code>. There is currently no support for
+    user-defined parameterized queries on system objects. Typically,
+    parameterized queries on system objects are not called directly over the
+    REST interface, but are issued from internal calls, such as correlation
+    queries.
+   </p><p>
+    A typical query definition is as follows:
+   </p><pre class="brush: plain;">
+"query-all-ids" : "select _openidm_id from ${unquoted:_resource}"
+   </pre><p>
+    To call this query, you would reference its ID, as follows:
+   </p><pre class="brush: plain;">
+?_queryId=query-all-ids
+   </pre><p>
+    The following example calls <code class="literal">query-all-ids</code> over the REST
+    interface:
+   </p><div class="screen"><pre>$ curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ "https://localhost:8443/openidm/managed/user?_queryId=query-all-ids"</pre></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="native-queries"></a>6.3.2.&nbsp;Native Query Expressions</h3></div></div></div><p>
+    Native query expressions are supported for all managed objects and system
+    objects, and can be called directly over the REST interface, rather than
+    being defined in the repository configuration.
+   </p><p>
+    Native queries are intended specifically for internal callers, such as
+    custom scripts, in situations where the parameterized query facility is
+    insufficient. For example, native queries are useful if the query needs to
+    be generated dynamically.
+   </p><p>
+    The query expression is specific to the target resource. For repositories,
+    queries use the native language of the underlying data store. For system
+    objects that are backed by OpenICF connectors, queries use the applicable
+    query language of the system resource.
+   </p><p>
+    Native queries on the repository are made using the
+    <code class="literal">_queryExpression</code> keyword. For example:
+   </p><div class="screen"><pre>$ curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ "https://localhost:8443/openidm/managed/user?_queryExpression=select+from+managed_user"
+   </pre></div><p>
+    Unless you have specifically enabled native queries, the previous command
+    returns a 403 access denied error message. Native queries should not be
+    enabled in production environments, as they are not portable and do not
+    guard against injection attacks.
+   </p><p>
+    Such query expressions should therefore not be used or made accessible over
+    the REST interface or over HTTP, other than for development, and should be
+    used only via the internal Resource API. If you want to enable such
+    native queries for development, see the section on
+    <a href="../../integrators-guide/index/chap-security.html#security-urls" class="link"><em class="citetitle">Protecting
+    Sensitive REST Interface URLs</em></a>.
+   </p><p>
+    Alternatively, if you really need to expose native queries over HTTP, in a
+    selective manner, you can design a custom endpoint to wrap such access.
+   </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="constructing-queries"></a>6.3.3.&nbsp;Constructing Queries</h3></div></div></div><p>
+    The <code class="literal">openidm.query</code> function enables you to query OpenIDM
+    resource objects for reconciliation processes and workflows. The query
+    syntax is <code class="literal">openidm.query(id, params)</code>, where
+    <code class="literal">id</code> specifies the object on which the query should be
+    performed and <code class="literal">params</code> provides the parameters that are
+    passed to the query, either <code class="literal">_queryFilter</code> or
+    <code class="literal">_queryID</code>. For example:
+   </p><pre class="brush: javascript;">
+var params = {
+    '_queryFilter' : 'givenName co "' + sourceCriteria + '" or ' + 'sn co "'
+                     + sourceCriteria + '"'
+};
+var results = openidm.query("system/ScriptedSQL/account", params)
+   </pre><p>
+    The query filter is specified in common filter notation, with the following
+    operations.
+   </p><h4><a name="d0e3695"></a>Attribute Operations</h4><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">Equals</code> Filter</span></dt><dd><p>
+        Determines whether the resource contains an attribute that matches a
+        specific attribute value.
+       </p><p>
+        Returns <code class="literal">true</code> if the object satisfies all selection
+        criteria of the filter, otherwise returns <code class="literal">false</code>.
+       </p><p>
+        For example:
+       </p><pre class="brush: javascript;">
+"_queryFilter" : "employeeType eq \"Permanent\""
+       </pre></dd></dl></div><h4><a name="d0e3718"></a>Comparable Attribute Operations</h4><p>
+     Compares single-value attributes to a given filter.
+    </p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">GreaterThan</code> Filter</span></dt><dd><p>
+        Determines whether the attribute value of the resource object is greater
+        than the one provided in the filter.
+       </p><p>
+        Returns <code class="literal">true</code> if the attribute value is greater,
+        otherwise returns <code class="literal">false</code>.
+       </p><p>
+        For example:
+       </p><pre class="brush: javascript;">
+"_queryFilter" : "employeeNumber gt \"50000\""
+       </pre></dd><dt><span class="term"><code class="literal">GreaterThanOrEqual</code> Filter</span></dt><dd><p>
+        Determines whether the attribute value of the resource object is greater
+        than or equal to the one provided in the filter.
+       </p><p>
+        Returns <code class="literal">true</code> if the attribute value is greater than
+        or equal, otherwise returns <code class="literal">false</code>.
+       </p><p>
+        For example:
+       </p><pre class="brush: javascript;">
+"_queryFilter" : "employeeNumber ge \"50000\""
+       </pre></dd><dt><span class="term"><code class="literal">LessThan</code> Filter</span></dt><dd><p>
+        Determines whether the attribute value of the resource object is less
+        than the one provided in the filter.
+       </p><p>
+        Returns <code class="literal">true</code> if the attribute value is less,
+        otherwise returns <code class="literal">false</code>.
+       </p><p>
+        For example:
+       </p><pre class="brush: javascript;">
+"_queryFilter" : "employeeNumber lt \"50000\""
+       </pre></dd><dt><span class="term"><code class="literal">LessThanOrEqual</code> Filter</span></dt><dd><p>
+        Determines whether the attribute value of the resource object is less
+        than or equal to the one provided in the filter.
+       </p><p>
+        Returns <code class="literal">true</code> if the attribute value is less than or
+        equal, otherwise returns <code class="literal">false</code>.
+       </p><p>
+        For example:
+       </p><pre class="brush: javascript;">
+"_queryFilter" : "employeeNumber le \"50000\""
+       </pre></dd></dl></div><h4><a name="d0e3803"></a>String Attribute Operations</h4><p>
+     Compares string values to a given filter.
+    </p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">StartsWith</code> Filter</span></dt><dd><p>Returns attributes whose value starts with the string specified in
+        the filter.
+       </p><p>
+        For example:
+       </p><pre class="brush: javascript;">
+"_queryFilter" : "lastName sw \"smi\""
+       </pre></dd><dt><span class="term"><code class="literal">Contains</code> Filter</span></dt><dd><p>
+        Returns attributes whose value contains the string specified in the
+        filter.
+       </p><p>
+        For example:
+       </p><pre class="brush: javascript;">
+"_queryFilter" : "lastName co \"smi\""
+       </pre></dd><dt><span class="term"><code class="literal">EndsWith</code> Filter</span></dt><dd><p>
+        Returns attributes whose value ends with the string specified in the
+        filter.
+       </p><p>
+        For example:
+       </p><pre class="brush: javascript;">
+"_queryFilter" : "lastName ew \"ith\""
+       </pre></dd></dl></div><h4><a name="d0e3844"></a>Filter Operations</h4><p>
+     Filter operations are used to construct more complex filters by comparing
+     two filters from the preceding section or negating filters defined in the
+     previous section.
+    </p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">AND Filter</code></span></dt><dd><p>
+        A filter that matches entries using the AND boolean operator on two
+        filters.
+       </p><p>
+        For example:
+       </p><pre class="brush: javascript;">
+"_queryFilter": "(lastName eq \"Smith\") and (givenName eq \"John\")"
+       </pre></dd><dt><span class="term"><code class="literal">OR Filter</code></span></dt><dd><p>
+        A filter that matches entries using the OR boolean operator on two
+        filters.
+       </p><p>
+        For example:
+       </p><pre class="brush: javascript;">
+"_queryFilter": "(lastName eq \"Smith\") or (lastName eq \"Smythe\")"
+       </pre></dd><dt><span class="term"><code class="literal">NOT Filter</code></span></dt><dd><p>
+        A filter that filters out matched entries by using a query. Syntax is
+        <code class="literal">"! (expression)"</code>.
+       </p><p>
+        For example:
+       </p><pre class="brush: javascript;">
+"_queryFilter": "! (employeeType eq \"Contractor\")"
+       </pre></dd></dl></div></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-configuration.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-users-groups-roles.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;5.&nbsp;Configuring OpenIDM&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;7.&nbsp;Managing Users, Groups, and Roles</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10020&components=10164&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-9']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>
