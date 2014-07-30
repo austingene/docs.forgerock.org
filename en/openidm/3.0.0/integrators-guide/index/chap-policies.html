@@ -1,0 +1,438 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;8.&nbsp;Using Policies to Validate Data</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenIDM Integrator's Guide"><link rel="up" href="index.html" title="OpenIDM Integrator's Guide"><link rel="prev" href="chap-users-groups-roles.html" title="Chapter&nbsp;7.&nbsp;Managing Users, Groups, and Roles"><link rel="next" href="chap-logs.html" title="Chapter&nbsp;9.&nbsp;Configuring Server Logs"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;8.&nbsp;Using Policies to Validate Data</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-users-groups-roles.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-logs.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-policies"></a>Chapter&nbsp;8.&nbsp;Using Policies to Validate Data</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-policies.html#configuring-default-policy">8.1. Configuring the Default Policy</a></span></dt><dt><span class="section"><a href="chap-policies.html#extending-policies">8.2. Extending the Policy Service</a></span></dt><dt><span class="section"><a href="chap-policies.html#disabling-policies">8.3. Disabling Policy Enforcement</a></span></dt><dt><span class="section"><a href="chap-policies.html#policies-over-REST">8.4. Managing Policies Over REST</a></span></dt></dl></div><a class="indexterm" name="d0e4656"></a><p>OpenIDM provides an extensible policy service that enables you to 
+  apply specific validation requirements to various components and properties. 
+  The policy service provides a REST interface for reading policy requirements 
+  and validating the properties of components against configured policies. 
+  Objects and properties are validated automatically when they are created, 
+  updated, or patched. Policies can be applied to user passwords, but also to 
+  any kind of managed object.</p><p>The policy service enables you to do the following:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Read the configured policy requirements of a specific component.
+     </p></li><li class="listitem"><p>Read the configured policy requirements of all components.</p></li><li class="listitem"><p>Validate a component object against the configured policies.</p></li><li class="listitem"><p>Validate the properties of a component against the configured 
+     policies.</p></li></ul></div><p>A default policy applies to all managed objects. You can configure the 
+  default policy to suit your requirements, or you can extend the policy 
+  service by supplying your own scripted policies.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configuring-default-policy"></a>8.1.&nbsp;Configuring the Default Policy</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-policies.html#policy-script-file">8.1.1. Policy Script File</a></span></dt><dt><span class="section"><a href="chap-policies.html#policy-config-file">8.1.2. Policy Configuration File</a></span></dt></dl></div><p>The default policy is configured in two files:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>A policy script file 
+        (<code class="filename">openidm/bin/defaults/script/policy.js</code>) which 
+        defines each policy and specifies how policy validation is performed.
+        </p></li><li class="listitem"><p>A policy configuration file 
+        (<code class="filename">openidm/conf/policy.json</code>) which specifies which 
+        policies are applicable to each resource.
+        </p></li></ul></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="policy-script-file"></a>8.1.1.&nbsp;Policy Script File</h3></div></div></div><p>
+       The policy script file defines policy configuration in two parts:
+      </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+         A policy configuration object, which defines each element of the policy.
+        </p></li><li class="listitem"><p>
+         A policy implementation function, which describes the requirements that
+         are enforced by that policy.
+        </p></li></ul></div><p>Together, the configuration object and the implementation function 
+      determine whether an object is valid in terms of the policy. The following 
+      extract from the policy script file configures a policy that specifies 
+      that the value of a property must contain a certain number of capital 
+      letters.</p><pre class="brush: javascript;">...
+{   "policyId" : "at-least-X-capitals",
+    "policyExec" : "atLeastXCapitalLetters",
+    "clientValidation": true,
+    "validateOnlyIfPresent":true,
+    "policyRequirements" : ["AT_LEAST_X_CAPITAL_LETTERS"]
+},
+...
+
+policyFunctions.atLeastXCapitalLetters = function(fullObject, value, params, property) {
+  var isRequired = _.find(this.failedPolicyRequirements, function (fpr) {
+      return fpr.policyRequirement === "REQUIRED";
+    }),
+    isNonEmptyString = (typeof(value) === "string" &amp;&amp; value.length),
+    valuePassesRegexp = (function (v) {
+      var test = isNonEmptyString ? v.match(/[(A-Z)]/g) : null;
+      return test !== null &amp;&amp; test.length &gt;= params.numCaps;
+    }(value));
+
+  if ((isRequired || isNonEmptyString) &amp;&amp; !valuePassesRegexp) {
+    return [ { "policyRequirement" : "AT_LEAST_X_CAPITAL_LETTERS", "params" : {"numCaps": params.numCaps} } ];
+  }
+
+  return [];
+}     
+...     
+      </pre><p>To enforce user passwords that contain at least one capital letter, 
+      the previous policy ID is applied to the appropriate resource and the 
+      required number of capital letters is defined in the policy configuration 
+      file, as described in <a class="xref" href="chap-policies.html#policy-config-file" title="8.1.2.&nbsp;Policy Configuration File">Section&nbsp;8.1.2, &#8220;Policy Configuration File&#8221;</a>.</p><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="policy-config-object"></a>8.1.1.1.&nbsp;Policy Configuration Object</h4></div></div></div><p>Each element of the policy is defined in a policy configuration 
+        object. The structure of a policy configuration object is as follows:
+        </p><pre class="brush: javascript;">
+{   "policyId" : "minimum-length",
+    "policyExec" : "propertyMinLength",
+    "clientValidation": true,
+    "validateOnlyIfPresent": true,
+    "policyRequirements" : ["MIN_LENGTH"]
+}
+      </pre><table border="0" summary="Simple list" class="simplelist"><tr><td><code class="literal">"policyId"</code> - a unique ID that enables the 
+        policy to be referenced by component objects.</td></tr><tr><td><code class="literal">"policyExec"</code> - the name of the function that
+        contains the policy implementation. For more information, see
+        <a class="xref" href="chap-policies.html#policy-function" title="8.1.1.2.&nbsp;Policy Implementation Function">Section&nbsp;8.1.1.2, &#8220;Policy Implementation Function&#8221;</a>.</td></tr><tr><td><code class="literal">"clientValidation"</code> - indicates whether the
+        policy decision can be made on the client. When 
+        <code class="literal">"clientValidation": true</code>, the source code for the 
+        policy decision function is returned when the client requests the 
+        requirements for a property.</td></tr><tr><td><code class="literal">"validateOnlyIfPresent"</code> - notes that the
+        policy is to be validated only if it exists.</td></tr><tr><td><code class="literal">"policyRequirements"</code> - an array containing 
+        the policy requirement ID of each requirement that is associated with 
+        the policy. Typically, a policy will validate only one requirement, 
+        but it can validate more than one.</td></tr></table></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="policy-function"></a>8.1.1.2.&nbsp;Policy Implementation Function</h4></div></div></div><p>Each policy ID has a corresponding policy implementation 
+        function that performs the validation. Functions take the following 
+        form:</p><pre class="brush: javascript;">
+function &lt;name&gt;(fullObject, value, params, propName) {	
+	&lt;implementation_logic&gt;
+}
+        </pre><table border="0" summary="Simple list" class="simplelist"><tr><td><code class="literal">fullObject</code> is the full resource object 
+          that is supplied with the request.</td></tr><tr><td><code class="literal">value</code> is the value of the property that 
+          is being validated.</td></tr><tr><td><code class="literal">params</code> refers to the 
+          <code class="literal">"params"</code> array that is specified in the property's 
+          policy configuration.</td></tr><tr><td><code class="literal">propName</code> is the name of the property that 
+          is being validated.</td></tr></table><p>The following example shows the implementation function for the 
+        <code class="literal">"required"</code> policy.</p><pre class="brush: javascript;">
+function required(fullObject, value, params, propName) {
+    if (value === undefined) {
+        return [ { "policyRequirement" : "REQUIRED" } ];
+    }
+    return [];
+}          
+        </pre></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="policy-config-file"></a>8.1.2.&nbsp;Policy Configuration File</h3></div></div></div><p>
+       The policy configuration file includes a pointer to the policy
+       script, and the configured policies for each component resource.
+       The following includes three sample extracts from the
+       <code class="filename">policy.js</code> file, illustrating policies for
+       passwords, roles, and mobile telephone numbers.
+      </p><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="policy-config-file-password"></a>8.1.2.1.&nbsp;Sample Password Policy Extract</h4></div></div></div><p>
+        The following extract of the default policy configuration file shows how
+        the <code class="literal">at-least-X-capitals</code> policy is applied to user
+        passwords. In this case, the configuration file requires users to
+        include at least one upper case (capital) letter in their passwords.
+       </p><pre class="brush: javascript;">
+{
+    "type" : "text/javascript",
+    "file" : "bin/defaults/script/policy.js",
+    "resources" : [
+        {
+            "resource" : "managed/user/*",
+            "properties" : [
+...
+                {
+                    "name" : "password",
+                    "policies" : [
+                        {
+                            "policyId" : "required"
+                        },
+                        {
+                            "policyId" : "not-empty"
+                        },
+                        {
+                            "policyId" : "at-least-X-capitals",
+                            "params" : {
+                                "numCaps" : 1
+                            }
+                        },
+                ...
+           }
+       ]
+}     
+       </pre><p>The configuration file includes the following properties:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+         <code class="literal">"type"</code> - specifies the type of policy service.
+         Supported types include <code class="literal">"text/javascript"</code> and
+         <code class="literal">"groovy"</code>.
+        </p></li><li class="listitem"><p><code class="literal">"file"</code> - provides the path to the policy 
+          script file, relative to the OpenIDM installation directory.</p></li><li class="listitem"><p><code class="literal">"resources"</code> provides an array of resource 
+          objects, in JSON format, that are subject to the policy service. 
+          Resource objects are identified by the <code class="literal">"resource"</code> 
+          parameter, which indicates the URI and supports wildcard syntax. For 
+          example, <code class="literal">"managed/user/*"</code> indicates that the 
+          policy applies to all objects under <code class="literal">/managed/user</code>. 
+          Each resource has the following properties:</p><table border="0" summary="Simple list" class="simplelist"><tr><td><code class="literal">"name"</code> - the name of the property to 
+              which the policy is applied.</td></tr><tr><td><code class="literal">"policyId"</code> - the ID of the policy that
+              is applied to that property.</td></tr><tr><td><code class="literal">"params"</code> - any specific parameters 
+              that apply to that policy ID.</td></tr></table></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="policy-config-file-array"></a>8.1.2.2.&nbsp;Sample Array Policy Extract</h4></div></div></div><p>
+        Some users may choose to include multiple cellular telephone numbers.
+        In OpenIDM, multiple values for an object can be organized in an array.
+        The following excerpt from a sample <code class="filename">policy.json</code> file
+        requires an entry for <code class="literal">mobilePhones</code>, and includes two
+        separate policies.
+       </p><p>
+        The first policy suggests that the <code class="literal">mobilePhones</code>
+        policy must be present in the object, and there must be at least one
+        element within that object (array).
+       </p><p>
+        The second policy suggests that for any given element of the
+        <code class="literal">mobilePhones</code> object must not be an empty string.
+       </p><pre class="brush: javascript;">
+...
+    {
+        "name" : "mobilePhones",
+        "policies" : [
+            {
+                "policyId" : "required"
+            },
+            {
+                "policyId" : "not-empty"
+            }
+        ]
+    },
+    {
+        "name" : "mobilePhones[*]",
+        "policies" : [
+            {
+                "policyId" : "not-empty"
+            }
+        ]
+    }
+...
+       </pre></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="extending-policies"></a>8.2.&nbsp;Extending the Policy Service</h2></div></div></div><p>You can extend the policy service by adding your own scripted 
+    policies in <code class="filename">openidm/script</code> and referencing them in 
+    the policy configuration file (<code class="filename">conf/policy.json</code>). 
+    Avoid manipulating the default policy script file (in 
+    <code class="literal">bin/defaults/script</code>) as doing so might result in 
+    interoperability issues in a future release. To reference additional 
+    policy scripts, set the <code class="literal">"additionalFiles"</code> property in 
+    <code class="filename">conf/policy.json</code>.</p><p>The following example creates a custom policy that rejects 
+    properties with null values. The policy is defined in a script named 
+    <code class="literal">mypolicy.js</code>.</p><pre class="brush: javascript;">
+var policy = {   "policyId" : "notNull",
+       "policyExec" : "notNull",  
+       "policyRequirements" : ["NOT_NULL"]
+}
+
+addPolicy(policy);
+
+function notNull(fullObject, value, params, property) {
+   if (value == null) {
+       return [ {"policyRequirement": "NOT_NULL"}];
+   }
+   return [];
+} 
+    </pre><p>The <code class="filename">mypolicy.js</code> policy is referenced in the
+     <code class="filename">policy.json</code> configuration file as follows:
+    </p><pre class="brush: javascript;">
+{
+    "type" : "text/javascript",
+    "file" : "bin/defaults/script/policy.js",
+    "additionalFiles" : ["script/mypolicy.js"],
+    "resources" : [
+        {
+...
+    </pre><p>You can also configure policies for managed object properties as
+    part of the property definition in the <code class="filename">conf/managed.json</code>
+    file. For example, the following extract of a managed.json file shows a
+    policy configuration for the <code class="literal">password</code> property.</p><pre class="brush: javascript;">
+...
+"properties" : [
+    {
+        "name" : "password",
+        "encryption" : {
+            "key" : "openidm-sym-default"
+        },
+        "scope" : "private"
+        "policies" : [
+            {
+                "policyId" : "required"
+            },
+            {
+                "policyId" : "not-empty"
+            },
+            {
+                "policyId" : "at-least-X-capitals",
+                "params" : {
+                "numCaps" : 1
+                }
+            }
+        ]
+    },
+...
+   </pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="disabling-policies"></a>8.3.&nbsp;Disabling Policy Enforcement</h2></div></div></div><p>Policy enforcement refers to the automatic validation of data in 
+     the repository when it is created, updated, or patched. In certain 
+     situations you might want to disable policy enforcement temporarily. You 
+     might, for example, want to import existing data that does not meet the 
+     validation requirements with the intention of cleaning up this data at a 
+     later stage.</p><p>You can disable policy enforcement by setting 
+     <code class="literal">openidm.policy.enforcement.enabled</code> to 
+     <code class="literal">false</code> in the <code class="filename">conf/boot/boot.properties</code> 
+     file. This setting disables policy enforcement in the back-end only, and 
+     has no impact on direct policy validation calls to the Policy Service 
+     (which the user interface makes to validate input fields). So, with policy 
+     enforcement disabled, data added directly over REST is not subject to 
+     validation, but data added with the UI is still subject to validation.
+     </p><p>Disabling policy enforcement permanently in a production system is 
+     not recommended.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="policies-over-REST"></a>8.4.&nbsp;Managing Policies Over REST</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-policies.html#listing-policies">8.4.1. Listing the Defined Policies</a></span></dt><dt><span class="section"><a href="chap-policies.html#policy-validate">8.4.2. Validating Objects and Properties Over REST</a></span></dt></dl></div><p>You can manage the policy service over the REST interface, by calling 
+    the REST endpoint <code class="literal">https://localhost:8443/openidm/policy</code>, as
+    shown in the following examples.</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="listing-policies"></a>8.4.1.&nbsp;Listing the Defined Policies</h3></div></div></div><p>The following REST call displays a list of all the defined 
+      policies. The policy objects are returned in JSON format, with one object
+      for each defined policy ID.
+      </p><div class="screen"><pre>
+$ <strong>curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ "https://localhost:8443/openidm/policy"</strong>
+<em>
+{
+  "resources": [
+    {
+      "properties": [
+      {
+        "name": "_id",
+        "policies": [
+          {
+            "policyFunction":
+...</em>
+      </pre></div><p>To display the policies that apply to a specific component, include 
+      the component name in the URL. For example, the following REST call 
+      displays the policies that apply to managed users.
+      </p><div class="screen"><pre>
+$ <strong>curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ "https://localhost:8443/openidm/policy/managed/user/*"</strong>
+<em>
+{
+   "properties": [
+     {
+        "name": "_id",
+        "policies": [
+            {
+            "policyFunction": "
+               "\n  function (fullObject, value, params, property) {
+               \n    var i, join = function (arr, d) {
+
+...
+}</em></pre></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="policy-validate"></a>8.4.2.&nbsp;Validating Objects and Properties Over REST</h3></div></div></div><p>Use the <code class="literal">validateObject</code> action to verify that 
+      an object adheres to the requirements of a policy.</p><p>The following example verifies that a new managed user object is 
+      acceptable in terms of the policy requirements.</p><div class="screen"><pre>
+$ <strong>curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --header "Content-Type: application/json" \
+ --request POST \
+ --data '{
+  "sn":"Jones",
+  "givenName":"Bob",
+  "_id":"bjones",
+  "telephoneNumber":"0827878921",
+  "passPhrase":null,
+  "mail":"bjones@example.com",
+  "accountStatus":"active",
+  "roles":"admin",
+  "userName":"bjones@example.com",
+  "password":"123"}' \
+ "https://localhost:8443/openidm/policy/managed/user/bjones?_action=validateObject"
+       </strong>
+       <em>
+ {
+   "failedPolicyRequirements": [
+     {
+       "property": "password",
+       "policyRequirements": [
+         {
+           "params": {
+             "numCaps": 1
+           },
+           "policyRequirement": "AT_LEAST_X_CAPITAL_LETTERS"
+         }
+       ]
+     },
+     {
+       "property": "password",
+       "policyRequirements": [
+         {
+           "params": {
+             "minLength": 8
+           },
+           "policyRequirement": "MIN_LENGTH"
+         }
+       ]
+     },
+     {
+       "property": "passPhrase",
+       "policyRequirements": [
+         {
+           "params": {
+             "minLength": 4
+           },
+           "policyRequirement": "MIN_LENGTH"
+         }
+       ]
+     }
+   ],
+   "result": false
+ }</em>
+      </pre></div><p>The result (<code class="literal">false</code>) indicates that the object 
+      is not valid. The unfulfilled policy requirements are provided as part 
+      of the response - in this case, the user password does not meet the 
+      validation requirements.</p><p>Use the <code class="literal">validateProperty</code> action to verify that 
+      a specific property adheres to the requirements of a policy.</p><p>The following example checks whether Barbara Jensen's new password 
+      (<code class="literal">12345</code>) is acceptable.</p><div class="screen"><pre>$ <strong>curl \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --header "Content-Type: application/json" \
+ --request POST \
+ --data '{ "password" : "12345" }' \
+ "http://localhost:8080/openidm/policy/managed/user/bjensen?_action=validateProperty"
+       </strong>
+       <em>
+{
+    "result": false,
+    "failedPolicyRequirements": [
+        {
+            "policyRequirements": [
+                {
+                    "policyRequirement": "AT_LEAST_X_CAPITAL_LETTERS",
+                    "params": {
+                        "numCaps": 1
+                    }
+                },
+                {
+                    "policyRequirement": "MIN_LENGTH",
+                    "params": {
+                        "minLength": 8
+                    }
+                }
+            ],
+            "property": "password"
+        }
+    ]
+}                  </em>
+      </pre></div><p>The result (<code class="literal">false</code>) indicates that the password 
+      is not valid. The unfulfilled policy requirements are provided as part 
+      of the response - in this case, the minimum length and the minimum 
+      number of capital letters.</p><p>Validating a property that does fulfil the policy requirements 
+      returns a <code class="literal">true</code> result, for example:</p><div class="screen"><pre>$ <strong>curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --header "Content-Type: application/json" \
+ --request POST \
+ --data '{ "password" : "1NewPassword" }' \
+ "https://localhost:8443/openidm/policy/managed/user/bjensen?_action=validateProperty"
+       </strong>
+       <em>
+{
+    "failedPolicyRequirements": []
+    "result": true,
+}                      </em>
+      </pre></div></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-users-groups-roles.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-logs.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;7.&nbsp;Managing Users, Groups, and Roles&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;9.&nbsp;Configuring Server Logs</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10020&components=10164&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-9']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

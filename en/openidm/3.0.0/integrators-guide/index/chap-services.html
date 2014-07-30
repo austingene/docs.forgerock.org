@@ -1,0 +1,416 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;2.&nbsp;Starting and Stopping OpenIDM</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenIDM Integrator's Guide"><link rel="up" href="index.html" title="OpenIDM Integrator's Guide"><link rel="prev" href="chap-overview.html" title="Chapter&nbsp;1.&nbsp;Architectural Overview"><link rel="next" href="chap-cli.html" title="Chapter&nbsp;3.&nbsp;OpenIDM Command-Line Interface"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;2.&nbsp;Starting and Stopping OpenIDM</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-overview.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-cli.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-services"></a>Chapter&nbsp;2.&nbsp;Starting and Stopping OpenIDM</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-services.html#starting-and-stopping">2.1. To Start and Stop OpenIDM</a></span></dt><dt><span class="section"><a href="chap-services.html#startup-configuration">2.2. Specifying the OpenIDM Startup Configuration</a></span></dt><dt><span class="section"><a href="chap-services.html#info-service">2.3. Obtaining Information About an OpenIDM Instance</a></span></dt><dt><span class="section"><a href="chap-services.html#system-healthcheck">2.4. Verifying the Health of an OpenIDM System</a></span></dt><dt><span class="section"><a href="chap-services.html#installed-modules">2.5. Displaying Information About Installed Modules</a></span></dt><dt><span class="section"><a href="chap-services.html#starting-in-debug-mode">2.6. Starting OpenIDM in Debug Mode</a></span></dt></dl></div><p>This chapter covers the scripts provided for starting and stopping 
+ OpenIDM, and describes how to verify the <span class="emphasis"><em>health</em></span> of a 
+ system, that is, that all requirements are met for a successful system 
+ startup.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="starting-and-stopping"></a>2.1.&nbsp;To Start and Stop OpenIDM</h2></div></div></div><a class="indexterm" name="d0e639"></a><a class="indexterm" name="d0e642"></a><p>By default you start and stop OpenIDM in interactive mode.</p><div class="itemizedlist"><p>To start OpenIDM interactively, open a terminal or command window,
+   change to the <code class="filename">openidm</code> directory, and run the startup
+   script:</p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><span class="command"><strong>startup.sh</strong></span> (UNIX)</p></li><li class="listitem"><p><span class="command"><strong>startup.bat</strong></span> (Windows)</p></li></ul></div><p>The startup script starts OpenIDM, and opens an OSGi console with a
+  <code class="literal">-&gt;</code> prompt where you can issue console commands.</p><p>To stop OpenIDM interactively in the OSGi console, enter the
+  <span class="command"><strong>shutdown</strong></span> command.</p><div class="screen"><pre>-&gt; shutdown</pre></div><div class="orderedlist"><p>You can also start OpenIDM as a background process on UNIX, Linux, and
+   Mac OS X. Follow these steps <span class="emphasis"><em>before starting OpenIDM for the first
+   time</em></span>.</p><ol class="orderedlist" type="1"><li class="listitem"><p>If you have already started OpenIDM, then shut down OpenIDM and
+    remove the Felix cache files under <code class="filename">openidm/felix-cache/</code>.
+    </p><div class="screen"><pre>-&gt; shutdown
+...
+$ rm -rf felix-cache/*</pre></div></li><li class="listitem"><p>Disable <code class="literal">ConsoleHandler</code> logging before starting
+    OpenIDM by editing <code class="filename">openidm/conf/logging.properties</code>
+    to set <code class="literal">java.util.logging.ConsoleHandler.level = OFF</code>,
+    and to comment out other references to <code class="literal">ConsoleHandler</code>,
+    as shown in the following excerpt.</p><pre class="brush: ini;">
+# ConsoleHandler: A simple handler for writing formatted records to System.err
+#handlers=java.util.logging.FileHandler, java.util.logging.ConsoleHandler
+handlers=java.util.logging.FileHandler
+...
+# --- ConsoleHandler ---
+# Default: java.util.logging.ConsoleHandler.level = INFO
+java.util.logging.ConsoleHandler.level = OFF
+#java.util.logging.ConsoleHandler.formatter = ...
+#java.util.logging.ConsoleHandler.filter=...</pre></li><li class="listitem"><p>Remove the text-based OSGi console bundle,
+    <code class="filename">bundle/org.apache.felix.shell.tui-<em class="replaceable"><code>version</code></em>.jar</code>.</p></li><li class="listitem"><p>Start OpenIDM in the background.</p><div class="screen"><pre>$ ./startup.sh &amp;
+</pre></div><p>Alternatively, use the <span class="command"><strong>nohup</strong></span> command to keep
+    OpenIDM running after you log out.</p><div class="screen"><pre>$ nohup ./startup.sh &amp;
+[2] 394
+$ appending output to nohup.out
+$</pre></div></li></ol></div><p>To stop OpenIDM running as a background process, use the
+  <span class="command"><strong>shutdown.sh</strong></span> script.</p><div class="screen"><pre>$ ./shutdown.sh
+./shutdown.sh
+Stopping OpenIDM (454)</pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="startup-configuration"></a>2.2.&nbsp;Specifying the OpenIDM Startup Configuration</h2></div></div></div><p>By default, OpenIDM starts up with the configuration and script files 
+  that are located in the <code class="filename">openidm/conf</code> and 
+  <code class="filename">openidm/script</code> directories, and with the binaries that 
+  are in the default install location. You can launch OpenIDM with a different 
+  configuration and set of script files, and even with a different set of 
+  binaries, in order to test a new configuration, manage multiple different
+  OpenIDM projects, or to run one of the included samples.</p><p>The <code class="literal">startup.sh</code> script enables you to specify the 
+  following elements of a running OpenIDM instance.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>project location (<code class="literal">-p</code>)</p><p>The project location specifies the configuration and default 
+       scripts with which OpenIDM will run.
+       </p><p>If you specify the project location, OpenIDM does not try to 
+       locate configuration objects in the default location. All configuration 
+       objects and any artifacts that are not in the bundled defaults (such as 
+       custom scripts) <span class="emphasis"><em>must</em></span> be provided in the project 
+       location. This includes everything that is in the default 
+       <code class="literal">openidm/conf</code> and <code class="literal">openidm/script</code> 
+       directories.</p><p>The following command starts OpenIDM with the configuration of 
+       sample 1:</p><div class="screen"><pre>$ ./startup.sh -p /path/to/openidm/samples/sample1</pre></div><p>If an absolute path is not provided, the path is relative to the 
+       system property, <code class="literal">user.dir</code>. If no project location is 
+       specified, OpenIDM is launched with the default configuration in 
+       <code class="literal">/path/to/openidm/conf</code>.</p></li><li class="listitem"><p>working location (<code class="literal">-w</code>)</p><p>The working location specifies the directory to which OpenIDM 
+       writes its cache. Specifying a working location separates the project 
+       from the cached data that the system needs to store. The working 
+       location includes everything that is in the default 
+       <code class="literal">db</code>, <code class="literal">audit</code>,
+       <code class="literal">felix-cache</code>, and <code class="literal">logs</code>
+       directories.</p><p>The following command specifies that OpenIDM writes its cached 
+       data to <code class="filename">/Users/admin/openidm/storage</code>:</p><div class="screen"><pre>$ ./startup.sh -w /Users/admin/openidm/storage</pre></div><p>If an absolute path is not provided, the path is relative to the 
+       system property, <code class="literal">user.dir</code>. If no working location is 
+       specified, OpenIDM writes its cached data to the
+       <code class="literal">openidm/db</code>, <code class="literal">openidm/audit</code>,
+       <code class="literal">openidm/felix-cache</code> and <code class="literal">openidm/logs</code>
+       directories.</p></li><li class="listitem"><p>startup configuration file (<code class="literal">-c</code>)</p><p>A customizable startup configuration file (named 
+       <code class="filename">launcher.json</code>) enables you to specify how the OSGi 
+       Framework is started.</p><p>Unless you are working with a highly customized deployment, you
+       should not modify the default framework configuration. This option is
+       therefore described in more detail in the chapter on
+       <a href="../../integrators-guide/index/chap-advanced.html" class="link"><em class="citetitle">Advanced
+       Administration</em></a>.
+       </p></li></ul></div><p>By default, properties files are loaded in the following order,
+     and property values are resolved in the reverse order:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p><code class="literal">system.properties</code></p></li><li class="listitem"><p><code class="literal">config.properties</code></p></li><li class="listitem"><p><code class="literal">boot.properties</code></p></li></ol></div><p>If both system and boot properties define the same attribute, the
+     property substitution process locates the attribute in
+     <code class="literal">boot.properties</code> and does not attempt to locate the
+     property in <code class="literal">system.properties</code>.</p><p>You can use variable substitution in any <code class="literal">.json</code>
+     configuration file with the install, working and project locations
+     described previously. The following properties can be substituted:</p><table border="0" summary="Simple list" class="simplelist"><tr><td><code class="literal">install.location</code></td></tr><tr><td><code class="literal">install.url</code></td></tr><tr><td><code class="literal">working.location</code></td></tr><tr><td><code class="literal">working.url</code></td></tr><tr><td><code class="literal">project.location</code></td></tr><tr><td><code class="literal">project.url</code></td></tr></table><p>Property substitution takes the following syntax:</p><div class="screen"><pre>&amp;{launcher.<em><strong>property</strong></em>}</pre></div><p>For example, to specify the location of the OrientDB database, you
+     can set the <code class="literal">dbUrl</code> property in <code class="filename">repo.orientdb.json</code>
+     as follows:</p><pre class="brush: javascript;">
+"dbUrl" : "local:&amp;{launcher.working.location}/db/openidm",
+     </pre><p>The database location is then relative to a working location
+     defined in the startup configuration.</p><p>
+   Note that property substitution does not work for connector reference
+   properties. So, for example, the following configuration would not be valid:
+  </p><pre class="brush: javascript;">"connectorRef" : {
+    "connectorName" : "&amp;{connectorName}",
+    "bundleName" : "org.forgerock.openicf.connectors.ldap-connector",
+    "bundleVersion" : "&amp;{LDAP.BundleVersion}"
+    ...
+  </pre><p>
+   The <code class="literal">"connectorName"</code> must be the precise string from the
+   connector configuration. If you need to specify multiple connector version
+   numbers, use a range instead, for example:
+  </p><pre class="brush: javascript;">"connectorRef" : {
+    "connectorName" : "org.identityconnectors.ldap.LdapConnector",
+    "bundleName" : "org.forgerock.openicf.connectors.ldap-connector",
+    "bundleVersion" : "[1.1.0.1,1.1.2.0)",
+    ...
+  </pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="info-service"></a>2.3.&nbsp;Obtaining Information About an OpenIDM Instance</h2></div></div></div><p>
+   OpenIDM includes a customizable information service that provides detailed
+   information about a running OpenIDM instance. The information can be accessed
+   over the REST interface, under the context
+   <code class="literal">https://localhost:8443/openidm/info</code>.
+  </p><p>By default, OpenIDM provides the following information:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     Basic information about the health of the system.
+    </p><p>
+     This information can be accessed over REST at
+     <code class="literal">https://localhost:8443/openidm/info/ping</code>. For example:
+    </p><div class="screen"><pre>
+ $ <strong>curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ "https://localhost:8443/openidm/info/ping"</strong>
+
+   <em>
+ {"state":"ACTIVE_READY","shortDesc":"OpenIDM ready"}
+    </em></pre></div><p>
+     The information is provided by the script
+     <code class="filename">openidm/bin/defaults/script/info/ping.js</code>.
+    </p></li><li class="listitem"><p>
+     Information about the current OpenIDM session.
+    </p><p>
+     This information can be accessed over REST at
+     <code class="literal">https://localhost:8443/openidm/info/login</code>. For example:
+    </p><div class="screen"><pre>
+ $ <strong>curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ "https://localhost:8443/openidm/info/login" </strong>
+
+    <em>
+{
+  "authenticationId": "openidm-admin",
+  "class": "org.forgerock.json.resource.SecurityContext",
+  "parent": {
+    "class": "org.forgerock.json.resource.RootContext",
+    "parent": null,
+    "id": "6f1709ce-75bd-4f9b-b1ad-d4592be37361"
+  },
+  "authorizationId": {
+    "roles": [
+      "openidm-admin",
+      "openidm-authorized"
+    ],
+    "component": "repo/internal/user",
+    "id": "openidm-admin"
+  }
+}</em></pre></div><p>
+     The information is provided by the script
+     <code class="filename">openidm/bin/defaults/script/info/login.js</code>.
+    </p></li></ul></div><p>
+   You can extend or override the default information that is provided by
+   creating your own script file and its corresponding configuration file in
+   <code class="filename">openidm/conf/info-<em class="replaceable"><code>name</code></em>.json</code>.
+   Custom script files can be located anywhere, although a best practice is to
+   place them in <code class="filename">openidm/script/info</code>. A sample customized
+   script file for extending the default ping service is provided in
+   <code class="filename">openidm/samples/infoservice/script/info/customping.js</code>.
+   The corresponding configuration file is provided in
+   <code class="filename">openidm/samples/infoservice/conf/info-customping.json</code>.
+  </p><p>
+   The configuration file has the following syntax:
+  </p><pre class="brush: plain;">
+{
+    "infocontext" : "ping",
+    "type" : "text/javascript",
+    "file" : "script/info/customping.js"
+} 
+  </pre><p>
+   The parameters in the configuration file are as follows:
+  </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     <code class="literal">"infocontext"</code> specifies the relative name of the info
+     endpoint under the info context. The information can be accessed over REST
+     at this endpoint, for example, setting <code class="literal">"infocontext"</code> to
+     <code class="literal">"mycontext/myendpoint"</code> would make the information
+     accessible over REST at
+     <code class="literal">https://localhost:8443/openidm/info/mycontext/myendpoint</code>.
+    </p></li><li class="listitem"><p>
+     <code class="literal">"type"</code> specifies the type of the information source.
+     Javascript (<code class="literal">"type" : "text/javascript"</code>) and Groovy
+     (<code class="literal">"type" : "groovy"</code>) are supported.
+    </p></li><li class="listitem"><p>
+     <code class="literal">"file"</code> specifies the path to the Javascript or Groovy
+     file, if you do not provide a <code class="literal">"source"</code> parameter.
+    </p></li><li class="listitem"><p>
+     <code class="literal">"source"</code> specifies the actual Javascript or Groovy
+     script, if you have not provided a <code class="literal">"file"</code> parameter.
+    </p></li></ul></div><p>
+   Additional properties can be passed to the script as depicted in this
+   configuration file
+   (<code class="filename">openidm/samples/infoservice/conf/info-<em class="replaceable"><code>name</code></em>.json</code>).
+  </p><p>
+   Script files in <code class="filename">openidm/samples/infoservice/script/info/</code>
+   have access to the following objects:
+  </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="literal">request</code> - the request details, including the 
+      method called and any parameters passed.</p></li><li class="listitem"><p><code class="literal">healthinfo</code> - the current health status of the 
+      system.</p></li><li class="listitem"><p><code class="literal">openidm</code> - access to the JSON resource API.</p></li><li class="listitem"><p>Any additional properties that are depicted in the configuration
+      file (
+      <code class="filename">openidm/samples/infoservice/conf/info-<em class="replaceable"><code>name</code></em>.json</code>.)
+      </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="system-healthcheck"></a>2.4.&nbsp;Verifying the Health of an OpenIDM System</h2></div></div></div><a class="indexterm" name="d0e1082"></a><p>Due to the highly modular, configurable nature of OpenIDM, it is often 
+  difficult to assess whether a system has started up successfully, or whether 
+  the system is ready and stable after dynamic configuration changes have been 
+  made.</p><p>OpenIDM provides a configurable health check service that verifies 
+  that the required modules and services for an operational system are up and 
+  running. During system startup, OpenIDM checks that these modules and 
+  services are available and reports on whether any requirements for an 
+  operational system have not been met. If dynamic configuration changes are 
+  made, OpenIDM rechecks that the required modules and services are functioning 
+  so that system operation is monitored on an ongoing basis.</p><p>The health check service reports on the state of the OpenIDM system and 
+  outputs this state to the console and to the log files. The system can be in 
+  one of the following states:</p><table border="0" summary="Simple list" class="simplelist"><tr><td><code class="literal">STARTING</code> - OpenIDM is starting up</td></tr><tr><td><code class="literal">ACTIVE_READY</code> - all of the specified requirements 
+   have been met to consider the OpenIDM system ready</td></tr><tr><td><code class="literal">ACTIVE_NOT_READY</code> - one or more of the specified 
+   requirements have not been met and the OpenIDM system is not considered ready
+   </td></tr><tr><td><code class="literal">STOPPING</code> - OpenIDM is shutting down</td></tr></table><p>OpenIDM checks all required modules and services. Examples of those
+  services are shown here.</p><p><span class="bold"><strong>Required Modules</strong></span> (examples)</p><div class="screen"><pre>
+"org.forgerock.openicf.framework.connector-framework"
+"org.forgerock.openicf.framework.connector-framework-internal"
+"org.forgerock.openicf.framework.connector-framework-osgi"
+"org.forgerock.openidm.audit"
+"org.forgerock.openidm.core"
+"org.forgerock.openidm.enhanced-config"
+"org.forgerock.openidm.external-email"
+
+   ...
+
+"org.forgerock.openidm.system"
+"org.forgerock.openidm.ui"
+"org.forgerock.openidm.util"
+"org.forgerock.commons.org.forgerock.json.resource"
+"org.forgerock.commons.org.forgerock.json.resource.restlet"
+"org.forgerock.commons.org.forgerock.restlet"
+"org.forgerock.commons.org.forgerock.util"
+"org.forgerock.openidm.security-jetty"
+"org.forgerock.openidm.jetty-fragment"
+"org.forgerock.openidm.quartz-fragment"
+"org.ops4j.pax.web.pax-web-extender-whiteboard"
+"org.forgerock.openidm.scheduler"
+"org.ops4j.pax.web.pax-web-jetty-bundle"
+"org.forgerock.openidm.repo-jdbc"
+"org.forgerock.openidm.repo-orientdb"
+"org.forgerock.openidm.config"
+"org.forgerock.openidm.crypto"  
+  </pre></div><p><span class="bold"><strong>Required Services</strong></span> (examples)</p><div class="screen"><pre>
+"org.forgerock.openidm.config"
+"org.forgerock.openidm.provisioner"
+"org.forgerock.openidm.provisioner.openicf.connectorinfoprovider"
+"org.forgerock.openidm.external.rest"
+"org.forgerock.openidm.audit"
+"org.forgerock.openidm.policy"
+"org.forgerock.openidm.managed"
+"org.forgerock.openidm.script"
+"org.forgerock.openidm.crypto"
+"org.forgerock.openidm.recon"
+"org.forgerock.openidm.info"
+"org.forgerock.openidm.router"
+"org.forgerock.openidm.scheduler"
+"org.forgerock.openidm.scope"
+"org.forgerock.openidm.taskscanner"
+     </pre></div><p>You can replace this list, or add to it, by adding the following lines 
+  to the <code class="filename">openidm/conf/boot/boot.properties</code> file:</p><table border="0" summary="Simple list" class="simplelist"><tr><td><code class="literal">"openidm.healthservice.reqbundles"</code> - overrides 
+   the default required bundles. Bundles are specified as a list of symbolic 
+   names, separated by commas.</td></tr><tr><td><code class="literal">"openidm.healthservice.reqservices"</code> - overrides 
+   the default required services. Services are specified as a list of symolic 
+   names, separated by commas.</td></tr><tr><td><code class="literal">"openidm.healthservice.additionalreqbundles"</code> - 
+   specifies required bundles (in addition to the default list). Bundles are 
+   specified as a list of symbolic names, separated by commas.</td></tr><tr><td><code class="literal">"openidm.healthservice.additionalreqservices"</code> - 
+   specifies required services (in addition to the default list). Services are 
+   specified as a list of symbolic names, separated by commas.</td></tr></table><p>By default, OpenIDM gives the system ten seconds to start up all 
+  the required bundles and services, before the system readiness is assessed. 
+  Note that this is not the total start time, but the time required to complete 
+  the service startup after the framework has started. You can change this 
+  default by setting the value of the <code class="literal">servicestartmax</code> 
+  property (in miliseconds) in the 
+  <code class="filename">openidm/conf/boot/boot.properties</code> file. This example 
+  sets the startup time to five seconds.</p><div class="screen"><pre>openidm.healthservice.servicestartmax=5000</pre></div><p>
+   The health check service works in tandem with the scriptable information
+   service. For more information see <a class="xref" href="chap-services.html#info-service" title="2.3.&nbsp;Obtaining Information About an OpenIDM Instance">Section&nbsp;2.3, &#8220;Obtaining Information About an OpenIDM Instance&#8221;</a>.
+  </p><p>
+   Do not use the health check service to monitor the status of external
+   resources, such as LDAP servers, or external databases. Rather, monitor these
+   resources over the REST interface, as described in <a href="../../integrators-guide/index/chap-resource-conf.html#systems-over-rest" class="link"><em class="citetitle">Checking the
+   Status of External Systems Over REST</em></a>.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="installed-modules"></a>2.5.&nbsp;Displaying Information About Installed Modules</h2></div></div></div><p>On a running OpenIDM instance, you can list the installed modules
+     and their states by typing the following command in the Felix
+     administration console. (The output will vary by configuration.)</p><div class="screen"><pre>-&gt; <strong>scr list </strong>
+      <em>
+   Id   State          Name
+[  12] [active       ] org.forgerock.openidm.endpoint
+[  13] [active       ] org.forgerock.openidm.endpoint
+[  14] [active       ] org.forgerock.openidm.endpoint
+[  15] [active       ] org.forgerock.openidm.endpoint
+[  16] [active       ] org.forgerock.openidm.endpoint
+
+      ...
+
+[  34] [active       ] org.forgerock.openidm.taskscanner
+[  20] [active       ] org.forgerock.openidm.external.rest
+[   6] [active       ] org.forgerock.openidm.router
+[  33] [active       ] org.forgerock.openidm.scheduler
+[  19] [unsatisfied  ] org.forgerock.openidm.external.email
+[  11] [active       ] org.forgerock.openidm.sync
+[  25] [active       ] org.forgerock.openidm.policy
+[   8] [active       ] org.forgerock.openidm.script
+[  10] [active       ] org.forgerock.openidm.recon
+[   4] [active       ] org.forgerock.openidm.http.contextregistrator
+[   1] [active       ] org.forgerock.openidm.config
+[  18] [active       ] org.forgerock.openidm.endpointservice
+[  30] [unsatisfied  ] org.forgerock.openidm.servletfilter
+[  24] [active       ] org.forgerock.openidm.infoservice
+[  21] [active       ] org.forgerock.openidm.authentication
+</em>-&gt;</pre></div><p>To display additional information about a particular module or
+     service, run the following command, substituting the <code class="literal">Id</code>
+     of that module from the preceding list.</p><div class="screen"><pre>-&gt; scr info <em><strong>Id</strong></em></pre></div><p>The following example displays additional information about the
+     router service:</p><div class="screen"><pre>-&gt; <strong>scr info 6 </strong>
+      <em>
+ID: 6
+Name: org.forgerock.openidm.router
+Bundle: org.forgerock.openidm.core (41)
+State: active
+Default State: enabled
+Activation: immediate
+Configuration Policy: optional
+Activate Method: activate (declared in the descriptor)
+Deactivate Method: deactivate (declared in the descriptor)
+Modified Method: modified
+Services: org.forgerock.json.resource.JsonResource
+Service Type: service
+Reference: ref_JsonResourceRouterService_ScopeFactory
+    Satisfied: satisfied
+    Service Name: org.forgerock.openidm.scope.ScopeFactory
+    Multiple: single
+    Optional: mandatory
+    Policy: dynamic
+Properties:
+    component.id = 6
+    component.name = org.forgerock.openidm.router
+    felix.fileinstall.filename = file:/openidm/samples/sample1/conf/router.json
+    jsonconfig = {
+    "filters" : [
+        {
+            "onRequest" : {
+                "type" : "text/javascript",
+                "file" : "bin/defaults/script/router-authz.js"
+            }
+        },
+        {
+            "onRequest" : {
+                "type" : "text/javascript",
+                "file" : "bin/defaults/script/policyFilter.js"
+            },
+            "methods" : [
+                "create",
+                "update"
+            ]
+        }
+    ]
+}
+    openidm.restlet.path = /
+    service.description = OpenIDM internal JSON resource router
+    service.pid = org.forgerock.openidm.router
+    service.vendor = ForgeRock AS </em>
+-&gt;</pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="starting-in-debug-mode"></a>2.6.&nbsp;Starting OpenIDM in Debug Mode</h2></div></div></div><p>
+   To debug custom libraries, you can start OpenIDM with the option to use the
+   Java Platform Debugger Architecture (JPDA).
+  </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     Start OpenIDM with the <code class="literal">jpda</code> option:
+    </p><div class="screen"><pre>
+$ <strong>cd /path/to/openidm
+$ ./startup.sh jpda</strong>
+<em>
+Executing ./startup.sh...
+Using OPENIDM_HOME:   /path/to/openidm
+Using OPENIDM_OPTS:   -Xmx1024m -Xms1024m -Denvironment=PROD -Djava.compiler=NONE
+   -Xnoagent -Xdebug -Xrunjdwp:transport=dt_socket,address=5005,server=y,suspend=n
+Using LOGGING_CONFIG:
+   -Djava.util.logging.config.file=/path/to/openidm/conf/logging.properties
+Listening for transport dt_socket at address: 5005
+Using boot properties at /path/to/openidm/conf/boot/boot.properties
+-&gt; OpenIDM version "3.1.0-SNAPSHOT" (revision: xxxx)
+OpenIDM ready
+</em>
+    </pre></div><p>
+     The relevant JPDA options are outlined in the startup script
+     (<code class="literal">startup.sh</code>).
+    </p></li><li class="listitem"><p>
+     In your IDE, attach a Java debugger to the JVM via socket, on port 5005.
+    </p></li></ul></div><div class="caution"><h3 class="title">Caution</h3><p>
+    This interface is internal and subject to change. If you depend on this
+    interface, contact ForgeRock support.
+   </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-overview.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-cli.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;1.&nbsp;Architectural Overview&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;3.&nbsp;OpenIDM Command-Line Interface</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10020&components=10164&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-9']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

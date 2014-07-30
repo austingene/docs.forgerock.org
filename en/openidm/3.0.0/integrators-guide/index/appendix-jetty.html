@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Appendix&nbsp;H.&nbsp;Embedded Jetty Configuration</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenIDM Integrator's Guide"><link rel="up" href="index.html" title="OpenIDM Integrator's Guide"><link rel="prev" href="appendix-router.html" title="Appendix&nbsp;G.&nbsp;Router Service Reference"><link rel="next" href="appendix-interface-stability.html" title="Appendix&nbsp;I.&nbsp;Release Levels &amp; Interface Stability"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Appendix&nbsp;H.&nbsp;Embedded Jetty Configuration</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="appendix-router.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="appendix-interface-stability.html">Next</a></td></tr></table><hr></div><div lang="en" class="appendix"><div class="titlepage"><div><div><h1 class="title"><a name="appendix-jetty"></a>Appendix&nbsp;H.&nbsp;Embedded Jetty Configuration</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="appendix-jetty.html#access-openidm-config-properties">H.1. Using OpenIDM Configuration Properties in the Jetty Configuration</a></span></dt><dt><span class="section"><a href="appendix-jetty.html#default-jetty-settings">H.2. Jetty Default Settings</a></span></dt><dt><span class="section"><a href="appendix-jetty.html#registering-servlet-filters">H.3. Registering Additional Servlet Filters</a></span></dt></dl></div><p>
+  OpenIDM 3.0.0 includes an embedded Jetty web server.
+ </p><p>To configure the embedded Jetty server, edit
+ <code class="filename">openidm/conf/jetty.xml</code>. OpenIDM delegates most of the
+ connector configuration to <code class="filename">jetty.xml</code>. OSGi and PAX web specific
+ settings for connector configuration therefore do not have an effect. This
+ lets you take advantage of all Jetty capabilities, as the web server is not
+ configured through an abstraction that might limit some of the options.</p><p>
+  The Jetty configuration can reference configuration properties (such as port
+  numbers and keystore details) from OpenIDM's
+  <code class="filename">boot.properties</code> configuration file. If you change the
+  ports in the <code class="filename">boot.properties</code> file, you must make the same
+  change in the <code class="filename">config.properties</code> file.
+ </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="access-openidm-config-properties"></a>H.1.&nbsp;Using OpenIDM Configuration Properties in the Jetty Configuration</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="appendix-jetty.html#jetty-access-bean-properties">H.1.1. Accessing Explicit Bean Properties</a></span></dt><dt><span class="section"><a href="appendix-jetty.html#jetty-access-generic-properties">H.1.2. Accessing Generic Properties</a></span></dt></dl></div><p>OpenIDM exposes a <code class="literal">Param</code> class that you can use in
+  <code class="filename">jetty.xml</code> to include OpenIDM configuration. The
+  <code class="literal">Param</code> class exposes Bean properties for common Jetty
+  settings and generic property access for other, arbitrary settings.</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="jetty-access-bean-properties"></a>H.1.1.&nbsp;Accessing Explicit Bean Properties</h3></div></div></div><p>To retrieve an explicit Bean property, use the following syntax in
+   <code class="filename">jetty.xml</code>.</p><pre class="brush: xml;">
+&lt;Get class="org.forgerock.openidm.jetty.Param" name="&lt;bean property name&gt;"/&gt;
+   </pre><p>For example, to set a Jetty property for keystore password:</p><pre class="brush: xml;">
+&lt;Set name="password"&gt;
+    &lt;Get class="org.forgerock.openidm.jetty.Param" name="keystorePassword"/&gt;
+&lt;/Set&gt;</pre><p>Also see the bundled <code class="filename">jetty.xml</code> for further
+   examples.</p><div class="variablelist"><p>The following explicit Bean properties are available.</p><dl class="variablelist"><dt><span class="term">port</span></dt><dd><p>Maps to <code class="literal">openidm.port.http</code></p></dd><dt><span class="term">port</span></dt><dd><p>Maps to <code class="literal">openidm.port.https</code></p></dd><dt><span class="term">port</span></dt><dd><p>Maps to <code class="literal">openidm.port.mutualauth</code></p></dd><dt><span class="term">keystoreType</span></dt><dd><p>Maps to <code class="literal">openidm.keystore.type</code></p></dd><dt><span class="term">keystoreProvider</span></dt><dd><p>Maps to <code class="literal">openidm.keystore.provider</code></p></dd><dt><span class="term">keystoreLocation</span></dt><dd><p>Maps to <code class="literal">openidm.keystore.location</code></p></dd><dt><span class="term">keystorePassword</span></dt><dd><p>Maps to <code class="literal">openidm.keystore.password</code></p></dd><dt><span class="term">keystoreKeyPassword</span></dt><dd><p>
+       Maps to <code class="literal">openidm.keystore.key.password</code>, or the keystore
+       password, if not set
+      </p></dd><dt><span class="term">truststoreLocation</span></dt><dd><p>
+       Maps to <code class="literal">openidm.truststore.location</code>, or the keystore
+       location, if not set
+      </p></dd><dt><span class="term">truststorePassword</span></dt><dd><p>
+       Maps to <code class="literal">openidm.truststore.password</code>, or the keystore
+       password, if not set
+      </p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="jetty-access-generic-properties"></a>H.1.2.&nbsp;Accessing Generic Properties</h3></div></div></div><pre class="brush: xml;">
+&lt;Call class="org.forgerock.openidm.jetty.Param" name="getProperty"&gt;
+  &lt;Arg&gt;org.forgerock.openidm.some.sample.property&lt;/Arg&gt;
+&lt;/Call&gt;
+    </pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="default-jetty-settings"></a>H.2.&nbsp;Jetty Default Settings</h2></div></div></div><div class="itemizedlist"><p>By default the embedded Jetty server uses the following
+   settings.</p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>The HTTP, SSL, and Mutual Authentication ports defined in OpenIDM</p></li><li class="listitem"><p>The same keystore and truststore settings as OpenIDM</p></li><li class="listitem"><p>Trivial sample realm,
+    <code class="filename">openidm/security/realm.properties</code> to add users</p></li></ul></div><p>The default settings are intended for evaluation only. Adjust them
+  according to your production requirements.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="registering-servlet-filters"></a>H.3.&nbsp;Registering Additional Servlet Filters</h2></div></div></div><p>
+   You can register generic servlet filters in the embedded Jetty server to
+   perform additional filtering tasks on requests to or responses from OpenIDM.
+   For example, you might want to use a servlet filter to protect access to
+   OpenIDM with an access management product. Servlet filters are configured in
+   files named
+   <code class="filename">openidm/conf/servletfilter-<em class="replaceable"><code>name</code></em>.json</code>.
+   These servlet filter configuration files define the filter class, required
+   libraries, and other settings.
+  </p><p>
+   A sample servlet filter configuration is provided in the
+   <code class="filename">servletfilter-cors.json</code> file in the
+   <code class="filename">/path/to/openidm/conf</code> directory.
+  </p><p>The sample servlet filter configuration file is shown below:</p><pre class="brush: javascript;">{
+    "classPathURLs" : [ ],
+    "systemProperties" : { },
+    "requestAttributes" : { },
+    "scriptExtensions" : { }.
+    "initParams" : {
+       "allowedOrigins" : "https://localhost:8443",
+       "allowedMethods" : "GET,POST,PUT,DELETE,PATCH",
+       "allowedHeaders" : "accept,x-openidm-password,x-openidm-nosession,
+                           x-openidm-username,content-type,origin,
+                           x-requested-with",
+       "allowCredentials" : "true",
+       "chainPreflight" : "false"
+    },
+    "urlPatterns" : [
+       "/*"
+    ],
+    "filterClass" : "org.eclipse.jetty.servlets.CrossOriginFilter"
+}</pre><p>The sample configuration includes the following properties:</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">"classPathURLs"</code></span></dt><dd><p>The URLs to any required classes or libraries that should be 
+        added to the classpath used by the servlet filter class</p></dd><dt><span class="term"><code class="literal">"systemProperties"</code></span></dt><dd><p>Any additional Java system properties required by the filter</p></dd><dt><span class="term"><code class="literal">"requestAttributes"</code></span></dt><dd><p>The HTTP Servlet request attributes that will be set by OpenIDM 
+        when the filter is invoked. OpenIDM expects certain request attributes 
+        to be set by any module that protects access to it, so this helps in setting these expected settings.</p></dd><dt><span class="term"><code class="literal">"scriptExtensions"</code></span></dt><dd><p>Optional script extensions to OpenIDM. Currently only 
+        <code class="literal">"augmentSecurityContext"</code> is supported. A script 
+        that is defined in <code class="literal">augmentSecurityContext</code> is 
+        executed by OpenIDM after a successful authentication request. The 
+        script helps to populate the expected security context in OpenIDM. 
+        For example, the login module (servlet filter) might select to supply 
+        only the authenticated user name, while the associated roles and user 
+        ID can be augmented by the script.</p><p>
+         Supported script types include <code class="literal">"text/javascript"</code> and
+         <code class="literal">"groovy"</code>. The script can be provided inline
+         (<code class="literal">"source":<em class="replaceable"><code>script source</code></em></code>)
+         or in a file (<code class="literal">"file":<em class="replaceable"><code>filename</code></em></code>).
+        The sample filter extends the filter interface with the functionality in 
+        the script <code class="filename">script/security/populateContext.js</code>.</p></dd><dt><span class="term"><code class="literal">"filterClass"</code></span></dt><dd><p>The servlet filter that is being registered</p></dd></dl></div><p>The following additional properties can be configured for the filter:
+  </p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">"httpContextId"</code></span></dt><dd><p>The HTTP context under which the filter should be registered. 
+        The default is <code class="literal">"openidm"</code>.</p></dd><dt><span class="term"><code class="literal">"servletNames"</code></span></dt><dd><p>A list of servlet names to which the filter should apply. The 
+        default is <code class="literal">"OpenIDM REST"</code>.</p></dd><dt><span class="term"><code class="literal">"urlPatterns"</code></span></dt><dd><p>A list of URL patterns to which the filter applies. The default 
+        is <code class="literal">["/openidm/*", "/openidmui/*"]</code>.</p></dd><dt><span class="term"><code class="literal">"initParams"</code></span></dt><dd><p>Filter configuration initialization parameters that are passed 
+        to the servlet filter <code class="literal">init</code> method. For more 
+        information, see 
+        <a class="link" href="http://docs.oracle.com/javaee/5/api/javax/servlet/FilterConfig.html" target="_top">http://docs.oracle.com/javaee/5/api/javax/servlet/FilterConfig.html</a>.
+        </p></dd></dl></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="appendix-router.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="appendix-interface-stability.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Appendix&nbsp;G.&nbsp;Router Service Reference&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Appendix&nbsp;I.&nbsp;Release Levels &amp; Interface Stability</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10020&components=10164&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-9']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

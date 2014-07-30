@@ -1,0 +1,349 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Appendix&nbsp;F.&nbsp;Scripting Reference</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenIDM Integrator's Guide"><link rel="up" href="index.html" title="OpenIDM Integrator's Guide"><link rel="prev" href="appendix-rest.html" title="Appendix&nbsp;E.&nbsp;REST API Reference"><link rel="next" href="appendix-router.html" title="Appendix&nbsp;G.&nbsp;Router Service Reference"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Appendix&nbsp;F.&nbsp;Scripting Reference</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="appendix-rest.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="appendix-router.html">Next</a></td></tr></table><hr></div><div lang="en" class="appendix"><div class="titlepage"><div><div><h1 class="title"><a name="appendix-scripting"></a>Appendix&nbsp;F.&nbsp;Scripting Reference</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="appendix-scripting.html#scripting-configuration">F.1. Scripting Configuration</a></span></dt><dt><span class="section"><a href="appendix-scripting.html#scripting-example">F.2. Examples</a></span></dt><dt><span class="section"><a href="appendix-scripting.html#function-ref">F.3. Function Reference</a></span></dt><dt><span class="section"><a href="appendix-scripting.html#script-places">F.4. Places to Trigger Scripts</a></span></dt><dt><span class="section"><a href="appendix-scripting.html#script-variables">F.5. Variables Available in Scripts</a></span></dt><dt><span class="section"><a href="appendix-scripting.html#debugging-scripts">F.6. Debugging OpenIDM JavaScripts</a></span></dt></dl></div><a class="indexterm" name="d0e22937"></a><p>
+   Scripting allows you to customize various aspects of OpenIDM functionality,
+   for example, by providing custom logic between source and target mappings,
+   defining correlation rules, filters, and triggers, and so on.
+  </p><p>
+   OpenIDM 3.0.0 supports scripts written in JavaScript and
+   Groovy. OpenIDM configures script options in the
+   <code class="filename">conf/script.json</code> file.
+  </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scripting-configuration"></a>F.1.&nbsp;Scripting Configuration</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="appendix-scripting.html#script-json">F.1.1. Script Configuration File</a></span></dt><dt><span class="section"><a href="appendix-scripting.html#script-call">F.1.2. Calling A Script From Another Configuration File</a></span></dt></dl></div><p>
+    OpenIDM includes several default scripts in the following directory:
+    <code class="filename">path/to/openidm/bin/defaults/script/</code>. Do not modify
+    or remove any of the scripts in this directory, as OpenIDM needs these
+    scripts to run specific services. Scripts in this folder are not guaranteed
+    to remain constant between product releases.
+   </p><p>
+    If you develop custom scripts, copy them to the <code class="literal">script/</code>
+    directory for your project, such as
+    <code class="literal">path/to/openidm/script/</code>.
+   </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="script-json"></a>F.1.1.&nbsp;Script Configuration File</h3></div></div></div><p>
+      OpenIDM 3.0.0 includes a script configuration file
+      in the <code class="filename">conf/</code> directory,
+      <code class="filename">script.json</code>. OpenIDM uses this file to set up
+      <a href="../../integrators-guide/index/chap-configuration.html#config-default-directories" class="link">
+       <em class="citetitle">Default and Custom Configuration Directories</em>
+      </a>.
+     </p><p>
+      The properties shown in the default version of the
+      <code class="filename">script.json</code> file are described here:
+     </p><div class="variablelist"><dl class="variablelist"><dt><span class="term">properties</span></dt><dd><p>
+         Additional custom properties.
+        </p></dd><dt><span class="term">ECMAScript</span></dt><dd><p>
+         JavaScript is an ECMAScript language.
+        </p></dd><dt><span class="term">javascript.debug</span></dt><dd><p>
+         See <a class="xref" href="appendix-scripting.html#debugging-scripts" title="F.6.&nbsp;Debugging OpenIDM JavaScripts">Section&nbsp;F.6, &#8220;Debugging OpenIDM JavaScripts&#8221;</a>
+        </p></dd><dt><span class="term">javascript.recompile.minimumInterval</span></dt><dd><p>
+         Minimum time after which a script can be recompiled.
+        </p></dd><dt><span class="term">groovy.warnings</span></dt><dd><p>
+         Specifies a log level for Groovy scripts.
+        </p></dd><dt><span class="term">groovy.source.encoding</span></dt><dd><p>
+         Defines the encoding format for Groovy scripts.
+        </p></dd><dt><span class="term">groovy.target.directory</span></dt><dd><p>
+         Specifies the output directory.
+        </p></dd><dt><span class="term">groovy.target.bytecode</span></dt><dd><p>
+         Specifies the output bytecode.
+        </p></dd><dt><span class="term">groovy.classpath</span></dt><dd><p>
+         Defines directories with Groovy class files.
+        </p></dd><dt><span class="term">groovy.output.verbose</span></dt><dd><p>
+         Specifies the verbosity of stack traces.
+        </p></dd><dt><span class="term">groovy.output.debug</span></dt><dd><p>
+         Sets debugging status.
+        </p></dd><dt><span class="term">groovy.errors.tolerance</span></dt><dd><p>
+         Sets number of non-fatal errors before aborting a compilation.
+        </p></dd><dt><span class="term">groovy.script.extension</span></dt><dd><p>
+         Defines the file extension for a Groovy script.
+        </p></dd><dt><span class="term">groovy.script.base</span></dt><dd><p>
+         Defines the base class for the script.
+        </p></dd><dt><span class="term">groovy.recompile</span></dt><dd><p>
+         Allows a script to be recompiled.
+        </p></dd><dt><span class="term">groovy.recompile.minimumInterval</span></dt><dd><p>
+         Minimum time between when Groovy scripts can be compiled.
+        </p></dd><dt><span class="term">groovy.target.indy</span></dt><dd><p>
+         Defines whether a Groovy indy test can be used.
+        </p></dd><dt><span class="term">groovy.disabled.global.ast.transformations</span></dt><dd><p>
+         Notes whether Groovy Abstract Syntax Transformations (AST)s are 
+         disabled.
+        </p></dd></dl></div><p>
+     The remaining options in the <code class="filename">script.json</code> file are
+     discussed in the section on <a href="../../integrators-guide/index/chap-configuration.html#config-default-directories" class="link">
+     <em class="citetitle">Default and Custom Configuration Directories</em></a>.
+    </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="script-call"></a>F.1.2.&nbsp;Calling A Script From Another Configuration File</h3></div></div></div><pre class="brush: javascript;">
+
+{
+  "type" : "text/javascript",
+  "source": string
+}  </pre><p>or</p><pre class="brush: javascript;">
+{
+  "type" : "text/javascript",
+  "file" : file location
+}  </pre><div class="variablelist"><dl class="variablelist"><dt><span class="term">type</span></dt><dd><p>string, required</p><p>
+       Specifies the type of script to be executed. Supported types include
+       <code class="literal">"text/javascript"</code> and <code class="literal">"groovy"</code>.
+      </p></dd><dt><span class="term">source</span></dt><dd><p>string, required if file is not specified</p><p>
+       Specifies the source code of the script to be executed.
+      </p></dd><dt><span class="term">file</span></dt><dd><p>string, required if source is not specified</p><p>
+       Specifies the file containing the source code of the script to execute.
+      </p></dd></dl></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scripting-example"></a>F.2.&nbsp;Examples</h2></div></div></div><p>
+    The following example (included in the <code class="filename">sync.json</code> file)
+    returns <code class="literal">true</code> if the <code class="literal">employeeType</code> is
+    equal to <code class="literal">external</code>, otherwise returns
+    <code class="literal">false</code>. This script can be useful during reconciliation to
+    establish whether the source object should be a part of the reconciliation,
+    or ignored.
+   </p><pre class="brush: javascript;">
+"validTarget": {
+   "type" : "text/javascript",
+   "source": "target.employeeType == 'external'"
+}  </pre><p>
+    The following example (included in the <code class="filename">sync.json</code> file)
+    sets the <code class="literal">__PASSWORD__</code> attribute to
+    <code class="literal">defaultpwd</code> when OpenIDM creates a target object.
+   </p><pre class="brush: javascript;">
+"onCreate" : {
+  "type" : "text/javascript",
+  "source": "target.__PASSWORD__ = 'defaultpwd'"
+}  </pre><p>
+    The following example (included in the <code class="filename">router.json</code>
+    file) shows a trigger to create Solaris home directories using a script. The
+    script is located in a file,
+    <code class="filename">/path/to/openidm/script/createUnixHomeDir.js</code>.
+   </p><pre class="brush: javascript;">
+{
+  "filters" : [ {
+    "pattern" : "^system/solaris/account$",
+    "methods" : [ "create" ],
+    "onResponse" : {
+      "type" : "text/javascript",
+      "file" : "script/createUnixHomeDir.js"
+    }
+  } ]
+}   </pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="function-ref"></a>F.3.&nbsp;Function Reference</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="appendix-scripting.html#function-create">F.3.1. openidm.create(container, id, value)</a></span></dt><dt><span class="section"><a href="appendix-scripting.html#function-patch">F.3.2. openidm.patch(id, rev, value)</a></span></dt><dt><span class="section"><a href="appendix-scripting.html#function-read">F.3.3. openidm.read(id)</a></span></dt><dt><span class="section"><a href="appendix-scripting.html#function-update">F.3.4. openidm.update(id, rev, value)</a></span></dt><dt><span class="section"><a href="appendix-scripting.html#function-delete">F.3.5. openidm.delete(id, rev)</a></span></dt><dt><span class="section"><a href="appendix-scripting.html#function-query">F.3.6. openidm.query(id, params)</a></span></dt><dt><span class="section"><a href="appendix-scripting.html#function-action">F.3.7. openidm.action(id, params, value)</a></span></dt><dt><span class="section"><a href="appendix-scripting.html#function-encrypt">F.3.8. openidm.encrypt(value, cipher, alias)</a></span></dt><dt><span class="section"><a href="appendix-scripting.html#function-decrypt">F.3.9. openidm.decrypt(value)</a></span></dt><dt><span class="section"><a href="appendix-scripting.html#function-logger-debug">F.3.10. logger.debug(string message, object... params)</a></span></dt><dt><span class="section"><a href="appendix-scripting.html#function-logger-error">F.3.11. logger.error(string message, object... params)</a></span></dt><dt><span class="section"><a href="appendix-scripting.html#function-logger-info">F.3.12. logger.info(string message, object... params)</a></span></dt><dt><span class="section"><a href="appendix-scripting.html#function-logger-trace">F.3.13. logger.trace(string message, object... params)</a></span></dt><dt><span class="section"><a href="appendix-scripting.html#function-logger-warn">F.3.14. logger.warn(string message, object... params)</a></span></dt></dl></div><a class="indexterm" name="d0e23200"></a><a class="indexterm" name="d0e23205"></a><p>
+     Functions (access to managed objects, system objects, and configuration
+     objects) within OpenIDM are accessible to scripts via the
+     <code class="literal">openidm</code> object, which is included in the top-level scope
+     provided to each script.
+    </p><p>
+     OpenIDM also provides a <code class="literal">logger</code> object to access SLF4J
+     facilities. The following code shows an example:
+    </p><pre class="brush: javascript;">
+logger.info("Parameters passed in: {} {} {}", param1, param2, param3);
+        </pre><p>To set the log level, use
+            <code class="literal">org.forgerock.openidm.script.javascript.JavaScript.level</code>
+            in <code class="filename">openidm/conf/logging.properties</code>.
+        </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="function-create"></a>F.3.1.&nbsp;openidm.create(container, id, value)</h3></div></div></div><p>This function creates a new resource object.</p><div class="variablelist"><div class="variablelist-title">Parameters</div><dl class="variablelist"><dt><span class="term">container</span></dt><dd><p>string</p><p>
+                         The resource container in which the object will be
+                         created, for example, <code class="literal">managed/user</code>.
+                        </p></dd><dt><span class="term">id</span></dt><dd><p>string</p><p>
+                         The identifier of the object to be created, if the
+                         client is supplying the ID. If the server should
+                         generate an ID, pass null here.
+                         </p></dd><dt><span class="term">value</span></dt><dd><p>object</p><p>The value of the object to be created.</p></dd></dl></div><div class="itemizedlist"><div class="itemizedlist-title">Returns</div><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>The created OpenIDM resource object.
+                    </p></li></ul></div><div class="itemizedlist"><div class="itemizedlist-title">Throws</div><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>An exception is thrown if the object could not be created.
+                    </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="function-patch"></a>F.3.2.&nbsp;openidm.patch(id, rev, value)</h3></div></div></div><p>This function performs a partial modification of a managed
+            object. Unlike the <code class="literal">update</code> function, only the
+            modified attributes are provided, not the entire object.</p><div class="variablelist"><div class="variablelist-title">Parameters</div><dl class="variablelist"><dt><span class="term">id</span></dt><dd><p>string</p><p>The identifier of the object to be updated.</p></dd><dt><span class="term">rev</span></dt><dd><p>string</p><p>The revision of the object to be updated, or
+                        <code class="literal">null</code> if the object is not subject
+                        to revision control.
+                        </p></dd><dt><span class="term">value</span></dt><dd><p>object</p><p>The value of the modifications to be applied to
+                        the object.</p></dd></dl></div><div class="itemizedlist"><div class="itemizedlist-title">Returns</div><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>The modified OpenIDM resource object.
+                    </p></li></ul></div><div class="itemizedlist"><div class="itemizedlist-title">Throws</div><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>An exception is thrown if the object could not be updated.
+                    </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="function-read"></a>F.3.3.&nbsp;openidm.read(id)</h3></div></div></div><p>This function reads and returns an OpenIDM resource object.</p><div class="variablelist"><div class="variablelist-title">Parameters</div><dl class="variablelist"><dt><span class="term">id</span></dt><dd><p>string</p><p>The identifier of the object to be read.</p></dd></dl></div><div class="itemizedlist"><div class="itemizedlist-title">Returns</div><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>The read OpenIDM resource object, or <code class="literal">null</code>
+                        if not found.
+                    </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="function-update"></a>F.3.4.&nbsp;openidm.update(id, rev, value)</h3></div></div></div><p>This function updates a resource object.</p><div class="variablelist"><div class="variablelist-title">Parameters</div><dl class="variablelist"><dt><span class="term">id</span></dt><dd><p>string</p><p>The identifier of the resource object to be updated.</p></dd><dt><span class="term">rev</span></dt><dd><p>string</p><p>The revision of the object to be updated, or
+                            <code class="literal">null</code> if the object is not subject to revision control.
+                        </p></dd><dt><span class="term">value</span></dt><dd><p>object</p><p>The value of the object to be updated.</p></dd></dl></div><div class="itemizedlist"><div class="itemizedlist-title">Returns</div><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>The modified OpenIDM resource object.
+                    </p></li></ul></div><div class="itemizedlist"><div class="itemizedlist-title">Throws</div><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>An exception is thrown if the object could not be updated.
+                    </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="function-delete"></a>F.3.5.&nbsp;openidm.delete(id, rev)</h3></div></div></div><p>This function deletes a resource object.</p><div class="variablelist"><div class="variablelist-title">Parameters</div><dl class="variablelist"><dt><span class="term">id</span></dt><dd><p>string</p><p>The identifier of the object to be deleted.</p></dd><dt><span class="term">rev</span></dt><dd><p>string</p><p>The revision of the object to be deleted, or
+                            <code class="literal">null</code> if the object is not subject to revision control.
+                        </p></dd></dl></div><div class="itemizedlist"><div class="itemizedlist-title">Returns</div><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>A <code class="literal">null</code> value if successful.
+                    </p></li></ul></div><div class="itemizedlist"><div class="itemizedlist-title">Throws</div><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>An exception is thrown if the object could not be deleted.
+                    </p></li></ul></div><p>Note that <code class="literal">delete</code> is a reserved word in JavaScript
+                and this function can therefore not be called in the usual manner. To call
+                delete from a JavaScript, you must specify the call as shown in the
+                following example:
+            </p><pre class="brush: javascript;">
+openidm['delete']('managed/user/'+ user._id, user._rev)
+            </pre><p>Calling <code class="literal">openidm.delete()</code> directly from a JavaScript
+                results in an error similar to the following:
+            </p><div class="screen"><pre>
+org.forgerock.openidm.script.ScriptException: missing name after . operator
+            </pre></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="function-query"></a>F.3.6.&nbsp;openidm.query(id, params)</h3></div></div></div><p>This function performs a query on the specified OpenIDM resource object.
+            </p><div class="variablelist"><div class="variablelist-title">Parameters</div><dl class="variablelist"><dt><span class="term">id</span></dt><dd><p>string</p><p>The identifier of the object to perform the query on.</p></dd><dt><span class="term">params</span></dt><dd><p>object</p><p>An object containing the query ID and its parameters.</p></dd></dl></div><div class="itemizedlist"><div class="itemizedlist-title">Returns</div><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>The result of the query. A query result includes the following
+                        parameters:
+                    </p><div class="variablelist"><dl class="variablelist"><dt><span class="term">"query-time-ms"</span></dt><dd><p>The time, in milliseconds, that OpenIDM took to process
+                                    the query.
+                                </p></dd><dt><span class="term">"conversion-time-ms"</span></dt><dd><p>(For an OrientDB repository only) the time, in
+                                    milliseconds, taken to convert the data to a JSON object.
+                                </p></dd><dt><span class="term">"result"</span></dt><dd><p>The list of entries retrieved by the query. The result
+                                    includes the revision (<code class="literal">"_rev"</code>) of the
+                                    entry and any other properties that were requested in the
+                                    query.
+                                </p></dd></dl></div><p>The following example shows the result of a custom query that
+                        requests the ID, user name, and email address of managed users in the
+                        repository. For an OrientDB repository, the query would be something like
+                        <code class="literal">select _openidm_id, userName, email from managed_user,</code>.
+                    </p><pre class="brush: javascript;">
+{
+  "conversion-time-ms": 0,
+  "result": [
+    {
+      "email": "bjensen@example.com",
+      "userName": "bjensen",
+      "_rev": "0",
+      "_id": "36bbb745-517f-4695-93d0-998e1e7065cf"
+    },
+    {
+      "email": "scarter@example.com",
+      "userName": "scarter",
+      "_rev": "0",
+      "_id": "cc3bf6f0-949e-4699-9b8e-8c78ce04a287"
+    }
+  ],
+  "query-time-ms": 1
+}
+                    </pre></li></ul></div><div class="itemizedlist"><div class="itemizedlist-title">Throws</div><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>An exception is thrown if the given query could not be processed.
+                    </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="function-action"></a>F.3.7.&nbsp;openidm.action(id, params, value)</h3></div></div></div><p>This function performs an action on the specified OpenIDM resource
+                object.
+            </p><div class="variablelist"><div class="variablelist-title">Parameters</div><dl class="variablelist"><dt><span class="term">id</span></dt><dd><p>string</p><p>The identifier of the object on which the action should be
+                            performed.</p></dd><dt><span class="term">params</span></dt><dd><p>object</p><p>An object containing the parameters to pass to the action.</p></dd><dt><span class="term">value</span></dt><dd><p>object</p><p>A value that can be provided to the action for processing.</p></dd></dl></div><div class="itemizedlist"><div class="itemizedlist-title">Returns</div><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>The result of the action. May be <code class="literal">null</code> if
+                        no result is provided.
+                    </p></li></ul></div><div class="itemizedlist"><div class="itemizedlist-title">Throws</div><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>An exception is thrown if the given action could not be executed
+                        for any reason.
+                    </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="function-encrypt"></a>F.3.8.&nbsp;openidm.encrypt(value, cipher, alias)</h3></div></div></div><p>This function encrypts a value.</p><div class="variablelist"><div class="variablelist-title">Parameters</div><dl class="variablelist"><dt><span class="term">value</span></dt><dd><p>any</p><p>The value to be encrypted.</p></dd><dt><span class="term">cipher</span></dt><dd><p>string</p><p>The cipher with which to encrypt the value, using the form
+                            "algorithm/mode/padding" or just "algorithm". Example:
+                            <code class="literal">AES/ECB/PKCS5Padding</code>.
+                        </p></dd><dt><span class="term">alias</span></dt><dd><p>string</p><p>The key alias in the keystore with which to encrypt the node.</p></dd></dl></div><div class="itemizedlist"><div class="itemizedlist-title">Returns</div><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>The value, encrypted with the specified cipher and key.</p></li></ul></div><div class="itemizedlist"><div class="itemizedlist-title">Throws</div><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>An exception is thrown if the object could not be encrypted for any
+                        reason.
+                    </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="function-decrypt"></a>F.3.9.&nbsp;openidm.decrypt(value)</h3></div></div></div><p>This function decrypts a value.</p><div class="variablelist"><div class="variablelist-title">Parameters</div><dl class="variablelist"><dt><span class="term">value</span></dt><dd><p>any</p><p>The value to be decrypted.</p></dd></dl></div><div class="itemizedlist"><div class="itemizedlist-title">Returns</div><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>A deep copy of the value, with any encrypted value decrypted.</p></li></ul></div><div class="itemizedlist"><div class="itemizedlist-title">Throws</div><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>An exception is thrown if the object could not be decrypted for any
+                        reason.
+                    </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="function-logger-debug"></a>F.3.10.&nbsp;logger.debug(string message, object... params)</h3></div></div></div><p>Logs a message at DEBUG level.</p><div class="variablelist"><div class="variablelist-title">Parameters</div><dl class="variablelist"><dt><span class="term">message</span></dt><dd><p>string</p><p>The message format to log. Params replace <code class="literal">{}</code>
+                            in your message.
+                        </p></dd><dt><span class="term">params</span></dt><dd><p>object</p><p>Arguments to include in the message.</p></dd></dl></div><div class="itemizedlist"><div class="itemizedlist-title">Returns</div><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>A <code class="literal">null</code> value if successful.
+                    </p></li></ul></div><div class="itemizedlist"><div class="itemizedlist-title">Throws</div><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>An exception is thrown if the message could not be logged.</p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="function-logger-error"></a>F.3.11.&nbsp;logger.error(string message, object... params)</h3></div></div></div><p>Logs a message at ERROR level.</p><div class="variablelist"><div class="variablelist-title">Parameters</div><dl class="variablelist"><dt><span class="term">message</span></dt><dd><p>string</p><p>The message format to log. Params replace <code class="literal">{}</code>
+                            in your message.
+                        </p></dd><dt><span class="term">params</span></dt><dd><p>object</p><p>Arguments to include in the message.</p></dd></dl></div><div class="itemizedlist"><div class="itemizedlist-title">Returns</div><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>A <code class="literal">null</code> value if successful.
+                    </p></li></ul></div><div class="itemizedlist"><div class="itemizedlist-title">Throws</div><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>An exception is thrown if the message could not be logged.</p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="function-logger-info"></a>F.3.12.&nbsp;logger.info(string message, object... params)</h3></div></div></div><p>Logs a message at INFO level.</p><div class="variablelist"><div class="variablelist-title">Parameters</div><dl class="variablelist"><dt><span class="term">message</span></dt><dd><p>string</p><p>The message format to log. Params replace
+                            <code class="literal">{}</code>
+                            in your message.
+                        </p></dd><dt><span class="term">params</span></dt><dd><p>object</p><p>Arguments to include in the message.</p></dd></dl></div><div class="itemizedlist"><div class="itemizedlist-title">Returns</div><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>A
+                        <code class="literal">null</code>
+                        value if successful.
+                    </p></li></ul></div><div class="itemizedlist"><div class="itemizedlist-title">Throws</div><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>An exception is thrown if the message could not be logged.</p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="function-logger-trace"></a>F.3.13.&nbsp;logger.trace(string message, object... params)</h3></div></div></div><p>Logs a message at TRACE level.</p><div class="variablelist"><div class="variablelist-title">Parameters</div><dl class="variablelist"><dt><span class="term">message</span></dt><dd><p>string</p><p>The message format to log. Params replace
+                            <code class="literal">{}</code>
+                            in your message.
+                        </p></dd><dt><span class="term">params</span></dt><dd><p>object</p><p>Arguments to include in the message.</p></dd></dl></div><div class="itemizedlist"><div class="itemizedlist-title">Returns</div><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>A
+                        <code class="literal">null</code>
+                        value if successful.
+                    </p></li></ul></div><div class="itemizedlist"><div class="itemizedlist-title">Throws</div><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>An exception is thrown if the message could not be logged.</p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="function-logger-warn"></a>F.3.14.&nbsp;logger.warn(string message, object... params)</h3></div></div></div><p>Logs a message at WARN level.</p><div class="variablelist"><div class="variablelist-title">Parameters</div><dl class="variablelist"><dt><span class="term">message</span></dt><dd><p>string</p><p>The message format to log. Params replace
+                            <code class="literal">{}</code>
+                            in your message.
+                        </p></dd><dt><span class="term">params</span></dt><dd><p>object</p><p>Arguments to include in the message.</p></dd></dl></div><div class="itemizedlist"><div class="itemizedlist-title">Returns</div><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>A <code class="literal">null</code> value if successful.
+                    </p></li></ul></div><div class="itemizedlist"><div class="itemizedlist-title">Throws</div><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>An exception is thrown if the message could not be logged.</p></li></ul></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="script-places"></a>F.4.&nbsp;Places to Trigger Scripts</h2></div></div></div><p>Scripts can be triggered at different places, by different events.
+        </p><div class="variablelist"><dl class="variablelist"><dt><span class="term">In <code class="filename">openidm/conf/sync.json</code>
+                </span></dt><dd><div class="variablelist"><dl class="variablelist"><dt><span class="term">Triggered by situation</span></dt><dd><p>onCreate, onUpdate, onDelete, onLink, onUnlink</p></dd><dt><span class="term">Object filter</span></dt><dd><p>vaildSource, validTarget</p></dd><dt><span class="term">Correlating objects</span></dt><dd><p>correlationQuery</p></dd><dt><span class="term">Triggered on any reconciliation</span></dt><dd><p>result</p></dd><dt><span class="term">Scripts inside properties</span></dt><dd><p>condition, transform</p><p><code class="literal">sync.json</code> supports only one script
+                                    per hook. If multiple scripts are defined for the same hook, only the last
+                                    one is kept.
+                                </p></dd></dl></div></dd><dt><span class="term">In <code class="filename">openidm/conf/managed.json</code>
+                </span></dt><dd><p>onCreate, onRead, onUpdate, onDelete, onValidate,
+                     onRetrieve, onStore, postCreate, postUpdate, and postDelete
+                    </p><p><code class="literal">managed.json</code> supports only one script
+                        per hook. If multiple scripts are defined for the same hook, only the last
+                        one is kept.
+                    </p></dd><dt><span class="term">In <code class="filename">openidm/conf/router.json</code>
+                </span></dt><dd><p>onRequest, onResponse, onFailure</p><p><code class="literal">router.json</code> supports multiple scripts per hook.
+                    </p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="script-variables"></a>F.5.&nbsp;Variables Available in Scripts</h2></div></div></div><p>The variables that are available to scripts depend on the triggers
+            that launch the script. The following section outlines the available
+            variables, per trigger.
+        </p><div class="variablelist"><dl class="variablelist"><dt><span class="term">condition</span></dt><dd><p>object</p></dd><dt><span class="term">correlationQuery</span></dt><dd><p>source</p></dd><dt><span class="term">Custom endpoint scripts</span></dt><dd><p>request</p></dd><dt><span class="term">onCreate, postCreate</span></dt><dd><p>object, source, target</p></dd><dt><span class="term">onDelete, postDelete</span></dt><dd><p>object</p></dd><dt><span class="term">onLink</span></dt><dd><p>source, target</p></dd><dt><span class="term">onRead</span></dt><dd><p>object</p></dd><dt><span class="term">onRetrieve</span></dt><dd><p>object (when called from either an object or a
+                     property storage trigger); property (only when
+                     called from a property storage trigger)</p><p>
+                  As a property, returns the modified property values from the
+                  script.
+                 </p></dd><dt><span class="term">onStore</span></dt><dd><p>object, property</p><p>
+                  As a property, returns the modified property values from the
+                  script.
+                 </p></dd><dt><span class="term">onUnlink</span></dt><dd><p>source, target</p></dd><dt><span class="term">onUpdate, postUpdate</span></dt><dd><p>oldObject, newObject</p></dd><dt><span class="term">onValidate</span></dt><dd><p>object, property</p></dd><dt><span class="term">propertyName</span></dt><dd><p>
+               Name of the property that is changed.
+              </p></dd><dt><span class="term">result</span></dt><dd><p>source, target</p></dd><dt><span class="term">synchronization situation scripts</span></dt><dd><p><code class="literal">recon.actionParam</code> - the details of
+                    the synchronization operation in progress. This variable can
+                    be used for asynchronous callbacks to execute the action at
+                    a later stage.</p><p><code class="literal">sourceAction</code> - a boolean that
+                    indicates whether the situation was assessed during the source phase</p><p><code class="literal">source</code> (if found)</p><p><code class="literal">target</code> (if found)</p><p>The properties from the configured script object.</p></dd><dt><span class="term">taskScanner</span></dt><dd><p>input, objectID</p></dd><dt><span class="term">transform</span></dt><dd><p>source</p></dd><dt><span class="term">validSource</span></dt><dd><p>source</p></dd><dt><span class="term">validTarget</span></dt><dd><p>target</p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="debugging-scripts"></a>F.6.&nbsp;Debugging OpenIDM JavaScripts</h2></div></div></div><p>
+      OpenIDM includes Eclipse JSDT libraries so you can use Eclipse to debug
+      your OpenIDM JavaScripts during development.
+     </p><div class="procedure"><a name="enable-debugging"></a><div class="procedure-title">Procedure&nbsp;F.1.&nbsp;To Enable Debugging</div><p>
+       Follow these steps to enable debugging using Eclipse.
+      </p><ol class="procedure" type="1"><li class="step"><p>
+        Install the environment to support JavaScript development in either of
+        the following ways.
+       </p><ul class="stepalternatives">
+        <li class="step"><p>
+          Download and install Eclipse IDE for JavaScript Web Developers from
+          the <a class="link" href="http://www.eclipse.org/downloads/" target="_blank">Eclipse download page</a>.
+         </p></li>
+        <li class="step"><p>
+          Add <a class="link" href="http://wiki.eclipse.org/JSDT" target="_blank">JavaScript Development Tools</a> to your existing
+          Eclipse installation.
+         </p></li>
+       </ul></li><li class="step"><p>
+        Create an empty JavaScript project called <code class="literal">External JavaScript
+        Source</code> in Eclipse.
+       </p><p>
+        Eclipse then uses the <code class="filename">External JavaScript Source</code>
+        directory in the default workspace location to store sources that it
+        downloads from OpenIDM.
+       </p></li><li class="step"><p>
+        Stop OpenIDM.
+       </p></li><li class="step"><p>
+        Edit <code class="filename">openidm/conf/boot/boot.properties</code> to enable
+        debugging.
+       </p><ol type="a" class="substeps"><li class="step"><p>
+          Uncomment and edit the following line.
+         </p><pre class="brush: plain;">
+#openidm.script.javascript.debug=transport=socket,suspend=y,address=9888,trace=true
+         </pre><p>
+          Here <code class="literal">suspend=y</code> prevents OpenIDM from starting until
+          the remote JavaScript debugger has connected. You might therefore
+          choose to set this to <code class="literal">suspend=n</code>.
+         </p></li><li class="step"><p>
+          Uncomment and edit the following line.
+         </p><pre class="brush: plain;">
+#openidm.script.javascript.sources=/Eclipse/workspace/External JavaScript Source/
+         </pre><p>
+          Adjust <code class="literal">/Eclipse/workspace/External JavaScript Source/</code>
+          to match the absolute path to this folder including the trailing
+          <code class="literal">/</code> character. On Windows, also use forward slashes,
+          such as<code class="literal">C:/Eclipse/workspace/External JavaScript Source/</code>.
+         </p><p>
+          Each time OpenIDM loads a new script, it then creates or overwrites
+          the file in the <code class="filename">External JavaScript Source</code>
+          directory. Before toggling breakpoints, be sure to refresh the source
+          manually in Eclipse so you have the latest version.
+         </p></li></ol></li><li class="step"><p>Prepare the Eclipse debugger to allow you to set breakpoints.</p><p>In the Eclipse Debug perspective, select the Breakpoints tab, and
+                    then click the Add Script Load Breakpoint icon to open the list of
+                    scripts.
+                </p><p>In the Add Script Load Breakpoint window, select your scripts, and
+                    then click OK.
+                </p></li><li class="step"><p>Start OpenIDM, and connect the debugger.</p><p>To create a new debug, configuration click Run &gt; Debug
+                    Configurations... &gt; Remote JavaScript &gt; New button, and then set
+                    the port to 9888 as shown above.
+                </p></li></ol></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="appendix-rest.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="appendix-router.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Appendix&nbsp;E.&nbsp;REST API Reference&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Appendix&nbsp;G.&nbsp;Router Service Reference</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10020&components=10164&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-9']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

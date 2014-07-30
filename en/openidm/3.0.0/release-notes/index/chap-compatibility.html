@@ -1,0 +1,297 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;4.&nbsp;OpenIDM Compatibility</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenIDM Release Notes"><link rel="up" href="index.html" title="OpenIDM Release Notes"><link rel="prev" href="chap-issues.html" title="Chapter&nbsp;3.&nbsp;OpenIDM Fixes, Limitations, &amp; Known Issues"><link rel="next" href="chap-feedback.html" title="Chapter&nbsp;5.&nbsp;How to Report Problems &amp; Provide Feedback"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;4.&nbsp;OpenIDM Compatibility</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-issues.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-feedback.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-compatibility"></a>Chapter&nbsp;4.&nbsp;OpenIDM Compatibility</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-compatibility.html#major-changes">4.1. Major Changes to Existing Functionality</a></span></dt><dt><span class="section"><a href="chap-compatibility.html#minor-changes">4.2. Minor Changes to Existing Functionality</a></span></dt><dt><span class="section"><a href="chap-compatibility.html#deprecation">4.3. Deprecated Functionality</a></span></dt><dt><span class="section"><a href="chap-compatibility.html#removed-functionality">4.4. Removed Functionality</a></span></dt><dt><span class="section"><a href="chap-compatibility.html#changing-functionality">4.5. Functionality That Will Change in the Future</a></span></dt></dl></div><p>
+  This chapter covers major and minor changes to existing functionality, as well
+  as deprecated and removed functionality in this release of OpenIDM. You must
+  read this chapter before commencing a migration from a previous OpenIDM
+  release.
+ </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="major-changes"></a>4.1.&nbsp;Major Changes to Existing Functionality</h2></div></div></div><p>
+   The following changes will have an impact on existing deployments. Read these
+   changes carefully and adjust existing scripts and clients accordingly.
+  </p><div class="variablelist"><dl class="variablelist"><dt><a name="compatibility-idm3-icf4"></a><span class="term">Integration of OpenICF 1.4.0.0</span></dt><dd><p>
+      OpenIDM 3.0.0 is not compatible with the previous
+      version of the OpenICF framework. If your deployment uses remote connector
+      servers (either .NET or Java) you must upgrade them to the new connector
+      server versions (1.4.0.0). With the exception of the Active Directory
+      connector, the new connector framework <span class="emphasis"><em>is</em></span> compatible
+      with the older connectors, however, so you can use the older connectors
+      with an OpenIDM 3.0.0 deployment. Only version 1.4.0.0
+      of the Active Directory connector is supported with OpenIDM
+      3.0.0. The following compatibility matrix indicates
+      the supported connector and OpenICF framework versions.
+     </p><div class="table"><a name="idm-icf-compatibility"></a><div class="table-title">Table&nbsp;4.1.&nbsp;OpenIDM 3.0.0 / OpenICF Compatibility Matrix</div><div class="table-contents"><table summary="OpenIDM 3.0.0 / OpenICF Compatibility Matrix" border="0"><colgroup><col width="25%"><col width="25%"><col width="25%"><col width="25%"></colgroup><thead><tr><th>OpenIDM Version</th><th>OpenICF Framework</th><th>Supported Java Connectors</th><th>Supported .NET Connectors</th></tr></thead><tbody><tr><td>2.1</td><td>1.1</td><td>1.1</td><td>1.1</td></tr><tr><td>3.0.0</td><td>1.4</td><td>
+          <p>Previously supported Java connectors (1.1)</p>
+          <p>Groovy Connector (1.4)</p>
+         </td><td>
+          <p>Active Directory Connector (1.4)</p>
+          <p>PowerShell Connector (1.4)</p>
+         </td></tr></tbody></table></div></div><br class="table-break"></dd><dt><span class="term">Changes to the REST Interface</span></dt><dd><div class="itemizedlist"><p>
+       A number of changes have been made to the REST API in this release. Major
+       changes include the following:
+      </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+        In OpenIDM 3.0.0, the request header
+        <code class="literal">"Content-type: application/json"</code> is required for all
+        REST calls that include a request body (POST, PUT, and PATCH). This
+        header was optional in OpenIDM 2.1.
+       </p></li><li class="listitem"><p>
+        For REST calls to the <code class="literal">external/rest</code> endpoint, an
+        action name is now mandatory. In addition, there are no leading
+        underscores in attribute names.
+       </p><p>
+        For example:
+       </p><div class="screen"><pre><strong>$ curl \
+ --cacert self-signed.crt \
+ --header "Content-Type: application/json" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --data '{
+          "url" : "http://example.com/",
+          "method" : "GET",
+          "content-type" : "application/xml"
+       }' \
+ --request POST \
+ "https://localhost:8443/openidm/external/rest?_action=call"</strong></pre></div></li><li class="listitem"><p>
+        Creating system objects with a PUT request (specifying a client-assigned
+        ID) is handled differently in OpenIDM 3.0.0, in that
+        the resulting user _id is no longer URL-encoded. For example, consider
+        the following request:
+       </p><div class="screen"><pre><strong>$ curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --header "If-None-Match: *" \
+ --header "Content-Type: application/json" \
+ --request PUT \
+ --data '{"cn":"James Smith",
+          "dn":"uid=jsmith, ou=people,dc=example,dc=com",
+          "uid":"jsmith",
+          "sn":"Smith",
+          "givenName":"James",
+          "mail": "jsmith@example.com",
+          "description":"Created by OpenIDM REST."
+         }' \
+ https://localhost:8443/openidm/system/ldap/account/uid=jsmith,ou=people,dc=example,dc=com</strong></pre></div><p>
+        The resulting <code class="literal">_id</code> in OpenIDM
+        3.0.0 is:
+       </p><div class="screen"><pre>"_id":"uid=jsmith,ou=people,dc=example,dc=com"</pre></div><p>
+        In OpenIDM 2.1, the resulting <code class="literal">_id</code> is:
+       </p><div class="screen"><pre>"_id":"uid%3Djsmith%2Cou%3Dpeople%2Cdc%3Dexample%2Cdc%3Dcom"</pre></div><p>
+        When you create a system object with a PUT request (that is, specifying
+        a client-assigned ID), you should specify the ID in the URL only and not
+        in the JSON payload. If you specify a different ID in the URL and in the
+        JSON payload, the request will fail, with an error similar to the
+        following:
+       </p><div class="screen"><pre>{
+       "code":500,
+       "reason":"Internal Server Error",
+       "message":"The uid attribute is not single value attribute."}</pre></div></li></ul></div><p>
+      For details of the new interface, including examples, see the <a href="../../integrators-guide/index/appendix-rest.html" class="link"><em class="citetitle">REST API
+      Reference</em></a> in the <em class="citetitle">Integrator's Guide</em>.
+     </p></dd><dt><span class="term">Changes to the authentication service</span></dt><dd><p>
+      The authentication service now uses the ForgeRock commons authentication
+      framework. Authentication modules are specified in
+      <code class="literal">conf/authentication.json</code> and are applied in the order
+      in which they are specified.
+     </p></dd><dt><span class="term">Change to patch action data syntax</span></dt><dd><p>
+      In OpenIDM 2.1.0, the syntax to patch a data object was as follows:
+     </p><pre class="brush: plain;">
+--data '[
+      {
+        "replace": "/email",
+        "value": "new-mail-address@example.com"
+      }
+    ]'
+     </pre><p>
+      In OpenIDM 3.0.0, the syntax is as follows:
+     </p><pre class="brush: plain;">
+--data '[
+      {
+        "operation":"replace",
+        "field":"/email",
+        "value":"new-mail-address@example.com"
+      }
+    ]'
+     </pre><p>
+      The value of the <code class="literal">"operation"</code> field now specifies the
+      patch action (for example, <code class="literal">"add"</code>, <code class="literal">"replace"</code>,
+      or <code class="literal">"remove"</code>). For more information, see <span class="olink"><em class="citetitle">Patch
+      Resource</em></span> in the <em class="citetitle">Integrators Guide</em>.
+     </p></dd><dt><span class="term">Changes to the logging service</span></dt><dd><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+        The name of the <code class="literal">parentActionid</code> column in the activity
+        log has changed to <code class="literal">parentActionId</code>, for consistency
+        across the product.
+       </p></li></ul></div></dd><dt><span class="term">Scripting changes</span></dt><dd><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+        Managed object property scripts (<code class="literal">onRetrieve</code> and
+        <code class="literal">onStore</code>) must now return the modified property values
+        from the script, instead of changing the <code class="literal">property</code>
+        member in the scope itself.
+       </p><p>
+        <code class="literal">propertyName</code> is now available in managed object
+        property scripts.
+       </p></li><li class="listitem"><p>
+        The format of script exceptions has changed, replacing
+        <code class="literal">openidmCode</code> with <code class="literal">code</code>. For
+        example, in OpenIDM 2.1.0:
+       </p><pre class="brush: plain;">
+throw {
+        "openidmCode" : 403,
+        "message" : "Access denied"
+      }
+       </pre><p>
+        In OpenIDM 3.0.0:
+       </p><pre class="brush: plain;">
+throw {
+        "code" : 403,
+        "message" : "Access denied"
+      }
+       </pre></li><li class="listitem"><p>
+        Global script properties, as well as default and custom script file
+        locations, are now defined in the file
+        <code class="literal">conf/script.json</code>.
+       </p><p>
+       For more information, see <a href="../../integrators-guide/index/chap-configuration.html#config-default-directories" class="link"><em class="citetitle">Default and
+       Custom Configuration Directories</em></a> in the
+       <em class="citetitle">Integrators Guide</em>.
+       </p></li><li class="listitem"><p>
+        The method signature for <code class="literal">openidm.create</code> has changed.
+        The ID provided in the create has been separated into two parts - a
+        resource container name and an (optional) client-supplied resource ID.
+       </p><p>
+        This change makes it easier to determine whether the client is supplying
+        an ID, or whether the server should generate an ID.
+       </p><p>
+        Scripts using this function must now use the following format if
+        the client is providing the ID:
+       </p><pre class="brush: plain;">
+openidm.create('managed/user", "userName", user-object)
+       </pre><p>
+        and the following format if the server should generate the ID:
+       </p><pre class="brush: plain;">
+openidm.create('managed/user", null, user-object)
+       </pre></li><li class="listitem"><p>
+        The way in which a request object is accessed has changed from
+        <code class="literal">request.value</code> to <code class="literal">request.content</code>.
+        For example, to obtain the ID of a process definition in 2.1.0, the
+        script extract would have been:
+       </p><pre class="brush: plain;">var processDefinitionId = request.value._processDefinitionId;</pre><p>
+        In OpenIDM 3.0.0, the corresponding script would be:
+       </p><pre class="brush: plain;">var processDefinitionId = request.content._processDefinitionId;</pre><p>
+        In addition, parameters are now added to a request using
+        <code class="literal">request.additionalParameters</code> instead of the 2.1.0
+        construct <code class="literal">request.params</code>.
+       </p><p>
+        For more information about request objects, see <a href="../../integrators-guide/index/chap-configuration.html#adding-custom-endpoints-request" class="link"><em class="citetitle">Custom
+        Endpoints and request Objects</em></a> in the
+        <em class="citetitle">Integrators Guide</em>.
+       </p></li><li class="listitem"><p>
+        The way in which the log level is set for JavaScripts has changed.
+        Previously, the log level was set as follows:
+       </p><pre class="literallayout">org.forgerock.openidm.script.javascript.JavaScript.level=<em class="replaceable"><code>level</code></em></pre><p>
+        In OpenIDM 3.0.0, the log level is set as follows:
+       </p><pre class="literallayout">org.forgerock.script.javascript.JavaScript.level=<em class="replaceable"><code>level</code></em></pre></li></ul></div></dd><dt><span class="term">Changes to query support</span></dt><dd><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+        Token substitution from user parameters is no longer supported for lists,
+        and is only supported for strings.
+       </p></li><li class="listitem"><p>
+        The way in which queries on system object are constructed has changed.
+        Queries that followed the OpenICF format are no longer supported and
+        query filters must now be specified in common filter notation. This
+        includes correlation queries on system objects.
+       </p><p>
+        For example, the following query in OpenIDM 3.0.0:
+       </p><pre class="brush: plain;">'query': { 'Equals': { 'field' : 'employeeType', 'values': ['Permanent'] } }</pre><p>
+        would be constructed as follows in OpenIDM 3.0.0:
+       </p><pre class="brush: plain;">"_queryFilter" : "employeeType eq \"Permanent\""</pre><p>
+        For information about the supported query format, see <a href="../../integrators-guide/index/chap-data.html#constructing-queries" class="link"><em class="citetitle">Constructing
+        Queries</em></a> in the <em class="citetitle">Integrators
+        Guide</em>.
+       </p></li></ul></div></dd><dt><span class="term">Security Module Changes</span></dt><dd><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+        The way in which the security context is addressed has changed
+        from <code class="literal">request.parent.security</code> in OpenIDM 2.1.0 to
+        <code class="literal">context.security</code> in OpenIDM 3.0.0.
+       </p><p>
+        A sample object showing the security context in OpenIDM 2.1.0 follows:
+       </p><pre class="brush: plain;">
+"parent": {
+    ...
+    "security": {
+        "username": "openidm-admin",
+        "openidm-roles": [
+            "openidm-admin",
+            "openidm-authorized"
+        ],
+    "userid": {
+        "id": "openidm-admin",
+        "component": "internal/user"
+    }
+}</pre><p>
+        A corresponding sample security context in OpenIDM
+        3.0.0 would be:
+       </p><pre class="brush: plain;">
+"security": {
+    "context": {
+        "authenticationId": "openidm-admin",
+        "class": "org.forgerock.json.resource.SecurityContext",
+        "parent": {
+            "class": "org.forgerock.json.resource.RootContext",
+            "parent": null,
+            "id": "0a8d43c2-1c54-487f-bec4-564b944fa835"
+        },
+        "authorizationId": {
+            "roles": [
+                "openidm-admin",
+                "openidm-authorized"
+            ],
+        "component": "repo/internal/user",
+        "id": "openidm-admin"
+    }
+}</pre></li></ul></div></dd><dt><span class="term">Changes to the workflow module</span></dt><dd><p>
+      The action used to start a workflow process instance has changed. In
+      OpenIDM 2.1.0, you would start a process instance with a POST request to
+      the following URL:
+     </p><div class="screen"><pre>"https://localhost:8443/openidm/workflow/processinstance?_action=createProcessInstance"</pre></div><p>
+      In OpenIDM 3.0.0, you would send a similar POST
+      request to:
+     </p><div class="screen"><pre>"https://localhost:8443/openidm/workflow/processinstance?_action=create"</pre></div></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="minor-changes"></a>4.2.&nbsp;Minor Changes to Existing Functionality</h2></div></div></div><p>
+   The following changes should not have an impact on existing deployment
+   configurations.
+  </p><div class="variablelist"><dl class="variablelist"><dt><span class="term">Change to how roles are stored</span></dt><dd><p>
+       In OpenIDM 2.1.0, roles were stored as a CSV list. For example:
+      </p><pre class="brush: plain;">
+"roles":"openidm-authorized,contractor",
+      </pre><p>
+       In OpenIDM 3.0.0, roles are stored in an array. For
+       example:
+      </p><pre class="brush: plain;">
+"roles": [
+    "openidm-authorized","contractor"
+],
+      </pre></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="deprecation"></a>4.3.&nbsp;Deprecated Functionality</h2></div></div></div><p>
+   Apart from the support for OpenICF-style queries, noted previously, no
+   functionality has been deprecated in OpenIDM 3.0.0.
+  </p><p>
+   No additional functionality is planned to be deprecated at this time.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="removed-functionality"></a>4.4.&nbsp;Removed Functionality</h2></div></div></div><p>
+   No functionality has been removed in OpenIDM 3.0.0.
+  </p><p>
+   No functionality is planned to be removed at this time.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="changing-functionality"></a>4.5.&nbsp;Functionality That Will Change in the Future</h2></div></div></div><div class="itemizedlist"><p>These capabilities are expected to change in upcoming releases:</p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>The way you generate connector configurations for access to external
+   resources, described in
+   <a href="../../integrators-guide/index/chap-resource-conf.html#connector-wiz" class="link"><em class="citetitle">Creating Default
+   Connector Configurations</em></a>.</p></li></ul></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-issues.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-feedback.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;3.&nbsp;OpenIDM Fixes, Limitations, &amp; Known Issues&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;5.&nbsp;How to Report Problems &amp; Provide Feedback</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10020&components=10164&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-9']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>
