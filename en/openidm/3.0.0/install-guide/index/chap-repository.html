@@ -3,7 +3,7 @@
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
    <title>Chapter&nbsp;4.&nbsp;Installing a Repository For Production</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenIDM Installation Guide"><link rel="up" href="index.html" title="OpenIDM Installation Guide"><link rel="prev" href="chap-samples.html" title="Chapter&nbsp;3.&nbsp;More OpenIDM Samples"><link rel="next" href="chap-uninstall.html" title="Chapter&nbsp;5.&nbsp;Removing and Moving OpenIDM Software"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
-</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;4.&nbsp;Installing a Repository For Production</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-samples.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-uninstall.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-repository"></a>Chapter&nbsp;4.&nbsp;Installing a Repository For Production</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-repository.html#repository-mysql">4.1. To Set Up OpenIDM With MySQL</a></span></dt><dt><span class="section"><a href="chap-repository.html#repository-mssql">4.2. To Set Up OpenIDM With MS SQL</a></span></dt><dt><span class="section"><a href="chap-repository.html#repository-oracledb">4.3. To Set Up OpenIDM With Oracle Database</a></span></dt><dt><span class="section"><a href="chap-repository.html#jdbc-repo-config">4.4. Understanding the JDBC Repository Configuration File</a></span></dt><dt><span class="section"><a href="chap-repository.html#explicit-generic-mapping">4.5. Using Explicit or Generic Object Mapping With a JDBC Repository</a></span></dt></dl></div><a class="indexterm" name="d0e3174"></a><p>
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;4.&nbsp;Installing a Repository For Production</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-samples.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-uninstall.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-repository"></a>Chapter&nbsp;4.&nbsp;Installing a Repository For Production</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-repository.html#repository-mysql">4.1. To Set Up OpenIDM With MySQL</a></span></dt><dt><span class="section"><a href="chap-repository.html#repository-mssql">4.2. To Set Up OpenIDM With MS SQL</a></span></dt><dt><span class="section"><a href="chap-repository.html#repository-oracledb">4.3. To Set Up OpenIDM With Oracle Database</a></span></dt><dt><span class="section"><a href="chap-repository.html#jdbc-repo-config">4.4. Understanding the JDBC Repository Configuration File</a></span></dt><dt><span class="section"><a href="chap-repository.html#explicit-generic-mapping">4.5. Using Explicit or Generic Object Mapping With a JDBC Repository</a></span></dt><dt><span class="section"><a href="chap-repository.html#jdbc-repos-ssl">4.6. Configuring SSL with a JDBC Repository</a></span></dt></dl></div><a class="indexterm" name="d0e3173"></a><p>
   By default, OpenIDM uses OrientDB for its internal repository so that you do
   not have to install a database in order to evaluate OpenIDM. Before using
   OpenIDM in production, however, you must replace OrientDB with a supported
@@ -38,7 +38,7 @@ $ rm repo.orientdb.json</pre></div></li><li class="step"><p>
     Copy <code class="filename">openidm/samples/misc/repo.jdbc.json</code> to the
     <code class="filename">openidm/conf</code> directory.
    </p><div class="screen"><pre>$ cd /path/to/openidm/conf
-$ cp ../samples/misc/repo.jdbc.json .</pre></div></li><li class="step"><a class="indexterm" name="d0e3240"></a><p>
+$ cp ../samples/misc/repo.jdbc.json .</pre></div></li><li class="step"><a class="indexterm" name="d0e3239"></a><p>
     Import the data definition language script for OpenIDM into MySQL.
    </p><div class="screen"><pre><strong>$ cd /path/to/mysql
 $ ./bin/mysql -u root -p &lt; /path/to/openidm/db/scripts/mysql/openidm.sql</strong>
@@ -336,35 +336,24 @@ Id   State          Name
 [  4] [active      ] org.forgerock.openidm.managed
 [  9] [active      ] org.forgerock.openidm.authentication
 [ 11] [active      ] org.forgerock.openidm.provisioner
-   </em></pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="repository-oracledb"></a>4.3.&nbsp;To Set Up OpenIDM With Oracle Database</h2></div></div></div><div class="procedure"><p>This procedure assumes that Oracle Database has been installed and
-  configured on the local host.</p><p>OpenIDM listens on port 8080 by default. To avoid a port conflict,
-  make sure that Oracle Database is configured to use a different port, or
-  edit the <code class="filename">/path/to/openidm/conf/boot/boot.properties</code>
-  file to change the port on which OpenIDM listens.</p><ol class="procedure" type="1"><li class="step"><p>Connect to the Oracle Database with any database connection utility.
-      For more information, see <a class="link" href="http://docs.oracle.com/cd/B25329_01/doc/admin.102/b25107/connecting.htm" target="_blank">Connecting to the Database</a>.</p><p>This example uses SQL Command Line (SQL*Plus) to connect as the
-      <code class="literal">SYSTEM</code> user.</p><div class="screen"><pre>$ sqlplus /nolog
-SQL&gt; connect SYSTEM/password
-Connected.
-      </pre></div></li><li class="step"><p>Create a user that will have permission to connect to the
-      OpenIDM database tables.</p><p>The following example creates a user <code class="literal">openidm</code>
-      with password <code class="literal">password</code>.</p><div class="screen"><pre>SQL&gt; CREATE USER openidm IDENTIFIED BY password;
-User created.</pre></div></li><li class="step"><p>Grant the new user at least the <code class="literal">CREATE SESSION</code>
-      and <code class="literal">RESOURCE</code> privileges, to allow that user to connect
-      to the database and create the required tables.</p><div class="screen"><pre>SQL&gt; GRANT CREATE SESSION TO openidm;
-Grant succeeded.
-SQL&gt; GRANT RESOURCE TO openidm;
-Grant succeeded.</pre></div></li><li class="step"><p>Connect to the database as the <code class="literal">openidm</code> user.</p><div class="screen"><pre>SQL&gt; connect openidm/password;
-Connected.
-      </pre></div></li><li class="step"><p>Import the OpenIDM data definition language script for OpenIDM
-      into Oracle Database.</p><div class="screen"><pre>SQL&gt; @/root/openidm/db/scripts/oracle/openidm.sql
-Creating Sequence genericobjects_id_SEQ ...
-
-Sequence created.
-...</pre></div><p>This step creates all of the required database tables for use as
-      the internal repository.</p></li><li class="step"><p>Check that the tables have been created correctly by querying the
-      <code class="literal">internaluser</code> table. The query should return two
-      records (<code class="literal">openidm-admin</code> and <code class="literal">anonymous</code>).
-      The output here has been formatted for legibility.</p><div class="screen"><pre>SQL&gt; select * from internaluser;
+   </em></pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="repository-oracledb"></a>4.3.&nbsp;To Set Up OpenIDM With Oracle Database</h2></div></div></div><p>
+   This section assumes that you have configured an Oracle
+   Database with <a class="link" href="http://docs.oracle.com/cd/B28359_01/network.111/b28317/tnsnames.htm" target="_blank">Local Naming Parameters (tnsnames.ora)</a>, a schema owner, and
+   optionally a service user and its associated credentials for use by OpenIDM.
+  </p><div class="procedure"><p>
+   For more information on connecting to an Oracle database, see
+   <a class="link" href="http://docs.oracle.com/cd/E11882_01/appdev.112/e10766/tdddg_connecting.htm" target="_blank">Connecting to Oracle Database</a>.
+  </p><p>
+   You will need to import the OpenIDM schema using the data definition language
+   script found in
+   <code class="filename">/path/to/openidm/db/scripts/oracle/openidm.sql</code> using the
+   appropriate schema owner user.
+  </p><p>
+   If you have created OpenIDM tables correctly, you should be able to
+   query the <code class="literal">internaluser</code> table. The query should return two
+   records (<code class="literal">openidm-admin</code> and <code class="literal">anonymous</code>).
+   The output here has been formatted for legibility.
+  </p><div class="screen"><pre>SQL&gt; select * from internaluser;
 
 OBJECTID     openidm-admin
 -----------------------------------------------------------------------------
@@ -382,58 +371,80 @@ REV          0
 PWD          anonymous
 -----------------------------------------------------------------------------
 ROLES        openidm-reg
------------------------------------------------------------------------------</pre></div></li><li class="step"><p>Make sure that OpenIDM is stopped.</p><div class="screen"><pre>$ cd /path/to/openidm/
-$ ./shutdown.sh
-OpenIDM is not running, not stopping.</pre></div></li><li class="step"><p>OpenIDM requires an Oracle DB driver that must be created from two
-    separate jar files. Create the driver as follows.</p><ol type="a" class="substeps"><li class="step"><p>Download the Oracle JDBC driver for your Oracle DB version
-           from <a class="link" href="http://www.oracle.com/technetwork/database/features/jdbc/index-091264.html" target="_blank">Oracle Technetwork</a> and place it in the <code class="filename">openidm/db/scripts/oracle</code>
-           directory.</p><div class="screen"><pre>$ ls /path/to/openidm/db/scripts/oracle
+-----------------------------------------------------------------------------</pre></div><p>
+   Before you start OpenIDM, you should create an Oracle DB driver from
+   two separate jar files and set up the OpenIDM repository file for the
+   Oracle DB. To do so, take the following steps:
+  </p><ol class="procedure" type="1"><li class="step"><p>Download the Oracle JDBC driver for your Oracle DB version
+    from <a class="link" href="http://www.oracle.com/technetwork/database/features/jdbc/index-091264.html" target="_blank">Oracle Technology Network</a> and place it in the
+    <code class="filename">openidm/db/scripts/oracle</code> directory.</p><div class="screen"><pre>$ ls /path/to/openidm/db/scripts/oracle
 ojdbc6_g.jar
-</pre></div></li><li class="step"><p>Create a bind file and edit it to match the version information
-           for your JDBC driver.</p><p>You can use the sample bind file located in
-           <code class="filename">openidm/db/scripts/mssql/</code>. Copy the bind file
-           to the same location as the JDBC driver.</p><div class="screen"><pre>$ cd /path/to/openidm/db/scripts
+   </pre></div></li><li class="step"><p>
+    Create a bind file and edit it to match the version information
+    for your JDBC driver.
+   </p><p>
+    You can use the sample bind file located in
+    <code class="filename">openidm/db/scripts/mssql/</code>. Copy the bind file
+    to the same location as the JDBC driver.
+   </p><div class="screen"><pre>$ cd /path/to/openidm/db/scripts
 $ cp mssql/sqljdbc4.bnd oracle/
 $ ls oracle/
-ojdbc6_g.jar  sqljdbc4.bnd</pre></div><p>The JDBC driver version information for your driver is located
-           in the <code class="literal">Specification-Version</code> property in the
-           MANIFEST file of the driver.</p><div class="screen"><pre>$ cd /path/to/openidm/db/scripts/oracle
+ojdbc6_g.jar  sqljdbc4.bnd</pre></div><p>
+    The JDBC driver version information for your driver is located
+    in the <code class="literal">Specification-Version</code> property in the
+    MANIFEST file of the driver.</p><div class="screen"><pre>$ cd /path/to/openidm/db/scripts/oracle
 $ unzip -q -c ojdbc6_g.jar META-INF/MANIFEST.MF
 ...
 Specification-Vendor: Sun Microsystems Inc.
 Specification-Title: JDBC
 Specification-Version: 4.0
-...</pre></div><p>Edit the bind file to match the JDBC driver version.</p><div class="screen"><pre>$ more sqljdbc4.bnd
+...</pre></div><p>
+    Edit the bind file to match the JDBC driver version.
+   </p><div class="screen"><pre>$ more sqljdbc4.bnd
 ...
 version=4.0
 Export-Package: *;version=3.0.0
 Bundle-Name: Oracle JDBC Driver 4.0 for SQL Server
 Bundle-SymbolicName: Oracle JDBC Driver 4.0 for SQL Server
-Bundle-Version: 3.0.0</pre></div></li><li class="step"><p>Download the <code class="literal">bnd</code> Java archive file
-           (<code class="filename">biz.aQute.bnd.jar</code>) that enables you to create
-           OSGi bundles. The file can be downloaded from
-           <a class="link" href="http://dl.dropbox.com/u/2590603/bnd/biz.aQute.bnd.jar" target="_blank">http://dl.dropbox.com/u/2590603/bnd/biz.aQute.bnd.jar</a>.
-           For more information about <code class="literal">bnd</code>, see
-           <a class="link" href="http://www.aqute.biz/Bnd/Bnd" target="_blank">http://www.aqute.biz/Bnd/Bnd</a>.</p><p>Place the <code class="literal">bnd</code> Java archive file in the same
-           directory as the JDBC driver, and the bind file.</p><div class="screen"><pre>$ ls /path/to/openidm/db/scripts/oracle/
-biz.aQute.bnd.jar  ojdbc6_g.jar  sqljdbc4.bnd</pre></div></li><li class="step"><p>Change to the directory in which the three files are located and
-           run the following command to create the OSGi bundle.</p><div class="screen"><pre>$ cd /path/to/openidm/db/scripts/oracle/
+Bundle-Version: 3.0.0</pre></div></li><li class="step"><p>
+    Download the <code class="literal">bnd</code> Java archive file
+    (<code class="filename">biz.aQute.bnd.jar</code>) that enables you to create
+    OSGi bundles. The file can be downloaded from
+    <a class="link" href="http://dl.dropbox.com/u/2590603/bnd/biz.aQute.bnd.jar" target="_blank">http://dl.dropbox.com/u/2590603/bnd/biz.aQute.bnd.jar</a>.
+    For more information about <code class="literal">bnd</code>, see
+    <a class="link" href="http://www.aqute.biz/Bnd/Bnd" target="_blank">http://www.aqute.biz/Bnd/Bnd</a>.
+   </p><p>
+    Place the <code class="literal">bnd</code> Java archive file in the same
+    directory as the JDBC driver, and the bind file.
+   </p><div class="screen"><pre>$ ls /path/to/openidm/db/scripts/oracle/
+biz.aQute.bnd.jar  ojdbc6_g.jar  sqljdbc4.bnd</pre></div></li><li class="step"><p>
+    Change to the directory in which the three files are located and
+    run the following command to create the OSGi bundle.
+   </p><div class="screen"><pre>$ cd /path/to/openidm/db/scripts/oracle/
 $ java -jar biz.aQute.bnd.jar wrap -properties sqljdbc4.bnd ojdbc6_g.jar
 Dec 10, 2013 9:53:28 AM java.util.prefs.FileSystemPreferences$1 run
 INFO: Created user preferences directory.
-ojdbc6_g 984 0</pre></div><p>A new <code class="literal">.bar</code> file has now been created.</p><div class="screen"><pre>$ ls
+ojdbc6_g 984 0</pre></div><p>
+    A new <code class="literal">.bar</code> file has now been created.
+   </p><div class="screen"><pre>$ ls
 biz.aQute.bnd.jar  ojdbc6_g.bar  ojdbc6_g.jar  sqljdbc4.bnd</pre></div></li><li class="step"><p>Move the <code class="literal">.bar</code> file to the
-           <code class="literal">openidm/bundle</code> directory and rename it with a
-           <code class="literal">.jar</code> extension. The actual name of the file is
-           unimportant.</p><div class="screen"><pre>$ mv ojdbc6_g.bar /path/to/openidm/bundle/ojdbc6_g-osgi.jar</pre></div></li></ol></li><li class="step"><p>Remove the default OrientDB configuration file
+   <code class="literal">openidm/bundle</code> directory and rename it with a
+   <code class="literal">.jar</code> extension. The actual name of the file is
+   unimportant.</p><div class="screen"><pre>$ mv ojdbc6_g.bar /path/to/openidm/bundle/ojdbc6_g-osgi.jar</pre></div></li><li class="step"><p>
+    Remove the default OrientDB configuration file
    (<code class="filename">openidm/conf/repo.orientdb.json</code>) from the
-   configuration directory.</p><div class="screen"><pre>$ rm /path/to/openidm/conf/repo.orientdb.json</pre></div></li><li class="step"><p>Copy the OracleDB configuration file
+   configuration directory.
+   </p><div class="screen"><pre>$ rm /path/to/openidm/conf/repo.orientdb.json</pre></div></li><li class="step"><p>Copy the OracleDB configuration file
    (<code class="filename">openidm/samples/misc/repo.jdbc-oracle.json</code>) to the
-   configuration directory and rename the file <code class="filename">repo.jdbc.json</code>.</p><div class="screen"><pre>$ cd /path/to/openidm/conf
-$ cp ../samples/misc/repo.jdbc-oracle.json repo.jdbc.json</pre></div></li><li class="step"><p>Update <code class="filename">openidm/conf/repo.jdbc.json</code> as necessary,
-   to reflect your OracleDB deployment. Specifically, edit the <code class="literal">jdbcUrl</code>,
-   <code class="literal">username</code>, and <code class="literal">password</code> properties. For
-   example:</p><pre class="brush: javascript;">"connection" : {
+   configuration directory and rename the file
+    <code class="filename">repo.jdbc.json</code>.
+   </p><div class="screen"><pre>$ cd /path/to/openidm/conf
+$ cp ../samples/misc/repo.jdbc-oracle.json repo.jdbc.json</pre></div></li><li class="step"><p>
+    Update <code class="filename">openidm/conf/repo.jdbc.json</code> as necessary,
+    to reflect your OracleDB deployment. Specifically, edit the
+    <code class="literal">jdbcUrl</code>,
+    <code class="literal">username</code>, and <code class="literal">password</code> properties. For
+    example:</p><pre class="brush: javascript;">"connection" : {
         "dbType" : "ORACLE",
         "jndiName" : "",
         "driverClass" : "oracle.jdbc.OracleDriver",
@@ -444,12 +455,40 @@ $ cp ../samples/misc/repo.jdbc-oracle.json repo.jdbc.json</pre></div></li><li cl
         "maxBatchSize" : 100,
         "maxTxRetry" : 5,
         "connectionTimeoutInMs" : 30000
-    },</pre></li></ol></div><p>When you have set up OracleDB for use as the OpenIDM internal
-    repository, start OpenIDM to check that the setup has been successful. On
-    startup, a number of INFO messages are output, as the predefined queries
-    are processed.</p><p>After startup, you should see that <code class="literal">repo.jdbc</code> is
-    <code class="literal">active</code>, whereas <code class="literal">repo.orientdb</code> is
-    <code class="literal">unsatisfied</code>.
+    },</pre></li></ol></div><div class="itemizedlist"><p>
+    The following parameters relate to the Oracle database:
+   </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     The <code class="literal">"dbType"</code> is <code class="literal">"ORACLE"</code>.
+    </p></li><li class="listitem"><p>
+     The <code class="literal">"driverClass"</code> is
+     <code class="literal">"oracle.jdbc.OracleDriver"</code>.
+    </p></li><li class="listitem"><p>
+     The <code class="literal">"jdbcUrl"</code> corresponds to the URL of the Oracle DB
+     listener, including the service name, based on your configured Local Naming
+     Parameters (tnsnames.ora). It should be whatever is appropriate for your
+     environment. Replace "openidm" with the service name from your TNS
+     description.
+    </p></li><li class="listitem"><p>
+     The <code class="literal">"username"</code> and <code class="literal">"password"</code>
+     corresponds to the credentials of the service user that connects from
+     OpenIDM. Use the username of the service user you have created with grants
+     to the OpenIDM tables you created earlier.
+    </p></li><li class="listitem"><p>
+     The <code class="literal">"defaultCatalog"</code> is used to generate queries
+     appropriate to your OpenIDM schema in Oracle. It should match the user who
+     "owns" the tables. If your schema owner was <code class="literal">"openidm"</code>,
+     then the <code class="literal">"defaultCatalog"</code> should also be
+     <code class="literal">"openidm"</code>. This will cause OpenIDM to generate queries
+     such as <code class="literal">"SELECT objectid FROM openidm.internaluser"</code>.
+    </p></li></ul></div><p>
+     When you have set up OracleDB for use as the OpenIDM internal
+     repository, start OpenIDM to check that the setup has been successful. On
+     startup, a number of INFO messages are output, as the predefined queries
+     are processed.
+    </p><p>
+     After startup, you should see that <code class="literal">repo.jdbc</code> is
+     <code class="literal">active</code>, whereas <code class="literal">repo.orientdb</code> is
+     <code class="literal">unsatisfied</code>.
     </p><div class="screen"><pre><strong>$ cd /path/to/openidm
 $ ./startup.sh        </strong>
 <em>Using OPENIDM_HOME:   /path/to/openidm
@@ -886,7 +925,67 @@ openidm.query("managed/user", { "_queryId": "for-userName", "uid": "jdoe" });
        or
       </p><pre class="brush: plain;">
 "roles": { "column" : "roles", "type" : "JSON_LIST" }
-      </pre></dd></dl></div></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-samples.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-uninstall.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;3.&nbsp;More OpenIDM Samples&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;5.&nbsp;Removing and Moving OpenIDM Software</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10020&components=10164&issuetype=1">Log a documentation bug.</a></p></div>
+      </pre></dd></dl></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="jdbc-repos-ssl"></a>4.6.&nbsp;Configuring SSL with a JDBC Repository</h2></div></div></div><p>
+   To configure SSL with a JDBC repository, you need to import the CA
+   certificate file for the server into two locations: the Java truststore
+   and the OpenIDM truststore. That certificate file could have a name like
+   <code class="filename">ca-cert.pem</code>. If you have a different genuine or
+   self-signed certificate file, substitute accordingly.
+  </p><p>
+   To import the CA certificate file into both truststores, use the
+   <span class="command"><strong>keytool</strong></span> command native to the Java environment, typically
+   located in the <code class="filename">/path/to/jre-version/bin</code> directory. On
+   some UNIX-based systems, <span class="command"><strong>/usr/bin/keytool</strong></span> may link
+   to that command.
+  </p><p>
+   You can find the Java truststore file, <code class="filename">cacerts</code>, in the
+   <code class="filename">/path/to/jre-version/jre/lib/security</code> directory. On
+   some UNIX-based systems, that may be linked to a location such as
+   <code class="filename">/etc/pki/java/cacerts</code>.
+  </p><div class="procedure"><a name="import-cacert-jdbc"></a><div class="procedure-title">Procedure&nbsp;4.1.&nbsp;Preparing OpenIDM for SSL with a JDBC Repository</div><ol class="procedure" type="1"><li class="step"><p>
+     Import the <code class="filename">ca-cert.pem</code> certificate into the Java
+     truststore file with the following command:
+    </p><div class="screen"><pre>$ keytool \
+ -importcert \
+ -trustcacerts
+ -file ca-cert.pem \
+ -alias "DB cert" \
+ -keystore /etc/pki/java/cacerts
+    </pre></div></li><li class="step"><p>
+     Import the <code class="filename">ca-cert.pem</code> certificate into the OpenIDM
+     truststore file with the following command:
+    </p><div class="screen"><pre>$ keytool \
+ -importcert \
+ -trustcacerts \
+ -file ca-cert.pem \
+ -alias "DB cert" \
+ -keystore /path/to/openidm/security/truststore
+    </pre></div></li><li class="step"><p>
+     Open the repository configuration file, <code class="filename">repo.jdbc.json</code>.
+    </p><p>
+     Look for the <code class="literal">"jdbcUrl"</code> properties. You should see a
+     <code class="literal">jdbc</code> URL. Add a
+     <code class="literal">?characterEncoding=utf8&amp;useSSL=true</code> to the end of
+     that URL.
+    </p><p>
+     The <code class="literal">"jdbcUrl"</code> that you configure depends on your JDBC
+     repository. The following entries correspond to appropriate
+     <code class="literal">"jdbcURL"</code> properties for MySQL, MSSQL, and Oracle DB,
+     respectively.
+    </p><div class="screen"><pre>
+"jdbcUrl" : "jdbc:mysql://localhost:3306/openidm?characterEncoding=utf8&amp;useSSL=true"</pre></div><div class="screen"><pre>
+"jdbcUrl" : "jdbc:sqlserver://localhost:1433;instanceName=default;
+     databaseName=openidm;applicationName=OpenIDM?characterEncoding=utf8&amp;useSSL=true"</pre></div><div class="screen"><pre>
+"jdbcUrl" : "jdbc:oracle:thin:@//localhost:1521/openidm?characterEncoding=utf8&amp;useSSL=true"</pre></div></li><li class="step"><p>
+     Open the <code class="filename">/path/to/openidm/conf/config.properties</code> file.
+     Find the <code class="literal">org.osgi.framework.bootdelegation</code> property.
+     Make sure that property includes a reference to the
+     <code class="literal">javax.net.ssl</code> option. If you started with the default
+     version of <code class="filename">config.properties</code> that line should now
+     read as follows:
+    </p><div class="screen"><pre>
+org.osgi.framework.bootdelegation=sun.*,com.sun.*,apple.*,com.apple.*,javax.net.ssl
+    </pre></div></li></ol></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-samples.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-uninstall.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;3.&nbsp;More OpenIDM Samples&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;5.&nbsp;Removing and Moving OpenIDM Software</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10020&components=10164&issuetype=1">Log a documentation bug.</a></p></div>
 <script type="text/javascript">
 
   var _gaq = _gaq || [];

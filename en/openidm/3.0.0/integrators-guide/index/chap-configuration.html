@@ -10,7 +10,7 @@
  <a href="../../integrators-guide/index/appendix-file-layout.html" class="link"><em class="citetitle">File
  Layout</em></a>.</p><p>OpenIDM stores configuration objects in its internal repository.
  You can manage the configuration by using either the REST access to the
- configuration objects, or by using the JSON file based views.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configuration-objects"></a>5.1.&nbsp;OpenIDM Configuration Objects</h2></div></div></div><a class="indexterm" name="d0e2506"></a><a class="indexterm" name="d0e2511"></a><p>OpenIDM exposes internal configuration objects in JSON format.
+ configuration objects, or by using the JSON file based views.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configuration-objects"></a>5.1.&nbsp;OpenIDM Configuration Objects</h2></div></div></div><a class="indexterm" name="d0e2505"></a><a class="indexterm" name="d0e2510"></a><p>OpenIDM exposes internal configuration objects in JSON format.
       Configuration elements can be either single instance or multiple
       instance for an OpenIDM installation.</p><div class="itemizedlist"><a name="single-instance-configuration-objects"></a><div class="itemizedlist-title">Single Instance Configuration Objects</div><p>Single instance configuration objects correspond to services that have
    at most one instance per installation.</p><p>JSON file views of these configuration objects are named
@@ -90,8 +90,8 @@
    </p><p>
     Note if automatic polling is enabled, changes to scripts that are  called
     from a JSON configuration file are taken into account immediately.
-   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configuring-over-rest"></a>5.4.&nbsp;Configuring OpenIDM Over REST</h2></div></div></div><a class="indexterm" name="d0e2746"></a><a class="indexterm" name="d0e2749"></a><p>OpenIDM exposes configuration objects under the
-  <code class="literal">/openidm/config</code> context path.</p><a class="indexterm" name="d0e2759"></a><p>You can list the configuration on the local host by performing a GET
+   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configuring-over-rest"></a>5.4.&nbsp;Configuring OpenIDM Over REST</h2></div></div></div><a class="indexterm" name="d0e2745"></a><a class="indexterm" name="d0e2748"></a><p>OpenIDM exposes configuration objects under the
+  <code class="literal">/openidm/config</code> context path.</p><a class="indexterm" name="d0e2758"></a><p>You can list the configuration on the local host by performing a GET
   <code class="literal">https://localhost:8443/openidm/config</code>. The following
   example shows excerpts of the default configuration for an OpenIDM instance
   started with Sample 1.</p><div class="screen"><pre><strong>$ curl \
@@ -370,7 +370,7 @@
    <code class="literal">&amp;{ }</code>. When such references are found, OpenIDM replaces
    them with the appropriate property value, defined in the
    <code class="filename">boot.properties</code> file.
-  </p><div class="example"><a name="d0e2864"></a><div class="example-title">Example&nbsp;5.1.&nbsp;</div><div class="example-contents"><p>The following example defines two separate OpenIDM environments - 
+  </p><div class="example"><a name="d0e2863"></a><div class="example-title">Example&nbsp;5.1.&nbsp;</div><div class="example-contents"><p>The following example defines two separate OpenIDM environments - 
    a development environment and a production environment. You can specify the 
    environment at startup time and, depending on the environment, the database 
    URL is set accordingly.</p><p>The environments are defined by adding the following lines to the 
@@ -404,7 +404,7 @@ $ ./startup.sh</pre></div></div></div><br class="example-break"><div class="sect
 }
    </pre></div></div><br class="example-break"><p>You can define <span class="emphasis"><em>nested</em></span> properties (that is a property 
  definition within another property definition) and you can combine system 
- properties and boot properties.</p><div class="example"><a name="d0e2915"></a><div class="example-title">Example&nbsp;5.3.&nbsp;</div><div class="example-contents"><p>
+ properties and boot properties.</p><div class="example"><a name="d0e2914"></a><div class="example-title">Example&nbsp;5.3.&nbsp;</div><div class="example-contents"><p>
    The following example uses the <code class="literal">user.country</code> property, a
    default Java System property. The example defines specific LDAP ports,
    depending on the country (identified by the country code) in the 
