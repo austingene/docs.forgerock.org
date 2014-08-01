@@ -116,6 +116,12 @@ $ cp bin/default/script/access.js script/
       versa. Ultimately, you want to preserve your customizations but ensure
       that you are up to date with the latest default configuration. All files
       should end up in the <code class="filename">openidm-3.0/conf</code> directory.
+     </p></li><li class="listitem"><p>
+      Pay particular attention to the <code class="filename">conf/repo.jdbc.json</code>
+      file in your existing deployment. If you have customized this file, make
+      sure that these customizations are ported to the corresponding file in the
+      3.0.0 deployment. For example, if you have defined any new queries, add
+      these queries to the OpenIDM 3.0 <code class="filename">repo.jdbc.json</code> file.
      </p></li></ul></div></li><li class="step"><p>
     Modify any customized provisioner configurations in your existing project to
     point to the new connectors that are provided with OpenIDM
@@ -142,21 +148,43 @@ $ cp bin/default/script/access.js script/
     Migrate your internal user data, managed objects, and reconciliation and
     audit data, if required.
    </p><p>
-    The database schema has changed slightly in
-    OpenIDM 3.0.0. The following tables have been added:
-    <code class="literal">security</code>, <code class="literal">securitykeys</code>,
-    <code class="literal">clusterobjects</code>, and
-    <code class="literal">clusterobjectproperties</code>. In addition, the following
-    columns have been added to the <code class="literal">auditrecon</code> table:
-    <code class="literal">actionid</code>, <code class="literal">exceptiondetail</code>,
-    <code class="literal">mapping</code>, <code class="literal">messagedetail</code>.</p><p>
-    Your data migration strategy might vary, depending on your repository.
+    When you migrate this data, note the following points:
+   </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+      The way in which queries on system objects are constructed has changed.
+      This includes correlation queries on system objects. For more information,
+      see <a href="../../integrators-guide/index/chap-data.html#constructing-queries" class="link"><em class="citetitle">Constructing
+      Queries</em></a> in the <em class="citetitle">Integrators Guide</em>.
+     </p></li><li class="listitem"><p>
+      The database schema has changed slightly in OpenIDM 3.0.0. The following
+      tables have been added: <code class="literal">security</code>,
+      <code class="literal">securitykeys</code>, <code class="literal">clusterobjects</code>, and
+      <code class="literal">clusterobjectproperties</code>. In addition, the following
+      columns have been added to the <code class="literal">auditrecon</code> table:
+      <code class="literal">actionid</code>, <code class="literal">exceptiondetail</code>,
+      <code class="literal">mapping</code>, <code class="literal">messagedetail</code>, and
+      <code class="literal">_rev</code>.
+     </p></li><li class="listitem"><p>
+      Note that the format of system object <code class="literal">_ids</code> has changed
+      in OpenIDM 3.0.0 (they are no longer URL-encoded). Therefore, system
+      object <code class="literal">_ids</code> in an existing links table will not be
+      recognized by an OpenIDM 3.0.0 reconciliation process. For more
+      information, see <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIDM-2091" target="_blank">OPENIDM-2091</a>: Migration script for encoded ids in
+      the links table.
+     </p></li></ul></div><p>
+    Your data migration strategy might vary, depending on your repository. You
+    can either migrate your existing 2.1.0 database, or start with a new
+    3.0.0 database and import your existing data.
    </p><div class="itemizedlist"><p>
      To migrate an existing database:
     </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
       Using the appropriate schema script from the new OpenIDM 3.0.0 instance
       (<code class="filename">/path/to/openidm-3.0/db/scripts/<em class="replaceable"><code>repo</code></em>/openidm.sql</code>),
       take the changes described above and apply them to your existing database.
+     </p><p>
+      Use the <code class="literal">--force</code> option in MySQL (or an equivalent
+      option for your repository type) to create the new tables, then edit the
+      <code class="literal">auditrecon</code> table manually, to add the columns described
+      previously.
      </p></li></ul></div><div class="itemizedlist"><p>
      To start with a new database:
     </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>

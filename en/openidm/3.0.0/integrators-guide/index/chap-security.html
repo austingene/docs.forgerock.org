@@ -3,7 +3,7 @@
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
    <title>Chapter&nbsp;15.&nbsp;Securing &amp; Hardening OpenIDM</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenIDM Integrator's Guide"><link rel="up" href="index.html" title="OpenIDM Integrator's Guide"><link rel="prev" href="chap-auth.html" title="Chapter&nbsp;14.&nbsp;Managing Authentication, Authorization and Role-Based Access Control"><link rel="next" href="chap-workflow.html" title="Chapter&nbsp;16.&nbsp;Integrating Business Processes and Workflows"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
-</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;15.&nbsp;Securing &amp; Hardening OpenIDM</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-auth.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-workflow.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-security"></a>Chapter&nbsp;15.&nbsp;Securing &amp; Hardening OpenIDM</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-security.html#security-management-service">15.1. Accessing the Security Management Service</a></span></dt><dt><span class="section"><a href="chap-security.html#security-precautions">15.2. Security Precautions for a Production Environment</a></span></dt></dl></div><a class="indexterm" name="d0e13983"></a><a class="indexterm" name="d0e13986"></a><p>
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;15.&nbsp;Securing &amp; Hardening OpenIDM</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-auth.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-workflow.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-security"></a>Chapter&nbsp;15.&nbsp;Securing &amp; Hardening OpenIDM</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-security.html#security-management-service">15.1. Accessing the Security Management Service</a></span></dt><dt><span class="section"><a href="chap-security.html#security-precautions">15.2. Security Precautions for a Production Environment</a></span></dt></dl></div><a class="indexterm" name="d0e13981"></a><a class="indexterm" name="d0e13984"></a><p>
   OpenIDM provides a security management service, that manages keystore and
   truststore files. The security service is accessible over the REST interface,
   enabling you to read and import SSL certificates, and to generate certificate
@@ -306,7 +306,7 @@ QBzCfEbwMlJ17OB0AgWzNrbaak3MCmW1mh7OecjQwge1ajy7ho+JtQ==\n
    should take to minimize security breaches. After following the guidance in
    this section, make sure that you test your installation to verify that it
    behaves as expected before putting it into production.
-  </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="security-ssl-https"></a>15.2.1.&nbsp;Use SSL and HTTPS</h3></div></div></div><a class="indexterm" name="d0e14170"></a><p>We recommend that you disable plain HTTP access, as
+  </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="security-ssl-https"></a>15.2.1.&nbsp;Use SSL and HTTPS</h3></div></div></div><a class="indexterm" name="d0e14168"></a><p>We recommend that you disable plain HTTP access, as
   described in the section titled <a href="../../integrators-guide/index/chap-security.html#security-jetty" class="link"><em class="citetitle">Secure
   Jetty</em></a>.</p><p>
    Use TLS/SSL to access OpenIDM, ideally with mutual authentication so that
@@ -366,7 +366,7 @@ s5xPB2YTaZHWWdzrPVv90gL8JL/N7/Q=
     "resultCount": 0,
     "pagedResultsCooke": null,
     "remainingPagedResuts": -1
-}    </em></pre></div></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="security-encrypt-data"></a>15.2.3.&nbsp;Encrypt Data Internally and Externally</h3></div></div></div><a class="indexterm" name="d0e14240"></a><a class="indexterm" name="d0e14245"></a><p>Beyond relying on end-to-end availability of TLS/SSL to protect
+}    </em></pre></div></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="security-encrypt-data"></a>15.2.3.&nbsp;Encrypt Data Internally and Externally</h3></div></div></div><a class="indexterm" name="d0e14238"></a><a class="indexterm" name="d0e14243"></a><p>Beyond relying on end-to-end availability of TLS/SSL to protect
   data, OpenIDM also supports explicit encryption of data that goes on the
   network. This can be important if the TLS/SSL termination happens prior to
   the final endpoint.</p><p>OpenIDM also supports encryption of data stored in the repository,
@@ -374,7 +374,7 @@ s5xPB2YTaZHWWdzrPVv90gL8JL/N7/Q=
   store. Explicit table mapping is supported for encrypted string values.</p><p>OpenIDM automatically encrypts sensitive data in configuration files,
   such as passwords. OpenIDM replaces clear text values when the system first
   reads the configuration file. Take care with configuration files having
-  clear text values that OpenIDM has not yet read and updated.</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="security-messages"></a>15.2.4.&nbsp;Use Message Level Security</h3></div></div></div><a class="indexterm" name="d0e14257"></a><p>OpenIDM supports message level security, forcing authentication before
+  clear text values that OpenIDM has not yet read and updated.</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="security-messages"></a>15.2.4.&nbsp;Use Message Level Security</h3></div></div></div><a class="indexterm" name="d0e14255"></a><p>OpenIDM supports message level security, forcing authentication before
   granting access. Authentication works by means of a filter-based mechanism
   that lets you use either an HTTP Basic like mechanism or OpenIDM-specific 
   headers, setting a cookie in the response that you can use for subsequent 
@@ -470,9 +470,9 @@ Server: Jetty(8.y.z-SNAPSHOT)
    The JWT session cookie is based on the <code class="literal">JWT_SESSION</code> module
    documented in <a href="../../integrators-guide/index/chap-auth.html#supported-auth-modules" class="link">
    <em class="citetitle">Supported Authentication Modules</em></a>.
-  </p></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="security-replace-defaults"></a>15.2.5.&nbsp;Replace Default Security Settings</h3></div></div></div><a class="indexterm" name="d0e14328"></a><p>The default security settings are adequate for evaluation purposes. For 
+  </p></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="security-replace-defaults"></a>15.2.5.&nbsp;Replace Default Security Settings</h3></div></div></div><a class="indexterm" name="d0e14326"></a><p>The default security settings are adequate for evaluation purposes. For 
   production, change the default encryption key, and then replace the default user 
-  password.</p><div class="procedure"><a name="security-change-encryption-keys"></a><div class="procedure-title">Procedure&nbsp;15.1.&nbsp;To Change Default Encryption Keys</div><a class="indexterm" name="d0e14336"></a><a class="indexterm" name="d0e14339"></a><p>By default, OpenIDM uses a symmetric encryption key with alias
+  password.</p><div class="procedure"><a name="security-change-encryption-keys"></a><div class="procedure-title">Procedure&nbsp;15.1.&nbsp;To Change Default Encryption Keys</div><a class="indexterm" name="d0e14334"></a><a class="indexterm" name="d0e14337"></a><p>By default, OpenIDM uses a symmetric encryption key with alias
    <code class="literal">openidm-sym-default</code>. Change this default key before
    deploying OpenIDM in production.</p><p>
     As noted in the section on the<a href="../../integrators-guide/index/chap-cli.html#cli-keytool" class="link">
@@ -515,7 +515,7 @@ $ <strong>cli.sh encrypt newpwd</strong>
      </em>
     </pre></div></li><li class="step"><p>Replace the user object in the
     <code class="filename">openidm/db/scripts/mysql/openidm.sql</code> script before
-    setting up MySQL as a repository for OpenIDM.</p><p>Alternatively, replace the user in the internal user table.</p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="security-jetty"></a>15.2.6.&nbsp;Secure Jetty</h3></div></div></div><a class="indexterm" name="d0e14415"></a><p>
+    setting up MySQL as a repository for OpenIDM.</p><p>Alternatively, replace the user in the internal user table.</p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="security-jetty"></a>15.2.6.&nbsp;Secure Jetty</h3></div></div></div><a class="indexterm" name="d0e14413"></a><p>
    If you do not want to use regular HTTP on a production OpenIDM system, edit
    the <code class="filename">openidm/conf/jetty.xml</code> configuration file. Comment
    out the line that enables regular HTTP.
