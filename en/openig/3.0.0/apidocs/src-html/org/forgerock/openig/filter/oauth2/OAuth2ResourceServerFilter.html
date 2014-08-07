@@ -1,0 +1,360 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * The contents of this file are subject to the terms of the Common Development and<a name="line.2"></a>
+<span class="sourceLineNo">003</span> * Distribution License (the License). You may not use this file except in compliance with the<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * License.<a name="line.4"></a>
+<span class="sourceLineNo">005</span> *<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * You can obtain a copy of the License at legal/CDDLv1.0.txt. See the License for the<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * specific language governing permission and limitations under the License.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * When distributing Covered Software, include this CDDL Header Notice in each file and include<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * the License file at legal/CDDLv1.0.txt. If applicable, add the following below the CDDL<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * Header, with the fields enclosed by brackets [] replaced by your own identifying<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * information: "Portions copyright [year] [name of copyright owner]".<a name="line.12"></a>
+<span class="sourceLineNo">013</span> *<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * Copyright 2014 ForgeRock AS.<a name="line.14"></a>
+<span class="sourceLineNo">015</span> */<a name="line.15"></a>
+<span class="sourceLineNo">016</span><a name="line.16"></a>
+<span class="sourceLineNo">017</span>package org.forgerock.openig.filter.oauth2;<a name="line.17"></a>
+<span class="sourceLineNo">018</span><a name="line.18"></a>
+<span class="sourceLineNo">019</span>import static java.lang.String.*;<a name="line.19"></a>
+<span class="sourceLineNo">020</span>import static org.forgerock.openig.heap.HeapUtil.*;<a name="line.20"></a>
+<span class="sourceLineNo">021</span>import static org.forgerock.openig.util.Duration.duration;<a name="line.21"></a>
+<span class="sourceLineNo">022</span><a name="line.22"></a>
+<span class="sourceLineNo">023</span>import java.io.IOException;<a name="line.23"></a>
+<span class="sourceLineNo">024</span>import java.util.Collections;<a name="line.24"></a>
+<span class="sourceLineNo">025</span>import java.util.HashSet;<a name="line.25"></a>
+<span class="sourceLineNo">026</span>import java.util.Set;<a name="line.26"></a>
+<span class="sourceLineNo">027</span>import java.util.concurrent.Executors;<a name="line.27"></a>
+<span class="sourceLineNo">028</span>import java.util.concurrent.ScheduledExecutorService;<a name="line.28"></a>
+<span class="sourceLineNo">029</span><a name="line.29"></a>
+<span class="sourceLineNo">030</span>import org.forgerock.openig.el.Expression;<a name="line.30"></a>
+<span class="sourceLineNo">031</span>import org.forgerock.openig.el.ExpressionException;<a name="line.31"></a>
+<span class="sourceLineNo">032</span>import org.forgerock.openig.filter.Filter;<a name="line.32"></a>
+<span class="sourceLineNo">033</span>import org.forgerock.openig.filter.GenericFilter;<a name="line.33"></a>
+<span class="sourceLineNo">034</span>import org.forgerock.openig.filter.oauth2.cache.CachingAccessTokenResolver;<a name="line.34"></a>
+<span class="sourceLineNo">035</span>import org.forgerock.openig.filter.oauth2.cache.ThreadSafeCache;<a name="line.35"></a>
+<span class="sourceLineNo">036</span>import org.forgerock.openig.filter.oauth2.challenge.InsufficientScopeChallengeHandler;<a name="line.36"></a>
+<span class="sourceLineNo">037</span>import org.forgerock.openig.filter.oauth2.challenge.InvalidRequestChallengeHandler;<a name="line.37"></a>
+<span class="sourceLineNo">038</span>import org.forgerock.openig.filter.oauth2.challenge.InvalidTokenChallengeHandler;<a name="line.38"></a>
+<span class="sourceLineNo">039</span>import org.forgerock.openig.filter.oauth2.challenge.NoAuthenticationChallengeHandler;<a name="line.39"></a>
+<span class="sourceLineNo">040</span>import org.forgerock.openig.filter.oauth2.resolver.OpenAmAccessTokenResolver;<a name="line.40"></a>
+<span class="sourceLineNo">041</span>import org.forgerock.openig.handler.Handler;<a name="line.41"></a>
+<span class="sourceLineNo">042</span>import org.forgerock.openig.handler.HandlerException;<a name="line.42"></a>
+<span class="sourceLineNo">043</span>import org.forgerock.openig.heap.HeapException;<a name="line.43"></a>
+<span class="sourceLineNo">044</span>import org.forgerock.openig.heap.NestedHeaplet;<a name="line.44"></a>
+<span class="sourceLineNo">045</span>import org.forgerock.openig.http.Exchange;<a name="line.45"></a>
+<span class="sourceLineNo">046</span>import org.forgerock.openig.http.Request;<a name="line.46"></a>
+<span class="sourceLineNo">047</span>import org.forgerock.openig.log.LogTimer;<a name="line.47"></a>
+<span class="sourceLineNo">048</span>import org.forgerock.openig.util.Duration;<a name="line.48"></a>
+<span class="sourceLineNo">049</span>import org.forgerock.util.time.TimeService;<a name="line.49"></a>
+<span class="sourceLineNo">050</span><a name="line.50"></a>
+<span class="sourceLineNo">051</span>/**<a name="line.51"></a>
+<span class="sourceLineNo">052</span> * Validates an {@link Exchange} that contains an OAuth 2.0 access token. &lt;p&gt; This filter expects an OAuth 2.0 token to<a name="line.52"></a>
+<span class="sourceLineNo">053</span> * be available in the HTTP {@literal Authorization} header:<a name="line.53"></a>
+<span class="sourceLineNo">054</span> *<a name="line.54"></a>
+<span class="sourceLineNo">055</span> * &lt;pre&gt;{@code Authorization: Bearer 1fc0e143-f248-4e50-9c13-1d710360cec9}&lt;/pre&gt;<a name="line.55"></a>
+<span class="sourceLineNo">056</span> *<a name="line.56"></a>
+<span class="sourceLineNo">057</span> * It extracts the token and validate it against the {@literal token-info-endpoint} URL provided in the configuration.<a name="line.57"></a>
+<span class="sourceLineNo">058</span> *<a name="line.58"></a>
+<span class="sourceLineNo">059</span> * Here is a sample configuration:<a name="line.59"></a>
+<span class="sourceLineNo">060</span> * &lt;pre&gt;<a name="line.60"></a>
+<span class="sourceLineNo">061</span> * {<a name="line.61"></a>
+<span class="sourceLineNo">062</span> *         "name": "ProtectedResourceFilter",<a name="line.62"></a>
+<span class="sourceLineNo">063</span> *         "type": "org.forgerock.openig.filter.oauth2.OAuth2ResourceServerFilter",<a name="line.63"></a>
+<span class="sourceLineNo">064</span> *         "config": {<a name="line.64"></a>
+<span class="sourceLineNo">065</span> *           "requiredScopes": [ "email", "profile" ],<a name="line.65"></a>
+<span class="sourceLineNo">066</span> *           "tokenInfoEndpoint": "https://openam.example.com:8443/openam/oauth2/tokeninfo",<a name="line.66"></a>
+<span class="sourceLineNo">067</span> *           "cacheExpiration": "2 minutes",<a name="line.67"></a>
+<span class="sourceLineNo">068</span> *           "enforceHttps": false,<a name="line.68"></a>
+<span class="sourceLineNo">069</span> *           "httpHandler": "ClientHandler",<a name="line.69"></a>
+<span class="sourceLineNo">070</span> *           "realm": "Informative realm name"<a name="line.70"></a>
+<span class="sourceLineNo">071</span> *         }<a name="line.71"></a>
+<span class="sourceLineNo">072</span> * }<a name="line.72"></a>
+<span class="sourceLineNo">073</span> * &lt;/pre&gt;<a name="line.73"></a>
+<span class="sourceLineNo">074</span> *<a name="line.74"></a>
+<span class="sourceLineNo">075</span> * {@literal requiredScopes}, {@literal tokenInfoEndpoint} and {@literal httpHandler} are the 3 only mandatory<a name="line.75"></a>
+<span class="sourceLineNo">076</span> * configuration attributes.<a name="line.76"></a>
+<span class="sourceLineNo">077</span> * &lt;p&gt;<a name="line.77"></a>
+<span class="sourceLineNo">078</span> * If {@literal cacheExpiration} is not set, the default is to keep the {@link AccessToken}s for 1 minute.<a name="line.78"></a>
+<span class="sourceLineNo">079</span> * {@literal cacheExpiration} is expressed using natural language:<a name="line.79"></a>
+<span class="sourceLineNo">080</span> * &lt;pre&gt;<a name="line.80"></a>
+<span class="sourceLineNo">081</span> *     "cacheExpiration": "2 minutes"<a name="line.81"></a>
+<span class="sourceLineNo">082</span> *     "cacheExpiration": "3 days and 6 hours"<a name="line.82"></a>
+<span class="sourceLineNo">083</span> *     "cacheExpiration": "5m" // 5 minutes<a name="line.83"></a>
+<span class="sourceLineNo">084</span> *     "cacheExpiration": "10 min, 30 sec"<a name="line.84"></a>
+<span class="sourceLineNo">085</span> * &lt;/pre&gt;<a name="line.85"></a>
+<span class="sourceLineNo">086</span> * &lt;p&gt;<a name="line.86"></a>
+<span class="sourceLineNo">087</span> * {@literal httpHandler} is a name reference to another handler available in the heap. It will be used to perform<a name="line.87"></a>
+<span class="sourceLineNo">088</span> * access token validation against the {@literal tokenInfoEndpoint} URL.<a name="line.88"></a>
+<span class="sourceLineNo">089</span> * It is usually a reference to some {@link org.forgerock.openig.handler.ClientHandler}.<a name="line.89"></a>
+<span class="sourceLineNo">090</span> * &lt;p&gt;<a name="line.90"></a>
+<span class="sourceLineNo">091</span> * The {@literal enforceHttps} optional attribute control if this filter only accepts requests targeting the HTTPS<a name="line.91"></a>
+<span class="sourceLineNo">092</span> * scheme. By default, it is enabled (only URI starting with {@literal https://...} will be accepted,<a name="line.92"></a>
+<span class="sourceLineNo">093</span> * an Exception is thrown otherwise).<a name="line.93"></a>
+<span class="sourceLineNo">094</span> * &lt;p&gt;<a name="line.94"></a>
+<span class="sourceLineNo">095</span> * The {@literal realm} optional attribute specifies the name of the realm used in the authentication challenges<a name="line.95"></a>
+<span class="sourceLineNo">096</span> * returned back to the client in case of errors.<a name="line.96"></a>
+<span class="sourceLineNo">097</span> *<a name="line.97"></a>
+<span class="sourceLineNo">098</span> * @see Duration<a name="line.98"></a>
+<span class="sourceLineNo">099</span> */<a name="line.99"></a>
+<span class="sourceLineNo">100</span>public class OAuth2ResourceServerFilter extends GenericFilter {<a name="line.100"></a>
+<span class="sourceLineNo">101</span><a name="line.101"></a>
+<span class="sourceLineNo">102</span>    /**<a name="line.102"></a>
+<span class="sourceLineNo">103</span>     * The key under which downstream handlers will find the access token in the {@link Exchange}.<a name="line.103"></a>
+<span class="sourceLineNo">104</span>     */<a name="line.104"></a>
+<span class="sourceLineNo">105</span>    public static final String ACCESS_TOKEN_KEY = "oauth2AccessToken";<a name="line.105"></a>
+<span class="sourceLineNo">106</span><a name="line.106"></a>
+<span class="sourceLineNo">107</span>    /**<a name="line.107"></a>
+<span class="sourceLineNo">108</span>     * Name of the realm when none is specified in the heaplet.<a name="line.108"></a>
+<span class="sourceLineNo">109</span>     */<a name="line.109"></a>
+<span class="sourceLineNo">110</span>    public static final String DEFAULT_REALM_NAME = "OpenIG";<a name="line.110"></a>
+<span class="sourceLineNo">111</span><a name="line.111"></a>
+<span class="sourceLineNo">112</span>    private final AccessTokenResolver resolver;<a name="line.112"></a>
+<span class="sourceLineNo">113</span>    private final BearerTokenExtractor extractor;<a name="line.113"></a>
+<span class="sourceLineNo">114</span>    private final TimeService time;<a name="line.114"></a>
+<span class="sourceLineNo">115</span>    private final Set&lt;String&gt; scopes;<a name="line.115"></a>
+<span class="sourceLineNo">116</span><a name="line.116"></a>
+<span class="sourceLineNo">117</span>    private final Handler noAuthentication;<a name="line.117"></a>
+<span class="sourceLineNo">118</span>    private final Handler invalidToken;<a name="line.118"></a>
+<span class="sourceLineNo">119</span>    private final Handler invalidRequest;<a name="line.119"></a>
+<span class="sourceLineNo">120</span>    private final Handler insufficientScope;<a name="line.120"></a>
+<span class="sourceLineNo">121</span><a name="line.121"></a>
+<span class="sourceLineNo">122</span>    /**<a name="line.122"></a>
+<span class="sourceLineNo">123</span>     * Creates a new {@code OAuth2Filter}.<a name="line.123"></a>
+<span class="sourceLineNo">124</span>     *<a name="line.124"></a>
+<span class="sourceLineNo">125</span>     * @param resolver<a name="line.125"></a>
+<span class="sourceLineNo">126</span>     *         A {@code AccessTokenResolver} instance.<a name="line.126"></a>
+<span class="sourceLineNo">127</span>     * @param extractor<a name="line.127"></a>
+<span class="sourceLineNo">128</span>     *         A {@code BearerTokenExtractor} instance.<a name="line.128"></a>
+<span class="sourceLineNo">129</span>     * @param time<a name="line.129"></a>
+<span class="sourceLineNo">130</span>     *         A {@link TimeService} instance used to check if token is expired or not.<a name="line.130"></a>
+<span class="sourceLineNo">131</span>     */<a name="line.131"></a>
+<span class="sourceLineNo">132</span>    public OAuth2ResourceServerFilter(final AccessTokenResolver resolver,<a name="line.132"></a>
+<span class="sourceLineNo">133</span>                                      final BearerTokenExtractor extractor,<a name="line.133"></a>
+<span class="sourceLineNo">134</span>                                      final TimeService time) {<a name="line.134"></a>
+<span class="sourceLineNo">135</span>        this(resolver, extractor, time, Collections.&lt;String&gt;emptySet(), DEFAULT_REALM_NAME);<a name="line.135"></a>
+<span class="sourceLineNo">136</span>    }<a name="line.136"></a>
+<span class="sourceLineNo">137</span><a name="line.137"></a>
+<span class="sourceLineNo">138</span>    /**<a name="line.138"></a>
+<span class="sourceLineNo">139</span>     * Creates a new {@code OAuth2Filter}.<a name="line.139"></a>
+<span class="sourceLineNo">140</span>     *<a name="line.140"></a>
+<span class="sourceLineNo">141</span>     * @param resolver<a name="line.141"></a>
+<span class="sourceLineNo">142</span>     *         A {@code AccessTokenResolver} instance.<a name="line.142"></a>
+<span class="sourceLineNo">143</span>     * @param extractor<a name="line.143"></a>
+<span class="sourceLineNo">144</span>     *         A {@code BearerTokenExtractor} instance.<a name="line.144"></a>
+<span class="sourceLineNo">145</span>     * @param time<a name="line.145"></a>
+<span class="sourceLineNo">146</span>     *         A {@link TimeService} instance used to check if token is expired or not.<a name="line.146"></a>
+<span class="sourceLineNo">147</span>     * @param scopes<a name="line.147"></a>
+<span class="sourceLineNo">148</span>     *         A set of scopes to be checked in the resolved access tokens.<a name="line.148"></a>
+<span class="sourceLineNo">149</span>     * @param realm<a name="line.149"></a>
+<span class="sourceLineNo">150</span>     *         Name of the realm (used in authentication challenge returned in case of error).<a name="line.150"></a>
+<span class="sourceLineNo">151</span>     */<a name="line.151"></a>
+<span class="sourceLineNo">152</span>    public OAuth2ResourceServerFilter(final AccessTokenResolver resolver,<a name="line.152"></a>
+<span class="sourceLineNo">153</span>                                      final BearerTokenExtractor extractor,<a name="line.153"></a>
+<span class="sourceLineNo">154</span>                                      final TimeService time,<a name="line.154"></a>
+<span class="sourceLineNo">155</span>                                      final Set&lt;String&gt; scopes,<a name="line.155"></a>
+<span class="sourceLineNo">156</span>                                      final String realm) {<a name="line.156"></a>
+<span class="sourceLineNo">157</span>        this.resolver = resolver;<a name="line.157"></a>
+<span class="sourceLineNo">158</span>        this.extractor = extractor;<a name="line.158"></a>
+<span class="sourceLineNo">159</span>        this.time = time;<a name="line.159"></a>
+<span class="sourceLineNo">160</span>        this.scopes = scopes;<a name="line.160"></a>
+<span class="sourceLineNo">161</span>        this.noAuthentication = new NoAuthenticationChallengeHandler(realm);<a name="line.161"></a>
+<span class="sourceLineNo">162</span>        this.invalidToken = new InvalidTokenChallengeHandler(realm);<a name="line.162"></a>
+<span class="sourceLineNo">163</span>        this.invalidRequest = new InvalidRequestChallengeHandler(realm);<a name="line.163"></a>
+<span class="sourceLineNo">164</span>        this.insufficientScope = new InsufficientScopeChallengeHandler(realm, scopes);<a name="line.164"></a>
+<span class="sourceLineNo">165</span>    }<a name="line.165"></a>
+<span class="sourceLineNo">166</span><a name="line.166"></a>
+<span class="sourceLineNo">167</span>    @Override<a name="line.167"></a>
+<span class="sourceLineNo">168</span>    public void filter(final Exchange exchange, final Handler next) throws HandlerException, IOException {<a name="line.168"></a>
+<span class="sourceLineNo">169</span>        LogTimer timer = logger.getTimer().start();<a name="line.169"></a>
+<span class="sourceLineNo">170</span>        try {<a name="line.170"></a>
+<span class="sourceLineNo">171</span>            String token = getAccessToken(exchange.request);<a name="line.171"></a>
+<span class="sourceLineNo">172</span>            if (token == null) {<a name="line.172"></a>
+<span class="sourceLineNo">173</span>                logger.debug("Missing OAuth 2.0 Bearer Token Authorization header");<a name="line.173"></a>
+<span class="sourceLineNo">174</span>                noAuthentication.handle(exchange);<a name="line.174"></a>
+<span class="sourceLineNo">175</span>                return;<a name="line.175"></a>
+<span class="sourceLineNo">176</span>            }<a name="line.176"></a>
+<span class="sourceLineNo">177</span><a name="line.177"></a>
+<span class="sourceLineNo">178</span>            // Resolve the token<a name="line.178"></a>
+<span class="sourceLineNo">179</span>            AccessToken accessToken;<a name="line.179"></a>
+<span class="sourceLineNo">180</span>            try {<a name="line.180"></a>
+<span class="sourceLineNo">181</span>                accessToken = resolver.resolve(token);<a name="line.181"></a>
+<span class="sourceLineNo">182</span>            } catch (OAuth2TokenException e) {<a name="line.182"></a>
+<span class="sourceLineNo">183</span>                logger.debug(format("Cannot authorize request with token '%s' because [error:%s, description:%s]",<a name="line.183"></a>
+<span class="sourceLineNo">184</span>                                    token,<a name="line.184"></a>
+<span class="sourceLineNo">185</span>                                    e.getError(),<a name="line.185"></a>
+<span class="sourceLineNo">186</span>                                    e.getDescription()));<a name="line.186"></a>
+<span class="sourceLineNo">187</span>                invalidRequest.handle(exchange);<a name="line.187"></a>
+<span class="sourceLineNo">188</span>                return;<a name="line.188"></a>
+<span class="sourceLineNo">189</span>            }<a name="line.189"></a>
+<span class="sourceLineNo">190</span><a name="line.190"></a>
+<span class="sourceLineNo">191</span>            // Validate the token (expiration + scopes)<a name="line.191"></a>
+<span class="sourceLineNo">192</span>            if (isExpired(accessToken)) {<a name="line.192"></a>
+<span class="sourceLineNo">193</span>                logger.debug(format("Access Token '%s' is expired", token));<a name="line.193"></a>
+<span class="sourceLineNo">194</span>                invalidToken.handle(exchange);<a name="line.194"></a>
+<span class="sourceLineNo">195</span>                return;<a name="line.195"></a>
+<span class="sourceLineNo">196</span>            }<a name="line.196"></a>
+<span class="sourceLineNo">197</span><a name="line.197"></a>
+<span class="sourceLineNo">198</span>            if (areRequiredScopesMissing(accessToken)) {<a name="line.198"></a>
+<span class="sourceLineNo">199</span>                logger.debug(format("Access Token '%s' is missing required scopes", token));<a name="line.199"></a>
+<span class="sourceLineNo">200</span>                insufficientScope.handle(exchange);<a name="line.200"></a>
+<span class="sourceLineNo">201</span>                return;<a name="line.201"></a>
+<span class="sourceLineNo">202</span>            }<a name="line.202"></a>
+<span class="sourceLineNo">203</span><a name="line.203"></a>
+<span class="sourceLineNo">204</span>            // Store the AccessToken in the exchange for downstream handlers<a name="line.204"></a>
+<span class="sourceLineNo">205</span>            exchange.put(ACCESS_TOKEN_KEY, accessToken);<a name="line.205"></a>
+<span class="sourceLineNo">206</span><a name="line.206"></a>
+<span class="sourceLineNo">207</span>            // Call the rest of the chain<a name="line.207"></a>
+<span class="sourceLineNo">208</span>            next.handle(exchange);<a name="line.208"></a>
+<span class="sourceLineNo">209</span>        } finally {<a name="line.209"></a>
+<span class="sourceLineNo">210</span>            timer.stop();<a name="line.210"></a>
+<span class="sourceLineNo">211</span>        }<a name="line.211"></a>
+<span class="sourceLineNo">212</span>    }<a name="line.212"></a>
+<span class="sourceLineNo">213</span><a name="line.213"></a>
+<span class="sourceLineNo">214</span>    private boolean isExpired(final AccessToken accessToken) {<a name="line.214"></a>
+<span class="sourceLineNo">215</span>        return time.now() &gt; accessToken.getExpiresAt();<a name="line.215"></a>
+<span class="sourceLineNo">216</span>    }<a name="line.216"></a>
+<span class="sourceLineNo">217</span><a name="line.217"></a>
+<span class="sourceLineNo">218</span>    private boolean areRequiredScopesMissing(final AccessToken accessToken) {<a name="line.218"></a>
+<span class="sourceLineNo">219</span>        return !accessToken.getScopes().containsAll(this.scopes);<a name="line.219"></a>
+<span class="sourceLineNo">220</span>    }<a name="line.220"></a>
+<span class="sourceLineNo">221</span><a name="line.221"></a>
+<span class="sourceLineNo">222</span>    /**<a name="line.222"></a>
+<span class="sourceLineNo">223</span>     * Pulls the access token off of the request, by looking for the {@literal Authorization} header containing a<a name="line.223"></a>
+<span class="sourceLineNo">224</span>     * {@literal Bearer} token.<a name="line.224"></a>
+<span class="sourceLineNo">225</span>     *<a name="line.225"></a>
+<span class="sourceLineNo">226</span>     * @param request<a name="line.226"></a>
+<span class="sourceLineNo">227</span>     *         The Http {@link Request} message.<a name="line.227"></a>
+<span class="sourceLineNo">228</span>     * @return The access token, or {@literal null} if the access token was not present or was not using {@literal<a name="line.228"></a>
+<span class="sourceLineNo">229</span>     * Bearer} authorization.<a name="line.229"></a>
+<span class="sourceLineNo">230</span>     */<a name="line.230"></a>
+<span class="sourceLineNo">231</span>    private String getAccessToken(final Request request) {<a name="line.231"></a>
+<span class="sourceLineNo">232</span>        String header = request.getHeaders().getFirst("Authorization");<a name="line.232"></a>
+<span class="sourceLineNo">233</span>        return extractor.getAccessToken(header);<a name="line.233"></a>
+<span class="sourceLineNo">234</span>    }<a name="line.234"></a>
+<span class="sourceLineNo">235</span><a name="line.235"></a>
+<span class="sourceLineNo">236</span>    /** Creates and initializes an OAuth2 filter in a heap environment. */<a name="line.236"></a>
+<span class="sourceLineNo">237</span>    public static class Heaplet extends NestedHeaplet {<a name="line.237"></a>
+<span class="sourceLineNo">238</span><a name="line.238"></a>
+<span class="sourceLineNo">239</span>        private ThreadSafeCache&lt;String, AccessToken&gt; cache;<a name="line.239"></a>
+<span class="sourceLineNo">240</span>        private ScheduledExecutorService executorService;<a name="line.240"></a>
+<span class="sourceLineNo">241</span><a name="line.241"></a>
+<span class="sourceLineNo">242</span>        @Override<a name="line.242"></a>
+<span class="sourceLineNo">243</span>        public Object create() throws HeapException {<a name="line.243"></a>
+<span class="sourceLineNo">244</span><a name="line.244"></a>
+<span class="sourceLineNo">245</span>            Handler httpHandler = getRequiredObject(heap,<a name="line.245"></a>
+<span class="sourceLineNo">246</span>                                                    config.get("httpHandler").required(),<a name="line.246"></a>
+<span class="sourceLineNo">247</span>                                                    Handler.class);<a name="line.247"></a>
+<span class="sourceLineNo">248</span>            TimeService time = TimeService.SYSTEM;<a name="line.248"></a>
+<span class="sourceLineNo">249</span>            AccessTokenResolver resolver = new OpenAmAccessTokenResolver(<a name="line.249"></a>
+<span class="sourceLineNo">250</span>                    httpHandler,<a name="line.250"></a>
+<span class="sourceLineNo">251</span>                    time,<a name="line.251"></a>
+<span class="sourceLineNo">252</span>                    config.get("tokenInfoEndpoint").required().asString());<a name="line.252"></a>
+<span class="sourceLineNo">253</span><a name="line.253"></a>
+<span class="sourceLineNo">254</span>            // Build the cache<a name="line.254"></a>
+<span class="sourceLineNo">255</span>            Duration expiration = duration(config.get("cacheExpiration").defaultTo("1 minute").asString());<a name="line.255"></a>
+<span class="sourceLineNo">256</span>            executorService = Executors.newSingleThreadScheduledExecutor();<a name="line.256"></a>
+<span class="sourceLineNo">257</span>            cache = new ThreadSafeCache&lt;String, AccessToken&gt;(executorService);<a name="line.257"></a>
+<span class="sourceLineNo">258</span>            cache.setTimeout(expiration);<a name="line.258"></a>
+<span class="sourceLineNo">259</span>            resolver = new CachingAccessTokenResolver(resolver, cache);<a name="line.259"></a>
+<span class="sourceLineNo">260</span><a name="line.260"></a>
+<span class="sourceLineNo">261</span>            HashSet&lt;String&gt; scopes = new HashSet&lt;String&gt;(config.get("requiredScopes").required().asList(String.class));<a name="line.261"></a>
+<span class="sourceLineNo">262</span><a name="line.262"></a>
+<span class="sourceLineNo">263</span>            String realm = config.get("realm").defaultTo(DEFAULT_REALM_NAME).asString();<a name="line.263"></a>
+<span class="sourceLineNo">264</span><a name="line.264"></a>
+<span class="sourceLineNo">265</span>            Filter filter = new OAuth2ResourceServerFilter(resolver,<a name="line.265"></a>
+<span class="sourceLineNo">266</span>                                                           new BearerTokenExtractor(),<a name="line.266"></a>
+<span class="sourceLineNo">267</span>                                                           time,<a name="line.267"></a>
+<span class="sourceLineNo">268</span>                                                           scopes,<a name="line.268"></a>
+<span class="sourceLineNo">269</span>                                                           realm);<a name="line.269"></a>
+<span class="sourceLineNo">270</span>            if (config.get("enforceHttps").defaultTo(Boolean.TRUE).asBoolean()) {<a name="line.270"></a>
+<span class="sourceLineNo">271</span>                try {<a name="line.271"></a>
+<span class="sourceLineNo">272</span>                    filter = new EnforcerFilter(new Expression("${exchange.request.uri.scheme == 'https'}"),<a name="line.272"></a>
+<span class="sourceLineNo">273</span>                                                filter);<a name="line.273"></a>
+<span class="sourceLineNo">274</span>                } catch (ExpressionException e) {<a name="line.274"></a>
+<span class="sourceLineNo">275</span>                    // Can be ignored, since we completely control the expression<a name="line.275"></a>
+<span class="sourceLineNo">276</span>                }<a name="line.276"></a>
+<span class="sourceLineNo">277</span>            }<a name="line.277"></a>
+<span class="sourceLineNo">278</span>            return filter;<a name="line.278"></a>
+<span class="sourceLineNo">279</span>        }<a name="line.279"></a>
+<span class="sourceLineNo">280</span><a name="line.280"></a>
+<span class="sourceLineNo">281</span>        @Override<a name="line.281"></a>
+<span class="sourceLineNo">282</span>        public void destroy() {<a name="line.282"></a>
+<span class="sourceLineNo">283</span>            executorService.shutdownNow();<a name="line.283"></a>
+<span class="sourceLineNo">284</span>            cache.clear();<a name="line.284"></a>
+<span class="sourceLineNo">285</span>        }<a name="line.285"></a>
+<span class="sourceLineNo">286</span>    }<a name="line.286"></a>
+<span class="sourceLineNo">287</span><a name="line.287"></a>
+<span class="sourceLineNo">288</span>}<a name="line.288"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

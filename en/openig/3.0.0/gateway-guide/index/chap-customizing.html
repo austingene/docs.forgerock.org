@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;15.&nbsp;Customizing OpenIG</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="Guide to OpenIG"><link rel="up" href="index.html" title="Guide to OpenIG"><link rel="prev" href="chap-scripting.html" title="Chapter&nbsp;14.&nbsp;Scripting Filters &amp; Handlers"><link rel="next" href="chap-troubleshooting.html" title="Chapter&nbsp;16.&nbsp;Troubleshooting"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;15.&nbsp;Customizing OpenIG</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-scripting.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-troubleshooting.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-customizing"></a>Chapter&nbsp;15.&nbsp;Customizing OpenIG</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-customizing.html#extension-points">15.1. Key Extension Points</a></span></dt><dt><span class="section"><a href="chap-customizing.html#custom-filter">15.2. Implementing a Filter</a></span></dt><dt><span class="section"><a href="chap-customizing.html#custom-handler">15.3. Implementing a Handler</a></span></dt><dt><span class="section"><a href="chap-customizing.html#custom-heap-config">15.4. Heap Object Configuration</a></span></dt><dt><span class="section"><a href="chap-customizing.html#custom-sample-filter">15.5. Sample Filter</a></span></dt></dl></div><p>
+  With
+  <a href="../../reference/index/ScriptableFilter.html" class="link">ScriptableFilter</a>
+  and also
+  <a href="../../reference/index/ScriptableHandler.html" class="link">ScriptableHandler</a> objects,
+  you can often avoid customizing OpenIG Java code
+  by writing scripts instead.
+  For examples, see
+  <a href="../../gateway-guide/index/chap-scripting.html" class="link">Scripting Filters &amp; Handlers</a>.
+ </p><p>
+  If scripting is not enough, be aware that
+  OpenIG includes a complete
+  <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/index.html" target="_blank">application programming interface</a>,
+  designed to allow you to customize OpenIG as required.
+  Customizing OpenIG can be used to perform complex server interactions
+  or intensive data transformations
+  that you cannot achieve with scripts or existing handlers, filters and
+  <a href="../../reference/index/Expressions.html" class="link">expressions</a>.
+ </p><p>
+  Interface Stability:
+  <a href="../../reference/index/appendix-interface-stability.html#interface-stability" class="link">Evolving</a>
+ </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="extension-points"></a>15.1.&nbsp;Key Extension Points</h2></div></div></div><a class="indexterm" name="d0e4340"></a><p>The two primary extension points are the interfaces: <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/filter/Filter.html" target="_blank">Filter</a> (for processing a request and/or response en
+  route) and <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/handler/Handler.html" target="_blank">Handler</a> (for generating responses from requests).
+  These interfaces are similar to the Java Enterprise Edition
+  <code class="literal">Filter</code> and <code class="literal">Servlet</code> interfaces, with
+  some differences in the semantics of messages. While you can simply implement
+  these interfaces, there are also included convenience classes: <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/filter/GenericFilter.html" target="_blank">GenericFilter</a> and <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/handler/GenericHandler.html" target="_blank">GenericHandler</a> that you can use if you intend to make
+  your extensions configurable through the OpenIG configuration
+  resource.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom-filter"></a>15.2.&nbsp;Implementing a Filter</h2></div></div></div><a class="indexterm" name="d0e4368"></a><p>The <code class="literal">Filter</code> interface exposes a <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/filter/Filter.html#filter(org.forgerock.openig.http.Exchange,%20org.forgerock.openig.handler.Handler)" target="_blank">filter</a> method, which takes an <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/http/Exchange.html" target="_blank">Exchange</a> object and the <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/filter/Chain.html" target="_blank">Chain</a> of remaining filters and handler to dispatch to. Initially,
+  <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/http/Exchange.html#request" target="_blank">exchange.request</a> contains the request to be filtered. To pass the
+  request to the next filter or handler in the chain, the filter calls
+  <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/filter/Chain.html#handle(org.forgerock.openig.http.Exchange)" target="_blank">chain.handle(exchange)</a>. After this call, <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/http/Exchange.html#response" target="_blank">exchange.response</a> contains the response that can be filtered.</p><p>A filter might elect not to pass the request to the next filter or
+  handler, and instead handle the request itself. It can achieve this by
+  merely avoiding a call to <code class="literal">chain.handle(exchange)</code> and
+  creating its own response object in the exchange. The filter is also at
+  liberty to replace a response with another of its own. A filter can exist in
+  more than one chain, therefore should make no assumptions or correlations
+  using the chain it is supplied. The only valid use of a chain by a filter
+  is to call its <code class="literal">handle</code> method to dispatch the exchange to
+  the rest of the chain.</p><div class="note"><h3 class="title">Note</h3><p>If an existing response exists in the exchange object and the filter
+   intends to replace it with its own, it must first check to see if the
+   existing response has an <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/http/Message.html#entity" target="_blank">entity</a>, and if it does, must call its <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/io/BranchingInputStream.html#close()" target="_blank">close</a> method in order to signal that the processing of the response
+   from a remote server is complete.</p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom-handler"></a>15.3.&nbsp;Implementing a Handler</h2></div></div></div><a class="indexterm" name="d0e4416"></a><p>The <code class="literal">Handler</code> interface exposes a <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/handler/Handler.html#handle(org.forgerock.openig.http.Exchange)" target="_blank">handle</a> method, which takes an <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/http/Exchange.html#response" target="_blank">Exchange</a> object. It processes the request in
+  <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/http/Exchange.html#request" target="_blank">exchange.request</a> and produces a response in <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/http/Exchange.html#response" target="_blank">exchange.response</a>. A handler can elect to dispatch the exchange to
+  another handler or chain.</p><div class="note"><h3 class="title">Note</h3><p>If an existing response exists in the exchange object and the filter
+   intends to replace it with its own, it must first check to see if the
+   existing response has an <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/http/Message.html#entity" target="_blank">entity</a>, and if it does, must call its <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/io/BranchingInputStream.html#close()" target="_blank">close</a> method in order to signal that the processing of the response
+   from a remote server is complete.</p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom-heap-config"></a>15.4.&nbsp;Heap Object Configuration</h2></div></div></div><a class="indexterm" name="d0e4450"></a><p>Objects are added to the heap and supplied with configuration artifacts
+  at initialization time. To be integrated with the configuration, a class must
+  have an accompanying implementation of the <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/heap/Heaplet.html" target="_blank">Heaplet</a> interface. The easiest and most common way of exposing the
+  heaplet is to extend the <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/heap/NestedHeaplet.html" target="_blank">NestedHeaplet</a> class in a nested class in the class you want to create
+  and initialize and implementing its <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/heap/GenericHeaplet.html#create()" target="_blank">create</a> method.</p><p>Within the <code class="literal">create</code> method, you can access the
+  object's configuration through the <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/heap/GenericHeaplet.html#config" target="_blank">config</a> field.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom-sample-filter"></a>15.5.&nbsp;Sample Filter</h2></div></div></div><p>The following sample filter sets an arbitrary header in the incoming
+  request and outgoing response.</p><pre class="brush: java;">package com.example.filter;
+
+// Java Standard Edition
+import java.io.IOException;
+
+// OpenIG Core Library
+import org.forgerock.openig.filter.Chain;
+import org.forgerock.openig.filter.GenericFilter;
+import org.forgerock.openig.handler.HandlerException;
+import org.forgerock.openig.heap.HeapException;
+import org.forgerock.openig.heap.NestedHeaplet;
+import org.forgerock.openig.http.Exchange;
+
+public class HelloWorldFilter extends GenericFilter {
+
+    public String name;
+    public String value;
+
+    @Override
+    public void filter(Exchange exchange, Handler next)
+            throws HandlerException, IOException {
+        exchange.request.headers.put(name, value); // set header in request
+        next.handle(exchange); // pass to remaining filters &amp; handler in chain
+        exchange.response.headers.put(name, value); // set header in response
+    }
+
+    public static class Heaplet extends NestedHeaplet {
+
+        @Override
+        public Object create() throws HeapException {
+            HelloWorldFilter filter = new HelloWorldFilter();
+            filter.name = config.get("name").required().asString(); // required
+            filter.value = config.get("value").required().asString(); // req'd
+            return filter;
+        }
+    }
+}</pre><p>The corresponding heap object configuration is as follows.</p><pre class="brush: javascript;">{
+     "name": "HelloWorldFilter",
+     "type": "com.example.filter.HelloWorldFilter",
+     "config": {
+         "name": "X-Hello",
+         "value": "World" 
+     }
+}</pre></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-scripting.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-troubleshooting.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;14.&nbsp;Scripting Filters &amp; Handlers&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;16.&nbsp;Troubleshooting</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10060&components=10220&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

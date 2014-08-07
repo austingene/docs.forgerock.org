@@ -1,0 +1,334 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;14.&nbsp;Scripting Filters &amp; Handlers</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="Guide to OpenIG"><link rel="up" href="index.html" title="Guide to OpenIG"><link rel="prev" href="chap-gateway-templates.html" title="Chapter&nbsp;13.&nbsp;Configuration Templates"><link rel="next" href="chap-customizing.html" title="Chapter&nbsp;15.&nbsp;Customizing OpenIG"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;14.&nbsp;Scripting Filters &amp; Handlers</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-gateway-templates.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-customizing.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-scripting"></a>Chapter&nbsp;14.&nbsp;Scripting Filters &amp; Handlers</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-scripting.html#scripting-dispatch">14.1. Scripting Dispatch</a></span></dt><dt><span class="section"><a href="chap-scripting.html#scripting-http-basic">14.2. Scripting HTTP Basic Authentication</a></span></dt><dt><span class="section"><a href="chap-scripting.html#scripting-ldap-auth">14.3. Scripting LDAP Authentication</a></span></dt><dt><span class="section"><a href="chap-scripting.html#scripting-sql">14.4. Scripting SQL Queries</a></span></dt></dl></div><a class="indexterm" name="d0e4173"></a><a class="indexterm" name="d0e4176"></a><p>
+  To extend what you can do with Filters and Handlers,
+  OpenIG supports dynamic scripting languages like Groovy
+  through the use of <code class="literal">ScriptableFilter</code>
+  and <code class="literal">ScriptableHandler</code> objects.
+ </p><p>
+  Interface Stability:
+  <a href="../../reference/index/appendix-interface-stability.html#interface-stability" class="link">Evolving</a>
+ </p><p>
+  You add these Filters and Handlers to your configuration in the same way
+  as for other Filters and Handlers.
+  Each takes as its configuration the script's Internet media "type"
+  and either a "source" script included in the JSON configuration,
+  or a "file" script that OpenIG reads from a file.
+ </p><p>
+  The following example defines a <code class="literal">ScriptableFilter</code>,
+  written in the Groovy language,
+  and stored in a file named <code class="filename">SimpleFormLogin.groovy</code>.
+ </p><pre class="brush: java;">
+{
+    "name": "SimpleFormLogin",
+    "type": "ScriptableFilter",
+    "config": {
+        "type": "application/x-groovy",
+        "file": "SimpleFormLogin.groovy"
+    }
+}
+ </pre><p>
+  Relative paths in the "file" field depend on how OpenIG is installed.
+  If OpenIG is installed in an application server,
+  then paths for Groovy scripts are relative to
+  <code class="filename">$HOME/.openig/scripts/groovy</code>.
+ </p><p>
+  This base location <code class="filename">$HOME/.openig/scripts/groovy</code>
+  is on the classpath when the scripts are executed.
+  If therefore some Groovy scripts are not in the default package,
+  but instead have their own package names,
+  they belong in the directory corresponding to their package name.
+  For example, a script in package <code class="literal">com.example.groovy</code>
+  belongs under <code class="filename">$HOME/.openig/scripts/groovy/com/example/groovy/</code>.
+ </p><p>
+  OpenIG provides scripts with several global variables at run time,
+  enabling them to access the Exchange,
+  to store variables across executions,
+  to write messages to the logs,
+  and to make requests to a web service or to an LDAP directory service,
+  in addition to Groovy's built-in functionality.
+  For details, see the reference documentation for
+  <a href="../../reference/index/ScriptableFilter.html" class="link">ScriptableFilter</a>
+  and
+  <a href="../../reference/index/ScriptableHandler.html" class="link">ScriptableHandler</a>.
+ </p><p>
+  This chapter demonstrates some of what you might do using scripts.
+ </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scripting-dispatch"></a>14.1.&nbsp;Scripting Dispatch</h2></div></div></div><p>
+   In order to route requests, especially when the conditions are complicated,
+   you can use a <code class="literal">ScriptableHandler</code> instead of a
+   <a href="../../reference/index/DispatchHandler.html" class="link">DispatchHandler</a>.
+  </p><p>
+   The following script demonstrates a simple dispatch handler.
+  </p><pre class="brush: java;">
+import org.forgerock.openig.http.Response
+import org.forgerock.openig.io.ByteArrayBranchingStream
+
+/*
+ * This simplistic dispatcher matches the path part of the HTTP request.
+ * If the path is /login, it checks Username and Password headers,
+ * accepting bjensen:hifalutin, and returning HTTP 403 Forbidden to others.
+ * Otherwise it returns HTTP 401 Unauthorized.
+ */
+
+// Rather than get the response from an external source,
+// this handler produces the response itself.
+exchange.response = new Response();
+
+switch (exchange.request.uri.path) {
+
+    case "/login":
+
+        if (exchange.request.headers.Username[0] == "bjensen" &amp;&amp;
+                exchange.request.headers.Password[0] == "hifalutin") {
+
+            exchange.response.status = 200
+            exchange.response.entity = "&lt;html&gt;&lt;p&gt;Welcome back, Babs!&lt;/p&gt;&lt;/html&gt;"
+
+        } else {
+
+            exchange.response.status = 403
+            exchange.response.entity = "&lt;html&gt;&lt;p&gt;Authorization required&lt;/p&gt;&lt;/html&gt;"
+
+        }
+
+        break
+
+    default:
+
+        exchange.response.status = 401
+        exchange.response.entity = "&lt;html&gt;&lt;p&gt;Please &lt;a href='./login'&gt;log in&lt;/a&gt;.&lt;/p&gt;&lt;/html&gt;"
+
+        break
+
+}
+
+  </pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scripting-http-basic"></a>14.2.&nbsp;Scripting HTTP Basic Authentication</h2></div></div></div><p>
+   HTTP Basic authentication calls for the user agent such as a browser
+   to send a user name and password to the server in an Authorization header.
+   HTTP Basic authentication relies on an encrypted connection
+   to protect the user name and password credentials,
+   which are base64-encoded in the Authorization header, not encrypted.
+  </p><p>
+   The following script, for use in a <code class="literal">ScriptableFilter</code>,
+   adds an Authorization header based on a hard-coded username and password.
+  </p><pre class="brush: java;">
+/*
+ * Perform basic authentication with a hard-coded user name and password.
+ */
+
+def credentials = "bjensen:hifalutin".getBytes().encodeBase64().toString()
+exchange.request.headers.add("Authorization", "Basic ${credentials}" as String)
+
+// Credentials are only base64-encoded, not encrypted: Set scheme to HTTPS.
+
+/*
+ * When connecting over HTTPS, by default the client tries to trust the server.
+ * If the server has no certificate
+ * or has a self-signed certificate unknown to the client,
+ * then the most likely result is an SSLPeerUnverifiedException.
+ *
+ * To avoid an SSLPeerUnverifiedException,
+ * set up HTTPS correctly on the server.
+ * Either use a server certificate signed by a well-known CA,
+ * or set up the gateway to trust the server certificate.
+ *
+ */
+exchange.request.uri.scheme = "https"
+
+// Call the next handler. This returns when the request has been handled.
+next.handle(exchange)
+
+  </pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scripting-ldap-auth"></a>14.3.&nbsp;Scripting LDAP Authentication</h2></div></div></div><p>
+   Many organizations use an LDAP directory service to store user profiles
+   including authentication credentials.
+   The LDAP directory service securely stores user passwords
+   in a highly-available, central service capable of
+   handling thousands of authentications per second.
+  </p><p>
+   The following script, for use in a <code class="literal">ScriptableFilter</code>,
+   performs simple authentication against an LDAP server
+   based on request form fields
+   <code class="literal">username</code> and <code class="literal">password</code>.
+  </p><pre class="brush: java;">
+import org.forgerock.opendj.ldap.AuthenticationException
+import org.forgerock.openig.http.Response
+import org.forgerock.openig.io.ByteArrayBranchingStream
+
+/*
+ * Perform LDAP authentication based on user credentials from a form.
+ *
+ * If LDAP authentication succeeds, then call the next handler.
+ * If there is a failure, send a response back to the user.
+ */
+
+username = exchange.request.form?.username[0]
+password = exchange.request.form?.password[0]
+
+// For testing purposes, the LDAP host and port are provided in the exchange.
+// Edit as needed to match your directory service.
+host = exchange.ldapHost ?: "localhost"
+port = exchange.ldapPort ?: 1389
+
+client = ldap.connect(host, port as Integer)
+try {
+
+    // Assume the username is an exact match of either
+    // the user ID, the email address, or the user's full name.
+    filter = "(|(uid=%s)(mail=%s)(cn=%s))"
+
+    user = client.searchSingleEntry(
+            "ou=people,dc=example,dc=com",
+            ldap.scope.sub,
+            ldap.filter(filter, username, username, username))
+
+    client.bind(user.name as String, password?.toCharArray())
+
+    // Authentication succeeded.
+
+    // Set a header (or whatever else you want to do here).
+    exchange.request.headers.add("Ldap-User-Dn", user.name)
+
+    // Most LDAP attributes are multi-valued.
+    // When you read multi-valued attributes, use the parse() method,
+    // with an AttributeParser method
+    // that specifies the type of object to return.
+    exchange.session.cn = user.cn?.parse().asSetOfString()
+
+    // When you write attribute values, set them directly.
+    user.description = "New description set by my script"
+
+    // Here is how you might read a single value of a multi-valued attribute:
+    exchange.session.description = user.description?.parse().asString()
+
+    // Call the next handler. This returns when the request has been handled.
+    next.handle(exchange)
+
+} catch (AuthenticationException e) {
+
+    // LDAP authentication failed, so fail the exchange with
+    // HTTP status code 403 Forbidden.
+
+    exchange.response = new Response()
+    exchange.response.status = 403
+    exchange.response.reason = e.message
+    exchange.response.entity = "&lt;html&gt;&lt;p&gt;Authentication failed: " + e.message + "&lt;/p&gt;&lt;/html&gt;"
+
+} catch (Exception e) {
+
+    // Something other than authentication failed on the server side,
+    // so fail the exchange with HTTP 500 Internal Server Error.
+
+    exchange.response = new Response()
+    exchange.response.status = 500
+    exchange.response.reason = e.message
+    exchange.response.entity = "&lt;html&gt;&lt;p&gt;Server error: " + e.message + "&lt;/p&gt;&lt;/html&gt;"
+
+} finally {
+    client.close()
+}
+
+  </pre><p>
+   For the list of methods to specify which type of objects to return,
+   see the OpenDJ LDAP SDK Javadoc for
+   <a class="link" href="http://docs.forgerock.org/en/opendj/2.6.0/apidocs/index.html?org/forgerock/opendj/ldap/AttributeParser.html" target="_blank">AttributeParser</a>.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scripting-sql"></a>14.4.&nbsp;Scripting SQL Queries</h2></div></div></div><p>
+   You can use a <code class="literal">ScriptableFilter</code>
+   to look up information in a relational database
+   and include the results in the Exchange.
+  </p><p>
+   The following filter looks up user credentials in a database
+   given the user's email address,
+   which is found in the form data of the request.
+   The script then sets the credentials in headers,
+   making sure the scheme is HTTPS to protect the request
+   when it leaves the gateway.
+  </p><pre class="brush: java;">
+/*
+ * Look up user credentials in a relational database
+ * based on the user's email address provided in the request form data,
+ * and set the credentials in the exchange headers for the next handler.
+ */
+
+def client = new SqlClient()
+def credentials = client.getCredentials(exchange.request.form?.mail[0])
+exchange.request.headers.add("Username", credentials.Username)
+exchange.request.headers.add("Password", credentials.Password)
+
+// The credentials are not protected in the headers, so use HTTPS.
+exchange.request.uri.scheme = "https"
+
+// Call the next handler. This returns when the request has been handled.
+next.handle(exchange)
+
+  </pre><p>
+   The previous script demonstrates a <code class="literal">ScriptableFilter</code>
+   that uses a <code class="literal">SqlClient</code> class defined in another script.
+   The following code listing shows the <code class="literal">SqlClient</code> class.
+  </p><pre class="brush: java;">
+import groovy.sql.Sql
+
+import javax.naming.InitialContext
+import javax.sql.DataSource
+
+/**
+ * Access a database with a well-known structure,
+ * in particular to get credentials given an email address.
+ */
+class SqlClient {
+
+    // Get a DataSource from the container.
+    InitialContext context = new InitialContext()
+    DataSource dataSource = context.lookup("jdbc/forgerock") as DataSource
+    def sql = new Sql(dataSource)
+
+    // The expected table is laid out like the following.
+
+    // Table USERS
+    // ----------------------------------------
+    // | USERNAME  | PASSWORD |   EMAIL   |...|
+    // ----------------------------------------
+    // | &lt;username&gt;| &lt;passwd&gt; | &lt;mail@...&gt;|...|
+    // ----------------------------------------
+
+    String tableName = "USERS"
+    String usernameColumn = "USERNAME"
+    String passwordColumn = "PASSWORD"
+    String mailColumn = "EMAIL"
+
+    /**
+     * Get the Username and Password given an email address.
+     *
+     * @param mail Email address used to look up the credentials
+     * @return Username and Password from the database
+     */
+    def getCredentials(mail) {
+        def credentials = [:]
+        def query = "SELECT " + usernameColumn + ", " + passwordColumn +
+                " FROM " + tableName + " WHERE " + mailColumn + "='$mail';"
+
+        sql.eachRow(query) {
+            credentials.put("Username", it."$usernameColumn")
+            credentials.put("Password", it."$passwordColumn")
+        }
+        return credentials
+    }
+}
+
+  </pre></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-gateway-templates.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-customizing.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;13.&nbsp;Configuration Templates&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;15.&nbsp;Customizing OpenIG</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10060&components=10220&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

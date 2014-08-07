@@ -1,0 +1,348 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;12.&nbsp;Routing Tutorial</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="Guide to OpenIG"><link rel="up" href="index.html" title="Guide to OpenIG"><link rel="prev" href="chap-oauth2-client.html" title="Chapter&nbsp;11.&nbsp;Configuring OpenIG as an OAuth 2.0 Client"><link rel="next" href="chap-gateway-templates.html" title="Chapter&nbsp;13.&nbsp;Configuration Templates"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;12.&nbsp;Routing Tutorial</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-oauth2-client.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-gateway-templates.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-routing"></a>Chapter&nbsp;12.&nbsp;Routing Tutorial</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-routing.html#routing-before-you-start">12.1. Before You Start</a></span></dt><dt><span class="section"><a href="chap-routing.html#routing-route-setup">12.2. Configuring Routes</a></span></dt><dt><span class="section"><a href="chap-routing.html#routing-router-setup">12.3. Configuring the Router</a></span></dt><dt><span class="section"><a href="chap-routing.html#routing-try-it-out">12.4. Trying it Out</a></span></dt><dt><span class="section"><a href="chap-routing.html#routing-lockdown">12.5. Locking Down Route Configurations</a></span></dt></dl></div><a class="indexterm" name="d0e3745"></a><a class="indexterm" name="d0e3748"></a><a class="indexterm" name="d0e3753"></a><a class="indexterm" name="d0e3758"></a><p>
+  Other tutorials in this guide demonstrate use of a single configuration file
+  for all of OpenIG.
+  In those tutorials, you had to restart OpenIG
+  to pick up configuration changes.
+ </p><p>
+  This tutorial instead demonstrates how you can use a
+  <a href="../../reference/index/Router.html" class="link">Router</a>
+  and
+  <a href="../../reference/index/Route.html" class="link">Route</a> configurations to make changes at runtime.
+  This tutorial also shows how to lock down the configurations for deployment
+  so that accidental changes to configuration files
+  do not affect servers running in production.
+ </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="routing-before-you-start"></a>12.1.&nbsp;Before You Start</h2></div></div></div><p>
+   Before you start this tutorial,
+   prepare OpenIG and the minimal HTTP server as you did for the chapter on
+   <a href="../../gateway-guide/index/chap-quickstart.html" class="link"><em class="citetitle">Getting Started</em></a>.
+  </p><p>
+   OpenIG should be running in Jetty,
+   configured to access the minimal HTTP server as described in that chapter.
+  </p><p>
+   The initial OpenIG configuration file should look like the one used
+   to proxy requests through to the HTTP server
+   and to capture request and response data, see
+   <a href="../../gateway-guide/index/appendix-config.html#config-proxy-and-capture" class="link"><em class="citetitle">Configuration for Proxy &amp; Capture</em></a>.
+  </p><p>
+   To test your setup, access the HTTP server home page through OpenIG at
+   <a class="link" href="http://www.example.com:8080" target="_blank">http://www.example.com:8080</a>.
+   Login as username <code class="literal">george</code>, password <code class="literal">costanza</code>.
+   You should see a page showing the username and some information about the request.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="routing-route-setup"></a>12.2.&nbsp;Configuring Routes</h2></div></div></div><p>
+   Routes are configuration objects to handle a particular kind of Exchange.
+  </p><p>
+   The particular kind of an Exchange that a Route handles is
+   an Exchange that fits the condition defined for the route.
+   The condition is defined using a OpenIG
+   <a href="../../reference/index/Expressions.html" class="link">expression</a>, so it can be based on
+   almost any characteristic of the Exchange.
+   Another way to think of the Route is like an independent
+   <a href="../../reference/index/DispatchHandler.html" class="link">DispatchHandler</a>.
+  </p><p>
+   Routes can also have their own names, used to order them lexicographically.
+   If no name is specified, the Route file name is used.
+  </p><p>
+   Routes can have a base URI to change the scheme, host, and port of the request.
+  </p><p>
+   Routes wrap a heap of configuration objects,
+   and hand off any Exchange they accept to a handler.
+   In this way each Route is much like one of
+   the server-wide configuration files you have used in other tutorials.
+  </p><p>
+   If no condition is specified for the Route, the Route accepts any Exchange.
+   The following is a basic default route that accepts any Exchange
+   and forwards it on without changes.
+   This object explicitly shows you all the fields of the Route object.
+   (You could omit "condition" and "baseURI" here as they have no effect.)
+  </p><pre class="brush: javascript;">
+{
+    "heap": {
+        "objects": [
+            {
+                "name": "ClientHandler",
+                "type": "ClientHandler",
+                "config": {}
+            }
+        ]
+    },
+    "name": "default",
+    "condition": null,
+    "baseURI": null,
+    "handler": "ClientHandler"
+}
+  </pre><div class="orderedlist"><p>
+    The rest of this section indicates how to set up Route configurations.
+    Two of the Route configurations direct requests to
+    ForgeRock.com and ForgeRock.org based on a parameter in form data.
+    The third Route configuration directs request to
+    the minimal HTTP server when the parameter is not set.
+   </p><ol class="orderedlist" type="1"><li class="listitem"><p>
+     Create a file system directory where you store the Route configurations.
+    </p><p>
+     By default, Route configurations are stored in
+     <code class="filename">$HOME/.openig/config/routes</code>
+     (<code class="filename">%appdata%\.openig\config\routes</code> on Windows).
+     Create that file system directory now.
+    </p></li><li class="listitem"><p>
+     Add a ForgeRock.com Route file in the directory,
+     <code class="filename">forgerock.json</code>,
+     that holds the following content.
+    </p><pre class="brush: javascript;">
+{
+    "heap": {
+        "objects": [
+            {
+                "name": "ForgeRockChain",
+                "type": "Chain",
+                "config": {
+                    "filters": [],
+                    "handler": "DefaultHandler"
+                }
+            },
+            {
+                "name": "DefaultHandler",
+                "type": "ClientHandler",
+                "config": {}
+            }
+        ]
+    },
+    "name": "ForgeRock",
+    "handler": "ForgeRockChain",
+    "condition": "${exchange.request.form.site[0] == 'forgerock'}",
+    "baseURI": "http://forgerock.com:80/"
+}
+
+  </pre><p>
+     This Route accepts the Exchange when the form data parameter,
+     <code class="literal">site</code> matches <code class="literal">forgerock</code>.
+     When this Route picks up an Exchange,
+     it changes the request scheme, host, and port, and sends it to ForgeRock.com.
+    </p></li><li class="listitem"><p>
+     Add a ForgeRock.org community Route file in the directory,
+     <code class="filename">community.json</code>,
+     that holds the following content.
+    </p><pre class="brush: javascript;">
+{
+    "heap": {
+        "objects": [
+            {
+                "name": "CommunityChain",
+                "type": "Chain",
+                "config": {
+                    "filters": [],
+                    "handler": "DefaultHandler"
+                }
+            },
+            {
+                "name": "DefaultHandler",
+                "type": "ClientHandler",
+                "config": {}
+            }
+        ]
+    },
+    "name": "Community",
+    "handler": "CommunityChain",
+    "condition": "${exchange.request.form.site[0] == 'community'}",
+    "baseURI": "http://forgerock.org:80/"
+}
+
+  </pre><p>
+     This Route accepts the Exchange when the form data parameter,
+     <code class="literal">site</code> matches <code class="literal">community</code>.
+     When this Route picks up an Exchange,
+     it changes the request scheme, host, and port, and sends it to ForgeRock.org.
+    </p></li><li class="listitem"><p>
+     Add a default Route file in the directory,
+     <code class="filename">default.json</code>,
+     that holds the following content.
+    </p><pre class="brush: javascript;">
+{
+    "heap": {
+        "objects": [
+            {
+                "name": "LoginChain",
+                "type": "Chain",
+                "config": {
+                    "filters": [
+                        "LoginRequest"
+                    ],
+                    "handler": "DefaultHandler"
+                }
+            },
+            {
+                "name": "LoginRequest",
+                "type": "StaticRequestFilter",
+                "config": {
+                    "method": "POST",
+                    "uri": "http://www.example.com:8081",
+                    "form": {
+                        "username": [
+                            "george"
+                        ],
+                        "password": [
+                            "costanza"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "DefaultHandler",
+                "type": "ClientHandler",
+                "config": {}
+            }
+        ]
+    },
+    "handler": "LoginChain",
+    "name": "zDefault"
+}
+
+  </pre><p>
+     This Route has no condition set, and so it accepts any Exchange.
+     When this Route picks up an Exchange, it uses a static request filter
+     to login George Costanza with hard-coded username and password.
+    </p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="routing-router-setup"></a>12.3.&nbsp;Configuring the Router</h2></div></div></div><p>
+   At this point you have configured the Routes,
+   but OpenIG does not route any traffic to them.
+   To use the routes, you must configure a Router.
+  </p><p>
+   The Router is a handler that you can configure in the top-level
+   <code class="filename">config.json</code> file for OpenIG.<a href="#ftn.d0e3889" class="footnote" name="d0e3889"><sup class="footnote">[2]</sup></a>
+   The Router's job is to pass Exchanges to configured Routes,
+   and to periodically reload changed route configurations.
+   As Routes define the conditions on which they accept any given Exchange,
+   the Router does not have to know about specific Routes in advance.
+   In other words, you could configure the Router first and then add Routes
+   while OpenIG is running.
+  </p><div class="orderedlist"><p>
+    Configure the Router as follows.
+   </p><ol class="orderedlist" type="1"><li class="listitem"><p>
+     Stop Jetty.
+    </p></li><li class="listitem"><p>
+     Replace the existing <code class="filename">config.json</code> file content
+     with a simpler configuration that ends in a Router.
+    </p><pre class="brush: javascript;">
+{
+    "heap": {
+        "objects": [
+            {
+                "name": "DispatchHandler",
+                "type": "DispatchHandler",
+                "config": {
+                    "bindings": [
+                        {
+                            "handler": "Router",
+                            "baseURI": "http://www.example.com:8081"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "Router",
+                "type": "Router",
+                "config": {}
+            }
+        ]
+    },
+    "handlerObject": "DispatchHandler"
+}
+
+  </pre><p>
+     This configuration passes all Exchanges to the Router.
+     using the default settings, meaning that the Router
+     monitors <code class="filename">$HOME/.openig/config/routes</code> for Routes.
+     When OpenIG receives a request,
+     if more time has passed than the default scan interval of 10 seconds,
+     then OpenIG rescans the Routes directory for changes
+     and reloads any Routes changes it finds.
+    </p></li><li class="listitem"><p>
+     Restart Jetty.
+    </p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="routing-try-it-out"></a>12.4.&nbsp;Trying it Out</h2></div></div></div><p>
+   At this point you can try your new Router and Route configurations.
+  </p><p>
+   Make a request to hit the ForgeRock.com router.
+  </p><div class="screen"><pre>
+$ <strong>curl --data "site=forgerock" http://www.example.com:8080</strong>
+<em>...HTML of ForgeRock.com home page...</em>
+  </pre></div><p>
+   Now make a request to hit the Community page.
+  </p><div class="screen"><pre>
+$ <strong>curl --data "site=community" http://www.example.com:8080</strong>
+<em>...HTML of ForgeRock.org home page...</em>
+  </pre></div><p>
+   Now check that the default route still works.
+  </p><div class="screen"><pre>
+$ <strong>curl http://www.example.com:8080 | grep george</strong>
+<em>
+   &lt;title&gt;Howdy, george&lt;/title&gt;
+        &lt;dd&gt;george&lt;/dd&gt;
+</em>
+  </pre></div><p>
+   What happened behind the scenes?
+  </p><p>
+   When you issued your first request with HTTP POST form data "site=forgerock",
+   the request matched the condition defined in the ForgeRock.com Route.
+   OpenIG rebased the request and sent it along to
+   <code class="literal">http://forgerock.com:80/</code>.
+  </p><p>
+   When you issued your second request with HTTP POST form data "site=community",
+   the request matched the condition defined in the Community Route.
+   OpenIG rebased the request and sent it along to
+   <code class="literal">http://forgerock.org:80/</code>.
+  </p><p>
+   When the third request did not match either of the conditions defined,
+   the Exchange was routed to the default Route (that accepts any Exchange).
+   The static request filter in that route logged George in to the local server
+   listening on <code class="literal">http://www.example.com:8081/</code>.
+   The default Route has name "zDefault".
+  </p><p>
+   At this point, tinker with your Route configurations
+   without stopping OpenIG, and notice that changes are picked up
+   every 10 seconds.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="routing-lockdown"></a>12.5.&nbsp;Locking Down Route Configurations</h2></div></div></div><p>
+   Having the Route configurations automatically reloaded is great in the lab,
+   but is perhaps not what you want in production.
+  </p><p>
+   In that case, stop the server, edit the Router "scanInterval", and restart.
+   When "scanInterval" is set to -1, the Router only loads routes at startup.
+  </p><pre class="brush: javascript;">
+{
+    "name": "Router",
+    "type": "Router",
+    "config": {
+        "scanInterval": -1
+    }
+}
+  </pre><p>
+   You can also change the file system location to look for Routes.
+  </p><pre class="brush: javascript;">
+{
+    "name": "Router",
+    "type": "Router",
+    "config": {
+        "directory": "/path/to/safe/routes",
+        "scanInterval": -1
+    }
+}
+  </pre></div><div class="footnotes"><br><hr class="footnote-hr"><div id="ftn.d0e3889" class="footnote"><p><a href="#d0e3889" class="para"><sup class="para">[2] </sup></a>
+     In fact you can add a Router wherever you can add a Handler,
+     not only in the top-level configuration.
+    </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-oauth2-client.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-gateway-templates.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;11.&nbsp;Configuring OpenIG as an OAuth 2.0 Client&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;13.&nbsp;Configuration Templates</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10060&components=10220&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

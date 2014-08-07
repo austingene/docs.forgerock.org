@@ -1,0 +1,818 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;13.&nbsp;Configuration Templates</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="Guide to OpenIG"><link rel="up" href="index.html" title="Guide to OpenIG"><link rel="prev" href="chap-routing.html" title="Chapter&nbsp;12.&nbsp;Routing Tutorial"><link rel="next" href="chap-scripting.html" title="Chapter&nbsp;14.&nbsp;Scripting Filters &amp; Handlers"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;13.&nbsp;Configuration Templates</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-routing.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-scripting.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-gateway-templates"></a>Chapter&nbsp;13.&nbsp;Configuration Templates</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-gateway-templates.html#template-proxy-capture">13.1. Proxy &amp; Capture</a></span></dt><dt><span class="section"><a href="chap-gateway-templates.html#template-simple-login">13.2. Simple Login Form</a></span></dt><dt><span class="section"><a href="chap-gateway-templates.html#template-login-cookie">13.3. Login Form With Cookie From Login Page</a></span></dt><dt><span class="section"><a href="chap-gateway-templates.html#template-login-extract-cookie-filters">13.4. Login Form With Extract Filter &amp; Cookie Filter</a></span></dt><dt><span class="section"><a href="chap-gateway-templates.html#template-login-hidden-value">13.5. Login Which Requires a Hidden Value From the Login Page</a></span></dt><dt><span class="section"><a href="chap-gateway-templates.html#template-http-and-https">13.6. HTTP &amp; HTTPS Application</a></span></dt><dt><span class="section"><a href="chap-gateway-templates.html#template-am-integration-headers">13.7. OpenAM Integration With Headers</a></span></dt><dt><span class="section"><a href="chap-gateway-templates.html#template-owa-online">13.8. Microsoft Online Outlook Web Access</a></span></dt></dl></div><p>This chapter contains templates of common configurations. Start with one
+ of our templates and then modify to suit your deployment. Read the summary of
+ each template to find the right match for your application. If you are not
+ sure about the characteristics of your application, start with the basic
+ Application Capture template. This template allows you to setup basic proxying
+ and capture the traffic of the login sequence in a flat file, which then
+ allows you to analyze the application and subsequently choose the right
+ template or add your own configuration.</p><div class="note"><h3 class="title">Note</h3><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>All templates have the <a href="../../reference/index/CaptureFilter.html" class="link">CaptureFilter</a>
+    enabled by default. Remove the capture filter from the outgoing chain
+    before running the gateway in production. Capturing is typically used only
+    for initial development or debugging and may rapidly fill up your available
+    disk space if left enabled.</p></li><li class="listitem"><p>Substitute the <code class="literal">TARGETIP</code> tag with the IP address of
+    your application.</p></li><li class="listitem"><p>Modify the <code class="literal">LoginRequest</code> filter to match the form
+    required for login by your target application.</p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-proxy-capture"></a>13.1.&nbsp;Proxy &amp; Capture</h2></div></div></div><a class="indexterm" name="d0e4011"></a><p>Proxies all requests and captures them in a flat file. Use this
+  template if you need to analyze the traffic for your application. Simply
+  change the <code class="literal">baseURI</code> to be that of the target application,
+  restart OpenIG, and login to the application. The entire sequence is logged
+  to the flat file.</p><div class="informalexample"><pre class="brush: javascript;">
+    {
+    "heap": {
+        "objects": [
+            {
+                "name": "DispatchHandler",
+                "type": "DispatchHandler",
+                "config": {
+                    "bindings": [
+                        {
+                            "condition": "${exchange.request.uri.scheme == 'http'}",
+                            "handler": "OutgoingChain",
+                            "baseURI": "http://TARGETIP"
+                        },
+                        {
+                            "condition": "${exchange.request.uri.path == '/login'}",
+                            "handler": "LoginChain",
+                            "baseURI": "https://TARGETIP"
+                        },
+                        {
+                            "handler": "OutgoingChain",
+                            "baseURI": "https://TARGETIP"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "LoginChain",
+                "type": "Chain",
+                "config": {
+                    "filters": [],
+                    "handler": "OutgoingChain"
+                }
+            },
+            {
+                "name": "OutgoingChain",
+                "type": "Chain",
+                "config": {
+                    "filters": [
+                        "CaptureFilter"
+                    ],
+                    "handler": "ClientHandler"
+                }
+            },
+            {
+                "name": "CaptureFilter",
+                "type": "CaptureFilter",
+                "config": {
+                    "captureEntity": false,
+                    "file": "/tmp/gateway.log"
+                }
+            },
+            {
+                "name": "ClientHandler",
+                "comment": "Sends all requests to remote servers.",
+                "type": "ClientHandler",
+                "config": {}
+            }
+        ]
+    },
+    "handlerObject": "DispatchHandler"
+}
+   </pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-simple-login"></a>13.2.&nbsp;Simple Login Form</h2></div></div></div><a class="indexterm" name="d0e4028"></a><p>Logs the user into the target application with hard-coded user name
+  and password. This template intercepts the login page request and replaces
+  it with the login form.</p><div class="informalexample"><pre class="brush: javascript;">
+    {
+    "heap": {
+        "objects": [
+            {
+                "name": "DispatchHandler",
+                "type": "DispatchHandler",
+                "config": {
+                    "bindings": [
+                        {
+                            "condition": "${exchange.request.uri.path == '/login'}",
+                            "handler": "LoginChain",
+                            "baseURI": "http://TARGETIP"
+                        },
+                        {
+                            "handler": "OutgoingChain",
+                            "baseURI": "http://TARGETIP"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "LoginChain",
+                "type": "Chain",
+                "config": {
+                    "filters": [
+                        "LoginRequest"
+                    ],
+                    "handler": "OutgoingChain"
+                }
+            },
+            {
+                "name": "LoginRequest",
+                "type": "StaticRequestFilter",
+                "config": {
+                    "method": "POST",
+                    "uri": "https://TARGETIP/login",
+                    "form": {
+                        "USER": [
+                            "myusername"
+                        ],
+                        "PASSWORD": [
+                            "mypassword"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "OutgoingChain",
+                "type": "Chain",
+                "config": {
+                    "filters": [
+                        "CaptureFilter"
+                    ],
+                    "handler": "ClientHandler"
+                }
+            },
+            {
+                "name": "CaptureFilter",
+                "type": "CaptureFilter",
+                "config": {
+                    "captureEntity": false,
+                    "file": "/tmp/gateway.log"
+                }
+            },
+            {
+                "name": "ClientHandler",
+                "comment": "Responsible for sending all requests to remote servers.",
+                "type": "ClientHandler",
+                "config": {}
+            }
+        ]
+    },
+    "handlerObject": "DispatchHandler"
+}
+
+   </pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-login-cookie"></a>13.3.&nbsp;Login Form With Cookie From Login Page</h2></div></div></div><a class="indexterm" name="d0e4042"></a><p>For applications that expect a cookie from the login page to be sent
+  in the login request form. This templates allows the login page request to
+  go through to the target, intercepts the response, then creates the login
+  form and adds the intercepted cookie to the POST.</p><div class="informalexample"><pre class="brush: javascript;">
+    {
+    "heap": {
+        "objects": [
+            {
+                "name": "DispatchHandler",
+                "type": "DispatchHandler",
+                "config": {
+                    "bindings": [
+                        {
+                            "condition": "${exchange.request.uri.path == '/eum/login'}",
+                            "handler": "LoginChain",
+                            "baseURI": "http://TARGETIP"
+                        },
+                        {
+                            "handler": "OutgoingChain",
+                            "baseURI": "http://TARGETIP"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "LoginChain",
+                "type": "Chain",
+                "config": {
+                    "filters": [
+                        "SwitchFilter"
+                    ],
+                    "handler": "OutgoingChain"
+                }
+            },
+            {
+                "name": "SwitchFilter",
+                "type": "SwitchFilter",
+                "config": {
+                    "onResponse": [
+                        {
+                            "handler": "LoginRequestHandler"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "LoginRequestHandler",
+                "type": "Chain",
+                "config": {
+                    "filters": [
+                        "LoginRequest"
+                    ],
+                    "handler": "OutgoingChain"
+                }
+            },
+            {
+                "name": "LoginRequest",
+                "type": "StaticRequestFilter",
+                "config": {
+                    "method": "POST",
+                    "uri": "https://TARGETIP/login",
+                    "form": {
+                        "USER": [
+                            "myusername"
+                        ],
+                        "PASSWORD": [
+                            "mypassword"
+                        ]
+                    },
+                    "headers": {
+                        "cookie": [
+                            "${exchange.response.headers['Set-Cookie'][0]}"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "OutgoingChain",
+                "type": "Chain",
+                "config": {
+                    "filters": [
+                        "CaptureFilter"
+                    ],
+                    "handler": "ClientHandler"
+                }
+            },
+            {
+                "name": "CaptureFilter",
+                "type": "CaptureFilter",
+                "config": {
+                    "captureEntity": false,
+                    "file": "/tmp/gateway.log"
+                }
+            },
+            {
+                "name": "ClientHandler",
+                "comment": "Responsible for sending all requests to remote servers.",
+                "type": "ClientHandler",
+                "config": {}
+            }
+        ]
+    },
+    "handlerObject": "DispatchHandler"
+}
+
+   </pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-login-extract-cookie-filters"></a>13.4.&nbsp;Login Form With Extract Filter &amp; Cookie Filter</h2></div></div></div><a class="indexterm" name="d0e4056"></a><p>For applications that return the login page when the user tries to
+  access a page without a valid session. This template shows how to use the
+  <code class="literal">ExtractFilter</code> to find the login page on the response and
+  use the <code class="literal">CookieFilter</code> to ensure the cookies from the
+  application are replayed on each request. The sample application in this
+  template is OpenAM. If you change the <code class="literal">TARGETIP:PORT</code> to be
+  the IP address of OpenAM, the <code class="literal">TARGETDN:PORT</code> to be the
+  fully qualified name and port of OpenAM and modify <code class="literal">USERNAME</code>
+  and <code class="literal">PASSWORD</code> in the <code class="literal">LoginRequest</code> you
+  automatically log <code class="literal">USERNAME</code> into OpenAM.</p><div class="note"><h3 class="title">Note</h3><p>Without the <code class="literal">CookieFilter</code> in the
+   <code class="literal">OutgoingChain</code> the cookie set in the login page response
+   would not get set in the browser since that request is intercepted before
+   it gets to the browser. The simplest way to deal with this situation is to
+   let OpenIG manage all the cookies by enabling the
+   <code class="literal">CookieFilter</code>. The side effect of OpenIG managing
+   cookies is none of the cookies are sent to the browser, but are managed
+   locally by OpenIG.</p></div><div class="informalexample"><pre class="brush: javascript;">
+    {
+    "heap": {
+        "objects": [
+            {
+                "name": "DispatchHandler",
+                "type": "DispatchHandler",
+                "config": {
+                    "bindings": [
+                        {
+                            "handler": "FindLoginPageChain",
+                            "baseURI": "http://TARGETIP:PORT"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "FindLoginPageChain",
+                "type": "Chain",
+                "config": {
+                    "filters": [
+                        "IsLoginPage",
+                        "FindLoginPage"
+                    ],
+                    "handler": "OutgoingChain"
+                }
+            },
+            {
+                "name": "FindLoginPage",
+                "type": "EntityExtractFilter",
+                "config": {
+                    "messageType": "response",
+                    "target": "${exchange.isLoginPage}",
+                    "bindings": [
+                        {
+                            "key": "found",
+                            "pattern": "OpenAM\s\(Login\)",
+                            "template": "true"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "IsLoginPage",
+                "type": "SwitchFilter",
+                "config": {
+                    "onResponse": [
+                        {
+                            "condition": "${exchange.isLoginPage.found == 'true'}",
+                            "handler": "LoginChain"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "LoginChain",
+                "type": "Chain",
+                "config": {
+                    "filters": [
+                        "LoginRequest"
+                    ],
+                    "handler": "OutgoingChain"
+                }
+            },
+            {
+                "name": "LoginRequest",
+                "type": "StaticRequestFilter",
+                "config": {
+                    "method": "POST",
+                    "uri": "http://TARGETIP:PORT/openam/UI/Login",
+                    "form": {
+                        "IDToken0": [
+                            ""
+                        ],
+                        "IDToken1": [
+                            "USERNAME"
+                        ],
+                        "IDToken2": [
+                            "PASSWORD"
+                        ],
+                        "IDButton": [
+                            "Log+In"
+                        ],
+                        "encoded": [
+                            "false"
+                        ]
+                    },
+                    "headers": {
+                        "host": [
+                            "TARGETFQDN:PORT"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "OutgoingChain",
+                "type": "Chain",
+                "config": {
+                    "filters": [
+                        "CookieFilter",
+                        "CaptureFilter"
+                    ],
+                    "handler": "ClientHandler"
+                }
+            },
+            {
+                "name": "CookieFilter",
+                "type": "CookieFilter",
+                "config": {}
+            },
+            {
+                "name": "CaptureFilter",
+                "type": "CaptureFilter",
+                "config": {
+                    "captureEntity": true,
+                    "file": "/tmp/gateway.log"
+                }
+            },
+            {
+                "name": "LogSink",
+                "comment": "Default sink for logging information.",
+                "type": "ConsoleLogSink",
+                "config": {
+                    "level": "DEBUG"
+                }
+            },
+            {
+                "name": "ClientHandler",
+                "comment": "Responsible for sending all requests to remote servers.",
+                "type": "ClientHandler",
+                "config": {}
+            }
+        ]
+    },
+    "handlerObject": "DispatchHandler"
+}
+
+   </pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-login-hidden-value"></a>13.5.&nbsp;Login Which Requires a Hidden Value From the Login Page</h2></div></div></div><a class="indexterm" name="d0e4106"></a><p>Extracts a hidden value from the login page and includes it in the
+  login form POSTed to the target application.</p><div class="informalexample"><pre class="brush: javascript;">
+    {
+    "heap": {
+        "objects": [
+            {
+                "name": "DispatchHandler",
+                "type": "DispatchHandler",
+                "config": {
+                    "bindings": [
+                        {
+                            "condition": "${exchange.request.uri.path == '/login'}",
+                            "handler": "LoginChain",
+                            "baseURI": "http://TARGETIP"
+                        },
+                        {
+                            "handler": "OutgoingChain",
+                            "baseURI": "http://TARGETIP"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "LoginChain",
+                "type": "Chain",
+                "config": {
+                    "filters": [
+                        "HiddenValueExtract",
+                        "LoginRequest"
+                    ],
+                    "handler": "OutgoingChain"
+                }
+            },
+            {
+                "name": "HiddenValueExtract",
+                "type": "EntityExtractFilter",
+                "config": {
+                    "messageType": "response",
+                    "target": "${exchange.hiddenValue}",
+                    "bindings": [
+                        {
+                            "key": "value",
+                            "pattern": "wpLoginToken\"\s.*value=\"(.*)\"",
+                            "template": "$1"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "LoginRequest",
+                "type": "StaticRequestFilter",
+                "config": {
+                    "method": "POST",
+                    "uri": "https://TARGETIP/login",
+                    "form": {
+                        "USER": [
+                            "myusername"
+                        ],
+                        "PASSWORD": [
+                            "mypassword"
+                        ],
+                        "hiddenValue": [
+                            "${exchange.hiddenValue.value}"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "OutgoingChain",
+                "type": "Chain",
+                "config": {
+                    "filters": [
+                        "CaptureFilter"
+                    ],
+                    "handler": "ClientHandler"
+                }
+            },
+            {
+                "name": "CaptureFilter",
+                "type": "CaptureFilter",
+                "config": {
+                    "captureEntity": false,
+                    "file": "/tmp/gateway.log"
+                }
+            },
+            {
+                "name": "ClientHandler",
+                "comment": "Responsible for sending all requests to remote servers.",
+                "type": "ClientHandler",
+                "config": {}
+            }
+        ]
+    },
+    "handlerObject": "DispatchHandler"
+}
+
+   </pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-http-and-https"></a>13.6.&nbsp;HTTP &amp; HTTPS Application</h2></div></div></div><a class="indexterm" name="d0e4120"></a><p>Proxies traffic to an application listening on ports 80 and 443. The
+  assumption is the application uses HTTPS for authentication and HTTP for the
+  general application features. Assuming the login will all take place on
+  port 443, you will need to add the login filters and handlers to the
+  <code class="literal">LoginChain</code>. To get started quickly, modify the
+  <code class="literal">baseURI</code> to be the <code class="literal">IPAddress</code> of your
+  target application. This should allow you to proxy all traffic to the
+  application. Then add the logic for the <code class="literal">LoginChain</code> using
+  the flow from one of the login templates.</p><div class="informalexample"><pre class="brush: javascript;">
+    {
+    "heap": {
+        "objects": [
+            {
+                "name": "DispatchHandler",
+                "type": "DispatchHandler",
+                "config": {
+                    "bindings": [
+                        {
+                            "condition": "${exchange.request.uri.scheme == 'http'}",
+                            "handler": "OutgoingChain",
+                            "baseURI": "http://TARGETIP"
+                        },
+                        {
+                            "condition": "${exchange.request.uri.path == '/login'}",
+                            "handler": "LoginChain",
+                            "baseURI": "https://TARGETIP"
+                        },
+                        {
+                            "handler": "OutgoingChain",
+                            "baseURI": "https://TARGETIP"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "LoginChain",
+                "type": "Chain",
+                "config": {
+                    "filters": [],
+                    "handler": "OutgoingChain"
+                }
+            },
+            {
+                "name": "OutgoingChain",
+                "type": "Chain",
+                "config": {
+                    "filters": [
+                        "CaptureFilter"
+                    ],
+                    "handler": "ClientHandler"
+                }
+            },
+            {
+                "name": "CaptureFilter",
+                "type": "CaptureFilter",
+                "config": {
+                    "captureEntity": false,
+                    "file": "/tmp/gateway.log"
+                }
+            },
+            {
+                "name": "ClientHandler",
+                "comment": "Responsible for sending all requests to remote servers.",
+                "type": "ClientHandler",
+                "config": {}
+            }
+        ]
+    },
+    "handlerObject": "DispatchHandler"
+}
+
+   </pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-am-integration-headers"></a>13.7.&nbsp;OpenAM Integration With Headers</h2></div></div></div><p>Logs the user into the target application using the headers passed down
+  from an OpenAM policy agent. This template assumes the user name and
+  password are passed down by the OpenAM policy agent as headers. If the
+  header passed in contains only a user name or subject and requires a lookup to
+  an external data source, you must add an attribute filter to the chain to
+  retrieve the credentials.</p><div class="informalexample"><pre class="brush: javascript;">
+    {
+    "heap": {
+        "objects": [
+            {
+                "name": "DispatchHandler",
+                "type": "DispatchHandler",
+                "config": {
+                    "bindings": [
+                        {
+                            "condition": "${exchange.request.uri.path == '/login'}",
+                            "handler": "LoginChain",
+                            "baseURI": "http://TARGETIP"
+                        },
+                        {
+                            "handler": "OutgoingChain",
+                            "baseURI": "http://TARGETIP"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "LoginChain",
+                "type": "Chain",
+                "config": {
+                    "filters": [
+                        "LoginRequest"
+                    ],
+                    "handler": "OutgoingChain"
+                }
+            },
+            {
+                "name": "LoginRequest",
+                "type": "StaticRequestFilter",
+                "config": {
+                    "method": "POST",
+                    "uri": "https://TARGETIP/login",
+                    "form": {
+                        "USER": [
+                            "${exchange.request.headers['username'][0]}"
+                        ],
+                        "PASSWORD": [
+                            "${exchange.request.headers['password'][0]}"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "OutgoingChain",
+                "type": "Chain",
+                "config": {
+                    "filters": [
+                        "CaptureFilter"
+                    ],
+                    "handler": "ClientHandler"
+                }
+            },
+            {
+                "name": "CaptureFilter",
+                "type": "CaptureFilter",
+                "config": {
+                    "captureEntity": false,
+                    "file": "/tmp/gateway.log"
+                }
+            },
+            {
+                "name": "ClientHandler",
+                "comment": "Responsible for sending all requests to remote servers.",
+                "type": "ClientHandler",
+                "config": {}
+            }
+        ]
+    },
+    "handlerObject": "DispatchHandler"
+}
+
+   </pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-owa-online"></a>13.8.&nbsp;Microsoft Online Outlook Web Access</h2></div></div></div><a class="indexterm" name="d0e4155"></a><p>A sample template used to log a user into Microsoft Online Outlook Web
+  Access. This template shows how you would use OpenIG and the OpenAM
+  password capture feature to integrate with OWA. You can follow the
+  <a href="../../gateway-guide/index/chap-password-capture-replay-tutorial.html" class="link">Tutorial On Password Capture
+  &amp; Replay</a> tutorial and substitute this template.</p><div class="informalexample"><pre class="brush: javascript;">
+    {
+    "heap": {
+        "objects": [
+            {
+                "name": "LogSink",
+                "comment": "Default sink for logging information.",
+                "type": "ConsoleLogSink",
+                "config": {
+                    "level": "DEBUG"
+                }
+            },
+            {
+                "name": "DispatchHandler",
+                "type": "DispatchHandler",
+                "config": {
+                    "bindings": [
+                        {
+                            "condition": "${exchange.request.uri.path == '/owa/auth/logon.aspx'}",
+                            "handler": "LoginChain",
+                            "baseURI": "https://65.55.171.158"
+                        },
+                        {
+                            "handler": "OutgoingChain",
+                            "baseURI": "https://65.55.171.158"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "LoginChain",
+                "type": "Chain",
+                "config": {
+                    "filters": [
+                        "CryptoHeaderFilter",
+                        "LoginRequest"
+                    ],
+                    "handler": "OutgoingChain"
+                }
+            },
+            {
+                "name": "CryptoHeaderFilter",
+                "type": "CryptoHeaderFilter",
+                "config": {
+                    "messageType": "REQUEST",
+                    "operation": "DECRYPT",
+                    "algorithm": "DES/ECB/NoPadding",
+                    "key": "DESKEY",
+                    "keyType": "DES",
+                    "charSet": "utf-8",
+                    "headers": [
+                        "password"
+                    ]
+                }
+            },
+            {
+                "name": "LoginRequest",
+                "type": "StaticRequestFilter",
+                "config": {
+                    "method": "POST",
+                    "uri": "https://65.55.171.158/owa/auth/owaauth.dll",
+                    "headers": {
+                        "Host": [
+                            "red001.mail.microsoftonline.com"
+                        ],
+                        "Content-Type": [
+                            "Content-Type:application/x-www-form-urlencoded"
+                        ]
+                    },
+                    "form": {
+                        "destination": [
+                            "https://red001.mail.microsoftonline.com/owa/"
+                        ],
+                        "forcedownlevel": [
+                            "0"
+                        ],
+                        "trusted": [
+                            "0"
+                        ],
+                        "username": [
+                            "${exchange.request.headers['username'][0]}"
+                        ],
+                        "password": [
+                            "${exchange.request.headers['password'][0]}"
+                        ],
+                        "isUtf8": [
+                            "1"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "OutgoingChain",
+                "type": "Chain",
+                "config": {
+                    "filters": [
+                        "HeaderFilter",
+                        "CaptureFilter"
+                    ],
+                    "handler": "ClientHandler"
+                }
+            },
+            {
+                "name": "HeaderFilter",
+                "type": "HeaderFilter",
+                "config": {
+                    "messageType": "REQUEST",
+                    "remove": [
+                        "password",
+                        "username"
+                    ]
+                }
+            },
+            {
+                "name": "CaptureFilter",
+                "type": "CaptureFilter",
+                "config": {
+                    "captureEntity": false,
+                    "file": "/tmp/gateway.log"
+                }
+            },
+            {
+                "name": "ClientHandler",
+                "type": "ClientHandler",
+                "config": {}
+            }
+        ]
+    },
+    "handlerObject": "DispatchHandler"
+}
+
+   </pre></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-routing.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-scripting.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;12.&nbsp;Routing Tutorial&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;14.&nbsp;Scripting Filters &amp; Handlers</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10060&components=10220&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

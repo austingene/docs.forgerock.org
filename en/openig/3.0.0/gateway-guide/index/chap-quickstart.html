@@ -1,0 +1,366 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;3.&nbsp;Getting Started</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="Guide to OpenIG"><link rel="up" href="index.html" title="Guide to OpenIG"><link rel="prev" href="chap-howitworks.html" title="Chapter&nbsp;2.&nbsp;How OpenIG Works"><link rel="next" href="chap-install.html" title="Chapter&nbsp;4.&nbsp;Installing OpenIG"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;3.&nbsp;Getting Started</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-howitworks.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-install.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-quickstart"></a>Chapter&nbsp;3.&nbsp;Getting Started</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-quickstart.html#before-you-quickstart">3.1. Before You Begin</a></span></dt><dt><span class="section"><a href="chap-quickstart.html#quickstart-install">3.2. Install OpenIG</a></span></dt><dt><span class="section"><a href="chap-quickstart.html#quickstart-sample-app">3.3. Install an Application to Protect</a></span></dt><dt><span class="section"><a href="chap-quickstart.html#quickstart-config">3.4. Configure OpenIG</a></span></dt><dt><span class="section"><a href="chap-quickstart.html#quickstart-network-config">3.5. Configure the Network</a></span></dt><dt><span class="section"><a href="chap-quickstart.html#quickstart-try-it-out">3.6. Try It Out</a></span></dt><dt><span class="section"><a href="chap-quickstart.html#quickstart-where-to-go-from-here">3.7. Where To Go From Here</a></span></dt></dl></div><a class="indexterm" name="d0e556"></a><p>
+  This chapter provides instructions to get OpenIG up and running on Jetty,
+  configured to serve as reverse proxy
+  to a minimal HTTP server for use when following along with the documentation.
+  This allows you to quickly see how OpenIG works,
+  and provides hands on experience with a few key features.
+  For more general installation and configuration instructions,
+  start with the chapter on
+  <a href="../../gateway-guide/index/chap-install.html" class="link"><em class="citetitle">Installing OpenIG</em></a>.
+ </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="before-you-quickstart"></a>3.1.&nbsp;Before You Begin</h2></div></div></div><p>
+   Make sure you have a supported Java Development Kit installed.
+   For details, see the <em class="citetitle">Release Notes</em> section,
+   <a href="../../release-notes/index/chap-before-you-install.html#java-requirements" class="link"><em class="citetitle">JDK Version</em></a>.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="quickstart-install"></a>3.2.&nbsp;Install OpenIG</h2></div></div></div><p>
+   You install OpenIG in the root context of a web application container.
+   In this chapter, you use Jetty server as the web application container.
+  </p><div class="procedure"><p>
+    To perform initial installation, follow these steps.
+   </p><ol class="procedure" type="1"><li class="step"><p>
+     Download and unzip a supported version of Jetty server.
+    </p><p>
+     Supported versions are listed in the <em class="citetitle">Release Notes</em> section,
+     <a href="../../release-notes/index/chap-before-you-install.html#which-container" class="link"><em class="citetitle">Web Application Containers</em></a>.
+    </p></li><li class="step"><p>
+     <a class="link" href="http://forgerock.com/download-stack/" target="_blank">Download</a> the OpenIG .war file.
+    </p></li><li class="step"><p>
+     Deploy OpenIG in the root context.
+    </p><p>
+     Copy the OpenIG .war file as <code class="filename">root.war</code>
+     to the <code class="filename">/path/to/jetty/webapps/</code>.
+    </p><div class="screen"><pre>
+$ <strong>cp OpenIG-3.0.0.war /path/to/jetty/webapps/root.war</strong>
+    </pre></div><p>
+     Jetty automatically deploys OpenIG in the root context on startup.
+    </p></li><li class="step"><p>Start Jetty in the background:</p><div class="screen"><pre>
+$ <strong>/path/to/jetty/bin/jetty.sh start</strong>
+    </pre></div><p>Or start Jetty in the foreground:</p><div class="screen"><pre>
+$ <strong>cd /path/to/jetty/</strong>
+$ <strong>java -jar start.jar</strong>
+    </pre></div></li><li class="step"><p>
+     Verify that you can see the OpenIG welcome page at
+     <a class="link" href="http://localhost:8080" target="_blank">http://localhost:8080</a>.
+    </p><p>
+     When you start OpenIG without a configuration,
+     requests to OpenIG default to a welcome page
+     with a link to the documentation.
+    </p></li><li class="step"><p>
+     Stop Jetty in the background:
+    </p><div class="screen"><pre>
+$ <strong>/path/to/jetty/bin/jetty.sh stop</strong>
+    </pre></div><p>
+     Or stop Jetty in the foreground
+     by entering Ctrl+C in the terminal where Jetty is running.
+    </p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="quickstart-sample-app"></a>3.3.&nbsp;Install an Application to Protect</h2></div></div></div><p>
+   Now that OpenIG is installed,
+   set up a sample application to protect.
+  </p><div class="procedure"><p>
+    Follow these steps.
+   </p><ol class="procedure" type="1"><li class="step"><p lang="en">
+ Download and run the
+ <a class="link" href="http://maven.forgerock.org/repo/releases/org/forgerock/openig/openig-doc-samples/3.0.0/openig-doc-samples-3.0.0-jar-with-dependencies.jar" target="_top">minimal HTTP server .jar</a>
+ to use as the application to protect.
+</p><div class="screen"><pre>
+$ <strong>java -jar openig-doc-samples-3.0.0-jar-with-dependencies.jar</strong>
+<em>Jun 11, 2014 4:32:42 PM org.forgerock.openig.doc.SampleServer runServer
+INFO: Starting HTTP server on port 8081
+Jun 11, 2014 4:32:42 PM org.glassfish.grizzly.http.server.NetworkListener start
+INFO: Started listener bound to [0.0.0.0:8081]
+Jun 11, 2014 4:32:42 PM org.glassfish.grizzly.http.server.HttpServer start
+INFO: [HttpServer] Started.
+Jun 11, 2014 4:32:42 PM org.forgerock.openig.doc.SampleServer runServer
+INFO: Press Ctrl+C to stop the server.
+</em>
+    </pre></div><p>
+     By default, this server listens on port 8081.
+     If that port is not free, specify another port.
+    </p><div class="screen"><pre>
+$ <strong>java -jar openig-doc-samples-3.0.0-jar-with-dependencies.jar 8888</strong>
+<em>Jun 11, 2014 4:33:04 PM org.forgerock.openig.doc.SampleServer runServer
+INFO: Starting HTTP server on port 8888
+Jun 11, 2014 4:33:04 PM org.glassfish.grizzly.http.server.NetworkListener start
+INFO: Started listener bound to [0.0.0.0:8888]
+Jun 11, 2014 4:33:04 PM org.glassfish.grizzly.http.server.HttpServer start
+INFO: [HttpServer] Started.
+Jun 11, 2014 4:33:04 PM org.forgerock.openig.doc.SampleServer runServer
+INFO: Press Ctrl+C to stop the server.</em>
+    </pre></div></li><li class="step"><p>
+     Now access the minimal HTTP server through a browser at
+     <a class="link" href="http://localhost:8081" target="_blank">http://localhost:8081</a>.
+    </p><p>
+     Login with username <code class="literal">demo</code>,
+     password <code class="literal">changeit</code>.
+     You should see a page that includes the username, <code class="literal">demo</code>,
+     and some information about your browser request.
+    </p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="quickstart-config"></a>3.4.&nbsp;Configure OpenIG</h2></div></div></div><p>
+   Now that you have installed both OpenIG
+   and also a sample application to protect,
+   and configure OpenIG.
+  </p><div class="procedure"><p>
+    Follow these steps to configure OpenIG
+    to proxy traffic to the sample application.
+   </p><ol class="procedure" type="1"><li class="step"><p>
+     Prepare the OpenIG configuration.
+    </p><p>
+     Copy the basic configuration file from the example,
+     <a href="../../gateway-guide/index/appendix-config.html#config-proxy-and-capture" class="link"><em class="citetitle">Configuration for Proxy &amp; Capture</em></a>,
+     to <code class="filename">$HOME/.openig/config/config.json</code>.
+     By default, OpenIG looks for <code class="filename">config.json</code>
+     in the <code class="filename">$HOME/.openig/config</code> directory.
+    </p><div class="screen"><pre>
+$ <strong>mkdir -p $HOME/.openig/config</strong>
+$ <strong>cp config.json $HOME/.openig/config/config.json</strong>
+    </pre></div><p>
+     On Windows, the configuration files belong in
+     <code class="filename">%appdata%\.openig\config</code>.
+     To locate the <code class="filename">%appdata%</code> folder
+     for your version of Windows,
+     open Windows Explorer,
+     type <code class="literal">%appdata%</code> as the file path,
+     and press Enter.
+     You must create the <code class="filename">%appdata%\.openig\config</code> folder,
+     and then copy the configuration files.
+    </p><p>
+     Also on Windows, change the capture log file name
+     in <code class="filename">config.json</code>
+     from <code class="filename">/tmp/gateway.log</code>
+     to a file system location that works for Windows systems,
+     such as <code class="filename">C:\Temp\gateway.log</code>.
+    </p></li><li class="step"><p>Start Jetty in the background:</p><div class="screen"><pre>
+$ <strong>/path/to/jetty/bin/jetty.sh start</strong>
+    </pre></div><p>Or start Jetty in the foreground:</p><div class="screen"><pre>
+$ <strong>cd /path/to/jetty/</strong>
+$ <strong>java -jar start.jar</strong>
+    </pre></div></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="quickstart-network-config"></a>3.5.&nbsp;Configure the Network</h2></div></div></div><p>
+   So far you have deployed OpenIG in the root context of Jetty on port 8080.
+   Since OpenIG is a reverse proxy you must make sure
+   that all traffic from your browser to the protected application
+   goes through OpenIG.
+   In other words, the network must be configured
+   so that the browser goes to OpenIG
+   instead of going directly to the protected application.
+  </p><p>
+   Although if you followed the installation steps you are running
+   both OpenIG and the minimal HTTP server
+   on the same host as your browser (probably your laptop or desktop),
+   keep in mind that network configuration is an important deployment step.
+   To encourage you to keep this in mind,
+   the sample configuration for this chapter expects the minimal HTTP server
+   to be running on <code class="literal">www.example.com</code>,
+   rather than <code class="literal">localhost</code>.
+  </p><p>
+   The quickest way to configure the network locally is to add an entry to your
+   <code class="filename">/etc/hosts</code> file on UNIX systems
+   or <code class="filename">%SystemRoot%\system32\drivers\etc\hosts</code> on Windows.
+   See the Wikipedia entry,
+   <a class="link" href="http://en.wikipedia.org/wiki/Hosts_(file)" target="_blank"><em class="citetitle">Hosts (file)</em></a>,
+   for more information on host files.
+   If you are indeed running all servers in this chapter on the same host,
+   add the following entry to the hosts file.
+  </p><pre class="brush: plain;">127.0.0.1    www.example.com</pre><p>
+   If you are running the browser and OpenIG on separate hosts,
+   add the IP address of the host running OpenIG
+   to the hosts file on the system running the browser,
+   where the host name matches that of protected application.
+   For example, if OpenIG is running on a host with IP address 192.168.0.15:
+  </p><pre class="brush: plain;">192.168.0.15    www.example.com</pre><p>
+   If OpenIG is on a different host from the protected application,
+   also make sure that the host name of the protected application
+   resolves correctly for requests from OpenIG to the application.
+  </p><div class="tip"><h3 class="title">Tip</h3><p>
+    Some browsers cache IP address resolutions,
+    even after clearing all browsing data.
+    Restart the browser after changing the IP addresses of named hosts.
+  </p><p>
+    The simplest way to make sure you have configured
+    your DNS or host settings properly for remote systems is to stop OpenIG
+    and then to make sure you cannot reach the target application
+    with the host name and port number of OpenIG.
+    If you can still reach it, double check your host settings.
+  </p><p>
+    Also make sure name resolution is configured to check host files before DNS.
+    This configuration can be found in <code class="filename">/etc/nsswitch.conf</code>
+    for most UNIX systems.
+    Make sure <code class="literal">files</code> is listed before <code class="literal">dns</code>.
+   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="quickstart-try-it-out"></a>3.6.&nbsp;Try It Out</h2></div></div></div><p>
+   <a class="link" href="http://www.example.com:8080/" target="_blank">http://www.example.com:8080/</a>
+   should take you to the home page of the minimal HTTP server.
+  </p><div class="orderedlist"><p>
+    Now change the OpenIG configuration to log you in automatically
+    with hard-coded credentials.
+   </p><ol class="orderedlist" type="1"><li class="listitem"><p>
+     Edit the configuration file, <code class="filename">config.json</code>,
+     to automatically log you in as username <code class="literal">demo</code>,
+     password <code class="literal">password</code>.
+    </p><div class="orderedlist"><p>
+      To do this, make the following two changes to the file.
+     </p><ol class="orderedlist" type="a"><li class="listitem"><p>
+       Between the <code class="literal">"OutgoingChain"</code> object
+       and the "CaptureFilter" object,
+       add a new <code class="literal">StaticRequestFilter</code> configuration object.
+      </p><p>
+       The <code class="literal">StaticRequestFilter</code> performs
+       an HTTP POST of the username and password as form data.
+       OpenIG supports a variety of ways to get the credentials,
+       but for now just hard code them into the configuration.
+      </p><p>
+       The new filter configuration object should look like this:
+      </p><pre class="brush: javascript;">
+{
+    "name": "LoginRequest",
+    "type": "StaticRequestFilter",
+    "config": {
+        "method": "POST",
+        "uri": "http://www.example.com:8081",
+        "form": {
+            "username": [
+                "demo"
+            ],
+            "password": [
+                "changeit"
+            ]
+        }
+    }
+}
+      </pre><p>
+       Do not forget to add the comma after the object,
+       so that your configuration file remains valid JSON.
+      </p></li><li class="listitem"><p>
+       Edit the list of filters in the "OutgoingChain" object
+       to include your new filter before the "CaptureFilter".
+      </p><p>
+       The full "OutgoingChain" object should now look like this:
+      </p><pre class="brush: javascript;">
+{
+    "name": "OutgoingChain",
+    "type": "Chain",
+    "config": {
+        "filters": [
+            "LoginRequest",
+            "CaptureFilter"
+        ],
+        "handler": "DefaultHandler"
+    }
+}
+      </pre></li></ol></div><p>
+     Make sure that the configuration is valid JSON,
+     and then save your changes.
+    </p><p>
+     The resulting configuration file should be very close to the example,
+     <a href="../../gateway-guide/index/appendix-config.html#config-login-static-request" class="link"><em class="citetitle">Configuration for Hard-Coded Credentials</em></a>.
+    </p></li><li class="listitem"><p>
+     Restart the Jetty server where OpenIG is deployed.
+    </p></li><li class="listitem"><p>
+     Access the home page again,
+     <a class="link" href="http://www.example.com:8080/" target="_blank">http://www.example.com:8080/</a>.
+    </p><p>
+     This time, OpenIG logs you in automatically.
+    </p></li></ol></div><p>
+   Also view the file capturing information about requests and responses.
+   In the default sample configuration,
+   this file is <code class="filename">/tmp/gateway.log</code>.
+  </p><p>
+   What's happening behind the scenes?
+  </p><p>
+   When your browser goes to <code class="literal">http://www.example.com:8080/</code>,
+   it is actually connecting to OpenIG deployed in Jetty.
+   OpenIG proxies all traffic it receives to the protected application at
+   <code class="literal">http://www.example.com:8080/</code>,
+   and returns responses from the application to your browser.
+  </p><p>
+   With the original configuration,
+   OpenIG does not change requests or responses,
+   but only proxies requests and responses,
+   and captures request and response information.
+  </p><p>
+   After you change the configuration,
+   OpenIG continues to capture request and response data.
+   And OpenIG also replaces your browser's original HTTP GET request
+   with an HTTP POST login request containing credentials to authenticate.
+   As a result, instead of the home page with a login form,
+   OpenIG logs you in directly,
+   and the application responds with the page you see after logging in.
+   OpenIG then returns this response to your browser.
+  </p><p>
+   The following sequence diagram shows the steps.
+  </p><div class="figure"><a name="figure-hard-coded-login"></a><div class="figure-title">Figure&nbsp;3.1.&nbsp;</div><div class="figure-contents"><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/hard-coded-login.png" align="middle" height="360"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="ld-d0e925.html" target="longdesc">D</a>]</span></div></div></div></div><br class="figure-break"><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>
+     The browser host makes a DNS request for
+     the IP address of the HTTP server host, <code class="literal">www.example.com</code>.
+    </p></li><li class="listitem"><p>
+     DNS responds with the address for OpenIG.
+    </p></li><li class="listitem"><p>
+     Browser sends a request to the HTTP server.
+    </p></li><li class="listitem"><p>
+     OpenIG replaces the request with an HTTP POST request,
+     including the login form with hard-coded credentials.
+    </p></li><li class="listitem"><p>
+     HTTP server validates the credentials,
+     and responds with the profile page.
+    </p></li><li class="listitem"><p>
+     OpenIG passes the response back to the browser.
+    </p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="quickstart-where-to-go-from-here"></a>3.7.&nbsp;Where To Go From Here</h2></div></div></div><p>
+   In this chapter, you have scratched the surface of OpenIG.
+   For more information, start with these chapters.
+  </p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><a href="../../gateway-guide/index/chap-usecases.html" class="link"><em class="citetitle">Detailed Use Cases</em></a>
+    </span></dt><dd><p>
+      This chapter covers common use case request and response flows.
+     </p></dd><dt><span class="term"><a href="../../gateway-guide/index/chap-install.html" class="link"><em class="citetitle">Installing OpenIG</em></a>
+    </span></dt><dd><p>
+      This chapter covers everything you need to install OpenIG.
+     </p></dd><dt><span class="term"><a href="../../gateway-guide/index/chap-credentials-tutorial.html" class="link"><em class="citetitle">Tutorial On Looking Up Credentials</em></a>
+    </span></dt><dd><p>
+      This chapter shows you how to configure OpenIG
+      to look up credentials in external sources, such as a file or a database.
+     </p></dd><dt><span class="term"><a href="../../gateway-guide/index/chap-gateway-templates.html" class="link"><em class="citetitle">Configuration Templates</em></a>
+    </span></dt><dd><p>
+      This chapter provides sample OpenIG configuration files
+      for common use cases.
+     </p></dd><dt><span class="term"><a href="../../gateway-guide/index/chap-federation-tutorial.html" class="link"><em class="citetitle">Tutorial For OpenIG Federation</em></a>
+    </span></dt><dd><p>
+      This chapter shows how to configure OpenIG to get credentials
+      from a SAML 2.0 Identity Provider.
+     </p></dd><dt><span class="term"><span class="olink"><em class="citetitle">Configuring OpenIG as an OAuth 2.0 Resource Server</em></span>
+    </span></dt><dd><p>
+      This chapter explains how OpenIG acts
+      as an OAuth 2.0 Resource Server,
+      and follows with a tutorial
+      that shows you how to use OpenIG as a resource server.
+     </p></dd><dt><span class="term"><span class="olink"><em class="citetitle">Configuring OpenIG as an OAuth 2.0 Client</em></span>
+    </span></dt><dd><p>
+      This chapter explains how OpenIG acts
+      as an OAuth 2.0 client or OpenID Connect 1.0 relying party,
+      and follows with a tutorial
+      that shows you how to use OpenIG
+      as an OpenID Connect 1.0 relying party.
+     </p></dd><dt><span class="term"><a href="../../gateway-guide/index/chap-routing.html" class="link"><em class="citetitle">Routing Tutorial</em></a>
+    </span></dt><dd><p>
+      This chapter shows how to configure OpenIG
+      to allow dynamic configuration changes and route to multiple applications.
+     </p></dd></dl></div><p>
+   ForgeRock can also help you succeed in your projects involving OpenIG.
+   You can purchase OpenIG support subscriptions and training courses
+   from ForgeRock and from consulting partners around the world and in your area.
+   To contact ForgeRock, send mail to
+   <a class="link" href="mailto:info@forgerock.com" target="_top">info@forgerock.com</a>.
+   To find a partner in your area, see
+   <a class="link" href="http://forgerock.com/partners/find-a-partner/" target="_blank">http://forgerock.com/partners/find-a-partner/</a>.
+  </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-howitworks.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-install.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;2.&nbsp;How OpenIG Works&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;4.&nbsp;Installing OpenIG</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10060&components=10220&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

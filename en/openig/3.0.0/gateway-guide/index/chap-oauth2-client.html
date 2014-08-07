@@ -1,0 +1,287 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;11.&nbsp;Configuring OpenIG as an OAuth 2.0 Client</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="Guide to OpenIG"><link rel="up" href="index.html" title="Guide to OpenIG"><link rel="prev" href="chap-oauth-rs.html" title="Chapter&nbsp;10.&nbsp;Configuring OpenIG as an OAuth 2.0 Resource Server"><link rel="next" href="chap-routing.html" title="Chapter&nbsp;12.&nbsp;Routing Tutorial"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;11.&nbsp;Configuring OpenIG as an OAuth 2.0 Client</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-oauth-rs.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-routing.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-oauth2-client"></a>Chapter&nbsp;11.&nbsp;Configuring OpenIG as an OAuth 2.0 Client</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-oauth2-client.html#about-oauth2-client">11.1. About OpenIG as an OAuth 2.0 Client</a></span></dt><dt><span class="section"><a href="chap-oauth2-client.html#about-oidc-rp">11.2. About OpenIG as an OpenID Connect 1.0 Relying Party</a></span></dt><dt><span class="section"><a href="chap-oauth2-client.html#oidc-rp-tutorial-before-you-start">11.3. Preparing the Tutorial</a></span></dt><dt><span class="section"><a href="chap-oauth2-client.html#oidc-rp-tutorial-openam-config">11.4. Setting Up OpenAM as an OpenID Provider</a></span></dt><dt><span class="section"><a href="chap-oauth2-client.html#oidc-rp-tutorial-gateway-config">11.5. Configuring OpenIG as a Relying Party</a></span></dt><dt><span class="section"><a href="chap-oauth2-client.html#oidc-rp-tutorial-test">11.6. Trying It Out</a></span></dt></dl></div><p>
+  This chapter explains how OpenIG acts
+  as an OAuth 2.0 client or OpenID Connect 1.0 relying party,
+  and follows with a tutorial
+  that shows you how to use OpenIG
+  as an OpenID Connect 1.0 relying party.
+ </p><a class="indexterm" name="d0e3471"></a><a class="indexterm" name="d0e3476"></a><a class="indexterm" name="d0e3481"></a><a class="indexterm" name="d0e3486"></a><a class="indexterm" name="d0e3491"></a><a class="indexterm" name="d0e3496"></a><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="about-oauth2-client"></a>11.1.&nbsp;About OpenIG as an OAuth 2.0 Client</h2></div></div></div><p>
+   As described in the chapter on
+   <a href="../../gateway-guide/index/chap-oauth-rs.html" class="link"><em class="citetitle">Configuring OpenIG as an OAuth 2.0 Resource Server</em></a>,
+   an OAuth 2.0 client is the third-party application that needs access
+   to a user's protected resources.
+   The client application therefore has the user (the OAuth 2.0 resource owner)
+   delegate authorization by authenticating
+   with an identity provider (the OAuth 2.0 authorization server)
+   using an existing account,
+   and then consenting to authorize access to protected resources
+   (on an OAuth 2.0 resource server).
+  </p><p>
+   OpenIG can act as an OAuth 2.0 client when you configure an
+   <a href="../../reference/index/OAuth2ClientFilter.html" class="link">OAuth2ClientFilter</a>.
+   The filter handles the process of allowing the user to select a provider,
+   and redirecting the user through the authentication and authorization steps
+   of an OAuth 2.0 authorization code grant,
+   which results in the authorization server returning an access token to the filter.
+   At the outcome of a successful authorization grant,
+   the filter injects the access token data
+   into a configurable target field of the exchange
+   so that subsequent filters and handlers have access
+   to the access token.
+   Subsequent requests can use the access token without re-authentication.
+  </p><p>
+   If the protected application is an OAuth 2.0 resource server,
+   then OpenIG can send the access token with the resource request.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="about-oidc-rp"></a>11.2.&nbsp;About OpenIG as an OpenID Connect 1.0 Relying Party</h2></div></div></div><p>
+   The specifications available through the
+   <a class="link" href="http://tools.ietf.org/html/rfc6749" target="_blank">OpenID Connect</a> site describe an authentication layer built on OAuth 2.0,
+   which is OpenID Connect 1.0.
+  </p><p>
+   OpenID Connect 1.0 is a specific implementation of OAuth 2.0
+   where the identity provider holds the protected resource
+   that the third-party application aims to access.
+   This resource is the <em class="firstterm">UserInfo</em>,
+   information about the authenticated end-user expressed in a standard format.
+  </p><div class="itemizedlist"><p>
+    In OpenID Connect 1.0, the key entities are the following.
+   </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     The <em class="firstterm">end user</em> (OAuth 2.0 resource owner)
+     whose user information the application needs to access.
+    </p><p>
+     The end user wants to use an application
+     through existing identity provider account
+     without signing up to and creating credentials for yet another web service.
+    </p></li><li class="listitem"><p>
+     The <em class="firstterm">Relying Party</em> (RP) (OAuth 2.0 client)
+     needs access to the end user's protected user information.
+    </p><p>
+     For example, an online mail application needs to know which end user
+     is accessing the application in order to present the correct inbox.
+    </p><p>
+     As another example, an online shopping site needs to know which end user
+     is accessing the site in order to present
+     the right offerings, account, and shopping cart.
+    </p></li><li class="listitem"><p>
+     The <em class="firstterm">OpenID Provider</em> (OP)
+     (OAuth 2.0 authorization server and also resource server)
+     that holds the user information and grants access.
+    </p><p>
+     The OP effectively has the end user consent to providing the RP
+     with access to some of its user information.
+     As OpenID Connect 1.0 defines unique identification for an account
+     (subject identifier + issuer identifier),
+     the RP can use this as a key to its own user profile.
+    </p><p>
+     In the case of the online mail application,
+     this key could be used to access the mailboxes and related account information.
+     In the case of the online shopping site,
+     this key could be used to access the offerings, account, shopping cart and so forth.
+     The key makes it possible to serve users as if they had local accounts.
+    </p></li></ul></div><p>
+   When OpenIG acts therefore as an OpenID Connect 1.0 relying party,
+   its ultimate role is to retrieve user information from the OpenID provider,
+   and then to inject that information into the exchange
+   for use by subsequent filters and handlers.
+  </p><p>
+   In the tutorial that follows,
+   you configure OpenIG as a relying party,
+   and use OpenAM as the OpenID Provider.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="oidc-rp-tutorial-before-you-start"></a>11.3.&nbsp;Preparing the Tutorial</h2></div></div></div><p>
+   In the chapter on
+   <a href="../../gateway-guide/index/chap-quickstart.html" class="link"><em class="citetitle">Getting Started</em></a>,
+   you learned how to configure OpenIG
+   to proxy traffic and capture request and response data.
+   You also learned how to configure OpenIG
+   to use a static request to log in with hard-coded credentials.
+  </p><p>
+   This tutorial shows you how OpenIG
+   can act as an OpenID Connect 1.0 relying party.
+  </p><p>
+   This tutorial relies on OpenAM as an OpenID Provider.
+   As a relying party, OpenIG takes the end user to OpenAM
+   for authorization and an access token.
+   It then uses the access token to get end user information from OpenAM.
+  </p><p>
+   Before you start this tutorial,
+   prepare OpenIG and the minimal HTTP server as you did for the chapter on
+   <a href="../../gateway-guide/index/chap-quickstart.html" class="link"><em class="citetitle">Getting Started</em></a>.
+  </p><p>
+   OpenIG should be running in Jetty,
+   configured to access the minimal HTTP server as described in that chapter.
+  </p><div class="tip"><h3 class="title">Tip</h3><p>
+    If you get stuck running the following samples,
+    know that you can activate OpenIG debug logging
+    with a "ConsoleLogSink" configuration object.
+    Add it as the first object in the array of configuration objects.
+   </p><pre class="brush: javascript;">
+{
+    "name": "LogSink",
+    "type": "ConsoleLogSink",
+    "config": {
+        "level": "DEBUG"
+    }
+}
+   </pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="oidc-rp-tutorial-openam-config"></a>11.4.&nbsp;Setting Up OpenAM as an OpenID Provider</h2></div></div></div><p>
+   Install and configure OpenAM on
+   <code class="literal">http://openam.example.com:8088/openam</code>
+   with the default configuration.
+   If you use a different configuration,
+   make sure you substitute in the tutorial accordingly.
+   Although this tutorial does not use HTTPS,
+   you must use HTTPS to protect access tokens and user information
+   in production environments.
+  </p><p>
+   Login to the OpenAM console as administrator,
+   and use the common task wizard, Configure OAuth2,
+   to configure an OAuth 2.0 authorization server in / (Top Level Realm).
+   This also configures OpenAM as an OpenID Provider.
+  </p><p>
+   Also create an OAuth 2.0 Client profile in / (Top Level Realm).
+   This allows OpenIG to communicate with OpenAM as an OAuth 2.0 client.
+   In OpenAM console, browse to
+   Access Control &gt; / (Top Level Realm) &gt; Agents &gt; OAuth 2.0 Client,
+   and then click New in the Agent table.
+  </p><p>
+   Create an OAuth 2.0 client profile with name <code class="literal">OpenIG</code>
+   and password <code class="literal">password</code>.
+   The name is the "clientId" value, and the password is the "clientSecret" value
+   that you use in the provider configuration in OpenIG.
+  </p><p>
+   Edit the <code class="literal">OpenIG</code> client profile
+   to add the Redirection URI
+   <code class="literal">http://www.example.com:8080/openid/callback</code>.
+   Also add <code class="literal">openid</code> and <code class="literal">profile</code> scopes
+   to the Scope(s) list, and then save your work.
+   In this tutorial,
+   you overload these profile settings to pass credentials to OpenIG.
+   This tutorial uses Full Name and Last Name for the sake of simplicity.
+   Both of those attributes are part of a user's profile
+   out of the box with the default OpenAM configuration.
+   Neither of the attributes are needed for anything else in this tutorial.
+   So this tutorial uses Last Name to hold the username,
+   and Full Name to hold the password.
+   In a real deployment, you would no doubt use other attributes,
+   depending upon the user profiles and on your requirements.
+  </p><p>
+   Finally, edit the OpenAM demo user to set credentials in
+   the Last Name and Full Name fields of the demo user profile.
+   In OpenAM console, browse to the user profile under
+   Access Control &gt; / (Top Level Realm) &gt; Subjects &gt; User &gt; demo.
+   Set Last Name to <code class="literal">george</code>
+   and Full Name to <code class="literal">costanza</code>.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="oidc-rp-tutorial-gateway-config"></a>11.5.&nbsp;Configuring OpenIG as a Relying Party</h2></div></div></div><p>
+   To configure OpenIG as an OpenID Connect 1.0 relying party,
+   replace the <code class="filename">config.json</code> file
+   with the new configuration from the example,
+   <a href="../../gateway-guide/index/appendix-config.html#config-oidc-client" class="link"><em class="citetitle">Configuration for an OAuth 2.0 Resource Server</em></a>.
+  </p><p>
+   Also add the <code class="filename">DumpExchange.groovy</code> script from that section
+   under <code class="filename">$HOME/.openig/scripts/groovy</code>
+   (<code class="filename">%appdata%\.openig\scripts\groovy</code> on Windows).
+   The script is called from the configuration on failure.
+  </p><p>
+   In the <code class="filename">config.json</code>,
+   consider the "OpenIDConnectClient" filter.
+   This configuration object has the
+   <a href="../../reference/index/OAuth2ClientFilter.html" class="link">OAuth2ClientFilter</a> type.
+   This is the filter that enables OpenIG to act as a relying party.
+  </p><p>
+   The filter is configured to work only with a single provider,
+   the OpenAM server you configured in
+   <a class="xref" href="chap-oauth2-client.html#oidc-rp-tutorial-openam-config" title="11.4.&nbsp;Setting Up OpenAM as an OpenID Provider">Section&nbsp;11.4, &#8220;Setting Up OpenAM as an OpenID Provider&#8221;</a>.
+   If you had more than one provider configured,
+   you would need a "loginHandler" as well to help end users pick a provider.
+  </p><p>
+   The "OpenIDConnectClient" filter has
+   a base client endpoint of <code class="literal">/openid</code>.
+   Incoming requests to <code class="literal">/openid/login</code>
+   start the delegated authorization process.
+   Incoming requests to <code class="literal">/openid/callback</code>
+   are expected as redirects from the OP (as authorization server),
+   so this is why you set the redirect URI in the client profile in OpenAM to
+   <code class="literal">http://www.example.com:8080/openid/callback</code>.
+  </p><p>
+   The "OpenIDConnectClient" filter has <code class="literal">"requireHttps": false</code>
+   as a convenience for testing.
+   In production environments, require HTTPS.
+  </p><p>
+   The filter has <code class="literal">"requireLogin": true</code> to ensure you see
+   the delegated authorization process when you make your request.
+  </p><p>
+   In the "OpenIDConnectClient" filter, the target
+   for storing authorization state information is
+   <code class="literal">${exchange.openid}</code>,
+   so this is where subsequent filters and handlers can find
+   access token and user information.
+  </p><p>
+   The scopes are set to "openid" and "profile" as allowed for OpenID Connect 1.0.
+  </p><p>
+   Notice that on failure the filter dumps the current information in the exchange
+   into a web page response to the end user.
+   While this is helpful to you for debugging purposes,
+   it is not helpful to an end user.
+   In production environments, return a more user-friendly failure page.
+  </p><p>
+   Also in the "OpenIDConnectClient" filter,
+   the typical "ClientHandler" configures the HTTP client that communicates
+   with the OpenID Provider.
+  </p><p>
+   Returning to the top of the configuration,
+   notice that the "OpenIDConnectChain" invokes an "OutgoingChain" handler
+   after the filter injects the access token and user information
+   into <code class="literal">exchange.openid</code>.
+   The "OutgoingChain" in this case
+   extracts credentials from the user information by script ("GetCredentials"),
+   and then uses the credentials to log the user in to the minimal HTTP server
+   ("LoginRequestFilter").
+  </p><p>
+   In this simple configuration, all successful requests result in login attempts
+   against the minimal HTTP server.
+  </p><p>
+   After updating <code class="filename">config.json</code>,
+   restart Jetty server so that OpenIG loads the new configuration.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="oidc-rp-tutorial-test"></a>11.6.&nbsp;Trying It Out</h2></div></div></div><p>
+   To try your configuration, browse to OpenIG at
+   <a class="link" href="http://www.example.com:8080" target="_blank">http://www.example.com:8080</a>.
+  </p><p>
+   When redirected to the OpenAM login page,
+   login as user <code class="literal">demo</code>, password <code class="literal">changeit</code>,
+   and then allow the application access to user information.
+  </p><p>
+   If successful, OpenIG logs you into the minimal HTTP server
+   as George Costanza, and the minimal HTTP server returns George's page.
+  </p><p>
+   What is happening behind the scenes?
+  </p><p>
+   After OpenIG gets the browser request,
+   the "OpenIDConnectClient" filter redirects you to authenticate with OpenAM
+   and consent to authorize access to user information.
+   After you authorize access, OpenAM returns an access token to the filter.
+   The filter then uses that access token to get the user information.
+   Before handling the next filter or handler in the exchange,
+   which is the "OutgoingChain",
+   the filter injects the authorization state information into
+   <code class="literal">exchange.openid</code>.
+  </p><p>
+   The "OutgoingChain" extracts credentials to re-inject them into the exchange.
+   Its login filter then uses the credentials to log the user in
+   to the minimal HTTP server, which responds with its User Information page.
+  </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-oauth-rs.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-routing.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;10.&nbsp;Configuring OpenIG as an OAuth 2.0 Resource Server&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;12.&nbsp;Routing Tutorial</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10060&components=10220&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

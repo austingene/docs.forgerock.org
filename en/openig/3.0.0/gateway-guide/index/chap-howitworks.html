@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;2.&nbsp;How OpenIG Works</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="Guide to OpenIG"><link rel="up" href="index.html" title="Guide to OpenIG"><link rel="prev" href="chap-overview.html" title="Chapter&nbsp;1.&nbsp;Solutions Overview"><link rel="next" href="chap-quickstart.html" title="Chapter&nbsp;3.&nbsp;Getting Started"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;2.&nbsp;How OpenIG Works</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-overview.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-quickstart.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-howitworks"></a>Chapter&nbsp;2.&nbsp;How OpenIG Works</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-howitworks.html#how-it-works-short">2.1. How It Works In A Nutshell</a></span></dt><dt><span class="section"><a href="chap-howitworks.html#how-it-works-detail">2.2. How It Works In Detail</a></span></dt></dl></div><a class="indexterm" name="d0e344"></a><p>This chapter provides a detailed look at OpenIG components and how
+ they work together.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="how-it-works-short"></a>2.1.&nbsp;How It Works In A Nutshell</h2></div></div></div><p>The underlying core of ForgeRock OpenIG is based on a
+  <a class="link" href="http://en.wikipedia.org/wiki/Reverse_proxy" target="_blank">reverse proxy architecture</a>. All HTTP traffic to each protected
+  application is routed through OpenIG, enabling close inspection,
+  transformation and filtering of each request.  By inspecting the traffic,
+  OpenIG is able to intercept requests that would normally require the user to
+  authenticate, obtain the user's login credentials, and send the necessary
+  HTTP request to the target application, thereby logging in the user without
+  modifying or installing anything on the application.  In its simplest form
+  and basic configuration, OpenIG is a Java-based reverse proxy which runs as
+  a web application.  Enable the Form-Filter replay module and OpenIG
+  automatically log users in when a timeout or authentication page is detected.
+  Additionally, enable the SAML2 service and OpenIG becomes a SAML2
+  endpoint. In this mode of operation, OpenIG receives
+  and verifies the SAML2 request and then logs the user directly
+  into the target application.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="how-it-works-detail"></a>2.2.&nbsp;How It Works In Detail</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-howitworks.html#how-it-works-core">2.2.1. OpenIG Core (Reverse Proxy)</a></span></dt><dt><span class="section"><a href="chap-howitworks.html#how-it-works-exchange">2.2.2. Exchange</a></span></dt><dt><span class="section"><a href="chap-howitworks.html#how-it-works-router">2.2.3. Router &amp; Routes</a></span></dt><dt><span class="section"><a href="chap-howitworks.html#how-it-works-dispatcher">2.2.4. Dispatcher</a></span></dt><dt><span class="section"><a href="chap-howitworks.html#how-it-works-chain">2.2.5. Chain</a></span></dt><dt><span class="section"><a href="chap-howitworks.html#how-it-works-handlers">2.2.6. Handlers</a></span></dt><dt><span class="section"><a href="chap-howitworks.html#how-it-works-filters">2.2.7. Filters</a></span></dt><dt><span class="section"><a href="chap-howitworks.html#how-it-works-configuration">2.2.8. Configuration</a></span></dt><dt><span class="section"><a href="chap-howitworks.html#how-it-works-heaplets">2.2.9. Heaplets</a></span></dt><dt><span class="section"><a href="chap-howitworks.html#how-it-works-saml2">2.2.10. OpenIG SAML 2.0 Federation</a></span></dt></dl></div><p>The following modules make up OpenIG.</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="how-it-works-core"></a>2.2.1.&nbsp;OpenIG Core (Reverse Proxy)</h3></div></div></div><p>OpenIG core is a standard Java EE servlet implementation of a reverse
+   proxy. The main function of OpenIG core is to act as a reverse proxy to the
+   target application. When deployed in its base configuration, OpenIG can be
+   used as a pure reverse proxy. The power of the OpenIG core comes in its
+   ability to search, transform, and process HTTP traffic to and from the
+   target application. This enables OpenIG to recognize login pages, submit
+   login forms, transform or filter content, and even function as a Federation
+   endpoint for the application.  All these features are possible without
+   making any changes to the application's deployment container or the
+   application itself.</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="how-it-works-exchange"></a>2.2.2.&nbsp;Exchange</h3></div></div></div><p>The <a href="../../reference/index/Exchange.html" class="link">Exchange</a> is a
+   wrapper around the HTTP request and response objects that pass through
+   OpenIG. Every request or response being processed in OpenIG can be accessed
+   or modified through the Exchange object.  In addition, arbitrary data can
+   be set in the Exchange to facilitate the passing of data and state between
+   filters and handlers.</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="how-it-works-router"></a>2.2.3.&nbsp;Router &amp; Routes</h3></div></div></div><p>
+    In a multiple-file configuration, the
+    <a href="../../reference/index/Router.html" class="link">Router</a>
+    takes responsibility for managing
+    <a href="../../reference/index/Route.html" class="link">Route</a> configurations.
+   </p><p>
+    Each Route accepts all Exchanges that match its (configurable) condition.
+    The Route then optionally changes the request scheme, host, and port,
+    and forwards the Exchange on to the configured chain of filters and handlers.
+   </p><p>
+    The Router can be configured either
+    to load Route configurations only at startup
+    or to reload Route configurations periodically,
+    picking up any changes you make.
+    You can thus reconfigure OpenIG without restarting the server.
+   </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="how-it-works-dispatcher"></a>2.2.4.&nbsp;Dispatcher</h3></div></div></div><p>
+    In a single-file configuration with no Router,
+    the Dispatcher may be thought of as the internal router of OpenIG.
+    Every request that comes into OpenIG is analyzed
+    and forwarded on to the configured processing chain of filters and handlers.
+    A request may be forwarded based on
+    the target host, URL, URL parameters, headers, cookies,
+    or any other component of the request.
+   </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="how-it-works-chain"></a>2.2.5.&nbsp;Chain</h3></div></div></div><p>A <a href="../../reference/index/Chain.html" class="link">Chain</a> is a
+   combination of one or more Filters and a handler that process an incoming
+   request from the Dispatcher. For example, the Dispatcher can process an
+   incoming request with a URL parameter of <code class="literal">action=login</code>
+   and forward the request to the Login Chain. The Login Chain executes a list
+   of Filters and then calls a Handler. The Handler sends the request on to
+   the target application or to another Chain for further processing.</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="how-it-works-handlers"></a>2.2.6.&nbsp;Handlers</h3></div></div></div><p>The final processing of every Chain ends in a call to a Handler. A
+   Handler can simply call another Chain or it can send the request on to the
+   target application. The following Handlers are shipped with OpenIG:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+      <a href="../../reference/index/ClientHandler.html" class="link">ClientHandler</a>: Sends the final request to the target application.
+     </p><p>
+      You can specify HTTP client settings for requests to remote servers
+      by adding an
+      <a href="../../reference/index/HttpClient.html" class="link">HttpClient</a>
+      in the configuration for the <code class="literal">ClientHandler</code>.
+     </p></li><li class="listitem"><p>
+      <a href="../../reference/index/Router.html" class="link">Router</a>: Routes Exchange processing to separate configuration files.
+     </p></li><li class="listitem"><p>
+      <a href="../../reference/index/ScriptableHandler.html" class="link">ScriptableHandler</a>: Handles a request by using a script.
+     </p></li><li class="listitem"><p><a href="../../reference/index/SequenceHandler.html" class="link">SequenceHandler</a>:
+     Links together multiple handlers or chains during request
+     processing.</p></li><li class="listitem"><p><a href="../../reference/index/StaticResponseHandler.html" class="link">StaticResponseHandler</a>: Used to send a response, such as a
+     redirect, to a client during request processing.</p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="how-it-works-filters"></a>2.2.7.&nbsp;Filters</h3></div></div></div><p>Filters are responsible for processing HTTP requests in OpenIG.
+   Filters can be chained together to act on the input stream coming from the
+   browser, or the  output stream returned back from the target application.
+   A filter can do something as simple as logging the input and output stream
+   or something more complex, such as processing login pages, fetching user
+   attributes, or transforming content. There are multiple Filters shipped with
+   OpenIG that can be combined in chains to provide very extensible request and
+   response processing features. Custom filters can also be written using the
+   Java SPIs. The following is a list of Filters shipped with OpenIG:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a href="../../reference/index/AssignmentFilter.html" class="link">AssignmentFilter</a>:
+     Sets values in the HTTP request and response.</p></li><li class="listitem"><p><a href="../../reference/index/CaptureFilter.html" class="link">CaptureFilter</a>:
+     Captures the HTTP requests being processed by OpenIG. Capture can be used
+     for audit purposes and may also be very useful when analyzing an
+     application or troubleshooting a misbehaving OpenIG. Logs are written to
+     a flat file on the OpenIG host.</p></li><li class="listitem"><p><a href="../../reference/index/CookieFilter.html" class="link">CookieFilter</a>:
+     The default behavior of OpenIG is to accept and forward all cookies.
+     Since this is not always the desirable behavior, the CookieFilter, when
+     configured, allows you to suppress, manage, and relay cookies.</p></li><li class="listitem"><p><a href="../../reference/index/EntityExtractFilter.html" class="link">EntityExtractFilter</a>: Searches for specific content within the body
+     of the requests. For example, it can be used to extract hidden form
+     parameters in a login page, which are needed in the login request.</p></li><li class="listitem"><p><a href="../../reference/index/ExceptionFilter.html" class="link">ExceptionFilter</a>:
+     Sends users to configured URLs when errors or exceptions occur during
+     request processing or user interactions.</p></li><li class="listitem"><p><a href="../../reference/index/FileAttributesFilter.html" class="link">FileAttributesFilter</a>: Looks up attributes in a flat file with the
+     specified key. The attributes are added to the exchange to be used by
+     subsequent filters or handlers.</p></li><li class="listitem"><p><a href="../../reference/index/HeaderFilter.html" class="link">HeaderFilter</a>:
+     The default behavior of OpenIG is to accept and forward all headers.
+     The HeaderFilter can be configured to add additional headers or remove
+     headers on both the HTTP request and the response. It can also be
+     configured to parse and set header values in OpenIG context to allow
+     filters access to the header attributes. This feature is used most
+     commonly when OpenIG is integrated with OpenAM and being fronted by a
+     policy agent.</p></li><li class="listitem"><p><a href="../../reference/index/HttpBasicAuthFilter.html" class="link">HttpBasicAuthFilter</a>: Performs HTTP basic authentication to the
+     target application per <a class="link" href="http://www.ietf.org/rfc/rfc2617.txt" target="_blank">RFC 2617</a>.</p></li><li class="listitem"><p>
+      <a href="../../reference/index/OAuth2ClientFilter.html" class="link">OAuth2ClientFilter</a>:
+      acts as an OAuth 2.0 or OpenID Connect 1.0 client,
+      authenticating an end user using OAuth 2.0 delegated authorization.
+     </p></li><li class="listitem"><p>
+      <a href="../../reference/index/OAuth2ResourceServerFilter.html" class="link">OAuth2ResourceServerFilter</a>: acts as an OAuth 2.0 resource server,
+      validating OAuth 2.0 access tokens,
+      and injecting token information into the exchange.
+     </p></li><li class="listitem"><p><a href="../../reference/index/RedirectFilter.html" class="link">RedirectFilter</a>: Rewrites Location headers on responses that
+     generate a redirect that would take the user directly to the application
+     being proxied rather than taking the user through OpenIG.</p></li><li class="listitem"><p>
+      <a href="../../reference/index/ScriptableFilter.html" class="link">ScriptableFilter</a>: Processes the HTTP exchange by using a script.
+     </p></li><li class="listitem"><p><a href="../../reference/index/SqlAttributesFilter.html" class="link">SqlAttributesFilter</a>: Executes an SQL prepared statement with
+     configured parameters. The result is added to the exchange to be used by
+     subsequent filters or handlers.</p></li><li class="listitem"><p><a href="../../reference/index/StaticRequestFilter.html" class="link">StaticRequestFilter</a>: Creates and sends HTTP GET and POST requests.
+     The request can be formed using parameters from previous processing or
+     statically configured values.</p></li><li class="listitem"><p><a href="../../reference/index/SwitchFilter.html" class="link">SwitchFilter</a>:
+     Conditionally diverts the exchange to another handler.</p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="how-it-works-configuration"></a>2.2.8.&nbsp;Configuration</h3></div></div></div><p>The configuration of OpenIG was designed to be very modular and
+   self-contained. Each module within OpenIG stores its configuration in JSON
+   representation, which is stored in flat files. The
+   features of OpenIG can be configured by directly manipulating the JSON flat
+   files.</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="how-it-works-heaplets"></a>2.2.9.&nbsp;Heaplets</h3></div></div></div><p>Every OpenIG module which has JSON configuration also has a Heaplet
+   associated with it. Each module's Heaplet is responsible for reading the
+   JSON configuration and creating that module's configuration in the OpenIG
+   runtime heap. Each module can then read its configuration from the heap as
+   well as make shared configuration information available to other
+   modules.</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="how-it-works-saml2"></a>2.2.10.&nbsp;OpenIG SAML 2.0 Federation</h3></div></div></div><p>
+    When the Federation component is configured,
+    OpenIG acts as the Service Provider in a Circle of Trust
+    with a SAML 2.0-compliant Identity Provider.
+    The Federation component supports both IDP and SP-initiated
+    SAML 2.0 Web Single Sign-On.
+    OpenIG Federation can serve as a a Service Provider
+    in the classic Federation use case
+    where the IDP and SP are different companies or domains.
+    
+   </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-overview.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-quickstart.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;1.&nbsp;Solutions Overview&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;3.&nbsp;Getting Started</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10060&components=10220&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>
