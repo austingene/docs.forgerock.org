@@ -6,7 +6,7 @@
 </head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Appendix&nbsp;A.&nbsp;Tutorial Configuration Files</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-troubleshooting.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ix01.html">Next</a></td></tr></table><hr></div><div lang="en" class="appendix"><div class="titlepage"><div><div><h1 class="title"><a name="appendix-config"></a>Appendix&nbsp;A.&nbsp;Tutorial Configuration Files</h1></div></div></div><p>
   This appendix holds the following configuration files
   for tutorials in this guide.
- </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="xref" href="appendix-config.html#config-proxy-and-capture" title="Example&nbsp;A.1.&nbsp;Configuration for Proxy &amp; Capture">Example&nbsp;A.1, &#8220;Configuration for Proxy &amp; Capture&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="appendix-config.html#config-login-static-request" title="Example&nbsp;A.2.&nbsp;Configuration for Hard-Coded Credentials">Example&nbsp;A.2, &#8220;Configuration for Hard-Coded Credentials&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="appendix-config.html#config-login-from-file" title="Example&nbsp;A.3.&nbsp;Configuration for Login With Credentials From a File">Example&nbsp;A.3, &#8220;Configuration for Login With Credentials From a File&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="appendix-config.html#config-login-from-sql" title="Example&nbsp;A.4.&nbsp;Configuration for Login With Credentials From a Database">Example&nbsp;A.4, &#8220;Configuration for Login With Credentials From a Database&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="appendix-config.html#config-capture-and-replay" title="Example&nbsp;A.5.&nbsp;Configuration for Password Capture &amp; Replay">Example&nbsp;A.5, &#8220;Configuration for Password Capture &amp; Replay&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="appendix-config.html#config-federation" title="Example&nbsp;A.6.&nbsp;Configuration for the Federation Tutorial">Example&nbsp;A.6, &#8220;Configuration for the Federation Tutorial&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="appendix-config.html#config-routing" title="Example&nbsp;A.9.&nbsp;Configuration for the Routing Tutorial">Example&nbsp;A.9, &#8220;Configuration for the Routing Tutorial&#8221;</a></p></li></ul></div><div class="example"><a name="config-proxy-and-capture"></a><div class="example-title">Example&nbsp;A.1.&nbsp;Configuration for Proxy &amp; Capture</div><div class="example-contents"><pre class="brush: javascript;">
+ </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="xref" href="appendix-config.html#config-proxy-and-capture" title="Example&nbsp;A.1.&nbsp;Configuration for Proxy &amp; Capture">Example&nbsp;A.1, &#8220;Configuration for Proxy &amp; Capture&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="appendix-config.html#config-login-static-request" title="Example&nbsp;A.2.&nbsp;Configuration for Hard-Coded Credentials">Example&nbsp;A.2, &#8220;Configuration for Hard-Coded Credentials&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="appendix-config.html#config-login-from-file" title="Example&nbsp;A.3.&nbsp;Configuration for Login With Credentials From a File">Example&nbsp;A.3, &#8220;Configuration for Login With Credentials From a File&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="appendix-config.html#config-login-from-sql" title="Example&nbsp;A.4.&nbsp;Configuration for Login With Credentials From a Database">Example&nbsp;A.4, &#8220;Configuration for Login With Credentials From a Database&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="appendix-config.html#config-capture-and-replay" title="Example&nbsp;A.5.&nbsp;Configuration for Password Capture &amp; Replay">Example&nbsp;A.5, &#8220;Configuration for Password Capture &amp; Replay&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="appendix-config.html#config-federation" title="Example&nbsp;A.6.&nbsp;Configuration for the Federation Tutorial">Example&nbsp;A.6, &#8220;Configuration for the Federation Tutorial&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="appendix-config.html#config-oauth2-rs" title="Example&nbsp;A.7.&nbsp;Configuration for an OAuth 2.0 Resource Server">Example&nbsp;A.7, &#8220;Configuration for an OAuth 2.0 Resource Server&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="appendix-config.html#config-oidc-client" title="Example&nbsp;A.8.&nbsp;Configuration for an OpenID Connect 1.0 Client">Example&nbsp;A.8, &#8220;Configuration for an OpenID Connect 1.0 Client&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="appendix-config.html#config-routing" title="Example&nbsp;A.9.&nbsp;Configuration for the Routing Tutorial">Example&nbsp;A.9, &#8220;Configuration for the Routing Tutorial&#8221;</a></p></li></ul></div><div class="example"><a name="config-proxy-and-capture"></a><div class="example-title">Example&nbsp;A.1.&nbsp;Configuration for Proxy &amp; Capture</div><div class="example-contents"><pre class="brush: javascript;">
 {
     "heap": {
         "objects": [
@@ -146,13 +146,7 @@
                     "target": "${exchange.credentials}",
                     "file": "/tmp/userfile",
                     "key": "email",
-                    "value": "george@example.com",
-                    "fields": [
-                        "username",
-                        "password",
-                        "fullname",
-                        "email"
-                    ]
+                    "value": "george@example.com"
                 }
             },
             {
@@ -557,7 +551,7 @@
                             "name": "openam",
                             "wellKnownConfiguration":
                               "http://openam.example.com:8088/openam/.well-known/openid-configuration",
-                            "clientId": "${projectName}",
+                            "clientId": "OpenIG",
                             "clientSecret": "password"
                         }
                     ]

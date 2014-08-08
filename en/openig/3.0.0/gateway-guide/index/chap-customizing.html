@@ -24,45 +24,75 @@
  </p><p>
   Interface Stability:
   <a href="../../reference/index/appendix-interface-stability.html#interface-stability" class="link">Evolving</a>
- </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="extension-points"></a>15.1.&nbsp;Key Extension Points</h2></div></div></div><a class="indexterm" name="d0e4340"></a><p>The two primary extension points are the interfaces: <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/filter/Filter.html" target="_blank">Filter</a> (for processing a request and/or response en
+ </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="extension-points"></a>15.1.&nbsp;Key Extension Points</h2></div></div></div><a class="indexterm" name="d0e4355"></a><p>The two primary extension points are the interfaces: <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/filter/Filter.html" target="_blank">Filter</a> (for processing a request and/or response en
   route) and <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/handler/Handler.html" target="_blank">Handler</a> (for generating responses from requests).
   These interfaces are similar to the Java Enterprise Edition
   <code class="literal">Filter</code> and <code class="literal">Servlet</code> interfaces, with
   some differences in the semantics of messages. While you can simply implement
   these interfaces, there are also included convenience classes: <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/filter/GenericFilter.html" target="_blank">GenericFilter</a> and <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/handler/GenericHandler.html" target="_blank">GenericHandler</a> that you can use if you intend to make
   your extensions configurable through the OpenIG configuration
-  resource.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom-filter"></a>15.2.&nbsp;Implementing a Filter</h2></div></div></div><a class="indexterm" name="d0e4368"></a><p>The <code class="literal">Filter</code> interface exposes a <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/filter/Filter.html#filter(org.forgerock.openig.http.Exchange,%20org.forgerock.openig.handler.Handler)" target="_blank">filter</a> method, which takes an <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/http/Exchange.html" target="_blank">Exchange</a> object and the <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/filter/Chain.html" target="_blank">Chain</a> of remaining filters and handler to dispatch to. Initially,
-  <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/http/Exchange.html#request" target="_blank">exchange.request</a> contains the request to be filtered. To pass the
-  request to the next filter or handler in the chain, the filter calls
-  <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/filter/Chain.html#handle(org.forgerock.openig.http.Exchange)" target="_blank">chain.handle(exchange)</a>. After this call, <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/http/Exchange.html#response" target="_blank">exchange.response</a> contains the response that can be filtered.</p><p>A filter might elect not to pass the request to the next filter or
-  handler, and instead handle the request itself. It can achieve this by
-  merely avoiding a call to <code class="literal">chain.handle(exchange)</code> and
-  creating its own response object in the exchange. The filter is also at
-  liberty to replace a response with another of its own. A filter can exist in
-  more than one chain, therefore should make no assumptions or correlations
-  using the chain it is supplied. The only valid use of a chain by a filter
-  is to call its <code class="literal">handle</code> method to dispatch the exchange to
-  the rest of the chain.</p><div class="note"><h3 class="title">Note</h3><p>If an existing response exists in the exchange object and the filter
-   intends to replace it with its own, it must first check to see if the
-   existing response has an <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/http/Message.html#entity" target="_blank">entity</a>, and if it does, must call its <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/io/BranchingInputStream.html#close()" target="_blank">close</a> method in order to signal that the processing of the response
-   from a remote server is complete.</p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom-handler"></a>15.3.&nbsp;Implementing a Handler</h2></div></div></div><a class="indexterm" name="d0e4416"></a><p>The <code class="literal">Handler</code> interface exposes a <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/handler/Handler.html#handle(org.forgerock.openig.http.Exchange)" target="_blank">handle</a> method, which takes an <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/http/Exchange.html#response" target="_blank">Exchange</a> object. It processes the request in
-  <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/http/Exchange.html#request" target="_blank">exchange.request</a> and produces a response in <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/http/Exchange.html#response" target="_blank">exchange.response</a>. A handler can elect to dispatch the exchange to
-  another handler or chain.</p><div class="note"><h3 class="title">Note</h3><p>If an existing response exists in the exchange object and the filter
-   intends to replace it with its own, it must first check to see if the
-   existing response has an <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/http/Message.html#entity" target="_blank">entity</a>, and if it does, must call its <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/io/BranchingInputStream.html#close()" target="_blank">close</a> method in order to signal that the processing of the response
-   from a remote server is complete.</p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom-heap-config"></a>15.4.&nbsp;Heap Object Configuration</h2></div></div></div><a class="indexterm" name="d0e4450"></a><p>Objects are added to the heap and supplied with configuration artifacts
+  resource.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom-filter"></a>15.2.&nbsp;Implementing a Filter</h2></div></div></div><a class="indexterm" name="d0e4383"></a><p>
+   The <code class="literal">Filter</code> interface exposes a
+   <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/index.html?org/forgerock/openig/filter/Filter.html#filter(org.forgerock.openig.http.Exchange,%20org.forgerock.openig.handler.Handler)" target="_blank">filter()</a> method,
+   which takes an
+   <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/index.html?org/forgerock/openig/http/Exchange.html" target="_blank">Exchange</a> object
+   and the
+   <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/index.html?org/forgerock/openig/filter/Chain.html" target="_blank">Chain</a> of remaining filters and handler to dispatch to.
+   Initially,
+   <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/index.html?org/forgerock/openig/http/Exchange.html#request" target="_blank">exchange.request</a> contains the request to be filtered.
+   To pass the request to the next filter or handler in the chain,
+   the filter calls
+   <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/index.html?org/forgerock/openig/filter/Chain.html#handle(org.forgerock.openig.http.Exchange)" target="_blank">next.handle(exchange)</a>.
+   After this call,
+   <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/index.html?org/forgerock/openig/http/Exchange.html#response" target="_blank">exchange.response</a> contains the response that can be filtered.
+  </p><p>
+   A filter might elect not to pass the request to the next filter or handler,
+   and instead handle the request itself.
+   It can achieve this by merely avoiding a call
+   to <code class="literal">next.handle(exchange)</code>
+   and creating its own response object in the exchange.
+   The filter is also at liberty to replace a response with another of its own.
+   A filter can exist in more than one chain,
+   therefore should make no assumptions or correlations
+   using the chain it is supplied.
+   The only valid use of a chain by a filter is to call its
+   <code class="literal">handle()</code> method to dispatch the exchange
+   to the rest of the chain.
+  </p><div class="note"><h3 class="title">Note</h3><p>
+    If an existing response exists in the exchange object
+    and the filter intends to replace it with its own,
+    it must call the
+    <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/index.html?org/forgerock/openig/http/Message.html#close()" target="_blank">response.close()</a> method in order to signal
+    that the processing of the response from a remote server is complete.
+   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom-handler"></a>15.3.&nbsp;Implementing a Handler</h2></div></div></div><a class="indexterm" name="d0e4428"></a><p>
+   The <code class="literal">Handler</code> interface exposes a
+   <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/index.html?org/forgerock/openig/handler/Handler.html#handle(org.forgerock.openig.http.Exchange)" target="_blank">handle()</a> method,
+   which takes an
+   <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/index.html?org/forgerock/openig/http/Exchange.html#response" target="_blank">Exchange</a> object.
+   It processes the request in
+   <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/index.html?org/forgerock/openig/http/Exchange.html#request" target="_blank">exchange.request</a> and produces a response in
+   <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/index.html?org/forgerock/openig/http/Exchange.html#response" target="_blank">exchange.response</a>.
+   A handler can elect to dispatch the exchange to another handler or chain.
+  </p><div class="note"><h3 class="title">Note</h3><p>
+    If an existing response exists in the exchange object
+    and the filter intends to replace it with its own,
+    it must first check to see if the
+    it must call the
+    <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/index.html?org/forgerock/openig/http/Message.html#close()" target="_blank">response.close()</a> method in order to signal
+    that the processing of the response from a remote server is complete.
+   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom-heap-config"></a>15.4.&nbsp;Heap Object Configuration</h2></div></div></div><a class="indexterm" name="d0e4459"></a><p>Objects are added to the heap and supplied with configuration artifacts
   at initialization time. To be integrated with the configuration, a class must
   have an accompanying implementation of the <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/heap/Heaplet.html" target="_blank">Heaplet</a> interface. The easiest and most common way of exposing the
   heaplet is to extend the <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/heap/NestedHeaplet.html" target="_blank">NestedHeaplet</a> class in a nested class in the class you want to create
   and initialize and implementing its <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/heap/GenericHeaplet.html#create()" target="_blank">create</a> method.</p><p>Within the <code class="literal">create</code> method, you can access the
   object's configuration through the <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/heap/GenericHeaplet.html#config" target="_blank">config</a> field.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom-sample-filter"></a>15.5.&nbsp;Sample Filter</h2></div></div></div><p>The following sample filter sets an arbitrary header in the incoming
-  request and outgoing response.</p><pre class="brush: java;">package com.example.filter;
+  request and outgoing response.</p><pre class="brush: java;">
+package com.example.filter;
 
 // Java Standard Edition
 import java.io.IOException;
 
 // OpenIG Core Library
-import org.forgerock.openig.filter.Chain;
 import org.forgerock.openig.filter.GenericFilter;
 import org.forgerock.openig.handler.HandlerException;
 import org.forgerock.openig.heap.HeapException;
@@ -77,9 +107,9 @@ public class HelloWorldFilter extends GenericFilter {
     @Override
     public void filter(Exchange exchange, Handler next)
             throws HandlerException, IOException {
-        exchange.request.headers.put(name, value); // set header in request
+        exchange.request.getHeaders().putSingle(name, value); // set header in request
         next.handle(exchange); // pass to remaining filters &amp; handler in chain
-        exchange.response.headers.put(name, value); // set header in response
+        exchange.response.getHeaders().putSingle(name, value); // set header in response
     }
 
     public static class Heaplet extends NestedHeaplet {
@@ -92,7 +122,7 @@ public class HelloWorldFilter extends GenericFilter {
             return filter;
         }
     }
-}</pre><p>The corresponding heap object configuration is as follows.</p><pre class="brush: javascript;">{
+}  </pre><p>The corresponding heap object configuration is as follows.</p><pre class="brush: javascript;">{
      "name": "HelloWorldFilter",
      "type": "com.example.filter.HelloWorldFilter",
      "config": {

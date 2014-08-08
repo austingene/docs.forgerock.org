@@ -5,7 +5,7 @@
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
 </head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;4.&nbsp;Installing OpenIG</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-quickstart.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-usecases.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-install"></a>Chapter&nbsp;4.&nbsp;Installing OpenIG</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-install.html#configure-container">4.1. Configuring Deployment Containers</a></span></dt><dt><span class="section"><a href="chap-install.html#configure-network">4.2. Preparing the Network</a></span></dt><dt><span class="section"><a href="chap-install.html#install">4.3. Installing OpenIG</a></span></dt></dl></div><p>
   This chapter covers everything you need to install OpenIG.
- </p><a class="indexterm" name="d0e1044"></a><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+ </p><a class="indexterm" name="d0e1059"></a><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
     Make sure you have a supported Java version installed.
    </p><p>
     See the <em class="citetitle">Release Notes</em> section,
@@ -62,7 +62,7 @@
    </p><p>
     Certificate Authorities (CAs) are trusted signers
     with well-known certificates.
-    Browsers generally ship with with many well-known CA certificates.
+    Browsers generally ship with many well-known CA certificates.
     Java distributions also ship with many well-known CA certificates.
     Getting a certificate signed by a well-known CA generally costs money.
    </p><p>
@@ -72,7 +72,7 @@
     Whereas it is often enough
     to install a certificate signed by a well-known CA
     in the server key store as the basis of trust for HTTPS connections,
-    self-signed certificates must also be installed in all clients.<a href="#ftn.d0e1112" class="footnote" name="d0e1112"><sup class="footnote">[1]</sup></a>
+    self-signed certificates must also be installed in all clients.<a href="#ftn.d0e1127" class="footnote" name="d0e1127"><sup class="footnote">[1]</sup></a>
    </p><p>
     This guide describes how to install self-signed certificates,
     which are certainly fine for trying out the software
@@ -106,7 +106,7 @@
    </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="tomcat"></a>4.1.2.&nbsp;Configuring Apache Tomcat For OpenIG</h3></div></div></div><p>
     This section describes essential Apache Tomcat configuration
     that you need in order to run OpenIG.
-   </p><a class="indexterm" name="d0e1149"></a><p>
+   </p><a class="indexterm" name="d0e1164"></a><p>
     Download and install a supported version of Apache Tomcat from
     <a class="link" href="http://tomcat.apache.org/" target="_blank">http://tomcat.apache.org/</a>.
    </p><p>
@@ -219,7 +219,7 @@ $ <strong>keytool \
       </p></li></ol></div></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="jetty"></a>4.1.3.&nbsp;Configuring Jetty For OpenIG</h3></div></div></div><p>
     This section describes essential Jetty configuration
     that you need in order to run OpenIG.
-   </p><a class="indexterm" name="d0e1249"></a><p>
+   </p><a class="indexterm" name="d0e1264"></a><p>
     Download and install a supported version of Jetty from
     <a class="link" href="http://download.eclipse.org/jetty/" target="_blank">http://download.eclipse.org/jetty/</a>.
    </p><p>
@@ -387,7 +387,7 @@ etc/jetty-ssl.xml
        <a class="link" href="http://forgerock.org/downloads/openig-archive/" target="_blank">Archive</a> page
        makes older builds available.
       </p></li></ul></div></li><li class="step"><p>
-     Deploy the OpenIG .war <span class="emphasis"><em>to the root context</em></span>
+     Deploy the OpenIG war file <span class="emphasis"><em>to the root context</em></span>
      of the web application container.
     </p><p>
      OpenIG must be deployed to the root context, not below.
@@ -396,36 +396,36 @@ etc/jetty-ssl.xml
     </p><div class="variablelist"><p>
       By default, OpenIG files are located under
       <code class="filename">$HOME/.openig</code> on Linux, Mac OS X, and UNIX systems,
-      and <code class="filename">%appdata%\.openig</code> on Windows systems.
+      and <code class="filename">%appdata%\OpenIG</code> on Windows systems.
       OpenIG uses the following file system directories.
-     </p><dl class="variablelist"><dt><span class="term"><code class="filename">$HOME/.openig/config</code>, </span><span class="term"><code class="filename">%appdata%\.openig\config</code></span></dt><dd><p>
+     </p><dl class="variablelist"><dt><span class="term"><code class="filename">$HOME/.openig/config</code>, </span><span class="term"><code class="filename">%appdata%\OpenIG\config</code></span></dt><dd><p>
         OpenIG configuration files,
         where the main configuration file is <code class="filename">config.json</code>.
-       </p></dd><dt><span class="term"><code class="filename">$HOME/.openig/config/routes</code>, </span><span class="term"><code class="filename">%appdata%\.openig\config\routes</code></span></dt><dd><p>
+       </p></dd><dt><span class="term"><code class="filename">$HOME/.openig/config/routes</code>, </span><span class="term"><code class="filename">%appdata%\OpenIG\config\routes</code></span></dt><dd><p>
         OpenIG configuration files,
         where the main configuration file is <code class="filename">config.json</code>.
-       </p></dd><dt><span class="term"><code class="filename">$HOME/.openig/SAML</code>, </span><span class="term"><code class="filename">%appdata%\.openig\SAML</code></span></dt><dd><p>
+       </p></dd><dt><span class="term"><code class="filename">$HOME/.openig/SAML</code>, </span><span class="term"><code class="filename">%appdata%\OpenIG\SAML</code></span></dt><dd><p>
         OpenIG SAML 2.0 configuration files.
        </p><p>
         See the chapter,
         <a href="../../gateway-guide/index/chap-federation.html" class="link"><em class="citetitle">Using OpenIG Federation</em></a>,
         for more information.
-       </p></dd><dt><span class="term"><code class="filename">$HOME/.openig/scripts/groovy</code>, </span><span class="term"><code class="filename">%appdata%\.openig\scripts\groovy</code></span></dt><dd><p>
+       </p></dd><dt><span class="term"><code class="filename">$HOME/.openig/scripts/groovy</code>, </span><span class="term"><code class="filename">%appdata%\OpenIG\scripts\groovy</code></span></dt><dd><p>
         OpenIG script files, for Groovy scripted filters and handlers.
        </p><p>
         See the chapter,
         <a href="../../gateway-guide/index/chap-scripting.html" class="link"><em class="citetitle">Scripting Filters &amp; Handlers</em></a>,
         for more information.
-       </p></dd><dt><span class="term"><code class="filename">$HOME/.openig/tmp</code>, </span><span class="term"><code class="filename">%appdata%\.openig\SAML</code></span></dt><dd><p>
+       </p></dd><dt><span class="term"><code class="filename">$HOME/.openig/tmp</code>, </span><span class="term"><code class="filename">%appdata%\OpenIG\tmp</code></span></dt><dd><p>
         OpenIG temporary files.
        </p><p>
         This location can be used for capture files and temporary storage.
        </p></dd></dl></div><div class="itemizedlist"><p>
       You can change <code class="filename">$HOME/.openig</code>
-      (or <code class="filename">%appdata%\.openig</code>)
+      (or <code class="filename">%appdata%\OpenIG</code>)
       from the default location in the following ways.
      </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
-       Unpack the OpenIG .war,
+       Unpack the OpenIG war file,
        and edit the <code class="filename">WEB-INF/web.xml</code> application descriptor
        to set the <code class="literal">openig-base</code> initialization parameter
        to the full path to the base location for OpenIG files,
@@ -437,7 +437,7 @@ etc/jetty-ssl.xml
    &lt;servlet-class&gt;org.forgerock.openig.servlet.GatewayServlet&lt;/servlet-class&gt;
    &lt;init-param&gt;
      &lt;param-name&gt;openig-base&lt;/param-name&gt;
-     &lt;param-value&gt;/path/to/openig/files&lt;/param-value&gt;
+     &lt;param-value&gt;/path/to/openig&lt;/param-value&gt;
    &lt;/init-param&gt;
  &lt;/servlet&gt;
 
@@ -446,17 +446,17 @@ etc/jetty-ssl.xml
        to the full path to the base location for OpenIG files.
       </p><div class="screen"><pre>
 # On Linux, Mac OS X, and UNIX using Bash
-$ <strong>export OPENIG_BASE=/path/to/openig/files</strong>
+$ <strong>export OPENIG_BASE=/path/to/openig</strong>
 
 # On Windows
-C:&gt;<strong>set OPENIG_BASE=c:\path\to\openig\files</strong>
+C:&gt;<strong>set OPENIG_BASE=c:\path\to\openig</strong>
       </pre></div></li><li class="listitem"><p>
        Set the <code class="literal">openig.base</code> Java system property
        to the full path to the base location for OpenIG files
        when starting the web application container where OpenIG runs,
        as in the following example that starts Jetty server in the foreground.
       </p><div class="screen"><pre>
-$ <strong>java -Dopenig.base=/path/to/openig/files -jar start.jar</strong>
+$ <strong>java -Dopenig.base=/path/to/openig -jar start.jar</strong>
       </pre></div></li></ul></div><p>
      If you have not yet prepared configuration files, then start with the
      <a href="../../gateway-guide/index/appendix-config.html#config-proxy-and-capture" class="link"><em class="citetitle">Configuration for Proxy &amp; Capture</em></a>.
@@ -466,13 +466,13 @@ $ <strong>java -Dopenig.base=/path/to/openig/files -jar start.jar</strong>
      with that of the protected application.
     </p><p>
      On Windows,
-     copy the template to <code class="filename">%appdata%\.openig\config\config.json</code>.
+     copy the template to <code class="filename">%appdata%\OpenIG\config\config.json</code>.
      To locate the <code class="filename">%appdata%</code> folder
      for your version of Windows,
      open Windows Explorer,
      type <code class="literal">%appdata%</code> as the file path,
      and press Enter.
-     You must create the <code class="filename">%appdata%\.openig\config</code> folder,
+     You must create the <code class="filename">%appdata%\OpenIG\config</code> folder,
      and then add the configuration file.
     </p><p>
      On Windows,
@@ -504,7 +504,7 @@ $ <strong>java -Dopenig.base=/path/to/openig/files -jar start.jar</strong>
        The location for the capture log is set in <code class="filename">config.json</code>,
        by default <code class="filename">/tmp/gateway.log</code>.
       </p></li>
-    </ul></li></ol></div></div><div class="footnotes"><br><hr class="footnote-hr"><div id="ftn.d0e1112" class="footnote"><p><a href="#d0e1112" class="para"><sup class="para">[1] </sup></a>
+    </ul></li></ol></div></div><div class="footnotes"><br><hr class="footnote-hr"><div id="ftn.d0e1127" class="footnote"><p><a href="#d0e1127" class="para"><sup class="para">[1] </sup></a>
       When OpenIG acts as a client
       of a protected application or other server
       whose certificate is not recognized out of the box by the Java environment,
