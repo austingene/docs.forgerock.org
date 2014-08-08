@@ -10,7 +10,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="country">USA</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="phone">+1&nbsp;415-523-0772</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<code class="uri">www.forgerock.com</code><br>
-&nbsp;&nbsp;&nbsp;</p></div></div></div></div></div><div><p class="releaseinfo">Software release date: August 11, 2014</p></div><div><p class="copyright">Copyright &copy; 2011-2014 ForgeRock AS</p></div><div><a href="legalnotice.html">Legal Notice</a></div><div><p class="pubdate">Publication date: August 08, 2014</p></div></div><hr></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="preface"><a href="#preface">Preface</a></span></dt><dt><span class="chapter"><a href="#chap-overview">1. Solutions Overview</a></span></dt><dt><span class="chapter"><a href="#chap-howitworks">2. How OpenIG Works</a></span></dt><dt><span class="chapter"><a href="#chap-quickstart">3. Getting Started</a></span></dt><dt><span class="chapter"><a href="#chap-install">4. Installing OpenIG</a></span></dt><dt><span class="chapter"><a href="#chap-usecases">5. Detailed Use Cases</a></span></dt><dt><span class="chapter"><a href="#chap-credentials-tutorial">6. Tutorial On Looking Up Credentials</a></span></dt><dt><span class="chapter"><a href="#chap-password-capture-replay-tutorial">7. Tutorial On OpenAM Password Capture &amp; Replay</a></span></dt><dt><span class="chapter"><a href="#chap-federation">8. Using OpenIG Federation</a></span></dt><dt><span class="chapter"><a href="#chap-federation-tutorial">9. Tutorial For OpenIG Federation</a></span></dt><dt><span class="chapter"><a href="#chap-oauth-rs">10. Configuring OpenIG as an OAuth 2.0 Resource Server</a></span></dt><dt><span class="chapter"><a href="#chap-oauth2-client">11. Configuring OpenIG as an OAuth 2.0 Client</a></span></dt><dt><span class="chapter"><a href="#chap-routing">12. Routing Tutorial</a></span></dt><dt><span class="chapter"><a href="#chap-gateway-templates">13. Configuration Templates</a></span></dt><dt><span class="chapter"><a href="#chap-scripting">14. Scripting Filters &amp; Handlers</a></span></dt><dt><span class="chapter"><a href="#chap-customizing">15. Customizing OpenIG</a></span></dt><dt><span class="chapter"><a href="#chap-troubleshooting">16. Troubleshooting</a></span></dt><dt><span class="appendix"><a href="#appendix-config">A. Tutorial Configuration Files</a></span></dt><dt><span class="index"><a href="#d851e4724">Index</a></span></dt></dl></div><div lang="en" class="preface"><div class="titlepage"><div><div><h1 class="title"><a name="preface"></a>Preface</h1></div></div></div><p>
+&nbsp;&nbsp;&nbsp;</p></div></div></div></div></div><div><p class="releaseinfo">Software release date: August 11, 2014</p></div><div><p class="copyright">Copyright &copy; 2011-2014 ForgeRock AS</p></div><div><a href="legalnotice.html">Legal Notice</a></div><div><p class="pubdate">Publication date: August 08, 2014</p></div></div><hr></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="preface"><a href="#preface">Preface</a></span></dt><dt><span class="chapter"><a href="#chap-overview">1. Solutions Overview</a></span></dt><dt><span class="chapter"><a href="#chap-howitworks">2. How OpenIG Works</a></span></dt><dt><span class="chapter"><a href="#chap-quickstart">3. Getting Started</a></span></dt><dt><span class="chapter"><a href="#chap-install">4. Installing OpenIG</a></span></dt><dt><span class="chapter"><a href="#chap-usecases">5. Detailed Use Cases</a></span></dt><dt><span class="chapter"><a href="#chap-credentials-tutorial">6. Tutorial On Looking Up Credentials</a></span></dt><dt><span class="chapter"><a href="#chap-password-capture-replay-tutorial">7. Tutorial On OpenAM Password Capture &amp; Replay</a></span></dt><dt><span class="chapter"><a href="#chap-federation">8. Using OpenIG Federation</a></span></dt><dt><span class="chapter"><a href="#chap-federation-tutorial">9. Tutorial For OpenIG Federation</a></span></dt><dt><span class="chapter"><a href="#chap-oauth-rs">10. Configuring OpenIG as an OAuth 2.0 Resource Server</a></span></dt><dt><span class="chapter"><a href="#chap-oauth2-client">11. Configuring OpenIG as an OAuth 2.0 Client</a></span></dt><dt><span class="chapter"><a href="#chap-routing">12. Routing Tutorial</a></span></dt><dt><span class="chapter"><a href="#chap-gateway-templates">13. Configuration Templates</a></span></dt><dt><span class="chapter"><a href="#chap-scripting">14. Scripting Filters &amp; Handlers</a></span></dt><dt><span class="chapter"><a href="#chap-customizing">15. Customizing OpenIG</a></span></dt><dt><span class="chapter"><a href="#chap-troubleshooting">16. Troubleshooting</a></span></dt><dt><span class="appendix"><a href="#appendix-config">A. Tutorial Configuration Files</a></span></dt><dt><span class="index"><a href="#d851e4727">Index</a></span></dt></dl></div><div lang="en" class="preface"><div class="titlepage"><div><div><h1 class="title"><a name="preface"></a>Preface</h1></div></div></div><p>
   This guide shows you how to install and configure OpenIG,
   a high-performance reverse proxy server with specialized session management
   and credential replay functionality.
@@ -1118,8 +1118,11 @@ etc/jetty-ssl.xml
         OpenIG configuration files,
         where the main configuration file is <code class="filename">config.json</code>.
        </p></dd><dt><span class="term"><code class="filename">$HOME/.openig/config/routes</code>, </span><span class="term"><code class="filename">%appdata%\OpenIG\config\routes</code></span></dt><dd><p>
-        OpenIG configuration files,
-        where the main configuration file is <code class="filename">config.json</code>.
+        OpenIG route configuration files.
+       </p><p>
+        See the chapter,
+        <a href="../gateway-guide/index.html#chap-routing" class="link"><em class="citetitle">Routing Tutorial</em></a>,
+        for more information.
        </p></dd><dt><span class="term"><code class="filename">$HOME/.openig/SAML</code>, </span><span class="term"><code class="filename">%appdata%\OpenIG\SAML</code></span></dt><dd><p>
         OpenIG SAML 2.0 configuration files.
        </p><p>
@@ -1243,7 +1246,7 @@ $ <strong>keytool \
       and so works both with self-signed certificates
       and also with certificates used to sign server certificates.
      </p></div></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-usecases"></a>Chapter&nbsp;5.&nbsp;Detailed Use Cases</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="#portal-app-login">5.1. Portal Application Login</a></span></dt><dt><span class="section"><a href="#am-integration">5.2. OpenAM Integration</a></span></dt><dt><span class="section"><a href="#sp-initiated-sso">5.3. OpenIG Federation SP Initiated SAML 2.0 SSO</a></span></dt><dt><span class="section"><a href="#idp-initiated-sso">5.4. OpenIG Federation IDP Initiated SAML 2.0 SSO</a></span></dt></dl></div><p>This chapter diagrams and describes common use case request and
- response flows.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="portal-app-login"></a>5.1.&nbsp;Portal Application Login</h2></div></div></div><a class="indexterm" name="d851e1651"></a><p>The figure below illustrates a sample flow with a description of each
+ response flows.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="portal-app-login"></a>5.1.&nbsp;Portal Application Login</h2></div></div></div><a class="indexterm" name="d851e1654"></a><p>The figure below illustrates a sample flow with a description of each
   request from the browser to the back end application.
   This flow is based on the tutorial,
   <a href="../gateway-guide/index.html#tutorial-credentials-from-file" class="link"><em class="citetitle">Login With Credentials From a File</em></a>.
@@ -1258,7 +1261,7 @@ $ <strong>keytool \
     authentication.</p></li><li class="listitem"><p>OpenIG intercepts the redirect, finds a match for the login page,
     fetches the credentials from the flat file.</p></li><li class="listitem"><p>OpenIG creates the login form and POSTs it to the Portal login
     page.</p></li><li class="listitem"><p>Portal validates the credentials and redirects to the user's home
-    page.</p></li><li class="listitem"><p>OpenIG passes the request through to the browser.</p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="am-integration"></a>5.2.&nbsp;OpenAM Integration</h2></div></div></div><a class="indexterm" name="d851e1691"></a><p>The figure below illustrates OpenIG integrated into an OpenAM
+    page.</p></li><li class="listitem"><p>OpenIG passes the request through to the browser.</p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="am-integration"></a>5.2.&nbsp;OpenAM Integration</h2></div></div></div><a class="indexterm" name="d851e1694"></a><p>The figure below illustrates OpenIG integrated into an OpenAM
   deployment. In this deployment OpenIG is running in a container
   that is protected by an OpenAM policy agent. The agent is configured to
   forward a header, with the subject (user) of the single sign-on session, to
@@ -1279,7 +1282,7 @@ $ <strong>keytool \
     </p></li><li class="listitem"><p>Portal finds no local session, redirects to the Portal login
     page.</p></li><li class="listitem"><p>OpenIG inspects the redirect, finds a match for the login page,
     creates the login form, and POSTs it to the Portal.</p></li><li class="listitem"><p>Portal validates the credentials and redirects to the Portal
-    page.</p></li><li class="listitem"><p>OpenIG passes the request through to the browser.</p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="sp-initiated-sso"></a>5.3.&nbsp;OpenIG Federation SP Initiated SAML 2.0 SSO</h2></div></div></div><a class="indexterm" name="d851e1736"></a><p>
+    page.</p></li><li class="listitem"><p>OpenIG passes the request through to the browser.</p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="sp-initiated-sso"></a>5.3.&nbsp;OpenIG Federation SP Initiated SAML 2.0 SSO</h2></div></div></div><a class="indexterm" name="d851e1739"></a><p>
    The figure below illustrates OpenIG Federation
    providing SAML 2.0 features acting as Service Provider (SP)
    in an SP-initiated single sign-on configuration.
@@ -1317,7 +1320,7 @@ $ <strong>keytool \
     to the application.</p></li><li class="listitem"><p>The HR application verifies the credentials and redirects to its
     home page.</p></li><li class="listitem"><p>
      OpenIG Federation passes the HR application's redirect to the browser.
-    </p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idp-initiated-sso"></a>5.4.&nbsp;OpenIG Federation IDP Initiated SAML 2.0 SSO</h2></div></div></div><a class="indexterm" name="d851e1786"></a><p>
+    </p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idp-initiated-sso"></a>5.4.&nbsp;OpenIG Federation IDP Initiated SAML 2.0 SSO</h2></div></div></div><a class="indexterm" name="d851e1789"></a><p>
    The figure below illustrates OpenIG Federation
    providing SAML 2.0 features acting as Service Provider
    in an IDP-initiated single sign-on configuration.
@@ -1329,7 +1332,7 @@ $ <strong>keytool \
     makes the attributes available to the OpenIG login chain.
     </p></li><li class="listitem"><p>OpenIG login chain retrieves the user credentials and POSTs the login
     form to the HR application.</p></li><li class="listitem"><p>HR application validates the credentials and redirects to the main
-    page of the application.</p></li></ol></div></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-credentials-tutorial"></a>Chapter&nbsp;6.&nbsp;Tutorial On Looking Up Credentials</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="#tutorial-before-you-start">6.1. Before You Start</a></span></dt><dt><span class="section"><a href="#tutorial-credentials-from-file">6.2. Login With Credentials From a File</a></span></dt><dt><span class="section"><a href="#tutorial-credentials-from-sql">6.3. Login With Credentials From a Database</a></span></dt></dl></div><a class="indexterm" name="d851e1818"></a><a class="indexterm" name="d851e1823"></a><p>
+    page of the application.</p></li></ol></div></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-credentials-tutorial"></a>Chapter&nbsp;6.&nbsp;Tutorial On Looking Up Credentials</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="#tutorial-before-you-start">6.1. Before You Start</a></span></dt><dt><span class="section"><a href="#tutorial-credentials-from-file">6.2. Login With Credentials From a File</a></span></dt><dt><span class="section"><a href="#tutorial-credentials-from-sql">6.3. Login With Credentials From a Database</a></span></dt></dl></div><a class="indexterm" name="d851e1821"></a><a class="indexterm" name="d851e1826"></a><p>
   In the chapter on
   <a href="../gateway-guide/index.html#chap-quickstart" class="link"><em class="citetitle">Getting Started</em></a>,
   you learned how to configure OpenIG
@@ -1484,7 +1487,7 @@ scarter,sprain,Sam Carter,scarter@example.com
    If everything is configured correctly, OpenIG logs you in as George.
   </p><p>
    What's happening behind the scenes?
-  </p><div class="figure"><a name="figure-login-from-file"></a><div class="figure-title">Figure&nbsp;6.1.&nbsp;</div><div class="figure-contents"><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/login-from-file.png" align="middle" height="360"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="ld-d851e1964.html" target="longdesc">D</a>]</span></div></div></div></div><br class="figure-break"><p>
+  </p><div class="figure"><a name="figure-login-from-file"></a><div class="figure-title">Figure&nbsp;6.1.&nbsp;</div><div class="figure-contents"><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/login-from-file.png" align="middle" height="360"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="ld-d851e1967.html" target="longdesc">D</a>]</span></div></div></div></div><br class="figure-break"><p>
    OpenIG intercepts your browser's HTTP GET request.
    The OpenIG "FileAttributesFilter" looks up credentials in a file,
    and stores the credentials it finds in the exchange.
@@ -1699,7 +1702,7 @@ $ <strong>cp /path/to/h2/bin/h2-*.jar /path/to/jetty/lib/ext/</strong>
      OpenIG logs you in automatically as George.
     </p></li></ol></div><p>
    What's happening behind the scenes?
-  </p><div class="figure"><a name="figure-login-from-sql"></a><div class="figure-title">Figure&nbsp;6.2.&nbsp;</div><div class="figure-contents"><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/login-from-sql.png" align="middle" height="360"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="ld-d851e2171.html" target="longdesc">D</a>]</span></div></div></div></div><br class="figure-break"><p>
+  </p><div class="figure"><a name="figure-login-from-sql"></a><div class="figure-title">Figure&nbsp;6.2.&nbsp;</div><div class="figure-contents"><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/login-from-sql.png" align="middle" height="360"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="ld-d851e2174.html" target="longdesc">D</a>]</span></div></div></div></div><br class="figure-break"><p>
    OpenIG intercepts your browser's HTTP GET request.
    The OpenIG "SqlAttributesFilter" looks up credentials in H2,
    and stores the credentials it finds in the exchange.
@@ -1709,7 +1712,7 @@ $ <strong>cp /path/to/h2/bin/h2-*.jar /path/to/jetty/lib/ext/</strong>
    builds the login form, and performs the HTTP POST request to the HTTP server.
    The HTTP server validates the credentials, and responds with a profile page.
    OpenIG then passes the response from the HTTP server to your browser.
-  </p></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-password-capture-replay-tutorial"></a>Chapter&nbsp;7.&nbsp;Tutorial On OpenAM Password Capture &amp; Replay</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="#capture-replay-flow">7.1. Detailed Flow</a></span></dt><dt><span class="section"><a href="#capture-replay-summary">7.2. Setup Summary</a></span></dt><dt><span class="section"><a href="#capture-replay-setup">7.3. Setup Details</a></span></dt><dt><span class="section"><a href="#capture-replay-try-it-out">7.4. Trying It Out</a></span></dt></dl></div><a class="indexterm" name="d851e2183"></a><p>
+  </p></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-password-capture-replay-tutorial"></a>Chapter&nbsp;7.&nbsp;Tutorial On OpenAM Password Capture &amp; Replay</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="#capture-replay-flow">7.1. Detailed Flow</a></span></dt><dt><span class="section"><a href="#capture-replay-summary">7.2. Setup Summary</a></span></dt><dt><span class="section"><a href="#capture-replay-setup">7.3. Setup Details</a></span></dt><dt><span class="section"><a href="#capture-replay-try-it-out">7.4. Trying It Out</a></span></dt></dl></div><a class="indexterm" name="d851e2186"></a><p>
   This tutorial walks you through an OpenAM integration
   with OpenAM's password capture and replay feature.
   This feature of OpenAM is typically used to integrate
@@ -2042,7 +2045,7 @@ $ <strong>java -classpath \
   See the
   <a href="../gateway-guide/index.html#chap-federation-tutorial" class="link"><em class="citetitle">Tutorial For OpenIG Federation</em></a>
   in order to try this out with OpenAM playing the role of Identity Provider.
- </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="federation-installation"></a>8.1.&nbsp;Installation Overview</h2></div></div></div><a class="indexterm" name="d851e2606"></a><div class="itemizedlist"><p>
+ </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="federation-installation"></a>8.1.&nbsp;Installation Overview</h2></div></div></div><a class="indexterm" name="d851e2609"></a><div class="itemizedlist"><p>
     This section summarizes the steps needed to prepare OpenIG
     to act as a SAML 2.0 SP for your target application.
    </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
@@ -2064,7 +2067,7 @@ $ <strong>java -classpath \
      (An OpenAM Fedlet is a small web application that can act as SP.)
     </p></li><li class="listitem"><p>
      Import OpenIG metadata to your Identity Provider.
-    </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="federation-configuration-files"></a>8.2.&nbsp;Configuration File Overview</h2></div></div></div><a class="indexterm" name="d851e2635"></a><p>
+    </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="federation-configuration-files"></a>8.2.&nbsp;Configuration File Overview</h2></div></div></div><a class="indexterm" name="d851e2638"></a><p>
    You configure the Federation component by modifying
    both the OpenIG <code class="filename">config.json</code> file
    and also by including Federation-specific XML files with the configuration.
@@ -2113,7 +2116,7 @@ $ <strong>java -classpath \
      </p></dd><dt><span class="term"><code class="filename">$HOME/.openig/SAML/sp.xml</code>, </span><span class="term"><code class="filename">$HOME/.openig/SAML/sp-extended.xml</code></span></dt><dd><p>
       These are the standard metadata and metadata extensions
       for the OpenIG Federation component.
-     </p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="federation-configuration"></a>8.3.&nbsp;Configuring the Federation Handler</h2></div></div></div><a class="indexterm" name="d851e2738"></a><p>
+     </p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="federation-configuration"></a>8.3.&nbsp;Configuring the Federation Handler</h2></div></div></div><a class="indexterm" name="d851e2741"></a><p>
    The simplest way to configure the Federation component
    is to use the OpenAM task wizard to generate a Fedlet,
    and then copy the Fedlet configuration files to the correct locations.
@@ -2303,7 +2306,7 @@ $ <strong>ssoadm \
  --password-file /tmp/pwd.txt \
  --entityid http://openam.example.com:8088/openam \
  --meta-data-file /tmp/idp.xml</strong>
-  </pre></div></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-federation-tutorial"></a>Chapter&nbsp;9.&nbsp;Tutorial For OpenIG Federation</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="#fed-tutorial-before-you-start">9.1. Before You Start</a></span></dt><dt><span class="section"><a href="#fed-tutorial-configure-openam">9.2. Configuring OpenAM</a></span></dt><dt><span class="section"><a href="#fed-tutorial-configure-federation">9.3. Configuring OpenIG For Federation</a></span></dt><dt><span class="section"><a href="#fed-tutorial-testing">9.4. Trying It Out</a></span></dt></dl></div><a class="indexterm" name="d851e3016"></a><p>
+  </pre></div></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-federation-tutorial"></a>Chapter&nbsp;9.&nbsp;Tutorial For OpenIG Federation</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="#fed-tutorial-before-you-start">9.1. Before You Start</a></span></dt><dt><span class="section"><a href="#fed-tutorial-configure-openam">9.2. Configuring OpenAM</a></span></dt><dt><span class="section"><a href="#fed-tutorial-configure-federation">9.3. Configuring OpenIG For Federation</a></span></dt><dt><span class="section"><a href="#fed-tutorial-testing">9.4. Trying It Out</a></span></dt></dl></div><a class="indexterm" name="d851e3019"></a><p>
   This tutorial demonstrates how to configure OpenIG
   as a SAML 2.0 federation service provider
   to log users in to a protected application.
@@ -2472,7 +2475,7 @@ sp.xml</em>
   This chapter explains how OpenIG acts as an OAuth 2.0 Resource Server,
   and follows with a tutorial
   that shows you how to use OpenIG as a resource server.
- </p><a class="indexterm" name="d851e3236"></a><a class="indexterm" name="d851e3241"></a><a class="indexterm" name="d851e3246"></a><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="about-oauth2-rs"></a>10.1.&nbsp;About OpenIG as an OAuth 2.0 Resource Server</h2></div></div></div><p>
+ </p><a class="indexterm" name="d851e3239"></a><a class="indexterm" name="d851e3244"></a><a class="indexterm" name="d851e3249"></a><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="about-oauth2-rs"></a>10.1.&nbsp;About OpenIG as an OAuth 2.0 Resource Server</h2></div></div></div><p>
    <a class="link" href="http://tools.ietf.org/html/rfc6749" target="_blank">The OAuth 2.0 Authorization Framework</a> describes a way of
    allowing a third-party application to access a user's resources
    without having the user's credentials.
@@ -2779,7 +2782,7 @@ $ <strong>curl \
   and follows with a tutorial
   that shows you how to use OpenIG
   as an OpenID Connect 1.0 relying party.
- </p><a class="indexterm" name="d851e3486"></a><a class="indexterm" name="d851e3491"></a><a class="indexterm" name="d851e3496"></a><a class="indexterm" name="d851e3501"></a><a class="indexterm" name="d851e3506"></a><a class="indexterm" name="d851e3511"></a><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="about-oauth2-client"></a>11.1.&nbsp;About OpenIG as an OAuth 2.0 Client</h2></div></div></div><p>
+ </p><a class="indexterm" name="d851e3489"></a><a class="indexterm" name="d851e3494"></a><a class="indexterm" name="d851e3499"></a><a class="indexterm" name="d851e3504"></a><a class="indexterm" name="d851e3509"></a><a class="indexterm" name="d851e3514"></a><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="about-oauth2-client"></a>11.1.&nbsp;About OpenIG as an OAuth 2.0 Client</h2></div></div></div><p>
    As described in the chapter on
    <a href="../gateway-guide/index.html#chap-oauth-rs" class="link"><em class="citetitle">Configuring OpenIG as an OAuth 2.0 Resource Server</em></a>,
    an OAuth 2.0 client is the third-party application that needs access
@@ -3040,7 +3043,7 @@ $ <strong>curl \
    The "OutgoingChain" extracts credentials to re-inject them into the exchange.
    Its login filter then uses the credentials to log the user in
    to the minimal HTTP server, which responds with its User Information page.
-  </p></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-routing"></a>Chapter&nbsp;12.&nbsp;Routing Tutorial</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="#routing-before-you-start">12.1. Before You Start</a></span></dt><dt><span class="section"><a href="#routing-route-setup">12.2. Configuring Routes</a></span></dt><dt><span class="section"><a href="#routing-router-setup">12.3. Configuring the Router</a></span></dt><dt><span class="section"><a href="#routing-try-it-out">12.4. Trying it Out</a></span></dt><dt><span class="section"><a href="#routing-lockdown">12.5. Locking Down Route Configurations</a></span></dt></dl></div><a class="indexterm" name="d851e3760"></a><a class="indexterm" name="d851e3763"></a><a class="indexterm" name="d851e3768"></a><a class="indexterm" name="d851e3773"></a><p>
+  </p></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-routing"></a>Chapter&nbsp;12.&nbsp;Routing Tutorial</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="#routing-before-you-start">12.1. Before You Start</a></span></dt><dt><span class="section"><a href="#routing-route-setup">12.2. Configuring Routes</a></span></dt><dt><span class="section"><a href="#routing-router-setup">12.3. Configuring the Router</a></span></dt><dt><span class="section"><a href="#routing-try-it-out">12.4. Trying it Out</a></span></dt><dt><span class="section"><a href="#routing-lockdown">12.5. Locking Down Route Configurations</a></span></dt></dl></div><a class="indexterm" name="d851e3763"></a><a class="indexterm" name="d851e3766"></a><a class="indexterm" name="d851e3771"></a><a class="indexterm" name="d851e3776"></a><p>
   Other tutorials in this guide demonstrate use of a single configuration file
   for all of OpenIG.
   In those tutorials, you had to restart OpenIG
@@ -3248,7 +3251,7 @@ $ <strong>curl \
    To use the routes, you must configure a Router.
   </p><p>
    The Router is a handler that you can configure in the top-level
-   <code class="filename">config.json</code> file for OpenIG.<a href="#ftn.d851e3904" class="footnote" name="d851e3904"><sup class="footnote">[2]</sup></a>
+   <code class="filename">config.json</code> file for OpenIG.<a href="#ftn.d851e3907" class="footnote" name="d851e3907"><sup class="footnote">[2]</sup></a>
    The Router's job is to pass Exchanges to configured Routes,
    and to periodically reload changed route configurations.
    As Routes define the conditions on which they accept any given Exchange,
@@ -3365,7 +3368,7 @@ $ <strong>curl http://www.example.com:8080 | grep george</strong>
         "scanInterval": -1
     }
 }
-  </pre></div><div class="footnotes"><br><hr class="footnote-hr"><div id="ftn.d851e3904" class="footnote"><p><a href="#d851e3904" class="para"><sup class="para">[2] </sup></a>
+  </pre></div><div class="footnotes"><br><hr class="footnote-hr"><div id="ftn.d851e3907" class="footnote"><p><a href="#d851e3907" class="para"><sup class="para">[2] </sup></a>
      In fact you can add a Router wherever you can add a Handler,
      not only in the top-level configuration.
     </p></div></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-gateway-templates"></a>Chapter&nbsp;13.&nbsp;Configuration Templates</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="#template-proxy-capture">13.1. Proxy &amp; Capture</a></span></dt><dt><span class="section"><a href="#template-simple-login">13.2. Simple Login Form</a></span></dt><dt><span class="section"><a href="#template-login-cookie">13.3. Login Form With Cookie From Login Page</a></span></dt><dt><span class="section"><a href="#template-login-extract-cookie-filters">13.4. Login Form With Extract Filter &amp; Cookie Filter</a></span></dt><dt><span class="section"><a href="#template-login-hidden-value">13.5. Login Which Requires a Hidden Value From the Login Page</a></span></dt><dt><span class="section"><a href="#template-http-and-https">13.6. HTTP &amp; HTTPS Application</a></span></dt><dt><span class="section"><a href="#template-am-integration-headers">13.7. OpenAM Integration With Headers</a></span></dt><dt><span class="section"><a href="#template-owa-online">13.8. Microsoft Online Outlook Web Access</a></span></dt></dl></div><p>This chapter contains templates of common configurations. Start with one
@@ -3381,7 +3384,7 @@ $ <strong>curl http://www.example.com:8080 | grep george</strong>
     for initial development or debugging and may rapidly fill up your available
     disk space if left enabled.</p></li><li class="listitem"><p>Substitute the <code class="literal">TARGETIP</code> tag with the IP address of
     your application.</p></li><li class="listitem"><p>Modify the <code class="literal">LoginRequest</code> filter to match the form
-    required for login by your target application.</p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-proxy-capture"></a>13.1.&nbsp;Proxy &amp; Capture</h2></div></div></div><a class="indexterm" name="d851e4026"></a><p>Proxies all requests and captures them in a flat file. Use this
+    required for login by your target application.</p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-proxy-capture"></a>13.1.&nbsp;Proxy &amp; Capture</h2></div></div></div><a class="indexterm" name="d851e4029"></a><p>Proxies all requests and captures them in a flat file. Use this
   template if you need to analyze the traffic for your application. Simply
   change the <code class="literal">baseURI</code> to be that of the target application,
   restart OpenIG, and login to the application. The entire sequence is logged
@@ -3447,7 +3450,7 @@ $ <strong>curl http://www.example.com:8080 | grep george</strong>
     },
     "handlerObject": "DispatchHandler"
 }
-   </pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-simple-login"></a>13.2.&nbsp;Simple Login Form</h2></div></div></div><a class="indexterm" name="d851e4043"></a><p>Logs the user into the target application with hard-coded user name
+   </pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-simple-login"></a>13.2.&nbsp;Simple Login Form</h2></div></div></div><a class="indexterm" name="d851e4046"></a><p>Logs the user into the target application with hard-coded user name
   and password. This template intercepts the login page request and replaces
   it with the login form.</p><div class="informalexample"><pre class="brush: javascript;">
     {
@@ -3525,7 +3528,7 @@ $ <strong>curl http://www.example.com:8080 | grep george</strong>
     "handlerObject": "DispatchHandler"
 }
 
-   </pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-login-cookie"></a>13.3.&nbsp;Login Form With Cookie From Login Page</h2></div></div></div><a class="indexterm" name="d851e4057"></a><p>For applications that expect a cookie from the login page to be sent
+   </pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-login-cookie"></a>13.3.&nbsp;Login Form With Cookie From Login Page</h2></div></div></div><a class="indexterm" name="d851e4060"></a><p>For applications that expect a cookie from the login page to be sent
   in the login request form. This templates allows the login page request to
   go through to the target, intercepts the response, then creates the login
   form and adds the intercepted cookie to the POST.</p><div class="informalexample"><pre class="brush: javascript;">
@@ -3630,7 +3633,7 @@ $ <strong>curl http://www.example.com:8080 | grep george</strong>
     "handlerObject": "DispatchHandler"
 }
 
-   </pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-login-extract-cookie-filters"></a>13.4.&nbsp;Login Form With Extract Filter &amp; Cookie Filter</h2></div></div></div><a class="indexterm" name="d851e4071"></a><p>For applications that return the login page when the user tries to
+   </pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-login-extract-cookie-filters"></a>13.4.&nbsp;Login Form With Extract Filter &amp; Cookie Filter</h2></div></div></div><a class="indexterm" name="d851e4074"></a><p>For applications that return the login page when the user tries to
   access a page without a valid session. This template shows how to use the
   <code class="literal">ExtractFilter</code> to find the login page on the response and
   use the <code class="literal">CookieFilter</code> to ensure the cookies from the
@@ -3783,7 +3786,7 @@ $ <strong>curl http://www.example.com:8080 | grep george</strong>
     "handlerObject": "DispatchHandler"
 }
 
-   </pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-login-hidden-value"></a>13.5.&nbsp;Login Which Requires a Hidden Value From the Login Page</h2></div></div></div><a class="indexterm" name="d851e4121"></a><p>Extracts a hidden value from the login page and includes it in the
+   </pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-login-hidden-value"></a>13.5.&nbsp;Login Which Requires a Hidden Value From the Login Page</h2></div></div></div><a class="indexterm" name="d851e4124"></a><p>Extracts a hidden value from the login page and includes it in the
   login form POSTed to the target application.</p><div class="informalexample"><pre class="brush: javascript;">
     {
     "heap": {
@@ -3879,7 +3882,7 @@ $ <strong>curl http://www.example.com:8080 | grep george</strong>
     "handlerObject": "DispatchHandler"
 }
 
-   </pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-http-and-https"></a>13.6.&nbsp;HTTP &amp; HTTPS Application</h2></div></div></div><a class="indexterm" name="d851e4135"></a><p>Proxies traffic to an application listening on ports 80 and 443. The
+   </pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-http-and-https"></a>13.6.&nbsp;HTTP &amp; HTTPS Application</h2></div></div></div><a class="indexterm" name="d851e4138"></a><p>Proxies traffic to an application listening on ports 80 and 443. The
   assumption is the application uses HTTPS for authentication and HTTP for the
   general application features. Assuming the login will all take place on
   port 443, you will need to add the login filters and handlers to the
@@ -4031,7 +4034,7 @@ $ <strong>curl http://www.example.com:8080 | grep george</strong>
     "handlerObject": "DispatchHandler"
 }
 
-   </pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-owa-online"></a>13.8.&nbsp;Microsoft Online Outlook Web Access</h2></div></div></div><a class="indexterm" name="d851e4170"></a><p>A sample template used to log a user into Microsoft Online Outlook Web
+   </pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="template-owa-online"></a>13.8.&nbsp;Microsoft Online Outlook Web Access</h2></div></div></div><a class="indexterm" name="d851e4173"></a><p>A sample template used to log a user into Microsoft Online Outlook Web
   Access. This template shows how you would use OpenIG and the OpenAM
   password capture feature to integrate with OWA. You can follow the
   <a href="../gateway-guide/index.html#chap-password-capture-replay-tutorial" class="link">Tutorial On Password Capture
@@ -4166,7 +4169,7 @@ $ <strong>curl http://www.example.com:8080 | grep george</strong>
     "handlerObject": "DispatchHandler"
 }
 
-   </pre></div></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-scripting"></a>Chapter&nbsp;14.&nbsp;Scripting Filters &amp; Handlers</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="#scripting-dispatch">14.1. Scripting Dispatch</a></span></dt><dt><span class="section"><a href="#scripting-http-basic">14.2. Scripting HTTP Basic Authentication</a></span></dt><dt><span class="section"><a href="#scripting-ldap-auth">14.3. Scripting LDAP Authentication</a></span></dt><dt><span class="section"><a href="#scripting-sql">14.4. Scripting SQL Queries</a></span></dt></dl></div><a class="indexterm" name="d851e4188"></a><a class="indexterm" name="d851e4191"></a><p>
+   </pre></div></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-scripting"></a>Chapter&nbsp;14.&nbsp;Scripting Filters &amp; Handlers</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="#scripting-dispatch">14.1. Scripting Dispatch</a></span></dt><dt><span class="section"><a href="#scripting-http-basic">14.2. Scripting HTTP Basic Authentication</a></span></dt><dt><span class="section"><a href="#scripting-ldap-auth">14.3. Scripting LDAP Authentication</a></span></dt><dt><span class="section"><a href="#scripting-sql">14.4. Scripting SQL Queries</a></span></dt></dl></div><a class="indexterm" name="d851e4191"></a><a class="indexterm" name="d851e4194"></a><p>
   To extend what you can do with Filters and Handlers,
   OpenIG supports dynamic scripting languages like Groovy
   through the use of <code class="literal">ScriptableFilter</code>
@@ -4500,14 +4503,14 @@ class SqlClient {
  </p><p>
   Interface Stability:
   <a href="../reference/index.html#interface-stability" class="link">Evolving</a>
- </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="extension-points"></a>15.1.&nbsp;Key Extension Points</h2></div></div></div><a class="indexterm" name="d851e4355"></a><p>The two primary extension points are the interfaces: <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/filter/Filter.html" target="_blank">Filter</a> (for processing a request and/or response en
+ </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="extension-points"></a>15.1.&nbsp;Key Extension Points</h2></div></div></div><a class="indexterm" name="d851e4358"></a><p>The two primary extension points are the interfaces: <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/filter/Filter.html" target="_blank">Filter</a> (for processing a request and/or response en
   route) and <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/handler/Handler.html" target="_blank">Handler</a> (for generating responses from requests).
   These interfaces are similar to the Java Enterprise Edition
   <code class="literal">Filter</code> and <code class="literal">Servlet</code> interfaces, with
   some differences in the semantics of messages. While you can simply implement
   these interfaces, there are also included convenience classes: <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/filter/GenericFilter.html" target="_blank">GenericFilter</a> and <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/handler/GenericHandler.html" target="_blank">GenericHandler</a> that you can use if you intend to make
   your extensions configurable through the OpenIG configuration
-  resource.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom-filter"></a>15.2.&nbsp;Implementing a Filter</h2></div></div></div><a class="indexterm" name="d851e4383"></a><p>
+  resource.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom-filter"></a>15.2.&nbsp;Implementing a Filter</h2></div></div></div><a class="indexterm" name="d851e4386"></a><p>
    The <code class="literal">Filter</code> interface exposes a
    <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/index.html?org/forgerock/openig/filter/Filter.html#filter(org.forgerock.openig.http.Exchange,%20org.forgerock.openig.handler.Handler)" target="_blank">filter()</a> method,
    which takes an
@@ -4540,7 +4543,7 @@ class SqlClient {
     it must call the
     <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/index.html?org/forgerock/openig/http/Message.html#close()" target="_blank">response.close()</a> method in order to signal
     that the processing of the response from a remote server is complete.
-   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom-handler"></a>15.3.&nbsp;Implementing a Handler</h2></div></div></div><a class="indexterm" name="d851e4428"></a><p>
+   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom-handler"></a>15.3.&nbsp;Implementing a Handler</h2></div></div></div><a class="indexterm" name="d851e4431"></a><p>
    The <code class="literal">Handler</code> interface exposes a
    <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/index.html?org/forgerock/openig/handler/Handler.html#handle(org.forgerock.openig.http.Exchange)" target="_blank">handle()</a> method,
    which takes an
@@ -4556,7 +4559,7 @@ class SqlClient {
     it must call the
     <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/index.html?org/forgerock/openig/http/Message.html#close()" target="_blank">response.close()</a> method in order to signal
     that the processing of the response from a remote server is complete.
-   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom-heap-config"></a>15.4.&nbsp;Heap Object Configuration</h2></div></div></div><a class="indexterm" name="d851e4459"></a><p>Objects are added to the heap and supplied with configuration artifacts
+   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom-heap-config"></a>15.4.&nbsp;Heap Object Configuration</h2></div></div></div><a class="indexterm" name="d851e4462"></a><p>Objects are added to the heap and supplied with configuration artifacts
   at initialization time. To be integrated with the configuration, a class must
   have an accompanying implementation of the <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/heap/Heaplet.html" target="_blank">Heaplet</a> interface. The easiest and most common way of exposing the
   heaplet is to extend the <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/heap/NestedHeaplet.html" target="_blank">NestedHeaplet</a> class in a nested class in the class you want to create
@@ -4605,7 +4608,7 @@ public class HelloWorldFilter extends GenericFilter {
          "name": "X-Hello",
          "value": "World" 
      }
-}</pre></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-troubleshooting"></a>Chapter&nbsp;16.&nbsp;Troubleshooting</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="#d851e4503">16.1. Object not found in heap</a></span></dt><dt><span class="section"><a href="#d851e4513">16.2. Unexpected character (x) at position 1103</a></span></dt><dt><span class="section"><a href="#d851e4523">16.3. The values in the flat file are incorrect</a></span></dt><dt><span class="section"><a href="#d851e4528">16.4. Problem accessing URL</a></span></dt><dt><span class="section"><a href="#d851e4544">16.5. StaticResponseHandler results in a blank page</a></span></dt><dt><span class="section"><a href="#d851e4551">16.6. OpenIG is not logging users in</a></span></dt><dt><span class="section"><a href="#d851e4560">16.7. Read timed out error when sending a request</a></span></dt><dt><span class="section"><a href="#d851e4575">16.8. OpenIG does not use new route configuration</a></span></dt></dl></div><a class="indexterm" name="d851e4498"></a><p>This chapter covers common problems and their solutions.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d851e4503"></a>16.1.&nbsp;Object not found in heap</h2></div></div></div><pre class="brush: plain;">
+}</pre></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-troubleshooting"></a>Chapter&nbsp;16.&nbsp;Troubleshooting</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="#d851e4506">16.1. Object not found in heap</a></span></dt><dt><span class="section"><a href="#d851e4516">16.2. Unexpected character (x) at position 1103</a></span></dt><dt><span class="section"><a href="#d851e4526">16.3. The values in the flat file are incorrect</a></span></dt><dt><span class="section"><a href="#d851e4531">16.4. Problem accessing URL</a></span></dt><dt><span class="section"><a href="#d851e4547">16.5. StaticResponseHandler results in a blank page</a></span></dt><dt><span class="section"><a href="#d851e4554">16.6. OpenIG is not logging users in</a></span></dt><dt><span class="section"><a href="#d851e4563">16.7. Read timed out error when sending a request</a></span></dt><dt><span class="section"><a href="#d851e4578">16.8. OpenIG does not use new route configuration</a></span></dt></dl></div><a class="indexterm" name="d851e4501"></a><p>This chapter covers common problems and their solutions.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d851e4506"></a>16.1.&nbsp;Object not found in heap</h2></div></div></div><pre class="brush: plain;">
 org.forgerock.json.fluent.JsonValueException: /handlerObject:
    object Router2 not found in heap
     at org.forgerock.openig.heap.HeapUtil.getRequiredObject(HeapUtil.java:69)
@@ -4617,16 +4620,16 @@ org.forgerock.json.fluent.JsonValueException: /handlerObject:
    but no handler configuration object named "Router2" exists.
    Make sure you have added an entry for the handler
    and that you have correctly spelled its name.
-  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d851e4513"></a>16.2.&nbsp;Unexpected character (x) at position 1103</h2></div></div></div><pre class="brush: plain;">
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d851e4516"></a>16.2.&nbsp;Unexpected character (x) at position 1103</h2></div></div></div><pre class="brush: plain;">
 HTTP ERROR 500
 Problem accessing /. Reason:
 
 Unexpected character (x) at position 1103
   </pre><p>This error usually means a missing double quote or a missing bracket
   in the configuration file.  Use a JSON editor or JSON validation tool
-  such as <a class="link" href="http://jsonlint.com/" target="_blank">JSONLint</a> to make sure your JSON is valid.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d851e4523"></a>16.3.&nbsp;The values in the flat file are incorrect</h2></div></div></div><p>Ensure the flat file is readable by the user running the container for
+  such as <a class="link" href="http://jsonlint.com/" target="_blank">JSONLint</a> to make sure your JSON is valid.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d851e4526"></a>16.3.&nbsp;The values in the flat file are incorrect</h2></div></div></div><p>Ensure the flat file is readable by the user running the container for
   OpenIG. Values are all characters, including space and tabs, between the
-  separator, so make sure the values are not padded with spaces.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d851e4528"></a>16.4.&nbsp;Problem accessing URL</h2></div></div></div><pre class="brush: plain;">
+  separator, so make sure the values are not padded with spaces.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d851e4531"></a>16.4.&nbsp;Problem accessing URL</h2></div></div></div><pre class="brush: plain;">
 HTTP ERROR 500
 
 Problem accessing /myURL . Reason:
@@ -4644,7 +4647,7 @@ at org.forgerock.openig.filter.Chain.handle(Chain.java:54)
   try to set <code class="literal">exchange.request.headers['Location']</code> for a
   redirect in the response object, you should instead set
   <code class="literal">exchange.request.headers['Location'][0]</code>. A header without
-  a subscript leads to the error above.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d851e4544"></a>16.5.&nbsp;StaticResponseHandler results in a blank page</h2></div></div></div><p>You must define an entity for the response. For example:</p><pre class="brush: javascript;">{
+  a subscript leads to the error above.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d851e4547"></a>16.5.&nbsp;StaticResponseHandler results in a blank page</h2></div></div></div><p>You must define an entity for the response. For example:</p><pre class="brush: javascript;">{
     "name": "AccessDeniedHandler",
     "type": "org.forgerock.openig.handler.StaticResponseHandler",
     "config": {
@@ -4652,12 +4655,12 @@ at org.forgerock.openig.filter.Chain.handle(Chain.java:54)
         "reason": "Forbidden",
         "entity": "&lt;html&gt;&lt;h2&gt;User does not have permission&lt;/h2&gt;&lt;/html&gt;"
     }
-}</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d851e4551"></a>16.6.&nbsp;OpenIG is not logging users in</h2></div></div></div><p>
+}</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d851e4554"></a>16.6.&nbsp;OpenIG is not logging users in</h2></div></div></div><p>
    If you are proxying to more than one application in multiple DNS domains,
    you must make sure your container is enabled for domain cookies.
    For details on your specific container, see the section on
    <a href="../gateway-guide/index.html#configure-container" class="link"><em class="citetitle">Configuring Deployment Containers</em></a>.
-  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d851e4560"></a>16.7.&nbsp;Read timed out error when sending a request</h2></div></div></div><p>
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d851e4563"></a>16.7.&nbsp;Read timed out error when sending a request</h2></div></div></div><p>
    If a "baseURI" configuration setting
    causes a request to come back to OpenIG,
    OpenIG never produces a response to the request.
@@ -4672,7 +4675,7 @@ at org.forgerock.openig.filter.Chain.handle(Chain.java:54)
    To fix this issue, make sure
    that "baseURI" configuration settings do not cause requests
    to come back to OpenIG.
-  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d851e4575"></a>16.8.&nbsp;OpenIG does not use new route configuration</h2></div></div></div><p>
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d851e4578"></a>16.8.&nbsp;OpenIG does not use new route configuration</h2></div></div></div><p>
    OpenIG loads all configuration at startup.
    By default, it then periodically reloads changed route configurations.
   </p><p>
@@ -5461,7 +5464,7 @@ exchange.response.entity = "&lt;html&gt;&lt;pre&gt;" + json + "&lt;/pre&gt;&lt;/
     "baseURI": "http://forgerock.com:80/"
 }
 
-  </pre></div></div><br class="example-break"></div><div class="index"><div class="titlepage"><div><div><h1 class="title"><a name="d851e4724"></a>Index</h1></div></div></div><div class="index"><div class="indexdiv"><h3>A</h3><dl><dt>Architecture, <a class="indexterm" href="#chap-howitworks">How OpenIG Works</a></dt></dl></div><div class="indexdiv"><h3>C</h3><dl><dt>Configuration</dt><dd><dl><dt>Federation, <a class="indexterm" href="#federation-configuration-files">Configuration File Overview</a>, <a class="indexterm" href="#federation-configuration">Configuring the Federation Handler</a></dt><dt>HTTP &amp; HTTPS, <a class="indexterm" href="#template-http-and-https">HTTP &amp; HTTPS Application</a></dt><dt>Login with cookie, <a class="indexterm" href="#template-login-cookie">Login Form With Cookie From Login Page</a></dt><dt>Login with filter, <a class="indexterm" href="#template-login-extract-cookie-filters">Login Form With Extract Filter &amp; Cookie Filter</a></dt><dt>Login with hidden value, <a class="indexterm" href="#template-login-hidden-value">Login Which Requires a Hidden Value From the Login Page</a></dt><dt>Microsoft Online Outlook Web Access, <a class="indexterm" href="#template-owa-online">Microsoft Online Outlook Web Access</a></dt><dt>Multiple applications, <a class="indexterm" href="#chap-routing">Routing Tutorial</a></dt><dt>OAuth 2.0, <a class="indexterm" href="#chap-oauth-rs">Configuring OpenIG as an OAuth 2.0 Resource Server</a>, <a class="indexterm" href="#chap-oauth2-client">Configuring OpenIG as an OAuth 2.0 Client</a></dt><dt>OpenID Connect 1.0, <a class="indexterm" href="#chap-oauth2-client">Configuring OpenIG as an OAuth 2.0 Client</a></dt><dt>Proxy &amp; capture, <a class="indexterm" href="#template-proxy-capture">Proxy &amp; Capture</a></dt><dt>Run time changes, <a class="indexterm" href="#chap-routing">Routing Tutorial</a></dt><dt>Simple login form, <a class="indexterm" href="#template-simple-login">Simple Login Form</a></dt></dl></dd><dt>Containers</dt><dd><dl><dt>Jetty, <a class="indexterm" href="#jetty">Configuring Jetty For OpenIG</a></dt><dt>Tomcat, <a class="indexterm" href="#tomcat">Configuring Apache Tomcat For OpenIG</a></dt></dl></dd><dt>Customizations</dt><dd><dl><dt>Extension points, <a class="indexterm" href="#extension-points">Key Extension Points</a></dt><dt>Filters, <a class="indexterm" href="#custom-filter">Implementing a Filter</a></dt><dt>Handlers, <a class="indexterm" href="#custom-handler">Implementing a Handler</a></dt><dt>Heap objects, <a class="indexterm" href="#custom-heap-config">Heap Object Configuration</a></dt><dt>Scripting, <a class="indexterm" href="#chap-scripting">Scripting Filters &amp; Handlers</a></dt></dl></dd></dl></div><div class="indexdiv"><h3>I</h3><dl><dt>Installation, <a class="indexterm" href="#chap-install">Installing OpenIG</a></dt><dd><dl><dt>Federation, <a class="indexterm" href="#federation-installation">Installation Overview</a></dt></dl></dd></dl></div><div class="indexdiv"><h3>O</h3><dl><dt>OAuth 2.0</dt><dd><dl><dt>Client, <a class="indexterm" href="#chap-oauth2-client">Configuring OpenIG as an OAuth 2.0 Client</a></dt><dt>Resource server, <a class="indexterm" href="#chap-oauth-rs">Configuring OpenIG as an OAuth 2.0 Resource Server</a></dt></dl></dd><dt>OpenID Connect 1.0</dt><dd><dl><dt>Relying party, <a class="indexterm" href="#chap-oauth2-client">Configuring OpenIG as an OAuth 2.0 Client</a></dt></dl></dd></dl></div><div class="indexdiv"><h3>R</h3><dl><dt>Routing, <a class="indexterm" href="#chap-routing">Routing Tutorial</a></dt></dl></div><div class="indexdiv"><h3>S</h3><dl><dt>Scripting, <a class="indexterm" href="#chap-scripting">Scripting Filters &amp; Handlers</a></dt></dl></div><div class="indexdiv"><h3>T</h3><dl><dt>Troubleshooting, <a class="indexterm" href="#chap-troubleshooting">Troubleshooting</a></dt><dt>Tutorials</dt><dd><dl><dt>Capture &amp; relay passwords, <a class="indexterm" href="#chap-password-capture-replay-tutorial">Tutorial On OpenAM Password Capture &amp; Replay</a></dt><dt>Credentials from a file, <a class="indexterm" href="#chap-credentials-tutorial">Tutorial On Looking Up Credentials</a></dt><dt>Credentials from a relational database, <a class="indexterm" href="#chap-credentials-tutorial">Tutorial On Looking Up Credentials</a></dt><dt>Federation, <a class="indexterm" href="#chap-federation-tutorial">Tutorial For OpenIG Federation</a></dt><dt>Getting started, <a class="indexterm" href="#chap-quickstart">Getting Started</a></dt><dt>OAuth 2.0, <a class="indexterm" href="#chap-oauth-rs">Configuring OpenIG as an OAuth 2.0 Resource Server</a>, <a class="indexterm" href="#chap-oauth2-client">Configuring OpenIG as an OAuth 2.0 Client</a></dt><dt>OpenID Connect 1.0, <a class="indexterm" href="#chap-oauth2-client">Configuring OpenIG as an OAuth 2.0 Client</a></dt><dt>Routing, <a class="indexterm" href="#chap-routing">Routing Tutorial</a></dt></dl></dd></dl></div><div class="indexdiv"><h3>U</h3><dl><dt>Use cases, <a class="indexterm" href="#portal-app-login">Portal Application Login</a>, <a class="indexterm" href="#am-integration">OpenAM Integration</a>, <a class="indexterm" href="#sp-initiated-sso">OpenIG Federation SP Initiated SAML 2.0 SSO</a>, <a class="indexterm" href="#idp-initiated-sso">OpenIG Federation IDP Initiated SAML 2.0 SSO</a></dt></dl></div></div></div></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10060&components=10220&issuetype=1">Log a documentation bug.</a></p></div>
+  </pre></div></div><br class="example-break"></div><div class="index"><div class="titlepage"><div><div><h1 class="title"><a name="d851e4727"></a>Index</h1></div></div></div><div class="index"><div class="indexdiv"><h3>A</h3><dl><dt>Architecture, <a class="indexterm" href="#chap-howitworks">How OpenIG Works</a></dt></dl></div><div class="indexdiv"><h3>C</h3><dl><dt>Configuration</dt><dd><dl><dt>Federation, <a class="indexterm" href="#federation-configuration-files">Configuration File Overview</a>, <a class="indexterm" href="#federation-configuration">Configuring the Federation Handler</a></dt><dt>HTTP &amp; HTTPS, <a class="indexterm" href="#template-http-and-https">HTTP &amp; HTTPS Application</a></dt><dt>Login with cookie, <a class="indexterm" href="#template-login-cookie">Login Form With Cookie From Login Page</a></dt><dt>Login with filter, <a class="indexterm" href="#template-login-extract-cookie-filters">Login Form With Extract Filter &amp; Cookie Filter</a></dt><dt>Login with hidden value, <a class="indexterm" href="#template-login-hidden-value">Login Which Requires a Hidden Value From the Login Page</a></dt><dt>Microsoft Online Outlook Web Access, <a class="indexterm" href="#template-owa-online">Microsoft Online Outlook Web Access</a></dt><dt>Multiple applications, <a class="indexterm" href="#chap-routing">Routing Tutorial</a></dt><dt>OAuth 2.0, <a class="indexterm" href="#chap-oauth-rs">Configuring OpenIG as an OAuth 2.0 Resource Server</a>, <a class="indexterm" href="#chap-oauth2-client">Configuring OpenIG as an OAuth 2.0 Client</a></dt><dt>OpenID Connect 1.0, <a class="indexterm" href="#chap-oauth2-client">Configuring OpenIG as an OAuth 2.0 Client</a></dt><dt>Proxy &amp; capture, <a class="indexterm" href="#template-proxy-capture">Proxy &amp; Capture</a></dt><dt>Run time changes, <a class="indexterm" href="#chap-routing">Routing Tutorial</a></dt><dt>Simple login form, <a class="indexterm" href="#template-simple-login">Simple Login Form</a></dt></dl></dd><dt>Containers</dt><dd><dl><dt>Jetty, <a class="indexterm" href="#jetty">Configuring Jetty For OpenIG</a></dt><dt>Tomcat, <a class="indexterm" href="#tomcat">Configuring Apache Tomcat For OpenIG</a></dt></dl></dd><dt>Customizations</dt><dd><dl><dt>Extension points, <a class="indexterm" href="#extension-points">Key Extension Points</a></dt><dt>Filters, <a class="indexterm" href="#custom-filter">Implementing a Filter</a></dt><dt>Handlers, <a class="indexterm" href="#custom-handler">Implementing a Handler</a></dt><dt>Heap objects, <a class="indexterm" href="#custom-heap-config">Heap Object Configuration</a></dt><dt>Scripting, <a class="indexterm" href="#chap-scripting">Scripting Filters &amp; Handlers</a></dt></dl></dd></dl></div><div class="indexdiv"><h3>I</h3><dl><dt>Installation, <a class="indexterm" href="#chap-install">Installing OpenIG</a></dt><dd><dl><dt>Federation, <a class="indexterm" href="#federation-installation">Installation Overview</a></dt></dl></dd></dl></div><div class="indexdiv"><h3>O</h3><dl><dt>OAuth 2.0</dt><dd><dl><dt>Client, <a class="indexterm" href="#chap-oauth2-client">Configuring OpenIG as an OAuth 2.0 Client</a></dt><dt>Resource server, <a class="indexterm" href="#chap-oauth-rs">Configuring OpenIG as an OAuth 2.0 Resource Server</a></dt></dl></dd><dt>OpenID Connect 1.0</dt><dd><dl><dt>Relying party, <a class="indexterm" href="#chap-oauth2-client">Configuring OpenIG as an OAuth 2.0 Client</a></dt></dl></dd></dl></div><div class="indexdiv"><h3>R</h3><dl><dt>Routing, <a class="indexterm" href="#chap-routing">Routing Tutorial</a></dt></dl></div><div class="indexdiv"><h3>S</h3><dl><dt>Scripting, <a class="indexterm" href="#chap-scripting">Scripting Filters &amp; Handlers</a></dt></dl></div><div class="indexdiv"><h3>T</h3><dl><dt>Troubleshooting, <a class="indexterm" href="#chap-troubleshooting">Troubleshooting</a></dt><dt>Tutorials</dt><dd><dl><dt>Capture &amp; relay passwords, <a class="indexterm" href="#chap-password-capture-replay-tutorial">Tutorial On OpenAM Password Capture &amp; Replay</a></dt><dt>Credentials from a file, <a class="indexterm" href="#chap-credentials-tutorial">Tutorial On Looking Up Credentials</a></dt><dt>Credentials from a relational database, <a class="indexterm" href="#chap-credentials-tutorial">Tutorial On Looking Up Credentials</a></dt><dt>Federation, <a class="indexterm" href="#chap-federation-tutorial">Tutorial For OpenIG Federation</a></dt><dt>Getting started, <a class="indexterm" href="#chap-quickstart">Getting Started</a></dt><dt>OAuth 2.0, <a class="indexterm" href="#chap-oauth-rs">Configuring OpenIG as an OAuth 2.0 Resource Server</a>, <a class="indexterm" href="#chap-oauth2-client">Configuring OpenIG as an OAuth 2.0 Client</a></dt><dt>OpenID Connect 1.0, <a class="indexterm" href="#chap-oauth2-client">Configuring OpenIG as an OAuth 2.0 Client</a></dt><dt>Routing, <a class="indexterm" href="#chap-routing">Routing Tutorial</a></dt></dl></dd></dl></div><div class="indexdiv"><h3>U</h3><dl><dt>Use cases, <a class="indexterm" href="#portal-app-login">Portal Application Login</a>, <a class="indexterm" href="#am-integration">OpenAM Integration</a>, <a class="indexterm" href="#sp-initiated-sso">OpenIG Federation SP Initiated SAML 2.0 SSO</a>, <a class="indexterm" href="#idp-initiated-sso">OpenIG Federation IDP Initiated SAML 2.0 SSO</a></dt></dl></div></div></div></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10060&components=10220&issuetype=1">Log a documentation bug.</a></p></div>
 <script type="text/javascript">
 
   var _gaq = _gaq || [];

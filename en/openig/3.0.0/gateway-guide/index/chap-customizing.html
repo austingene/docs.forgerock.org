@@ -24,14 +24,14 @@
  </p><p>
   Interface Stability:
   <a href="../../reference/index/appendix-interface-stability.html#interface-stability" class="link">Evolving</a>
- </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="extension-points"></a>15.1.&nbsp;Key Extension Points</h2></div></div></div><a class="indexterm" name="d0e4355"></a><p>The two primary extension points are the interfaces: <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/filter/Filter.html" target="_blank">Filter</a> (for processing a request and/or response en
+ </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="extension-points"></a>15.1.&nbsp;Key Extension Points</h2></div></div></div><a class="indexterm" name="d0e4358"></a><p>The two primary extension points are the interfaces: <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/filter/Filter.html" target="_blank">Filter</a> (for processing a request and/or response en
   route) and <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/handler/Handler.html" target="_blank">Handler</a> (for generating responses from requests).
   These interfaces are similar to the Java Enterprise Edition
   <code class="literal">Filter</code> and <code class="literal">Servlet</code> interfaces, with
   some differences in the semantics of messages. While you can simply implement
   these interfaces, there are also included convenience classes: <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/filter/GenericFilter.html" target="_blank">GenericFilter</a> and <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/handler/GenericHandler.html" target="_blank">GenericHandler</a> that you can use if you intend to make
   your extensions configurable through the OpenIG configuration
-  resource.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom-filter"></a>15.2.&nbsp;Implementing a Filter</h2></div></div></div><a class="indexterm" name="d0e4383"></a><p>
+  resource.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom-filter"></a>15.2.&nbsp;Implementing a Filter</h2></div></div></div><a class="indexterm" name="d0e4386"></a><p>
    The <code class="literal">Filter</code> interface exposes a
    <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/index.html?org/forgerock/openig/filter/Filter.html#filter(org.forgerock.openig.http.Exchange,%20org.forgerock.openig.handler.Handler)" target="_blank">filter()</a> method,
    which takes an
@@ -64,7 +64,7 @@
     it must call the
     <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/index.html?org/forgerock/openig/http/Message.html#close()" target="_blank">response.close()</a> method in order to signal
     that the processing of the response from a remote server is complete.
-   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom-handler"></a>15.3.&nbsp;Implementing a Handler</h2></div></div></div><a class="indexterm" name="d0e4428"></a><p>
+   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom-handler"></a>15.3.&nbsp;Implementing a Handler</h2></div></div></div><a class="indexterm" name="d0e4431"></a><p>
    The <code class="literal">Handler</code> interface exposes a
    <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/index.html?org/forgerock/openig/handler/Handler.html#handle(org.forgerock.openig.http.Exchange)" target="_blank">handle()</a> method,
    which takes an
@@ -80,7 +80,7 @@
     it must call the
     <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/index.html?org/forgerock/openig/http/Message.html#close()" target="_blank">response.close()</a> method in order to signal
     that the processing of the response from a remote server is complete.
-   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom-heap-config"></a>15.4.&nbsp;Heap Object Configuration</h2></div></div></div><a class="indexterm" name="d0e4459"></a><p>Objects are added to the heap and supplied with configuration artifacts
+   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom-heap-config"></a>15.4.&nbsp;Heap Object Configuration</h2></div></div></div><a class="indexterm" name="d0e4462"></a><p>Objects are added to the heap and supplied with configuration artifacts
   at initialization time. To be integrated with the configuration, a class must
   have an accompanying implementation of the <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/heap/Heaplet.html" target="_blank">Heaplet</a> interface. The easiest and most common way of exposing the
   heaplet is to extend the <a class="link" href="http://docs.forgerock.org/en/openig/3.0.0/apidocs/org/forgerock/openig/heap/NestedHeaplet.html" target="_blank">NestedHeaplet</a> class in a nested class in the class you want to create
