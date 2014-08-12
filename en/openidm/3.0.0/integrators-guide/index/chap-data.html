@@ -62,7 +62,7 @@ openidm.patch("managed/organization/mysampleorg", rev, value)
    <code class="literal">https://localhost:8443/openidm/managed/organization/mysampleorg</code>.
   </p><p>
    By default, the HTTP GET returns a JSON representation of the object.
-  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="queries"></a>6.3.&nbsp;Defining and Calling Queries</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-data.html#parameterized-queries">6.3.1. Parameterized Queries</a></span></dt><dt><span class="section"><a href="chap-data.html#native-queries">6.3.2. Native Query Expressions</a></span></dt><dt><span class="section"><a href="chap-data.html#constructing-queries">6.3.3. Constructing Queries</a></span></dt></dl></div><p>
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="queries"></a>6.3.&nbsp;Defining and Calling Queries</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-data.html#parameterized-queries">6.3.1. Parameterized Queries</a></span></dt><dt><span class="section"><a href="chap-data.html#native-queries">6.3.2. Native Query Expressions</a></span></dt><dt><span class="section"><a href="chap-data.html#constructing-queries">6.3.3. Constructing Queries</a></span></dt><dt><span class="section"><a href="chap-data.html#paging-query-results">6.3.4. Paging Query Results</a></span></dt></dl></div><p>
    OpenIDM supports an advanced query model that enables you to define queries,
    and to call them over the REST or Resource API.
   </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="parameterized-queries"></a>6.3.1.&nbsp;Parameterized Queries</h3></div></div></div><p>
@@ -252,7 +252,80 @@ var results = openidm.query("system/ScriptedSQL/account", params)
         For example:
        </p><pre class="brush: javascript;">
 "_queryFilter": "! (employeeType eq \"Contractor\")"
-       </pre></dd></dl></div></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-configuration.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-users-groups-roles.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;5.&nbsp;Configuring OpenIDM&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;7.&nbsp;Managing Users, Groups, and Roles</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10020&components=10164&issuetype=1">Log a documentation bug.</a></p></div>
+       </pre></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="paging-query-results"></a>6.3.4.&nbsp;Paging Query Results</h3></div></div></div><p>
+    The OpenIDM repository provides some support for paging results, useful, for
+    example, for UI display purposes. Note that this paging is not guaranteed to
+    include all results if the data moves in between paging calls. Predefined
+    queries must be configured to support paging. For example:
+   </p><div class="screen"><pre>"query-all-ids" : "select _openidm_id from ${unquoted:_resource} SKIP ${unquoted:_pagedResultsOffset} LIMIT ${unquoted:_pageSize}",</pre></div><p>
+    This query configuration enables the paging parameters to be used, for
+    example, in a query such as the following:
+   </p><div class="screen"><pre><strong>$ curl \
+  --cacert self-signed.crt \
+  --header "X-OpenIDM-Username: openidm-admin" \
+  --header "X-OpenIDM-Password: openidm-admin" \
+  --header "Content-Type: application/json" \
+  --request GET \
+  "https://localhost:8443/openidm/managed/user?_queryId=query-all-ids&amp;_pageSize=2&amp;_pagedResultsOffset=3"</strong>
+ <em>{
+   "remainingPagedResults": 2,
+   "pagedResultsCookie": "5",
+   "resultCount": 2,
+   "result": [
+     {
+       "_rev": "0",
+       "_id": "b980999e-aa5c-4655-b2a0-08731b64e0ba"
+     },
+     {
+       "_rev": "0",
+       "_id": "c72b9c00-1e2c-4139-9e7f-fb9fb822db96"
+     }
+   ]
+ }</em>  </pre></div><p>
+    Paging is supported for managed objects, as queries on these objects are
+    delegated to the repository. There is currently no out of the box support
+    for paged queries on other objects.
+   </p><div class="variablelist"><p>
+     The following paging parameters are supported:
+    </p><dl class="variablelist"><dt><span class="term"><code class="literal">_pagedResultsCookie</code></span></dt><dd><p>
+       Opaque cookie used by the server to keep track of the position
+       in the search results. The format of the cookie is a string value.
+      </p><p>
+       The server provides the cookie value on the first request. You should then
+       supply the cookie value in subsequent requests until the server returns a
+       null cookie, meaning that the final page of results has been returned.
+      </p><p>
+       Paged results are enabled only if the <code class="literal">_pageSize</code> is a
+       non-zero integer.
+      </p></dd><dt><span class="term"><code class="literal">_pagedResultsOffset</code></span></dt><dd><p>
+       Specifies the index within the result set of the number of records to be
+       skipped before the first result is returned. The format of the
+       <code class="literal">_pagedResultsOffset</code> is an integer value. When the value
+       of <code class="literal">_pagedResultsOffset</code> is greater than or equal to 1,
+       the server returns pages, starting after the specified index.
+      </p><p>
+       This request assumes that the <code class="literal">_pageSize</code> is set, and not
+       equal to zero.
+      </p><p>
+       For example, if the result set includes 10 records, the
+       <code class="literal">_pageSize</code> is 2, and the
+       <code class="literal">_pagedResultsOffset</code> is 6, the server skips the first 6
+       records, then returns 2 records, 7 and 8. The
+       <code class="literal">_pagedResultsCookie</code> value would then be 8 (the index of
+       the last returned record) and the <code class="literal">_remainingPagedResults</code>
+       value would be 2, the last two records (9 and 10) that have not yet been
+       returned.
+      </p><p>
+       If the offset points to a page beyond the last of the search results, the
+       result set returned is empty.
+      </p></dd><dt><span class="term"><code class="literal">_pageSize</code></span></dt><dd><p>
+       An optional parameter indicating that query results should be returned in
+       pages of the specified size. For all paged result requests other than the
+       initial request, a cookie should be provided with the query request.
+      </p><p>
+       The default behavior is not to return paged query results. If set, this
+       parameter should be an integer value, greater than zero.
+      </p></dd></dl></div></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-configuration.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-users-groups-roles.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;5.&nbsp;Configuring OpenIDM&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;7.&nbsp;Managing Users, Groups, and Roles</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10020&components=10164&issuetype=1">Log a documentation bug.</a></p></div>
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
