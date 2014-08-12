@@ -3,7 +3,7 @@
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
    <title>Appendix&nbsp;E.&nbsp;REST API Reference</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenIDM Integrator's Guide"><link rel="up" href="index.html" title="OpenIDM Integrator's Guide"><link rel="prev" href="appendix-synchronization.html" title="Appendix&nbsp;D.&nbsp;Synchronization Reference"><link rel="next" href="appendix-scripting.html" title="Appendix&nbsp;F.&nbsp;Scripting Reference"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
-</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Appendix&nbsp;E.&nbsp;REST API Reference</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="appendix-synchronization.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="appendix-scripting.html">Next</a></td></tr></table><hr></div><div lang="en" class="appendix"><div class="titlepage"><div><div><h1 class="title"><a name="appendix-rest"></a>Appendix&nbsp;E.&nbsp;REST API Reference</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="appendix-rest.html#rest-uri-scheme">E.1. URI Scheme</a></span></dt><dt><span class="section"><a href="appendix-rest.html#rest-object-identifier">E.2. Object Identifiers</a></span></dt><dt><span class="section"><a href="appendix-rest.html#rest-content-negotiation">E.3. Content Negotiation</a></span></dt><dt><span class="section"><a href="appendix-rest.html#rest-supported-operations">E.4. Supported Operations</a></span></dt><dt><span class="section"><a href="appendix-rest.html#rest-conditional-operations">E.5. Conditional Operations</a></span></dt><dt><span class="section"><a href="appendix-rest.html#rest-supported-methods">E.6. Supported Methods</a></span></dt><dt><span class="section"><a href="appendix-rest.html#sample-rest-commands">E.7. REST Endpoints and Sample Commands</a></span></dt><dt><span class="section"><a href="appendix-rest.html#http-status-codes">E.8. HTTP Status Codes</a></span></dt></dl></div><a class="indexterm" name="d0e21346"></a><a class="indexterm" name="d0e21351"></a><p>
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Appendix&nbsp;E.&nbsp;REST API Reference</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="appendix-synchronization.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="appendix-scripting.html">Next</a></td></tr></table><hr></div><div lang="en" class="appendix"><div class="titlepage"><div><div><h1 class="title"><a name="appendix-rest"></a>Appendix&nbsp;E.&nbsp;REST API Reference</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="appendix-rest.html#rest-uri-scheme">E.1. URI Scheme</a></span></dt><dt><span class="section"><a href="appendix-rest.html#rest-object-identifier">E.2. Object Identifiers</a></span></dt><dt><span class="section"><a href="appendix-rest.html#rest-content-negotiation">E.3. Content Negotiation</a></span></dt><dt><span class="section"><a href="appendix-rest.html#rest-supported-operations">E.4. Supported Operations</a></span></dt><dt><span class="section"><a href="appendix-rest.html#rest-conditional-operations">E.5. Conditional Operations</a></span></dt><dt><span class="section"><a href="appendix-rest.html#rest-supported-methods">E.6. Supported Methods</a></span></dt><dt><span class="section"><a href="appendix-rest.html#sample-rest-commands">E.7. REST Endpoints and Sample Commands</a></span></dt><dt><span class="section"><a href="appendix-rest.html#http-status-codes">E.8. HTTP Status Codes</a></span></dt></dl></div><a class="indexterm" name="d0e21427"></a><a class="indexterm" name="d0e21432"></a><p>
    Representational State Transfer (REST) is a software architecture style for
    exposing resources, using the technologies and protocols of the World Wide
    Web. REST describes how distributed data objects, or resources, can be
@@ -45,8 +45,18 @@
   </p><pre class="literallayout">/openidm/system/<em class="replaceable"><code>resource-name</code></em>/<em class="replaceable"><code>type</code></em>/<em class="replaceable"><code>id</code></em></pre><p>
    An example of a system object in an LDAP repository might be:
   </p><pre class="literallayout">
-/openidm/system/ldap/account/uid=jsmith,ou=people,dc=example,dc=com
-  </pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="rest-object-identifier"></a>E.2.&nbsp;Object Identifiers</h2></div></div></div><a class="indexterm" name="d0e21449"></a><p>
+/openidm/system/ldap/account/07b46858-56eb-457c-b935-cfe6ddf769c7
+  </pre><p>
+   Note that for LDAP resources, you should not map the LDAP
+   <code class="literal">dn</code> to the OpenIDM <code class="literal">uidAttribute</code>
+   (<code class="literal">_id</code>). The attribute that is used for the
+   <code class="literal">_id</code> should be immutable. You should therefore map the LDAP
+   <code class="literal">entryUUID</code> operational attribute to the OpenIDM
+   <code class="literal">_id</code>, as shown in the following excerpt of the provisioner
+   configuration file:
+  </p><pre class="brush: plain;">...
+"uidAttribute" : "entryUUID",
+... </pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="rest-object-identifier"></a>E.2.&nbsp;Object Identifiers</h2></div></div></div><a class="indexterm" name="d0e21552"></a><p>
    Every managed and system object has an identifier (expressed as
    <em class="replaceable"><code>id</code></em> in the URI scheme) that is used to address the
    object through the REST API. The REST API allows for client-generated and
@@ -193,18 +203,20 @@
  --header "X-OpenIDM-Username: openidm-admin" \
  --header "X-OpenIDM-Password: openidm-admin" \
  --request GET \
- "https://localhost:8443/openidm/system/ldap/account/uid=mike,ou=People,dc=example,dc=com"</strong>
+ "https://localhost:8443/openidm/system/ldap/account/fc252fd9-b982-3ed6-b42a-c76d2546312c"</strong>
 <em>{
-  "_id": "uid=mike,ou=People,dc=example,dc=com",
-  "sn": "Smith",
-  "telephoneNumber": "082082082",
-  "description": null,
-  "mail": "mike@example.com",
-  "givenName": "Mike",
-  "cn": "Mike Smith",
-  "dn": "uid=mike,ou=People,dc=example,dc=com",
-  "uid": "mike",
-  "ldapGroups": []
+    "givenName": "Barbara",
+    "telephoneNumber": "1-503-334-2546",
+    "dn": "uid=bjensen,ou=People,dc=example,dc=com",
+    "description": "Created for OpenIDM",
+    "mail": "bjensen@example.com",
+    "ldapGroups": [
+        "cn=openidm2,ou=Groups,dc=example,dc=com"
+    ],
+    "cn": "Babara Jensen",
+    "uid": "bjensen",
+    "sn": "Jensen",
+    "_id": "fc252fd9-b982-3ed6-b42a-c76d2546312c"
 }   </em></pre></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-supported-update"></a>E.4.3.&nbsp;Updating an Object</h3></div></div></div><p>
    An update replaces some or all of the contents of an existing object. Any
    object can be updated over REST with a PUT request. <span class="emphasis"><em>Managed
@@ -220,20 +232,22 @@
  --header "Content-Type: application/json" \
  --header "If-Match : *" \
  --request PUT \
- --data '{"description":"The new description for Mike"}'
- "https://localhost:8443/openidm/system/ldap/account/uid=mike,ou=People,dc=example,dc=com"</strong>
+ --data '{"description":"The new description for Babs Jensen"}'
+ "https://localhost:8443/openidm/system/ldap/account/fc252fd9-b982-3ed6-b42a-c76d2546312c"</strong>
 <em>{
-  "_id": "uid=mike,ou=People,dc=example,dc=com",
-  "sn": "Smith",
-  "telephoneNumber": "082082082",
-  "description": "The new description for Mike",
-  "mail": "mike@example.com",
-  "givenName": "Mike",
-  "cn": "Mike Smith",
-  "dn": "uid=mike,ou=People,dc=example,dc=com",
-  "uid": "mike",
-  "ldapGroups": []
-}  </em></pre></div><p>
+    "givenName": "Barbara",
+    "telephoneNumber": "1-503-334-2546",
+    "dn": "uid=bjensen,ou=People,dc=example,dc=com",
+    "description": "The new description for Babs Jensen",
+    "mail": "bjensen@example.com",
+    "ldapGroups": [
+        "cn=openidm2,ou=Groups,dc=example,dc=com"
+    ],
+    "cn": "Babara Jensen",
+    "uid": "bjensen",
+    "sn": "Jensen",
+    "_id": "fc252fd9-b982-3ed6-b42a-c76d2546312c"
+} </em></pre></div><p>
    To update a managed object with a POST request, use the
    <code class="literal">patch</code> action and specify the updated fields as an array in
    the <code class="literal">data</code> option. For example:
@@ -294,10 +308,10 @@
  --header "X-OpenIDM-Username: openidm-admin" \
  --header "X-OpenIDM-Password: openidm-admin" \
  --request DELETE \
- "https://localhost:8443/openidm/system/ldap/account/uid=james,ou=People,dc=example,dc=com"</strong>
+ "https://localhost:8443/openidm/system/ldap/account/e81c7f15-2e6d-4c3c-8005-890101070dd9"</strong>
 <em>{
-  "_id": "uid=james,ou=People,dc=example,dc=com"
-}   </em></pre></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-supported-query"></a>E.4.5.&nbsp;Querying Resources</h3></div></div></div><p>
+    "_id": "e81c7f15-2e6d-4c3c-8005-890101070dd9"
+}  </em></pre></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-supported-query"></a>E.4.5.&nbsp;Querying Resources</h3></div></div></div><p>
    Resources can be queried using the <code class="literal">GET</code> method, with one of
    the following query parameters:
   </p><div class="itemizedlist"><p>
@@ -316,49 +330,6 @@
      <code class="literal">_queryFilter</code> for arbitrary filters, in common filter
      notation
     </p></li></ul></div><p>
-   The following additional query parameters are supported.
-  </p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">_sortKeys</code></span></dt><dd><p>
-      When configured with a comma-separated list, this will order the way
-      JSON resources are returned by this query request.
-     </p></dd><dt><span class="term"><code class="literal">_pagedResultsCookie</code></span></dt><dd><p>
-      Opaque cookie used by the server to keep track of the position
-      in the search results. The format of the cookie is a string value.
-     </p><p>
-      The server provides the cookie value on the first request. You should then
-      supply the cookie value in subsequent requests until the server returns a
-      null cookie, meaning that the final page of results has been returned.
-     </p><p>
-      Paged results are enabled only if the <code class="literal">_pageSize</code> is a
-      non-zero integer.
-     </p></dd><dt><span class="term"><code class="literal">_pagedResultsOffset</code></span></dt><dd><p>
-      Specifies the index within the result set of the number of records to be
-      skipped before the first result is returned. The format of the
-      <code class="literal">_pagedResultsOffset</code> is an integer value. When the value
-      of <code class="literal">_pagedResultsOffset</code> is greater than or equal to 1,
-      the server returns pages, starting after the specified index.
-     </p><p>
-      This request assumes that the <code class="literal">_pageSize</code> is set, and not
-      equal to zero.
-     </p><p>
-      For example, if the result set includes 10 records, the
-      <code class="literal">_pageSize</code> is 2, and the
-      <code class="literal">_pagedResultsOffset</code> is 6, the server skips the first 6
-      records, then returns 2 records, 7 and 8. The
-      <code class="literal">_pagedResultsCookie</code> value would then be 8 (the index of
-      the last returned record) and the <code class="literal">_remainingPagedResults</code>
-      value would be 2, the last two records (9 and 10) that have not yet been
-      returned.
-     </p><p>
-      If the offset points to a page beyond the last of the search results, the
-      result set returned is empty.
-     </p></dd><dt><span class="term"><code class="literal">_pageSize</code></span></dt><dd><p>
-      An optional parameter indicating that query results should be returned in
-      pages of the specified size. For all paged result requests other than the
-      initial request, a cookie should be provided with the query request.
-     </p><p>
-      The default behavior is not to return paged query results. If set, this
-      parameter should be an integer value, greater than zero.
-     </p></dd></dl></div><p>
    For additional information on queries, see the section on <a href="../../integrators-guide/index/chap-data.html#constructing-queries" class="link"><em class="citetitle">Constructing
    Queries</em></a>.
   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="rest-conditional-operations"></a>E.5.&nbsp;Conditional Operations</h2></div></div></div><p>The REST API fully supports conditional operations through the use of
@@ -729,13 +700,13 @@ Content-Length: 89
     "reason":"Internal Server Error",
     "message":"The uid attribute is not single value attribute."}</pre></div><p>
      The <code class="literal">patch</code> action is not supported on system objects.
-    </p></div><div class="example"><a name="d0e22510"></a><div class="example-title">Example&nbsp;E.1.&nbsp;Returning a list of the available connector configurations</div><div class="example-contents"><div class="screen"><pre>$ <strong>curl \
+    </p></div><div class="example"><a name="d0e22546"></a><div class="example-title">Example&nbsp;E.1.&nbsp;Returning a list of the available connector configurations</div><div class="example-contents"><div class="screen"><pre>$ <strong>curl \
  --cacert self-signed.crt \
  --header "Content-Type: application/json" \
  --header "X-OpenIDM-Username: openidm-admin" \
  --header "X-OpenIDM-Password: openidm-admin" \
  --request POST \
- "https://localhost:8443/openidm/system?_action=CREATECONFIGURATION"</strong></pre></div></div></div><br class="example-break"><div class="example"><a name="d0e22517"></a><div class="example-title">Example&nbsp;E.2.&nbsp;Returning a list of remote systems, and their status</div><div class="example-contents"><div class="screen"><pre>$ <strong>curl \
+ "https://localhost:8443/openidm/system?_action=CREATECONFIGURATION"</strong></pre></div></div></div><br class="example-break"><div class="example"><a name="d0e22553"></a><div class="example-title">Example&nbsp;E.2.&nbsp;Returning a list of remote systems, and their status</div><div class="example-contents"><div class="screen"><pre>$ <strong>curl \
  --cacert self-signed.crt \
  --header "Content-Type: application/json" \
  --header "X-OpenIDM-Username: openidm-admin" \
@@ -747,13 +718,13 @@ Content-Length: 89
     "ok": true,
     "name": "ldap"
   }
-]</em></pre></div></div></div><br class="example-break"><div class="example"><a name="d0e22527"></a><div class="example-title">Example&nbsp;E.3.&nbsp;Two options for running a liveSync operation on a specified system object</div><div class="example-contents"><div class="screen"><pre>$ <strong>curl \
+]</em></pre></div></div></div><br class="example-break"><div class="example"><a name="d0e22563"></a><div class="example-title">Example&nbsp;E.3.&nbsp;Two options for running a liveSync operation on a specified system object</div><div class="example-contents"><div class="screen"><pre>$ <strong>curl \
  --cacert self-signed.crt \
  --header "Content-Type: application/json" \
  --header "X-OpenIDM-Username: openidm-admin" \
  --header "X-OpenIDM-Password: openidm-admin" \
  --request POST \
- "http://localhost:8080/openidm/system?_action=liveSync&amp;source=system/ldap/account"</strong>
+ "https://localhost:8443/openidm/system?_action=liveSync&amp;source=system/ldap/account"</strong>
 <em>{
   "_rev": "1",
   "_id": "SYSTEMLDAPACCOUNT",
@@ -776,13 +747,13 @@ Content-Length: 89
     "nativeType": "integer",
     "syncToken": 0
   }
-}   </em></pre></div></div></div><br class="example-break"><div class="example"><a name="d0e22544"></a><div class="example-title">Example&nbsp;E.4.&nbsp;Running a script on a system object</div><div class="example-contents"><div class="screen"><pre>$ <strong>curl \
+}   </em></pre></div></div></div><br class="example-break"><div class="example"><a name="d0e22580"></a><div class="example-title">Example&nbsp;E.4.&nbsp;Running a script on a system object</div><div class="example-contents"><div class="screen"><pre>$ <strong>curl \
  --cacert self-signed.crt \
  --header "Content-Type: application/json" \
  --header "X-OpenIDM-Username: openidm-admin" \
  --header "X-OpenIDM-Password: openidm-admin" \
  --request POST \
- "https://localhost:8443/openidm/system/ldap/account?_action=script&amp;_scriptId=addUser"</strong></pre></div></div></div><br class="example-break"><div class="example"><a name="d0e22551"></a><div class="example-title">Example&nbsp;E.5.&nbsp;Authenticating to a system object</div><div class="example-contents"><div class="screen"><pre>$ <strong>curl \
+ "https://localhost:8443/openidm/system/ldap/account?_action=script&amp;_scriptId=addUser"</strong></pre></div></div></div><br class="example-break"><div class="example"><a name="d0e22587"></a><div class="example-title">Example&nbsp;E.5.&nbsp;Authenticating to a system object</div><div class="example-contents"><div class="screen"><pre>$ <strong>curl \
  --cacert self-signed.crt \
  --header "Content-Type: application/json" \
  --header "X-OpenIDM-Username: openidm-admin" \
@@ -790,8 +761,8 @@ Content-Length: 89
  --request POST \
  "https://localhost:8443/openidm/system/ldap/account?_action=authenticate&amp;username=bjensen&amp;password=Passw0rd"</strong>
 <em>{
-  "_id": "uid=bjensen,ou=People,dc=example,dc=com"
-}</em></pre></div></div></div><br class="example-break"><div class="example"><a name="d0e22561"></a><div class="example-title">Example&nbsp;E.6.&nbsp;Creating a new system object</div><div class="example-contents"><div class="screen"><pre>$ <strong>curl \
+  "_id": "fc252fd9-b982-3ed6-b42a-c76d2546312c"
+}</em></pre></div></div></div><br class="example-break"><div class="example"><a name="d0e22597"></a><div class="example-title">Example&nbsp;E.6.&nbsp;Creating a new system object</div><div class="example-contents"><div class="screen"><pre>$ <strong>curl \
  --cacert self-signed.crt \
  --header "Content-Type: application/json" \
  --header "X-OpenIDM-Password: openidm-admin" \
@@ -816,8 +787,44 @@ Content-Length: 89
     "uid":"jsmith",
     "ldapGroups":[],
     "sn":"Smith",
-    "_id":"uid=jsmith,ou=people,dc=example,dc=com"
-}   </em></pre></div></div></div><br class="example-break"><div class="example"><a name="d0e22571"></a><div class="example-title">Example&nbsp;E.7.&nbsp;List the IDs associated with a specific system object</div><div class="example-contents"><div class="screen"><pre>$ <strong>curl \
+    "_id":"07b46858-56eb-457c-b935-cfe6ddf769c7"
+}   </em></pre></div></div></div><br class="example-break"><div class="example"><a name="d0e22607"></a><div class="example-title">Example&nbsp;E.7.&nbsp;Renaming a system object</div><div class="example-contents"><p>
+     You can rename a system object simply by supplying a new naming attribute
+     value in a PUT request. The PUT request replaces the entire object. The
+     naming attribute depends on the external resource.
+    </p><p>
+     The following example renames an object on an LDAP server, by changing the
+     DN of the LDAP object (effectively performing a modDN operation on that
+     object).
+    </p><p>
+     The example renames the user created in the previous example.
+    </p><div class="screen"><pre><strong>$ curl \
+ --cacert self-signed.crt \
+ --header "Content-Type: application/json" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "If-Match: *" \
+ --data '{
+    "cn":"James Smith",
+    "dn":"uid=jimmysmith,ou=people,dc=example,dc=com",
+    "uid":"jimmysmith",
+    "sn":"Smith",
+    "givenName":"James",
+    "mail": "jsmith@example.com"}' \
+ --request PUT \
+ "https://localhost:8443/openidm/system/ldap/account/07b46858-56eb-457c-b935-cfe6ddf769c7"</strong>
+<em>{
+  "mail":"jsmith@example.com",
+  "cn":"James Smith",
+  "sn":"Smith",
+  "dn":"uid=jimmysmith,ou=people,dc=example,dc=com",
+  "ldapGroups":[],
+  "telephoneNumber":null,
+  "description":"Created by OpenIDM REST",
+  "givenName":"James",
+  "uid":"jimmysmith",
+  "_id":"07b46858-56eb-457c-b935-cfe6ddf769c7"
+}</em>    </pre></div></div></div><br class="example-break"><div class="example"><a name="d0e22623"></a><div class="example-title">Example&nbsp;E.8.&nbsp;List the IDs associated with a specific system object</div><div class="example-contents"><div class="screen"><pre>$ <strong>curl \
  --cacert self-signed.crt \
  --header "Content-Type: application/json" \
  --header "X-OpenIDM-Password: openidm-admin" \
@@ -829,18 +836,18 @@ Content-Length: 89
   "pagedResultsCookie": null,
   "resultCount": 3,
   "result": [
-    {
-      "_id": "uid=jdoe,ou=People,dc=example,dc=com",
-      "dn": "uid=jdoe,ou=People,dc=example,dc=com"
-    },
-    {
-      "_id": "uid=bjensen,ou=People,dc=example,dc=com",
-      "dn": "uid=bjensen,ou=People,dc=example,dc=com"
-    },
-    {
-      "_id": "uid=jsmith,ou=people,dc=example,dc=com",
-      "dn": "uid=jsmith,ou=people,dc=example,dc=com"
-    }
+        {
+           "dn": "uid=jdoe,ou=People,dc=example,dc=com",
+           "_id": "1ff2e78f-4c4c-300c-b8f7-c2ab160061e0"
+       },
+       {
+           "dn": "uid=bjensen,ou=People,dc=example,dc=com",
+           "_id": "fc252fd9-b982-3ed6-b42a-c76d2546312c"
+       },
+       {
+           "dn": "uid=jimmysmith,ou=people,dc=example,dc=com",
+           "_id": "07b46858-56eb-457c-b935-cfe6ddf769c7"
+       }
   ]
 }</em></pre></div></div></div><br class="example-break"></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="managing-workflows-over-REST"></a>E.7.4.&nbsp;Managing Workflows Over Rest</h3></div></div></div><p>
      Workflow objects are exposed under the <code class="literal">/openidm/workflow</code>
