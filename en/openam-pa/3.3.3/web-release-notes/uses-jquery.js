@@ -136,7 +136,7 @@ $(document).ready(function () {
      * then show a link.
      */
     var project = "openam-pa";       // E.g. "OpenAM"
-    var version = "11.0.1";    // E.g. "11.0.0"
+    var version = "3.3.3";    // E.g. "11.0.0"
     var jsonUrl = "http://mcraig.org/fr/latest.php";        // E.g. "http://docs.forgerock.org/latest.php"
     var language = "en";
     var latestUrl, latest;
