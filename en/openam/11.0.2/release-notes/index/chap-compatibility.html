@@ -1,0 +1,216 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;4.&nbsp;OpenAM Changes &amp; Deprecated Functionality</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenAM 11.0.2 Release Notes"><link rel="up" href="index.html" title="OpenAM 11.0.2 Release Notes"><link rel="prev" href="chap-update-install.html" title="Chapter&nbsp;3.&nbsp;Updating &amp; Installing OpenAM"><link rel="next" href="chap-issues.html" title="Chapter&nbsp;5.&nbsp;OpenAM Fixes, Limitations, &amp; Known Issues"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;4.&nbsp;OpenAM Changes &amp; Deprecated Functionality</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-update-install.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-issues.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-compatibility"></a>Chapter&nbsp;4.&nbsp;OpenAM Changes &amp; Deprecated Functionality</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-compatibility.html#changes">4.1. Important Changes to Existing Functionality</a></span></dt><dt><span class="section"><a href="chap-compatibility.html#deprecated">4.2. Deprecated Functionality</a></span></dt><dt><span class="section"><a href="chap-compatibility.html#removed">4.3. Removed Functionality</a></span></dt></dl></div><p>This chapter covers both major changes to existing functionality, and
+ also deprecated and removed functionality.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="changes"></a>4.1.&nbsp;Important Changes to Existing Functionality</h2></div></div></div><div class="itemizedlist"><p>
+    These changes are new in OpenAM 11.0.2.
+   </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     Valid loginURIs are now set using a property that specifies
+     a whitelist for custom login URIs
+     so that the CDCServlet and the Distributed Authentication UI (DAS)
+     can check login URI values against those in the whitelist.
+    </p><p>
+     For details, see the explanation in
+     <a href="../../release-notes/index/chap-whats-new.html#product-enhancements" class="link"><em class="citetitle">Product Enhancements</em></a>.
+    </p></li><li class="listitem"><p>
+     Attributes names in responses to REST API calls now
+     preserve the original case used in the request (
+     <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-3159" target="_blank">OPENAM-3159</a>).
+     In other words, if the request asks for <code class="literal">userName</code>,
+     the response includes <code class="literal">userName</code>.
+     If the request asks for <code class="literal">username</code>,
+     the response includes <code class="literal">username</code>.
+    </p><p>
+     If you prefer that responses always use lower case names,
+     set the advanced server property,
+     <code class="literal">org.forgerock.openam.idm.attribute.names.lower.case</code>
+     to <code class="literal">true</code>.
+    </p></li><li class="listitem"><p>
+     The <code class="literal">AttributeQueryUtil</code> class now uses
+     the configured SP attribute mapper to map received attributes
+     in the same way as they come as part of an assertion (
+     <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-1655" target="_blank">OPENAM-1655</a>).
+    </p></li></ul></div><div class="itemizedlist"><p>
+    The following changes were listed for OpenAM 11.0.1.
+   </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     Consistency has been improved in how OpenAM policy rules match resources.
+     Policy rules are now interpreted more consistently
+     in line with the documentation,
+     and more consistently across platforms and across self and subtree modes.
+     Before you upgrade, consider how these changes affect policy rules.
+    </p><div class="itemizedlist"><p>
+      Although the changes introduced by the improvements affect mainly edge cases,
+      they do impact deployments relying on previous, inconsistent behaviors.
+      The following points describe how OpenAM and policy agents behave
+      following upgrade to OpenAM 11.0.1 or later
+      and web policy agents 3.3.1 or later.
+     </p><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+       Policy agents configured to use subtree mode behave
+       as they did prior to 3.3.0.
+      </p></li><li class="listitem"><p>
+       If you created your policies with OpenAM 11.0.0 and web policy agents 3.3.0,
+       then note that trailing slashes are no longer stripped from resource names
+       (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-3509" target="_blank">OPENAM-3509</a>).
+      </p><p>
+       In order to match a trailing slash, your rule must end in a slash,
+       or a slash followed by a wildcard.
+      </p></li><li class="listitem"><p>
+       When policy agents are configured to use self mode,
+       trailing wildcards, except after <code class="literal">?</code>,
+       match zero or more characters.
+      </p></li><li class="listitem"><p>
+       When policy agents are configured to use self mode,
+       previously a trailing wildcard after a slash, <code class="literal">/*</code>,
+       matched one or more characters, whereas it now matches zero or more.
+       This means that a resource ending in <code class="literal">/</code>
+       previously would not match a rule ending in <code class="literal">/*</code>,
+       whereas it now does.
+      </p><p>
+       If you already have two rules to allow access,
+       one ending in <code class="literal">/</code> and the other in <code class="literal">/*</code>,
+       then you have nothing to do.
+       Only the latter rule is now required.
+      </p><p>
+       If however you have only rules ending in <code class="literal">/*</code>
+       and intend these to deny access to resources ending in <code class="literal">/</code>,
+       then add rules ending in <code class="literal">/</code>
+       specifically to deny access to resources ending in <code class="literal">/</code>.
+      </p></li><li class="listitem"><p>
+       When web policy agents are configured to use self mode,
+       trailing wildcards after <code class="literal">?</code>
+       match <span class="emphasis"><em>one</em></span> or more characters.
+       This means that a resource with a trailing <code class="literal">?</code>
+       no longer matches a rule of the form <code class="literal">/*?*</code>,
+       whereas it would have matched with earlier versions.
+      </p><p>
+       To match the behavior of previous releases,
+       when using self mode with resources having empty query strings,
+       add additional rules without trailing wildcards as in <code class="literal">/*?</code>
+       before you upgrade OpenAM.
+      </p></li></ul></div></li><li class="listitem"><p>
+     OpenAM now handles SAML single logout (SLO) requests differently
+     when the user presents an invalid session
+     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-3437" target="_blank">OPENAM-3437</a>).
+    </p><p>
+     In this scenario OpenAM no longer follows
+     the <code class="literal">RelayState</code> without validation.
+     To ensure that the <code class="literal">RelayState</code> validation succeeds,
+     include the <code class="literal">metaAlias</code> request parameter
+     when invoking the SLO JSPs.
+    </p></li><li class="listitem"><p>
+     For LDAP and Active Directory data store configurations
+     the settings for the Authentication Naming Attribute
+     (<code class="literal">sun-idrepo-ldapv3-config-auth-naming-attr</code>)
+     and the LDAP Users Search Attribute
+     (<code class="literal">sun-idrepo-ldapv3-config-users-search-attribute</code>)
+     now have the same effects as they did in versions prior to 11.0.0
+     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-3428" target="_blank">OPENAM-3428</a>).
+    </p><p>
+     The Authentication Naming Attribute
+     is now used only to find the user when performing authentication.
+     The LDAP Users Search Attribute is used in other cases
+     when searching for users.
+     When upgrading from OpenAM 11.0.0,
+     make sure these attributes are correctly set in data store configurations.
+    </p></li><li class="listitem"><p>
+     The fix for
+     <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-2327" target="_blank">OPENAM-2327</a>
+     adds a new <code class="literal">PrintWriter</code> argument
+     to the <code class="literal">postSingleSignOnSuccess</code> method of the
+     <a class="link" href="http://docs.forgerock.org/en/openam/11.0.0/apidocs/index.html?com/sun/identity/saml2/plugins/SAML2ServiceProviderAdapter.html" target="_blank"><code class="literal">SAML2ServiceProviderAdapter</code></a> class.
+     If you use a custom Service Provider adapter,
+     then you must update its implementation.
+    </p><p>
+     The new <code class="literal">PrintWriter</code> argument takes
+     the <code class="literal">PrintWriter</code> for presenting output.
+     It fits between the <code class="literal">HttpServletResponse response</code> argument
+     and the <code class="literal">Object session</code> argument.
+    </p></li></ul></div><div class="itemizedlist"><p>
+    The following changes were listed for OpenAM 11.0.0.
+   </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>The advanced server property used to set the HTTP header name,
+      <code class="literal">com.sun.identity.authentication.client.ipAddressHeader</code>,
+      has replaced the legacy OpenSSO property
+      <code class="literal">com.sun.identity.session.httpClientIPHeader</code> (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-1879" target="_blank">OPENAM-1879</a>).</p></li><li class="listitem"><p>Legacy naming conventions have been changed to conform to the
+    current product name, OpenAM.</p><p><code class="filename">$HOME/.openamcfg/</code> is the new name for
+    <code class="filename">$HOME/.openssocfg/</code>. If you upgrade, OpenAM still
+    supports use of <code class="filename">$HOME/.openssocfg/</code>, and does not
+    rename the folder. For new OpenAM installs, OpenAM creates the directory
+    with the new name, <code class="filename">$HOME/.openamcfg/</code>, at configuration
+    time.</p><p>Other files, such as the <code class="filename">openam.war</code> file, and
+    paths have been modified to ensure consistency with the naming
+    conventions.</p></li><li class="listitem"><p>OpenAM now ships with multiple .war files. You no longer have to
+    build custom .war files for core server-only or distributed authentication
+    UI installations for example.</p></li><li class="listitem"><p>In versions before OpenAM 10.1.0 the default root suffix DN for OpenAM
+    configuration and profile data was <code class="literal">dc=opensso,dc=java,dc=net</code>.
+    The default root suffix is now <code class="literal">dc=openam,dc=forgerock,dc=org</code>.</p></li><li class="listitem"><div class="itemizedlist"><p>The fix for <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-1630" target="_blank">OPENAM-1630</a> changes SAML metadata signing in OpenAM to better
+     conform with the SAML 2.0 standard.</p><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>Metadata for hosted entities is signed using the
+      <code class="literal">metadataSigningKey</code> configured for the realm, or
+      inherited from the global configuration for the server.</p></li><li class="listitem"><p>OpenAM now signs the <code class="literal">EntityDescriptor</code> element
+      that contains child <code class="literal">SPSSODescriptor</code> or
+      <code class="literal">IDPSSODescriptor</code> elements.</p></li><li class="listitem"><p>When importing remote entity metadata with signatures, OpenAM does
+      not modify the signatures, but instead returns them as they were when they
+      were imported.</p></li><li class="listitem"><p>When OpenAM imports remote entity metadata that has no signature and
+      signed metadata is requested on export, OpenAM signs the metadata with
+      the <code class="literal">metadataSigningKey</code>.</p></li></ul></div></li><li class="listitem"><p>The default policy evaluation mode for new policy agent profiles is
+    now self rather than subtree, in order to better scale for large numbers of
+    policy rules.</p><p>Upgrade does not change existing policy agent profile configurations,
+    however. If you want to adopt the new default setting for existing policy
+    agents, you must change the setting manually.</p><p>To do so for Java EE policy agents, set
+    <code class="literal">com.sun.identity.policy.client.cacheMode=self</code>.</p><p>For web policy agents, set
+    <code class="literal">com.sun.identity.agents.config.fetch.from.root.resource=false</code>.</p></li><li class="listitem"><p>
+     You now specify rules for referrals in the same way as rules for policies.
+    </p><p>
+     For example, with previous releases a referral rule for
+     <code class="literal">http://example.com/</code> matched everything underneath.
+     Now you would need three rules, <code class="literal">http://example.com/</code>,
+     <code class="literal">http://example.com/*</code>,
+     and <code class="literal">http://example.com/*?*</code>.
+
+     When used at the end of a rule
+     <code class="literal">*</code> matches one or more characters,
+     rather than zero or more characters.
+    </p><p>
+     When you upgrade OpenAM, the upgrade tool converts existing referral rules.
+    </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="deprecated"></a>4.2.&nbsp;Deprecated Functionality</h2></div></div></div><p>
+   The following functionality is deprecated in OpenAM 11.0.0,
+   and is likely to be removed in a future release.
+  </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>With the implementation of OAuth 2.0 in this release, OAuth 1.0 has been 
+    deprecated. OAuth 1.0 support was originally provided in OpenAM 9.</p></li><li class="listitem"><p>The Netscape LDAP API is to be removed from OpenAM, with OpenAM
+    using the OpenDJ LDAP SDK instead. This affects all classes in
+    <code class="literal">com.sun.identity.shared.ldap.*</code> packages.</p></li><li class="listitem"><p>OpenAM currently uses Sun Java System Application Framework (JATO).
+    JATO is deprecated and is likely to be replaced in a future release.</p></li><li class="listitem"><p>With the implementation of the Persistent Cookie authentication module, the
+    Core Authentication module persistent cookie options are deprecated and are
+    likely to be removed in a future release.</p></li><li class="listitem"><p>Older REST services relying on the following end points are
+    deprecated.</p><table border="0" summary="Simple list" class="simplelist"><tr><td>/identity/attributes</td><td>/identity/logout</td></tr><tr><td>/identity/authenticate</td><td>/identity/read</td></tr><tr><td>/identity/create</td><td>/identity/search</td></tr><tr><td>/identity/delete</td><td>/identity/update</td></tr></table><p>The following table shows how legacy and newer end points
+    correspond.</p><div class="table"><a name="d0e917"></a><div class="table-title">Table&nbsp;4.1.&nbsp;REST End Points</div><div class="table-contents"><table summary="REST End Points" border="0"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Deprecated URIs</th><th>Newer Evolving URIs</th></tr></thead><tbody><tr><td>/identity/attributes</td><td>/json/users</td></tr><tr><td>/identity/authenticate</td><td>/json/authenticate</td></tr><tr><td>/identity/create, /identity/delete, /identity/read,
+        /identity/search, /identity/update</td><td>/json/agents, /json/groups, /json/realms, /json/users</td></tr><tr><td>/identity/logout</td><td>/json/sessions/?_action=logout</td></tr><tr><td>N/A</td><td>/json/dashboard</td></tr><tr><td>N/A</td><td>/json/serverinfo</td></tr></tbody></table></div></div><br class="table-break"><p>Find examples in the <em class="citetitle">Developer Guide</em> chapter on
+    <em class="citetitle">Using RESTful Web Services</em> OpenAM.</p><p>Support for the older REST services is likely to be removed in a
+    future release in favor of the newer REST services. Older REST services
+    will be removed only after replacement REST services are introduced.</p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="removed"></a>4.3.&nbsp;Removed Functionality</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>OpenAM Java SDK no longer supports JDK 5.</p></li><li class="listitem"><p>The <code class="literal">iplanet-am-auth-ldap-server-check</code> property for
+    LDAP and Active Directory authentication modules has been removed and
+    replaced with a heartbeat mechanism configurable through the LDAP Connection
+    Heartbeat Interval (<code class="literal">openam-auth-ldap-heartbeat-interval</code>)
+    and LDAP Connection Heartbeat Time Unit
+    (<code class="literal">openam-auth-ldap-heartbeat-interval</code>) properties for the
+    modules.</p><p>Set these new properties as necessary when you have firewalls or
+    load balancers that drop connections that remain idle for too long.</p></li><li class="listitem"><p>The advanced server property,
+    <code class="literal">openam.session.destroy_all_sessions</code>, has been replaced
+    by the built-in Global Session Service setting,
+    <code class="literal">DESTROY_OLD_SESSIONS</code>.</p></li><li class="listitem"><p>Javadoc for the client SDK is no longer delivered with the
+    distribution, but instead is available online.</p></li></ul></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-update-install.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-issues.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;3.&nbsp;Updating &amp; Installing OpenAM&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;5.&nbsp;OpenAM Fixes, Limitations, &amp; Known Issues</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>
