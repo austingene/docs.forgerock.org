@@ -57,9 +57,9 @@ your new version.
 
 ## For Doc Tools 2.1.0 & Later
 
-Update `latest.php` when you update your documentation,
-and make sure it shows up as JSON rather than PHP source
-at <http://docs.forgerock.org/latest.php>.
+Update `latest.json` when you update your documentation,
+and make sure it shows up in the JSON
+at <http://docs.forgerock.org/latest.json>.
 
 The doc build plugin includes JavaScript in the HTML source
 that retrieves the list of latest versions,
