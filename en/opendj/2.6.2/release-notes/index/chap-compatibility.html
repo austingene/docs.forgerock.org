@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;4.&nbsp;OpenDJ Compatibility</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenDJ Release Notes"><link rel="up" href="index.html" title="OpenDJ Release Notes"><link rel="prev" href="chap-update-install.html" title="Chapter&nbsp;3.&nbsp;Updating &amp; Installing OpenDJ"><link rel="next" href="chap-issues.html" title="Chapter&nbsp;5.&nbsp;OpenDJ Fixes, Limitations, &amp; Known Issues"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;4.&nbsp;OpenDJ Compatibility</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-update-install.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-issues.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-compatibility"></a>Chapter&nbsp;4.&nbsp;OpenDJ Compatibility</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-compatibility.html#changed-functionality">4.1. Important Changes to Existing Functionality</a></span></dt><dt><span class="section"><a href="chap-compatibility.html#deprecated-functionality">4.2. Deprecated Functionality</a></span></dt><dt><span class="section"><a href="chap-compatibility.html#removed-functionality">4.3. Removed Functionality</a></span></dt></dl></div><p>This chapter covers both major changes to existing functionality, and
+ also deprecated and removed functionality.</p><div class="note"><h3 class="title"><a name="compatibility-not-changed"></a>Note</h3><p>
+   No incompatible changes have been made since OpenDJ 2.6.0.
+   This chapter reflects changes made in version 2.6.0.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="changed-functionality"></a>4.1.&nbsp;Important Changes to Existing Functionality</h2></div></div></div><p>OpenDJ 2.6.0 improves on earlier releases
+  introducing many new features. Also take the following into account.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     The upgrade process and <span class="command"><strong>upgrade</strong></span> command have
+     changed to facilitate native packaging on more platforms.
+     See <a class="link" href="http://docs.forgerock.org/en/opendj/2.6.0/install-guide/#chap-upgrade" target="_blank"><em class="citetitle">Upgrading to OpenDJ 2.6.0</em></a>
+     for instructions.
+    </p></li><li class="listitem"><p>The default DB cache size is now 50%, rather than 10%.</p><p>If you have multiple backends, configure cache sizes
+    accordingly.</p></li><li class="listitem"><p>The number of LDAP request handlers now defaults to half the CPU
+    count.</p></li><li class="listitem"><p>The replication purge delay default has increased from one day to
+    three days.</p></li><li class="listitem"><p>Syntax checking has been added for certificate and country attribute
+    values. This affects applications updating those attribute values.
+    Applications updating country attribute values must now use Country String
+    syntax for example, which uses two-character codes from <a class="link" href="http://www.iso.org/iso/country_codes.htm" target="_blank">ISO
+    3166</a> such as <code class="literal">US</code> instead of full names such as
+    <code class="literal">United States</code>.</p></li><li class="listitem"><p>The following global ACI settings have changed.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>OpenDJ directory server now allows any client to use the LDAP
+      Permissive Modify Request control, <code class="literal">1.2.840.113556.1.4.1413</code>,
+      by default for newly installed servers.</p></li><li class="listitem"><p>The "Anonymous read access" global ACI has changed. The list of
+      attributes that are not allowed has been changed to add
+      <code class="literal">includedAttributes</code> and to remove
+      <code class="literal">targetUniqueID</code>.</p></li></ul></div><p>When you upgrade from earlier versions of OpenDJ, however, the
+    previous <code class="literal">global-aci</code> settings are not updated. To apply
+    the changes manually, change the relevant <code class="literal">global-aci</code>
+    settings by using the <span class="command"><strong>dsconfig</strong></span> command. An example of
+    how to change a <code class="literal">global-aci</code> property can be found in the
+    <em class="citetitle">Administration Guide</em>, <a class="link" href="http://docs.forgerock.org/en/opendj/2.6.0/admin-guide/#access-control-disable-anonymous" target="_blank"><em class="citetitle">ACI: Disable Anonymous Access</em></a>.</p></li><li class="listitem"><p>For the SNMP Connection Handler, the default
+    <code class="literal">security-agent-file</code> has changed to
+    <code class="filename">opendj-snmp.security</code> (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENDJ-982" target="_blank">OPENDJ-982</a>), and the upgrade process changes the file name. The
+    <code class="literal">community</code> has also changed to <code class="literal">OpenDJ</code>.
+    If the SNMP Connection Handler fails to start after upgrade, use the
+    <span class="command"><strong>dsconfig</strong></span> command to make sure that the
+    <code class="literal">security-agent-file</code> property is correctly set for your
+    installation.</p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="deprecated-functionality"></a>4.2.&nbsp;Deprecated Functionality</h2></div></div></div><p>OpenDJ 2.6.0 makes use of new environment
+  variables aligned with the project name to use <code class="literal">OPENDJ</code>.
+  Use of the old variables is Deprecated. The old variables are likely to be
+  removed in a future release.</p><p>The <span class="command"><strong>dsframework</strong></span> command is Deprecated and likely
+  to be removed in a future release.</p><p>
+   The next major version of OpenDJ LDAP SDK includes
+   improvements and changes that are not compatible with the 2.x SDK.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="removed-functionality"></a>4.3.&nbsp;Removed Functionality</h2></div></div></div><p>Native packages in SVR4 format for Solaris are not provided at this
+  time.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-update-install.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-issues.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;3.&nbsp;Updating &amp; Installing OpenDJ&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;5.&nbsp;OpenDJ Fixes, Limitations, &amp; Known Issues</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10040&components=10132&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>
