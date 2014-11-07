@@ -11,7 +11,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="country">USA</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="phone">+1&nbsp;415-523-0772</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<code class="uri">www.forgerock.com</code><br>
-&nbsp;&nbsp;&nbsp;</p></div></div></div></div></div><div><p class="releaseinfo">Software release date: October 16, 2014</p></div><div><p class="copyright">Copyright &copy; 2011-2014 ForgeRock AS</p></div><div><a href="legalnotice.html">Legal Notice</a></div><div><p class="pubdate">Publication date: October 16, 2014</p></div><div><div class="abstract"><div class="abstract-title">Abstract</div><p>Notes covering OpenDJ hardware &amp; software requirements, fixes,
+&nbsp;&nbsp;&nbsp;</p></div></div></div></div></div><div><p class="releaseinfo">Software release date: November 07, 2014</p></div><div><p class="copyright">Copyright &copy; 2011-2014 ForgeRock AS</p></div><div><a href="legalnotice.html">Legal Notice</a></div><div><p class="pubdate">Publication date: November 07, 2014</p></div><div><div class="abstract"><div class="abstract-title">Abstract</div><p>Notes covering OpenDJ hardware &amp; software requirements, fixes,
    known issues. The OpenDJ project offers open source LDAP directory services
    in Java.</p></div></div></div><hr></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="preface"><a href="#d143e125">About OpenDJ</a></span></dt><dt><span class="chapter"><a href="#chap-whats-new">1. What's New in OpenDJ 2.6.2</a></span></dt><dt><span class="chapter"><a href="#chap-before-you-install">2. Before You Install OpenDJ Software</a></span></dt><dt><span class="chapter"><a href="#chap-update-install">3. Updating &amp; Installing OpenDJ</a></span></dt><dt><span class="chapter"><a href="#chap-compatibility">4. OpenDJ Compatibility</a></span></dt><dt><span class="chapter"><a href="#chap-issues">5. OpenDJ Fixes, Limitations, &amp; Known Issues</a></span></dt><dt><span class="chapter"><a href="#chap-feedback">6. How to Report Problems &amp; Provide Feedback</a></span></dt><dt><span class="chapter"><a href="#chap-support">7. Support</a></span></dt></dl></div><div class="preface"><div class="titlepage"><div><div><h1 class="title"><a name="d143e125"></a>About OpenDJ</h1></div></div></div><p>OpenDJ is an LDAPv3 compliant directory service, developed for
   the Java platform, providing a high performance, highly available,
@@ -115,14 +115,14 @@
      </p></li><li class="listitem"><p>
       <a class="link" href="http://docs.forgerock.org/en/opendj/2.6.0/javadoc/" target="_blank"><em class="citetitle">OpenDJ 2.6.0 Server Plugin API Specification</em></a>
      </p></li></ul></div></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-before-you-install"></a>Chapter&nbsp;2.&nbsp;Before You Install OpenDJ Software</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="#prerequisites-java">2.1. Java Environment</a></span></dt><dt><span class="section"><a href="#prerequisites-file-descriptors">2.2. Maximum Open Files</a></span></dt><dt><span class="section"><a href="#prerequisites-operating-systems">2.3. Operating System</a></span></dt><dt><span class="section"><a href="#prerequisites-virtualization">2.4. Virtualization</a></span></dt><dt><span class="section"><a href="#prerequisites-application-servers">2.5. Application Servers</a></span></dt><dt><span class="section"><a href="#prerequisites-fqdn">2.6. FQDNs For Replication</a></span></dt><dt><span class="section"><a href="#prerequisites-hardware">2.7. Hardware</a></span></dt></dl></div><p>This chapter covers requirements to consider before you run OpenDJ,
- especially before you run OpenDJ in your production environment.</p><div class="note"><h3 class="title"><a name="requirements-not-changed"></a>Note</h3><p>
-   These requirements have not changed since OpenDJ 2.6.0.
+ especially before you run OpenDJ in your production environment.</p><div class="note"><h3 class="title"><a name="requirements-changes"></a>Note</h3><p>
+   OpenDJ 2.6.2 adds support for Java 8.
   </p></div><p>If you have a special request to support a combination not listed here,
  contact ForgeRock at <a class="link" href="mailto:info@forgerock.com" target="_top">info@forgerock.com</a>.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="prerequisites-java"></a>2.1.&nbsp;Java Environment</h2></div></div></div><a class="indexterm" name="d143e287"></a><p>OpenDJ software consists of pure Java applications. OpenDJ servers
   and clients therefore should run on any system with full Java support.
   OpenDJ is tested on a variety of operating systems, including Solaris
   SPARC and x86, various Linux distributions, Microsoft Windows,
-  and Apple Mac OS X.</p><p>OpenDJ software requires Java 6 or 7, specifically at least the Java
+  and Apple Mac OS X.</p><p>OpenDJ software requires Java 6, 7 or 8, specifically at least the Java
   Standard Edition runtime environment. ForgeRock has tested most with Oracle
   Java Platform, Standard Edition.</p><p>ForgeRock recommends that you keep your Java installation up to date
   with the latest security fixes.</p><p>To build applications with the OpenDJ LDAP SDK, you need the
@@ -146,8 +146,10 @@ opendj hard nofile 131072</pre><p>The example above assumes the system has enoug
   options for your file system in the <span class="command"><strong>mount</strong></span> command manual
   page.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="prerequisites-virtualization"></a>2.4.&nbsp;Virtualization</h2></div></div></div><a class="indexterm" name="d143e355"></a><p>ForgeRock has tested OpenDJ software on systems running atop VMware
   vSphere Hypervisor (ESXi) 5.1.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="prerequisites-application-servers"></a>2.5.&nbsp;Application Servers</h2></div></div></div><a class="indexterm" name="d143e365"></a><p>OpenDJ directory server runs as a standalone Java service, and
-  does not depend on an application server.</p><p>OpenDJ DSML gateway has been validated on Apache Tomcat 6 and 7.</p><p>OpenDJ REST LDAP gateway has been validated on Apache Tomcat 6 and
-  Jetty 8.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="prerequisites-fqdn"></a>2.6.&nbsp;FQDNs For Replication</h2></div></div></div><a class="indexterm" name="d143e379"></a><p>OpenDJ replication requires that you use fully qualified domain names,
+  does not depend on an application server.</p><p>OpenDJ DSML gateway has been validated on Apache Tomcat 6 and 7.</p><p>
+   OpenDJ REST LDAP gateway has been validated on Apache Tomcat 6 and Jetty 8.
+   Using Jetty 8 is not supported with Java 8.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="prerequisites-fqdn"></a>2.6.&nbsp;FQDNs For Replication</h2></div></div></div><a class="indexterm" name="d143e379"></a><p>OpenDJ replication requires that you use fully qualified domain names,
   such as <code class="literal">opendj.example.com</code>.</p><p>Although you can use host names like <code class="literal">my-laptop.local</code>
   for evaluation, in production and even in your lab, you must either ensure
   DNS is set up correctly to provide fully qualified domain names, or set up
