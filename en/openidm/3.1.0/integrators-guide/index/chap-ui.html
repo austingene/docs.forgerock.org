@@ -1,0 +1,806 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;4.&nbsp;OpenIDM Web-based User Interfaces</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/css/shCore.css"><link rel="stylesheet" type="text/css" href="sh/css/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/css/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/js/shCore.js" type="text/javascript"></script><script src="sh/js/shBrushAci.js" type="text/javascript"></script><script src="sh/js/shBrushBash.js" type="text/javascript"></script><script src="sh/js/shBrushCsv.js" type="text/javascript"></script><script src="sh/js/shBrushHttp.js" type="text/javascript"></script><script src="sh/js/shBrushJava.js" type="text/javascript"></script><script src="sh/js/shBrushJScript.js" type="text/javascript"></script><script src="sh/js/shBrushLDIF.js" type="text/javascript"></script><script src="sh/js/shBrushPlain.js" type="text/javascript"></script><script src="sh/js/shBrushProperties.js" type="text/javascript"></script><script src="sh/js/shBrushXml.js" type="text/javascript"></script><script src="sh/js/shAll.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenIDM Integrator's Guide"><link rel="up" href="index.html" title="OpenIDM Integrator's Guide"><link rel="prev" href="chap-cli.html" title="Chapter&nbsp;3.&nbsp;OpenIDM Command-Line Interface"><link rel="next" href="chap-repo.html" title="Chapter&nbsp;5.&nbsp;Managing the OpenIDM Repository"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;4.&nbsp;OpenIDM Web-based User Interfaces</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-cli.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-repo.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-ui"></a>Chapter&nbsp;4.&nbsp;OpenIDM Web-based User Interfaces</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-ui.html#ui-admin">4.1. Configuring OpenIDM from the Admin UI</a></span></dt><dt><span class="section"><a href="chap-ui.html#ui-overview">4.2. Overview of the User View UI</a></span></dt><dt><span class="section"><a href="chap-ui.html#ui-configuring">4.3. Configuring the User View UI</a></span></dt><dt><span class="section"><a href="chap-ui.html#ui-managing-users">4.4. Managing User Accounts With the User View UI</a></span></dt><dt><span class="section"><a href="chap-ui.html#ui-managing-workflows">4.5. Managing Workflows From the User View UI</a></span></dt><dt><span class="section"><a href="chap-ui.html#ui-customizing">4.6. Changing the UI Theme</a></span></dt><dt><span class="section"><a href="chap-ui.html#ui-external-password-reset">4.7. Using an External System for Password Reset</a></span></dt><dt><span class="section"><a href="chap-ui.html#ui-external-logout">4.8. Providing a Logout URL to External Applications</a></span></dt><dt><span class="section"><a href="chap-ui.html#ui-path">4.9. Changing the UI Path</a></span></dt><dt><span class="section"><a href="chap-ui.html#ui-disabling">4.10. Disabling the UI</a></span></dt></dl></div><p>
+  OpenIDM provides a customizable, browser-based user interface, known as the
+  User View UI. To take full advantage of this interface, you can configure
+  OpenIDM <a href="../../integrators-guide/index/appendix-objects.html#managed-objects" class="link"><em class="citetitle">Managed
+  Objects</em></a> under <code class="literal">managed/user</code>. Most of the
+  <a href="../../install-guide/index/chap-samples.html" class="link"><em class="citetitle">OpenIDM
+  Samples</em></a> demonstrate how you can deploy OpenIDM with managed
+  users.
+ </p><p>
+  The User View UI interface enables administrative users to create, modify,
+  and delete user accounts. It provides role-based access to tasks based on
+  BPMN2 workflows, and allows users to manage certain aspects of their own
+  accounts, including configurable self-service registration. When OpenIDM
+  starts, you can access the User View UI at
+  <code class="literal">https://localhost:8443/openidmui</code>.
+ </p><p>
+  OpenIDM also provides a configurable administrative user interface (Admin UI)
+  that allows you to configure connectors, customize managed objects, set up
+  attribute mappings, and more. When OpenIDM starts, you can access the Admin UI
+  at <code class="literal">https://localhost:8443/admin</code>.
+ </p><p>
+  The first time you log into either UI as the <code class="literal">openidm-admin</code>
+  administrative user, the default password is <code class="literal">openidm-admin</code>.
+  As that default password is not secure, we recommend that you change that
+  password in production. However, you can bypass that window, by clicking the
+  X in the upper right corner.
+ </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/ui-admin-password-change.png" align="middle" height="360" alt="OpenIDM UI Administrator Password Change"></td></tr></table></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ui-admin"></a>4.1.&nbsp;Configuring OpenIDM from the Admin UI</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-ui.html#ui-admin-connectors">4.1.1. Administering Connectors from the UI</a></span></dt><dt><span class="section"><a href="chap-ui.html#ui-admin-managedobjects">4.1.2. Administering Managed Objects from the UI</a></span></dt><dt><span class="section"><a href="chap-ui.html#admin-ui-resource-mapping">4.1.3. Configuring a Resource Mapping from the UI</a></span></dt><dt><span class="section"><a href="chap-ui.html#admin-ui-sync">4.1.4. Configuring Reconciliation from the UI</a></span></dt><dt><span class="section"><a href="chap-ui.html#admin-ui-auth">4.1.5. Configuring Authentication Modules from the UI</a></span></dt></dl></div><p>
+   You can set up a basic configuration for OpenIDM with the Administrative User
+   Interface (Admin UI).
+  </p><p>
+   Through the Admin UI, you can connect to resources, configure attribute
+   mapping, and set up managed objects, reconciled on a defined schedule.
+  </p><p>
+   You can customize the configuration of connectors, managed objects,
+   mapping between resources, and more. You can add and edit properties to be
+   synchronized, configure correlation queries, and enable LiveSync.
+  </p><p>
+   To access the initial Admin UI screen, navigate to
+   <code class="literal">https://localhost:8443/admin</code>.
+  </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/admin-ui-main.png" align="middle" height="360" alt="Initial Admin UI Screen"></td></tr></table></div><p>
+   The information that appears in the initial Admin UI screen depends on how
+   you started OpenIDM. For example, if you start OpenIDM with one of the
+   <a class="link" href="install-guide#more-samples" target="_blank">OpenIDM Samples</a>, your
+   first Resources screen will display connectors and managed objects as
+   configured in the selected sample.
+  </p><p>
+   As shown in the initial screen, the Admin UI supports: <a href="../../integrators-guide/index/chap-resource-conf.html" class="link">
+   Connecting to External Resources</a> and <a href="../../integrators-guide/index/chap-users-groups-roles.html" class="link">Managing Users,
+   Groups, and Roles</a>.
+  </p><p>
+   Scroll up and down the Admin UI screen. Review configured
+   connectors and managed objects. The screenshots in this section assume that
+   you have started OpenIDM with <a href="../../install-guide/index/chap-samples.html#more-sample2b" class="link">
+   <em class="citetitle">Sample 2b - LDAP Two Way</em></a>.
+  </p><div class="note"><h3 class="title">Note</h3><p>
+    While a connector is not a resource, it provides a connection to remote
+    resources such as LDAP data stores, XML files, and other databases.
+   </p></div><p>
+   Connectors are used to communicate with remote resources, such as a
+   database, an identity store, or another organized data store.
+  </p><p>
+   Once you connect one or more data stores and managed objects, you can
+   create a mapping between two resources. You can then configure property
+   mapping between those resources, for later synchronization.
+  </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="ui-admin-connectors"></a>4.1.1.&nbsp;Administering Connectors from the UI</h3></div></div></div><p>
+    You can include several different connectors in an OpenIDM configuration.
+    Select the option to create a new connector. Try some of the different
+    connector types in the screen that appears. Observe as the Admin UI changes
+    the configuration options to match the requirements of the connector type.
+   </p><p>
+    Remember, every connector serves as a conduit to an external data store.
+   </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/admin-ui-con-types.png" align="middle" height="360" alt="Add Connector Admin UI Screen"></td></tr></table></div><p>
+    If you are not sure what to enter in a specific Add Connector text box,
+    review the list of <a href="../../integrators-guide/index/chap-resource-conf.html#connectors-with-openidm" class="link"><em class="citetitle">Connectors
+    Supported With OpenIDM</em></a>. You should be able to find
+    guidance and or examples on how each supported connector is configured.
+   </p><p>
+    For additional guidance, review sample connector files in the
+    <code class="filename">samples/provisioners/</code> subdirectory.
+   </p><p>
+    Once you fill in all required text boxes, the Admin UI allows you
+    to validate the connector configuration.
+   </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="ui-admin-managedobjects"></a>4.1.2.&nbsp;Administering Managed Objects from the UI</h3></div></div></div><p>
+    You can set up Managed Objects in a fashion similar to the way you set up
+    connectors. Typically, OpenIDM uses managed objects as defined in
+    <a href="../../integrators-guide/index/chap-users-groups-roles.html" class="link">
+     <em class="citetitle">Managing Users, Groups, and Roles</em>.</a>
+   </p><p>
+    To access details of a Managed Object, go to the Resources screen. Select
+    the Edit icon associated with the desired Managed Object, such as user,
+    group, or role.
+   </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/admin-ui-managed.png" align="middle" height="360" alt="Managed Object Admin UI Screen"></td></tr></table></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="admin-ui-resource-mapping"></a>4.1.3.&nbsp;Configuring a Resource Mapping from the UI</h3></div></div></div><p>
+    You may have multiple connectors and managed objects. You can configure a
+    mapping between any two of these resources. Connectors represent an external
+    data store, as specified in the following section:
+    <a href="../../integrators-guide/index/chap-resource-conf.html#openicf-provisioner-conf" class="link">
+    <em class="citetitle">Connectors Supported with OpenIDM</em></a>. In
+    contrast, managed objects represents a data store internal to OpenIDM.
+   </p><p>
+    Resource mapping requires a source and a target. Generally, each resource
+    includes properties such as username, address, surname, and title.
+    Resource mapping can go beyond user information to other types of data.
+   </p><p>
+    Once you create a mapping, you can identify properties that you wish to
+    control in the target. With this part of the Admin UI, you can configure
+    how OpenIDM uses matching properties in the source.
+   </p><p>
+    The following screenshot illustrates a property mapping between two
+    resources. Every resource includes identifiers for each attribute. For
+    example, different resources may use one of the following identifiers for
+    usernames: un, uid, user, sAMAccountName, and account. For more information
+    on property mappings, see the following section on the
+    <a href="../../integrators-guide/index/chap-synchronization.html#synchronization-mappings-file" class="link">
+     <em class="citetitle">Synchronization Mappings File</em></a>.
+   </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/admin-ui-map-sync.png" align="middle" height="360" alt="Admin UI - Property Mapping"></td></tr></table></div><p>
+    The bold black line is used solely by the UI to determine what data is
+    shown from these data stores. It does not affect reconciliation. In the
+    Admin UI, you can change the location of the line, or move a desired
+    property above or below the line.
+   </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="admin-ui-sync"></a>4.1.4.&nbsp;Configuring Reconciliation from the UI</h3></div></div></div><p>
+    Reconciliation changes data on a target system to match the corresponding
+    data on a source system. You can customize how OpenIDM performs
+    reconciliation in several ways.
+   </p><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="admin-ui-correlation"></a>4.1.4.1.&nbsp;Correlation Options</h4></div></div></div><p>
+     OpenIDM can match existing records on the target system to records
+     on the source system. This matching is known as correlation.
+    </p><p>
+     Before activating reconciliation, you may choose to configure various
+     correlation options, including reconciliation query filters, individual
+     record validation, association rules, and data association management.
+    </p><p>
+     For more information on correlation, see the section on
+     <a href="../../integrators-guide/index/chap-synchronization.html#correlation" class="link">
+     <em class="citetitle">Correlation Queries</em></a>.
+    </p><p>
+     You can add reconciliation query filters, with queries on the source and
+     target objects. For more information, see the section on
+     <a class="link" href="integrators-guide#constructing-queries" target="_blank">
+      <em class="citetitle">Constructing Queries</em></a>. You can set up queries
+     on properties such as <code class="literal">userName</code> and parameters such as
+     <code class="literal">Smith</code>.
+    </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/admin-ui-recon-query.png" align="middle" height="360" alt="Admin UI Screen, Reconciliation Query Filters"></td></tr></table></div><p>
+     You can add individual record validation scripts, based on the
+     <code class="literal">validSource</code> and <code class="literal">validTarget</code>
+     script objects. For more information on these objects, see the Appendix on
+     <a href="../../integrators-guide/index/appendix-synchronization.html#sync-object-mapping" class="link">
+      <em class="citetitle">Object-Mapping Objects</em></a>. With these scripts,
+     you can set up criteria for OpenIDM to validate source and target objects
+     for reconciliation.
+    </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/admin-ui-recon-validation.png" align="middle" height="360" alt="Admin UI Screen, Individual Record Validation"></td></tr></table></div><p>
+     If desired, you can set up
+     <a href="../../integrators-guide/index/chap-synchronization.html#correlation" class="link">
+     <em class="citetitle">Correlation Queries</em></a>, with an expression
+     builder or with a JavaScript or Groovy-based script.
+    </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/admin-ui-corr.png" align="middle" height="360" alt="Admin UI Screen, Correlation Queries"></td></tr></table></div><p>
+     When a reconciliation operation finds a matching target entry, the process
+     creates a link between the source and the target entries. This is also known
+     as a Data Association. Data associations serve two purposes - they speed up
+     future reconciliation operations, and they serve as a record of the
+     relationship between a source and a target entry.
+    </p><p>
+     You can set up such data associations for individual entries, as well as
+     different situations shown in the section on
+     <a class="link" href="integrators-guide#sync-situations" target="_blank">
+      <em class="citetitle">Synchronization Situations</em></a>.
+    </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/admin-ui-data-assoc.png" align="middle" height="360" alt="Admin UI Screen, Data Association Management"></td></tr></table></div></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="admin-ui-recon"></a>4.1.4.2.&nbsp;Reconciliation Options</h4></div></div></div><p>
+     Before activating reconciliation, you may choose to configure situational
+     policies, situational event scripts, and reconciliation scripts.
+    </p><p>
+     You may want to configure situational policies. By default, the policies
+     associated with mappings are set to "read-only". As such, OpenIDM does not
+     change anything on the target system, unless you make changes to
+     situational policies.
+    </p><p>
+     With situational policies, you can define actions relevant for situations
+     shown in the screenshot below. For a full list of available
+     policies, see the following section:
+     <a href="../../integrators-guide/index/chap-synchronization.html#handling-sync" class="link"><em class="citetitle">Synchronization
+      Situations and Actions</em></a>.
+    </p><p>
+     To access the following screen, select the Mapping of your choice and
+     select edit. In the sub-tabs that appear, select Reconciliation.
+    </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/admin-ui-situ-policy.png" align="middle" height="360" alt="Admin UI Screen, User-Defined Situational Policies"></td></tr></table></div><p>
+     You can configure situational event scripts. Each of the script events
+     shown <code class="literal">onCreate</code>, <code class="literal">onDelete</code>,
+     <code class="literal">onLink</code>, <code class="literal">onUnlink</code>, and
+     <code class="literal">onUpdate</code>, can help you with
+     <a href="../../integrators-guide/index/chap-synchronization.html#constructing-attributes" class="link">
+      <em class="citetitle">Constructing and Manipulating Attributes</em></a>.
+    </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/admin-ui-situ-event.png" align="middle" height="360" alt="Admin UI Screen, Situational Event Scripts"></td></tr></table></div><p>
+     You can configure scripts that are triggered on reconciliation, as part of
+     the <a href="../../integrators-guide/index/chap-synchronization.html#advanced-dataflow" class="link">
+     <em class="citetitle">Advanced Dataflow Configuration</em></a>.
+    </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/admin-ui-recon-script.png" align="middle" height="360" alt="Admin UI Screen, Reconciliation Script"></td></tr></table></div><p>
+     You can choose to test the overall process with a single record
+     reconciliation. In other words, you need not test these policies and
+     scripts against the entire data set. For example, you can
+     <a href="../../integrators-guide/index/chap-synchronization.html#recon-by-id" class="link">
+      <em class="citetitle">Restrict Reconciliation to a Specific ID</em></a>
+    </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/admin-ui-single.png" align="middle" height="360" alt="Admin UI Screen, Single Record Reconciliation"></td></tr></table></div><p>
+     Finally, you should set up a schedule, as described in
+     the following section: <a href="../../integrators-guide/index/chap-synchronization.html#configuring-sync-schedule" class="link">
+     <em class="citetitle">Configuring Scheduled Synchronization</em></a>.
+    </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/admin-ui-sync.png" align="middle" height="360" alt="Admin UI Screen, Synchronization"></td></tr></table></div><p>
+     You can also configure LiveSync, which captures the changes that happen on
+     a remote system, and then pushes those changes to OpenIDM.
+    </p><p>
+     For more information on Reconciliation and LiveSync, see the section that
+     explains: <a href="../../integrators-guide/index/chap-synchronization.html#sync-types" class="link"><em class="citetitle">Types of
+     Synchronization</em></a>.
+    </p><p>
+     While Reconciliation and LiveSync are two different concepts, you can
+     manage both with the embedded Quartz scheduler. For more information, see
+     the following section:
+     <a href="../../integrators-guide/index/chap-scheduler-conf.html" class="link">
+      <em class="citetitle">Scheduling Tasks and Events</em></a>.
+    </p><p>
+     Once you've set up Reconciliation based on configured properties,
+     correlation queries, and a synchronization schedule, you can start the
+     synchronization process. Try it out! You'll see the results in the target
+     data store.
+    </p><p>
+     Once you have taken the steps required to configure OpenIDM through the
+     Admin UI, you can start the synchronization process from a source to a
+     target. Once a synchronization is complete, you can review the results in
+     this window.
+    </p></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="admin-ui-auth"></a>4.1.5.&nbsp;Configuring Authentication Modules from the UI</h3></div></div></div><p>
+    You can also configure authentication modules from the Admin UI. To access
+    those modules, click Settings.
+   </p><p>
+    The page shown here displays several available modules, based on the
+    ForgeRock Common Authentication Framework. For more information on each
+    module, see the following section:
+    <a class="link" href="integrators-guide#supported-auth-modules" target="_blank">
+     <em class="citetitle">Supported Authentication Modules</em>
+    </a>.
+   </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/admin-ui-auth.png" align="middle" height="360" alt="Admin UI Screen, Authentication Settings"></td></tr></table></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ui-overview"></a>4.2.&nbsp;Overview of the User View UI</h2></div></div></div><p>
+   For all users, the User View UI includes a Dashboard tab, which lists
+   any tasks assigned to the user who as logged in, processes available to be
+   invoked, and any notifications for that user.
+  </p><p>
+   For the administrative user, (role <code class="literal">openidm-admin</code>), the
+   User View UI also includes a Users tab, which provides an interface for
+   user entries, if you have configured managed users in the OpenIDM repository.
+  </p><p>
+   To access the User View UI, install and start OpenIDM, then point your
+   browser to <a class="link" href="https://localhost:8443/openidmui" target="_top">https://localhost:8443/openidmui</a>. If you
+   have not installed a certificate that is trusted by a certificate authority,
+   you are prompted with an "Untrusted Connection" warning the first time you
+   log in to the UI.
+  </p><p>
+   The following image shows the Dashboard tab for the administrative user when
+   no tasks, processes, or notifications are available.
+  </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/ui-admin-view.png" align="middle" height="360" alt="OpenIDM User View UI Administrator View - Dashboard"></td></tr></table></div><p>
+   The following image shows the Users tab, populated with two sample users,
+   after a reconciliation associated with Sample 2b.
+  </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/ui-users-tab.png" align="middle" height="360" alt="OpenIDM User View UI Administrator View - Users"></td></tr></table></div><p>
+   You can sort the list of users alphabetically, by any of the column values.
+   Click on the column title to sort.
+  </p><p>
+   The <code class="literal">Profile</code> link enables the user to modify his username
+   or password. The <code class="literal">Change Security Data</code> link, accessed from
+   the top of the screen, or from the user's Profile page enables the user to
+   change his password and, if this functionality has been enabled, to select a
+   new security question.
+  </p><p>
+   Password changes are subject to the default password policy, as shown in the
+   following password update screen.
+  </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/ui-password-change.png" align="middle" height="360" alt="OpenIDM UI - Password Change"></td></tr></table></div><p>
+   For a regular user (role <code class="literal">openidm-authorized</code>), the Users
+   tab is not displayed. By default, regular users cannot manage user accounts,
+   except for certain aspects of their own accounts.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ui-configuring"></a>4.3.&nbsp;Configuring the User View UI</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-ui.html#ui-self-registration">4.3.1. Enabling Self-Registration</a></span></dt><dt><span class="section"><a href="chap-ui.html#ui-security-questions">4.3.2. Configuring Security Questions</a></span></dt><dt><span class="section"><a href="chap-ui.html#ui-minimum-length">4.3.3. Minimum Length Security Answers</a></span></dt><dt><span class="section"><a href="chap-ui.html#ui-site-identification">4.3.4. Enabling Site Identification</a></span></dt><dt><span class="section"><a href="chap-ui.html#ui-country-list">4.3.5. Configuring the Country List</a></span></dt></dl></div><p>
+   The following sections outline the configurable aspects of the User View UI.
+  </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="ui-self-registration"></a>4.3.1.&nbsp;Enabling Self-Registration</h3></div></div></div><p>
+    Self-registration (the ability for new users to create their own accounts)
+    is disabled by default. To enable self-registration, set
+    <code class="literal">"selfRegistration"</code> to <code class="literal">true</code> in the UI
+    configuration file (<code class="filename">conf/ui-configuration.json</code>).
+   </p><pre class="brush: javascript;">
+{
+    "configuration" : {
+        "selfRegistration" : true,
+...    
+    </pre><p>
+     When self-registration is enabled, a "Register your account" link is
+     provided on the login page. When a user creates an account on the account
+     registration page, a managed object is created in the OpenIDM repository.
+     The default policies for managed objects are applied during account
+     creation.
+    </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/ui-register-account.png" align="middle" height="360" alt="OpenIDM UI - Self Registration"></td></tr></table></div><p>
+     User objects created using self-registration automatically have the role
+     <code class="literal">openidm-authorized</code>.
+    </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="ui-security-questions"></a>4.3.2.&nbsp;Configuring Security Questions</h3></div></div></div><p>
+    In the event that a user forgets his password, a password reset function
+    enables registered users to reset their own passwords. To guard against
+    unauthorized access, you can specify that users be prompted with one or
+    more security questions when they request a password reset.
+   </p><p>
+    Security questions are disabled by default. To enable them, set
+    <code class="literal">"securityQuestions"</code> to <code class="literal">true</code> in the UI
+    configuration file (<code class="filename">conf/ui-configuration.json</code>).
+   </p><pre class="brush: javascript;">
+{
+    "configuration" : {
+        "securityQuestions" : true,
+...    
+   </pre><p>
+    A default set of questions is provided, but you can add to these, or
+    overwrite them. Specify the list of questions to be asked in the
+    <code class="filename">conf/ui-secquestions.json</code> file.
+   </p><p>
+    Refresh your browser after this configuration change for the change to be
+    picked up by the UI.
+   </p><p>
+    When security questions are enabled, the following panel is included on the
+    self registration page.
+   </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/ui-security-questions.png" align="middle" height="360" alt="OpenIDM User View UI - Security Questions"></td></tr></table></div><p>
+    In addition, a "Reset your password" link is provided on the login page.
+    When a user attempts to reset her password, she is prompted for the
+    response to the security question that she set up during registration.
+   </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/ui-reset-password.png" align="middle" height="360" alt="OpenIDM User View UI - Reset Password"></td></tr></table></div><div class="note"><h3 class="title">Note</h3><p>
+     If security questions are enabled <span class="emphasis"><em>after</em></span> a specific
+     user has registered, that particular user will be unable to use the
+     password reset functionality.
+    </p></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="ui-minimum-length"></a>4.3.3.&nbsp;Minimum Length Security Answers</h3></div></div></div><p>
+    The password, passphrase, and security answer are all associated with
+    some minimum length. To change that minimum, edit the
+    <code class="filename">conf/policy.json</code> file.
+    Navigate to the appropriate section. Set the <code class="literal">minLength</code>
+    option to the desired number.
+   </p><p>
+    For example, the following excerpt from the
+    <code class="filename">conf/policy.json</code> file shows a default
+    <code class="literal">minLength</code> of 16 associated with the security answer.
+   </p><pre class="brush: javascript;">
+{
+    "policyId" : "minimum-length",
+    "params" : {
+        "minLength" : 16
+    }
+},</pre></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="ui-site-identification"></a>4.3.4.&nbsp;Enabling Site Identification</h3></div></div></div><p>
+    To ensure that users are entering their details onto the correct site, you
+    can enable site identification. Site identification provides a preventative
+    measure against phishing.
+   </p><p>
+    With site identification enabled, a user is presented with a range of images
+    from which he can select when he registers his account, and prompted to
+    specify his own <span class="emphasis"><em>site phrase</em></span>. The selected site image
+    and phrase are displayed on login, to confirm that the user is logging in to
+    the legitimate site.
+   </p><p>
+    To enable site identification, set <code class="literal">"siteIdentification"</code>
+    to <code class="literal">true</code> in the UI configuration file
+    (<code class="filename">conf/ui-configuration.json</code>).
+   </p><pre class="brush: javascript;">
+{
+    "configuration" : {
+        "siteIdentification" : true,
+...    
+    </pre><p>
+     Refresh your browser after this configuration change for the change to be
+     picked up by the UI.
+    </p><p>
+    When site identification is enabled, the following panel is included on the
+    self registration page.
+   </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/ui-site-identification.png" align="middle" height="360" alt="OpenIDM UI - Site Identification"></td></tr></table></div><p>
+    A default list of four images is presented for site identification. The
+    images are defined in the <code class="literal">siteImages</code> property in the
+   <code class="filename">conf/ui-configuration.json</code> file:
+   </p><pre class="brush: javascript;">
+"siteImages" : [
+"images/passphrase/mail.png",
+"images/passphrase/user.png",
+"images/passphrase/report.png",
+"images/passphrase/twitter.png"
+],
+...    
+   </pre><p>
+    You can change the default images, and include additional images, by
+    placing image files in the <code class="filename">ui/extension/images</code> folder
+    and modifying the <code class="literal">siteImages</code> property in the
+    <code class="filename">ui-configuration.json</code> file to point to the new images.
+    Refresh your browser for the change to take effect.
+   </p><p>
+    The following example assumes an image file named
+    <code class="filename">my-new-image.jpg</code>, located in
+    <code class="filename">ui/extension/images</code>.
+   </p><pre class="brush: javascript;">
+"siteImages" : [
+"images/passphrase/mail.png",
+"images/passphrase/user.png",
+"images/passphrase/report.png",
+"images/passphrase/twitter.png",
+"images/my-new-image.jpg"
+],
+...
+   </pre><p>
+    Note that the default image files are located in
+    <code class="filename">ui/default/enduser/public/images/passphrase</code>.
+   </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="ui-country-list"></a>4.3.5.&nbsp;Configuring the Country List</h3></div></div></div><p>
+    The default user profile includes the ability to select the user's country
+    and state or province. To specify the countries, and the associated states
+    or provinces, that appear in these drop down lists,  edit the
+    <code class="filename">conf/ui-countries.json</code> file. For example, to add 
+    Norway to the list of countries, you would add the following to the 
+    <code class="filename">conf/ui-countries.json</code> file:
+   </p><pre class="brush: javascript;">
+{
+    "key" : "norway",
+    "value" : "Norway",
+    "states" : [
+        {
+            "key" : "akershus",
+            "value" : "Akershus"
+        },
+        {
+            "key" : "aust-agder",
+            "value" : "Aust-Agder"
+        },
+        {
+            "key" : "buskerud",
+            "value" : "Buskerud"
+        },
+...
+   </pre><p>
+    Refresh your browser after this configuration change for the change to be
+    picked up by the UI.
+   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ui-managing-users"></a>4.4.&nbsp;Managing User Accounts With the User View UI</h2></div></div></div><p>
+   Only administrative users (with the role <code class="literal">openidm-admin</code>)
+   can add, modify, and delete user accounts. Regular users can modify certain
+   aspects of their own accounts.
+  </p><div class="procedure"><a name="add-user-account"></a><div class="procedure-title">Procedure&nbsp;4.1.&nbsp;To Add a User Account</div><ol class="procedure" type="1"><li class="step"><p>
+     Log into the user interface as an administrative user.
+    </p></li><li class="step"><p>
+     Select the Users tab.
+    </p></li><li class="step"><p>
+     Click Add User.
+    </p></li><li class="step"><p>
+     Complete the fields on the Create new account page.
+    </p><p>
+     Most of these fields are self-explanatory. Be aware that the user interface
+     is subject to policy validation, as described in <a href="../../integrators-guide/index/chap-policies.html" class="link">
+     <em class="citetitle">Using Policies to Validate Data</em></a>. So, for
+     example, the Email address must be of valid email address format, and the
+     Password must comply with the password validation settings that are
+     indicated in the panel to the right.
+    </p><p>
+     The Admin Role field reflects the roles that are defined in the
+     <code class="filename">ui-configuration.json</code> file, as well as any managed
+     roles that have been added. By default, the roles are mapped as follows:
+    </p><pre class="brush: javascript;">
+"roles" : {
+    "openidm-admin" : "Administrator",
+    "openidm-authorized" : "User",
+    "openidm-tasks-manager" : "Tasks Manager"
+},  </pre><p>
+     A user can be assigned more than one role. Only users with the
+     <code class="literal">tasks-manager</code> role can assign tasks to any candidate
+     user for that task.
+    </p></li></ol></div><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/ui-create-account.png" align="middle" height="360" alt="OpenIDM User View UI - Create User Account"></td></tr></table></div><div class="procedure"><a name="ui-update-account"></a><div class="procedure-title">Procedure&nbsp;4.2.&nbsp;To Update a User Account</div><ol class="procedure" type="1"><li class="step"><p>
+     Log into the User View UI at
+     <code class="literal">https://localhost:8443/openidmui</code> as an administrative
+     user.
+    </p></li><li class="step"><p>
+     Select the Users tab.
+    </p></li><li class="step"><p>
+     Click the Username of the user that you want to update.
+    </p></li><li class="step"><p>
+     On the user's profile page, modify the fields you want to change and click
+     Update.
+    </p><p>
+     The user account is updated in the OpenIDM repository.
+    </p></li></ol></div><div class="procedure"><a name="deactivate-account"></a><div class="procedure-title">Procedure&nbsp;4.3.&nbsp;To Deactivate a User Account</div><ol class="procedure" type="1"><li class="step"><p>
+     Follow steps 1-3 in <a class="xref" href="chap-ui.html#ui-update-account" title="Procedure&nbsp;4.2.&nbsp;To Update a User Account">Procedure&nbsp;4.2, &#8220;To Update a User Account&#8221;</a>.
+    </p></li><li class="step"><p>
+     On the user's profile page, select Inactive from the Account status list.
+    </p></li><li class="step"><p>
+     Click Update.
+    </p><p>
+     The user account is deactivated and the user can no longer log in to the
+     system.
+    </p><p>
+     Inactive users are indicated with a X icon in the Status column of the
+     Users page. The following image shows that Steven Carter's account has been
+     deactivated.
+    </p></li></ol></div><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/ui-deactivate-account.png" align="middle" height="360" alt="OpenIDM UI - Deactivate User Account"></td></tr></table></div><div class="procedure"><a name="reset-user-password"></a><div class="procedure-title">Procedure&nbsp;4.4.&nbsp;To Reset a User's Password</div><p>
+    Users can change their own passwords by following the Change Security Data
+    link in their profiles. This process requires that users know their existing
+    passwords.
+   </p><p>
+    In a situation where a user forgets his password, an administrator can reset
+    the password of that user without knowing the user's existing password.
+   </p><ol class="procedure" type="1"><li class="step"><p>
+     Follow steps 1-3 in <a class="xref" href="chap-ui.html#ui-update-account" title="Procedure&nbsp;4.2.&nbsp;To Update a User Account">Procedure&nbsp;4.2, &#8220;To Update a User Account&#8221;</a>.
+    </p></li><li class="step"><p>
+     On the user's profile page, click Change password.
+    </p></li><li class="step"><p>
+     Enter a new password that conforms to the password policy and click Update.
+    </p><p>
+     The user password is updated in the repository.
+    </p></li></ol></div><div class="procedure"><a name="delete-user-account"></a><div class="procedure-title">Procedure&nbsp;4.5.&nbsp;To Delete a User Account</div><ol class="procedure" type="1"><li class="step"><p>
+     Log into the user interface as an administrative user.
+    </p></li><li class="step"><p>
+     Select the Users tab.
+    </p></li><li class="step"><p>
+     Click the Username of the user that you want to delete.
+    </p></li><li class="step"><p>
+     On the user's profile page, click Delete.
+    </p></li><li class="step"><p>
+     Click OK to confirm the deletion.
+    </p><p>
+     The user is deleted from the internal repository.
+    </p></li></ol></div><div class="procedure"><a name="user-linked-view"></a><div class="procedure-title">Procedure&nbsp;4.6.&nbsp;To View a User's Account in External Resources</div><p>
+    The User View UI displays the details of the user account in the OpenIDM
+    repository (managed/user). When a mapping has been configured between the
+    repository and one or more external resources, you can view what that user
+    account looks like in any of the systems to which it is linked. Note that
+    this view is read-only - you cannot update a user record in a linked system
+    from within the User View UI.
+   </p><p>
+    By default, <span class="emphasis"><em>implicit synchronization</em></span> is enabled for
+    mappings <span class="emphasis"><em>from</em></span> the <code class="literal">managed/user</code>
+    repository <span class="emphasis"><em>to</em></span> any external resource. This means that
+    when you update a managed object, any mappings defined in the
+    <code class="filename">sync.json</code> file that have the managed object as the
+    source are automatically executed to update the target system. You can see
+    these changes in the Linked Systems section of a user's profile.
+   </p><p>
+    To view a user's linked accounts:
+   </p><ol class="procedure" type="1"><li class="step"><p>
+     Log into the User View UI as an administrative user.
+    </p></li><li class="step"><p>
+     Select the Users tab.
+    </p></li><li class="step"><p>
+     Click the Username of the user whose accounts you want to view.
+    </p></li><li class="step"><p>
+     At the bottom of the user profile, the Linked Systems panel indicates the
+     external resource or resources to which this user entry is mapped. .
+    </p></li><li class="step"><p>
+     Select the resource in which you want to view the account, from the Linked
+     Resource list.
+    </p><p>
+     The user record in the linked resource is displayed.
+    </p><p>
+     The following image shows the user account for a user <code class="literal">fdoe</code>,
+     as it exists in the LDAP directory to which the managed user repository is
+     mapped.
+    </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/linked-view-fdoe.png" align="middle" height="360" alt="New user record for fdoe"></td></tr></table></div></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ui-managing-workflows"></a>4.5.&nbsp;Managing Workflows From the User View UI</h2></div></div></div><p>
+   The User View UI is integrated with the embedded Activiti worfklow engine,
+   enabling users to interact with workflows. Available workflows are displayed
+   under the Processes item on the Dashboard. In order for a workflow to be
+   displayed here, the workflow definition file must be present in the
+   <code class="filename">openidm/workflow</code> directory.
+  </p><p>
+   A sample workflow integration with the User View UI is provided in
+   <code class="filename">openidm/samples/workflow</code>, and documented in <a href="../../integrators-guide/index/chap-workflow.html#example-provisioning-workflow" class="link"><em class="citetitle">Sample Workflow -
+   Provisioning User Accounts</em></a>. Follow the steps in that
+   sample for an understanding of how the workflow integration works.
+  </p><p>
+   Access to workflows is based on OpenIDM roles, and is configured in the file
+   <code class="filename">conf/process-access.json</code>. By default all users with the
+   role <code class="literal">openidm-authorized</code> or
+   <code class="literal">openidm-admin</code> can invoke any available workflow. The
+   default <code class="filename">process-access.json</code> file is as follows:
+  </p><pre class="brush: javascript;">
+{
+    "workflowAccess" : [
+        {
+            "propertiesCheck" : {
+                "property" : "_id",
+                "matches" : ".*",
+                "requiresRole" : "openidm-authorized"
+            }
+        },
+        {
+            "propertiesCheck" : {
+                "property" : "_id",
+                "matches" : ".*",
+                "requiresRole" : "openidm-admin"
+            }
+        }
+    ]
+}  
+  </pre><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">"property"</code></span></dt><dd><p>
+      Specifies the property used to identify the process definition. By default,
+      process definitions are identified by their <code class="literal">_id</code>.
+     </p></dd><dt><span class="term"><code class="literal">"matches"</code></span></dt><dd><p>
+      A regular expression match is performed on the process definitions,
+      according to the specified property. The default
+      (<code class="literal">"matches" : ".*"</code>) implies that all process definition
+      IDs match.
+     </p></dd><dt><span class="term"><code class="literal">"requiresRole"</code></span></dt><dd><p>
+      Specifies the OpenIDM role that is required for users to have access to
+      the matched process definition IDs. In the default file, users with the
+      role <code class="literal">openidm-authorized</code> or
+      <code class="literal">openidm-admin</code> have access.
+     </p></dd></dl></div><p>
+   To extend the process action definition file, identify the processes to which
+   users should have access, and specify the qualifying user roles. For example,
+   if you wanted to restrict access to a process definition whose ID was
+   <code class="literal">567</code>, to users with the role <code class="literal">ldap</code> you
+   would add the following to the <code class="filename">process-access.json</code> file:
+  </p><pre class="brush: plain;">
+{
+    "propertiesCheck" : {
+        "property" : "_id",
+        "matches" : "567",
+        "requiresRole" : "ldap"
+    }
+}
+  </pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ui-customizing"></a>4.6.&nbsp;Changing the UI Theme</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-ui.html#ui-style">4.6.1. Changing the Default Stylesheet</a></span></dt><dt><span class="section"><a href="chap-ui.html#ui-logo">4.6.2. Changing the Default Logo</a></span></dt><dt><span class="section"><a href="chap-ui.html#ui-locale">4.6.3. Changing the Language of the UI</a></span></dt><dt><span class="section"><a href="chap-ui.html#ui-project-config">4.6.4. Creating a Project-Specific UI Theme</a></span></dt></dl></div><p>
+   You can customize the theme of the user interface with your own branding. One
+   way to adjust the UI theme, is to edit the properties in the UI theme
+   configuration file
+   (<code class="filename">/path/to/openidm/conf/ui-themeconfig.json</code>). This file
+   stores detailed color values, background image paths, and a number of other
+   common styling options. Because the UI theme configuration file is part of
+   the configuration store, it is shared by all nodes in a cluster. Changes made
+   to this file do not have to be replicated manually across nodes.
+  </p><p>
+   To change theme elements that are not included in the UI theme configuration
+   file, you can create a custom theme in the
+   <code class="filename">openidm/ui/extension</code> directory. By default the user
+   interface reads the stylesheets and images from the
+   <code class="filename">openidm/ui/default</code> directory. Do not modify the files in
+   this default directory as there is no guarantee that your changes will not be
+   overwritten in the next OpenIDM release. Modifications made in the
+   <code class="filename">openidm/ui/extension</code> directory can be maintained across
+   product upgrades. The UI searches the <code class="literal">extension</code> directory
+   first and applies any styles or images located in this directory. Note that
+   files added to the <code class="literal">extension</code> directory must be manually
+   copied between every node in a cluster.
+  </p><p>
+   If you want to update the view logic of the UI, you cannot simply add files
+   to the extensions folder. It is assumed that if your deployment requires that
+   level of control of the user interface, you are no longer going to want to be
+   automatically upgraded with subsequent releases. As such, you need to take on
+   the task of maintaining a fork of the UI.
+  </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="ui-style"></a>4.6.1.&nbsp;Changing the Default Stylesheet</h3></div></div></div><p>
+    Most changes to the UI stylesheets can be made in the UI theme configuration
+    file (<code class="filename">conf/ui-themeconfig.json</code>).
+   </p><p>
+    If you make the following change to that file, that changes the background
+    color of the UI to dark grey.
+   </p><div class="screen"><pre><strong>$ grep "background-color" /path/to/openidm/conf/ui-themeconfig.json</strong>
+<em>"background-color" : "#ababab",</em>
+   </pre></div><p>
+      Refresh your browser window for the change to appear.
+     </p><p>
+    The default stylesheets are located in the
+    <code class="filename">openidm/ui/default/enduser/public/css</code> directory. To
+    customize the stylesheets beyond the properties available in the UI theme
+    configuration file, copy the default stylesheets to
+    <code class="filename">openidm/ui/extension/css</code>, and edit them according to
+    your requirements.
+   </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="ui-logo"></a>4.6.2.&nbsp;Changing the Default Logo</h3></div></div></div><p>
+    The default logo is located in the
+    <code class="filename">openidm/ui/default/enduser/public/images</code> directory.
+    Any file named <code class="filename">logo.png</code>, added to the directory
+    <code class="filename">openidm/ui/extension/images</code>, will replace the default
+    logo when the browser is refreshed.
+   </p><p>
+    To specify a different file name, or to control the size, and other
+    properties of the image file that is used for the logo, adjust the
+    <code class="literal">logo</code> property in the UI theme configuration file
+    (<code class="filename">conf/themeconfig.json</code>).
+   </p><p>
+    The following change to the UI theme configuration file points to an image
+    file named <code class="filename">example-logo.png</code>, in the
+    <code class="filename">openidm/ui/extension/images</code> directory.
+   </p><pre class="brush: javascript;">...
+   "logo" : {
+       "src" : "images/example-logo.png",
+       "title" : "Example.com",
+       "alt" : "Example.com",
+       "height" : "80",
+       "width" : "120"
+   },
+...</pre><p>
+    Refresh your browser window for the new logo to appear.
+   </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="ui-locale"></a>4.6.3.&nbsp;Changing the Language of the UI</h3></div></div></div><p>
+    Currently, the UI is provided only in US English. You can translate the UI
+    and specify that your own locale is used. The following example shows how to
+    translate the UI into French.
+   </p><div class="procedure"><ol class="procedure" type="1"><li class="step"><p>
+      Copy the default locale to a new folder in the same location
+      (<code class="filename">openidm/ui/default/enduser/public/locales</code>):
+     </p><div class="screen"><pre>$ cd /path/to/openidm/ui/default/enduser/public/locales
+$ cp -R en/ fr/</pre></div><p>
+      The new locale (<code class="literal">fr</code>) now contains the default
+      <code class="filename">translation.json</code> file.
+     </p><div class="screen"><pre><strong>$ ls fr/</strong>
+<em>translation.json</em></pre></div></li><li class="step"><p>
+      Translate the values of the properties in the
+      <code class="filename">fr/translate.json</code> file. Do <span class="emphasis"><em>not</em></span>
+      translate the property names. For example:
+     </p><pre class="brush: javascript;">...
+"UserMessages" : {
+    "changedPassword" : "Mot de passe a &eacute;t&eacute; modifi&eacute;",
+    "profileUpdateFailed" : "Probl&egrave;me lors de la mise &agrave; jour du profil",
+    "profileUpdateSuccessful" : "Profil a &eacute;t&eacute; mis &agrave; jour",
+    "userNameUpdated" : "Nom d'utilisateur a &eacute;t&eacute; modifi&eacute;",
+.... </pre></li><li class="step"><p>
+      Change the UI configuration to use the new locale by setting the value of
+      the <code class="literal">lang</code> property in the
+      <code class="filename">/path/to/openidm/conf/ui-configuration.json</code> file, as
+      follows:
+     </p><div class="screen"><pre>"lang" : "fr",</pre></div></li><li class="step"><p>
+      Refresh your browser window for the modification to be applied.
+     </p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="ui-project-config"></a>4.6.4.&nbsp;Creating a Project-Specific UI Theme</h3></div></div></div><p>
+    You can create specific UI themes for different projects and then point a
+    particular UI instance to use a defined theme on startup. To create a
+    complete custom theme, follow these steps:
+   </p><div class="procedure"><ol class="procedure" type="1"><li class="step"><p>
+      Shut down the OpenIDM instance, if it is running. In the Felix
+      administration console, type:
+     </p><div class="screen"><pre>shutdown
+-&gt;</pre></div></li><li class="step"><p>
+      Clear the <code class="literal">felix-cache</code> directory.
+     </p><div class="screen"><pre>$ rm -rf felix-cache</pre></div></li><li class="step"><p>
+      Copy the entire default UI theme to an accessible location. For example:
+     </p><div class="screen"><pre>$ cd /path/to/openidm/ui
+$ cp -r default ../new-project-theme</pre></div></li><li class="step"><p>
+      In the copied theme, modify the required elements, as described in the
+      previous sections. Note that nothing is copied to the extension folder in
+      this case - changes are made in the copied theme.
+     </p></li><li class="step"><p>
+      In the <code class="literal">openidm/conf/boot/boot.properties</code> file, add the
+      following line, specifying the location of the new theme. The path is
+      relative to the installation root of the OpenIDM instance.
+     </p><div class="screen"><pre>openidm.ui.fileinstall.dir=new-project-theme</pre></div></li><li class="step"><p>
+      Restart OpenIDM.
+     </p><div class="screen"><pre>$ cd /path/to/openidm
+$ ./startup.sh</pre></div></li><li class="step"><p>
+      Relaunch the UI in your browser. The UI is displayed with the new custom
+      theme.
+     </p></li></ol></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ui-external-password-reset"></a>4.7.&nbsp;Using an External System for Password Reset</h2></div></div></div><p>
+   By default, the password reset mechanism is handled internally, in OpenIDM.
+   You can reroute password reset in the event that a user has forgotten his
+   password, by specifying an external URL to which password reset requests are
+   sent. Note that this URL applies to the password reset link on the login page
+   only, not to the security data change facility that is available after a user
+   has logged in.
+  </p><p>
+   To set an external URL to handle password reset, set the
+   <code class="literal">passwordResetLink</code> parameter in the UI configuration file
+   (<code class="filename">conf/ui-configuration.json</code>) file. The following example
+   sets the <code class="literal">passwordResetLink</code> to
+   <code class="literal">https://accounts.example.com/account/reset-password</code>.
+  </p><div class="screen"><pre>passwordResetLink: "https://accounts.example.com/reset-password"</pre></div><p>
+   The <code class="literal">passwordResetLink</code> parameter takes either an empty
+   string as a value (which indicates that no external link is used) or a full
+   URL to the external system that handles password reset requests.
+  </p><div class="note"><h3 class="title">Note</h3><p>
+    External password reset and security questions for internal password reset
+    are mutually exclusive. Therefore, if you set a value for the
+    <code class="literal">passwordResetLink</code> parameter, users will not be prompted
+    with any security questions, regardless of the setting of the
+    <code class="literal">securityQuestions</code> parameter.
+   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ui-external-logout"></a>4.8.&nbsp;Providing a Logout URL to External Applications</h2></div></div></div><p>
+   By default, a UI session is invalidated when a user clicks on the Log out
+   link. In certain situations your external applications might require a
+   distinct logout URL to which users can be routed, to terminate their UI
+   session.
+  </p><p>
+   The logout URL is <code class="literal">#logout</code>, appended to the UI URL, for
+   example, <code class="literal">https://localhost:8443/openidmui/index.html#logout/</code>.
+  </p><p>
+   The logout URL effectively performs the same action as clicking on the Log
+   out link of the UI.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ui-path"></a>4.9.&nbsp;Changing the UI Path</h2></div></div></div><p>
+   By default, the UI is registered at a specific URL
+   (<code class="literal"><em class="replaceable"><code>context-root</code></em>/openidmui</code>). To
+   override the default URL and specify your own path, edit the
+   <code class="filename">openidm/conf/ui.context-enduser.json</code> file, setting the
+   <code class="literal">urlContextRoot</code> property to the new URL. For example, to
+   change the path to
+   <code class="literal"><em class="replaceable"><code>context-root</code></em>/exampleui</code>, edit
+   the file as follows:
+  </p><div class="screen"><pre>"urlContextRoot" : "/exampleui",</pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ui-disabling"></a>4.10.&nbsp;Disabling the UI</h2></div></div></div><p>
+   The UI is packaged as a separate bundle that can be disabled in the
+   configuration before server startup. To disable the registration of the UI
+   servlet, edit the <code class="filename">openidm/conf/ui.context-enduser.json</code>
+   file, setting the <code class="literal">enabled</code> property to false:
+  </p><div class="screen"><pre>"enabled" : false,</pre></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-cli.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-repo.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;3.&nbsp;OpenIDM Command-Line Interface&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;5.&nbsp;Managing the OpenIDM Repository</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10020&components=10164&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-9']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

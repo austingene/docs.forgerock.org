@@ -1,0 +1,778 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;7.&nbsp;Accessing Data Objects</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/css/shCore.css"><link rel="stylesheet" type="text/css" href="sh/css/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/css/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/js/shCore.js" type="text/javascript"></script><script src="sh/js/shBrushAci.js" type="text/javascript"></script><script src="sh/js/shBrushBash.js" type="text/javascript"></script><script src="sh/js/shBrushCsv.js" type="text/javascript"></script><script src="sh/js/shBrushHttp.js" type="text/javascript"></script><script src="sh/js/shBrushJava.js" type="text/javascript"></script><script src="sh/js/shBrushJScript.js" type="text/javascript"></script><script src="sh/js/shBrushLDIF.js" type="text/javascript"></script><script src="sh/js/shBrushPlain.js" type="text/javascript"></script><script src="sh/js/shBrushProperties.js" type="text/javascript"></script><script src="sh/js/shBrushXml.js" type="text/javascript"></script><script src="sh/js/shAll.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenIDM Integrator's Guide"><link rel="up" href="index.html" title="OpenIDM Integrator's Guide"><link rel="prev" href="chap-configuration.html" title="Chapter&nbsp;6.&nbsp;Configuring OpenIDM"><link rel="next" href="chap-users-groups-roles.html" title="Chapter&nbsp;8.&nbsp;Managing Users, Groups, and Roles"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;7.&nbsp;Accessing Data Objects</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-configuration.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-users-groups-roles.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-data"></a>Chapter&nbsp;7.&nbsp;Accessing Data Objects</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-data.html#data-scripts">7.1. Accessing Data Objects by Using Scripts</a></span></dt><dt><span class="section"><a href="chap-data.html#data-rest">7.2. Accessing Data Objects by Using the REST API</a></span></dt><dt><span class="section"><a href="chap-data.html#queries">7.3. Defining and Calling Queries</a></span></dt></dl></div><a class="indexterm" name="d0e4770"></a><p>
+  OpenIDM supports a variety of objects that can be addressed via a URL or URI.
+  You can access data objects by using scripts (through the Resource API) or by
+  using direct HTTP calls (through the REST API).
+ </p><p>
+  The following sections describe these two methods of accessing data objects,
+  and provide information on constructing and calling data queries.
+ </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="data-scripts"></a>7.1.&nbsp;Accessing Data Objects by Using Scripts</h2></div></div></div><a class="indexterm" name="d0e4782"></a><p>
+   OpenIDM's uniform programming model means that all objects are queried and
+   manipulated in the same way, using the Resource API. The URL or URI that is
+   used to identify the target object for an operation depends on the object
+   type. For an explanation of object types, see the
+   <span class="olink"><em class="citetitle">Data Models and
+   Objects Reference</em></span>. For more information about scripts and
+   the objects available to scripts, see the
+   <a href="../../integrators-guide/index/appendix-scripting.html" class="link"><em class="citetitle">Scripting
+   Reference</em></a>.
+  </p><p>
+   You can use the Resource API to obtain managed objects, configuration
+   objects, and repository objects, as follows:
+  </p><pre class="brush: javascript;">
+val = openidm.read("managed/organization/mysampleorg")
+val = openidm.read("config/custom/mylookuptable")
+val = openidm.read("repo/custom/mylookuptable")
+  </pre><p>
+   For information about constructing an object ID, see <a href="../../integrators-guide/index/appendix-rest.html#rest-uri-scheme" class="link"><em class="citetitle">URI Scheme</em></a>
+   in the <em class="citetitle">REST API Reference</em>.
+  </p><p>
+   You can update entire objects with the <code class="literal">update()</code> function,
+   as follows.
+  </p><pre class="brush: javascript;">
+openidm.update("managed/organization/mysampleorg", mymap)
+openidm.update("config/custom/mylookuptable", mymap)
+openidm.update("repo/custom/mylookuptable", mymap)
+  </pre><p>
+   For managed objects, you can partially update an object with the
+   <code class="literal">patch()</code> function.
+  </p><pre class="brush: javascript;">
+openidm.patch("managed/organization/mysampleorg", rev, value)
+  </pre><p>
+   The <code class="literal">create()</code>, <code class="literal">delete()</code>, and
+   <code class="literal">query()</code> functions work the same way.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="data-rest"></a>7.2.&nbsp;Accessing Data Objects by Using the REST API</h2></div></div></div><p>
+   OpenIDM provides RESTful access to data objects via a REST API. To access
+   objects over REST, you can use a browser-based REST client, such as the
+   <a class="link" href="https://chrome.google.com/webstore/detail/simple-rest-client/fhjcajmcbmldlhcimfajhfbgofnpcjmb" target="_top">
+   Simple REST Client</a> for Chrome, or <a class="link" href="https://addons.mozilla.org/en-US/firefox/addon/restclient/" target="_top">
+   RESTClient</a> for Firefox. Alternatively you can use the <a class="link" href="http://curl.haxx.se/" target="_blank"><span class="command"><strong>curl</strong></span>
+   </a> command-line utility.
+  </p><p>
+   For a comprehensive overview of the REST API, see the <a href="../../integrators-guide/index/appendix-rest.html" class="link"><em class="citetitle">REST API
+   Reference</em></a> appendix.
+  </p><p>
+   To obtain a managed object through the REST API, depending on your security
+   settings and authentication configuration, perform an HTTP GET on the
+   corresponding URL, for example
+   <code class="literal">https://localhost:8443/openidm/managed/organization/mysampleorg</code>.
+  </p><p>
+   By default, the HTTP GET returns a JSON representation of the object.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="queries"></a>7.3.&nbsp;Defining and Calling Queries</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-data.html#query-filters">7.3.1. Common Filter Expressions</a></span></dt><dt><span class="section"><a href="chap-data.html#parameterized-queries">7.3.2. Parameterized Queries</a></span></dt><dt><span class="section"><a href="chap-data.html#native-queries">7.3.3. Native Query Expressions</a></span></dt><dt><span class="section"><a href="chap-data.html#constructing-queries">7.3.4. Constructing Queries</a></span></dt><dt><span class="section"><a href="chap-data.html#paging-query-results">7.3.5. Paging Query Results</a></span></dt><dt><span class="section"><a href="chap-data.html#sorting-query-results">7.3.6. Sorting Query Results</a></span></dt></dl></div><p>
+   OpenIDM supports an advanced query model that enables you to define queries,
+   and to call them over the REST or Resource API. Three types of queries are
+   supported, on both managed, and system objects:
+  </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     Common filter expressions
+    </p></li><li class="listitem"><p>
+     Parameterized, or predefined queries
+    </p></li><li class="listitem"><p>
+     Native query expressions
+    </p></li></ul></div><p>
+   Each of these mechanisms is discussed in the following sections.
+  </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="query-filters"></a>7.3.1.&nbsp;Common Filter Expressions</h3></div></div></div><p>
+    The ForgeRock REST API defines common filter expressions, that enable you to
+    form arbitrary queries using a number of supported filter operations. This
+    query capability is the standard way to query data if no predefined query
+    exists, and is supported for all managed and system objects.
+   </p><p>
+    Common filter expressions are useful in that they do not require knowledge
+    of how the object is stored and do not require additions to the repository
+    configuration.
+   </p><p>
+    Common filter expressions are called with the
+    <code class="literal">_queryFilter</code> keyword. The following example uses a common
+    filter expression to retrieve managed user objects whose user name is Smith.
+   </p><div class="screen"><pre>$ curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ "https://localhost:8443/openidm/managed/user?_queryFilter=userName%20eq%20%22smith%22"</pre></div><p>
+    The filter is URL encoded in this example. The corresponding filter using
+    the resource API would be:
+   </p><div class="screen"><pre>openidm.query("managed/user", { "_queryFilter" : '/userName eq "smith"' });</pre></div><p>
+    Note that, this JavaScript invocation is internal and is not subject to the
+    same URL-encoding requirements that a GET request would be. Also, because
+    JavaScript supports the use of single quotes, it is not necessary to escape
+    the double quotes in this example.
+   </p><p>
+    For a list of supported filter operations, see
+    <a class="xref" href="chap-data.html#constructing-queries" title="7.3.4.&nbsp;Constructing Queries">Section&nbsp;7.3.4, &#8220;Constructing Queries&#8221;</a>.
+   </p><p>
+    Note that using common filter expressions to retrieve values from arrays is
+    currently not supported. If you need to search within an array you should
+    set up a predefined (parameterized) in your repository configuration. For
+    more information, see <a class="xref" href="chap-data.html#parameterized-queries" title="7.3.2.&nbsp;Parameterized Queries">Section&nbsp;7.3.2, &#8220;Parameterized Queries&#8221;</a>.
+   </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="parameterized-queries"></a>7.3.2.&nbsp;Parameterized Queries</h3></div></div></div><p>
+    Managed objects in the supported OpenIDM repositories can be accessed using
+    a parameterized query mechanism. Parameterized queries on repositories are
+    defined in the repository configuration (<code class="filename">repo.*.json</code>)
+    and are called by their <code class="literal">_queryId</code>.
+   </p><p>
+    Parameterized queries provide precise control over the query that is
+    executed. Such control might be useful for tuning, or for performing
+    database operations such as aggregation (which is not possible with a
+    common filter expression.)
+   </p><p>
+    Parameterized queries provide security and portability for the query call
+    signature, regardless of the back-end implementation. Queries that are
+    exposed over the REST interface <span class="emphasis"><em>must</em></span> be parameterized
+    queries to guard against injection attacks and other misuse. Queries on the
+    officially supported repositories have been reviewed and hardened against
+    injection attacks.
+   </p><p>
+    For system objects, support for parameterized queries is restricted to
+    <code class="literal">_queryId=query-all-ids</code>. There is currently no support for
+    user-defined parameterized queries on system objects. Typically,
+    parameterized queries on system objects are not called directly over the
+    REST interface, but are issued from internal calls, such as correlation
+    queries.
+   </p><p>
+    A typical query definition is as follows:
+   </p><pre class="brush: plain;">
+"query-all-ids" : "select _openidm_id from ${unquoted:_resource}"
+   </pre><p>
+    To call this query, you would reference its ID, as follows:
+   </p><pre class="brush: plain;">
+?_queryId=query-all-ids
+   </pre><p>
+    The following example calls <code class="literal">query-all-ids</code> over the REST
+    interface:
+   </p><div class="screen"><pre>$ curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ "https://localhost:8443/openidm/managed/user?_queryId=query-all-ids"</pre></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="native-queries"></a>7.3.3.&nbsp;Native Query Expressions</h3></div></div></div><p>
+    Native query expressions are supported for all managed objects and system
+    objects, and can be called directly, rather than being defined in the
+    repository configuration.
+   </p><p>
+    Native queries are intended specifically for internal callers, such as
+    custom scripts, and should be used only in situations where the common
+    filter or parameterized query facilities are insufficient. For example,
+    native queries are useful if the query needs to be generated dynamically.
+   </p><p>
+    The query expression is specific to the target resource. For repositories,
+    queries use the native language of the underlying data store. For system
+    objects that are backed by OpenICF connectors, queries use the applicable
+    query language of the system resource.
+   </p><p>
+    Native queries on the repository are made using the
+    <code class="literal">_queryExpression</code> keyword. For example:
+   </p><div class="screen"><pre>$ curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ "https://localhost:8443/openidm/managed/user?_queryExpression=select+from+managed_user"
+   </pre></div><p>
+    Unless you have specifically enabled native queries, the previous command
+    returns a 403 access denied error message. Native queries should not be
+    enabled in production environments, as they are not portable and do not
+    guard against injection attacks.
+   </p><p>
+    Such query expressions should therefore not be used or made accessible over
+    the REST interface or over HTTP, other than for development, and should be
+    used only via the internal Resource API. If you want to enable such
+    native queries for development, see the section on
+    <a href="../../integrators-guide/index/chap-security.html#security-urls" class="link"><em class="citetitle">Protecting
+    Sensitive REST Interface URLs</em></a>.
+   </p><p>
+    Alternatively, if you really need to expose native queries over HTTP, in a
+    selective manner, you can design a custom endpoint to wrap such access.
+   </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="constructing-queries"></a>7.3.4.&nbsp;Constructing Queries</h3></div></div></div><p>
+    The <code class="literal">openidm.query</code> function enables you to query OpenIDM
+    managed and system objects. The query syntax is
+    <code class="literal">openidm.query(id, params)</code>, where <code class="literal">id</code>
+    specifies the object on which the query should be performed and
+    <code class="literal">params</code> provides the parameters that are passed to the
+    query, either <code class="literal">_queryFilter</code> or
+    <code class="literal">_queryID</code>. For example:
+   </p><pre class="brush: javascript;">
+var params = {
+    '_queryFilter' : 'givenName co "' + sourceCriteria + '" or ' + 'sn co "'
+                     + sourceCriteria + '"'
+};
+var results = openidm.query("system/ScriptedSQL/account", params)
+   </pre><p>
+    Over the REST interface, the query filter is specified as
+    <code class="literal">_queryFilter=<em class="replaceable"><code>filter</code></em></code>, for
+    example:
+   </p><div class="screen"><pre>$ <strong>curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET
+ 'https://localhost:8443/openidm/managed/user?_queryFilter=userName+eq+"Smith"'
+   </strong></pre></div><p>
+    When called over REST, you must URL encode the filter expression. The
+    following examples show the filter expressions using the resource API and
+    the REST API, but do not show the URL encoding, to make them easier to read.
+   </p><p>
+    Note that, for generic mappings, any fields that are included in the query
+    filter (for example <code class="literal">userName</code> in the previous query), must
+    be explicitly defined as <span class="emphasis"><em>searchable</em></span>, if you have set
+    the global <code class="literal">searchableDefault</code> to false. For more
+    information, see <a href="../../integrators-guide/index/chap-repo.html#searches-with-generic-mappings" class="link"><em class="citetitle">Improving
+    Search Performance for Generic Mappings</em></a>.
+   </p><div class="variablelist"><p>
+    The <em class="replaceable"><code>filter</code></em> expression is constructed from the
+    building blocks shown in this section. In these expressions the simplest
+    <em class="replaceable"><code>json-pointer</code></em> is a field of the JSON resource,
+    such as <code class="literal">userName</code> or <code class="literal">id</code>. A json-pointer
+    can, however, point to nested elements as described in the
+    <a class="link" href="http://tools.ietf.org/html/rfc6901" target="_blank">JSON
+    Pointer RFC</a>.
+   </p><dl class="variablelist"><dt><span class="term">Comparison expressions</span></dt><dd><p>
+      The following examples show how you can build filters using comparison
+      expressions.
+     </p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal"><em class="replaceable"><code>json-pointer</code></em> eq <em class="replaceable"><code>json-value</code></em></code></span></dt><dd><p>
+         Matches when the pointer equals the value, for example:
+        </p><pre class="brush: javascript;">
+"_queryFilter" : '/givenName eq "Dan"'
+        </pre><p>
+         The following REST call returns the user name and given name of all
+         managed users whose first name (<code class="literal">givenName</code>) is "Dan".
+        </p><div class="screen"><pre>$ <strong>curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ 'https://localhost:8443/openidm/managed/user?_queryFilter=givenName+eq+"Dan"&amp;_fields=userName,givenName'</strong>
+<em>{
+  "remainingPagedResults": -1,
+  "pagedResultsCookie": null,
+  "resultCount": 3,
+  "result": [
+    {
+      "givenName": "Dan",
+      "userName": "dlangdon"
+    },
+    {
+      "givenName": "Dan",
+      "userName": "dcope"
+    },
+    {
+      "givenName": "Dan",
+      "userName": "dlanoway"
+    }
+}</em></pre></div></dd><dt><span class="term"><code class="literal"><em class="replaceable"><code>json-pointer</code></em> co <em class="replaceable"><code>json-value</code></em></code></span></dt><dd><p>
+         Matches when the pointer contains the value, for example:
+        </p><pre class="brush: javascript;">
+"_queryFilter" : '/givenName co "smi"'
+        </pre><p>
+         The following REST call returns the user name and given name of all
+         managed users whose first name (<code class="literal">givenName</code>) contains
+         "Da".
+        </p><div class="screen"><pre>$ <strong>curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ 'https://localhost:8443/openidm/managed/user?_queryFilter=givenName+co+"Da"&amp;_fields=userName,givenName'</strong>
+<em>{
+  "remainingPagedResults": -1,
+  "pagedResultsCookie": null,
+  "resultCount": 10,
+  "result": [
+    {
+      "givenName": "Dave",
+      "userName": "djensen"
+    },
+    {
+      "givenName": "David",
+      "userName": "dakers"
+    },
+    {
+      "givenName": "Dan",
+      "userName": "dlangdon"
+    },
+    {
+      "givenName": "Dan",
+      "userName": "dcope"
+    },
+    {
+      "givenName": "Dan",
+      "userName": "dlanoway"
+    },
+    {
+      "givenName": "Daniel",
+      "userName": "dsmith"
+    },
+...
+}</em></pre></div></dd><dt><span class="term"><code class="literal"><em class="replaceable"><code>json-pointer</code></em> sw <em class="replaceable"><code>json-value</code></em></code></span></dt><dd><p>
+         Matches when the pointer starts with the value, for example:
+        </p><pre class="brush: javascript;">
+"_queryFilter" : '/sn sw "Jen"'
+        </pre><p>
+         The following REST call returns the user names of all managed users
+         whose last name (<code class="literal">sn</code>) starts with "Jen".
+        </p><div class="screen"><pre>$ <strong>curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ 'http://localhost:8443/openidm/managed/user?_queryFilter=sn+sw+"Jen"&amp;_fields=userName'</strong>
+<em>{
+  "remainingPagedResults": -1,
+  "pagedResultsCookie": null,
+  "resultCount": 4,
+  "result": [
+    {
+      "userName": "bjensen"
+    },
+    {
+      "userName": "djensen"
+    },
+    {
+      "userName": "cjenkins"
+    },
+    {
+      "userName": "mjennings"
+    }
+  ]
+}</em></pre></div></dd><dt><span class="term"><code class="literal"><em class="replaceable"><code>json-pointer</code></em> lt <em class="replaceable"><code>json-value</code></em></code></span></dt><dd><p>
+         Matches when the pointer is less than the value, for example:
+        </p><pre class="brush: javascript;">
+"_queryFilter" : '/employeeNumber lt 5000'
+       </pre><p>
+      The following REST call returns the user names of all managed users whose
+      <code class="literal">employeeNumber</code> is lower than 5000.
+     </p><div class="screen"><pre>$ <strong>curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ 'http://localhost:8443/openidm/managed/user?_queryFilter=employeeNumber+lt+5000&amp;_fields=userName,employeeNumber'</strong>
+<em>{
+  "remainingPagedResults": -1,
+  "pagedResultsCookie": null,
+  "resultCount": 4999,
+  "result": [
+    {
+      "employeeNumber": 4907,
+      "userName": "jnorris"
+    },
+    {
+      "employeeNumber": 4905,
+      "userName": "afrancis"
+    },
+    {
+      "employeeNumber": 3095,
+      "userName": "twhite"
+    },
+    {
+      "employeeNumber": 3921,
+      "userName": "abasson"
+    },
+    {
+      "employeeNumber": 2892,
+      "userName": "dcarter"
+    }
+...
+  ]
+}</em></pre></div></dd><dt><span class="term"><code class="literal"><em class="replaceable"><code>json-pointer</code></em> le <em class="replaceable"><code>json-value</code></em></code></span></dt><dd><p>
+        Matches when the pointer is less than or equal to the value, for
+        example:
+       </p><pre class="brush: javascript;">
+"_queryFilter" : '/employeeNumber le 5000'
+       </pre><p>
+      The following REST call returns the user names of all managed users whose
+      <code class="literal">employeeNumber</code> is 5000 or lower.
+     </p><div class="screen"><pre>$ <strong>curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ 'http://localhost:8443/openidm/managed/user?_queryFilter=employeeNumber+le+5000&amp;_fields=userName,employeeNumber'</strong>
+<em>{
+  "remainingPagedResults": -1,
+  "pagedResultsCookie": null,
+  "resultCount": 5000,
+  "result": [
+    {
+      "employeeNumber": 4907,
+      "userName": "jnorris"
+    },
+    {
+      "employeeNumber": 4905,
+      "userName": "afrancis"
+    },
+    {
+      "employeeNumber": 3095,
+      "userName": "twhite"
+    },
+    {
+      "employeeNumber": 3921,
+      "userName": "abasson"
+    },
+    {
+      "employeeNumber": 2892,
+      "userName": "dcarter"
+    }
+...
+  ]
+}</em></pre></div></dd><dt><span class="term"><code class="literal"><em class="replaceable"><code>json-pointer</code></em> gt <em class="replaceable"><code>json-value</code></em></code></span></dt><dd><p>
+        Matches when the pointer is greater than the value, for example:
+       </p><pre class="brush: javascript;">
+"_queryFilter" : '/employeeNumber gt 5000'
+       </pre><p>
+      The following REST call returns the user names of all managed users whose
+      <code class="literal">employeeNumber</code> is higher than 5000.
+     </p><div class="screen"><pre>$ <strong>curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ 'http://localhost:8443/openidm/managed/user?_queryFilter=employeeNumber+gt+5000&amp;_fields=userName,employeeNumber'</strong>
+<em>{
+  "remainingPagedResults": -1,
+  "pagedResultsCookie": null,
+  "resultCount": 1458,
+  "result": [
+    {
+      "employeeNumber": 5003,
+      "userName": "agilder"
+    },
+    {
+      "employeeNumber": 5011,
+      "userName": "bsmith"
+    },
+    {
+      "employeeNumber": 5034,
+      "userName": "bjensen"
+    },
+    {
+      "employeeNumber": 5027,
+      "userName": "cclarke"
+    },
+    {
+      "employeeNumber": 5033,
+      "userName": "scarter"
+    }
+...
+  ]
+}</em></pre></div></dd><dt><span class="term"><code class="literal"><em class="replaceable"><code>json-pointer</code></em> ge <em class="replaceable"><code>json-value</code></em></code></span></dt><dd><p>
+        Matches when the pointer is greater than or equal to the value for
+        example:
+       </p><pre class="brush: javascript;">
+"_queryFilter" : '/employeeNumber ge 5000'
+       </pre><p>
+      The following REST call returns the user names of all managed users whose
+      <code class="literal">employeeNumber</code> is 5000 or higher.
+     </p><div class="screen"><pre>$ <strong>curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ 'http://localhost:8443/openidm/managed/user?_queryFilter=employeeNumber+ge+5000&amp;_fields=userName,employeeNumber'</strong>
+<em>{
+  "remainingPagedResults": -1,
+  "pagedResultsCookie": null,
+  "resultCount": 1457,
+  "result": [
+    {
+      "employeeNumber": 5000,
+      "userName": "agilder"
+    },
+    {
+      "employeeNumber": 5011,
+      "userName": "bsmith"
+    },
+    {
+      "employeeNumber": 5034,
+      "userName": "bjensen"
+    },
+    {
+      "employeeNumber": 5027,
+      "userName": "cclarke"
+    },
+    {
+      "employeeNumber": 5033,
+      "userName": "scarter"
+    }
+...
+  ]
+}</em></pre></div></dd></dl></div></dd><dt><span class="term">Presence expression</span></dt><dd><p>
+      <code class="literal"><em class="replaceable"><code>json-pointer</code></em> pr</code> matches any
+      object in which the <em class="replaceable"><code>json-pointer</code></em> is present,
+      for example:
+     </p><pre class="brush: javascript;">
+"_queryFilter" : '/mail pr'
+     </pre><p>
+      The following REST call returns the mail addresses for all managed users
+      who have a <code class="literal">mail</code> property in their entry.
+     </p><div class="screen"><pre>$ <strong>curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ 'http://localhost:8443/openidm/managed/user?_queryFilter=mail+pr&amp;_fields=mail'</strong>
+<em>{
+  "remainingPagedResults": -1,
+  "pagedResultsCookie": null,
+  "resultCount": 2,
+  "result": [
+    {
+      "mail": "jdoe@exampleAD.com"
+    },
+    {
+      "mail": "bjensen@example.com"
+    }
+  ]
+}</em></pre></div><p>
+      The presence filter is not currently supported for system objects. To
+      query for presence on a system object, specify any attribute that exists
+      for all entries, such as the <code class="literal">uid</code> on an LDAP system,
+      and use the starts with (<code class="literal">sw</code>) filter, with an empty
+      value. For example, the following query returns the <code class="literal">uid</code>
+      of all users in an LDAP system.
+     </p><div class="screen"><pre>$ <strong>curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ 'http://localhost:8443/openidm/system/ldap/account?_queryFilter=uid+sw+""&amp;_fields=uid'</strong>
+<em>{
+  "remainingPagedResults": -1,
+  "pagedResultsCookie": null,
+  "resultCount": 2,
+  "result": [
+    {
+      "uid": "jdoe"
+    },
+    {
+      "uid": "bjensen"
+    }
+  ]
+}</em></pre></div></dd><dt><span class="term">Literal expressions</span></dt><dd><p>
+      <code class="literal">true</code> matches any object in the resource.
+     </p><p>
+      <code class="literal">false</code> matches no object in the resource.
+     </p><p>
+      For example, you can list the <code class="literal">_id</code> of all managed
+      objects as follows:
+     </p><div class="screen"><pre>$ <strong>curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET
+ 'https://localhost:8443/openidm/managed/user?_queryFilter=true&amp;_fields=_id'</strong>
+<em>{
+  "remainingPagedResults": -1,
+  "pagedResultsCookie": null,
+  "resultCount": 2,
+  "result": [
+    {
+      "_id": "d2e29d5f-0d74-4d04-bcfe-b1daf508ad7c"
+    },
+    {
+      "_id": "709fed03-897b-4ff0-8a59-6faaa34e3af6"
+    }
+  ]
+}</em>
+     </pre></div></dd><dt><span class="term">Complex expressions</span></dt><dd><p>
+      You can combine expressions using the boolean operators
+      <code class="literal">and</code>, <code class="literal">or</code>, and <code class="literal">!</code>
+      (not). The following example queries managed user objects located in
+      London, with last name Jensen.
+     </p><div class="screen"><pre>$ <strong>curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ https://localhost:8443/openidm/managed/user?_queryFilter=city+eq+"London"+and+sn+eq+"Jensen"&amp;_fields=userName,givenName,sn'&amp;_fields=userName'</strong>
+<em>{
+  "remainingPagedResults": -1,
+  "pagedResultsCookie": null,
+  "resultCount": 3,
+  "result": [
+    {
+      "sn": "Jensen",
+      "givenName": "Clive",
+      "userName": "cjensen"
+    },
+    {
+      "sn": "Jensen",
+      "givenName": "Dave",
+      "userName": "djensen"
+    },
+    {
+      "sn": "Jensen",
+      "givenName": "Margaret",
+      "userName": "mjensen"
+    }
+  ]
+}</em></pre></div></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="paging-query-results"></a>7.3.5.&nbsp;Paging Query Results</h3></div></div></div><p>
+    The common filter query mechanism supports paged query results for managed
+    and system objects.
+   </p><p>
+    The following filtered query returns the first two records in an LDAP
+    repository, whose <code class="literal">uid</code> starts with <code class="literal">b</code>.
+   </p><div class="screen"><pre>$ <strong>curl \
+ --cacert self-signed.crt \
+ --header "X-OpenIDM-Username: openidm-admin" \
+ --header "X-OpenIDM-Password: openidm-admin" \
+ --request GET \
+ "https://localhost:8443/openidm/system/ldap/account?_queryFilter=uid%20sw%20%22b%22&amp;_pageSize=2"
+   </strong>
+<em>
+{
+  "remainingPagedResults": -1,
+  "pagedResultsCookie": null,
+  "resultCount": 2,
+  "result": [
+    {
+      "_id": "uid=bjensen,ou=People,dc=example,dc=com",
+      "sn": "Jensen",
+      "dn": "uid=bjensen,ou=People,dc=example,dc=com",
+      "givenName": "Barbara",
+      "description": "Created for OpenIDM",
+      "cn": "Babara Jensen",
+      "uid": "bjensen",
+      "ldapGroups": [
+        "cn=openidm2,ou=Groups,dc=example,dc=com"
+      ],
+      "mail": "bjensen@example.com",
+      "telephoneNumber": "1-360-229-7105"
+    },
+    {
+      "_id": "cn=bsmith,ou=People,dc=example,dc=com",
+      "sn": "Smith",
+      "dn": "cn=bsmith,ou=People,dc=example,dc=com",
+      "givenName": "Bill",
+      "description": null,
+      "cn": "bsmith",
+      "uid": "bsmith",
+      "ldapGroups": [],
+      "mail": "bsmith@example.com",
+      "telephoneNumber": "0987362837"
+    }
+  ]
+}</em>   </pre></div><p>
+    Predefined queries also provide some support for paged
+    results, useful, for example, for UI display purposes. Predefined queries
+    must be configured to support paging, in the repository configuration. For
+    example:
+   </p><div class="screen"><pre>"query-all-ids" : "select _openidm_id from ${unquoted:_resource} SKIP ${unquoted:_pagedResultsOffset} LIMIT ${unquoted:_pageSize}",</pre></div><p>
+    This query configuration enables the paging parameters to be used, for
+    example, in a query such as the following:
+   </p><div class="screen"><pre><strong>$ curl \
+  --cacert self-signed.crt \
+  --header "X-OpenIDM-Username: openidm-admin" \
+  --header "X-OpenIDM-Password: openidm-admin" \
+  --header "Content-Type: application/json" \
+  --request GET \
+  "https://localhost:8443/openidm/managed/user?_queryId=query-all-ids&amp;_pageSize=2&amp;_pagedResultsOffset=3"</strong>
+ <em>{
+   "remainingPagedResults": 2,
+   "pagedResultsCookie": "5",
+   "resultCount": 2,
+   "result": [
+     {
+       "_rev": "0",
+       "_id": "b980999e-aa5c-4655-b2a0-08731b64e0ba"
+     },
+     {
+       "_rev": "0",
+       "_id": "c72b9c00-1e2c-4139-9e7f-fb9fb822db96"
+     }
+   ]
+ }</em>  </pre></div><div class="variablelist"><p>
+     The following paging parameters are supported:
+    </p><dl class="variablelist"><dt><span class="term"><code class="literal">_pagedResultsCookie</code></span></dt><dd><p>
+       Opaque cookie used by the server to keep track of the position
+       in the search results. The format of the cookie is a string value.
+      </p><p>
+       The server provides the cookie value on the first request. You should then
+       supply the cookie value in subsequent requests until the server returns a
+       null cookie, meaning that the final page of results has been returned.
+      </p><p>
+       Paged results are enabled only if the <code class="literal">_pageSize</code> is a
+       non-zero integer.
+      </p></dd><dt><span class="term"><code class="literal">_pagedResultsOffset</code></span></dt><dd><p>
+       Specifies the index within the result set of the number of records to be
+       skipped before the first result is returned. The format of the
+       <code class="literal">_pagedResultsOffset</code> is an integer value. When the value
+       of <code class="literal">_pagedResultsOffset</code> is greater than or equal to 1,
+       the server returns pages, starting after the specified index.
+      </p><p>
+       This request assumes that the <code class="literal">_pageSize</code> is set, and not
+       equal to zero.
+      </p><p>
+       For example, if the result set includes 10 records, the
+       <code class="literal">_pageSize</code> is 2, and the
+       <code class="literal">_pagedResultsOffset</code> is 6, the server skips the first 6
+       records, then returns 2 records, 7 and 8. The
+       <code class="literal">_pagedResultsCookie</code> value would then be 8 (the index of
+       the last returned record) and the <code class="literal">_remainingPagedResults</code>
+       value would be 2, the last two records (9 and 10) that have not yet been
+       returned.
+      </p><p>
+       If the offset points to a page beyond the last of the search results, the
+       result set returned is empty.
+      </p><p>
+       Note that the <code class="literal">_remainingPagedResults</code> parameter is not
+       supported for all queries. Where it is not supported, the returned value
+       is always <code class="literal">-1</code>.
+      </p></dd><dt><span class="term"><code class="literal">_pageSize</code></span></dt><dd><p>
+       An optional parameter indicating that query results should be returned in
+       pages of the specified size. For all paged result requests other than the
+       initial request, a cookie should be provided with the query request.
+      </p><p>
+       The default behavior is not to return paged query results. If set, this
+       parameter should be an integer value, greater than zero.
+      </p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="sorting-query-results"></a>7.3.6.&nbsp;Sorting Query Results</h3></div></div></div><p>
+    For common filter query expressions, you can sort the results of a query,
+    using the <code class="literal">_sortKeys</code> parameter. This parameter takes a
+    comma-separated list as a value and orders the way in which the JSON result
+    is returned, based on this list.
+   </p><p>
+    The <code class="literal">_sortKeys</code> parameter is not supported for predefined
+    queries.
+   </p><p>
+    The following query returns all users with the <code class="literal">givenName</code>
+    <code class="literal">Dan</code>, and sorts the results alphabetically, according to
+    surname (<code class="literal">sn</code>).
+   </p><div class="screen"><pre>$ <strong>
+'https://localhost:8443/openidm/system/ldap/account?_queryFilter=givenName+eq+"Dan"&amp;_fields=givenName,sn&amp;_sortKeys=sn'
+</strong>
+<em>
+{
+  "remainingPagedResults": -1,
+  "pagedResultsCookie": null,
+  "resultCount": 3,
+  "result": [
+    {
+      "sn": "Cope",
+      "givenName": "Dan"
+    },
+    {
+      "sn": "Langdon",
+      "givenName": "Dan"
+    },
+    {
+      "sn": "Lanoway",
+      "givenName": "Dan"
+    }
+  ]
+}   </em>
+   </pre></div></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-configuration.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-users-groups-roles.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;6.&nbsp;Configuring OpenIDM&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;8.&nbsp;Managing Users, Groups, and Roles</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10020&components=10164&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-9']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

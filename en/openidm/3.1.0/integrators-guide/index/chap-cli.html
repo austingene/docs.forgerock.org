@@ -1,0 +1,320 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;3.&nbsp;OpenIDM Command-Line Interface</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/css/shCore.css"><link rel="stylesheet" type="text/css" href="sh/css/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/css/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/js/shCore.js" type="text/javascript"></script><script src="sh/js/shBrushAci.js" type="text/javascript"></script><script src="sh/js/shBrushBash.js" type="text/javascript"></script><script src="sh/js/shBrushCsv.js" type="text/javascript"></script><script src="sh/js/shBrushHttp.js" type="text/javascript"></script><script src="sh/js/shBrushJava.js" type="text/javascript"></script><script src="sh/js/shBrushJScript.js" type="text/javascript"></script><script src="sh/js/shBrushLDIF.js" type="text/javascript"></script><script src="sh/js/shBrushPlain.js" type="text/javascript"></script><script src="sh/js/shBrushProperties.js" type="text/javascript"></script><script src="sh/js/shBrushXml.js" type="text/javascript"></script><script src="sh/js/shAll.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenIDM Integrator's Guide"><link rel="up" href="index.html" title="OpenIDM Integrator's Guide"><link rel="prev" href="chap-services.html" title="Chapter&nbsp;2.&nbsp;Starting and Stopping OpenIDM"><link rel="next" href="chap-ui.html" title="Chapter&nbsp;4.&nbsp;OpenIDM Web-based User Interfaces"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;3.&nbsp;OpenIDM Command-Line Interface</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-services.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-ui.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-cli"></a>Chapter&nbsp;3.&nbsp;OpenIDM Command-Line Interface</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-cli.html#cli-configexport">3.1. configexport</a></span></dt><dt><span class="section"><a href="chap-cli.html#cli-configimport">3.2. configimport</a></span></dt><dt><span class="section"><a href="chap-cli.html#cli-configureconnector">3.3. configureconnector</a></span></dt><dt><span class="section"><a href="chap-cli.html#cli-encrypt">3.4. encrypt</a></span></dt><dt><span class="section"><a href="chap-cli.html#cli-keytool">3.5. keytool</a></span></dt><dt><span class="section"><a href="chap-cli.html#cli-validate">3.6. validate</a></span></dt></dl></div><p>OpenIDM includes a basic command-line interface that provides a number 
+ of utilities for managing the OpenIDM instance.</p><p>All of the utilities are subcommands of the <code class="literal">cli.sh</code> 
+ (UNIX) or <code class="literal">cli.bat</code> (Windows) scripts. To use the utilities, 
+ you can either run them as subcommands, or launch the <span class="command"><strong>cli</strong></span> 
+ script first, and then run the utility. For example, to run the 
+ <span class="command"><strong>encrypt</strong></span> utility on a UNIX system:</p><div class="screen"><pre>
+$ <strong>cd /path/to/openidm </strong>
+$ <strong>./cli.sh </strong>
+  <em>
+Using boot properties at /path/to/openidm/conf/boot/boot.properties
+openidm# encrypt ....</em>
+ </pre></div><p>or</p><div class="screen"><pre>
+$ <strong>cd /path/to/openidm</strong>
+$ <strong>./cli.sh encrypt ... </strong>
+ </pre></div><p>By default, the command-line utilities run with the properties defined 
+ in <code class="filename">/path/to/openidm/conf/boot/boot.properties</code>.</p><p>
+  If you run the <span class="command"><strong>cli.sh</strong></span> command by itself, it opens an
+  OpenIDM-specific shell prompt:
+ </p><div class="screen"><pre>openidm#</pre></div><p>The startup and shutdown scripts are not discussed in this chapter. For 
+ information about these scripts, see <a href="../../integrators-guide/index/chap-services.html" class="link"><em class="citetitle">Starting and 
+ Stopping OpenIDM</em></a>.</p><p>The following sections describe the subcommands and their use. Examples 
+ assume that you are running the commands on a UNIX system. For Windows 
+ systems, use <span class="command"><strong>cli.bat</strong></span> instead of <span class="command"><strong>cli.sh</strong></span>.
+ </p><p>
+  For a list of subcommands available from the <code class="literal">openidm#</code>
+  prompt, run the <span class="command"><strong>cli.sh help</strong></span> command. The
+  <span class="command"><strong>help</strong></span> and <span class="command"><strong>exit</strong></span> options shown below are
+  self-explanatory. The other subcommands are explained in the subsections
+  that follow.
+ </p><div class="screen"><pre>local:keytool  Export or import a SecretKeyEntry. 
+	   The Java Keytool does not allow for exporting or importing SecretKeyEntries.
+local:encrypt    Encrypt the input string.
+local:validate   Validates all json configuration files in the configuration
+    (default: /conf) folder.
+basic:help   Displays available commands.
+basic:exit   Exit from the console.
+remote:configureconnector   Generate connector configuration.
+remote:configexport         Exports all configurations.
+remote:configimport         Imports the configuration set from local file/directory.</pre></div><p>
+   The <span class="command"><strong>configexport</strong></span>, <span class="command"><strong>configimport</strong></span>, and
+   <span class="command"><strong>configconnector</strong></span> subcommands support up to four options:
+  </p><div class="variablelist"><dl class="variablelist"><dt><span class="term">-u or --user USER[:PASSWORD]</span></dt><dd><p>
+      Allows you to specify the server user and password. Specifying a username
+      is mandatory. If you do not specify a username, the following error is
+      output to the console:
+      <code class="literal">Remote operation failed: Unauthorized</code>. If you do
+      not specify a password, you are prompted for one. This option is used by
+      all three subcommands.
+     </p></dd><dt><span class="term">--url URL</span></dt><dd><p>
+       The URL of the OpenIDM REST service. The default URL is
+       <code class="literal">http://localhost:8080/openidm/</code>. This can
+       be used to import configuration files from a remote running
+       instance of OpenIDM. This option is used by all three subcommands.
+       commands.
+      </p></dd><dt><span class="term">-P or --port PORT</span></dt><dd><p>
+       The port number associated with the OpenIDM REST service. If specified,
+       this option overrides any port number specified with the
+       <span class="command"><strong>--url</strong></span> option. The default port is 8080. This option is
+       used by all three subcommands.
+      </p></dd><dt><span class="term">-r or --replaceall or --replaceAll</span></dt><dd><p>
+      Replaces the entire list of configuration files with the files in the
+      specified backup directory. This option is used with only the
+      <span class="command"><strong>configimport</strong></span> command.
+     </p></dd></dl></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="cli-configexport"></a>3.1.&nbsp;configexport</h2></div></div></div><p>The <span class="command"><strong>configexport</strong></span> subcommand exports all 
+  configuration objects to a specified location, enabling you to reuse a 
+  system configuration in another environment. For example, you can test a 
+  configuration in a development environment, then export it and import it 
+  into a production environment. This subcommand also enables you to inspect 
+  the active configuration of an OpenIDM instance.</p><p>OpenIDM must be running when you execute this command.</p><p>Usage is as follows:</p><div class="screen"><pre>
+$ ./cli.sh configexport --user username:passsword <em><strong>export-location</strong></em>
+  </pre></div><p>For example:</p><div class="screen"><pre>
+$ ./cli.sh configexport --user openidm-admin:openidm-admin /tmp/conf</pre></div><p>
+   On Windows systems, the <em class="replaceable"><code>export-location</code></em> must be
+   provided in quotation marks, for example:
+  </p><div class="screen"><pre>C:\openidm\cli.bat configexport --user openidm-admin:openidm-admin "C:\temp\openidm"</pre></div><p>Configuration objects are exported, as <code class="filename">.json</code>
+   files, to the specified directory. The command creates the directory if
+   needed. Configuration files that are present in this directory are renamed as
+   backup files, with a timestamp, for example,
+   <code class="filename">audit.json.2014-02-19T12-00-28.bkp</code>, and are not
+   overwritten. The following configuration objects are exported:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>The internal repository configuration (<code class="filename">repo.orientdb.json
+      </code> or <code class="filename">repo.jdbc.json</code>)</p></li><li class="listitem"><p>Default and custom configuration directories (<code class="filename">script.json
+     </code>)</p></li><li class="listitem"><p>The log configuration (<code class="filename">audit.json</code>)</p></li><li class="listitem"><p>The authentication configuration (<code class="filename">authentication.json
+      </code>)</p></li><li class="listitem"><p>The cluster configuration (<code class="filename">cluster.json</code>)</p></li><li class="listitem"><p>The configuration of a connected SMTP email server
+     (<code class="filename">external.email.json)</code></p></li><li class="listitem"><p>Custom configuration information
+      (<code class="filename">info-<em class="replaceable"><code>name</code></em>.json</code>)
+     </p></li><li class="listitem"><p>The managed object configuration (<code class="filename">managed.json</code>)
+      </p></li><li class="listitem"><p>The connector configuration (<code class="filename">provisioner.openicf-*.json
+      </code>)</p></li><li class="listitem"><p>The router service configuration (<code class="filename">router.json</code>)
+      </p></li><li class="listitem"><p>The scheduler service configuration (<code class="filename">scheduler.json</code>)
+      </p></li><li class="listitem"><p>Any configured schedules (<code class="filename">schedule-*.json</code>)
+      </p></li><li class="listitem"><p>The synchronization mapping configuration (<code class="filename">sync.json
+      </code>)</p></li><li class="listitem"><p>If workflows are defined, the configuration of the workflow engine 
+      (<code class="filename">workflow.json</code>) and the workflow access 
+      configuration (<code class="filename">process-access.json</code>)</p></li><li class="listitem"><p>Any configuration files related to the user interface 
+     (<code class="filename">ui-*.json</code>)</p></li><li class="listitem"><p>The configuration of any custom endpoints 
+      (<code class="filename">endpoint-*.json</code>)</p></li><li class="listitem"><p>The configuration of servlet filters
+     (<code class="filename">servletfilter-*.json</code>)</p></li><li class="listitem"><p>The policy configuration (<code class="filename">policy.json</code>)</p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="cli-configimport"></a>3.2.&nbsp;configimport</h2></div></div></div><p>The <span class="command"><strong>configimport</strong></span> subcommand imports configuration 
+  objects from the specified directory, enabling you to reuse a system 
+  configuration from another environment. For example, you can test a 
+  configuration in a development environment, then export it and import it 
+  into a production environment.</p><p>The command updates the existing configuration from the 
+  <em class="replaceable"><code>import-location</code></em> over the OpenIDM REST interface. 
+  By default, if configuration objects are present in the 
+  <em class="replaceable"><code>import-location</code></em> and not in the existing 
+  configuration, these objects are added. If configuration objects are present 
+  in the existing location but not in the 
+  <em class="replaceable"><code>import-location</code></em>, these objects are left untouched 
+  in the existing configuration.</p><p>If you include the <code class="literal">--replaceAll</code> parameter, the 
+  command wipes out the existing configuration and replaces it with the 
+  configuration in the <em class="replaceable"><code>import-location</code></em>. Objects in 
+  the existing configuration that are not present in the 
+  <em class="replaceable"><code>import-location</code></em> are deleted.</p><p>Usage is as follows:</p><div class="screen"><pre>
+$ ./cli.sh configimport --user username:password [--replaceAll] <em><strong>import-location</strong></em>
+  </pre></div><p>For example:</p><div class="screen"><pre>
+$ ./cli.sh configimport --user openidm-admin:openidm-admin --replaceAll /tmp/conf
+  </pre></div><p>
+   On Windows systems, the <em class="replaceable"><code>import-location</code></em> must be
+   provided in quotation marks, for example:
+  </p><div class="screen"><pre>C:\openidm\cli.bat configimport --user openidm-admin:openidm-admin --replaceAll "C:\temp\openidm"</pre></div><p>Configuration objects are imported, as <code class="literal">.json</code> files, 
+  from the specified directory to the <code class="filename">conf</code> directory. The 
+  configuration objects that are imported are outlined in the corresponding 
+  export command, described in the previous section.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="cli-configureconnector"></a>3.3.&nbsp;configureconnector</h2></div></div></div><p>The <span class="command"><strong>configureconnector</strong></span> subcommand generates a 
+  configuration for an OpenICF connector.</p><p>Usage is as follows:</p><div class="screen"><pre>$ ./cli.sh configureconnector --user username:password <em><strong>connector-name</strong></em>
+  </pre></div><p>Select the type of connector that you want to configure. The following 
+  example configures a new XML connector.
+  </p><div class="screen"><pre>$ <strong>./cli.sh configureconnector --user openidm-admin:openidm-admin myXmlConnector</strong>
+ <em>Starting shell in /path/to/openidm
+Using boot properties at /path/to/openidm/conf/boot/boot.properties
+0. CSV File Connector version 1.1.0.2
+1. Database Table Connector version 1.1.0.1
+2. Scripted Poolable Groovy Connector version 1.4.1.0
+3. Scripted Groovy Connector version 1.4.1.0
+4. Scripted CREST Connector version 1.4.1.0
+5. Scripted SQL Connector version 1.4.1.0
+6. Scripted REST Connector version 1.4.1.0
+7. LDAP Connector version 1.4.0.0
+8. XML Connector version 1.1.0.2
+9. Exit
+Select [0..9]: 8
+Edit the configuration file and run the command again. The configuration was 
+saved to /openidm/temp/provisioner.openicf-myXmlConnector.json</em></pre></div><p>The basic configuration is saved in a file named 
+  <code class="filename">/openidm/temp/provisioner.openicf-<em class="replaceable"><code>connector-name</code></em>.json</code>.
+  Edit the <code class="literal">configurationProperties</code> parameter in this file to 
+  complete the connector configuration. For an XML connector, you can use the 
+  schema definitions in sample 1 for an example configuration.</p><pre class="brush: javascript;">
+  "configurationProperties" : {
+    "xmlFilePath" : "samples/sample1/data/resource-schema-1.xsd",
+    "createFileIfNotExists" : false,
+    "xsdFilePath" : "samples/sample1/data/resource-schema-extension.xsd",
+    "xsdIcfFilePath" : "samples/sample1/data/xmlConnectorData.xml"
+  },  
+  </pre><p>For more information about the connector configuration properties, see 
+  <a href="../../integrators-guide/index/chap-resource-conf.html#openicf-provisioner-conf" class="link"><em class="citetitle">Configuring Connectors</em></a>.</p><p>When you have modified the file, run the 
+  <span class="command"><strong>configureconnector</strong></span> command again so that OpenIDM can pick 
+  up the new connector configuration.</p><div class="screen"><pre><strong>$ ./cli.sh configureconnector --user openidm-admin:openidm-admin myXmlConnector</strong>
+<em>Executing ./cli.sh...
+Starting shell in /path/to/openidm
+Using boot properties at /path/to/openidm/conf/boot/boot.properties
+Configuration was found and read from: /path/to/openidm/temp/provisioner.openicf-myXmlConnector.json</em>
+  </pre></div><p>
+   You can now copy the new
+   <code class="filename">provisioner.openicf-myXmlConnector.json</code> file
+   to the <code class="filename">conf/</code> subdirectory.
+  </p><p>You can also configure connectors over the REST interface. For more 
+  information, see <a href="../../integrators-guide/index/chap-resource-conf.html#connector-wiz" class="link"><em class="citetitle">Creating Default Connector Configurations</em></a>.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="cli-encrypt"></a>3.4.&nbsp;encrypt</h2></div></div></div><p>The <span class="command"><strong>encrypt</strong></span> subcommand encrypts an input string, or 
+  JSON object, provided at the command line. This subcommand can be used to 
+  encrypt passwords, or other sensitive data, to be stored in the OpenIDM 
+  repository. The encrypted value is output to standard output and provides 
+  details of the cryptography key that is used to encrypt the data.</p><p>Usage is as follows:</p><div class="screen"><pre>
+$ ./cli.sh encrypt [-j] <em><strong>string</strong></em>
+  </pre></div><p>The <code class="literal">-j</code> option specifies that the string to be 
+  encrypted is a JSON object. If you do not enter the string as part of the 
+  command, the command prompts for the string to be encrypted. If you enter 
+  the string as part of the command, any special characters, for example 
+  quotation marks, must be escaped.</p><p>The following example encrypts a normal string value:</p><div class="screen"><pre>
+$ <strong>./cli.sh encrypt mypassword  </strong>
+  <em>
+Executing ./cli.sh
+Starting shell in /path/to/openidm
+Using boot properties at /path/to/openidm/conf/boot/boot.properties
+Activating cryptography service of type: JCEKS provider:  location: security/keystore.jceks
+Available cryptography key: openidm-sym-default
+Available cryptography key: openidm-localhost
+CryptoService is initialized with 2 keys.
+-----BEGIN ENCRYPTED VALUE-----
+{
+  "$crypto" : {
+    "value" : {
+      "iv" : "M2913T5ZADlC2ip2imeOyg==",
+      "data" : "DZAAAM1nKjQM1qpLwh3BgA==",
+      "cipher" : "AES/CBC/PKCS5Padding",
+      "key" : "openidm-sym-default"
+    },
+    "type" : "x-simple-encryption"
+  }
+}
+------END ENCRYPTED VALUE------ </em>
+  </pre></div><p>The following example encrypts a JSON object. The input string must be 
+  a valid JSON object.</p><div class="screen"><pre>
+$ <strong>./cli.sh encrypt -j {\"password\":\"myPassw0rd\"}</strong>
+<em>
+Starting shell in /path/to/openidm
+Using boot properties at /path/to/openidm/conf/boot/boot.properties
+Activating cryptography service of type: JCEKS provider:  location: security/keystore.jceks
+Available cryptography key: openidm-sym-default
+Available cryptography key: openidm-localhost
+CryptoService is initialized with 2 keys.
+-----BEGIN ENCRYPTED VALUE-----
+{
+  "$crypto" : {
+    "value" : {
+      "iv" : "M2913T5ZADlC2ip2imeOyg==",
+      "data" : "DZAAAM1nKjQM1qpLwh3BgA==",
+      "cipher" : "AES/CBC/PKCS5Padding",
+      "key" : "openidm-sym-default"
+    },
+    "type" : "x-simple-encryption"
+  }
+}
+------END ENCRYPTED VALUE------  </em>
+  </pre></div><p>The following example prompts for a JSON object to be encrypted. In 
+  this case, you need not escape the special characters.</p><div class="screen"><pre>
+$ <strong>./cli.sh encrypt -j</strong>
+<em>
+Using boot properties at /path/to/openidm/conf/boot/boot.properties
+Enter the Json value
+
+&gt; Press ctrl-D to finish input
+Start data input:</em>
+<strong>{"password":"myPassw0rd"}
+^D        </strong>
+<em>
+Activating cryptography service of type: JCEKS provider:  location: security/keystore.jceks
+Available cryptography key: openidm-sym-default
+Available cryptography key: openidm-localhost
+CryptoService is initialized with 2 keys.
+-----BEGIN ENCRYPTED VALUE-----
+{
+  "$crypto" : {
+    "value" : {
+      "iv" : "6e0RK8/4F1EK5FzSZHwNYQ==",
+      "data" : "gwHSdDTmzmUXeD6Gtfn6JFC8cAUiksiAGfvzTsdnAqQ=",
+      "cipher" : "AES/CBC/PKCS5Padding",
+      "key" : "openidm-sym-default"
+    },
+    "type" : "x-simple-encryption"
+  }
+}
+------END ENCRYPTED VALUE------</em>
+  </pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="cli-keytool"></a>3.5.&nbsp;keytool</h2></div></div></div><a class="indexterm" name="d0e1774"></a><p>
+    The <span class="command"><strong>keytool</strong></span> subcommand exports or imports secret key
+    values.
+   </p><p>
+    The Java <span class="command"><strong>keytool</strong></span> command enables you to export and import
+    public keys and certificates, but not secret or symmetric keys. The OpenIDM
+    <span class="command"><strong>keytool</strong></span> subcommand provides this functionality.
+   </p><p>Usage is as follows:</p><div class="screen"><pre>./cli.sh keytool [--export, --import] <em><strong>alias</strong></em>
+  </pre></div><p>
+   For example, to export the default OpenIDM symmetric key, run the following
+   command:
+  </p><div class="screen"><pre>
+$ <strong>./cli.sh keytool --export openidm-sym-default</strong>
+   <em>
+Using boot properties at /openidm/conf/boot/boot.properties
+Use KeyStore from: /openidm/security/keystore.jceks
+Please enter the password: 
+[OK] Secret key entry with algorithm AES
+AES:606d80ae316be58e94439f91ad8ce1c0  </em>
+  </pre></div><p>The default keystore password is <code class="literal">changeit</code>. You 
+  should change this password after installation.</p><p>To import a new secret key named <em class="replaceable"><code>my-new-key</code></em>, 
+  run the following command:</p><div class="screen"><pre>
+$ <strong>./cli.sh keytool --import my-new-key   </strong>
+   <em>
+Using boot properties at /openidm/conf/boot/boot.properties
+Use KeyStore from: /openidm/security/keystore.jceks
+Please enter the password: 
+Enter the key: 
+AES:606d80ae316be58e94439f91ad8ce1c0 </em>
+  </pre></div><p>If a secret key of that name already exists, OpenIDM returns the 
+  following error:</p><div class="screen"><pre>"KeyStore contains a key with this alias"</pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="cli-validate"></a>3.6.&nbsp;validate</h2></div></div></div><a class="indexterm" name="d0e1832"></a><p>The <span class="command"><strong>validate</strong></span> subcommand validates all .json 
+  configuration files in the <code class="filename">openidm/conf/</code> directory.</p><p>Usage is as follows:</p><div class="screen"><pre>
+$ <strong>./cli.sh validate   </strong>
+   <em>
+Executing ./cli.sh
+Starting shell in /path/to/openidm
+Using boot properties at /path/to/openidm/conf/boot/boot.properties
+...................................................................
+[Validating] Load JSON configuration files from:
+[Validating] 	/path/to/openidm/conf
+[Validating] audit.json .................................. SUCCESS
+[Validating] authentication.json ......................... SUCCESS
+
+    ...
+
+[Validating] sync.json ................................... SUCCESS
+[Validating] ui-configuration.json ....................... SUCCESS
+[Validating] ui-countries.json ........................... SUCCESS
+[Validating] ui-secquestions.json ........................ SUCCESS
+[Validating] workflow.json ............................... SUCCESS
+  </em></pre></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-services.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-ui.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;2.&nbsp;Starting and Stopping OpenIDM&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;4.&nbsp;OpenIDM Web-based User Interfaces</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10020&components=10164&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-9']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>
