@@ -4,7 +4,7 @@
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
    <title>Chapter&nbsp;15.&nbsp;Managing Authentication, Authorization and Role-Based Access Control</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/css/shCore.css"><link rel="stylesheet" type="text/css" href="sh/css/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/css/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/js/shCore.js" type="text/javascript"></script><script src="sh/js/shBrushAci.js" type="text/javascript"></script><script src="sh/js/shBrushBash.js" type="text/javascript"></script><script src="sh/js/shBrushCsv.js" type="text/javascript"></script><script src="sh/js/shBrushHttp.js" type="text/javascript"></script><script src="sh/js/shBrushJava.js" type="text/javascript"></script><script src="sh/js/shBrushJScript.js" type="text/javascript"></script><script src="sh/js/shBrushLDIF.js" type="text/javascript"></script><script src="sh/js/shBrushPlain.js" type="text/javascript"></script><script src="sh/js/shBrushProperties.js" type="text/javascript"></script><script src="sh/js/shBrushXml.js" type="text/javascript"></script><script src="sh/js/shAll.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenIDM Integrator's Guide"><link rel="up" href="index.html" title="OpenIDM Integrator's Guide"><link rel="prev" href="chap-passwords.html" title="Chapter&nbsp;14.&nbsp;Managing Passwords"><link rel="next" href="chap-security.html" title="Chapter&nbsp;16.&nbsp;Securing &amp; Hardening OpenIDM"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
-</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;15.&nbsp;Managing Authentication, Authorization and Role-Based Access Control</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-passwords.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-security.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-auth"></a>Chapter&nbsp;15.&nbsp;Managing Authentication, Authorization and Role-Based Access Control</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-auth.html#openidm-users">15.1. OpenIDM Users</a></span></dt><dt><span class="section"><a href="chap-auth.html#openidm-authentication">15.2. Authentication</a></span></dt><dt><span class="section"><a href="chap-auth.html#supported-auth-modules">15.3. Supported Authentication Modules</a></span></dt><dt><span class="section"><a href="chap-auth.html#passthrough-auth">15.4. Using Delegated Authentication</a></span></dt><dt><span class="section"><a href="chap-auth.html#openidm-roles">15.5. Roles and Authentication</a></span></dt><dt><span class="section"><a href="chap-auth.html#openidm-authorization">15.6. Authorization</a></span></dt><dt><span class="section"><a href="chap-auth.html#user-group-role-auth-assignment">15.7. Building Role-Based Access Control (RBAC)</a></span></dt></dl></div><a class="indexterm" name="d0e14921"></a><a class="indexterm" name="d0e14924"></a><p>
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;15.&nbsp;Managing Authentication, Authorization and Role-Based Access Control</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-passwords.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-security.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-auth"></a>Chapter&nbsp;15.&nbsp;Managing Authentication, Authorization and Role-Based Access Control</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-auth.html#openidm-users">15.1. OpenIDM Users</a></span></dt><dt><span class="section"><a href="chap-auth.html#openidm-authentication">15.2. Authentication</a></span></dt><dt><span class="section"><a href="chap-auth.html#supported-auth-modules">15.3. Supported Authentication Modules</a></span></dt><dt><span class="section"><a href="chap-auth.html#passthrough-auth">15.4. Using Delegated Authentication</a></span></dt><dt><span class="section"><a href="chap-auth.html#openidm-auth-kerberos">15.5. Kerberos Configuration Example</a></span></dt><dt><span class="section"><a href="chap-auth.html#openidm-roles">15.6. Roles and Authentication</a></span></dt><dt><span class="section"><a href="chap-auth.html#openidm-authorization">15.7. Authorization</a></span></dt><dt><span class="section"><a href="chap-auth.html#user-group-role-auth-assignment">15.8. Building Role-Based Access Control (RBAC)</a></span></dt></dl></div><a class="indexterm" name="d0e14921"></a><a class="indexterm" name="d0e14924"></a><p>
   OpenIDM provides a flexible authentication and authorization mechanism, based
   on REST interface URLs and on roles which may be stored in the repository.
  </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="openidm-users"></a>15.1.&nbsp;OpenIDM Users</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-auth.html#internal-users">15.1.1. Internal Users</a></span></dt><dt><span class="section"><a href="chap-auth.html#managed-users">15.1.2. Managed Users</a></span></dt></dl></div><a class="indexterm" name="d0e14932"></a><a class="indexterm" name="d0e14937"></a><p>
@@ -133,7 +133,7 @@
    </p><p>
     By default, the attribute names for managed user login and password are
     <code class="literal">userName</code> and <code class="literal">password</code>, respectively.
-   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="openidm-authentication"></a>15.2.&nbsp;Authentication</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-auth.html#openidm-auth-kerberos">15.2.1. Kerberos Configuration Examples </a></span></dt></dl></div><p>
+   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="openidm-authentication"></a>15.2.&nbsp;Authentication</h2></div></div></div><p>
    OpenIDM does not allow access to the REST interface without authentication.
   </p><p>
    User self-registration requires anonymous access. For that purpose, OpenIDM
@@ -190,173 +190,7 @@
         "userRoles" : "roles"
     },
  ... 
- </pre><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="openidm-auth-kerberos"></a>15.2.1.&nbsp;Kerberos Configuration Examples </h3></div></div></div><p>
-    This section assumes that you have an active Kerberos server acting as
-    a Key Distribution Center (KDC). If you're running Active Directory in your
-    deployment, that service includes a Kerberos KDC by default.
-   </p><p>
-    To take advantage of a Kerberos KDC, you need to do two things: first
-    include at least the <code class="literal">IWA</code> and possibly the
-    <code class="literal">PASSTHROUGH</code> modules in the
-    <code class="filename">authentication.json</code> file. Second, modify the
-    <code class="filename">system.properties</code> file to take advantage of the
-    noted modules.
-   </p><p>
-    For <code class="literal">IWA</code>, based on Integrated Windows Authentication,
-    this section assumes you have configured an LDAP connector for an Active
-    Directory server. To confirm, identify the following mapping source in the
-    <code class="filename">sync.json</code> configuration file:
-   </p><div class="screen"><pre>system/ad/account</pre></div><p>
-    You could then include the following code block in the
-    <code class="filename">authentication.json</code> file. Include appropriate
-    values for the <code class="literal">kerberosRealm</code> and
-    <code class="literal">kerberosServerName</code>. For a list of definitions, see the
-    following section: <a href="../../integrators-guide/index/chap-auth.html#kerberos-definitions" class="link">
-    <em class="citetitle">Kerberos Definitions</em></a>.
-   </p><pre class="brush: javascript;">"authModules" : [
-    ...
-    {
-        "name" : "IWA",
-        "properties": {
-            "servicePrincipal" : "",
-            "keytabFileName" : "security/name.HTTP.keytab",
-            "kerberosRealm" : "",
-            "kerberosServerName" : "",
-            "queryOnResource" : "system/ad/account",
-            "propertyMapping" : {
-                "authenticationId" : "sAMAccountName",
-                "groupMembership" : "memberOf"
-            },
-            "groupRoleMapping" : { "openidm-admin": [ ] },
-            "groupComparisonMethod": "ldap",
-            "defaultUserRoles" : [
-                "openidm-authorized"
-            ]
-        },
-        "enabled" : true
-    }
-   </pre><p>
-    To grant different roles to users who are authenticated through the
-    <code class="literal">IWA</code> module, list them with their
-    <code class="literal">groupRoleMapping</code>.
-   </p><p>
-    You could pair the <code class="literal">IWA</code> module with the
-    <code class="literal">PASSTHROUGH</code> module. When paired, a failure in the
-    <code class="literal">IWA</code> module allows users to revert to forms-based
-    authentication.
-   </p><p>
-    You could add the <code class="literal">PASSTHROUGH</code> module as follows, in the
-    <code class="filename">authentication.json</code> file:
-   </p><pre class="brush: javascript;"> ...
-    {
-        "name" : "PASSTHROUGH",
-        "properties": {
-            "queryOnResource" : "system/AD/account",
-            "propertyMapping" : {
-                "authenticationId" : "sAMAccountName",
-                "groupMembership" : "memberOf" },
-            "groupRoleMapping" : { "openidm-admin": [ ] },
-            "groupComparisonMethod": "ldap",
-            "defaultUserRoles" : [
-                "openidm-authorized"
-            ]
-        },
-        "enabled" : true
-    }
-... </pre><p>
-    Once you have included at least the <code class="literal">IWA</code> module,
-    edit the <code class="filename">system.properties</code> file. Include the following
-    entry to point to a JAAS configuration file. Substitute if desired for
-    <code class="filename">gssapi_jaas.conf</code>
-   </p><div class="screen"><pre>
-java.security.auth.login.config=/path/to/openidm/conf/gssapi_jaas.conf
-   </pre></div><p>
-    In the <code class="filename">gssapi_jaas.conf</code> file, include the following
-    information related to the LDAP connector:
-   </p><pre class="brush: javascript;">
-org.identityconnectors.ldap.LdapConnector {
-    com.sun.security.auth.module.Krb5LoginModule required client=TRUE
-    principal="bjensen@EXAMPLE.COM" useKeyTab=true keyTab="/path/to/bjensen.keytab";
-};
-   </pre><div lang="en" class="section"><div class="titlepage"><div><div><h4 class="title"><a name="kerberos-definitions"></a>15.2.1.1.&nbsp;Kerberos Definitions</h4></div></div></div><p>
-   The Windows Desktop authentication module uses Kerberos. The user presents a
-   Kerberos token to the ForgeRock product, through the Simple and Protected
-   GSS-API Negotiation Mechanism (SPNEGO) protocol. The Windows Desktop
-   authentication module enables desktop single sign on such that a user who has
-   already authenticated with a Kerberos Key Distribution Center can
-   authenticate without having to provide the login information again. Users
-   might need to set up Integrated Windows Authentication in Internet Explorer
-   to benefit from single sign on when logged on to a Windows desktop.
-  </p><p>
-   The Kerberos attributes shown may correspond to a <span class="command"><strong>ssoadm</strong></span>
-   attribute for OpenAM or a JSON attribute for OpenIDM.
-  </p><div class="variablelist"><dl class="variablelist"><dt><span class="term">Service Principal</span></dt><dd><p>Specify the Kerberos principal for authentication in the following
-     format.</p><pre class="literallayout">HTTP/<em class="replaceable"><code>host</code></em>.<em class="replaceable"><code>domain</code></em>@<em class="replaceable"><code>dc-domain-name</code></em></pre><p>Here, <em class="replaceable"><code>host</code></em> and
-     <em class="replaceable"><code>domain</code></em> correspond to the host and domain names
-     of the installed ForgeRock product, and
-     <em class="replaceable"><code>dc-domain-name</code></em> is the domain name of the Windows
-     Kerberos domain controller server. The
-     <em class="replaceable"><code>dc-domain-name</code></em> can differ from the domain
-     name for the installed ForgeRock product.</p><p>You set up the account on the Windows domain controller, creating
-     a computer account for the installed ForgeRock product and associating the
-     new account with a service provider name.</p><p>
-     <span class="command"><strong>ssoadm</strong></span> attribute:
-     <code class="literal">iplanet-am-auth-windowsdesktopsso-principal-name</code>
-    </p><p>
-     JSON attribute: <code class="literal">servicePrincipal</code>
-    </p></dd><dt><span class="term">Keytab File Name</span></dt><dd><p>Specify the full path of the keytab file for the Service Principal.
-     You generate the keytab file using the Windows <span class="command"><strong>ktpass</strong></span>
-     utility.</p><p><span class="command"><strong>ssoadm</strong></span> attribute:
-     <code class="literal">iplanet-am-auth-windowsdesktopsso-keytab-file</code>
-    </p><p>
-     JSON attribute: <code class="literal">keytabFileName</code>
-    </p></dd><dt><span class="term">Kerberos Realm</span></dt><dd><p>Specify the Kerberos Key Distribution Center realm. For the
-     Windows Kerberos service this is the domain controller server domain
-     name.</p><p>
-     <span class="command"><strong>ssoadm</strong></span> attribute:
-     <code class="literal">iplanet-am-auth-windowsdesktopsso-kerberos-realm</code>
-    </p><p>
-     JSON attribute: <code class="literal">kerberosRealm</code>
-    </p></dd><dt><span class="term">Kerberos Server Name</span></dt><dd><p>Specify the fully qualified domain name of the Kerberos Key
-     Distribution Center server, such as that of the domain controller
-     server.</p><p>
-     <span class="command"><strong>ssoadm</strong></span> attribute:
-     <code class="literal">iplanet-am-auth-windowsdesktopsso-kdc</code>
-    </p><p>
-     JSON attribute: <code class="literal">kerberosServerName</code>
-    </p></dd><dt><span class="term">Return Principal with Domain Name</span></dt><dd><p>
-     When enabled, OpenAM automatically returns the Kerberos principal
-     with the domain controller's domain name during authentication.
-    </p><p>
-     <span class="command"><strong>ssoadm</strong></span> attribute:
-     <code class="literal">iplanet-am-auth-windowsdesktopsso-returnRealm</code>
-    </p><p>
-     JSON attribute: <code class="literal">returnRealm</code>
-    </p></dd><dt><span class="term">Authentication Level</span></dt><dd><p>
-     Sets the authentication level used to indicate the level of security
-     associated with the module. The value can range from 0 to any positive
-     integer.
-    </p><p>
-     <span class="command"><strong>ssoadm</strong></span> attribute:
-     <code class="literal">iplanet-am-auth-windowsdesktopsso-auth-level</code>
-    </p><p>
-     JSON attribute: <code class="literal">authLevel</code>
-    </p></dd><dt><span class="term">Search for the user in the realm</span></dt><dd><p>Validates the user against the configured data stores. If the user from the
-     Kerberos token is not found, authentication will fail. If an authentication
-     chain is set, the user will be able to authenticate through another module.</p><p>
-     <span class="command"><strong>ssoadm</strong></span> attribute:
-     <code class="literal">iplanet-am-auth-windowsdesktopsso-lookupUserInRealm</code>
-    </p><p>
-     JSON attribute: <code class="literal">lookupUserInRealm</code>
-    </p></dd></dl></div><div class="note"><h3 class="title">Note</h3><p>
-   Note: For Windows 7 and later, you will need to disable the "Enable
-   Integrated Windows Authentication" option in Internet Explorer. In addition,
-   you will need to add and activate the DisableNTMLPreAuth key to the Windows
-   Registry. For detailed instructions, see the Microsoft KB article on when
-   <a class="link" href="http://support.microsoft.com/kb/251404" target="_blank">
-   <em class="citetitle">You cannot post data to a non-NTLM-authenticated Web
-   site</em></a>
-  </p></div></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="supported-auth-modules"></a>15.3.&nbsp;Supported Authentication Modules</h2></div></div></div><div class="variablelist"><p>
+ </pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="supported-auth-modules"></a>15.3.&nbsp;Supported Authentication Modules</h2></div></div></div><div class="variablelist"><p>
     OpenIDM supports a variety of modules, including those available from the
     Common Authentication Framework (CAF). The CAF modules available to
     OpenIDM include <code class="literal">JWT_SESSION</code>,
@@ -443,7 +277,7 @@ org.identityconnectors.ldap.LdapConnector {
 ]
   </pre><p>
    The properties shown from this excerpt are defined in
-   <a class="xref" href="chap-auth.html#roles-auth-prop" title="15.6.3.&nbsp;Properties for Authentication and Roles">Section&nbsp;15.6.3, &#8220;Properties for Authentication and Roles&#8221;</a>
+   <a class="xref" href="chap-auth.html#roles-auth-prop" title="15.7.3.&nbsp;Properties for Authentication and Roles">Section&nbsp;15.7.3, &#8220;Properties for Authentication and Roles&#8221;</a>
   </p><p>
    The content of the delegated authentication object varies. Samples
    2/2b/2c/2d, 3, 5, and 6 include slightly different versions of the
@@ -475,7 +309,173 @@ org.identityconnectors.ldap.LdapConnector {
       matches the AD attribute used for account names. The associated
       <code class="literal">managedUserLink</code> is
       <code class="literal">systemAdAccounts_managedUser</code>.
-     </p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="openidm-roles"></a>15.5.&nbsp;Roles and Authentication</h2></div></div></div><a class="indexterm" name="d0e15693"></a><a class="indexterm" name="d0e15698"></a><p>
+     </p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="openidm-auth-kerberos"></a>15.5.&nbsp;Kerberos Configuration Example</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-auth.html#kerberos-definitions">15.5.1. Kerberos Definitions</a></span></dt></dl></div><p>
+   This section assumes that you have an active Kerberos server acting as
+   a Key Distribution Center (KDC). If you're running Active Directory in your
+   deployment, that service includes a Kerberos KDC by default.
+  </p><p>
+   To take advantage of a Kerberos KDC, you need to do two things: first
+   include at least the <code class="literal">IWA</code> and possibly the
+   <code class="literal">PASSTHROUGH</code> modules in the
+   <code class="filename">authentication.json</code> file. Second, modify the
+   <code class="filename">system.properties</code> file to take advantage of the
+   noted modules.
+  </p><p>
+   For <code class="literal">IWA</code>, based on Integrated Windows Authentication,
+   this section assumes you have configured an LDAP connector for an Active
+   Directory server. To confirm, identify the following mapping source in the
+   <code class="filename">sync.json</code> configuration file:
+  </p><div class="screen"><pre>system/ad/account</pre></div><p>
+   You could then include the following code block in the
+   <code class="filename">authentication.json</code> file. Include appropriate
+   values for the <code class="literal">kerberosRealm</code> and
+   <code class="literal">kerberosServerName</code>. For a list of definitions, see the
+   following section: <a href="../../integrators-guide/index/chap-auth.html#kerberos-definitions" class="link">
+   <em class="citetitle">Kerberos Definitions</em></a>.
+  </p><pre class="brush: javascript;">"authModules" : [
+   ...
+   {
+   "name" : "IWA",
+   "properties": {
+   "servicePrincipal" : "",
+   "keytabFileName" : "security/name.HTTP.keytab",
+   "kerberosRealm" : "",
+   "kerberosServerName" : "",
+   "queryOnResource" : "system/ad/account",
+   "propertyMapping" : {
+   "authenticationId" : "sAMAccountName",
+   "groupMembership" : "memberOf"
+   },
+   "groupRoleMapping" : { "openidm-admin": [ ] },
+   "groupComparisonMethod": "ldap",
+   "defaultUserRoles" : [
+   "openidm-authorized"
+   ]
+   },
+   "enabled" : true
+   }
+  </pre><p>
+   To grant different roles to users who are authenticated through the
+   <code class="literal">IWA</code> module, list them with their
+   <code class="literal">groupRoleMapping</code>.
+  </p><p>
+   You could pair the <code class="literal">IWA</code> module with the
+   <code class="literal">PASSTHROUGH</code> module. When paired, a failure in the
+   <code class="literal">IWA</code> module allows users to revert to forms-based
+   authentication.
+  </p><p>
+   You could add the <code class="literal">PASSTHROUGH</code> module as follows, in the
+   <code class="filename">authentication.json</code> file:
+  </p><pre class="brush: javascript;"> ...
+   {
+   "name" : "PASSTHROUGH",
+   "properties": {
+   "queryOnResource" : "system/AD/account",
+   "propertyMapping" : {
+   "authenticationId" : "sAMAccountName",
+   "groupMembership" : "memberOf" },
+   "groupRoleMapping" : { "openidm-admin": [ ] },
+   "groupComparisonMethod": "ldap",
+   "defaultUserRoles" : [
+   "openidm-authorized"
+   ]
+   },
+   "enabled" : true
+   }
+   ... </pre><p>
+   Once you have included at least the <code class="literal">IWA</code> module,
+   edit the <code class="filename">system.properties</code> file. Include the following
+   entry to point to a JAAS configuration file. Substitute if desired for
+   <code class="filename">gssapi_jaas.conf</code>
+  </p><div class="screen"><pre>
+   java.security.auth.login.config=/path/to/openidm/conf/gssapi_jaas.conf
+  </pre></div><p>
+   In the <code class="filename">gssapi_jaas.conf</code> file, include the following
+   information related to the LDAP connector:
+  </p><pre class="brush: javascript;">
+   org.identityconnectors.ldap.LdapConnector {
+   com.sun.security.auth.module.Krb5LoginModule required client=TRUE
+   principal="bjensen@EXAMPLE.COM" useKeyTab=true keyTab="/path/to/bjensen.keytab";
+   };
+  </pre><div lang="en" class="section"><div class="titlepage"><div><div><h3 class="title"><a name="kerberos-definitions"></a>15.5.1.&nbsp;Kerberos Definitions</h3></div></div></div><p>
+   The Windows Desktop authentication module uses Kerberos. The user presents a
+   Kerberos token to the ForgeRock product, through the Simple and Protected
+   GSS-API Negotiation Mechanism (SPNEGO) protocol. The Windows Desktop
+   authentication module enables desktop single sign on such that a user who has
+   already authenticated with a Kerberos Key Distribution Center can
+   authenticate without having to provide the login information again. Users
+   might need to set up Integrated Windows Authentication in Internet Explorer
+   to benefit from single sign on when logged on to a Windows desktop.
+  </p><p>
+   The Kerberos attributes shown may correspond to a <span class="command"><strong>ssoadm</strong></span>
+   attribute for OpenAM or a JSON attribute for OpenIDM.
+  </p><div class="variablelist"><dl class="variablelist"><dt><span class="term">Service Principal</span></dt><dd><p>Specify the Kerberos principal for authentication in the following
+     format.</p><pre class="literallayout">HTTP/<em class="replaceable"><code>host</code></em>.<em class="replaceable"><code>domain</code></em>@<em class="replaceable"><code>dc-domain-name</code></em></pre><p>Here, <em class="replaceable"><code>host</code></em> and
+     <em class="replaceable"><code>domain</code></em> correspond to the host and domain names
+     of the installed ForgeRock product, and
+     <em class="replaceable"><code>dc-domain-name</code></em> is the domain name of the Windows
+     Kerberos domain controller server. The
+     <em class="replaceable"><code>dc-domain-name</code></em> can differ from the domain
+     name for the installed ForgeRock product.</p><p>You set up the account on the Windows domain controller, creating
+     a computer account for the installed ForgeRock product and associating the
+     new account with a service provider name.</p><p>
+     <span class="command"><strong>ssoadm</strong></span> attribute:
+     <code class="literal">iplanet-am-auth-windowsdesktopsso-principal-name</code>
+    </p><p>
+     JSON attribute: <code class="literal">servicePrincipal</code>
+    </p></dd><dt><span class="term">Keytab File Name</span></dt><dd><p>Specify the full path of the keytab file for the Service Principal.
+     You generate the keytab file using the Windows <span class="command"><strong>ktpass</strong></span>
+     utility.</p><p><span class="command"><strong>ssoadm</strong></span> attribute:
+     <code class="literal">iplanet-am-auth-windowsdesktopsso-keytab-file</code>
+    </p><p>
+     JSON attribute: <code class="literal">keytabFileName</code>
+    </p></dd><dt><span class="term">Kerberos Realm</span></dt><dd><p>Specify the Kerberos Key Distribution Center realm. For the
+     Windows Kerberos service this is the domain controller server domain
+     name.</p><p>
+     <span class="command"><strong>ssoadm</strong></span> attribute:
+     <code class="literal">iplanet-am-auth-windowsdesktopsso-kerberos-realm</code>
+    </p><p>
+     JSON attribute: <code class="literal">kerberosRealm</code>
+    </p></dd><dt><span class="term">Kerberos Server Name</span></dt><dd><p>Specify the fully qualified domain name of the Kerberos Key
+     Distribution Center server, such as that of the domain controller
+     server.</p><p>
+     <span class="command"><strong>ssoadm</strong></span> attribute:
+     <code class="literal">iplanet-am-auth-windowsdesktopsso-kdc</code>
+    </p><p>
+     JSON attribute: <code class="literal">kerberosServerName</code>
+    </p></dd><dt><span class="term">Return Principal with Domain Name</span></dt><dd><p>
+     When enabled, OpenAM automatically returns the Kerberos principal
+     with the domain controller's domain name during authentication.
+    </p><p>
+     <span class="command"><strong>ssoadm</strong></span> attribute:
+     <code class="literal">iplanet-am-auth-windowsdesktopsso-returnRealm</code>
+    </p><p>
+     JSON attribute: <code class="literal">returnRealm</code>
+    </p></dd><dt><span class="term">Authentication Level</span></dt><dd><p>
+     Sets the authentication level used to indicate the level of security
+     associated with the module. The value can range from 0 to any positive
+     integer.
+    </p><p>
+     <span class="command"><strong>ssoadm</strong></span> attribute:
+     <code class="literal">iplanet-am-auth-windowsdesktopsso-auth-level</code>
+    </p><p>
+     JSON attribute: <code class="literal">authLevel</code>
+    </p></dd><dt><span class="term">Search for the user in the realm</span></dt><dd><p>Validates the user against the configured data stores. If the user from the
+     Kerberos token is not found, authentication will fail. If an authentication
+     chain is set, the user will be able to authenticate through another module.</p><p>
+     <span class="command"><strong>ssoadm</strong></span> attribute:
+     <code class="literal">iplanet-am-auth-windowsdesktopsso-lookupUserInRealm</code>
+    </p><p>
+     JSON attribute: <code class="literal">lookupUserInRealm</code>
+    </p></dd></dl></div><div class="note"><h3 class="title">Note</h3><p>
+   Note: For Windows 7 and later, you will need to disable the "Enable
+   Integrated Windows Authentication" option in Internet Explorer. In addition,
+   you will need to add and activate the DisableNTMLPreAuth key to the Windows
+   Registry. For detailed instructions, see the Microsoft KB article on when
+   <a class="link" href="http://support.microsoft.com/kb/251404" target="_blank">
+   <em class="citetitle">You cannot post data to a non-NTLM-authenticated Web
+   site</em></a>
+  </p></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="openidm-roles"></a>15.6.&nbsp;Roles and Authentication</h2></div></div></div><a class="indexterm" name="d0e15693"></a><a class="indexterm" name="d0e15698"></a><p>
    OpenIDM includes a number of default roles, and supports the configuration of
    managed roles, enabling you to customize the roles mechanism as needed.
   </p><div class="variablelist"><p>The following roles are configured by default:</p><dl class="variablelist"><dt><span class="term">openidm-reg</span></dt><dd><p>
@@ -538,8 +538,8 @@ org.identityconnectors.ldap.LdapConnector {
 }</pre><p>
     Access control for such users is configured in the
     <code class="filename">access.js</code> file. For more information, see
-    <a class="xref" href="chap-auth.html#openidm-authorization" title="15.6.&nbsp;Authorization">Section&nbsp;15.6, &#8220;Authorization&#8221;</a>.
-   </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="openidm-authorization"></a>15.6.&nbsp;Authorization</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-auth.html#router-authz-js">15.6.1. <code class="literal">router-authz.js</code></a></span></dt><dt><span class="section"><a href="chap-auth.html#access-js">15.6.2. <code class="literal">access.js</code></a></span></dt><dt><span class="section"><a href="chap-auth.html#roles-auth-prop">15.6.3. Properties for Authentication and Roles</a></span></dt><dt><span class="section"><a href="chap-auth.html#authorization-extending">15.6.4. Extending the Authorization Mechanism</a></span></dt></dl></div><a class="indexterm" name="d0e15813"></a><p>
+    <a class="xref" href="chap-auth.html#openidm-authorization" title="15.7.&nbsp;Authorization">Section&nbsp;15.7, &#8220;Authorization&#8221;</a>.
+   </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="openidm-authorization"></a>15.7.&nbsp;Authorization</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-auth.html#router-authz-js">15.7.1. <code class="literal">router-authz.js</code></a></span></dt><dt><span class="section"><a href="chap-auth.html#access-js">15.7.2. <code class="literal">access.js</code></a></span></dt><dt><span class="section"><a href="chap-auth.html#roles-auth-prop">15.7.3. Properties for Authentication and Roles</a></span></dt><dt><span class="section"><a href="chap-auth.html#authorization-extending">15.7.4. Extending the Authorization Mechanism</a></span></dt></dl></div><a class="indexterm" name="d0e15813"></a><p>
    OpenIDM provides role-based authorization that restricts direct HTTP access
    to REST interface URLs. The default authorization configuration grants
    different access rights to users that are assigned the roles
@@ -557,7 +557,7 @@ org.identityconnectors.ldap.LdapConnector {
    <code class="filename">router.json</code> file. The scripts either throw the string
    <code class="literal">Access denied</code>, or nothing. If
    <code class="literal">Access denied</code> is thrown, OpenIDM denies the request.
-  </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="router-authz-js"></a>15.6.1.&nbsp;<code class="literal">router-authz.js</code></h3></div></div></div><p>
+  </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="router-authz-js"></a>15.7.1.&nbsp;<code class="literal">router-authz.js</code></h3></div></div></div><p>
     This file provides the functions that enforce access rules. For example, the
     following function controls whether users with a certain role can start a
     specified process.
@@ -572,7 +572,7 @@ return isProcessOnUsersList(processDefinitionId);
     There are certain authorization-related functions in
     <code class="filename">router-authz.js</code> that should <span class="emphasis"><em>not</em></span> be
     altered, as described in a comment in the file.
-   </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="access-js"></a>15.6.2.&nbsp;<code class="literal">access.js</code></h3></div></div></div><p>
+   </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="access-js"></a>15.7.2.&nbsp;<code class="literal">access.js</code></h3></div></div></div><p>
     This file defines the access configuration for HTTP requests and
     references the methods defined in <code class="filename">router-authz.js</code>. Each 
     entry in the configuration contains a pattern to match against the incoming 
@@ -703,7 +703,7 @@ return isProcessOnUsersList(processDefinitionId);
      </p></li><li class="listitem"><p>
       <code class="literal">"excludePatterns"</code> - an optional parameter that enables
       you to specify particular endpoints to which access should not be given.
-     </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="roles-auth-prop"></a>15.6.3.&nbsp;Properties for Authentication and Roles</h3></div></div></div><p>
+     </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="roles-auth-prop"></a>15.7.3.&nbsp;Properties for Authentication and Roles</h3></div></div></div><p>
     The properties in this section define how users and groups may be associated
     with roles and certain authentication mechanisms. Some of these properties
     are included in the excerpt of the <code class="filename">authentication.json</code>
@@ -778,11 +778,11 @@ return isProcessOnUsersList(processDefinitionId);
       </p></dd><dt><span class="term"><code class="literal">enabled</code></span></dt><dd><p>
        Specifies whether the given authentication module is enabled
        (<code class="literal">true</code>) or disabled (<code class="literal">false</code>).
-      </p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="authorization-extending"></a>15.6.4.&nbsp;Extending the Authorization Mechanism</h3></div></div></div><p>
+      </p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="authorization-extending"></a>15.7.4.&nbsp;Extending the Authorization Mechanism</h3></div></div></div><p>
     You can extend the default authorization mechanism by defining additional
     functions in <code class="filename">router-authz.js</code> and by creating new access
     control configuration definitions in <code class="filename">access.js</code>.
-   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="user-group-role-auth-assignment"></a>15.7.&nbsp;Building Role-Based Access Control (RBAC)</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-auth.html#auth-security-context">15.7.1. Roles, Authentication, and the Security Context</a></span></dt></dl></div><p>
+   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="user-group-role-auth-assignment"></a>15.8.&nbsp;Building Role-Based Access Control (RBAC)</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-auth.html#auth-security-context">15.8.1. Roles, Authentication, and the Security Context</a></span></dt></dl></div><p>
    In OpenIDM, role assignments can be configured with different authentication
    options. Roles can be assigned in a number of ways. The roles assigned to
    specific users are cumulative.
@@ -793,14 +793,14 @@ return isProcessOnUsersList(processDefinitionId);
    roles configured for clients, for managed / internal users, as well as for
    group memberships.
   </p><p>
-   For information on the properties listed in this section, see <a class="xref" href="chap-auth.html#roles-auth-prop" title="15.6.3.&nbsp;Properties for Authentication and Roles">Section&nbsp;15.6.3, &#8220;Properties for Authentication and Roles&#8221;</a>.
+   For information on the properties listed in this section, see <a class="xref" href="chap-auth.html#roles-auth-prop" title="15.7.3.&nbsp;Properties for Authentication and Roles">Section&nbsp;15.7.3, &#8220;Properties for Authentication and Roles&#8221;</a>.
   </p><p>
    Roles and authentication options can be configured for users in three stages:
   </p><div class="variablelist"><dl class="variablelist"><dt><span class="term">Client Controlled</span></dt><dd><p>
       The <code class="literal">defaultUserRoles</code> may be added to authentication
       modules configured in the applicable
       <code class="filename">authentication.json</code> file. Default roles are listed in
-      <a class="xref" href="chap-auth.html#openidm-roles" title="15.5.&nbsp;Roles and Authentication">Section&nbsp;15.5, &#8220;Roles and Authentication&#8221;</a>.
+      <a class="xref" href="chap-auth.html#openidm-roles" title="15.6.&nbsp;Roles and Authentication">Section&nbsp;15.6, &#8220;Roles and Authentication&#8221;</a>.
      </p><p>
       If you see the following entry in <code class="filename">authentication.json</code>,
       the cited authentication property applies to all authenticated users:
@@ -820,7 +820,7 @@ return isProcessOnUsersList(processDefinitionId);
       <code class="literal">context.security</code> map, based on the scripts in the
       <code class="filename">policy.js</code> file. Details require an extended
       discussion in the next section.
-     </p></dd></dl></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="auth-security-context"></a>15.7.1.&nbsp;Roles, Authentication, and the Security Context</h3></div></div></div><p>
+     </p></dd></dl></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="auth-security-context"></a>15.8.1.&nbsp;Roles, Authentication, and the Security Context</h3></div></div></div><p>
    The Security Context, written into the code as
    <code class="literal">context.security</code>, consists of a principal defined by the
    <code class="literal">authenticationId</code>, along with access control defined
@@ -834,10 +834,10 @@ return isProcessOnUsersList(processDefinitionId);
    The <code class="literal">authorizationId</code> includes two roles-related components,
    generated by OpenIDM:
   </p><div class="variablelist"><dl class="variablelist"><dt><span class="term">roles</span></dt><dd><p>
-      Discussed in <a class="xref" href="chap-auth.html#openidm-roles" title="15.5.&nbsp;Roles and Authentication">Section&nbsp;15.5, &#8220;Roles and Authentication&#8221;</a>
+      Discussed in <a class="xref" href="chap-auth.html#openidm-roles" title="15.6.&nbsp;Roles and Authentication">Section&nbsp;15.6, &#8220;Roles and Authentication&#8221;</a>
      </p></dd><dt><span class="term">component</span></dt><dd><p>
       Resources defined through properties defined in
-      <a class="xref" href="chap-auth.html#roles-auth-prop" title="15.6.3.&nbsp;Properties for Authentication and Roles">Section&nbsp;15.6.3, &#8220;Properties for Authentication and Roles&#8221;</a>. The <code class="literal">authorizationId</code>
+      <a class="xref" href="chap-auth.html#roles-auth-prop" title="15.7.3.&nbsp;Properties for Authentication and Roles">Section&nbsp;15.7.3, &#8220;Properties for Authentication and Roles&#8221;</a>. The <code class="literal">authorizationId</code>
       component is set to the value references in the
       <code class="literal">queryOnResource</code> property.
      </p></dd></dl></div></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-passwords.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-security.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;14.&nbsp;Managing Passwords&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;16.&nbsp;Securing &amp; Hardening OpenIDM</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10020&components=10164&issuetype=1">Log a documentation bug.</a></p></div>
