@@ -4,7 +4,7 @@
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
    <title>Appendix&nbsp;E.&nbsp;REST API Reference</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/css/shCore.css"><link rel="stylesheet" type="text/css" href="sh/css/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/css/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/js/shCore.js" type="text/javascript"></script><script src="sh/js/shBrushAci.js" type="text/javascript"></script><script src="sh/js/shBrushBash.js" type="text/javascript"></script><script src="sh/js/shBrushCsv.js" type="text/javascript"></script><script src="sh/js/shBrushHttp.js" type="text/javascript"></script><script src="sh/js/shBrushJava.js" type="text/javascript"></script><script src="sh/js/shBrushJScript.js" type="text/javascript"></script><script src="sh/js/shBrushLDIF.js" type="text/javascript"></script><script src="sh/js/shBrushPlain.js" type="text/javascript"></script><script src="sh/js/shBrushProperties.js" type="text/javascript"></script><script src="sh/js/shBrushXml.js" type="text/javascript"></script><script src="sh/js/shAll.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenIDM Integrator's Guide"><link rel="up" href="index.html" title="OpenIDM Integrator's Guide"><link rel="prev" href="appendix-synchronization.html" title="Appendix&nbsp;D.&nbsp;Synchronization Reference"><link rel="next" href="appendix-scripting.html" title="Appendix&nbsp;F.&nbsp;Scripting Reference"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
-</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Appendix&nbsp;E.&nbsp;REST API Reference</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="appendix-synchronization.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="appendix-scripting.html">Next</a></td></tr></table><hr></div><div lang="en" class="appendix"><div class="titlepage"><div><div><h1 class="title"><a name="appendix-rest"></a>Appendix&nbsp;E.&nbsp;REST API Reference</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="appendix-rest.html#rest-uri-scheme">E.1. URI Scheme</a></span></dt><dt><span class="section"><a href="appendix-rest.html#rest-object-identifier">E.2. Object Identifiers</a></span></dt><dt><span class="section"><a href="appendix-rest.html#rest-content-negotiation">E.3. Content Negotiation</a></span></dt><dt><span class="section"><a href="appendix-rest.html#rest-supported-operations">E.4. Supported Operations</a></span></dt><dt><span class="section"><a href="appendix-rest.html#rest-conditional-operations">E.5. Conditional Operations</a></span></dt><dt><span class="section"><a href="appendix-rest.html#rest-supported-methods">E.6. Supported Methods</a></span></dt><dt><span class="section"><a href="appendix-rest.html#sample-rest-commands">E.7. REST Endpoints and Sample Commands</a></span></dt><dt><span class="section"><a href="appendix-rest.html#http-status-codes">E.8. HTTP Status Codes</a></span></dt></dl></div><a class="indexterm" name="d0e24417"></a><a class="indexterm" name="d0e24422"></a><p>
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Appendix&nbsp;E.&nbsp;REST API Reference</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="appendix-synchronization.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="appendix-scripting.html">Next</a></td></tr></table><hr></div><div lang="en" class="appendix"><div class="titlepage"><div><div><h1 class="title"><a name="appendix-rest"></a>Appendix&nbsp;E.&nbsp;REST API Reference</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="appendix-rest.html#rest-uri-scheme">E.1. URI Scheme</a></span></dt><dt><span class="section"><a href="appendix-rest.html#rest-object-identifier">E.2. Object Identifiers</a></span></dt><dt><span class="section"><a href="appendix-rest.html#rest-content-negotiation">E.3. Content Negotiation</a></span></dt><dt><span class="section"><a href="appendix-rest.html#rest-supported-operations">E.4. Supported Operations</a></span></dt><dt><span class="section"><a href="appendix-rest.html#rest-conditional-operations">E.5. Conditional Operations</a></span></dt><dt><span class="section"><a href="appendix-rest.html#rest-supported-methods">E.6. Supported Methods</a></span></dt><dt><span class="section"><a href="appendix-rest.html#sample-rest-commands">E.7. REST Endpoints and Sample Commands</a></span></dt><dt><span class="section"><a href="appendix-rest.html#http-status-codes">E.8. HTTP Status Codes</a></span></dt></dl></div><a class="indexterm" name="d0e24507"></a><a class="indexterm" name="d0e24512"></a><p>
    Representational State Transfer (REST) is a software architecture style for
    exposing resources, using the technologies and protocols of the World Wide
    Web. REST describes how distributed data objects, or resources, can be
@@ -57,7 +57,7 @@
    configuration file:
   </p><pre class="brush: plain;">...
 "uidAttribute" : "entryUUID",
-... </pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="rest-object-identifier"></a>E.2.&nbsp;Object Identifiers</h2></div></div></div><a class="indexterm" name="d0e24542"></a><p>
+... </pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="rest-object-identifier"></a>E.2.&nbsp;Object Identifiers</h2></div></div></div><a class="indexterm" name="d0e24632"></a><p>
    Every managed and system object has an identifier (expressed as
    <em class="replaceable"><code>id</code></em> in the URI scheme) that is used to address the
    object through the REST API. The REST API allows for client-generated and
@@ -530,7 +530,7 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 89
 ...
 
-[JSON representation of error]</pre></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="sample-rest-commands"></a>E.7.&nbsp;REST Endpoints and Sample Commands</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="appendix-rest.html#rest-server-config">E.7.1. Managing the Server Configuration Over REST</a></span></dt><dt><span class="section"><a href="appendix-rest.html#managing-users-REST">E.7.2. Managing Users Over REST</a></span></dt><dt><span class="section"><a href="appendix-rest.html#managing-system-objects-REST">E.7.3. Managing System Objects Over Rest</a></span></dt><dt><span class="section"><a href="appendix-rest.html#managing-workflows-over-REST">E.7.4. Managing Workflows Over Rest</a></span></dt><dt><span class="section"><a href="appendix-rest.html#managing-scanned-REST">E.7.5. Managing Scanned Tasks Over REST</a></span></dt><dt><span class="section"><a href="appendix-rest.html#accessing-log-REST">E.7.6. Accessing Log Entries Over REST</a></span></dt><dt><span class="section"><a href="appendix-rest.html#recon-over-REST">E.7.7. Managing Reconciliation Operations Over REST</a></span></dt><dt><span class="section"><a href="appendix-rest.html#repo-REST">E.7.8. Managing the Repository over REST</a></span></dt></dl></div><p>
+[JSON representation of error]</pre></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="sample-rest-commands"></a>E.7.&nbsp;REST Endpoints and Sample Commands</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="appendix-rest.html#rest-server-config">E.7.1. Managing the Server Configuration Over REST</a></span></dt><dt><span class="section"><a href="appendix-rest.html#managing-users-REST">E.7.2. Managing Users Over REST</a></span></dt><dt><span class="section"><a href="appendix-rest.html#managing-system-objects-REST">E.7.3. Managing System Objects Over REST</a></span></dt><dt><span class="section"><a href="appendix-rest.html#managing-workflows-over-REST">E.7.4. Managing Workflows Over REST</a></span></dt><dt><span class="section"><a href="appendix-rest.html#managing-scanned-REST">E.7.5. Managing Scanned Tasks Over REST</a></span></dt><dt><span class="section"><a href="appendix-rest.html#accessing-log-REST">E.7.6. Accessing Log Entries Over REST</a></span></dt><dt><span class="section"><a href="appendix-rest.html#recon-over-REST">E.7.7. Managing Reconciliation Operations Over REST</a></span></dt><dt><span class="section"><a href="appendix-rest.html#repo-REST">E.7.8. Managing the Repository over REST</a></span></dt></dl></div><p>
     This section describes the OpenIDM REST endpoints and provides
     a number of sample commands that show the interaction with the REST
     interface.
@@ -658,7 +658,7 @@ Content-Length: 89
   "value":"1234567"
   }]' \
   "https://localhost:8443/openidm/managed/user?_action=patch&amp;_queryId=for-userName&amp;uid=<em><strong>id</strong></em>"</strong>
-   </pre></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="managing-system-objects-REST"></a>E.7.3.&nbsp;Managing System Objects Over Rest</h3></div></div></div><p>
+   </pre></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="managing-system-objects-REST"></a>E.7.3.&nbsp;Managing System Objects Over REST</h3></div></div></div><p>
     System objects, that is, objects that are stored in remote systems, are
     exposed under the <code class="literal">/openidm/system</code> context. OpenIDM
     provides access to system objects over REST, as listed in the following
@@ -732,13 +732,13 @@ Content-Length: 89
     "reason":"Internal Server Error",
     "message":"The uid attribute is not single value attribute."}</pre></div><p>
      The <code class="literal">patch</code> action is not supported on system objects.
-    </p></div><div class="example"><a name="d0e25584"></a><div class="example-title">Example&nbsp;E.1.&nbsp;Returning a list of the available connector configurations</div><div class="example-contents"><div class="screen"><pre>$ <strong>curl \
+    </p></div><div class="example"><a name="d0e25674"></a><div class="example-title">Example&nbsp;E.1.&nbsp;Returning a list of the available connector configurations</div><div class="example-contents"><div class="screen"><pre>$ <strong>curl \
  --cacert self-signed.crt \
  --header "Content-Type: application/json" \
  --header "X-OpenIDM-Username: openidm-admin" \
  --header "X-OpenIDM-Password: openidm-admin" \
  --request POST \
- "https://localhost:8443/openidm/system?_action=availableConnectors"</strong></pre></div></div></div><br class="example-break"><div class="example"><a name="d0e25591"></a><div class="example-title">Example&nbsp;E.2.&nbsp;Returning a list of remote systems, and their status</div><div class="example-contents"><div class="screen"><pre>$ <strong>curl \
+ "https://localhost:8443/openidm/system?_action=availableConnectors"</strong></pre></div></div></div><br class="example-break"><div class="example"><a name="d0e25681"></a><div class="example-title">Example&nbsp;E.2.&nbsp;Returning a list of remote systems, and their status</div><div class="example-contents"><div class="screen"><pre>$ <strong>curl \
  --cacert self-signed.crt \
  --header "Content-Type: application/json" \
  --header "X-OpenIDM-Username: openidm-admin" \
@@ -761,7 +761,7 @@ Content-Length: 89
     "enabled": true,
     "name": "ldap"
   }
-]</em></pre></div></div></div><br class="example-break"><div class="example"><a name="d0e25601"></a><div class="example-title">Example&nbsp;E.3.&nbsp;Two options for running a liveSync operation on a specified system object</div><div class="example-contents"><div class="screen"><pre>$ <strong>curl \
+]</em></pre></div></div></div><br class="example-break"><div class="example"><a name="d0e25691"></a><div class="example-title">Example&nbsp;E.3.&nbsp;Two options for running a liveSync operation on a specified system object</div><div class="example-contents"><div class="screen"><pre>$ <strong>curl \
  --cacert self-signed.crt \
  --header "Content-Type: application/json" \
  --header "X-OpenIDM-Username: openidm-admin" \
@@ -790,13 +790,13 @@ Content-Length: 89
     "nativeType": "integer",
     "syncToken": 0
   }
-}   </em></pre></div></div></div><br class="example-break"><div class="example"><a name="d0e25618"></a><div class="example-title">Example&nbsp;E.4.&nbsp;Running a script on a system object</div><div class="example-contents"><div class="screen"><pre>$ <strong>curl \
+}   </em></pre></div></div></div><br class="example-break"><div class="example"><a name="d0e25708"></a><div class="example-title">Example&nbsp;E.4.&nbsp;Running a script on a system object</div><div class="example-contents"><div class="screen"><pre>$ <strong>curl \
  --cacert self-signed.crt \
  --header "Content-Type: application/json" \
  --header "X-OpenIDM-Username: openidm-admin" \
  --header "X-OpenIDM-Password: openidm-admin" \
  --request POST \
- "https://localhost:8443/openidm/system/ldap/account?_action=script&amp;_scriptId=addUser"</strong></pre></div></div></div><br class="example-break"><div class="example"><a name="d0e25625"></a><div class="example-title">Example&nbsp;E.5.&nbsp;Authenticating to a system object</div><div class="example-contents"><div class="screen"><pre>$ <strong>curl \
+ "https://localhost:8443/openidm/system/ldap/account?_action=script&amp;_scriptId=addUser"</strong></pre></div></div></div><br class="example-break"><div class="example"><a name="d0e25715"></a><div class="example-title">Example&nbsp;E.5.&nbsp;Authenticating to a system object</div><div class="example-contents"><div class="screen"><pre>$ <strong>curl \
  --cacert self-signed.crt \
  --header "Content-Type: application/json" \
  --header "X-OpenIDM-Username: openidm-admin" \
@@ -805,7 +805,7 @@ Content-Length: 89
  "https://localhost:8443/openidm/system/ldap/account?_action=authenticate&amp;username=bjensen&amp;password=Passw0rd"</strong>
 <em>{
   "_id": "fc252fd9-b982-3ed6-b42a-c76d2546312c"
-}</em></pre></div></div></div><br class="example-break"><div class="example"><a name="d0e25635"></a><div class="example-title">Example&nbsp;E.6.&nbsp;Creating a new system object</div><div class="example-contents"><div class="screen"><pre>$ <strong>curl \
+}</em></pre></div></div></div><br class="example-break"><div class="example"><a name="d0e25725"></a><div class="example-title">Example&nbsp;E.6.&nbsp;Creating a new system object</div><div class="example-contents"><div class="screen"><pre>$ <strong>curl \
  --cacert self-signed.crt \
  --header "Content-Type: application/json" \
  --header "X-OpenIDM-Password: openidm-admin" \
@@ -831,7 +831,7 @@ Content-Length: 89
     "ldapGroups":[],
     "sn":"Smith",
     "_id":"07b46858-56eb-457c-b935-cfe6ddf769c7"
-}   </em></pre></div></div></div><br class="example-break"><div class="example"><a name="d0e25645"></a><div class="example-title">Example&nbsp;E.7.&nbsp;Renaming a system object</div><div class="example-contents"><p>
+}   </em></pre></div></div></div><br class="example-break"><div class="example"><a name="d0e25735"></a><div class="example-title">Example&nbsp;E.7.&nbsp;Renaming a system object</div><div class="example-contents"><p>
      You can rename a system object simply by supplying a new naming attribute
      value in a PUT request. The PUT request replaces the entire object. The
      naming attribute depends on the external resource.
@@ -867,7 +867,7 @@ Content-Length: 89
   "givenName":"James",
   "uid":"jimmysmith",
   "_id":"07b46858-56eb-457c-b935-cfe6ddf769c7"
-}</em>    </pre></div></div></div><br class="example-break"><div class="example"><a name="d0e25661"></a><div class="example-title">Example&nbsp;E.8.&nbsp;List the IDs associated with a specific system object</div><div class="example-contents"><div class="screen"><pre>$ <strong>curl \
+}</em>    </pre></div></div></div><br class="example-break"><div class="example"><a name="d0e25751"></a><div class="example-title">Example&nbsp;E.8.&nbsp;List the IDs associated with a specific system object</div><div class="example-contents"><div class="screen"><pre>$ <strong>curl \
  --cacert self-signed.crt \
  --header "Content-Type: application/json" \
  --header "X-OpenIDM-Password: openidm-admin" \
@@ -892,13 +892,14 @@ Content-Length: 89
            "_id": "07b46858-56eb-457c-b935-cfe6ddf769c7"
        }
   ]
-}</em></pre></div></div></div><br class="example-break"></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="managing-workflows-over-REST"></a>E.7.4.&nbsp;Managing Workflows Over Rest</h3></div></div></div><p>
+}</em></pre></div></div></div><br class="example-break"></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="managing-workflows-over-REST"></a>E.7.4.&nbsp;Managing Workflows Over REST</h3></div></div></div><p>
      Workflow objects are exposed under the <code class="literal">/openidm/workflow</code>
      context. OpenIDM provides access to the workflow module over REST, as listed
      in the following table.
-    </p><div class="informaltable"><table width="100%" border="0"><colgroup><col width="50%" class="c1"><col width="10%" class="c2"><col width="40%" class="c3"></colgroup><thead><tr><th>URI</th><th>HTTP Operation</th><th>Description</th></tr></thead><tbody><tr><td>/openidm/workflow/processdefinition</td><td>GET</td><td>Lists the defined workflow definitions</td></tr><tr><td>/openidm/workflow/processdefinition?_queryId=<em class="replaceable"><code>id</code></em></td><td>GET</td><td>Performs a filtered search for a process definition</td></tr><tr><td>/openidm/workflow/processdefinition/<em class="replaceable"><code>id</code></em></td><td>GET</td><td>Returns detailed information about the specified process definition</td></tr><tr><td>/openidm/workflow/processinstance?_queryId=query-all-ids</td><td>GET</td><td>Lists the running workflow process instances</td></tr><tr><td>/openidm/workflow/processinstance/<em class="replaceable"><code>id</code></em></td><td>GET</td><td>Provides detailed information of a running process instance</td></tr><tr><td>/openidm/workflow/taskdefinition</td><td>GET</td><td>Returns detailed information about the task definition</td></tr><tr><td>/openidm/workflow/taskinstance</td><td>GET</td><td>Returns detailed information about the task instance</td></tr><tr><td>/openidm/workflow/task?_queryId=query-all-ids</td><td>GET</td><td>Lists all active tasks</td></tr><tr><td>/openidm/workflow/task?_queryId=filteredQuery&amp;<em class="replaceable"><code>filter
-        </code></em></td><td>GET</td><td>Lists the tasks according to the specified filter</td></tr><tr><td>/openidm/workflow/task?_queryId=user-task-summary&amp;id=<em class="replaceable"><code>id
-        </code></em></td><td>GET</td><td>Lists the summary of tasks assigned to the specified user</td></tr><tr><td>/openidm/workflow/processinstance_action=create</td><td>POST</td><td>Start a new workflow. Parameters are included in the request body.</td></tr><tr><td>/openidm/workflow/task/<em class="replaceable"><code>id</code></em></td><td>PUT</td><td>Update task data</td></tr><tr><td>/openidm/workflow/processinstance/<em class="replaceable"><code>id</code></em></td><td>DELETE</td><td>Delete a process instance</td></tr><tr><td>/openidm/workflow/task/<em class="replaceable"><code>id</code></em>?_action=claim</td><td>POST</td><td>Claim or complete a task. Parameters are included in the request body.
+    </p><div class="informaltable"><table width="100%" border="0"><colgroup><col width="50%" class="c1"><col width="10%" class="c2"><col width="40%" class="c3"></colgroup><thead><tr><th>URI</th><th>HTTP Operation</th><th>Description</th></tr></thead><tbody><tr><td>/openidm/workflow/processdefinition?_queryId=<em class="replaceable"><code>id</code></em></td><td>GET</td><td>Lists workflow definitions based on filtering criteria</td></tr><tr><td>/openidm/workflow/processdefinition/<em class="replaceable"><code>id</code></em></td><td>GET</td><td>Returns detailed information about the specified process definition</td></tr><tr><td>/openidm/workflow/processinstance?_queryId=query-all-ids</td><td>GET</td><td>Lists the available running workflows, by IDs</td></tr><tr><td>/openidm/workflow/processinstance/<em class="replaceable"><code>id</code></em></td><td>GET</td><td>Provides detailed information of a running process instance</td></tr><tr><td>/openidm/workflow/processdefinition/<em class="replaceable"><code>id</code></em>/taskdefinition</td><td>GET</td><td>Returns detailed information about the task definition, when you
+         include an <em class="replaceable"><code>id</code></em> or a query for all IDs,
+         <code class="literal">?_queryId=query-all-ids</code></td></tr><tr><td>/openidm/workflow/taskinstance?_queryId=query-all-ids</td><td>GET</td><td>Lists all active tasks</td></tr><tr><td>/openidm/workflow/taskinstance?_queryId=filteredQuery&amp;<em class="replaceable"><code>filter
+        </code></em></td><td>GET</td><td>Lists the tasks according to the specified filter</td></tr><tr><td>/openidm/workflow/processinstance?_action=create</td><td>POST</td><td>Start a new workflow. Parameters are included in the request body.</td></tr><tr><td>/openidm/workflow/taskinstance/<em class="replaceable"><code>id</code></em></td><td>PUT</td><td>Update task data</td></tr><tr><td>/openidm/workflow/processinstance/<em class="replaceable"><code>id</code></em></td><td>DELETE</td><td>Stops a process instance</td></tr><tr><td>/openidm/workflow/taskinstance/<em class="replaceable"><code>id</code></em>?_action=claim</td><td>POST</td><td>Claim or complete a task. Parameters are included in the request body.
         Specifically for user tasks, a user can <span class="emphasis"><em>claim</em></span> a specific
         task, which will then be assigned to that user.</td></tr></tbody></table></div><p>The following examples list the defined workflows. For a workflow to
      appear in this list, the corresponding workflow definition must be in the
@@ -921,7 +922,7 @@ Content-Length: 89
      "remainingPagedResults" : -1
 }</pre></div><p>The following example invokes a workflow named "myWorkflow". The
      <code class="literal">foo</code> parameter is given the value <code class="literal">bar</code>
-     in the workflow invokation.</p><div class="screen"><pre>$ <strong>curl \
+     in the workflow invocation.</p><div class="screen"><pre>$ <strong>curl \
  --cacert self-signed.crt \
  --header "Content-Type: application/json" \
  --header "X-OpenIDM-Username: openidm-admin" \

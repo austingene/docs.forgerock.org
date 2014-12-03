@@ -381,11 +381,20 @@
  --header "Content-Type: application/json" \
  --request POST \
  "https://localhost:8443/openidm/system/ldap?_action=liveSync"</strong></pre></div><div class="note"><h3 class="title">Note</h3><p>
-     The <code class="literal">__ALL__</code> object type requires the use of time stamps
-     to ensure that changes are processed in the correct order. For the
-     <a class="xref" href="chap-resource-conf.html#ldap-connector" title="11.5.2.&nbsp;Generic LDAP Connector">Section&nbsp;11.5.2, &#8220;Generic LDAP Connector&#8221;</a>, you must set
-     <code class="literal">useTimestampsForSync</code> to true, to make use of this
-     object type.
+     The use of the <code class="literal">__ALL__</code> object type requires a mechanism
+     to ensure the order in which synchronization changes are processed. Servers
+     that use the <code class="literal">cn=changelog</code> mechanism to order sync
+     changes (such as OpenDJ, Oracle DSEE and the legacy Sun Directory Server)
+     cannot use the <code class="literal">__ALL__</code> object type by default, and must
+     be forced to use time stamps to order their sync changes. For these LDAP
+     server types, set <code class="literal">useTimestampsForSync</code> to
+     <code class="literal">true</code> in the provisioner configuration.
+    </p><p>
+     LDAP servers that use timestamps by default (such as Active Directory GCs
+     and OpenLDAP) can use the <code class="literal">__ALL__</code> object type without
+     any additional configuration. Active Directory and Active Directory LDS,
+     which use Update Sequence Numbers, can also use the
+     <code class="literal">__ALL__</code> object type without additional configuration.
     </p></div><dl class="variablelist"><dt><span class="term">Object Level Extensions</span></dt><dd><div class="variablelist"><dl class="variablelist"><dt><span class="term">nativeType</span></dt><dd><p>string, optional</p><p>
          The native OpenICF object type.
         </p><p>
@@ -920,7 +929,7 @@ connectorserver.key=xOS4IeeE6eb/AhMbhxZEC37PgtE\=</pre></li><li class="step"><p>
      This sample demonstrates reconciliation of users stored in an XML file on a
      remote machine. The remote Java Connector Server enables OpenIDM to
      synchronize the internal OpenIDM repository with the remote XML repository.
-    </p><h5><a name="d0e8171"></a>Before You Start</h5><p>
+    </p><h5><a name="d0e8186"></a>Before You Start</h5><p>
      This sample assumes that a remote Java Connector Server is installed and
      running on a host named <code class="literal">remote-host</code>. For instructions on
      setting up the remote Java Connector Server, see
@@ -944,7 +953,7 @@ connectorserver.key=xOS4IeeE6eb/AhMbhxZEC37PgtE\=</pre></li><li class="step"><p>
     </p><div class="screen"><pre><strong>$ cd path/to/openidm
  $ scp connectors/xml-connector-1.4.0.0.jar testuser@remote-host:/path/to/openicf/bundles</strong>
  <em>testuser@172.16.203.97's password:
- xml-connector-1.4.0.0.jar                100% 4379KB   4.3MB/s   00:00</em></pre></div><div class="procedure"><a name="d0e8204"></a><div class="procedure-title">Procedure&nbsp;11.7.&nbsp;Configuring OpenIDM for the XML Connector Example</div><p>
+ xml-connector-1.4.0.0.jar                100% 4379KB   4.3MB/s   00:00</em></pre></div><div class="procedure"><a name="d0e8219"></a><div class="procedure-title">Procedure&nbsp;11.7.&nbsp;Configuring OpenIDM for the XML Connector Example</div><p>
       This example uses the configuration of Sample 1, which is effectively
       your OpenIDM project location. Any configuration changes that you make
       must therefore be made in the <code class="literal">conf</code> directory of
@@ -1264,7 +1273,7 @@ javax.net.ssl.trustStore=/path/to/openidm/security/truststore
     .NET Connector Server is installed, configured and started, and that OpenIDM
     has been configured to use the Connector Server. For more information, see
     <a class="xref" href="chap-resource-conf.html#install-.net-connector" title="11.4.1.&nbsp;Installing and Configuring a .NET Connector Server">Section&nbsp;11.4.1, &#8220;Installing and Configuring a .NET Connector Server&#8221;</a>.
-   </p><div class="procedure"><a name="d0e8731"></a><div class="procedure-title">Procedure&nbsp;11.8.&nbsp;Setting Up the Active Directory Connector</div><ol class="procedure" type="1"><li class="step"><p>
+   </p><div class="procedure"><a name="d0e8746"></a><div class="procedure-title">Procedure&nbsp;11.8.&nbsp;Setting Up the Active Directory Connector</div><ol class="procedure" type="1"><li class="step"><p>
       Download the Active Directory Connector from the OpenIDM download
       page under the ForgeRock <a class="link" href="http://forgerock.com/download-stack/" target="_blank">Open Stack download page</a>.
       </p></li><li class="step"><p>
@@ -1769,12 +1778,12 @@ Properties:
     (<code class="filename">mspowershell-connector-1.4.1.0.zip</code>) and extract the
     <code class="filename">MsPowerShell.Connector.dll</code> to the same folder in which
     the Connector Server(<code class="filename">connectorserver.exe</code>) is located.
-    The <a class="link" href="http://www.forgerock.com/download-stack/" target="_blank">Enterprise
-    Download</a> of OpenIDM includes sample connectors and scripts that will
+    <a class="link" href="http://www.forgerock.com/download-stack/" target="_blank">OpenIDM
+     Enterprise</a> includes sample connectors and scripts that will
     enable you to get started with this toolkit.
    </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="salesforce-connector"></a>11.5.9.&nbsp;Salesforce Connector</h3></div></div></div><p>
-    The <a class="link" href="http://www.forgerock.com/download-stack/" target="_blank">Enterprise
-    Download</a> of OpenIDM includes a Salesforce connector, along with a
+    <a class="link" href="http://www.forgerock.com/download-stack/" target="_blank">OpenIDM
+     Enterprise</a> includes a Salesforce connector, along with a
     sample connector configuration. The Salesforce connector enables
     provisioning, reconciliation, and synchronization between Salesforce and the
     OpenIDM repository.
@@ -1788,18 +1797,68 @@ Properties:
     Salesforce With the Salesforce Connector</em></a> in the
     <span class="emphasis"><em>Installation Guide</em></span>.
    </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="google-apps-connector"></a>11.5.10.&nbsp;Google Apps Connector</h3></div></div></div><p>
-    The <a class="link" href="http://www.forgerock.com/download-stack/" target="_blank">Enterprise
-    Download</a> of OpenIDM includes a Google Apps connector, along with a
+    <a class="link" href="http://www.forgerock.com/download-stack/" target="_blank">OpenIDM
+     Enterprise</a> includes a Google Apps connector, along with a
     sample connector configuration. The Google Apps Connector enables you to
     interact with Google's web applications.
    </p><p>
     To use this connector, you need a Google Apps account.
    </p><p>
-    For additional instructions, and a sample Google Apps configuration, see
+    If you have OpenIDM Enterprise, you can view a sample
+    Google Apps connector configuration file in
+    <code class="filename">samples/provisioners/provisioner.openicf-google.json</code>
+   </p><p>
+    The following is an excerpt of the provisioner configuration file. This
+    example shows an excerpt of the provisioner configuration. The
+    default location of the connector .jar is
+    <code class="filename">openidm/connectors</code>. Therefore the value of the
+    <code class="literal">connectorHostRef</code> property must be
+    <code class="literal">"#LOCAL"</code>.
+   </p><pre class="brush: javascript;">
+{
+    "connectorHostRef": "#LOCAL",
+    "connectorName": "org.forgerock.openicf.connectors.googleapps.GoogleAppsConnector",
+    "bundleName": "org.forgerock.openicf.connectors.googleapps-connector",
+    "bundleVersion": "[1.4.0.0,2.0.0.0)"
+}, </pre><p>
+    The following excerpt shows required configuration properties.
+   </p><pre class="brush: javascript;">
+"configurationProperties": {
+    "domain": "",
+    "clientId": "",
+    "clientSecret": null,
+    "refreshToken": null
+}, </pre><p>
+    These configuration properties are fairly straightforward.
+   </p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">domain</code></span></dt><dd><p>
+       Set to the domain name for OAuth 2-based authorization.
+      </p></dd><dt><span class="term"><code class="literal">clientId</code></span></dt><dd><p>
+       A client identifier, as issued by the OAuth 2 authorization server. For
+       more information, see the following section of RFC 6749:
+       <a class="link" href="http://tools.ietf.org/html/rfc6749#section-2.2" target="_blank">
+       <em class="citetitle">Client Identifier</em></a>.
+      </p></dd><dt><span class="term"><code class="literal">clientSecret</code></span></dt><dd><p>
+       Sometimes also known as the client password. OAuth 2 authorization
+       servers can support the use of <code class="literal">clientId</code> and
+       <code class="literal">clientSecret</code> credentials, as noted in the following
+       section of RFC 6749: <a class="link" href="http://tools.ietf.org/html/rfc6749#section-2.3.1" target="_blank">
+       <em class="citetitle">Client Password</em></a>.
+      </p></dd><dt><span class="term">refreshToken</span></dt><dd><p>
+       A client can use an OAuth 2 refresh token to continue accessing
+       resources. For more information, see the following section of RFC 6749:
+       <a class="link" href="http://tools.ietf.org/html/rfc6749#section-10.4" target="_blank">
+        <em class="citetitle">Refresh Tokens</em></a>.
+      </p></dd></dl></div><p>
+    The following section in the <span class="emphasis"><em>Installation Guide</em></span>,
     <a href="../../install-guide/index/chap-samples.html#sample-google-connector" class="link"><em class="citetitle">Connecting to
-    Google With the Google Apps Connector</em></a> in the
-    <span class="emphasis"><em>Installation Guide</em></span>.
-   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="connector-wiz"></a>11.6.&nbsp;Creating Default Connector Configurations</h2></div></div></div><a class="indexterm" name="d0e9298"></a><p>
+    Google With the Google Apps Connector</em></a>, includes a Google
+    Apps configuration, including example OAuth 2-based entries for
+    <code class="literal">configurationProperties</code>.
+   </p><p>
+    For a description of all configurable properties for this connector, see
+    the <a class="link" href="http://openicf.forgerock.org/doc/config-reference/index.html" target="_blank">OpenICF
+    Connector Configuration Reference</a>.
+   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="connector-wiz"></a>11.6.&nbsp;Creating Default Connector Configurations</h2></div></div></div><a class="indexterm" name="d0e9394"></a><p>
    Rather than creating provisioner files by hand, use the service that OpenIDM
    exposes through the REST interface to create basic connector configuration
    files, or use the <span class="command"><strong>cli.sh</strong></span> or <span class="command"><strong>cli.bat</strong></span>
@@ -1831,7 +1890,7 @@ Properties:
    </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>CSV File Connector</p></li><li class="listitem"><p>Database Table Connector</p></li><li class="listitem"><p>
      Scripted Groovy Connector Toolkit, which includes the following
      sample implementations:
-    </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>Scripted SQL Connector</p></li><li class="listitem"><p>Scripted CREST Connector</p></li><li class="listitem"><p>Scripted REST Connector</p></li></ul></div></li><li class="listitem"><p>LDAP Connector</p></li><li class="listitem"><p>XML Connector</p></li><li class="listitem"><p>GoogleApps Connector (Enterprise download only)</p></li><li class="listitem"><p>Salesforce Connector (Enterprise download only)</p></li></ul></div><p>
+    </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>Scripted SQL Connector</p></li><li class="listitem"><p>Scripted CREST Connector</p></li><li class="listitem"><p>Scripted REST Connector</p></li></ul></div></li><li class="listitem"><p>LDAP Connector</p></li><li class="listitem"><p>XML Connector</p></li><li class="listitem"><p>GoogleApps Connector (OpenIDM Enterprise only)</p></li><li class="listitem"><p>Salesforce Connector (OpenIDM Enterprise only)</p></li></ul></div><p>
    The preceding command therefore returns the following output:
   </p><pre class="brush: javascript;">{
   "connectorRef": [

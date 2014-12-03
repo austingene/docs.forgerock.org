@@ -2341,7 +2341,7 @@ $ ./startup.sh -p samples/scriptedcrest2dj/</strong></pre></div></li><li class="
     </p><div class="procedure"><ol class="procedure" type="1"><li class="step"><p>
        Start OpenIDM with the configuration for the scripted Azure sample.
       </p><div class="screen"><pre><strong>$ cd /path/to/openidm
- $ ./startup.sh -p samples/scriptedazure/</strong></pre></div></li><li class="step"><p>
+$ ./startup.sh -p samples/scriptedazure/</strong></pre></div></li><li class="step"><p>
        Check the connector configuration. Obtain its status over REST.
       </p><div class="screen"><pre>$ <strong>curl \
  --cacert self-signed.crt \
@@ -2527,10 +2527,8 @@ $ ./startup.sh -p samples/scriptedcrest2dj/</strong></pre></div></li><li class="
  --request DELETE \
  "https://localhost:8443/openidm/system/scriptedazure/User/744aa30f-55e0-4559-b956-985b77d80814"
       </strong>
-      <em>
- {
+<em>{
    "_id": "744aa30f-55e0-4559-b956-985b77d80814"
- }
 }</em>
       </pre></div></li><li class="step"><p>
        Delete the group created earlier.
@@ -2542,10 +2540,9 @@ $ ./startup.sh -p samples/scriptedcrest2dj/</strong></pre></div></li><li class="
  --request DELETE \
  "https://localhost:8443/openidm/system/scriptedazure/Group/ab347420f-4e8e-f045-a437b62c0f3-636e"
       </strong>
-      <em>
- {
+<em>{
    "_id": "ab347420f-4e8e-f045-a437b62c0f3-636e"
- }</em></pre></div></li></ol></div></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="samples-powershell"></a>3.8.&nbsp;Sample - Using the PowerShell Connector Toolkit to Create Scripted Connectors</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-samples.html#powershell-setup">3.8.1. Setting Up the PowerShell Sample</a></span></dt><dt><span class="section"><a href="chap-samples.html#powershell-test">3.8.2. Testing the PowerShell Sample</a></span></dt></dl></div><p>
+}</em></pre></div></li></ol></div></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="samples-powershell"></a>3.8.&nbsp;Sample - Using the PowerShell Connector Toolkit to Create Scripted Connectors</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-samples.html#powershell-setup">3.8.1. Setting Up the PowerShell Sample</a></span></dt><dt><span class="section"><a href="chap-samples.html#powershell-test">3.8.2. Testing the PowerShell Sample</a></span></dt></dl></div><p>
    OpenICF 1.4 introduces a generic PowerShell Connector Toolkit that enables
    you to run PowerShell scripts on any external resource.
   </p><p>
@@ -3955,7 +3952,7 @@ $ ./startup.sh -p samples/sample9</strong></pre></div></div><div class="section"
    <code class="literal">openidm.example.com</code>. It configures OpenAM and OpenDJ on
    a separate second system, with a URL of <code class="literal">openam.example.com</code>.
   </p><div class="note"><h3 class="title">Note</h3><p>
-    This sample assumes that you have deployed OpenAM 12-SNAPSHOT.
+    This sample assumes that you have deployed OpenAM 12.
    </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="prepare-sample-openam"></a>3.16.1.&nbsp;Prepare the Sample</h3></div></div></div><p>
     Before installing OpenIDM, you need to prepare your systems. To set up this
     sample, you need to take the following basic steps:
@@ -4333,8 +4330,8 @@ $ ./startup.sh -p samples/audit-sample</pre></div></div><div class="section"><di
    enables you to interact with Google's web applications.
   </p><div class="note"><h3 class="title">Note</h3><p>
     The Google Apps Connector, and this corresponding sample, are provided only
-    with the <a class="link" href="http://www.forgerock.com/download-stack/" target="_blank">Enterprise
-    Download</a> of OpenIDM.
+    with <a class="link" href="http://www.forgerock.com/download-stack/" target="_blank">OpenIDM
+    Enterprise</a>.
    </p></div><p>
    This sample demonstrates the creation of users and groups on an external
    Google system, using OpenIDM's REST interface.
@@ -4376,7 +4373,7 @@ $ ./startup.sh -p samples/audit-sample</pre></div></div><div class="section"><di
       command on the <code class="filename">client_secrets.json</code> file that you
       obtained earlier in this procedure.
      </p><div class="screen"><pre><strong>$ cd admin/
-$ java -jar googleapps-connector-1.4.0.0-SNAPSHOT.jar /path/to/client_secrets.json</strong>
+$ java -jar googleapps-connector-1.4.0.0.jar /path/to/client_secrets.json</strong>
 <em>Please open the following address in your browser:
 https://accounts.google.com/o/oauth2/auth?
 access_type=offline
@@ -4418,7 +4415,7 @@ Using OPENIDM_HOME:   /path/to/openidm
 Using OPENIDM_OPTS:   -Xmx1024m -Xms1024m
 Using LOGGING_CONFIG: -Djava.util.logging.config.file=/path/to/openidm/conf/logging.properties
 Using boot properties at /path/to/openidm/samples/google-connector/conf/boot/boot.properties
-OpenIDM version "3.1.0-SNAPSHOT" (revision: 0) null null
+OpenIDM version "3.1.0" (revision: 0) null null
 -&gt; OpenIDM ready</em>
      </pre></div></li><li class="step"><p>
       To verify the connector configuration, check the status of the Google Apps
@@ -4658,8 +4655,8 @@ OpenIDM version "3.1.0-SNAPSHOT" (revision: 0) null null
    separate OpenIDM module, based on the ForgeRock Common Resource API.
   </p><div class="note"><h3 class="title">Note</h3><p>
     The Salesforce Connector, and this corresponding sample, are provided only
-    with the <a class="link" href="http://www.forgerock.com/download-stack/" target="_blank">Enterprise
-    Download</a> of OpenIDM.
+    with <a class="link" href="http://www.forgerock.com/download-stack/" target="_blank">OpenIDM
+    Enterprise</a>.
    </p></div><p>
    This sample demonstrates the creation and update of users from OpenIDM to
    Salesforce, and from Salesforce to OpenIDM. You can use either the Admin UI,
@@ -4759,25 +4756,30 @@ $ ./startup.sh -p samples/salesforce-connector</pre></div></div><div class="sect
       Enable the Salesforce connector by completing the authentication details
       as follows. You will need the Consumer Key and Consumer Secret that you
       obtained in the previous section.
-     </p><ol type="a" class="substeps"><li class="step"><p>
+     </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
         Click on the Salesforce connector to open the Edit Connector dialog.
-       </p></li><li class="step"><p>
+       </p></li><li class="listitem"><p>
         Select True from the Enabled list.
-       </p></li><li class="step"><p>
+       </p></li><li class="listitem"><p>
         Select Salesforce Connector from the Connector Type list.
-       </p></li><li class="step"><p>
+       </p></li><li class="listitem"><p>
         Under Basic Connector Details select the Sandbox URL (for the purposes
         of testing the sample) and enter the Connector Key and Secret that you
         obtained in the previous section.
-       </p></li><li class="step"><p>
+       </p></li><li class="listitem"><p>
         You can leave the default LiveSync details for now. Click Update to
         update the connector configuration.
-       </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/edit-sf-connector.png" align="middle" height="360" alt="Editing the Salesforce connector"></td></tr></table></div></li><li class="step"><p>
+       </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/edit-sf-connector.png" align="middle" height="360" alt="Editing the Salesforce connector"></td></tr></table></div></li><li class="listitem"><p>
         On the permission request screen click Allow, to enable OpenIDM to
         access your Salesforce Connected App.
-       </p><p>
+       </p><div class="note"><h3 class="title">Note</h3><p>
+         In the current OpenIDM release, an issue is occasionally seen where the
+         system appears to time out while retrieving the refresh token from
+         Salesforce, at this stage. If this happens, refresh your browser and
+         attempt the connector setup again.
+        </p></div><p>
         On the Resources tab, your Salesforce Connector should now be Active.
-       </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/active-sf-connector.png" align="middle" height="360" alt="Salesforce connector now active"></td></tr></table></div></li></ol></li><li class="step"><p>
+       </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/active-sf-connector.png" align="middle" height="360" alt="Salesforce connector now active"></td></tr></table></div></li></ul></div></li><li class="step"><p>
       To test the reconciliation process, select the Mappings tab.
      </p><p>
       This tab shows two configured mappings, one from Salesforce to the OpenIDM
@@ -4811,7 +4813,7 @@ $ ./startup.sh -p samples/salesforce-connector</pre></div></div><div class="sect
       the corresponding user record in Salesforce.
      </p><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/salesforce-bjensen.png" align="middle" height="360" alt="User details for a specific user"></td></tr></table></div></li><li class="step"><p>
       To test the second mapping (from OpenIDM to Salesforce), update any user
-      in the OpenIDM repository.
+      in the OpenIDM repository. For example, update Babs Jensen's username.
      </p></li><li class="step"><p>
       By default, <span class="emphasis"><em>implicit synchronization</em></span> is enabled for
       mappings <span class="emphasis"><em>from</em></span> the <code class="literal">managed/user</code>
@@ -4820,13 +4822,13 @@ $ ./startup.sh -p samples/salesforce-connector</pre></div></div><div class="sect
       <code class="filename">sync.json</code> file that have the managed object as the
       source are automatically executed to update the target system. For more
       information, see <a href="../../integrators-guide/index/chap-synchronization.html#synchronization-mappings-file" class="link"><em class="citetitle">Synchronization
-      Mappings File</em></a> in the <em class="citetitle">Integrator's
-      Guide</em>.
+      Mappings File</em></a> in the <span class="emphasis"><em>Integrator's
+      Guide</em></span>.
      </p><p>
       To test that the implicit synchronization has been successful, look at
-      Steven Carter's record in the User View UI. At the bottom of the user
-      profile, the Linked Systems panel indicates Steven Carter's record in the
-      Salesforce data store. Note the changed telephone number.
+      Babs Jensen's record in the User View UI. At the bottom of the user
+      profile, the Linked Systems panel indicates Babs Jensen's record in the
+      Salesforce data store. Note the changed Username.
      </p><p>
       Alternatively, check the updated user record in Salesforce.
      </p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="salesforce-sample-cli"></a>3.19.4.&nbsp;Running the Sample by Using the Command Line</h3></div></div></div><p>
@@ -4834,7 +4836,7 @@ $ ./startup.sh -p samples/salesforce-connector</pre></div></div><div class="sect
     section breaks the sample into two tasks - configuring the connector, and
     then testing the configuration by running reconciliation operations between
     the two systems.
-   </p><div class="procedure"><a name="d0e6443"></a><div class="procedure-title">Procedure&nbsp;3.10.&nbsp;To Set Up the Salesforce Connector</div><p>
+   </p><div class="procedure"><a name="d0e6446"></a><div class="procedure-title">Procedure&nbsp;3.10.&nbsp;To Set Up the Salesforce Connector</div><p>
     Before you start, you will need the Consumer Key and Consumer Secret that
     you obtained in the previous section.
    </p><ol class="procedure" type="1"><li class="step"><p>
@@ -4844,7 +4846,7 @@ $ ./startup.sh -p samples/salesforce-connector</pre></div></div><div class="sect
       substitute the appropriate hostname and port number in the value of the
       <code class="literal">redirect_uri</code> parameter.
      </p><p>
-<a class="link" href="https://login.salesforce.com/services/oauth2/authorize?response_type=code&amp;client_id=CLIENT_ID&amp;redirect_uri=https://localhost:8443/admin/oauth2&amp;scope=id%20api%20refresh_token" target="_blank">https://login.salesforce.com/services/oauth2/authorize?response_type=code&amp;client_id=CLIENT_ID&amp;redirect_uri=https://localhost:8443/admin/oauth2&amp;scope=id%20api%20refresh_token</a>
+<a class="link" href="https://login.salesforce.com/services/oauth2/authorize?response_type=code&amp;client_id=CLIENT_ID&amp;redirect_uri=https://localhost:8443/admin/oauth.html&amp;scope=id%20api%20refresh_token" target="_blank">https://login.salesforce.com/services/oauth2/authorize?response_type=code&amp;client_id=CLIENT_ID&amp;redirect_uri=https://localhost:8443/admin/oauth.html&amp;scope=id%20api%20refresh_token</a>
      </p></li><li class="step"><p>
       You are redirected to Salesforce, and prompted to give this application
       access to your Salesforce account. When you have given consent, you should
@@ -4889,11 +4891,12 @@ $ ./startup.sh -p samples/salesforce-connector</pre></div></div><div class="sect
       to include your Consumer Key (<code class="literal">clientID</code>), Consumer
       Secret (<code class="literal">clientSecret</code>), and refresh token.
      </p><p>
-      In addition, set the <code class="literal">"enabled"</code> property in the
-      connector configuration file to <code class="literal">true</code>.
+      In addition, set the <code class="literal">"instanceUrl"</code> to the value
+      returned in the previous step, and set the <code class="literal">"enabled"</code>
+      property to <code class="literal">true</code>.
      </p><p>
       The relevant excerpts of the <code class="filename">provisioner.salesforce-salesforce.json</code>
-      file follows:
+      file are as follows:
      </p><pre class="brush: plain;">{
     "name" : "salesforce",
     "enabled" : true,
@@ -4906,7 +4909,7 @@ $ ./startup.sh -p samples/salesforce-connector</pre></div></div><div class="sect
         "refreshToken" : "5Aep861KIwKdekr90I4iHdtDgWwRoG7O_6uHrgJ.yVtMS0UaGxRqE6WFM77W7wCV4muVMgdqKjuWI2i5S6sjN2X",
         "clientSecret" : "4850xxxxxxxxxxxxx425",
         "clientId" : "3MVG98dostKihXN7Is8Q0g5q1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxPdB5f5ATwmaMuWxl",
-        "instanceUrl" : null,
+        "instanceUrl" : "https://example-com.cs1.my.salesforce.com",
         "version" : 29
     }
 ... </pre></li><li class="step"><p>
@@ -4945,7 +4948,7 @@ $ ./startup.sh -p samples/salesforce-connector</pre></div></div><div class="sect
     "name": "salesforce"
   }
 ]</em>
-     </pre></div></li></ol></div><div class="procedure"><a name="d0e6547"></a><div class="procedure-title">Procedure&nbsp;3.11.&nbsp;To Run Reconciliation by Using the Command Line</div><p>
+     </pre></div></li></ol></div><div class="procedure"><a name="d0e6553"></a><div class="procedure-title">Procedure&nbsp;3.11.&nbsp;To Run Reconciliation by Using the Command Line</div><p>
      The mapping configuration file (<code class="filename">sync.json</code>) for this
      sample includes two mappings, <code class="literal">sourceSalesforceUser_managedUser</code>,
      which synchronizes users from the Salesforce with the OpenIDM repository,
