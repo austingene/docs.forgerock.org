@@ -2627,6 +2627,31 @@ C:\&gt;</em></pre></div></li><li class="step"><p>
       from the samples directory to your <code class="literal">conf</code> directory.
      </p><div class="screen"><pre>$ <strong>cd /path/to/openidm</strong>
 $ <strong>cp samples/provisioners/provisioner.openicf-adpowershell.json conf/</strong></pre></div><p>
+      The following excerpt of the sample connector configuration shows the
+      configuration properties:
+     </p><pre class="brush: plain;">  "configurationProperties" : {
+    "AuthenticateScriptFileName" : "C:/openidm/samples/powershell2AD/tools/ADAuthenticate.ps1",
+    "CreateScriptFileName" : "C:/openidm/samples/powershell2AD/tools/ADCreate.ps1",
+    "DeleteScriptFileName" : "C:/openidm/samples/powershell2AD/tools/ADDelete.ps1",
+    "ResolveUsernameScriptFileName" : "C:/openidm/samples/powershell2AD/tools/ADResolveUsername.ps1",
+    "SchemaScriptFileName" : "C:/openidm/samples/powershell2AD/tools/ADSchema.ps1",
+    "SearchScriptFileName" : "C:/openidm/samples/powershell2AD/tools/ADSearch.ps1",
+    "SyncScriptFileName" : "C:/openidm/samples/powershell2AD/tools/ADSync.ps1",
+    "TestScriptFileName" : "C:/openidm/samples/powershell2AD/tools/ADTest.ps1",
+    "UpdateScriptFileName" : "C:/openidm/samples/powershell2AD/tools/ADUpdate.ps1",
+    "VariablesPrefix" : "Connector",
+    "QueryFilterType" : "AdPsModule",
+    "ReloadScriptOnExecution" : true,
+    "UseInterpretersPool" : true,
+    "SubstituteUidAndNameInQueryFilter" : true,
+    "UidAttributeName" : "ObjectGUID",
+    "NameAttributeName" : "DistinguishedName",
+    "PsModulesToImport" : [ "ActiveDirectory" ],
+    "Host" : "",
+    "Port" : null,
+    "Login" : "",
+    "Password" : null
+  },</pre><p>
       The sample connector configuration assumes that the scripts are located in
       <code class="filename">C:/openidm/samples/powershell2AD/tools/</code>. If you
       copied your scripts to a different location, adjust your connector
@@ -2636,17 +2661,25 @@ $ <strong>cp samples/provisioners/provisioner.openicf-adpowershell.json conf/</s
       characters and not the backslash characters that you would expect in a
       Windows path.
      </p><p>
-      In addition, make sure that the value of the
-      <code class="literal">"connectorHostRef"</code> property in the connector
-      configuration file matches the value that you specified in the remote
-      connector configuration file, in step 2 of this procedure. For example:
-     </p><div class="screen"><pre>"connectorHostRef" : "dotnet",</pre></div><p>
       The host, port, login and password of the machine on which Active
       Directory runs do not need to be specified here. By default the Active
       Directory cmdlets pick up the first available Domain Controller. In
       addition, the scripts are executed using the credentials of the .Net
       connector server.
-     </p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="powershell-test"></a>3.8.2.&nbsp;Testing the PowerShell Sample</h3></div></div></div><p>
+     </p><div class="note"><h3 class="title">Note</h3><p>
+       The <code class="literal">"ReloadScriptOnExecution"</code> property is set to
+       <code class="literal">true</code> in this sample configuration. This setting causes
+       script files to be reloaded each time the script is invoked. Having
+       script files reloaded each time is suitable for debugging purposes.
+       However, this property should be set to <code class="literal">false</code> in
+       production environments, as the script reloading can have a negative
+       performance impact.
+      </p></div><p>
+      In addition, make sure that the value of the
+      <code class="literal">"connectorHostRef"</code> property in the connector
+      configuration file matches the value that you specified in the remote
+      connector configuration file, in step 2 of this procedure. For example:
+     </p><div class="screen"><pre>"connectorHostRef" : "dotnet",</pre></div></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="powershell-test"></a>3.8.2.&nbsp;Testing the PowerShell Sample</h3></div></div></div><p>
     Because you have copied all of the required configuration files into the
     default OpenIDM project, you can start OpenIDM with the default
     configuration (that is, without the <code class="literal">-p</code> option).
@@ -3030,7 +3063,7 @@ $ ./startup.sh</pre></div><p>
   "message": "",
   "reason": "Not Found",
   "code": 404
-}</em></pre></div></li></ol></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="more-sample4"></a>3.9.&nbsp;Sample 4 - CSV to XML File</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-samples.html#install-sample4">3.9.1. Install the Sample</a></span></dt><dt><span class="section"><a href="chap-samples.html#examine-sample4">3.9.2. Check and then Run the Sample</a></span></dt></dl></div><a class="indexterm" name="d0e4240"></a><p>Sample 4 works with two databases, a comma-separated value file
+}</em></pre></div></li></ol></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="more-sample4"></a>3.9.&nbsp;Sample 4 - CSV to XML File</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-samples.html#install-sample4">3.9.1. Install the Sample</a></span></dt><dt><span class="section"><a href="chap-samples.html#examine-sample4">3.9.2. Check and then Run the Sample</a></span></dt></dl></div><a class="indexterm" name="d0e4256"></a><p>Sample 4 works with two databases, a comma-separated value file
    and an XML file. There is no need to include any external
    resources.
   </p><p>
@@ -3066,7 +3099,7 @@ $ ./startup.sh -p samples/sample4</pre></div></div><div class="section"><div cla
     These users will not be visible from the OpenIDM UI, since they are mapped
     directly between the XML and CSV files. The internal OpenIDM repository is
     not updated in this sample.
-   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="more-sample5"></a>3.10.&nbsp;Sample 5 - Synchronization of Two Resources</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-samples.html#email-sample5">3.10.1. Configure Email for the Sample</a></span></dt><dt><span class="section"><a href="chap-samples.html#install-sample5">3.10.2. Install the Sample</a></span></dt><dt><span class="section"><a href="chap-samples.html#run-sample5">3.10.3. Run the Sample</a></span></dt></dl></div><a class="indexterm" name="d0e4298"></a><p>
+   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="more-sample5"></a>3.10.&nbsp;Sample 5 - Synchronization of Two Resources</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-samples.html#email-sample5">3.10.1. Configure Email for the Sample</a></span></dt><dt><span class="section"><a href="chap-samples.html#install-sample5">3.10.2. Install the Sample</a></span></dt><dt><span class="section"><a href="chap-samples.html#run-sample5">3.10.3. Run the Sample</a></span></dt></dl></div><a class="indexterm" name="d0e4314"></a><p>
    Sample 5 demonstrates the flow of data from one external resource to
    another. The resources are named <code class="literal">LDAP</code> and
    <code class="literal">AD</code> but in the sample, both directory-like resources are
@@ -3209,7 +3242,7 @@ $ ./startup.sh -p samples/sample5</pre></div><p>
     reconciliation operation creates the new user from the simulated LDAP
     resource in the OpenIDM repository. An implicit synchronization operation
     then creates that user in the AD resource.
-   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="more-sample5b"></a>3.11.&nbsp;Sample 5b - Failure Compensation With Multiple Resources</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-samples.html#install-sample5b">3.11.1. Install the Sample</a></span></dt><dt><span class="section"><a href="chap-samples.html#onsync-sample5b">3.11.2. Demonstrate onSync</a></span></dt></dl></div><a class="indexterm" name="d0e4426"></a><p>
+   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="more-sample5b"></a>3.11.&nbsp;Sample 5b - Failure Compensation With Multiple Resources</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-samples.html#install-sample5b">3.11.1. Install the Sample</a></span></dt><dt><span class="section"><a href="chap-samples.html#onsync-sample5b">3.11.2. Demonstrate onSync</a></span></dt></dl></div><a class="indexterm" name="d0e4442"></a><p>
    The compensated synchronization mechanism depicted in this sample can help
    manage the risks associated with synchronizing data across multiple
    resources.
@@ -3338,7 +3371,7 @@ $ sudo mv xml_LDAP_Data.xml xml_LDAP_Data.xml.bak</pre></div><p>
     <code class="filename">sync.json</code>). The synchronization will fail for the AD
     resource. In this case, the change will be reverted on both the managed/user
     entry, and the LDAP resource.
-   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="more-sample6"></a>3.12.&nbsp;Sample 6 - LiveSync With an AD Server</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-samples.html#more-sample6-realad">3.12.1. Sample 6 with an Active AD Deployment</a></span></dt><dt><span class="section"><a href="chap-samples.html#d0e4660">3.12.2. Sample 6 with a Simulated AD Deployment</a></span></dt><dt><span class="section"><a href="chap-samples.html#external-resource-sample6">3.12.3. External Configuration</a></span></dt><dt><span class="section"><a href="chap-samples.html#install-sample6">3.12.4. Start OpenIDM with Sample 6</a></span></dt><dt><span class="section"><a href="chap-samples.html#run-sample6">3.12.5. Run the Sample</a></span></dt></dl></div><a class="indexterm" name="d0e4590"></a><p>
+   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="more-sample6"></a>3.12.&nbsp;Sample 6 - LiveSync With an AD Server</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-samples.html#more-sample6-realad">3.12.1. Sample 6 with an Active AD Deployment</a></span></dt><dt><span class="section"><a href="chap-samples.html#d0e4676">3.12.2. Sample 6 with a Simulated AD Deployment</a></span></dt><dt><span class="section"><a href="chap-samples.html#external-resource-sample6">3.12.3. External Configuration</a></span></dt><dt><span class="section"><a href="chap-samples.html#install-sample6">3.12.4. Start OpenIDM with Sample 6</a></span></dt><dt><span class="section"><a href="chap-samples.html#run-sample6">3.12.5. Run the Sample</a></span></dt></dl></div><a class="indexterm" name="d0e4606"></a><p>
    Sample 6 resembles sample 5, but demonstrates LiveSync from an external
    resource. Sample 6 includes configuration files for two scenarios, depending
    on whether you have a live Active Directory (AD) service, or whether you
@@ -3379,7 +3412,7 @@ $ sudo mv xml_LDAP_Data.xml xml_LDAP_Data.xml.bak</pre></div><p>
     <code class="filename">/path/to/sample6/data</code> directory.
    </p><p>
     The actions run in this sample should not change any data on the AD server.
-   </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="d0e4660"></a>3.12.2.&nbsp;Sample 6 with a Simulated AD Deployment</h3></div></div></div><p>
+   </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="d0e4676"></a>3.12.2.&nbsp;Sample 6 with a Simulated AD Deployment</h3></div></div></div><p>
     In this sample, an AD deployment is simulated with a different baseDN
     (<code class="literal">dc=fakead,dc=com</code>) on the same OpenDJ server instance.
     You can also simulate the AD server with a separate OpenDJ instance, running
@@ -3660,7 +3693,7 @@ userPassword: passw0rd</pre></div><p>
       </p><div class="screen"><pre><strong>$ ./ldapsearch \
  --port 1389 \
  --baseDN ou=people,dc=example,dc=com \
- "(uid=bsmith)"</strong></pre></div></li></ol></div></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="more-sample7"></a>3.13.&nbsp;Sample 7 - Scripting a SCIM-like Schema</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-samples.html#install-sample7">3.13.1. Install the Sample</a></span></dt><dt><span class="section"><a href="chap-samples.html#run-sample7">3.13.2. Running the Sample</a></span></dt></dl></div><a class="indexterm" name="d0e5059"></a><p>Sample 7 demonstrates how you can use OpenIDM to expose user data with a
+ "(uid=bsmith)"</strong></pre></div></li></ol></div></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="more-sample7"></a>3.13.&nbsp;Sample 7 - Scripting a SCIM-like Schema</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-samples.html#install-sample7">3.13.1. Install the Sample</a></span></dt><dt><span class="section"><a href="chap-samples.html#run-sample7">3.13.2. Running the Sample</a></span></dt></dl></div><a class="indexterm" name="d0e5075"></a><p>Sample 7 demonstrates how you can use OpenIDM to expose user data with a
   SCIM-like schema. The sample uses the XML file connector to read in attributes
   from external accounts and construct a JSON object for users stored in the
   OpenIDM repository. For more information about SCIM schema, see
@@ -3768,7 +3801,7 @@ $ ./startup.sh -p samples/sample7</pre></div></div><div class="section"><div cla
     <code class="filename">/path/to/samples/sample7/script</code> directory,
     transforms the user data from the resource into the JSON object layout
     required by SCIM schema.
-   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="more-sample8"></a>3.14.&nbsp;Sample 8 - Logging in Scripts</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-samples.html#install-sample8">3.14.1. Install the Sample</a></span></dt><dt><span class="section"><a href="chap-samples.html#run-sample8">3.14.2. Running the Sample</a></span></dt></dl></div><a class="indexterm" name="d0e5111"></a><p>OpenIDM provides a <code class="literal">logger</code> object with
+   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="more-sample8"></a>3.14.&nbsp;Sample 8 - Logging in Scripts</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-samples.html#install-sample8">3.14.1. Install the Sample</a></span></dt><dt><span class="section"><a href="chap-samples.html#run-sample8">3.14.2. Running the Sample</a></span></dt></dl></div><a class="indexterm" name="d0e5127"></a><p>OpenIDM provides a <code class="literal">logger</code> object with
   <code class="literal">debug()</code>, <code class="literal">error()</code>,
   <code class="literal">info()</code>, <code class="literal">trace()</code>, and
   <code class="literal">warn()</code> functions that you can use to log messages to 
@@ -3793,7 +3826,7 @@ $ ./startup.sh -p samples/sample8</pre></div><p>The <code class="filename">sync.
 ...Case emptySource: the source object contains: = {lastname=Carter, mobile...
 ...Case sourceDescription: the source object contains: = Created By XML1
 ...Case onCreate: the source object contains: = {lastname=Carter, mobile...
-...Case result: the source object contains: = {SOURCE_IGNORED={count=0, ids=[]},...</pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="more-sample9"></a>3.15.&nbsp;Sample 9 - Asynchronous Reconciliation Using Workflows</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-samples.html#install-sample9">3.15.1. Install the Sample</a></span></dt><dt><span class="section"><a href="chap-samples.html#run-sample9">3.15.2. Running the Sample</a></span></dt></dl></div><a class="indexterm" name="d0e5170"></a><p>Sample 9 demonstrates asynchronous reconciliation using workflows. 
+...Case result: the source object contains: = {SOURCE_IGNORED={count=0, ids=[]},...</pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="more-sample9"></a>3.15.&nbsp;Sample 9 - Asynchronous Reconciliation Using Workflows</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-samples.html#install-sample9">3.15.1. Install the Sample</a></span></dt><dt><span class="section"><a href="chap-samples.html#run-sample9">3.15.2. Running the Sample</a></span></dt></dl></div><a class="indexterm" name="d0e5186"></a><p>Sample 9 demonstrates asynchronous reconciliation using workflows. 
   Reconciliation generates an approval request for each ABSENT user. The 
   configuration for this action is defined in the <code class="filename">conf/sync.json</code> 
   file, which specifies that an <code class="literal">ABSENT</code> condition should 
@@ -3934,7 +3967,7 @@ $ ./startup.sh -p samples/sample9</strong></pre></div></div><div class="section"
  "resultCount": 1,
  "pagedResultsCookie": null,
  "remainingPagedResults": -1,
-}</pre></div></li></ol></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="more-sample-openam"></a>3.16.&nbsp;Sample - Configuring Authentication Management With OpenAM</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-samples.html#prepare-sample-openam">3.16.1. Prepare the Sample</a></span></dt><dt><span class="section"><a href="chap-samples.html#configure-openam-sample">3.16.2. Configuring OpenIDM for the OpenAM Sample</a></span></dt><dt><span class="section"><a href="chap-samples.html#install-sample-openam">3.16.3. Install the Sample</a></span></dt><dt><span class="section"><a href="chap-samples.html#run-sample-openam">3.16.4. Running the Sample</a></span></dt><dt><span class="section"><a href="chap-samples.html#review-sample-openam">3.16.5. Make Sure the Sample Works as Intended</a></span></dt><dt><span class="section"><a href="chap-samples.html#sample-openam-going-further">3.16.6. Additional Options for the OpenAM Sample</a></span></dt></dl></div><a class="indexterm" name="d0e5279"></a><p>
+}</pre></div></li></ol></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="more-sample-openam"></a>3.16.&nbsp;Sample - Configuring Authentication Management With OpenAM</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-samples.html#prepare-sample-openam">3.16.1. Prepare the Sample</a></span></dt><dt><span class="section"><a href="chap-samples.html#configure-openam-sample">3.16.2. Configuring OpenIDM for the OpenAM Sample</a></span></dt><dt><span class="section"><a href="chap-samples.html#install-sample-openam">3.16.3. Install the Sample</a></span></dt><dt><span class="section"><a href="chap-samples.html#run-sample-openam">3.16.4. Running the Sample</a></span></dt><dt><span class="section"><a href="chap-samples.html#review-sample-openam">3.16.5. Make Sure the Sample Works as Intended</a></span></dt><dt><span class="section"><a href="chap-samples.html#sample-openam-going-further">3.16.6. Additional Options for the OpenAM Sample</a></span></dt></dl></div><a class="indexterm" name="d0e5295"></a><p>
    This sample demonstrates how you can protect a deployment of OpenIDM with
    ForgeRock's <a class="link" href="http://docs.forgerock.org/en/index.html?product=openam" target="_blank">
    <em class="citetitle">OpenAM Access Management</em></a> product.
@@ -4201,7 +4234,7 @@ $ ./ldapmodify \
       section of the file and set <code class="literal">"enabled" : false</code>. Once
       complete, the only users with access to OpenIDM are users with a valid
       SSO authentication token in their browsers.
-     </p></li></ul></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="more-sample-audit"></a>3.17.&nbsp;Sample - Demonstrate Extended Audit Capabilities</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-samples.html#audit-config-files">3.17.1. Audit Sample Configuration Files</a></span></dt><dt><span class="section"><a href="chap-samples.html#external-audit-mysql-sample">3.17.2. Configuration with MySQL</a></span></dt><dt><span class="section"><a href="chap-samples.html#install-sample-audit">3.17.3. Install the Sample</a></span></dt><dt><span class="section"><a href="chap-samples.html#run-sample-audit">3.17.4. Running the Sample</a></span></dt></dl></div><a class="indexterm" name="d0e5654"></a><p>
+     </p></li></ul></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="more-sample-audit"></a>3.17.&nbsp;Sample - Demonstrate Extended Audit Capabilities</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-samples.html#audit-config-files">3.17.1. Audit Sample Configuration Files</a></span></dt><dt><span class="section"><a href="chap-samples.html#external-audit-mysql-sample">3.17.2. Configuration with MySQL</a></span></dt><dt><span class="section"><a href="chap-samples.html#install-sample-audit">3.17.3. Install the Sample</a></span></dt><dt><span class="section"><a href="chap-samples.html#run-sample-audit">3.17.4. Running the Sample</a></span></dt></dl></div><a class="indexterm" name="d0e5670"></a><p>
    This sample demonstrates how you can use the audit features associated with
    OpenIDM, for access, activity, reconciliation, and synchronization.
   </p><p>
@@ -4325,7 +4358,7 @@ $ ./startup.sh -p samples/audit-sample</pre></div></div><div class="section"><di
     information on <code class="literal">"useForQueries"</code>, see
     <a href="../../integrators-guide/index/chap-auditing.html#audit-remote-logging" class="link"><em class="citetitle">Logging
     to a Remote System</em></a>.
-   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="sample-google-connector"></a>3.18.&nbsp;Sample - Connecting to Google With the Google Apps Connector</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-samples.html#google-apps-">3.18.1. Before You Start</a></span></dt><dt><span class="section"><a href="chap-samples.html#running-the-google-apps-sample">3.18.2. Running the Google Apps Sample</a></span></dt></dl></div><a class="indexterm" name="d0e5877"></a><p>
+   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="sample-google-connector"></a>3.18.&nbsp;Sample - Connecting to Google With the Google Apps Connector</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-samples.html#google-apps-">3.18.1. Before You Start</a></span></dt><dt><span class="section"><a href="chap-samples.html#running-the-google-apps-sample">3.18.2. Running the Google Apps Sample</a></span></dt></dl></div><a class="indexterm" name="d0e5893"></a><p>
    OpenICF 1.4.1.0 provides a new Google Apps Connector that
    enables you to interact with Google's web applications.
   </p><div class="note"><h3 class="title">Note</h3><p>
@@ -4648,7 +4681,7 @@ OpenIDM version "3.1.0" (revision: 0) null null
  "https://localhost:8443/openidm/system/google/__ACCOUNT__/101643010677712061243" </strong>
 <em>{
     "_id":"101643010677712061243"
-}</em></pre></div></li></ol></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="sample-salesforce-connector"></a>3.19.&nbsp;Sample - Connecting to Salesforce With the Salesforce Connector</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-samples.html#salesforce-setup">3.19.1. Before you Start</a></span></dt><dt><span class="section"><a href="chap-samples.html#install-sample-salesforce">3.19.2. Install the Sample</a></span></dt><dt><span class="section"><a href="chap-samples.html#salesforce-sample-ui">3.19.3. Running the Sample by Using the Admin UI</a></span></dt><dt><span class="section"><a href="chap-samples.html#salesforce-sample-cli">3.19.4. Running the Sample by Using the Command Line</a></span></dt></dl></div><a class="indexterm" name="d0e6115"></a><p>
+}</em></pre></div></li></ol></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="sample-salesforce-connector"></a>3.19.&nbsp;Sample - Connecting to Salesforce With the Salesforce Connector</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-samples.html#salesforce-setup">3.19.1. Before you Start</a></span></dt><dt><span class="section"><a href="chap-samples.html#install-sample-salesforce">3.19.2. Install the Sample</a></span></dt><dt><span class="section"><a href="chap-samples.html#salesforce-sample-ui">3.19.3. Running the Sample by Using the Admin UI</a></span></dt><dt><span class="section"><a href="chap-samples.html#salesforce-sample-cli">3.19.4. Running the Sample by Using the Command Line</a></span></dt></dl></div><a class="indexterm" name="d0e6131"></a><p>
    OpenIDM 3.1.0 provides a Salesforce Connector that enables
    provisioning, reconciliation, and synchronization with a Salesforce
    organization. The Salesforce Connector is not an OpenICF connector, but a
@@ -4836,7 +4869,7 @@ $ ./startup.sh -p samples/salesforce-connector</pre></div></div><div class="sect
     section breaks the sample into two tasks - configuring the connector, and
     then testing the configuration by running reconciliation operations between
     the two systems.
-   </p><div class="procedure"><a name="d0e6439"></a><div class="procedure-title">Procedure&nbsp;3.10.&nbsp;To Set Up the Salesforce Connector</div><p>
+   </p><div class="procedure"><a name="d0e6455"></a><div class="procedure-title">Procedure&nbsp;3.10.&nbsp;To Set Up the Salesforce Connector</div><p>
     Before you start, you will need the Consumer Key and Consumer Secret that
     you obtained in the previous section.
    </p><ol class="procedure" type="1"><li class="step"><p>
@@ -4948,7 +4981,7 @@ $ ./startup.sh -p samples/salesforce-connector</pre></div></div><div class="sect
     "name": "salesforce"
   }
 ]</em>
-     </pre></div></li></ol></div><div class="procedure"><a name="d0e6546"></a><div class="procedure-title">Procedure&nbsp;3.11.&nbsp;To Run Reconciliation by Using the Command Line</div><p>
+     </pre></div></li></ol></div><div class="procedure"><a name="d0e6562"></a><div class="procedure-title">Procedure&nbsp;3.11.&nbsp;To Run Reconciliation by Using the Command Line</div><p>
      The mapping configuration file (<code class="filename">sync.json</code>) for this
      sample includes two mappings, <code class="literal">sourceSalesforceUser_managedUser</code>,
      which synchronizes users from the Salesforce with the OpenIDM repository,
