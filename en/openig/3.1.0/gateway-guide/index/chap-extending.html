@@ -1,0 +1,950 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;11.&nbsp;Extending OpenIG</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="Guide to OpenIG"><link rel="up" href="index.html" title="Guide to OpenIG"><link rel="prev" href="chap-gateway-templates.html" title="Chapter&nbsp;10.&nbsp;Configuration Templates"><link rel="next" href="chap-auditing.html" title="Chapter&nbsp;12.&nbsp;OpenIG Audit Framework"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;11.&nbsp;Extending OpenIG</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-gateway-templates.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-auditing.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-extending"></a>Chapter&nbsp;11.&nbsp;Extending OpenIG</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-extending.html#about-scripting">11.1. About Scripting</a></span></dt><dt><span class="section"><a href="chap-extending.html#scripting-dispatch">11.2. Scripting Dispatch</a></span></dt><dt><span class="section"><a href="chap-extending.html#scripting-http-basic">11.3. Scripting HTTP Basic Authentication</a></span></dt><dt><span class="section"><a href="chap-extending.html#scripting-ldap-auth">11.4. Scripting LDAP Authentication</a></span></dt><dt><span class="section"><a href="chap-extending.html#scripting-sql">11.5. Scripting SQL Queries</a></span></dt><dt><span class="section"><a href="chap-extending.html#about-custom-extensions">11.6. About Developing Custom Extensions</a></span></dt><dt><span class="section"><a href="chap-extending.html#extension-points">11.7. Key Extension Points</a></span></dt><dt><span class="section"><a href="chap-extending.html#custom-filter">11.8. Implementing a Filter</a></span></dt><dt><span class="section"><a href="chap-extending.html#custom-handler">11.9. Implementing a Handler</a></span></dt><dt><span class="section"><a href="chap-extending.html#custom-heap-config">11.10. Heap Object Configuration</a></span></dt><dt><span class="section"><a href="chap-extending.html#custom-sample-filter">11.11. Sample Filter</a></span></dt><dt><span class="section"><a href="chap-extending.html#custom-build">11.12. Building Customizations</a></span></dt><dt><span class="section"><a href="chap-extending.html#custom-embed">11.13. Embedding Customizations in OpenIG</a></span></dt></dl></div><p>
+  This chapter looks at extending what OpenIG can do
+  beyond what you get out of the box.
+ </p><p>
+  To extend what you can do with Filters and Handlers,
+  OpenIG supports dynamic scripting languages like Groovy
+  through the use of <code class="literal">ScriptableFilter</code>
+  and <code class="literal">ScriptableHandler</code> objects.
+ </p><p>
+  If scripting is not enough, be aware that
+  OpenIG includes a complete
+  <a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/index.html" target="_blank">application programming interface</a>,
+  designed to allow you to customize OpenIG as required.
+  Customizing OpenIG can be used to perform complex server interactions
+  or intensive data transformations
+  that you cannot achieve with scripts or existing handlers, filters and
+  <a href="../../reference/index/Expressions.html" class="link">expressions</a>.
+ </p><p>
+  Interface Stability:
+  <a href="../../reference/index/appendix-interface-stability.html#interface-stability" class="link">Evolving</a>
+ </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="about-scripting"></a>11.1.&nbsp;About Scripting</h2></div></div></div><p>
+   You add these Filters and Handlers to your configuration in the same way
+   as for other Filters and Handlers.
+   Each takes as its configuration the script's Internet media "type"
+   and either a "source" script included in the JSON configuration,
+   or a "file" script that OpenIG reads from a file.
+   The configuration can also optionally supply "args"
+   in order to pass parameters to the script.
+  </p><p>
+   The following example defines a <code class="literal">ScriptableFilter</code>,
+   written in the Groovy language,
+   and stored in a file named
+   <code class="filename">$HOME/.openig/scripts/groovy/SimpleFormLogin.groovy</code>
+   (<code class="filename">%appdata%\OpenIG\scripts\groovy\SimpleFormLogin.groovy</code> on Windows).
+  </p><pre class="brush: java;">
+ {
+     "name": "SimpleFormLogin",
+     "type": "ScriptableFilter",
+     "config": {
+         "type": "application/x-groovy",
+         "file": "SimpleFormLogin.groovy"
+     }
+ }
+  </pre><p>
+   Relative paths in the "file" field depend on how OpenIG is installed.
+   If OpenIG is installed in an application server,
+   then paths for Groovy scripts are relative to
+   <code class="filename">$HOME/.openig/scripts/groovy</code>.
+  </p><p>
+   This base location <code class="filename">$HOME/.openig/scripts/groovy</code>
+   is on the classpath when the scripts are executed.
+   If therefore some Groovy scripts are not in the default package,
+   but instead have their own package names,
+   they belong in the directory corresponding to their package name.
+   For example, a script in package <code class="literal">com.example.groovy</code>
+   belongs under <code class="filename">$HOME/.openig/scripts/groovy/com/example/groovy/</code>.
+  </p><p>
+   OpenIG provides scripts with several global variables at run time,
+   enabling them to access the Exchange,
+   to store variables across executions,
+   to write messages to the logs,
+   and to make requests to a web service or to an LDAP directory service,
+   in addition to Groovy's built-in functionality.
+   For details, see the reference documentation for
+   <a href="../../reference/index/ScriptableFilter.html" class="link">ScriptableFilter</a>
+   and
+   <a href="../../reference/index/ScriptableHandler.html" class="link">ScriptableHandler</a>.
+  </p><p>
+   This chapter demonstrates some of what you might do using scripts.
+  </p><p>
+   If you want to try these scripts,
+   first install and configure OpenIG as described in the chapter on
+   <a href="../../gateway-guide/index/chap-quickstart.html" class="link"><em class="citetitle">Getting Started</em></a>.
+  </p><p>
+   When developing and debugging your scripts, consider configuring a
+   <a href="../../reference/index/CaptureDecorator.html" class="link"><em class="citetitle">CaptureDecorator</em></a>
+   to log requests, responses, and the exchange data in JSON form.
+   You can then turn off capturing when you move to production.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scripting-dispatch"></a>11.2.&nbsp;Scripting Dispatch</h2></div></div></div><p>
+   In order to route requests, especially when the conditions are complicated,
+   you can use a <code class="literal">ScriptableHandler</code> instead of a
+   <a href="../../reference/index/DispatchHandler.html" class="link">DispatchHandler</a>.
+  </p><p>
+   The following script demonstrates a simple dispatch handler.
+  </p><pre class="brush: java;">
+import org.forgerock.openig.http.Response
+
+/*
+ * This simplistic dispatcher matches the path part of the HTTP request.
+ * If the path is /login, it checks Username and Password headers,
+ * accepting bjensen:hifalutin, and returning HTTP 403 Forbidden to others.
+ * Otherwise it returns HTTP 401 Unauthorized.
+ */
+
+// Rather than get the response from an external source,
+// this handler produces the response itself.
+exchange.response = new Response();
+
+switch (exchange.request.uri.path) {
+
+    case "/login":
+
+        if (exchange.request.headers.Username[0] == "bjensen" &amp;&amp;
+                exchange.request.headers.Password[0] == "hifalutin") {
+
+            exchange.response.status = 200
+            exchange.response.entity = "&lt;html&gt;&lt;p&gt;Welcome back, Babs!&lt;/p&gt;&lt;/html&gt;"
+
+        } else {
+
+            exchange.response.status = 403
+            exchange.response.entity = "&lt;html&gt;&lt;p&gt;Authorization required&lt;/p&gt;&lt;/html&gt;"
+
+        }
+
+        break
+
+    default:
+
+        exchange.response.status = 401
+        exchange.response.entity = "&lt;html&gt;&lt;p&gt;Please &lt;a href='./login'&gt;log in&lt;/a&gt;.&lt;/p&gt;&lt;/html&gt;"
+
+        break
+
+}
+
+  </pre><p>
+   To try this handler, save the script
+   as <code class="filename">$HOME/.openig/scripts/groovy/DispatchHandler.groovy</code>
+   (<code class="filename">%appdata%\OpenIG\scripts\groovy\DispatchHandler.groovy</code> on Windows).
+  </p><p>
+   Next, add the following route to your configuration
+   as <code class="filename">$HOME/.openig/config/routes/98-dispatch.json</code>
+   (<code class="filename">%appdata%\OpenIG\config\routes\98-dispatch.json</code> on Windows).
+  </p><pre class="brush: javascript;">
+{
+    "heap": [
+        {
+            "name": "DispatchHandler",
+            "type": "DispatchHandler",
+            "config": {
+                "bindings": [
+                    {
+                        "condition":
+                            "${matches(exchange.request.uri.path, '^/login')}",
+                        "handler": {
+                            "type": "Chain",
+                            "config": {
+                                "filters": [
+                                    {
+                                        "type": "HeaderFilter",
+                                        "config": {
+                                            "messageType": "REQUEST",
+                                            "add": {
+                                                "Username": [
+                                                    "bjensen"
+                                                ],
+                                                "Password": [
+                                                    "hifalutin"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                ],
+                                "handler": "Dispatcher"
+                            }
+                        }
+                    },
+                    {
+                        "handler": "Dispatcher"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Dispatcher",
+            "type": "ScriptableHandler",
+            "config": {
+                "type": "application/x-groovy",
+                "file": "DispatchHandler.groovy"
+            }
+        }
+    ],
+    "handler": "DispatchHandler"
+}
+
+  </pre><p>
+   The route sets up the headers required by the script when the user logs in.
+  </p><p>
+   To try it out, browse to
+   <a class="link" href="http://www.example.com:8080" target="_blank">http://www.example.com:8080</a>.
+  </p><p>
+   The response from the script says <code class="literal">Please
+   <a class="link" href="http://www.example.com:8080/login" target="_blank">log in</a>.</code>
+   When you click the "log in" link,
+   the "HeaderFilter" sets Username and Password headers in the request,
+   and passes the request to the script.
+  </p><p>
+   The script then responds, <code class="literal">Welcome back, Babs!</code>
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scripting-http-basic"></a>11.3.&nbsp;Scripting HTTP Basic Authentication</h2></div></div></div><p>
+   HTTP Basic authentication calls for the user agent such as a browser
+   to send a user name and password to the server in an Authorization header.
+   HTTP Basic authentication relies on an encrypted connection
+   to protect the user name and password credentials,
+   which are base64-encoded in the Authorization header, not encrypted.
+  </p><p>
+   The following script, for use in a <code class="literal">ScriptableFilter</code>,
+   adds an Authorization header based on a username and password combination.
+  </p><pre class="brush: java;">
+/*
+ * Perform basic authentication with the user name and password
+ * that are supplied using a configuration like the following:
+ *
+ * {
+ *     "name": "BasicAuth",
+ *     "type": "ScriptableFilter",
+ *     "config": {
+ *         "type": "application/x-groovy",
+ *         "file": "BasicAuthFilter.groovy",
+ *         "args": {
+ *             "username": "bjensen",
+ *             "password": "hifalutin"
+ *             }
+ *         }
+ * }
+ */
+
+def userPass = username + ":" + password
+def base64UserPass = userPass.getBytes().encodeBase64()
+exchange.request.headers.add("Authorization", "Basic ${base64UserPass}" as String)
+
+// Credentials are only base64-encoded, not encrypted: Set scheme to HTTPS.
+
+/*
+ * When connecting over HTTPS, by default the client tries to trust the server.
+ * If the server has no certificate
+ * or has a self-signed certificate unknown to the client,
+ * then the most likely result is an SSLPeerUnverifiedException.
+ *
+ * To avoid an SSLPeerUnverifiedException,
+ * set up HTTPS correctly on the server.
+ * Either use a server certificate signed by a well-known CA,
+ * or set up the gateway to trust the server certificate.
+ */
+exchange.request.uri.scheme = "https"
+
+// Call the next handler. This returns when the request has been handled.
+next.handle(exchange)
+
+  </pre><p>
+   To try this filter, save the script
+   as <code class="filename">$HOME/.openig/scripts/groovy/BasicAuthFilter.groovy</code>
+   (<code class="filename">%appdata%\OpenIG\scripts\groovy\BasicAuthFilter.groovy</code> on Windows).
+  </p><p>
+   Next, add the following route to your configuration
+   as <code class="filename">$HOME/.openig/config/routes/09-basic.json</code>
+   (<code class="filename">%appdata%\OpenIG\config\routes\09-basic.json</code> on Windows).
+  </p><pre class="brush: javascript;">
+{
+    "handler": {
+        "type": "Chain",
+        "config": {
+            "filters": [
+                {
+                    "type": "ScriptableFilter",
+                    "config": {
+                        "type": "application/x-groovy",
+                        "file": "BasicAuthFilter.groovy",
+                        "args": {
+                            "username": "bjensen",
+                            "password": "hifalutin"
+                        }
+                    },
+                    "capture": "filtered_request"
+                }
+            ],
+            "handler": {
+                "type": "StaticResponseHandler",
+                "config": {
+                    "status": 200,
+                    "reason": "OK",
+                    "entity": "Hello, Babs!"
+                }
+            }
+        }
+    },
+    "condition": "${matches(exchange.request.uri.path, '^/basic')}"
+}
+
+  </pre><p>
+   When the request path matches <code class="literal">/basic</code>
+   the route calls the "Chain",
+   which runs the "ScriptableFilter".
+   The "capture" setting captures the request
+   as updated by the "ScriptableFilter".
+   Finally, OpenIG returns a static page.
+  </p><p>
+   To try it out, browse to
+   <a class="link" href="http://www.example.com:8080/basic" target="_blank">http://www.example.com:8080/basic</a>.
+  </p><p>
+   The captured request in the console log
+   shows that the "scheme" is now HTTPS,
+   and that the "Authorization" header is set for HTTP Basic.
+  </p><pre class="brush: http;">
+GET https://www.example.com:8080/basic HTTP/1.1
+Authorization: Basic YmplbnNlbjpoaWZhbHV0aW4=
+  </pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scripting-ldap-auth"></a>11.4.&nbsp;Scripting LDAP Authentication</h2></div></div></div><p>
+   Many organizations use an LDAP directory service to store user profiles
+   including authentication credentials.
+   The LDAP directory service securely stores user passwords
+   in a highly-available, central service capable of
+   handling thousands of authentications per second.
+  </p><p>
+   The following script, for use in a <code class="literal">ScriptableFilter</code>,
+   performs simple authentication against an LDAP server
+   based on request form fields
+   <code class="literal">username</code> and <code class="literal">password</code>.
+  </p><pre class="brush: java;">
+import org.forgerock.opendj.ldap.*
+import org.forgerock.openig.http.Response
+
+/*
+ * Perform LDAP authentication based on user credentials from a form.
+ *
+ * If LDAP authentication succeeds, then call the next handler.
+ * If there is a failure, send a response back to the user.
+ */
+
+username = exchange.request.form?.username[0]
+password = exchange.request.form?.password[0]
+
+// For testing purposes, the LDAP host and port are provided in the exchange.
+// Edit as needed to match your directory service.
+host = exchange.ldapHost ?: "localhost"
+port = exchange.ldapPort ?: 1389
+
+client = ldap.connect(host, port as Integer)
+try {
+
+    // Assume the username is an exact match of either
+    // the user ID, the email address, or the user's full name.
+    filter = "(|(uid=%s)(mail=%s)(cn=%s))"
+
+    user = client.searchSingleEntry(
+            "ou=people,dc=example,dc=com",
+            ldap.scope.sub,
+            ldap.filter(filter, username, username, username))
+
+    client.bind(user.name as String, password?.toCharArray())
+
+    // Authentication succeeded.
+
+    // Set a header (or whatever else you want to do here).
+    exchange.request.headers.add("Ldap-User-Dn", user.name)
+
+    // Most LDAP attributes are multi-valued.
+    // When you read multi-valued attributes, use the parse() method,
+    // with an AttributeParser method
+    // that specifies the type of object to return.
+    exchange.cn = user.cn?.parse().asSetOfString()
+
+    // When you write attribute values, set them directly.
+    user.description = "New description set by my script"
+
+    // Here is how you might read a single value of a multi-valued attribute:
+    exchange.description = user.description?.parse().asString()
+
+    // Call the next handler. This returns when the request has been handled.
+    next.handle(exchange)
+
+} catch (AuthenticationException e) {
+
+    // LDAP authentication failed, so fail the exchange with
+    // HTTP status code 403 Forbidden.
+
+    exchange.response = new Response()
+    exchange.response.status = 403
+    exchange.response.reason = e.message
+    exchange.response.entity = "&lt;html&gt;&lt;p&gt;Authentication failed: " + e.message + "&lt;/p&gt;&lt;/html&gt;"
+
+} catch (Exception e) {
+
+    // Something other than authentication failed on the server side,
+    // so fail the exchange with HTTP 500 Internal Server Error.
+
+    exchange.response = new Response()
+    exchange.response.status = 500
+    exchange.response.reason = e.message
+    exchange.response.entity = "&lt;html&gt;&lt;p&gt;Server error: " + e.message + "&lt;/p&gt;&lt;/html&gt;"
+
+} finally {
+    client.close()
+}
+
+  </pre><p>
+   For the list of methods to specify which type of objects to return,
+   see the OpenDJ LDAP SDK Javadoc for
+   <a class="link" href="http://docs.forgerock.org/en/opendj/2.6.9/apidocs/index.html?org/forgerock/opendj/ldap/AttributeParser.html" target="_blank">AttributeParser</a>.
+  </p><p>
+   To try this out, first install an LDAP directory server such as
+   <a class="link" href="http://opendj.forgerock.org/" target="_blank">OpenDJ</a>.
+   Also import some sample users who can authenticate over LDAP.
+   With OpenDJ, you can generate sample users at installation time.
+  </p><p>
+   Next, save the script
+   as <code class="filename">$HOME/.openig/scripts/groovy/LdapAuthFilter.groovy</code>
+   (<code class="filename">%appdata%\OpenIG\scripts\groovy\LdapAuthFilter.groovy</code> on Windows).
+   If the directory server installation does not match
+   the assumptions made in the script,
+   adjust the script to use the correct settings for your installation.
+  </p><p>
+   Finally, add the following route to your configuration
+   as <code class="filename">$HOME/.openig/config/routes/10-ldap.json</code>
+   (<code class="filename">%appdata%\OpenIG\config\routes\10-ldap.json</code> on Windows).
+  </p><pre class="brush: javascript;">
+{
+    "handler": {
+        "type": "Chain",
+        "config": {
+            "filters": [
+                {
+                    "type": "ScriptableFilter",
+                    "config": {
+                        "type": "application/x-groovy",
+                        "file": "LdapAuthFilter.groovy"
+                    }
+                }
+            ],
+            "handler": {
+                "type": "ScriptableHandler",
+                "config": {
+                    "type": "application/x-groovy",
+                    "source":
+                        "import org.forgerock.openig.http.Response;
+                         dn = exchange.request.headers['Ldap-User-Dn'][0];
+                         entity = '&lt;html&gt;&lt;p&gt;Ldap-User-Dn: ' + dn + '&lt;/p&gt;&lt;/html&gt;';
+
+                         exchange.response = new Response();
+                         exchange.response.status = 200;
+                         exchange.response.entity = entity;"
+                }
+            }
+        }
+    },
+    "condition": "${matches(exchange.request.uri.path, '^/ldap')}"
+}
+  </pre><p>
+   The route calls the "LdapAuthFilter.groovy" script
+   to authenticate the user over LDAP.
+   On successful authentication, it responds with the the bind DN.
+  </p><p>
+   To try it out, browse to a URL
+   where query string parameters specify a valid username and password, such as
+   <a class="link" href="http://www.example.com:8080/ldap?username=user.0&amp;password=password" target="_blank">http://www.example.com:8080/ldap?username=user.0&amp;password=password</a>.
+  </p><p>
+   The response from the script shows the DN:
+   <code class="literal">Ldap-User-Dn: uid=user.0,ou=People,dc=example,dc=com</code>.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scripting-sql"></a>11.5.&nbsp;Scripting SQL Queries</h2></div></div></div><p>
+   You can use a <code class="literal">ScriptableFilter</code>
+   to look up information in a relational database
+   and include the results in the Exchange.
+  </p><p>
+   The following filter looks up user credentials in a database
+   given the user's email address,
+   which is found in the form data of the request.
+   The script then sets the credentials in headers,
+   making sure the scheme is HTTPS to protect the request
+   when it leaves OpenIG.
+  </p><pre class="brush: java;">
+/*
+ * Look up user credentials in a relational database
+ * based on the user's email address provided in the request form data,
+ * and set the credentials in the exchange headers for the next handler.
+ */
+
+def client = new SqlClient()
+def credentials = client.getCredentials(exchange.request.form?.mail[0])
+exchange.request.headers.add("Username", credentials.Username)
+exchange.request.headers.add("Password", credentials.Password)
+
+// The credentials are not protected in the headers, so use HTTPS.
+exchange.request.uri.scheme = "https"
+
+// Call the next handler. This returns when the request has been handled.
+next.handle(exchange)
+
+  </pre><p>
+   The previous script demonstrates a <code class="literal">ScriptableFilter</code>
+   that uses a <code class="literal">SqlClient</code> class defined in another script.
+   The following code listing shows the <code class="literal">SqlClient</code> class.
+  </p><pre class="brush: java;">
+import groovy.sql.Sql
+
+import javax.naming.InitialContext
+import javax.sql.DataSource
+
+/**
+ * Access a database with a well-known structure,
+ * in particular to get credentials given an email address.
+ */
+class SqlClient {
+
+    // Get a DataSource from the container.
+    InitialContext context = new InitialContext()
+    DataSource dataSource = context.lookup("jdbc/forgerock") as DataSource
+    def sql = new Sql(dataSource)
+
+    // The expected table is laid out like the following.
+
+    // Table USERS
+    // ----------------------------------------
+    // | USERNAME  | PASSWORD |   EMAIL   |...|
+    // ----------------------------------------
+    // | &lt;username&gt;| &lt;passwd&gt; | &lt;mail@...&gt;|...|
+    // ----------------------------------------
+
+    String tableName = "USERS"
+    String usernameColumn = "USERNAME"
+    String passwordColumn = "PASSWORD"
+    String mailColumn = "EMAIL"
+
+    /**
+     * Get the Username and Password given an email address.
+     *
+     * @param mail Email address used to look up the credentials
+     * @return Username and Password from the database
+     */
+    def getCredentials(mail) {
+        def credentials = [:]
+        def query = "SELECT " + usernameColumn + ", " + passwordColumn +
+                " FROM " + tableName + " WHERE " + mailColumn + "='$mail';"
+
+        sql.eachRow(query) {
+            credentials.put("Username", it."$usernameColumn")
+            credentials.put("Password", it."$passwordColumn")
+        }
+        return credentials
+    }
+}
+
+  </pre><p>
+   To try this out, first follow the tutorial on
+   <a href="../../gateway-guide/index/chap-credentials-tutorial.html#tutorial-credentials-from-sql" class="link"><em class="citetitle">Login With Credentials From a Database</em></a>.
+   When everything in that tutorial works,
+   you know that OpenIG can connect to the database,
+   lookup users by email address,
+   and successfully authenticate to the sample application.
+  </p><p>
+   Next, save the scripts
+   as <code class="filename">$HOME/.openig/scripts/groovy/SqlAccessFilter.groovy</code>
+   (<code class="filename">%appdata%\OpenIG\scripts\groovy\SqlAccessFilter.groovy</code> on Windows),
+   and as <code class="filename">$HOME/.openig/scripts/groovy/SqlClient.groovy</code>
+   (<code class="filename">%appdata%\OpenIG\scripts\groovy\SqlClient.groovy</code> on Windows).
+  </p><p>
+   Finally, add the following route to your configuration
+   as <code class="filename">$HOME/.openig/config/routes/11-db.json</code>
+   (<code class="filename">%appdata%\OpenIG\config\routes\11-db.json</code> on Windows).
+  </p><pre class="brush: javascript;">
+{
+    "handler": {
+        "type": "Chain",
+        "config": {
+            "filters": [
+                {
+                    "type": "ScriptableFilter",
+                    "config": {
+                        "type": "application/x-groovy",
+                        "file": "SqlAccessFilter.groovy"
+                    }
+                },
+                {
+                    "type": "StaticRequestFilter",
+                    "config": {
+                        "method": "POST",
+                        "uri": "http://www.example.com:8081",
+                        "form": {
+                            "username": [
+                                "${exchange.request.headers['Username'][0]}"
+                            ],
+                            "password": [
+                                "${exchange.request.headers['Password'][0]}"
+                            ]
+                        }
+                    }
+                }
+            ],
+            "handler": "ClientHandler"
+        }
+    },
+    "condition": "${matches(exchange.request.uri.path, '^/db')}"
+}
+
+  </pre><p>
+   The route calls the "ScriptableFilter" to look up credentials over SQL.
+   It then uses calls a "StaticRequestFilter" to build a login request.
+   Although the script sets the scheme to HTTPS,
+   the "StaticRequestFilter" ignores that and resets the URI.
+   This is to make it easier for you to try this out,
+   without having to worry about setting up HTTPS.
+  </p><p>
+   To try it out, browse to a URL
+   where a query string parameter specifies a valid email address, such as
+   <a class="link" href="http://www.example.com:8080/db?mail=george@example.com" target="_blank">http://www.example.com:8080/db?mail=george@example.com</a>.
+  </p><p>
+   If the lookup and authentication are successful,
+   you see the profile page of the sample application.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="about-custom-extensions"></a>11.6.&nbsp;About Developing Custom Extensions</h2></div></div></div><p>
+   If scripting is not enough, be aware that
+   OpenIG includes a complete Java
+   <a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/index.html" target="_blank">application programming interface</a>,
+   designed to allow you to customize OpenIG as required.
+   Customizing OpenIG can be used to perform complex server interactions
+   or intensive data transformations
+   that you cannot achieve with scripts or existing handlers, filters and
+   <a href="../../reference/index/Expressions.html" class="link">expressions</a>.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="extension-points"></a>11.7.&nbsp;Key Extension Points</h2></div></div></div><a class="indexterm" name="d0e4597"></a><div class="variablelist"><p>
+    Primary extension points include these interfaces.
+   </p><dl class="variablelist"><dt><span class="term"><a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/index.html?org/forgerock/openig/audit/AuditEventListener.html" target="_blank">AuditEventListener</a></span></dt><dd><p>
+      An AuditEventListener observes audit events.
+      For an example, see
+      <a href="../../reference/index/MonitorEndpointHandler.html" class="link">MonitorEndpointHandler</a>.
+     </p><p>
+      You must implement the interface for your audit agent
+      and its heaplet must extend
+      <a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/index.html?org/forgerock/openig/audit/ConditionalAuditEventListener.ConditionalListenerHeaplet.html" target="_blank">ConditionalAuditEventListener.ConditionalListenerHeaplet</a>.
+     </p></dd><dt><span class="term"><a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/index.html?org/forgerock/openig/decoration/Decorator.html" target="_blank">Decorator</a></span></dt><dd><p>
+      A Decorator adds new behavior to another object,
+      without changing the base type of the object.
+     </p><p>
+      When suggesting custom Decorator names,
+      know that OpenIG reserves all field names
+      that use only alphanumeric characters.
+      To avoid clashes, use dots or dashes in your field names,
+      such as "my-decorator".
+     </p></dd><dt><span class="term"><a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/index.html?org/forgerock/openig/filter/Filter.html" target="_blank">Filter</a></span></dt><dd><p>
+      A Filter serves to process the request and/or the response.
+     </p></dd><dt><span class="term"><a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/index.html?org/forgerock/openig/handler/Handler.html" target="_blank">Handler</a></span></dt><dd><p>
+      A Handler generates a response given a request.
+     </p></dd></dl></div><p>
+   These Filter and Handler interfaces are similar to Java Enterprise Edition
+   <code class="literal">Filter</code> and <code class="literal">Servlet</code> interfaces,
+   with some differences in the semantics of messages.
+   While you can simply implement these interfaces,
+   OpenIG also provides convenience classes:
+   <a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/org/forgerock/openig/filter/GenericFilter.html" target="_blank">GenericFilter</a> and
+   <a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/org/forgerock/openig/handler/GenericHandler.html" target="_blank">GenericHandler</a>.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom-filter"></a>11.8.&nbsp;Implementing a Filter</h2></div></div></div><a class="indexterm" name="d0e4660"></a><p>
+   The <code class="literal">Filter</code> interface exposes a
+   <a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/index.html?org/forgerock/openig/filter/Filter.html#filter(org.forgerock.openig.http.Exchange,%20org.forgerock.openig.handler.Handler)" target="_blank">filter()</a> method,
+   which takes an
+   <a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/index.html?org/forgerock/openig/http/Exchange.html" target="_blank">Exchange</a> object
+   and the
+   <a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/index.html?org/forgerock/openig/filter/Chain.html" target="_blank">Chain</a> of remaining filters and handler to dispatch to.
+   Initially,
+   <a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/index.html?org/forgerock/openig/http/Exchange.html#request" target="_blank">exchange.request</a> contains the request to be filtered.
+   To pass the request to the next filter or handler in the chain,
+   the filter calls
+   <a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/index.html?org/forgerock/openig/filter/Chain.html#handle(org.forgerock.openig.http.Exchange)" target="_blank">next.handle(exchange)</a>.
+   After this call,
+   <a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/index.html?org/forgerock/openig/http/Exchange.html#response" target="_blank">exchange.response</a> contains the response that can be filtered.
+  </p><p>
+   A filter might elect not to pass the request to the next filter or handler,
+   and instead handle the request itself.
+   It can achieve this by merely avoiding a call
+   to <code class="literal">next.handle(exchange)</code>
+   and creating its own response object in the exchange.
+   The filter is also at liberty to replace a response with another of its own.
+   A filter can exist in more than one chain,
+   therefore should make no assumptions or correlations
+   using the chain it is supplied.
+   The only valid use of a chain by a filter is to call its
+   <code class="literal">handle()</code> method to dispatch the exchange
+   to the rest of the chain.
+  </p><div class="note"><h3 class="title">Note</h3><p>
+    If an existing response exists in the exchange object
+    and the filter intends to replace it with its own,
+    it must call the
+    <a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/index.html?org/forgerock/openig/http/Message.html#close()" target="_blank">response.close()</a> method in order to signal
+    that the processing of the response from a remote server is complete.
+   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom-handler"></a>11.9.&nbsp;Implementing a Handler</h2></div></div></div><a class="indexterm" name="d0e4705"></a><p>
+   The <code class="literal">Handler</code> interface exposes a
+   <a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/index.html?org/forgerock/openig/handler/Handler.html#handle(org.forgerock.openig.http.Exchange)" target="_blank">handle()</a> method,
+   which takes an
+   <a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/index.html?org/forgerock/openig/http/Exchange.html#response" target="_blank">Exchange</a> object.
+   It processes the request in
+   <a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/index.html?org/forgerock/openig/http/Exchange.html#request" target="_blank">exchange.request</a> and produces a response in
+   <a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/index.html?org/forgerock/openig/http/Exchange.html#response" target="_blank">exchange.response</a>.
+   A handler can elect to dispatch the exchange to another handler or chain.
+  </p><div class="note"><h3 class="title">Note</h3><p>
+    If an existing response exists in the exchange object
+    and the filter intends to replace it with its own,
+    it must first check to see if the
+    it must call the
+    <a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/index.html?org/forgerock/openig/http/Message.html#close()" target="_blank">response.close()</a> method in order to signal
+    that the processing of the response from a remote server is complete.
+   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom-heap-config"></a>11.10.&nbsp;Heap Object Configuration</h2></div></div></div><a class="indexterm" name="d0e4736"></a><p>
+   Objects are added to the heap and supplied with configuration artifacts
+   at initialization time. To be integrated with the configuration, a class must
+   have an accompanying implementation of the
+   <a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/org/forgerock/openig/heap/Heaplet.html" target="_blank">Heaplet</a> interface. The easiest and most common way of exposing the
+   heaplet is to extend the
+   <a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/org/forgerock/openig/heap/GenericHeaplet.html" target="_blank">GenericHeaplet</a> class
+   in a nested class of the class you want to create and initialize,
+   overriding the heaplet's
+   <a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/org/forgerock/openig/heap/GenericHeaplet.html#create()" target="_blank">create</a> method.
+  </p><p>
+   Within the <code class="literal">create</code> method,
+   you can access the object's configuration through the
+   <a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/org/forgerock/openig/heap/GenericHeaplet.html#config" target="_blank">config</a> field.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom-sample-filter"></a>11.11.&nbsp;Sample Filter</h2></div></div></div><p>
+   The following sample filter sets an arbitrary header
+   in the incoming request and outgoing response.
+  </p><pre class="brush: java;">package org.forgerock.openig.doc;
+
+import org.forgerock.openig.filter.GenericFilter;
+import org.forgerock.openig.handler.Handler;
+import org.forgerock.openig.handler.HandlerException;
+import org.forgerock.openig.heap.GenericHeaplet;
+import org.forgerock.openig.heap.HeapException;
+import org.forgerock.openig.http.Exchange;
+
+import java.io.IOException;
+
+/**
+ * Filter to set a header in the incoming request and in the outgoing response.
+ */
+public class SampleFilter extends GenericFilter {
+
+    /** Header name. */
+    String name;
+
+    /** Header value. */
+    String value;
+
+    /**
+     * Set a header in the incoming request and in the outgoing response.
+     * A configuration example looks something like the following.
+     *
+     * &lt;pre&gt;
+     * {
+     *     "name": "SampleFilter",
+     *     "type": "SampleFilter",
+     *     "config": {
+     *         "name": "X-Greeting",
+     *         "value": "Hello world"
+     *     }
+     * }
+     * &lt;/pre&gt;
+     *
+     * @param exchange          Wraps request and response.
+     * @param next              Next filter or handler in the chain.
+     * @throws HandlerException Failure when handling the exchange.
+     * @throws IOException      I/O exception when handling the exchange.
+     */
+    @Override
+    public void filter(Exchange exchange, Handler next)
+            throws HandlerException, IOException {
+
+        // Set header in the request.
+        exchange.request.getHeaders().putSingle(name, value);
+
+        // Pass to the next filter or handler in the chain.
+        next.handle(exchange);
+
+        // Set header in the response.
+        exchange.response.getHeaders().putSingle(name, value);
+    }
+
+    /**
+     * Create and initialize the filter, based on the configuration.
+     * The filter object is stored in the heap.
+     */
+    public static class Heaplet extends GenericHeaplet {
+
+        /**
+         * Create the filter object in the heap,
+         * setting the header name and value for the filter,
+         * based on the configuration.
+         *
+         * @return                  The filter object.
+         * @throws HeapException    Failed to create the object.
+         */
+        @Override
+        public Object create() throws HeapException {
+
+            SampleFilter filter = new SampleFilter();
+            filter.name  = config.get("name").required().asString();
+            filter.value = config.get("value").required().asString();
+
+            return filter;
+        }
+    }
+}</pre><p>
+   When you set the sample filter "type" in the configuration,
+   you need to provide the fully qualified class name,
+   as in <code class="literal">"type": "org.forgerock.openig.doc.SampleFilter"</code>.
+   You can however implement a class alias resolver
+   to make it possible to use a short name instead,
+   as in <code class="literal">"type": "SampleFilter"</code>.
+  </p><pre class="brush: java;">package org.forgerock.openig.doc;
+
+import org.forgerock.openig.alias.ClassAliasResolver;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Allow use of short name aliases in configuration object types.
+ *
+ * This allows a configuration with {@code "type": "SampleFilter"}
+ * instead of {@code "type": "org.forgerock.openig.doc.SampleFilter"}.
+ */
+public class SampleClassAliasResolver implements ClassAliasResolver {
+
+    private static final Map&lt;String, Class&lt;?&gt;&gt; ALIASES =
+            new HashMap&lt;String, Class&lt;?&gt;&gt;();
+
+    static {
+        ALIASES.put("SampleFilter", SampleFilter.class);
+    }
+
+    /**
+     * Get the class for a short name alias.
+     *
+     * @param alias Short name alias.
+     * @return      The class, or null if the alias is not defined.
+     */
+    @Override
+    public Class&lt;?&gt; resolve(String alias) {
+        return ALIASES.get(alias);
+    }
+}</pre><p>
+   When you add your own resolver,
+   you must make it discoverable within your custom library.
+   You do this by adding a services file named after the class resolver interface,
+   where the file contains the fully qualified class name of your resolver, under
+   <code class="filename">META-INF/services/org.forgerock.openig.alias.ClassAliasResolver</code>
+   in the jar file for your customizations.
+   When you have more than one resolver,
+   add one fully qualified class name per line.
+   If you build your project using Maven, then you can add this
+   under the <code class="filename">src/main/resources</code> directory.
+   The content of the file in this example is one line:
+  </p><pre class="brush: plain;">
+org.forgerock.openig.doc.SampleClassAliasResolver
+  </pre><p>
+   The corresponding heap object configuration then looks as follows.
+  </p><pre class="brush: javascript;">
+{
+    "name": "SampleFilter",
+    "type": "SampleFilter",
+    "config": {
+        "name": "X-Greeting",
+        "value": "Hello world"
+    }
+}
+  </pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom-build"></a>11.12.&nbsp;Building Customizations</h2></div></div></div><p>
+   You can use Apache Maven to manage dependencies on OpenIG.
+   The dependencies are found in the ForgeRock Maven repository.
+  </p><p>
+   The following listing shows the Maven POM configuration
+   for the ForgeRock Maven repository
+   and the dependency to build the sample Filter.
+  </p><pre class="brush: xml;">
+
+  &lt;repositories&gt;
+    &lt;repository&gt;
+      &lt;id&gt;forgerock-staging-repository&lt;/id&gt;
+      &lt;name&gt;ForgeRock Release Repository&lt;/name&gt;
+      &lt;url&gt;http://maven.forgerock.org/repo/releases&lt;/url&gt;
+      &lt;snapshots&gt;
+        &lt;enabled&gt;false&lt;/enabled&gt;
+      &lt;/snapshots&gt;
+    &lt;/repository&gt;
+    &lt;repository&gt;
+      &lt;id&gt;forgerock-snapshots-repository&lt;/id&gt;
+      &lt;name&gt;ForgeRock Snapshot Repository&lt;/name&gt;
+      &lt;url&gt;http://maven.forgerock.org/repo/snapshots&lt;/url&gt;
+      &lt;releases&gt;
+        &lt;enabled&gt;false&lt;/enabled&gt;
+      &lt;/releases&gt;
+    &lt;/repository&gt;
+  &lt;/repositories&gt;
+
+  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.forgerock.openig&lt;/groupId&gt;
+      &lt;artifactId&gt;openig-core&lt;/artifactId&gt;
+      &lt;version&gt;3.1.0&lt;/version&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;
+
+  </pre><p>
+   You can then build your customizations into a jar file
+   and install them in your local Maven repository
+   by using the <span class="command"><strong>mvn install</strong></span> command.
+  </p><div class="screen"><pre>
+$ <strong>mvn install</strong>
+<em>...
+[INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ sample-filter ---
+[INFO] Building jar: .../sample-filter/target/sample-filter-1.0.0-SNAPSHOT.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 1.478s
+[INFO] Finished at: Fri Nov 07 16:57:18 CET 2014
+[INFO] Final Memory: 18M/309M
+[INFO] ------------------------------------------------------------------------
+</em>
+  </pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom-embed"></a>11.13.&nbsp;Embedding Customizations in OpenIG</h2></div></div></div><p>
+   After building your customizations into a jar file,
+   you can include them in the OpenIG war file for deployment.
+   You do this by unpacking <code class="filename">OpenIG-3.1.0.war</code>,
+   including your jar library in <code class="filename">WEB-INF/lib</code>,
+   and then creating a new war file.
+  </p><p>
+   For example, if your jar file is in a project named <code class="literal">sample-filter</code>,
+   and the development version is <code class="literal">1.0.0-SNAPSHOT</code>,
+   you might include the file as in the following example.
+  </p><div class="screen"><pre>
+$ <strong>mkdir root &amp;&amp; cd root</strong>
+$ <strong>jar -xf ~/Downloads/OpenIG-3.1.0.war</strong>
+$ <strong>cp ~/Documents/sample-filter/target/sample-filter-1.0.0-SNAPSHOT.jar WEB-INF/lib</strong>
+$ <strong>jar -cf ../custom.war *</strong>
+  </pre></div><p>
+   In this example, the resulting <code class="filename">custom.war</code>
+   contains the custom sample filter.
+   You can deploy the custom war file
+   as you would deploy <code class="filename">OpenIG-3.1.0.war</code>.
+  </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-gateway-templates.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-auditing.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;10.&nbsp;Configuration Templates&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;12.&nbsp;OpenIG Audit Framework</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10060&components=10220&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

@@ -1,0 +1,357 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>OpenIG Release Notes</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><meta name="description" content="Notes covering OpenIG prerequisites, fixes, known issues. OpenIG provides a high-performance reverse proxy server with specialized session management and credential replay functionality."><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div lang="en" class="book"><div class="titlepage"><div><div><h1 class="title"><a name="release-notes"></a>OpenIG Release Notes</h1></div><div><h2 class="subtitle">Version 3.1.0</h2></div><div><div class="authorgroup"><div class="author"><h3 class="author"><span class="firstname">Mark </span> <span class="surname">Craig</span></h3><div lang="en" class="affiliation"><span class="orgname">ForgeRock AS<br></span><div class="address"><p><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="street">33&nbsp;New&nbsp;Montgomery&nbsp;St.</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="otheraddr">Suite&nbsp;1500</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="city">San&nbsp;Francisco</span>,&nbsp;<span class="state">CA</span>&nbsp;<span class="postcode">94105</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="country">USA</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="phone">+1&nbsp;415-599-1100&nbsp;(US)</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<code class="uri">www.forgerock.com</code><br>
+&nbsp;&nbsp;&nbsp;</p></div></div></div></div></div><div><p class="releaseinfo">Software release date: December 12, 2014</p></div><div><p class="copyright">Copyright &copy; 2012-2014 ForgeRock AS</p></div><div><a href="legalnotice.html">Legal Notice</a></div><div><p class="pubdate">Publication date: December 05, 2014</p></div><div><div class="abstract"><div class="abstract-title">Abstract</div><p>
+    Notes covering OpenIG prerequisites, fixes, known issues.
+    OpenIG provides a high-performance reverse proxy server
+    with specialized session management and credential replay functionality.
+   </p></div></div></div><hr></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="chapter"><a href="#chap-whats-new">1. What's New in OpenIG</a></span></dt><dt><span class="chapter"><a href="#chap-before-you-install">2. Before You Install</a></span></dt><dt><span class="chapter"><a href="#chap-compatibility">3. Changes &amp; Deprecated Functionality</a></span></dt><dt><span class="chapter"><a href="#chap-issues">4. Fixes, Limitations, &amp; Known Issues</a></span></dt><dt><span class="chapter"><a href="#chap-feedback">5. How to Report Problems &amp; Provide Feedback</a></span></dt><dt><span class="chapter"><a href="#chap-support">6. Support</a></span></dt></dl></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-whats-new"></a>Chapter&nbsp;1.&nbsp;What's New in OpenIG</h1></div></div></div><div class="itemizedlist"><p>
+   OpenIG 3.1.0 fixes a number of issues,
+   and provides the following additional features.
+  </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+    OpenIG can now store session information
+    in encrypted JSON Web Token (JWT) cookies on the user-agent (
+    <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-224" target="_blank">OPENIG-224</a>,
+    <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-278" target="_blank">OPENIG-278</a>).
+    By default, OpenIG continues to back session information
+    with HttpSession from the container where OpenIG runs.
+   </p><p>
+    With this change, you can specify the session storage
+    at the global level, or in a particular route configuration.
+    For details, see
+    <a href="../reference/index.html#JwtSession" class="link">JwtSession</a>
+    and
+    <a href="../gateway-guide/index.html#keystore-for-jwt-encryption" class="link"><em class="citetitle">Setting Up Keys For JWT Encryption</em></a>.
+   </p></li><li class="listitem"><p>
+    OpenIG now allows you to inline configuration objects (
+    <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-311" target="_blank">OPENIG-311</a>),
+    to omit "config" fields when all values are optional (
+    <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-300" target="_blank">OPENIG-300</a>),
+    to omit the "objects" field from the "heap"
+    <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-380" target="_blank">OPENIG-380</a>),
+    and even to omit the "heap" when it is empty
+    or would only contain a single handler (
+    <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-329" target="_blank">OPENIG-329</a>).
+   </p><p>
+    When you bring an object inline, you no longer need to specify the "name".
+   </p><p>
+    For example,
+    suppose your former <code class="filename">config.json</code> file looks like this:
+   </p><pre class="brush: javascript;">
+{
+    "heap": {
+        "objects": [
+            {
+                "name": "Chain",
+                "type": "Chain",
+                "config": {
+                    "filters": [
+                        "ReplaceHostFilter"
+                    ],
+                    "handler": "Router"
+                }
+            },
+            {
+                "name": "ReplaceHostFilter",
+                "type": "HeaderFilter",
+                "config": {
+                    "messageType": "REQUEST",
+                    "remove": [
+                        "host"
+                    ],
+                    "add": {
+                        "host": [
+                            "example.com"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "Router",
+                "type": "Router",
+                "config": {}
+            }
+        ]
+    },
+    "handler": "Chain"
+}
+   </pre><p>
+    OpenIG now lets you rewrite
+    the <code class="filename">config.json</code> file like this:
+   </p><pre class="brush: javascript;">
+{
+    "handler": {
+        "type": "Chain",
+        "config": {
+            "filters": [
+                {
+                    "type": "HeaderFilter",
+                    "config": {
+                        "messageType": "REQUEST",
+                        "remove": [
+                            "host"
+                        ],
+                        "add": {
+                            "host": [
+                                "example.com"
+                            ]
+                        }
+                    }
+                }
+            ],
+            "handler": {
+                "type": "Router"
+            }
+        }
+    }
+}
+   </pre><p>
+    Examples in the documentation now use streamlined configurations
+    where it makes sense.
+   </p></li><li class="listitem"><p>
+    OpenIG now supports object decorators (
+    <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-340" target="_blank">OPENIG-340</a>).
+    Decorators allow you to define heap objects that decorate other objects,
+    adding the new behavior that the decorator provides.
+   </p><div class="itemizedlist"><p>
+     OpenIG provides the following decorators out of the box.
+    </p><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+      A CaptureDecorator that extends what the CaptureFilter could do
+      to capture requests, responses, and exchange data on any decorated object
+      (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-299" target="_blank">OPENIG-299</a>,
+      <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-301" target="_blank">OPENIG-301</a>)
+     </p></li><li class="listitem"><p>
+      A TimerDecorator that records times to process the exchange
+      through any decorated object (
+      <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-352" target="_blank">OPENIG-352</a>,
+      <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-353" target="_blank">OPENIG-353</a>)
+     </p></li><li class="listitem"><p>
+      An AuditDecorator that allows you to audit operation
+      for any decorated object.
+     </p></li></ul></div><p>
+    For detailed information about decorators,
+    see the <em class="citetitle">Reference</em> on
+    <a href="../reference/index.html#decorators-conf" class="link"><em class="citetitle">Decorators</em></a>.
+   </p></li><li class="listitem"><p>
+    OpenIG now provides a publish-and-subscribe audit framework
+    and a sample monitoring handler that returns basic statistics (
+    <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-359" target="_blank">OPENIG-359</a>,
+    <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-386" target="_blank">OPENIG-386</a>).
+    To learn more, start by reading the chapter about the
+    <a href="../gateway-guide/index.html#chap-auditing" class="link"><em class="citetitle">OpenIG Audit Framework</em></a>.
+   </p></li><li class="listitem"><p>
+    OpenIG script configurations can now include arguments (
+    <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-240" target="_blank">OPENIG-240</a>).
+   </p></li><li class="listitem"><p>
+    The OAuth2ClientFilter and OAuth2ResourceServerFilter now cache data
+    to avoid unnecessarily calls to the provider (
+    <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-350" target="_blank">OPENIG-350</a>).
+   </p></li><li class="listitem"><p>
+    OpenIG uses improved object names in log messages
+    that make it easier to identify the source of the message (
+    <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-358" target="_blank">OPENIG-358</a>,
+    <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-371" target="_blank">OPENIG-371</a>).
+   </p></li><li class="listitem"><p>
+    The OpenIG Exchange now provides information about the client (
+    <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-333" target="_blank">OPENIG-333</a>).
+   </p><p>
+    For details see the <em class="citetitle">Reference</em> on
+    <a href="../reference/index.html#ClientInfo" class="link"><em class="citetitle">ClientInfo</em></a>.
+   </p></li></ul></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-before-you-install"></a>Chapter&nbsp;2.&nbsp;Before You Install</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="#java-requirements">2.1. JDK Version</a></span></dt><dt><span class="section"><a href="#which-container">2.2. Web Application Containers</a></span></dt></dl></div><p>
+  This chapter covers requirements for running OpenIG software.
+ </p><div class="tip"><h3 class="title">Tip</h3><p>
+  If you have a special request to support
+  a component or combination not listed here,
+  contact ForgeRock at
+  <a class="link" href="mailto:info@forgerock.com" target="_top">info@forgerock.com</a>.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="java-requirements"></a>2.1.&nbsp;JDK Version</h2></div></div></div><p>
+   This release of OpenIG requires
+   Java Development Kit 6, 7, or 8.
+   ForgeRock recommends the most recent update
+   to ensure you have the latest security fixes.
+  </p><p>
+   If you install an OpenAM policy agent
+   in the same container as OpenIG,
+   then you must use a Java release that is supported
+   with the policy agent as well.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="which-container"></a>2.2.&nbsp;Web Application Containers</h2></div></div></div><div class="itemizedlist"><p>
+    OpenIG runs in the following web application containers.
+   </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Apache Tomcat 7</p></li><li class="listitem"><p>Jetty 8 (8.1.13 or later)</p></li></ul></div><p>
+   You must deploy OpenIG to the root context of the container.
+   Deployment in other context causes unexpected results,
+   and cannot be supported.
+  </p><p>
+   OpenIG expressions depend on Unified Expression Language 2.2,
+   which is available in containers that support Servlet 3.0 or later.
+   Some expressions can lead to a <code class="literal">java.lang.NoSuchMethodError</code>
+   in containers that support only Servlet 2.5 (and EL 2.1).
+  </p><p>
+   See the <em class="citetitle">Guide to OpenIG</em> section,
+   <a href="../gateway-guide/index.html#configure-container" class="link"><em class="citetitle">Configuring Deployment Containers</em></a>,
+   for details on setting up your web application container.
+  </p></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-compatibility"></a>Chapter&nbsp;3.&nbsp;Changes &amp; Deprecated Functionality</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="#changes">3.1. Important Changes to Existing Functionality</a></span></dt><dt><span class="section"><a href="#deprecated">3.2. Deprecated Functionality</a></span></dt><dt><span class="section"><a href="#removed">3.3. Removed Functionality</a></span></dt></dl></div><p>
+  This chapter covers both major changes to existing functionality,
+  and also deprecated and removed functionality.
+ </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="changes"></a>3.1.&nbsp;Important Changes to Existing Functionality</h2></div></div></div><p>
+   This release includes configuration changes compared to OpenIG 3.0.0.
+   See <a class="xref" href="#deprecated" title="3.2.&nbsp;Deprecated Functionality">Section&nbsp;3.2, &#8220;Deprecated Functionality&#8221;</a> for a list of configuration changes
+   resulting in deprecation of earlier features.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="deprecated"></a>3.2.&nbsp;Deprecated Functionality</h2></div></div></div><p>
+   This release deprecates the following configuration settings.
+   Deprecation is defined in the <em class="citetitle">Reference</em> appendix on
+   <a href="../reference/index.html#interface-stability" class="link"><em class="citetitle">ForgeRock Product Interface Stability</em></a>.
+  </p><div class="table"><a name="d0e350"></a><div class="table-title">Table&nbsp;3.1.&nbsp;Configuration settings</div><div class="table-contents"><table summary="Configuration settings" width="100%" border="0"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>
+       Configuration Object
+      </th><th>
+       <a href="../reference/index.html#interface-stability" class="link">Deprecated</a> Settings
+      </th><th>
+       Newer
+       <a href="../reference/index.html#interface-stability" class="link">Evolving</a> Settings
+      </th></tr></thead><tbody><tr><td>
+       <a href="../reference/index.html#CaptureFilter" class="link">CaptureFilter</a>
+      </td><td>
+       Entire object
+      </td><td>
+       Use a
+       <a href="../reference/index.html#CaptureDecorator" class="link">CaptureDecorator</a> instead
+      </td></tr><tr><td rowspan="2">
+       <a href="../reference/index.html#gateway-servlet" class="link">gateway servlet</a>
+      </td><td>
+       "handlerObject"
+      </td><td>
+       New name: "handler"
+      </td></tr><tr><td>
+       Deprecated format:
+       <code class="literal">"heap": { "objects": [ configuration object, ... ] }</code>
+      </td><td>
+       New format:
+       <code class="literal">"heap": [ configuration object, ... ]</code>
+      </td></tr><tr><td rowspan="2">
+       <a href="../reference/index.html#HttpClient" class="link">HttpClient</a>
+      </td><td>
+       "keystore"
+      </td><td>
+       Replaced by "keyManager", which takes one or more
+       <a href="../reference/index.html#KeyManager" class="link">KeyManager</a> names
+      </td></tr><tr><td>
+       "truststore"
+      </td><td>
+       Replaced by "trustManager", which takes one or more
+       <a href="../reference/index.html#TrustManager" class="link">TrustManager</a> names
+      </td></tr><tr><td rowspan="3">
+       <a href="../reference/index.html#OAuth2ResourceServerFilter" class="link">OAuth2ResourceServerFilter</a>
+      </td><td>
+       "enforceHttps"
+      </td><td>
+       New name: "requireHttps"
+      </td></tr><tr><td>
+       "httpHandler"
+      </td><td>
+       New name: "providerHandler"
+      </td></tr><tr><td>
+       "requiredScopes"
+      </td><td>
+       New name: "scopes"
+      </td></tr><tr><td>
+       RedirectFilter
+      </td><td>
+       Entire object
+      </td><td>
+       Use <a href="../reference/index.html#LocationHeaderFilter" class="link">LocationHeaderFilter</a> instead
+      </td></tr><tr><td>
+       <a href="../reference/index.html#Route" class="link">Route</a>
+      </td><td>
+       Deprecated format:
+       <code class="literal">"heap": { "objects": [ configuration object, ... ] }</code>
+      </td><td>
+       New format:
+       <code class="literal">"heap": [ configuration object, ... ]</code>
+      </td></tr></tbody></table></div></div><br class="table-break"><div class="itemizedlist"><p>
+    This release deprecates the following API classes,
+    which are likely to be removed in a future release.
+   </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     <a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/index.html?org/forgerock/openig/filter/CaptureFilter.html" target="_blank">org.forgerock.openig.filter.CaptureFilter</a>
+    </p></li><li class="listitem"><p>
+     <a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/index.html?org/forgerock/openig/heap/NestedHeaplet.html" target="_blank">org.forgerock.openig.heap.NestedHeaplet</a>
+    </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="removed"></a>3.3.&nbsp;Removed Functionality</h2></div></div></div><p>
+   No functionality has been removed in this release.
+  </p></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-issues"></a>Chapter&nbsp;4.&nbsp;Fixes, Limitations, &amp; Known Issues</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="#fixes">4.1. Fixes</a></span></dt><dt><span class="section"><a href="#limitations">4.2. Limitations</a></span></dt><dt><span class="section"><a href="#known-issues">4.3. Known Issues</a></span></dt></dl></div><p>
+  OpenIG issues are tracked at
+  <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG" target="_blank">https://bugster.forgerock.org/jira/browse/OPENIG</a>.
+  This chapter covers the status of key issues and limitations
+  at release 3.1.0.
+ </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="fixes"></a>4.1.&nbsp;Fixes</h2></div></div></div><p>
+   The following issues were fixed in release 3.1.0.
+  </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-370" target="_blank">OPENIG-370</a>: Log output often includes irrelevant or duplicated information</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-368" target="_blank">OPENIG-368</a>: OAuth2ClientFilter rebases client endpoint against possibly rebased request.uri</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-331" target="_blank">OPENIG-331</a>: Moving a file in Routes may result in no route configured</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-325" target="_blank">OPENIG-325</a>: Allow scripts and AssignmentFilters to update exchange.request.uri</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-312" target="_blank">OPENIG-312</a>: Use Jackson for better messages about configuration errors in JSON</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-119" target="_blank">OPENIG-119</a>: RedirectFilter should handle HTTP 301</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-85" target="_blank">OPENIG-85</a>: SqlAttributesFilter throws SQLException: Invalid operation for forward only resultset</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-78" target="_blank">OPENIG-78</a>: SqlAttributesFilter throws SQLException: Invalid column index</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-56" target="_blank">OPENIG-56</a>: Temporary files leak</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-30" target="_blank">OPENIG-30</a>: OpenIG to protect multiple apps at one location</p></li></ul></div><p>
+   The ForgeRock issue tracker gives you access to the
+   <a class="link" href="https://bugster.forgerock.org/jira/issues/?filter=11945" target="_blank">complete list of resolved issues</a>.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="limitations"></a>4.2.&nbsp;Limitations</h2></div></div></div><p>
+   For HTTPS, OpenIG can check server certificates.
+   However mutual authentication,
+   where OpenIG presents its client certificate,
+   is not supported if the client certificate
+   is not the first certificate in the HttpClient key store.
+  </p><p>
+   OpenIG scripts are not sandboxed,
+   but instead have access to anything in their environment.
+   You must make sure that the scripts that OpenIG loads are safe.
+  </p><p>
+   When acting as an OpenID Connect 1.0 relying party,
+   OpenIG does not support dynamic registration.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="known-issues"></a>4.3.&nbsp;Known Issues</h2></div></div></div><p>
+   The following known issues remained open
+   at the time release 3.1.0 became available.
+  </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-322" target="_blank">OPENIG-322</a>: Cannot access both an OpenAM (self-signed) and a Google HTTPS endpoint</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-290" target="_blank">OPENIG-290</a>: Null pointer exception when capturing SAML federation response</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-258" target="_blank">OPENIG-258</a>: OpenIG doesn't shutdown properly when protected by a Tomcat J2EE agent</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-234" target="_blank">OPENIG-234</a>: Federation doesn't work if we used incomplete user in IDP</p></li></ul></div></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-feedback"></a>Chapter&nbsp;5.&nbsp;How to Report Problems &amp; Provide Feedback</h1></div></div></div><p>
+  If you have questions regarding OpenIG
+  that are not answered by the documentation,
+  there is a mailing list which can be found at
+  <a class="link" href="https://lists.forgerock.org/mailman/listinfo/openig" target="_blank">https://lists.forgerock.org/mailman/listinfo/openig</a>
+  where you are likely to find an answer.</p><p>
+  If you have found issues or reproducible bugs within OpenIG,
+  report them in
+  <a class="link" href="https://bugster.forgerock.org" target="_blank">https://bugster.forgerock.org</a>.
+ </p><div class="itemizedlist"><p>
+   When requesting help with a problem, include the following information:
+  </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+    Description of the problem,
+    including when the problem occurs and its impact on your operation
+   </p></li><li class="listitem"><p>
+    Machine type, operating system version, web container and version,
+    Java version, and OpenIG release version,
+    including any patches or other software that might be affecting the problem
+   </p></li><li class="listitem"><p>
+    Steps to reproduce the problem
+   </p></li><li class="listitem"><p>
+    Any relevant logs or stack traces
+   </p></li></ul></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-support"></a>Chapter&nbsp;6.&nbsp;Support</h1></div></div></div><p>
+  You can purchase OpenIG support, subscriptions and training courses
+  from ForgeRock and from consulting partners around the world and in your area.
+  To contact ForgeRock, send mail to
+  <a class="link" href="mailto:info@forgerock.com" target="_top">info@forgerock.com</a>.
+  To find a partner in your area, see
+  <a class="link" href="http://forgerock.com/partners/find-a-partner/" target="_blank">http://forgerock.com/partners/find-a-partner/</a>.
+ </p></div></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10060&components=10220&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

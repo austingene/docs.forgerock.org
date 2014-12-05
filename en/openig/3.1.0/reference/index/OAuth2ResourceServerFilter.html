@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>OAuth2ResourceServerFilter</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenIG Reference"><link rel="up" href="filters-conf.html" title="Filters"><link rel="prev" href="OAuth2ClientFilter.html" title="OAuth2ClientFilter"><link rel="next" href="ScriptableFilter.html" title="ScriptableFilter"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">OAuth2ResourceServerFilter</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="OAuth2ClientFilter.html">Prev</a>&nbsp;</td><th width="60%" align="center">Filters</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ScriptableFilter.html">Next</a></td></tr></table><hr></div><div lang="en" class="refentry"><a name="OAuth2ResourceServerFilter"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>OAuth2ResourceServerFilter &#8212; Validate an Exchange containing an OAuth 2.0 access token</p></div><div class="refsect1"><a name="OAuth2ResourceServerFilter-description"></a><h2>Description</h2><a class="indexterm" name="d0e3630"></a><p>
+   An OAuth2ResourceServerFilter is a filter
+   that validates an exchange containing an OAuth 2.0 access token.
+   The filter expects an OAuth 2.0 token
+   from the HTTP Authorization header of the request,
+   such as the following example header,
+   where the OAuth 2.0 access token is
+   <code class="literal">1fc0e143-f248-4e50-9c13-1d710360cec9</code>.
+  </p><pre class="brush: http;">
+Authorization: Bearer 1fc0e143-f248-4e50-9c13-1d710360cec9
+  </pre><p>
+   The filter extracts the access token,
+   and then validates it against the configured "tokenInfoEndpoint" URL.
+  </p><p>
+   On successful validation,
+   the filter includes the token info from the authorization server response
+   as JSON in the exchange at the location specified by the "target" setting.
+   Subsequent filters and handlers can access the token info through the exchange.
+  </p><p>
+   Regarding errors, if the filter configuration and access token
+   together result in an invalid request to the authorization server,
+   the filter returns an HTTP 400 Bad Request response to the user-agent.
+  </p><p>
+   If the access token is missing from the request,
+   the filter returns an HTTP 401 Unauthorized response to the user-agent.
+  </p><pre class="brush: http;">
+HTTP/1.1 401 Unauthorized
+WWW-Authenticate: Bearer realm="OpenIG"
+  </pre><p>
+   If the access token is not valid, for example because it has expired,
+   the filter also returns an HTTP 401 Unauthorized response to the user-agent.
+  </p><p>
+   If the scopes for the access token do not match the specified required scopes,
+   the filter returns an HTTP 403 Forbidden response to the user-agent.
+  </p></div><div class="refsect1"><a name="d0e3656"></a><h2>Usage</h2><pre class="brush: javascript;">
+{
+  "name": string,
+  "type": "OAuth2ResourceServerFilter",
+  "config": {
+    "providerHandler": Handler reference,
+    "scopes": [ expression, ... ],
+    "tokenInfoEndpoint": URL string,
+    "cacheExpiration": duration string,
+    "requireHttps": boolean,
+    "realm": string,
+    "target": expression
+  }
+}
+  </pre><p>
+   An alternative value for "type" is "OAuth2RSFilter".
+  </p></div><div class="refsect1"><a name="d0e3663"></a><h2>Properties</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="code">"providerHandler"</code>: <span class="emphasis"><em><a href="../../reference/index/handlers-conf.html" class="link">Handler</a> reference, required</em></span></span></dt><dd><p>
+      Invoke this HTTP client handler to send token info requests.
+     </p><p>
+      Provide either the name of a Handler object defined in the heap,
+      or an inline Handler configuration object.
+     </p><p>
+      Usually set this to the name of a
+      <a href="../../reference/index/ClientHandler.html" class="link">ClientHandler</a> configured in the heap.
+     </p></dd><dt><span class="term"><code class="code">"scopes"</code>: <span class="emphasis"><em>array of <a href="../../reference/index/Expressions.html" class="link">expressions</a>, required</em></span></span></dt><dd><p>
+      The list of required OAuth 2.0 scopes for this protected resource.
+     </p></dd><dt><span class="term"><code class="code">"tokenInfoEndpoint"</code>: <span class="emphasis"><em>URL string, required</em></span></span></dt><dd><p>
+      The URL to the token info endpoint of the OAuth 2.0 authorization server.
+     </p></dd><dt><span class="term"><code class="code">"cacheExpiration"</code>: <span class="emphasis"><em>duration string, optional</em></span></span></dt><dd><p>
+      Duration for which to cache OAuth 2.0 access tokens.
+     </p><p>
+      Caching allows OpenIG to avoid repeated requests for token info
+      when reusing the information over a short period.
+     </p><div lang="en" class="itemizedlist"><p>
+  A
+  <a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/index.html?org/forgerock/openig/util/Duration.html" target="_blank">duration</a> is a lapse of time expressed in English,
+  such as "23 hours 59 minutes and 59 seconds".
+ </p><p>
+    Durations are not case sensitive.
+  </p><p>
+    Negative durations are not supported.
+  </p><p>
+  The following units can be used in durations.
+ </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+      "indefinite", "infinity", "undefined", "unlimited": unlimited duration
+    </p></li><li class="listitem"><p>
+      "zero", "disabled": zero-length duration
+    </p></li><li class="listitem"><p>
+   "days", "day", "d": days
+  </p></li><li class="listitem"><p>
+   "hours", "hour", "h": hours
+  </p></li><li class="listitem"><p>
+   "minutes", "minute", "min", "m": minutes
+  </p></li><li class="listitem"><p>
+   "seconds", "second", "sec", "s": seconds
+  </p></li><li class="listitem"><p>
+   "milliseconds", "millisecond", "millisec", "millis", "milli", "ms": milliseconds
+  </p></li><li class="listitem"><p>
+   "microseconds", "microsecond", "microsec", "micros", "micro", "us": microseconds
+  </p></li><li class="listitem"><p>
+   "nanoseconds", "nanosecond", "nanosec", "nanos", "nano", "ns": nanoseconds
+  </p></li></ul></div><p>
+      Default: 1 minute
+     </p><p>
+      Set this to "disabled" or "zero" to disable caching.
+      When caching is disabled,
+      each request triggers a new request to the authorization server
+      to verify the access token.
+     </p></dd><dt><span class="term"><code class="code">"requireHttps"</code>: <span class="emphasis"><em>boolean, optional</em></span></span></dt><dd><p>
+      Whether to require that requests use the HTTPS scheme.
+     </p><p>
+      Default: true
+     </p></dd><dt><span class="term"><code class="code">"realm"</code>: <span class="emphasis"><em>string, optional</em></span></span></dt><dd><p>
+      HTTP authentication realm to include
+      in the WWW-Authenticate response header field
+      when returning an HTTP 401 Unauthorized status
+      to a user-agent that need to authenticate.
+     </p><p>
+      Default: OpenIG
+     </p></dd><dt><span class="term"><code class="code">"target"</code>: <span class="emphasis"><em><a href="../../reference/index/Expressions.html" class="link">expression</a>,
+     optional</em></span></span></dt><dd><p>
+      Where to store the OAuth 2.0 access token in the exchange,
+      such as <code class="literal">${exchange.token}</code>.
+     </p><p>
+      Default: <code class="literal">${exchange.oauth2AccessToken}</code>
+     </p></dd></dl></div></div><div class="refsect1"><a name="d0e3809"></a><h2>Example</h2><p>
+   The following example configures an OAuth 2.0 protected resource filter
+   that expects scopes "email" and "profile"
+   (and returns an HTTP 403 Forbidden status if the scopes are not present),
+   and validates access tokens against the OpenAM token info endpoint.
+   It caches access tokens for up to 2 minutes.
+  </p><pre class="brush: javascript;">
+{
+    "name": "ProtectedResourceFilter",
+    "type": "OAuth2ResourceServerFilter",
+    "config": {
+        "providerHandler": "ClientHandler",
+        "scopes": [
+            "email",
+            "profile"
+        ],
+        "tokenInfoEndpoint": "https://openam.example.com:8443/openam/oauth2/tokeninfo",
+        "cacheExpiration": "2 minutes"
+    }
+}
+  </pre></div><div class="refsect1"><a name="d0e3816"></a><h2>Javadoc</h2><p>
+   <a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/index.html?org/forgerock/openig/filter/oauth2/OAuth2ResourceServerFilter.html" target="_blank">org.forgerock.openig.filter.oauth2.OAuth2ResourceServerFilter</a></p></div><div class="refsect1"><a name="d0e3823"></a><h2>See Also</h2><p>
+   <a class="link" href="http://tools.ietf.org/html/rfc6749" target="_blank">The OAuth 2.0 Authorization Framework</a>
+  </p><p>
+   <a class="link" href="http://tools.ietf.org/html/rfc6750" target="_blank">OAuth 2.0 Bearer Token Usage</a>
+  </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="OAuth2ClientFilter.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="filters-conf.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ScriptableFilter.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">OAuth2ClientFilter&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;ScriptableFilter</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10060&components=10220&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

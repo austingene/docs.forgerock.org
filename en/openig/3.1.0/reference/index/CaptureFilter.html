@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>CaptureFilter</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenIG Reference"><link rel="up" href="filters-conf.html" title="Filters"><link rel="prev" href="AssignmentFilter.html" title="AssignmentFilter"><link rel="next" href="CookieFilter.html" title="CookieFilter"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">CaptureFilter</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="AssignmentFilter.html">Prev</a>&nbsp;</td><th width="60%" align="center">Filters</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="CookieFilter.html">Next</a></td></tr></table><hr></div><div lang="en" class="refentry"><a name="CaptureFilter"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>CaptureFilter &#8212; capture request and response messages</p></div><div class="refsect1"><a name="d0e2129"></a><h2>Description</h2><a class="indexterm" name="d0e2132"></a><p>Captures request and response messages for further analysis.</p><p>
+   Interface Stability:
+   <a href="../../reference/index/appendix-interface-stability.html#interface-stability" class="link">Deprecated</a>.
+   Use a
+   <a href="../../reference/index/CaptureDecorator.html" class="link">CaptureDecorator</a> instead.
+  </p></div><div class="refsect1"><a name="d0e2147"></a><h2>Usage</h2><pre class="brush: javascript;">{
+     "name": string,
+     "type": "CaptureFilter",
+     "config": {
+         "file": expression,
+         "charset": string,
+         "condition": expression,
+         "captureEntity": boolean
+     }
+}</pre></div><div class="refsect1"><a name="d0e2152"></a><h2>Properties</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="code">"file"</code>: <span class="emphasis"><em><a href="../../reference/index/Expressions.html" class="link">expression</a>,
+     required</em></span></span></dt><dd><p>The path of the file where captured output should be written.</p></dd><dt><span class="term"><code class="code">"charset"</code>: <span class="emphasis"><em>string, optional</em></span></span></dt><dd><p>The character set to encode captured output with. Default:
+     <code class="literal">"UTF-8"</code>.</p></dd><dt><span class="term"><code class="code">"condition"</code>: <span class="emphasis"><em><a href="../../reference/index/Expressions.html" class="link">expression</a>,
+    optional</em></span></span></dt><dd><p>The condition to evaluate to determine whether to capture an
+     exchange. Default: unconditional.</p></dd><dt><span class="term"><code class="code">"captureEntity"</code>: <span class="emphasis"><em>boolean,
+    optional</em></span></span></dt><dd><p>
+      Whether the message entity should be captured.
+     </p><p>
+      The filter omits binary entities,
+      instead writing a <code class="literal">[binary entity]</code> marker to the file.
+     </p><p>
+      Default: true
+     </p></dd></dl></div></div><div class="refsect1"><a name="d0e2210"></a><h2>Examples</h2><p>Log the entire request and response:</p><pre class="brush: javascript;">
+{
+    "name": "LogToTemporaryFile",
+    "type": "CaptureFilter",
+    "config": {
+        "file": "/tmp/gateway.log"
+    }
+}
+  </pre><p>Log the request and response. Do not log the entity:</p><pre class="brush: javascript;">
+{
+    "name": "LogToTemporaryFile",
+    "type": "CaptureFilter",
+    "config": {
+        "file": "/tmp/gateway.log",
+        "captureEntity": false
+    }
+}
+  </pre><p>
+   You can use the CaptureFilter to capture the exchange
+   before sending the request and when receiving the response
+   as in the following example.
+  </p><pre class="brush: javascript;">
+{
+    "name": "OutgoingChain",
+    "type": "Chain",
+    "config": {
+        "filters": [ "LogToTemporaryFile" ],
+        "handler": "ClientHandler"
+    }
+},
+{
+    "name": "LogToTemporaryFile",
+    "type": "CaptureFilter",
+    "config": {
+        "captureEntity": false,
+        "file": "/tmp/gateway.log"
+    }
+}
+  </pre></div><div class="refsect1"><a name="d0e2225"></a><h2>Javadoc</h2><p><a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/org/forgerock/openig/filter/CaptureFilter.html" target="_blank">org.forgerock.openig.filter.CaptureFilter</a></p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="AssignmentFilter.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="filters-conf.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="CookieFilter.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">AssignmentFilter&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;CookieFilter</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10060&components=10220&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

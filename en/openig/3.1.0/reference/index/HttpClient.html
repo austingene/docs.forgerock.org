@@ -1,0 +1,222 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>HttpClient</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenIG Reference"><link rel="up" href="misc-conf.html" title="Miscellaneous Heap Objects"><link rel="prev" href="FileLogSink.html" title="FileLogSink"><link rel="next" href="JwtSession.html" title="JwtSession"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">HttpClient</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="FileLogSink.html">Prev</a>&nbsp;</td><th width="60%" align="center">Miscellaneous Heap Objects</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="JwtSession.html">Next</a></td></tr></table><hr></div><div lang="en" class="refentry"><a name="HttpClient"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>HttpClient &#8212; group settings and submit requests to remote servers</p></div><div class="refsect1"><a name="HttpClient-description"></a><h2>Description</h2><a class="indexterm" name="d0e5242"></a><p>
+   Groups settings and submits requests to remote servers.
+  </p><p>
+   You configure <code class="literal">HttpClient</code> objects in order to
+   specify HTTP client settings for
+   <a href="../../reference/index/ClientHandler.html" class="link">ClientHandler</a> objects.
+  </p></div><div class="refsect1"><a name="d0e5257"></a><h2>Usage</h2><pre class="brush: javascript;">
+{
+  "name": string,
+  "type": "HttpClient",
+  "config": {
+    "connections": number,
+    "disableReuseConnection": boolean,
+    "disableRetries": boolean,
+    "hostnameVerifier": string,
+    "soTimeout": duration string,
+    "connectionTimeout": duration string,
+    "keyManager": KeyManager reference(s),
+    "trustManager": TrustManager reference(s),
+  }
+}
+  </pre></div><div class="refsect1"><a name="d0e5262"></a><h2>Properties</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="code">"connections"</code>: <span class="emphasis"><em>number, optional</em></span></span></dt><dd><p>
+      The maximum number of connections to open, from 1-64 inclusive.
+     </p><p>
+      Default: 64
+     </p></dd><dt><span class="term"><code class="code">"connectionTimeout"</code>: <span class="emphasis"><em>duration string, optional</em></span></span></dt><dd><p>
+      Amount of time to wait to establish a connection, expressed as a duration
+     </p><div lang="en" class="itemizedlist"><p>
+  A
+  <a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/index.html?org/forgerock/openig/util/Duration.html" target="_blank">duration</a> is a lapse of time expressed in English,
+  such as "23 hours 59 minutes and 59 seconds".
+ </p><p>
+    Durations are not case sensitive.
+  </p><p>
+    Negative durations are not supported.
+  </p><p>
+  The following units can be used in durations.
+ </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+      "indefinite", "infinity", "undefined", "unlimited": unlimited duration
+    </p></li><li class="listitem"><p>
+      "zero", "disabled": zero-length duration
+    </p></li><li class="listitem"><p>
+   "days", "day", "d": days
+  </p></li><li class="listitem"><p>
+   "hours", "hour", "h": hours
+  </p></li><li class="listitem"><p>
+   "minutes", "minute", "min", "m": minutes
+  </p></li><li class="listitem"><p>
+   "seconds", "second", "sec", "s": seconds
+  </p></li><li class="listitem"><p>
+   "milliseconds", "millisecond", "millisec", "millis", "milli", "ms": milliseconds
+  </p></li><li class="listitem"><p>
+   "microseconds", "microsecond", "microsec", "micros", "micro", "us": microseconds
+  </p></li><li class="listitem"><p>
+   "nanoseconds", "nanosecond", "nanosec", "nanos", "nano", "ns": nanoseconds
+  </p></li></ul></div><p>
+      Default: 10 seconds
+     </p></dd><dt><span class="term"><code class="code">"disableRetries"</code>: <span class="emphasis"><em>boolean, optional</em></span></span></dt><dd><p>
+      Whether to disable automatic retries for failed requests.
+     </p><p>
+      Default: <code class="literal">true</code>
+     </p></dd><dt><span class="term"><code class="code">"disableReuseConnection"</code>: <span class="emphasis"><em>boolean, optional</em></span></span></dt><dd><p>
+      Whether to disable connection reuse.
+     </p><p>
+      Default: <code class="literal">true</code>
+     </p></dd><dt><span class="term"><code class="code">"hostnameVerifier"</code>: <span class="emphasis"><em>string, optional</em></span></span></dt><dd><p>
+      How to handle hostname verification for outgoing SSL connections.
+     </p><div class="itemizedlist"><p>
+       Set this to one of the following values.
+      </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+        <code class="literal">ALLOW_ALL</code>: turn off verification.
+       </p></li><li class="listitem"><p>
+        <code class="literal">BROWSER_COMPATIBLE</code>:
+        match the hostname either as the value of the the first CN,
+        or any of the subject-alt names.
+       </p><p>
+        A wildcard can occur in the CN, and in any of the subject-alt names.
+        Wildcards match all subdomains, so <code class="literal">*.example.com</code>
+        matches <code class="literal">www.example.com</code>
+        and <code class="literal">some.host.example.com</code>.
+       </p></li><li class="listitem"><p>
+        <code class="literal">STRICT</code>:
+        match the hostname either as the value of the the first CN,
+        or any of the subject-alt names.
+       </p><p>
+        A wildcard can occur in the CN, and in any of the subject-alt names.
+        Wildcards match one domain level,
+        so <code class="literal">*.example.com</code>
+        matches <code class="literal">www.example.com</code>
+        but not <code class="literal">some.host.example.com</code>.
+       </p></li></ul></div><p>
+      Default: <code class="literal">ALLOW_ALL</code>
+     </p></dd><dt><span class="term"><code class="code">"keyManager"</code>: <span class="emphasis"><em><a href="../../reference/index/KeyManager.html" class="link">KeyManager</a> reference(s), optional</em></span></span></dt><dd><p>
+      The key manager(s) that handle(s) this client's keys and certificates.
+     </p><p>
+      The value of this field can be a single reference,
+      or an array of references.
+     </p><p>
+      Provide either the name(s) of KeyManager object(s) defined in the heap,
+      or specify the configuration object(s) inline.
+     </p><p>
+      You can specify either a single KeyManager,
+      as in <code class="literal">"keyManager": "MyKeyManager"</code>,
+      or an array of KeyManagers, as in
+      <code class="literal">"keyManager": [ "FirstKeyManager", "SecondKeyManager" ]</code>.
+     </p><p>
+      If you do not configure a key manager,
+      then the client cannot present a certificate,
+      and so cannot play the client role in mutual authentication.
+     </p></dd><dt><span class="term"><code class="code">"soTimeout"</code>: <span class="emphasis"><em>duration string, optional</em></span></span></dt><dd><p>
+      Socket timeout, after which stalled connections are destroyed,
+      expressed as a duration
+     </p><div lang="en" class="itemizedlist"><p>
+  A
+  <a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/index.html?org/forgerock/openig/util/Duration.html" target="_blank">duration</a> is a lapse of time expressed in English,
+  such as "23 hours 59 minutes and 59 seconds".
+ </p><p>
+    Durations are not case sensitive.
+  </p><p>
+    Negative durations are not supported.
+  </p><p>
+  The following units can be used in durations.
+ </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+      "indefinite", "infinity", "undefined", "unlimited": unlimited duration
+    </p></li><li class="listitem"><p>
+      "zero", "disabled": zero-length duration
+    </p></li><li class="listitem"><p>
+   "days", "day", "d": days
+  </p></li><li class="listitem"><p>
+   "hours", "hour", "h": hours
+  </p></li><li class="listitem"><p>
+   "minutes", "minute", "min", "m": minutes
+  </p></li><li class="listitem"><p>
+   "seconds", "second", "sec", "s": seconds
+  </p></li><li class="listitem"><p>
+   "milliseconds", "millisecond", "millisec", "millis", "milli", "ms": milliseconds
+  </p></li><li class="listitem"><p>
+   "microseconds", "microsecond", "microsec", "micros", "micro", "us": microseconds
+  </p></li><li class="listitem"><p>
+   "nanoseconds", "nanosecond", "nanosec", "nanos", "nano", "ns": nanoseconds
+  </p></li></ul></div><p>
+      Default: 10 seconds
+     </p></dd><dt><span class="term"><code class="code">"trustManager"</code>: <span class="emphasis"><em><a href="../../reference/index/TrustManager.html" class="link">TrustManager</a> reference(s), optional</em></span></span></dt><dd><p>
+      The trust managers that handle(s) peers' public key certificates.
+     </p><p>
+      The value of this field can be a single reference,
+      or an array of references.
+     </p><p>
+      Provide either the name(s) of TrustManager object(s) defined in the heap,
+      or specify the configuration object(s) inline.
+     </p><p>
+      You can specify either a single
+      <a href="../../reference/index/TrustManager.html" class="link">TrustManager</a>, as in
+      <code class="literal">"trustManager": "MyTrustManager"</code>,
+      or an array of KeyManagers, as in
+      <code class="literal">"trustManager": [ "FirstTrustManager", "SecondTrustManager" ]</code>.
+     </p><p>
+      If you do not configure a trust manager,
+      then the client uses only the default Java trust store.
+      The default Java trust store depends on the Java environment.
+      For example, <code class="filename">$JAVA_HOME/lib/security/cacerts</code>.
+     </p></dd></dl></div></div><div class="refsect1"><a name="d0e5528"></a><h2>Example</h2><pre class="brush: javascript;">
+{
+    "name": "HttpClient",
+    "type": "HttpClient",
+    "config": {
+        "connections": 64,
+        "disableReuseConnection": true,
+        "disableRetries": true,
+        "hostnameVerifier": "BROWSER_COMPATIBLE",
+        "soTimeout": "10 seconds",
+        "connectionTimeout": "10 seconds",
+        "keyManager": {
+            "type": "KeyManager",
+            "config": {
+                "keystore": {
+                    "type": "KeyStore",
+                    "config": {
+                        "url": "file://${env['HOME']}/keystore.jks",
+                        "password": "${system['keypass']}"
+                    }
+                },
+                "password": "${system['keypass']}"
+            }
+        },
+        "trustManager": {
+            "type": "TrustManager",
+            "config": {
+                "keystore": {
+                    "type": "KeyStore",
+                    "config": {
+                        "url": "file://${env['HOME']}/truststore.jks",
+                        "password": "${system['trustpass']}"
+                    }
+                }
+            }
+        }
+    }
+}
+  </pre></div><div class="refsect1"><a name="d0e5533"></a><h2>Javadoc</h2><p>
+   <a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/index.html?org/forgerock/openig/http/HttpClient.html" target="_blank">org.forgerock.openig.http.HttpClient</a>
+  </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="FileLogSink.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="misc-conf.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="JwtSession.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">FileLogSink&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;JwtSession</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10060&components=10220&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

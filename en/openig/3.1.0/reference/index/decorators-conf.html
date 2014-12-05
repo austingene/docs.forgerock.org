@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Decorators</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenIG Reference"><link rel="up" href="index.html" title="OpenIG Reference"><link rel="prev" href="SwitchFilter.html" title="SwitchFilter"><link rel="next" href="AuditDecorator.html" title="AuditDecorator"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Decorators</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="SwitchFilter.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="AuditDecorator.html">Next</a></td></tr></table><hr></div><div class="reference"><div class="titlepage"><div><div><h1 class="title"><a name="decorators-conf"></a>Decorators</h1></div></div><hr></div><div class="partintro"><div></div><p>
+    Decorators are objects that decorate other heap objects,
+    adding the new behavior that the decorator provides.
+    For example, you can configure a decorator object
+    for capturing requests and responses to a file
+    and then decorate other objects in the heap
+    to trigger the capture.
+   </p><p>
+    To decorate other objects individually, use a local decoration
+    by adding the decorator's "name" value as a top-level field of the object.
+    For example, suppose a capture decorator named "capture" is defined
+    in the global configuration, <code class="filename">config.json</code>.
+    The decorator is configured to capture the entity but not the exchange.
+   </p><pre class="brush: javascript;">
+{
+    "name": "capture",
+    "type": "CaptureDecorator",
+    "config": {
+        "captureEntity": true,
+        "_captureExchange": true
+    }
+}
+   </pre><p>
+    The following "ClientHandler" configuration would then capture requests
+    including the entity before they are forwarded to the server.
+   </p><pre class="brush: javascript;">
+{
+    "name": "ClientHandler",
+    "type": "ClientHandler",
+    "capture": "request"
+}
+   </pre><p>
+    To decorate the "handler" for a route,
+    add the decorator as a top-level field of the route.
+    The following route includes an audit decoration on the "handler".
+    This configuration decorates the "ClientHandler" only for the current route.
+    It does not decorate other uses of "ClientHandler" in other routes.
+   </p><pre class="brush: javascript;">
+{
+    "handler": "ClientHandler",
+    "audit": "Default route"
+}
+   </pre><p>
+    The decoration as a top-level field also does not decorate "heap" objects.
+    To decorate all applicable objects defined within a Route's heap,
+    configure "globalDecorators" as a top-level field of the Route.
+    The "globalDecorators" field takes a map of the decorations to apply.
+    For example, the following route has "audit" and "capture" decorations
+    that apply to the "Chain", "HeaderFilter", and "StaticResponseHandler".
+    In other words, the decorations apply to all objects in this route's heap.
+   </p><pre class="brush: javascript;">
+{
+    "globalDecorators": {
+        "audit": "My static route",
+        "capture": "all"
+    },
+    "handler": {
+        "type": "Chain",
+        "config": {
+            "filters": [
+                {
+                    "type": "HeaderFilter",
+                    "config": {
+                        "messageType": "RESPONSE",
+                        "add": [
+                            {
+                                "X-Powered-By": [
+                                    "OpenIG"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ],
+            "handler": {
+                "type": "StaticResponseHandler",
+                "config": {
+                    "status": 200,
+                    "entity": "Hello World"
+                }
+            }
+        }
+    },
+    "condition": "${matches(exchange.request.uri.path, '^/static')}"
+}
+   </pre><div class="itemizedlist"><p>
+     Decorations are inherited as follows.
+    </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+      Local decorations that are part of an object's declaration
+      are inherited wherever the object is used.
+     </p></li><li class="listitem"><p>
+      The "globalDecorations" on a route are inherited on child routes.
+     </p></li></ul></div><p>
+    To prevent loops, decorators themselves cannot be decorated.
+    Instead, decorators apply only to specific types of objects
+    such as Filters and Handlers.
+   </p><p>
+    OpenIG defines some decorators,
+    such as "audit", "capture", and "timer".
+    You can use these without configuring them explicitly.
+    For details see the reference section,
+    <a href="../../reference/index/gateway-servlet.html" class="link"><em class="citetitle">Gateway Servlet</em></a>.
+   </p><p>
+    Take care when defining decorator names not to use names
+    that unintentionally clash with field names for the decorated objects.
+    For all heap objects, avoid decorators named
+    "config", "name", and "type".
+    For Routes, avoid decorators named
+    "baseURI", "condition", "globalDecorators",
+    "heap", "handler", "name", and "session".
+    In <code class="filename">config.json</code>,
+    also avoid "logSink" and "temporaryStorage".
+    In addition, avoid decorators named "comment" or "comments".
+    The best way to avoid a clash with other field names
+    is to avoid OpenIG reserved field names,
+    which include all purely alphanumeric field names.
+    Instead use dots or dashes in your decorator names, such as "my-decorator".
+   </p><p>
+    Decorations can apply more than once.
+    For example, if you set a decoration
+    both on a Route and also on an object defined within the route,
+    then OpenIG can apply the decoration twice.
+    The following Route results in the request being captured twice.
+   </p><pre class="brush: javascript;">
+{
+  "handler": {
+    "type": "ClientHandler",
+    "capture": "request"
+  },
+  "capture": "all"
+}
+   </pre><div class="orderedlist"><p>
+     OpenIG applies decorations in this order.
+    </p><ol class="orderedlist" type="1"><li class="listitem"><p>
+      Local decorations
+     </p></li><li class="listitem"><p>
+      "globalDecorations" (first those of the parent,
+      then those declared in the current route)
+     </p></li><li class="listitem"><p>
+      Route decorations (those decorating a route's handler)
+     </p></li></ol></div><p>
+    Interface Stability:
+    <a href="../../reference/index/appendix-interface-stability.html#interface-stability" class="link">Evolving</a>
+   </p><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="refentrytitle"><a href="AuditDecorator.html">AuditDecorator</a></span><span class="refpurpose"> &#8212; trigger notification of audit events for Filters and Handlers</span></dt><dt><span class="refentrytitle"><a href="CaptureDecorator.html">CaptureDecorator</a></span><span class="refpurpose"> &#8212; capture request and response messages</span></dt><dt><span class="refentrytitle"><a href="TimerDecorator.html">TimerDecorator</a></span><span class="refpurpose"> &#8212; record times to process Filters and Handlers</span></dt></dl></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="SwitchFilter.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="AuditDecorator.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">SwitchFilter&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;AuditDecorator</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10060&components=10220&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

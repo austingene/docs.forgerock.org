@@ -1,0 +1,492 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;1.&nbsp;Understanding OpenIG</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="Guide to OpenIG"><link rel="up" href="index.html" title="Guide to OpenIG"><link rel="prev" href="preface.html" title="Preface"><link rel="next" href="chap-quickstart.html" title="Chapter&nbsp;2.&nbsp;Getting Started"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;1.&nbsp;Understanding OpenIG</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="preface.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-quickstart.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-start-here"></a>Chapter&nbsp;1.&nbsp;Understanding OpenIG</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-start-here.html#about">1.1. About OpenIG</a></span></dt><dt><span class="section"><a href="chap-start-here.html#the-exchange">1.2. The Exchange</a></span></dt><dt><span class="section"><a href="chap-start-here.html#the-configuration">1.3. The Configuration</a></span></dt><dt><span class="section"><a href="chap-start-here.html#routing">1.4. Routing</a></span></dt><dt><span class="section"><a href="chap-start-here.html#filters-handlers-chains">1.5. Filters, Handlers, &amp; Chains</a></span></dt><dt><span class="section"><a href="chap-start-here.html#config-comments">1.6. Comments in OpenIG Configuration Files</a></span></dt><dt><span class="section"><a href="chap-start-here.html#where-to-go-from-here">1.7. Where To Go From Here</a></span></dt></dl></div><p>
+  This chapter introduces OpenIG, briefly covering essential concepts.
+ </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="about"></a>1.1.&nbsp;About OpenIG</h2></div></div></div><p>
+   Most organizations have valuable existing services
+   that they cannot easily integrate into newer architectures.
+   Often, however, they also cannot change the existing services.
+   Without a gateway to bridge the gap,
+   some client applications cannot communicate with these existing services.
+  </p><div class="figure"><a name="figure-missing-gateway"></a><div class="figure-title">Figure&nbsp;1.1.&nbsp;Missing Gateway</div><div class="figure-contents"><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/missing-gateway.png" align="middle" height="360" alt="Missing Gateway"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="ld-d0e291.html" target="longdesc">D</a>]</span></div></div></div></div><br class="figure-break"><p>
+   OpenIG works as an HTTP gateway, also known as a
+   <a class="link" href="http://en.wikipedia.org/wiki/Reverse_proxy" target="_blank">reverse proxy</a>.
+   You deploy OpenIG on the network
+   so that it intercepts both client requests and also server responses.
+  </p><div class="figure"><a name="figure-gateway-deployed"></a><div class="figure-title">Figure&nbsp;1.2.&nbsp;OpenIG Deployed</div><div class="figure-contents"><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/gateway-deployed.png" align="middle" height="360" alt="OpenIG Deployed"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="ld-d0e307.html" target="longdesc">D</a>]</span></div></div></div></div><br class="figure-break"><p>
+   Clients then exchange with protected servers through OpenIG.
+   This means that without touching either clients or servers,
+   you can configure OpenIG to add new capabilities
+   to existing services.
+  </p><div class="itemizedlist"><p>
+    The list that follows names some of what you can add by using OpenIG.
+   </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     Access management integration
+    </p></li><li class="listitem"><p>
+     Application &amp; API security
+    </p></li><li class="listitem"><p>
+     Credential replay
+    </p></li><li class="listitem"><p>
+     OAuth 2.0 support
+    </p></li><li class="listitem"><p>
+     OpenID Connect 1.0 support
+    </p></li><li class="listitem"><p>
+     Network traffic control
+    </p></li><li class="listitem"><p>
+     Proxy with request &amp; response capture
+    </p></li><li class="listitem"><p>
+     Request &amp; response rewriting
+    </p></li><li class="listitem"><p>
+     SAML 2.0 federation support
+    </p></li><li class="listitem"><p>
+     Single sign-on
+    </p></li></ul></div><p>
+   OpenIG supports these capabilities
+   as out-of-the-box configuration options.
+   Once you understand the essential concepts covered in this chapter,
+   try the demonstrations in this guide to see for yourself
+   how to add these features by using OpenIG.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="the-exchange"></a>1.2.&nbsp;The Exchange</h2></div></div></div><p>
+   OpenIG handles HTTP requests and responses
+   with a wrapper called the <em class="firstterm">exchange</em>.
+  </p><p>
+   The OpenIG exchange encapsulates HTTP requests and responses
+   that pass through OpenIG,
+   as well as the principal associated with the request,
+   the session context associated with the client,
+   and any other state information needed.
+   OpenIG makes it easy
+   to access arbitrary state information through the exchange
+   so that you can use it throughout the duration of the exchange,
+   even when the exchange calls for interaction with additional services.
+  </p><p>
+   In addition, OpenIG includes information in the exchange
+   about the client that made the incoming request,
+   such as the client host, port, and IP address,
+   and also the user-agent description,
+   the login of the user making the request,
+   and the X.509 certificates presented by the client
+   when these are available as part of the request.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="the-configuration"></a>1.3.&nbsp;The Configuration</h2></div></div></div><p>
+   OpenIG represents its configuration in JSON format,
+   which is store in flat files.<a href="#ftn.d0e369" class="footnote" name="d0e369"><sup class="footnote">[1]</sup></a>
+   You configure OpenIG by editing the JSON flat files.
+  </p><p>
+   After installation, you add at least one configuration file.
+   Each configuration file holds a JSON object.
+   At minimum, the JSON object specifies a "handler" to deal with the exchange.
+  </p><p>
+   The following very simple configuration routes exchanges
+   to be handled according to separate route configurations.
+  </p><pre class="brush: javascript;">
+{
+    "handler": {
+        "type": "Router"
+    }
+}
+  </pre><p>
+   The "handler" indicates which object OpenIG invokes first.
+   A handler is an object responsible for producing a response to a request,
+   therefore every route must call a handler.
+  </p><p>
+   Notice in this case that the "handler" field takes an object as its value.
+   This is an inline declaration.
+   If you only use the object once where it is declared,
+   then it makes sense to use an inline declaration.
+  </p><p>
+   To change the definition of an object defined by default
+   or when you need to declare an object once and use it multiple times,
+   you declare object definitions in the "heap",
+   and then reference the objects by "name".
+   You can also use this technique instead of inline declarations.
+  </p><p>
+   The following example declares an identical "Router" object as above
+   and references it by its name.
+  </p><pre class="brush: javascript;">
+{
+    "handler": "My Router",
+    "heap": [
+        {
+            "name": "My Router",
+            "type": "Router"
+        }
+    ]
+}
+  </pre><p>
+   Notice that the "heap" takes an array.
+   As the "heap" holds configuration objects all at the same level,
+   you can impose any hierarchy or order that you like when referencing objects.
+   Yet, when you declare all objects in the "heap" and reference them by name,
+   neither hierarchy nor ordering are obvious
+   from the structure of the configuration file alone.
+  </p><div class="itemizedlist"><p>
+    Each configuration object has a "type", a "name", and an optional "config".
+   </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     The "type" must be the type name of the configuration object.<a href="#ftn.d0e397" class="footnote" name="d0e397"><sup class="footnote">[2]</sup></a>
+    </p><p>
+     As you see in the rest of this guide
+     and in the <em class="citetitle">Reference</em>,
+     OpenIG defines many types for different purposes.
+    </p></li><li class="listitem"><p>
+     The "name" takes a string that is unique in the list of objects.
+    </p><p>
+     You can omit this field when declaring objects inline.
+    </p></li><li class="listitem"><p>
+     The contents of the "config" object depend on the "type".
+    </p><p>
+     When all the configuration settings for the type are optional,
+     the "config" field is also optional, as in this example.
+     If all configuration settings are optional,
+     then omitting the "config" field,
+     or setting the "config" field to an empty object, "config": {},
+     or setting "config": null
+     all signify that the object uses default settings.
+    </p></li></ul></div><p>
+   The configuration can specify additional objects as well.
+   For example, you can configure an "HttpClient"
+   that OpenIG uses to connect to servers.
+   The following "HttpClient" configuration uses defaults for all settings,
+   except "hostnameVerifier", which it configures to
+   verify host names in SSL certificates in the same way as most browsers.
+  </p><pre class="brush: javascript;">
+{
+    "name": "HttpClient",
+    "type": "HttpClient",
+    "config": {
+        "hostnameVerifier": "BROWSER_COMPATIBLE"
+    }
+}
+  </pre><p>
+   <em class="firstterm">Decorators</em> are additional heap objects
+   that let you extend what another object can do.
+   For example, a "CaptureDecorator" enables filters and handlers
+   to log requests and responses.
+   A "TimerDecorator" logs processing times.
+   You decorate the configuration of other objects
+   with the names of decorators as field names.
+   OpenIG defines both a "CaptureDecorator" named "capture"
+   and also a "TimerDecorator" named "timer" by default.
+   You can therefore log requests, responses, and processing times
+   by adding decorations as shown in the following example.
+  </p><pre class="brush: javascript;">
+{
+    "handler": {
+        "type": "Router",
+        "capture": [ "request", "response" ],
+        "timer": true
+    }
+}
+  </pre><p>
+   In addition to decorators, OpenIG also creates
+   other utility objects with default settings,
+   including "HttpClient", "LogSink", and "TemporaryStorage".
+   You can reference these objects by name without configuring them
+   unless you need to override the default configurations.
+  </p><p>
+   Routes, mentioned here
+   and described in more detail in <a class="xref" href="chap-start-here.html#routing" title="1.4.&nbsp;Routing">Section&nbsp;1.4, &#8220;Routing&#8221;</a>,
+   inherit settings from their parent configurations.
+   This means that you can
+   configure global objects in the "heap" of the base configuration for example,
+   and then reference the objects by name
+   in any other OpenIG configuration.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="routing"></a>1.4.&nbsp;Routing</h2></div></div></div><p>
+   OpenIG routing lets you use multiple configuration files.
+   Routing also lets OpenIG reload configurations
+   that you change at runtime without restarting OpenIG.
+  </p><p>
+   You can use routing where OpenIG protects multiple services,
+   or multiple different endpoints of the same service.
+   You can also use routing when handling an exchange involves multiple steps,
+   for example because you must redirect the client
+   to authenticate with an identity provider
+   before accessing the service.
+  </p><p>
+   A <em class="firstterm">router</em>,
+   as shown in <a class="xref" href="chap-start-here.html#the-configuration" title="1.3.&nbsp;The Configuration">Section&nbsp;1.3, &#8220;The Configuration&#8221;</a>,
+   takes responsibility for managing the routes used,
+   periodically reloading changed routes
+   unless configured to load them only at startup.
+  </p><p>
+   Notice in the example that the router does not specify any routes.
+   Instead, routes optionally specify their own "condition".
+   If a route "condition" is true, then the route handles the exchange.
+  </p><p>
+   The following example specifies a condition
+   that is true when the incoming request path is <code class="literal">/login</code>.
+  </p><pre class="brush: javascript;">
+"condition": "${matches(exchange.request.uri.path, '^/login')}"
+  </pre><p>
+   If the route has no "condition", or if the value of the condition is null,
+   then the route matches any exchange.
+   Furthermore, OpenIG orders routes lexicographically by name.
+  </p><p>
+   You can use these features to have both optional and default routes.
+   For example, you could name your routes to check conditions in order:
+   <code class="filename">01-login.json</code>,
+   <code class="filename">02-protected.json</code>,
+   <code class="filename">99-default.json</code>.
+   Alternatively, you can name routes using the "name" property on the route.
+  </p><p>
+   A router configuration can specify where to look for route files.
+   As a "Router" is a kind of "handler", routes can have routers, too.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="filters-handlers-chains"></a>1.5.&nbsp;Filters, Handlers, &amp; Chains</h2></div></div></div><p>
+   Routing only delegates exchange handling.
+   It does not actually deal with exchanges.
+   To deal with an exchange, you chain together filters and handlers.
+  </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     A <em class="firstterm">handler</em> either delegates to another handler,
+     or it produces a response.
+    </p><p>
+     One way of producing a response is
+     to send a request to and receive a response from an external service.
+     In this case, OpenIG acts as a client of the service,
+     often on behalf of the client whose request initiated the exchange.
+    </p><p>
+     Another way of producing a response is
+     to build a response either statically or based on something in the exchange.
+     In this case, OpenIG plays the role of server,
+     generating a response to return to the client.
+    </p></li><li class="listitem"><p>
+     A <em class="firstterm">filter</em> transforms something in the exchange.
+    </p><p>
+     A filter can leave the exchange unchanged.
+     Alternatively a filter can even replace the request or the response,
+     for example generating a static request that replaces the client request.
+     Other filters only add or change some of the data in the exchange.
+    </p></li><li class="listitem"><p>
+     A <em class="firstterm">chain</em> takes a list of filters and one handler.
+     (The list of filters can be empty.)
+    </p><p>
+     Like a router, a chain itself is technically a handler.
+     You can therefore place a chain anywhere in the configuration
+     that you can place a handler.
+    </p><p>
+     The chain dispatches processing to the filters in order,
+     and then to the handler.
+    </p><p>
+     Initially the filters process the incoming exchange,
+     with each filter handing off to the next filter and finally the handler.
+     Then after the handler produces the response,
+     the filters process the outgoing exchange on its way to the client.
+     The same filter can process the incoming request and the outgoing response.
+     Many filters, however, either process the request or the response.
+    </p></li></ul></div><p>
+   The following diagram shows the flow inside a chain that has
+   a request filter transforming the request,
+   a response filter transforming the response,
+   and a handler sending a request to a service to get a response.
+   Notice how the flow traverses the filters in reverse order
+   when the outgoing exchange comes back from the handler.
+  </p><div class="figure"><a name="figure-chain"></a><div class="figure-title">Figure&nbsp;1.3.&nbsp;Flow Inside a Chain</div><div class="figure-contents"><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/chain.png" align="middle" height="360" alt="Flow Inside a Chain"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="ld-d0e512.html" target="longdesc">D</a>]</span></div></div></div></div><br class="figure-break"><p>
+   The following route configuration demonstrates the flow,
+   but without an external service.
+  </p><pre class="brush: javascript;">
+{
+    "handler": {
+        "type": "Chain",
+        "comment": "Base configuration defines the capture decorator",
+        "config": {
+            "filters": [
+                {
+                    "type": "HeaderFilter",
+                    "comment": "Same header on all requests",
+                    "config": {
+                        "messageType": "REQUEST",
+                        "add": {
+                            "X-MyHeaderFilter": [
+                                "Added by HeaderFilter to request"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "type": "HeaderFilter",
+                    "comment": "Remove X-Powered-By from response",
+                    "capture": "response",
+                    "config": {
+                        "messageType": "RESPONSE",
+                        "remove": [
+                            "X-Powered-By"
+                        ]
+                    }
+                }
+            ],
+            "handler": {
+                "type": "StaticResponseHandler",
+                "comment": "Same response to all requests",
+                "capture": "request",
+                "config": {
+                    "status": 200,
+                    "reason": "OK",
+                    "headers": {
+                        "X-Powered-By": [
+                            "OpenIG"
+                        ]
+                    },
+                    "entity": "&lt;html&gt;&lt;p&gt;Hello, World!&lt;/p&gt;&lt;/html&gt;"
+                }
+            }
+        }
+    }
+}
+  </pre><div class="orderedlist"><p>
+    When the "Chain" gets the request, it processes the exchange as follows.
+   </p><ol class="orderedlist" type="1"><li class="listitem"><p>
+     The first "HeaderFilter" adds a header to the incoming request.
+    </p></li><li class="listitem"><p>
+     The second "HeaderFilter" deals with responses,
+     so it simply passes the exchange to the handler.
+    </p></li><li class="listitem"><p>
+     The "StaticResponseHandler" captures (logs) the request.
+    </p></li><li class="listitem"><p>
+     The "StaticResponseHandler" itself produces a response
+     having an entity body and a header.
+    </p></li><li class="listitem"><p>
+     The second "HeaderFilter" captures (logs) the response.
+    </p></li><li class="listitem"><p>
+     The second "HeaderFilter" removes the header added to the response.
+    </p></li><li class="listitem"><p>
+     The first "HeaderFilter" deals with requests,
+     so it simply passes the outgoing exchange back to OpenIG.
+    </p></li></ol></div><p>
+   Suppose this chain configuration is the only route active for the request.
+   In that case, the flow produces the following.
+  </p><pre class="brush: http;">
+### Original request from user-agent
+GET / HTTP/1.1
+Host: www.example.com:8080
+Accept: */*
+
+### Captured incoming request (inside OpenIG exchange)
+GET / HTTP/1.1
+X-MyHeaderFilter: Added by HeaderFilter to request
+Accept: */*
+Host: www.example.com:8080
+
+### Captured outgoing response (inside OpenIG exchange)
+HTTP/1.1 200 OK
+Content-Length: 33
+X-Powered-By: OpenIG
+
+&lt;html&gt;&lt;p&gt;Hello, World!&lt;/p&gt;&lt;/html&gt;
+
+### Final response to user-agent
+HTTP/1.1 200 OK
+Content-Length: 33
+
+&lt;html&gt;&lt;p&gt;Hello, World!&lt;/p&gt;&lt;/html&gt;
+  </pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="config-comments"></a>1.6.&nbsp;Comments in OpenIG Configuration Files</h2></div></div></div><p>
+   JSON does not specify a notation for comments.
+  </p><p>
+   However, when OpenIG does not recognize a JSON field name,
+   it ignores the field.
+   This makes it possible to use comments in configuration files.
+  </p><div class="variablelist"><p>
+    To make your configuration files easier to read,
+    use the following conventions when commenting.
+   </p><dl class="variablelist"><dt><span class="term">"comment"</span></dt><dd><p>
+      Use the "comment" fields to add text comments.
+     </p><p>
+      The following "CaptureDecorator" configuration includes a text comment.
+     </p><pre class="brush: javascript;">
+{
+    "name": "capture",
+    "type": "CaptureDecorator",
+    "comment": "Write request and response information to the LogSink",
+    "config": {
+        "captureEntity": true
+    }
+}
+     </pre></dd><dt><span class="term">"_<em class="replaceable"><code>field-name</code></em>"</span></dt><dd><p>
+      Use an underscore (<code class="literal">_</code>) to comment a field temporarily.
+     </p><p>
+      The following "CaptureDecorator" configuration has
+      <code class="literal">"captureEntity": true</code> commented out.
+      As a result, it uses the default setting
+      (<code class="literal">"captureEntity": false</code>).
+     </p><pre class="brush: javascript;">
+{
+    "name": "capture",
+    "type": "CaptureDecorator",
+    "config": {
+        "_captureEntity": true
+    }
+}
+     </pre></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="where-to-go-from-here"></a>1.7.&nbsp;Where To Go From Here</h2></div></div></div><p>
+   Now that you understand the essential concepts,
+   start using OpenIG with the help of the following chapters.
+  </p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><a href="../../gateway-guide/index/chap-quickstart.html" class="link"><em class="citetitle">Getting Started</em></a>
+    </span></dt><dd><p>
+      This chapter shows you how to get OpenIG up and running quickly.
+     </p></dd><dt><span class="term"><a href="../../gateway-guide/index/chap-install.html" class="link"><em class="citetitle">Installation in Detail</em></a>
+    </span></dt><dd><p>
+      This chapter covers more advanced installation procedures.
+     </p></dd><dt><span class="term"><a href="../../gateway-guide/index/chap-credentials-tutorial.html" class="link"><em class="citetitle">Getting Login Credentials From Data Sources</em></a>
+    </span></dt><dd><p>
+      This chapter shows you how to configure OpenIG
+      to look up credentials in external sources, such as a file or a database.
+     </p></dd><dt><span class="term"><a href="../../gateway-guide/index/chap-password-capture-replay-tutorial.html" class="link"><em class="citetitle">Getting Login Credentials From OpenAM</em></a>
+    </span></dt><dd><p>
+      This chapter walks you through an OpenAM integration
+      with OpenAM's password capture and replay feature.
+     </p></dd><dt><span class="term"><a href="../../gateway-guide/index/chap-federation.html" class="link"><em class="citetitle">OpenIG as a SAML 2.0 Service Provider</em></a>
+    </span></dt><dd><p>
+      This chapter shows how to configure OpenIG
+      as a SAML 2.0 Identity Provider.
+     </p></dd><dt><span class="term"><a href="../../gateway-guide/index/chap-oauth2-rs.html" class="link"><em class="citetitle">OpenIG as an OAuth 2.0 Resource Server</em></a>
+    </span></dt><dd><p>
+      This chapter explains how OpenIG acts
+      as an OAuth 2.0 Resource Server,
+      and follows with a tutorial
+      that shows you how to use OpenIG as a resource server.
+     </p></dd><dt><span class="term"><a href="../../gateway-guide/index/chap-oauth2-client.html" class="link"><em class="citetitle">OpenIG as an OAuth 2.0 Client</em></a>
+    </span></dt><dd><p>
+      This chapter explains how OpenIG acts
+      as an OAuth 2.0 client or OpenID Connect 1.0 relying party,
+      and follows with a tutorial
+      that shows you how to use OpenIG
+      as an OpenID Connect 1.0 relying party.
+     </p></dd><dt><span class="term"><a href="../../gateway-guide/index/chap-routing.html" class="link"><em class="citetitle">Configuring Routes</em></a>
+    </span></dt><dd><p>
+      This chapter shows how to configure OpenIG
+      to allow dynamic configuration changes and route to multiple applications.
+     </p></dd><dt><span class="term"><a href="../../gateway-guide/index/chap-gateway-templates.html" class="link"><em class="citetitle">Configuration Templates</em></a>
+    </span></dt><dd><p>
+      This chapter provides sample OpenIG configuration files
+      for common use cases.
+     </p></dd></dl></div><p>
+   ForgeRock can also help you succeed in your projects involving OpenIG.
+   You can purchase OpenIG support subscriptions and training courses
+   from ForgeRock and from consulting partners around the world and in your area.
+   To contact ForgeRock, send mail to
+   <a class="link" href="mailto:info@forgerock.com" target="_top">info@forgerock.com</a>.
+   To find a partner in your area, see
+   <a class="link" href="http://forgerock.com/partners/find-a-partner/" target="_blank">http://forgerock.com/partners/find-a-partner/</a>.
+  </p></div><div class="footnotes"><br><hr class="footnote-hr"><div id="ftn.d0e369" class="footnote"><p><a href="#d0e369" class="para"><sup class="para">[1] </sup></a>
+     OpenIG also uses additional file formats for SAML 2.0,
+     but the primary configuration files are in JSON format.
+    </p></div><div id="ftn.d0e397" class="footnote"><p><a href="#d0e397" class="para"><sup class="para">[2] </sup></a>
+      For built-in objects, you can use the short name alias.
+      If the object has no alias,
+      use the fully qualified class name
+      of the Java class implementing the object.
+     </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="preface.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-quickstart.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Preface&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;2.&nbsp;Getting Started</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10060&components=10220&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

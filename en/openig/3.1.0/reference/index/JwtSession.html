@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>JwtSession</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenIG Reference"><link rel="up" href="misc-conf.html" title="Miscellaneous Heap Objects"><link rel="prev" href="HttpClient.html" title="HttpClient"><link rel="next" href="KeyManager.html" title="KeyManager"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">JwtSession</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="HttpClient.html">Prev</a>&nbsp;</td><th width="60%" align="center">Miscellaneous Heap Objects</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="KeyManager.html">Next</a></td></tr></table><hr></div><div lang="en" class="refentry"><a name="JwtSession"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>JwtSession &#8212; store sessions in encrypted JWT cookies</p></div><div class="refsect1"><a name="d0e5553"></a><h2>Description</h2><a class="indexterm" name="d0e5556"></a><p>
+   A JwtSession object holds settings for storing session information
+   in encrypted JSON Web Token (JWT) cookies.
+  </p><p>
+   In this context "encrypted JWT cookie" means an HTTP cookie
+   whose value is an encrypted JWT.
+   The payload of the encrypted JWT is
+   a JSON representation of the session information.
+  </p><p>
+   The JWT cookie lifetime is "Session" (not persistent),
+   meaning the user-agent deletes the JWT cookie when it shuts down.
+  </p><p>
+   When using this storage implementation,
+   you must use data types for session information that can be mapped to
+   <a class="link" href="http://json.org" target="_blank">JavaScript Object Notation</a> (JSON).
+   JSON allows strings, numbers,
+   <code class="literal">true</code>, <code class="literal">false</code>, <code class="literal">null</code>,
+   as well as arrays and JSON objects composed of the same primitives.
+   Java and Groovy types that can be mapped include
+   Java primitive types and <code class="literal">null</code>,
+   String and CharSequence objects,
+   as well as List and Map objects.
+  </p><p>
+   As browser cookie storage capacity is limited to 4 KB,
+   and encryption adds overhead,
+   take care to limit the size of any JSON that you store.
+   Rather than store larger data in the session information,
+   consider storing a reference instead.
+  </p><p>
+   When an exchange enters a route that uses a new session type,
+   the scope of the session information becomes limited to the route.
+   OpenIG builds a new session object
+   and does not propagate any existing session information to the new object.
+   <code class="literal">exchange.session</code> references the new session object.
+   When the exchange then exits the route,
+   the session object is closed, and serialized to a JWT cookie in this case,
+   and <code class="literal">exchange.session</code> references the previous session object.
+   Session information set inside the route is no longer available.
+  </p><p>
+   An HTTP client that performs multiple requests in a session
+   that modify the content of its session
+   can encounter inconsistencies in the session information.
+   This is because OpenIG does not share JwtSessions across threads.
+   Instead, each thread has its own JwtSession objects
+   that it modifies as necessary,
+   writing its own session to the JWT cookie
+   regardless of what other threads do.
+  </p></div><div class="refsect1"><a name="d0e5596"></a><h2>Usage</h2><pre class="brush: javascript;">
+{
+    "name": string,
+    "type": "JwtSession",
+    "config": {
+        "keystore": KeyStore reference,
+        "alias": string,
+        "password": configuration expression,
+        "cookieName": string
+    }
+}
+  </pre><p>
+   An alternative value for "type" is "JwtSessionFactory".
+  </p></div><div class="refsect1"><a name="d0e5603"></a><h2>Properties</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="code">"keystore"</code>: <span class="emphasis"><em><a href="../../reference/index/KeyStore.html" class="link">KeyStore</a> reference, optional</em></span></span></dt><dd><p>
+      The key store holding the key pair
+      with the private key used to encrypt the JWT.
+     </p><p>
+      Provide either the name of the KeyStore object defined in the heap,
+      or the inline KeyStore configuration object inline.
+     </p><p>
+      Default: When no "keystore" is specified,
+      OpenIG generates a unique key pair,
+      and stores the key pair in memory.
+      With JWTs encrypted using a unique key pair generated at runtime,
+      OpenIG cannot decrypt the JWTs after a restart,
+      nor can it decrypt such JWTs encrypted by another OpenIG server.
+     </p></dd><dt><span class="term"><code class="code">"alias"</code>: <span class="emphasis"><em>string,
+     required when "keystore" is used</em></span></span></dt><dd><p>
+      Alias for the private key.
+     </p></dd><dt><span class="term"><code class="code">"password"</code>: <span class="emphasis"><em>configuration <a href="../../reference/index/Expressions.html" class="link">expression</a>,
+     required when "keystore" is used</em></span></span></dt><dd><p>
+      The password to read the private key from the key store.
+     </p><p lang="en">
+      A configuration expression is independent of the
+      <a href="../../reference/index/Exchange.html" class="link">exchange</a>,
+      so do not use expressions that reference exchange properties.
+      You can, however, use
+      <code class="literal">${env['<em class="replaceable"><code>variable</code></em>']}</code>,
+      <code class="literal">${system['<em class="replaceable"><code>property</code></em>']}</code>,
+      and all the built-in
+      <a href="../../reference/index/Functions.html" class="link">functions</a>.
+</p></dd><dt><span class="term"><code class="code">"cookieName"</code> <span class="emphasis"><em>string, optional</em></span></span></dt><dd><p>
+      The name of the JWT cookie stored on the user-agent.
+     </p><p>
+      Default: <code class="literal">openig-jwt-session</code>
+     </p></dd></dl></div></div><div class="refsect1"><a name="d0e5682"></a><h2>Example</h2><p>
+   The following example defines a JwtSession
+   for storing session information
+   in a JWT token cookie named <code class="literal">OpenIG</code>.
+   The JWT is encrypted with a private key
+   that is recovered using the alias <code class="literal">private-key</code>,
+   and stored in the key store.
+   The password is both the password for the key store and also the private key.
+  </p><pre class="brush: javascript;">
+{
+    "name": "JwtSession",
+    "type": "JwtSession",
+    "config": {
+        "keystore": {
+            "type": "KeyStore",
+            "config": {
+                "url": "file://${env['HOME']}/keystore.jks",
+                "password": "${system['keypass']}"
+            }
+        },
+        "alias": "private-key",
+        "password": "${system['keypass']}",
+        "cookieName": "OpenIG"
+    }
+}
+  </pre></div><div class="refsect1"><a name="d0e5695"></a><h2>Javadoc</h2><p>
+   <a class="link" href="http://docs.forgerock.org/en/openig/3.1.0/apidocs/index.html?org/forgerock/openig/jwt/JwtSessionFactory.html" target="_blank">org.forgerock.openig.jwt.JwtSessionFactory</a>
+  </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="HttpClient.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="misc-conf.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="KeyManager.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">HttpClient&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;KeyManager</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10060&components=10220&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>
