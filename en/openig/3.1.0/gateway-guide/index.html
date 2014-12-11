@@ -11,7 +11,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="country">USA</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="phone">+1&nbsp;415-599-1100&nbsp;(US)</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<code class="uri">www.forgerock.com</code><br>
-&nbsp;&nbsp;&nbsp;</p></div></div></div></div></div><div><p class="releaseinfo">Software release date: December 12, 2014</p></div><div><p class="copyright">Copyright &copy; 2011-2014 ForgeRock AS</p></div><div><a href="legalnotice.html">Legal Notice</a></div><div><p class="pubdate">Publication date: December 05, 2014</p></div></div><hr></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="preface"><a href="#preface">Preface</a></span></dt><dt><span class="chapter"><a href="#chap-start-here">1. Understanding OpenIG</a></span></dt><dt><span class="chapter"><a href="#chap-quickstart">2. Getting Started</a></span></dt><dt><span class="chapter"><a href="#chap-install">3. Installation in Detail</a></span></dt><dt><span class="chapter"><a href="#chap-credentials-tutorial">4. Getting Login Credentials From Data Sources</a></span></dt><dt><span class="chapter"><a href="#chap-password-capture-replay-tutorial">5. Getting Login Credentials From OpenAM</a></span></dt><dt><span class="chapter"><a href="#chap-federation">6. OpenIG as a SAML 2.0 Service Provider</a></span></dt><dt><span class="chapter"><a href="#chap-oauth2-rs">7. OpenIG as an OAuth 2.0 Resource Server</a></span></dt><dt><span class="chapter"><a href="#chap-oauth2-client">8. OpenIG as an OAuth 2.0 Client</a></span></dt><dt><span class="chapter"><a href="#chap-routing">9. Configuring Routes</a></span></dt><dt><span class="chapter"><a href="#chap-gateway-templates">10. Configuration Templates</a></span></dt><dt><span class="chapter"><a href="#chap-extending">11. Extending OpenIG</a></span></dt><dt><span class="chapter"><a href="#chap-auditing">12. OpenIG Audit Framework</a></span></dt><dt><span class="chapter"><a href="#chap-troubleshooting">13. Troubleshooting</a></span></dt><dt><span class="appendix"><a href="#appendix-multiple-sps">A. SAML 2.0 &amp; Multiple Applications</a></span></dt><dt><span class="index"><a href="#d1182e5357">Index</a></span></dt></dl></div><div lang="en" class="preface"><div class="titlepage"><div><div><h1 class="title"><a name="preface"></a>Preface</h1></div></div></div><p>
+&nbsp;&nbsp;&nbsp;</p></div></div></div></div></div><div><p class="releaseinfo">Software release date: December 12, 2014</p></div><div><p class="copyright">Copyright &copy; 2011-2014 ForgeRock AS</p></div><div><a href="legalnotice.html">Legal Notice</a></div><div><p class="pubdate">Publication date: December 12, 2014</p></div></div><hr></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="preface"><a href="#preface">Preface</a></span></dt><dt><span class="chapter"><a href="#chap-start-here">1. Understanding OpenIG</a></span></dt><dt><span class="chapter"><a href="#chap-quickstart">2. Getting Started</a></span></dt><dt><span class="chapter"><a href="#chap-install">3. Installation in Detail</a></span></dt><dt><span class="chapter"><a href="#chap-credentials-tutorial">4. Getting Login Credentials From Data Sources</a></span></dt><dt><span class="chapter"><a href="#chap-password-capture-replay-tutorial">5. Getting Login Credentials From OpenAM</a></span></dt><dt><span class="chapter"><a href="#chap-federation">6. OpenIG as a SAML 2.0 Service Provider</a></span></dt><dt><span class="chapter"><a href="#chap-oauth2-rs">7. OpenIG as an OAuth 2.0 Resource Server</a></span></dt><dt><span class="chapter"><a href="#chap-oauth2-client">8. OpenIG as an OAuth 2.0 Client</a></span></dt><dt><span class="chapter"><a href="#chap-routing">9. Configuring Routes</a></span></dt><dt><span class="chapter"><a href="#chap-gateway-templates">10. Configuration Templates</a></span></dt><dt><span class="chapter"><a href="#chap-extending">11. Extending OpenIG</a></span></dt><dt><span class="chapter"><a href="#chap-auditing">12. OpenIG Audit Framework</a></span></dt><dt><span class="chapter"><a href="#chap-troubleshooting">13. Troubleshooting</a></span></dt><dt><span class="appendix"><a href="#appendix-multiple-sps">A. SAML 2.0 &amp; Multiple Applications</a></span></dt><dt><span class="index"><a href="#d1182e5357">Index</a></span></dt></dl></div><div lang="en" class="preface"><div class="titlepage"><div><div><h1 class="title"><a name="preface"></a>Preface</h1></div></div></div><p>
   This guide shows you how to install and configure OpenIG,
   a high-performance reverse proxy server with specialized session management
   and credential replay functionality.
@@ -1441,8 +1441,9 @@ C:&gt;<strong>set OPENIG_BASE=c:\path\to\openig</strong>
       </p><div class="screen"><pre>
 $ <strong>java -Dopenig.base=/path/to/openig -jar start.jar</strong>
       </pre></div></li></ul></div><p>
-     If you have not yet prepared configuration files, then start with the
-     <span class="olink"><em class="citetitle">Configuration for Proxy &amp; Capture</em></span>.
+     If you have not yet prepared configuration files,
+     then start with the configuration from the chapter on
+     <a href="../gateway-guide/index.html#quickstart-config" class="link"><em class="citetitle">Getting Started</em></a>.
     </p><p>
      Copy the template to <code class="filename">$HOME/.openig/config/config.json</code>.
      Replace the "baseURI" of the "DispatchHandler"
@@ -2306,8 +2307,8 @@ $ <strong>java -classpath \
    </p><p>
     The initial OpenIG configuration file should look like the one used
     to proxy requests through to the HTTP server
-    and to capture request and response data, see
-    <span class="olink"><em class="citetitle">Configuration for Proxy &amp; Capture</em></span>.
+    and to capture request and response data, as you used in the chapter on
+    <a href="../gateway-guide/index.html#quickstart-config" class="link"><em class="citetitle">Getting Started</em></a>.
    </p><p>
     To test your setup, access the HTTP server home page through OpenIG at
     <a class="link" href="http://www.example.com:8080" target="_blank">http://www.example.com:8080</a>.
@@ -2722,8 +2723,8 @@ $ <strong>ssoadm \
   </p><p>
    The initial OpenIG configuration file should look like the one used
    to proxy requests through to the HTTP server
-   and to capture request and response data, see
-   <span class="olink"><em class="citetitle">Configuration for Proxy &amp; Capture</em></span>.
+   and to capture request and response data, as you used in the chapter on
+   <a href="../gateway-guide/index.html#quickstart-config" class="link"><em class="citetitle">Getting Started</em></a>.
   </p><p>
    To test your setup, access the HTTP server home page through OpenIG at
    <a class="link" href="http://www.example.com:8080" target="_blank">http://www.example.com:8080</a>.
@@ -4272,7 +4273,7 @@ TUE DEC 02 17:14:28 CET 2014 (INFO) {ScriptableFilter}/handler/config/filters/1
                                             {
                                                 "key": "value",
                                                 "pattern":
-                                                    "wpLoginToken\"\s.*value=\"(.*)\"",
+                                                    "wpLoginToken\"\\s.*value=\"(.*)\"",
                                                 "template": "$1"
                                             }
                                         ]

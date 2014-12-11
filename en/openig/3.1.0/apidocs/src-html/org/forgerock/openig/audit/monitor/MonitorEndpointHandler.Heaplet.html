@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * The contents of this file are subject to the terms of the Common Development and<a name="line.2"></a>
+<span class="sourceLineNo">003</span> * Distribution License (the License). You may not use this file except in compliance with the<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * License.<a name="line.4"></a>
+<span class="sourceLineNo">005</span> *<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * You can obtain a copy of the License at legal/CDDLv1.0.txt. See the License for the<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * specific language governing permission and limitations under the License.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * When distributing Covered Software, include this CDDL Header Notice in each file and include<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * the License file at legal/CDDLv1.0.txt. If applicable, add the following below the CDDL<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * Header, with the fields enclosed by brackets [] replaced by your own identifying<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * information: "Portions copyright [year] [name of copyright owner]".<a name="line.12"></a>
+<span class="sourceLineNo">013</span> *<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * Copyright 2014 ForgeRock AS.<a name="line.14"></a>
+<span class="sourceLineNo">015</span> */<a name="line.15"></a>
+<span class="sourceLineNo">016</span><a name="line.16"></a>
+<span class="sourceLineNo">017</span>package org.forgerock.openig.audit.monitor;<a name="line.17"></a>
+<span class="sourceLineNo">018</span><a name="line.18"></a>
+<span class="sourceLineNo">019</span>import static org.forgerock.openig.audit.Tag.*;<a name="line.19"></a>
+<span class="sourceLineNo">020</span><a name="line.20"></a>
+<span class="sourceLineNo">021</span>import java.io.IOException;<a name="line.21"></a>
+<span class="sourceLineNo">022</span>import java.util.LinkedHashMap;<a name="line.22"></a>
+<span class="sourceLineNo">023</span>import java.util.Set;<a name="line.23"></a>
+<span class="sourceLineNo">024</span>import java.util.concurrent.ConcurrentHashMap;<a name="line.24"></a>
+<span class="sourceLineNo">025</span>import java.util.concurrent.atomic.AtomicLong;<a name="line.25"></a>
+<span class="sourceLineNo">026</span><a name="line.26"></a>
+<span class="sourceLineNo">027</span>import org.forgerock.openig.audit.AuditEvent;<a name="line.27"></a>
+<span class="sourceLineNo">028</span>import org.forgerock.openig.audit.AuditEventListener;<a name="line.28"></a>
+<span class="sourceLineNo">029</span>import org.forgerock.openig.audit.ConditionalAuditEventListener;<a name="line.29"></a>
+<span class="sourceLineNo">030</span>import org.forgerock.openig.audit.Tag;<a name="line.30"></a>
+<span class="sourceLineNo">031</span>import org.forgerock.openig.handler.GenericHandler;<a name="line.31"></a>
+<span class="sourceLineNo">032</span>import org.forgerock.openig.handler.HandlerException;<a name="line.32"></a>
+<span class="sourceLineNo">033</span>import org.forgerock.openig.http.Exchange;<a name="line.33"></a>
+<span class="sourceLineNo">034</span>import org.forgerock.openig.http.Response;<a name="line.34"></a>
+<span class="sourceLineNo">035</span>import org.forgerock.openig.util.EnumUtil;<a name="line.35"></a>
+<span class="sourceLineNo">036</span><a name="line.36"></a>
+<span class="sourceLineNo">037</span><a name="line.37"></a>
+<span class="sourceLineNo">038</span>/**<a name="line.38"></a>
+<span class="sourceLineNo">039</span> * Sample statistic endpoint provider that returns JSON-formatted collected statistic values.<a name="line.39"></a>
+<span class="sourceLineNo">040</span> */<a name="line.40"></a>
+<span class="sourceLineNo">041</span>public class MonitorEndpointHandler extends GenericHandler implements AuditEventListener {<a name="line.41"></a>
+<span class="sourceLineNo">042</span><a name="line.42"></a>
+<span class="sourceLineNo">043</span>    private static final Set&lt;String&gt; STANDARD_TAG_NAMES = EnumUtil.names(Tag.class);<a name="line.43"></a>
+<span class="sourceLineNo">044</span><a name="line.44"></a>
+<span class="sourceLineNo">045</span>    private ConcurrentHashMap&lt;String, TagMetric&gt; metrics = new ConcurrentHashMap&lt;String, TagMetric&gt;();<a name="line.45"></a>
+<span class="sourceLineNo">046</span><a name="line.46"></a>
+<span class="sourceLineNo">047</span>    @Override<a name="line.47"></a>
+<span class="sourceLineNo">048</span>    public void handle(final Exchange exchange) throws HandlerException, IOException {<a name="line.48"></a>
+<span class="sourceLineNo">049</span>        Response response = new Response();<a name="line.49"></a>
+<span class="sourceLineNo">050</span>        response.getEntity().setJson(metrics);<a name="line.50"></a>
+<span class="sourceLineNo">051</span>        response.setStatus(200);<a name="line.51"></a>
+<span class="sourceLineNo">052</span>        exchange.response = response;<a name="line.52"></a>
+<span class="sourceLineNo">053</span>    }<a name="line.53"></a>
+<span class="sourceLineNo">054</span><a name="line.54"></a>
+<span class="sourceLineNo">055</span>    @Override<a name="line.55"></a>
+<span class="sourceLineNo">056</span>    public void onAuditEvent(final AuditEvent event) {<a name="line.56"></a>
+<span class="sourceLineNo">057</span>        // Extract the set of additional tags<a name="line.57"></a>
+<span class="sourceLineNo">058</span>        Set&lt;String&gt; tags = event.getTags();<a name="line.58"></a>
+<span class="sourceLineNo">059</span><a name="line.59"></a>
+<span class="sourceLineNo">060</span>        // Manage counter for each of the additional tags, effectively performing correlations<a name="line.60"></a>
+<span class="sourceLineNo">061</span>        for (String tag : tags) {<a name="line.61"></a>
+<span class="sourceLineNo">062</span>            // Ignore tag if it is a standard one<a name="line.62"></a>
+<span class="sourceLineNo">063</span>            if (STANDARD_TAG_NAMES.contains(tag)) {<a name="line.63"></a>
+<span class="sourceLineNo">064</span>                continue;<a name="line.64"></a>
+<span class="sourceLineNo">065</span>            }<a name="line.65"></a>
+<span class="sourceLineNo">066</span>            TagMetric metric = getMetric(tag);<a name="line.66"></a>
+<span class="sourceLineNo">067</span>            if (tags.contains(request.name())) {<a name="line.67"></a>
+<span class="sourceLineNo">068</span>                metric.active.incrementAndGet();<a name="line.68"></a>
+<span class="sourceLineNo">069</span>            }<a name="line.69"></a>
+<span class="sourceLineNo">070</span>            if (tags.contains(response.name())) {<a name="line.70"></a>
+<span class="sourceLineNo">071</span>                metric.active.decrementAndGet();<a name="line.71"></a>
+<span class="sourceLineNo">072</span>                if (tags.contains(completed.name())) {<a name="line.72"></a>
+<span class="sourceLineNo">073</span>                    metric.completed.incrementAndGet();<a name="line.73"></a>
+<span class="sourceLineNo">074</span>                }<a name="line.74"></a>
+<span class="sourceLineNo">075</span>                if (tags.contains(exception.name())) {<a name="line.75"></a>
+<span class="sourceLineNo">076</span>                    metric.errors.incrementAndGet();<a name="line.76"></a>
+<span class="sourceLineNo">077</span>                }<a name="line.77"></a>
+<span class="sourceLineNo">078</span>            }<a name="line.78"></a>
+<span class="sourceLineNo">079</span>        }<a name="line.79"></a>
+<span class="sourceLineNo">080</span>    }<a name="line.80"></a>
+<span class="sourceLineNo">081</span><a name="line.81"></a>
+<span class="sourceLineNo">082</span>    private TagMetric getMetric(final String name) {<a name="line.82"></a>
+<span class="sourceLineNo">083</span>        TagMetric counter = metrics.get(name);<a name="line.83"></a>
+<span class="sourceLineNo">084</span>        if (counter != null) {<a name="line.84"></a>
+<span class="sourceLineNo">085</span>            return counter;<a name="line.85"></a>
+<span class="sourceLineNo">086</span>        }<a name="line.86"></a>
+<span class="sourceLineNo">087</span>        TagMetric newCounter = new TagMetric();<a name="line.87"></a>
+<span class="sourceLineNo">088</span>        TagMetric oldCounter = metrics.putIfAbsent(name, newCounter);<a name="line.88"></a>
+<span class="sourceLineNo">089</span>        return oldCounter != null ? oldCounter : newCounter;<a name="line.89"></a>
+<span class="sourceLineNo">090</span>    }<a name="line.90"></a>
+<span class="sourceLineNo">091</span><a name="line.91"></a>
+<span class="sourceLineNo">092</span>    /**<a name="line.92"></a>
+<span class="sourceLineNo">093</span>     * TagMetric extends a Map implementation to benefit of the natural mapping into a JSON object.<a name="line.93"></a>
+<span class="sourceLineNo">094</span>     * Still have 'in progress', 'completed' and 'internal errors' fields for easy programmatic access.<a name="line.94"></a>
+<span class="sourceLineNo">095</span>     * TagMetric is thread-safe because no additional fields are put in the structure after creation.<a name="line.95"></a>
+<span class="sourceLineNo">096</span>     */<a name="line.96"></a>
+<span class="sourceLineNo">097</span>    private static class TagMetric extends LinkedHashMap&lt;String, AtomicLong&gt; {<a name="line.97"></a>
+<span class="sourceLineNo">098</span><a name="line.98"></a>
+<span class="sourceLineNo">099</span>        public static final long serialVersionUID = 1L;<a name="line.99"></a>
+<span class="sourceLineNo">100</span><a name="line.100"></a>
+<span class="sourceLineNo">101</span>        final AtomicLong active = new AtomicLong();<a name="line.101"></a>
+<span class="sourceLineNo">102</span>        final AtomicLong completed = new AtomicLong();<a name="line.102"></a>
+<span class="sourceLineNo">103</span>        final AtomicLong errors = new AtomicLong();<a name="line.103"></a>
+<span class="sourceLineNo">104</span><a name="line.104"></a>
+<span class="sourceLineNo">105</span>        public TagMetric() {<a name="line.105"></a>
+<span class="sourceLineNo">106</span>            put("in progress", active);<a name="line.106"></a>
+<span class="sourceLineNo">107</span>            put("completed", completed);<a name="line.107"></a>
+<span class="sourceLineNo">108</span>            put("internal errors", errors);<a name="line.108"></a>
+<span class="sourceLineNo">109</span>        }<a name="line.109"></a>
+<span class="sourceLineNo">110</span>    }<a name="line.110"></a>
+<span class="sourceLineNo">111</span><a name="line.111"></a>
+<span class="sourceLineNo">112</span>    /**<a name="line.112"></a>
+<span class="sourceLineNo">113</span>     * Creates and initializes a MonitorEndpointHandler in a heap environment.<a name="line.113"></a>
+<span class="sourceLineNo">114</span>     */<a name="line.114"></a>
+<span class="sourceLineNo">115</span>    public static class Heaplet extends ConditionalAuditEventListener.ConditionalListenerHeaplet {<a name="line.115"></a>
+<span class="sourceLineNo">116</span>        @Override<a name="line.116"></a>
+<span class="sourceLineNo">117</span>        protected AuditEventListener createListener() {<a name="line.117"></a>
+<span class="sourceLineNo">118</span>            return new MonitorEndpointHandler();<a name="line.118"></a>
+<span class="sourceLineNo">119</span>        }<a name="line.119"></a>
+<span class="sourceLineNo">120</span>    }<a name="line.120"></a>
+<span class="sourceLineNo">121</span><a name="line.121"></a>
+<span class="sourceLineNo">122</span>}<a name="line.122"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

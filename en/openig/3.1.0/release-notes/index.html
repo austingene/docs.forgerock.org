@@ -11,7 +11,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="country">USA</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="phone">+1&nbsp;415-599-1100&nbsp;(US)</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<code class="uri">www.forgerock.com</code><br>
-&nbsp;&nbsp;&nbsp;</p></div></div></div></div></div><div><p class="releaseinfo">Software release date: December 12, 2014</p></div><div><p class="copyright">Copyright &copy; 2012-2014 ForgeRock AS</p></div><div><a href="legalnotice.html">Legal Notice</a></div><div><p class="pubdate">Publication date: December 05, 2014</p></div><div><div class="abstract"><div class="abstract-title">Abstract</div><p>
+&nbsp;&nbsp;&nbsp;</p></div></div></div></div></div><div><p class="releaseinfo">Software release date: December 12, 2014</p></div><div><p class="copyright">Copyright &copy; 2012-2014 ForgeRock AS</p></div><div><a href="legalnotice.html">Legal Notice</a></div><div><p class="pubdate">Publication date: December 12, 2014</p></div><div><div class="abstract"><div class="abstract-title">Abstract</div><p>
     Notes covering OpenIG prerequisites, fixes, known issues.
     OpenIG provides a high-performance reverse proxy server
     with specialized session management and credential replay functionality.
@@ -20,8 +20,8 @@
    and provides the following additional features.
   </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
     OpenIG can now store session information
-    in encrypted JSON Web Token (JWT) cookies on the user-agent (
-    <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-224" target="_blank">OPENIG-224</a>,
+    in encrypted JSON Web Token (JWT) cookies on the user-agent
+    (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-224" target="_blank">OPENIG-224</a>,
     <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-278" target="_blank">OPENIG-278</a>).
     By default, OpenIG continues to back session information
     with HttpSession from the container where OpenIG runs.
@@ -33,15 +33,15 @@
     and
     <a href="../gateway-guide/index.html#keystore-for-jwt-encryption" class="link"><em class="citetitle">Setting Up Keys For JWT Encryption</em></a>.
    </p></li><li class="listitem"><p>
-    OpenIG now allows you to inline configuration objects (
-    <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-311" target="_blank">OPENIG-311</a>),
-    to omit "config" fields when all values are optional (
-    <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-300" target="_blank">OPENIG-300</a>),
+    OpenIG now allows you to inline configuration objects
+    (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-311" target="_blank">OPENIG-311</a>),
+    to omit "config" fields when all values are optional
+    (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-300" target="_blank">OPENIG-300</a>),
     to omit the "objects" field from the "heap"
-    <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-380" target="_blank">OPENIG-380</a>),
+    (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-380" target="_blank">OPENIG-380</a>),
     and even to omit the "heap" when it is empty
-    or would only contain a single handler (
-    <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-329" target="_blank">OPENIG-329</a>).
+    or would only contain a single handler
+    (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-329" target="_blank">OPENIG-329</a>).
    </p><p>
     When you bring an object inline, you no longer need to specify the "name".
    </p><p>
@@ -119,8 +119,8 @@
     Examples in the documentation now use streamlined configurations
     where it makes sense.
    </p></li><li class="listitem"><p>
-    OpenIG now supports object decorators (
-    <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-340" target="_blank">OPENIG-340</a>).
+    OpenIG now supports object decorators
+    (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-340" target="_blank">OPENIG-340</a>).
     Decorators allow you to define heap objects that decorate other objects,
     adding the new behavior that the decorator provides.
    </p><div class="itemizedlist"><p>
@@ -132,8 +132,8 @@
       <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-301" target="_blank">OPENIG-301</a>)
      </p></li><li class="listitem"><p>
       A TimerDecorator that records times to process the exchange
-      through any decorated object (
-      <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-352" target="_blank">OPENIG-352</a>,
+      through any decorated object
+      (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-352" target="_blank">OPENIG-352</a>,
       <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-353" target="_blank">OPENIG-353</a>)
      </p></li><li class="listitem"><p>
       An AuditDecorator that allows you to audit operation
@@ -144,26 +144,26 @@
     <a href="../reference/index.html#decorators-conf" class="link"><em class="citetitle">Decorators</em></a>.
    </p></li><li class="listitem"><p>
     OpenIG now provides a publish-and-subscribe audit framework
-    and a sample monitoring handler that returns basic statistics (
-    <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-359" target="_blank">OPENIG-359</a>,
+    and a sample monitoring handler that returns basic statistics
+    (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-359" target="_blank">OPENIG-359</a>,
     <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-386" target="_blank">OPENIG-386</a>).
     To learn more, start by reading the chapter about the
     <a href="../gateway-guide/index.html#chap-auditing" class="link"><em class="citetitle">OpenIG Audit Framework</em></a>.
    </p></li><li class="listitem"><p>
-    OpenIG script configurations can now include arguments (
-    <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-240" target="_blank">OPENIG-240</a>).
+    OpenIG script configurations can now include arguments
+    (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-240" target="_blank">OPENIG-240</a>).
    </p></li><li class="listitem"><p>
     The OAuth2ClientFilter and OAuth2ResourceServerFilter now cache data
-    to avoid unnecessarily calls to the provider (
-    <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-350" target="_blank">OPENIG-350</a>).
+    to avoid unnecessarily calls to the provider
+    (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-350" target="_blank">OPENIG-350</a>).
    </p></li><li class="listitem"><p>
     OpenIG uses improved object names in log messages
-    that make it easier to identify the source of the message (
-    <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-358" target="_blank">OPENIG-358</a>,
+    that make it easier to identify the source of the message
+    (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-358" target="_blank">OPENIG-358</a>,
     <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-371" target="_blank">OPENIG-371</a>).
    </p></li><li class="listitem"><p>
-    The OpenIG Exchange now provides information about the client (
-    <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-333" target="_blank">OPENIG-333</a>).
+    The OpenIG Exchange now provides information about the client
+    (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENIG-333" target="_blank">OPENIG-333</a>).
    </p><p>
     For details see the <em class="citetitle">Reference</em> on
     <a href="../reference/index.html#ClientInfo" class="link"><em class="citetitle">ClientInfo</em></a>.
@@ -208,9 +208,11 @@
    resulting in deprecation of earlier features.
   </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="deprecated"></a>3.2.&nbsp;Deprecated Functionality</h2></div></div></div><p>
    This release deprecates the following configuration settings.
-   Deprecation is defined in the <em class="citetitle">Reference</em> appendix on
+   Deprecation is defined in the
+   <a href="../reference/index.html#reference" class="link"><em class="citetitle">Reference</em></a>
+   appendix on
    <a href="../reference/index.html#interface-stability" class="link"><em class="citetitle">ForgeRock Product Interface Stability</em></a>.
-  </p><div class="table"><a name="d0e350"></a><div class="table-title">Table&nbsp;3.1.&nbsp;Configuration settings</div><div class="table-contents"><table summary="Configuration settings" width="100%" border="0"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>
+  </p><div class="table"><a name="d0e351"></a><div class="table-title">Table&nbsp;3.1.&nbsp;Configuration settings</div><div class="table-contents"><table summary="Configuration settings" width="100%" border="0"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>
        Configuration Object
       </th><th>
        <a href="../reference/index.html#interface-stability" class="link">Deprecated</a> Settings
@@ -242,12 +244,12 @@
        "keystore"
       </td><td>
        Replaced by "keyManager", which takes one or more
-       <a href="../reference/index.html#KeyManager" class="link">KeyManager</a> names
+       <a href="../reference/index.html#KeyManager" class="link">KeyManager</a> references
       </td></tr><tr><td>
        "truststore"
       </td><td>
        Replaced by "trustManager", which takes one or more
-       <a href="../reference/index.html#TrustManager" class="link">TrustManager</a> names
+       <a href="../reference/index.html#TrustManager" class="link">TrustManager</a> references
       </td></tr><tr><td rowspan="3">
        <a href="../reference/index.html#OAuth2ResourceServerFilter" class="link">OAuth2ResourceServerFilter</a>
       </td><td>
