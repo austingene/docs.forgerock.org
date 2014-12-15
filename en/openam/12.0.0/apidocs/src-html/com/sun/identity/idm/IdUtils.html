@@ -1,0 +1,907 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/**<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.<a name="line.2"></a>
+<span class="sourceLineNo">003</span> *<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * Copyright (c) 2005 Sun Microsystems Inc. All Rights Reserved<a name="line.4"></a>
+<span class="sourceLineNo">005</span> *<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * The contents of this file are subject to the terms<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * of the Common Development and Distribution License<a name="line.7"></a>
+<span class="sourceLineNo">008</span> * (the License). You may not use this file except in<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * compliance with the License.<a name="line.9"></a>
+<span class="sourceLineNo">010</span> *<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * You can obtain a copy of the License at<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * https://opensso.dev.java.net/public/CDDLv1.0.html or<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * opensso/legal/CDDLv1.0.txt<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * See the License for the specific language governing<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * permission and limitations under the License.<a name="line.15"></a>
+<span class="sourceLineNo">016</span> *<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * When distributing Covered Code, include this CDDL<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * Header Notice in each file and include the License file<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * at opensso/legal/CDDLv1.0.txt.<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * If applicable, add the following below the CDDL Header,<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * with the fields enclosed by brackets [] replaced by<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * your own identifying information:<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * "Portions Copyrighted [year] [name of copyright owner]"<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * $Id: IdUtils.java,v 1.34 2009/11/20 23:52:54 ww203982 Exp $<a name="line.25"></a>
+<span class="sourceLineNo">026</span> *<a name="line.26"></a>
+<span class="sourceLineNo">027</span> */<a name="line.27"></a>
+<span class="sourceLineNo">028</span><a name="line.28"></a>
+<span class="sourceLineNo">029</span>/*<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * Portions Copyrighted [2011] [ForgeRock AS]<a name="line.30"></a>
+<span class="sourceLineNo">031</span> */<a name="line.31"></a>
+<span class="sourceLineNo">032</span>package com.sun.identity.idm;<a name="line.32"></a>
+<span class="sourceLineNo">033</span><a name="line.33"></a>
+<span class="sourceLineNo">034</span>import com.iplanet.am.sdk.AMDirectoryAccessFactory;<a name="line.34"></a>
+<span class="sourceLineNo">035</span>import com.iplanet.am.sdk.AMException;<a name="line.35"></a>
+<span class="sourceLineNo">036</span>import com.iplanet.am.sdk.AMObject;<a name="line.36"></a>
+<span class="sourceLineNo">037</span>import com.iplanet.am.sdk.AMOrganization;<a name="line.37"></a>
+<span class="sourceLineNo">038</span>import com.iplanet.am.sdk.AMStoreConnection;<a name="line.38"></a>
+<span class="sourceLineNo">039</span>import com.iplanet.am.sdk.AMConstants;<a name="line.39"></a>
+<span class="sourceLineNo">040</span>import com.iplanet.am.sdk.common.IDirectoryServices;<a name="line.40"></a>
+<span class="sourceLineNo">041</span>import com.iplanet.am.util.SystemProperties;<a name="line.41"></a>
+<span class="sourceLineNo">042</span>import com.iplanet.sso.SSOException;<a name="line.42"></a>
+<span class="sourceLineNo">043</span>import com.iplanet.sso.SSOToken;<a name="line.43"></a>
+<span class="sourceLineNo">044</span>import com.sun.identity.common.CaseInsensitiveHashMap;<a name="line.44"></a>
+<span class="sourceLineNo">045</span>import com.sun.identity.common.DNUtils;<a name="line.45"></a>
+<span class="sourceLineNo">046</span>import com.sun.identity.security.AdminTokenAction;<a name="line.46"></a>
+<span class="sourceLineNo">047</span>import com.sun.identity.shared.Constants;<a name="line.47"></a>
+<span class="sourceLineNo">048</span>import com.sun.identity.shared.debug.Debug;<a name="line.48"></a>
+<span class="sourceLineNo">049</span>import com.sun.identity.sm.DNMapper;<a name="line.49"></a>
+<span class="sourceLineNo">050</span>import com.sun.identity.sm.SMSEntry;<a name="line.50"></a>
+<span class="sourceLineNo">051</span>import com.sun.identity.sm.OrganizationConfigManager;<a name="line.51"></a>
+<span class="sourceLineNo">052</span>import com.sun.identity.sm.OrgConfigViaAMSDK;<a name="line.52"></a>
+<span class="sourceLineNo">053</span><a name="line.53"></a>
+<span class="sourceLineNo">054</span>import com.sun.identity.sm.SMSException;<a name="line.54"></a>
+<span class="sourceLineNo">055</span>import com.sun.identity.sm.ServiceConfig;<a name="line.55"></a>
+<span class="sourceLineNo">056</span>import com.sun.identity.sm.ServiceConfigManager;<a name="line.56"></a>
+<span class="sourceLineNo">057</span>import com.sun.identity.sm.ServiceManager;<a name="line.57"></a>
+<span class="sourceLineNo">058</span><a name="line.58"></a>
+<span class="sourceLineNo">059</span>import java.security.AccessController;<a name="line.59"></a>
+<span class="sourceLineNo">060</span>import java.util.Collections;<a name="line.60"></a>
+<span class="sourceLineNo">061</span>import java.util.HashSet;<a name="line.61"></a>
+<span class="sourceLineNo">062</span>import java.util.Iterator;<a name="line.62"></a>
+<span class="sourceLineNo">063</span>import java.util.Map;<a name="line.63"></a>
+<span class="sourceLineNo">064</span>import java.util.Set;<a name="line.64"></a>
+<span class="sourceLineNo">065</span>import java.util.StringTokenizer;<a name="line.65"></a>
+<span class="sourceLineNo">066</span><a name="line.66"></a>
+<span class="sourceLineNo">067</span>import com.sun.identity.shared.ldap.LDAPDN;<a name="line.67"></a>
+<span class="sourceLineNo">068</span>import com.sun.identity.shared.ldap.util.DN;<a name="line.68"></a>
+<span class="sourceLineNo">069</span><a name="line.69"></a>
+<span class="sourceLineNo">070</span><a name="line.70"></a>
+<span class="sourceLineNo">071</span>/**<a name="line.71"></a>
+<span class="sourceLineNo">072</span> * The class defines some static utilities used by other components like policy<a name="line.72"></a>
+<span class="sourceLineNo">073</span> * and auth<a name="line.73"></a>
+<span class="sourceLineNo">074</span> *<a name="line.74"></a>
+<span class="sourceLineNo">075</span> * @supported.api<a name="line.75"></a>
+<span class="sourceLineNo">076</span> */<a name="line.76"></a>
+<span class="sourceLineNo">077</span>public final class IdUtils {<a name="line.77"></a>
+<span class="sourceLineNo">078</span>    private static Debug debug = AMIdentityRepository.debug;<a name="line.78"></a>
+<span class="sourceLineNo">079</span><a name="line.79"></a>
+<span class="sourceLineNo">080</span>    private static Map mapSupportedTypes = new CaseInsensitiveHashMap(10);<a name="line.80"></a>
+<span class="sourceLineNo">081</span><a name="line.81"></a>
+<span class="sourceLineNo">082</span>    public static Set supportedTypes = new HashSet();<a name="line.82"></a>
+<span class="sourceLineNo">083</span><a name="line.83"></a>
+<span class="sourceLineNo">084</span>    private static Map mapTypesToServiceNames = new CaseInsensitiveHashMap();<a name="line.84"></a>
+<span class="sourceLineNo">085</span><a name="line.85"></a>
+<span class="sourceLineNo">086</span>    protected static Map typesCanBeMemberOf = new CaseInsensitiveHashMap();<a name="line.86"></a>
+<span class="sourceLineNo">087</span><a name="line.87"></a>
+<span class="sourceLineNo">088</span>    protected static Map typesCanHaveMembers = new CaseInsensitiveHashMap();<a name="line.88"></a>
+<span class="sourceLineNo">089</span><a name="line.89"></a>
+<span class="sourceLineNo">090</span>    protected static Map typesCanAddMembers = new CaseInsensitiveHashMap();<a name="line.90"></a>
+<span class="sourceLineNo">091</span><a name="line.91"></a>
+<span class="sourceLineNo">092</span>    // Static map to cache "orgIdentifier" and organization DN<a name="line.92"></a>
+<span class="sourceLineNo">093</span>    private static Map orgIdentifierToOrgName = Collections.synchronizedMap(<a name="line.93"></a>
+<span class="sourceLineNo">094</span>        new CaseInsensitiveHashMap());<a name="line.94"></a>
+<span class="sourceLineNo">095</span>    private static Map orgStatusCache = Collections.synchronizedMap(<a name="line.95"></a>
+<span class="sourceLineNo">096</span>        new CaseInsensitiveHashMap());<a name="line.96"></a>
+<span class="sourceLineNo">097</span><a name="line.97"></a>
+<span class="sourceLineNo">098</span>    // ServiceConfigManager for sunidentityrepository service<a name="line.98"></a>
+<span class="sourceLineNo">099</span>    private static String notificationId;<a name="line.99"></a>
+<span class="sourceLineNo">100</span><a name="line.100"></a>
+<span class="sourceLineNo">101</span>    private static ServiceConfigManager serviceConfigManager;<a name="line.101"></a>
+<span class="sourceLineNo">102</span>    <a name="line.102"></a>
+<span class="sourceLineNo">103</span>    // User naming attribute for AMSDK<a name="line.103"></a>
+<span class="sourceLineNo">104</span>    private static String USER_NAMING_ATTR;<a name="line.104"></a>
+<span class="sourceLineNo">105</span>    <a name="line.105"></a>
+<span class="sourceLineNo">106</span>    // Organization naming attribute for AMSDK<a name="line.106"></a>
+<span class="sourceLineNo">107</span>    private static String ORG_NAMING_ATTR;<a name="line.107"></a>
+<span class="sourceLineNo">108</span>    <a name="line.108"></a>
+<span class="sourceLineNo">109</span>    // SMS Root Suffix<a name="line.109"></a>
+<span class="sourceLineNo">110</span>    private static String ROOT_SUFFIX;<a name="line.110"></a>
+<span class="sourceLineNo">111</span>    <a name="line.111"></a>
+<span class="sourceLineNo">112</span>    // DN pointing to the services node<a name="line.112"></a>
+<span class="sourceLineNo">113</span>    private static String SERVICES_SUFFIX;<a name="line.113"></a>
+<span class="sourceLineNo">114</span>    <a name="line.114"></a>
+<span class="sourceLineNo">115</span>    // Special Users<a name="line.115"></a>
+<span class="sourceLineNo">116</span>    private static Set specialUsers = new HashSet();<a name="line.116"></a>
+<span class="sourceLineNo">117</span>    <a name="line.117"></a>
+<span class="sourceLineNo">118</span>    static {<a name="line.118"></a>
+<span class="sourceLineNo">119</span>        initialize();<a name="line.119"></a>
+<span class="sourceLineNo">120</span>    }<a name="line.120"></a>
+<span class="sourceLineNo">121</span><a name="line.121"></a>
+<span class="sourceLineNo">122</span>    protected static void initialize() {<a name="line.122"></a>
+<span class="sourceLineNo">123</span>        if (ServiceManager.isConfigMigratedTo70()) {<a name="line.123"></a>
+<span class="sourceLineNo">124</span>            // IdRepo service schema exists. Read the supported<a name="line.124"></a>
+<span class="sourceLineNo">125</span>            // entities from there<a name="line.125"></a>
+<span class="sourceLineNo">126</span>            try {<a name="line.126"></a>
+<span class="sourceLineNo">127</span>                SSOToken adminToken = (SSOToken) AccessController<a name="line.127"></a>
+<span class="sourceLineNo">128</span>                        .doPrivileged(AdminTokenAction.getInstance());<a name="line.128"></a>
+<span class="sourceLineNo">129</span>                serviceConfigManager = new ServiceConfigManager(adminToken,<a name="line.129"></a>
+<span class="sourceLineNo">130</span>                        IdConstants.REPO_SERVICE, "1.0");<a name="line.130"></a>
+<span class="sourceLineNo">131</span>                ServiceConfig ss = serviceConfigManager.getGlobalConfig(null);<a name="line.131"></a>
+<span class="sourceLineNo">132</span>                Set typeSchemaNames = ss.getSubConfigNames("*",<a name="line.132"></a>
+<span class="sourceLineNo">133</span>                        IdConstants.SUPPORTED_TYPES);<a name="line.133"></a>
+<span class="sourceLineNo">134</span>                if (typeSchemaNames == null || typeSchemaNames.isEmpty()) {<a name="line.134"></a>
+<span class="sourceLineNo">135</span>                    loadDefaultTypes();<a name="line.135"></a>
+<span class="sourceLineNo">136</span>                } else {<a name="line.136"></a>
+<span class="sourceLineNo">137</span>                    Iterator it = typeSchemaNames.iterator();<a name="line.137"></a>
+<span class="sourceLineNo">138</span>                    while (it.hasNext()) {<a name="line.138"></a>
+<span class="sourceLineNo">139</span>                        String typeSchema = (String) it.next();<a name="line.139"></a>
+<span class="sourceLineNo">140</span>                        IdType idType = new IdType(typeSchema);<a name="line.140"></a>
+<span class="sourceLineNo">141</span>                        supportedTypes.add(idType);<a name="line.141"></a>
+<span class="sourceLineNo">142</span>                        mapSupportedTypes.put(idType.getName(), idType);<a name="line.142"></a>
+<span class="sourceLineNo">143</span>                        ServiceConfig tsc = ss.getSubConfig(typeSchema);<a name="line.143"></a>
+<span class="sourceLineNo">144</span>                        Map attributes = tsc.getAttributes();<a name="line.144"></a>
+<span class="sourceLineNo">145</span>                        Set serviceNameSet = (Set) attributes<a name="line.145"></a>
+<span class="sourceLineNo">146</span>                                .get(IdConstants.SERVICE_NAME);<a name="line.146"></a>
+<span class="sourceLineNo">147</span>                        Set canBeMembersOf = (Set) attributes<a name="line.147"></a>
+<span class="sourceLineNo">148</span>                                .get(IdConstants.ATTR_MEMBER_OF);<a name="line.148"></a>
+<span class="sourceLineNo">149</span>                        Set canHaveMembers = (Set) attributes<a name="line.149"></a>
+<span class="sourceLineNo">150</span>                                .get(IdConstants.ATTR_HAVE_MEMBERS);<a name="line.150"></a>
+<span class="sourceLineNo">151</span>                        Set canAddMembers = (Set) attributes<a name="line.151"></a>
+<span class="sourceLineNo">152</span>                                .get(IdConstants.ATTR_ADD_MEMBERS);<a name="line.152"></a>
+<span class="sourceLineNo">153</span>                        if (serviceNameSet != null &amp;&amp; <a name="line.153"></a>
+<span class="sourceLineNo">154</span>                                !serviceNameSet.isEmpty()) {<a name="line.154"></a>
+<span class="sourceLineNo">155</span>                            mapTypesToServiceNames.put(typeSchema,<a name="line.155"></a>
+<span class="sourceLineNo">156</span>                                    (String) serviceNameSet.iterator().next());<a name="line.156"></a>
+<span class="sourceLineNo">157</span>                        }<a name="line.157"></a>
+<span class="sourceLineNo">158</span>                        if (canBeMembersOf != null &amp;&amp; <a name="line.158"></a>
+<span class="sourceLineNo">159</span>                                !canBeMembersOf.isEmpty()) {<a name="line.159"></a>
+<span class="sourceLineNo">160</span>                            Set memberOfSet = getMemberSet(canBeMembersOf);<a name="line.160"></a>
+<span class="sourceLineNo">161</span>                            typesCanBeMemberOf.put(typeSchema, memberOfSet);<a name="line.161"></a>
+<span class="sourceLineNo">162</span>                        }<a name="line.162"></a>
+<span class="sourceLineNo">163</span>                        if (canHaveMembers != null &amp;&amp; <a name="line.163"></a>
+<span class="sourceLineNo">164</span>                                !canHaveMembers.isEmpty()) {<a name="line.164"></a>
+<span class="sourceLineNo">165</span>                            Set memberSet = getMemberSet(canHaveMembers);<a name="line.165"></a>
+<span class="sourceLineNo">166</span>                            typesCanHaveMembers.put(typeSchema, memberSet);<a name="line.166"></a>
+<span class="sourceLineNo">167</span>                        }<a name="line.167"></a>
+<span class="sourceLineNo">168</span>                        if (canAddMembers != null &amp;&amp; <a name="line.168"></a>
+<span class="sourceLineNo">169</span>                                !canAddMembers.isEmpty()) <a name="line.169"></a>
+<span class="sourceLineNo">170</span>                        {<a name="line.170"></a>
+<span class="sourceLineNo">171</span>                            Set memberSet = getMemberSet(canAddMembers);<a name="line.171"></a>
+<span class="sourceLineNo">172</span>                            typesCanAddMembers.put(typeSchema, memberSet);<a name="line.172"></a>
+<span class="sourceLineNo">173</span>                        }<a name="line.173"></a>
+<span class="sourceLineNo">174</span>                    }<a name="line.174"></a>
+<span class="sourceLineNo">175</span>                }<a name="line.175"></a>
+<span class="sourceLineNo">176</span>            } catch (SMSException e) {<a name="line.176"></a>
+<span class="sourceLineNo">177</span>                String installTime = SystemProperties.get(<a name="line.177"></a>
+<span class="sourceLineNo">178</span>                    Constants.SYS_PROPERTY_INSTALL_TIME, "false");<a name="line.178"></a>
+<span class="sourceLineNo">179</span>                if (!installTime.equals("true")) {<a name="line.179"></a>
+<span class="sourceLineNo">180</span>                    debug.error(<a name="line.180"></a>
+<span class="sourceLineNo">181</span>                        "IdUtils.initialize: Loading default types.", e);<a name="line.181"></a>
+<span class="sourceLineNo">182</span>                }<a name="line.182"></a>
+<span class="sourceLineNo">183</span>                loadDefaultTypes();<a name="line.183"></a>
+<span class="sourceLineNo">184</span>            } catch  (SSOException ssoe) {<a name="line.184"></a>
+<span class="sourceLineNo">185</span>                debug.error("dUtils.initialize: Loading default types", ssoe);<a name="line.185"></a>
+<span class="sourceLineNo">186</span>                loadDefaultTypes();<a name="line.186"></a>
+<span class="sourceLineNo">187</span>            }<a name="line.187"></a>
+<span class="sourceLineNo">188</span>        } else {<a name="line.188"></a>
+<span class="sourceLineNo">189</span>            loadDefaultTypes();<a name="line.189"></a>
+<span class="sourceLineNo">190</span>        }<a name="line.190"></a>
+<span class="sourceLineNo">191</span><a name="line.191"></a>
+<span class="sourceLineNo">192</span>        // Register for SMS notifications to root realm<a name="line.192"></a>
+<span class="sourceLineNo">193</span>        if (notificationId == null) {<a name="line.193"></a>
+<span class="sourceLineNo">194</span>            try {<a name="line.194"></a>
+<span class="sourceLineNo">195</span>                SSOToken adminToken = (SSOToken) AccessController<a name="line.195"></a>
+<span class="sourceLineNo">196</span>                        .doPrivileged(AdminTokenAction.getInstance());<a name="line.196"></a>
+<span class="sourceLineNo">197</span>                if (serviceConfigManager == null) {<a name="line.197"></a>
+<span class="sourceLineNo">198</span>                    serviceConfigManager = new ServiceConfigManager(adminToken,<a name="line.198"></a>
+<span class="sourceLineNo">199</span>                        IdConstants.REPO_SERVICE, "1.0");<a name="line.199"></a>
+<span class="sourceLineNo">200</span>                }<a name="line.200"></a>
+<span class="sourceLineNo">201</span>                notificationId = serviceConfigManager.addListener(<a name="line.201"></a>
+<span class="sourceLineNo">202</span>                    new IdUtilsListener());<a name="line.202"></a>
+<span class="sourceLineNo">203</span>            } catch (SMSException e) {<a name="line.203"></a>
+<span class="sourceLineNo">204</span>                String installTime = SystemProperties.get(<a name="line.204"></a>
+<span class="sourceLineNo">205</span>                    Constants.SYS_PROPERTY_INSTALL_TIME, "false");<a name="line.205"></a>
+<span class="sourceLineNo">206</span>                if (!installTime.equals("true")) {<a name="line.206"></a>
+<span class="sourceLineNo">207</span>                    debug.error(<a name="line.207"></a>
+<span class="sourceLineNo">208</span>                        "IdUtils.initialize: Register notification", e);<a name="line.208"></a>
+<span class="sourceLineNo">209</span>                }<a name="line.209"></a>
+<span class="sourceLineNo">210</span>            } catch (SSOException ssoe) {<a name="line.210"></a>
+<span class="sourceLineNo">211</span>                String installTime = SystemProperties.get(<a name="line.211"></a>
+<span class="sourceLineNo">212</span>                    Constants.SYS_PROPERTY_INSTALL_TIME, "false");<a name="line.212"></a>
+<span class="sourceLineNo">213</span>                if (!installTime.equals("true")) {<a name="line.213"></a>
+<span class="sourceLineNo">214</span>                    debug.error(<a name="line.214"></a>
+<span class="sourceLineNo">215</span>                        "IdUtils.initialize: Register notification", ssoe);<a name="line.215"></a>
+<span class="sourceLineNo">216</span>                }<a name="line.216"></a>
+<span class="sourceLineNo">217</span>            }<a name="line.217"></a>
+<span class="sourceLineNo">218</span>        }<a name="line.218"></a>
+<span class="sourceLineNo">219</span>    }<a name="line.219"></a>
+<span class="sourceLineNo">220</span><a name="line.220"></a>
+<span class="sourceLineNo">221</span>    /**<a name="line.221"></a>
+<span class="sourceLineNo">222</span>     * @supported.api <a name="line.222"></a>
+<span class="sourceLineNo">223</span>     * Returns a handle of the Identity object based on<a name="line.223"></a>
+<span class="sourceLineNo">224</span>     * the SSO Token passed in (&lt;code&gt;AMIdentity&lt;/code&gt; object of the user<a name="line.224"></a>
+<span class="sourceLineNo">225</span>     * who is authenticated).<a name="line.225"></a>
+<span class="sourceLineNo">226</span>     * <a name="line.226"></a>
+<span class="sourceLineNo">227</span>     * @param token    Single sign on token of user.<a name="line.227"></a>
+<span class="sourceLineNo">228</span>     * @return Identity object.<a name="line.228"></a>
+<span class="sourceLineNo">229</span>     * @throws IdRepoException if there are repository related error conditions.<a name="line.229"></a>
+<span class="sourceLineNo">230</span>     * @throws SSOException if user's single sign on token is invalid.<a name="line.230"></a>
+<span class="sourceLineNo">231</span>     */<a name="line.231"></a>
+<span class="sourceLineNo">232</span>    public static AMIdentity getIdentity(SSOToken token)<a name="line.232"></a>
+<span class="sourceLineNo">233</span>        throws IdRepoException, SSOException {<a name="line.233"></a>
+<span class="sourceLineNo">234</span>        String principal = token.getProperty(Constants.UNIVERSAL_IDENTIFIER);<a name="line.234"></a>
+<span class="sourceLineNo">235</span>        if (principal == null) {<a name="line.235"></a>
+<span class="sourceLineNo">236</span>            // This could happen during co-existence with AM 6.x<a name="line.236"></a>
+<span class="sourceLineNo">237</span>            // and SSOToken created by AM 6.x server. In this case<a name="line.237"></a>
+<span class="sourceLineNo">238</span>            // the principal name would be the DN<a name="line.238"></a>
+<span class="sourceLineNo">239</span>            principal = token.getPrincipal().getName();<a name="line.239"></a>
+<span class="sourceLineNo">240</span>        }<a name="line.240"></a>
+<span class="sourceLineNo">241</span>        return (getIdentity(token, principal));<a name="line.241"></a>
+<span class="sourceLineNo">242</span>    }<a name="line.242"></a>
+<span class="sourceLineNo">243</span><a name="line.243"></a>
+<span class="sourceLineNo">244</span>    /**<a name="line.244"></a>
+<span class="sourceLineNo">245</span>     * @supported.api<a name="line.245"></a>
+<span class="sourceLineNo">246</span>     * <a name="line.246"></a>
+<span class="sourceLineNo">247</span>     * Returns a string which uniquely represents this identity object.<a name="line.247"></a>
+<span class="sourceLineNo">248</span>     * <a name="line.248"></a>
+<span class="sourceLineNo">249</span>     * @param id<a name="line.249"></a>
+<span class="sourceLineNo">250</span>     *            &lt;code&gt;AMIdentity&lt;/code&gt; object whose string represenation is<a name="line.250"></a>
+<span class="sourceLineNo">251</span>     *            needed.<a name="line.251"></a>
+<span class="sourceLineNo">252</span>     * @return universal identifier of &lt;code&gt;id&lt;/code&gt;.<a name="line.252"></a>
+<span class="sourceLineNo">253</span>     */<a name="line.253"></a>
+<span class="sourceLineNo">254</span>    public static String getUniversalId(AMIdentity id) {<a name="line.254"></a>
+<span class="sourceLineNo">255</span>        return id.getUniversalId();<a name="line.255"></a>
+<span class="sourceLineNo">256</span>    }<a name="line.256"></a>
+<span class="sourceLineNo">257</span><a name="line.257"></a>
+<span class="sourceLineNo">258</span>    /**<a name="line.258"></a>
+<span class="sourceLineNo">259</span>     * @supported.api <a name="line.259"></a>
+<span class="sourceLineNo">260</span>     * <a name="line.260"></a>
+<span class="sourceLineNo">261</span>     * Returns an &lt;code&gt;AMIdentity&lt;/code&gt; object, if provided with a string <a name="line.261"></a>
+<span class="sourceLineNo">262</span>     * identifier for the object.<a name="line.262"></a>
+<span class="sourceLineNo">263</span>     * <a name="line.263"></a>
+<span class="sourceLineNo">264</span>     * @param token SSOToken of the administrator<a name="line.264"></a>
+<span class="sourceLineNo">265</span>     * @param univId String represenation of the identity.<a name="line.265"></a>
+<span class="sourceLineNo">266</span>     * @return Identity object<a name="line.266"></a>
+<span class="sourceLineNo">267</span>     * @throws IdRepoException if the identifier provided is wrong.<a name="line.267"></a>
+<span class="sourceLineNo">268</span>     */<a name="line.268"></a>
+<span class="sourceLineNo">269</span>    public static AMIdentity getIdentity(SSOToken token, String univId)<a name="line.269"></a>
+<span class="sourceLineNo">270</span>            throws IdRepoException {<a name="line.270"></a>
+<span class="sourceLineNo">271</span>        return (getIdentity(token, univId, null));<a name="line.271"></a>
+<span class="sourceLineNo">272</span>    }<a name="line.272"></a>
+<span class="sourceLineNo">273</span><a name="line.273"></a>
+<span class="sourceLineNo">274</span>    /**<a name="line.274"></a>
+<span class="sourceLineNo">275</span>     * Returns an &lt;code&gt;AMIdentity&lt;/code&gt; object, given the<a name="line.275"></a>
+<span class="sourceLineNo">276</span>     * DN of an authenticated identity, realm name and identity type.<a name="line.276"></a>
+<span class="sourceLineNo">277</span>     * This interface is mainly for authentication component to get<a name="line.277"></a>
+<span class="sourceLineNo">278</span>     * back the identity of the user.<a name="line.278"></a>
+<span class="sourceLineNo">279</span>     * <a name="line.279"></a>
+<span class="sourceLineNo">280</span>     * @param token SSOToken of the administrator<a name="line.280"></a>
+<span class="sourceLineNo">281</span>     * @param amsdkdn DN of the authenticated user<a name="line.281"></a>
+<span class="sourceLineNo">282</span>     * @param realm  realm name where the user was authenticated<a name="line.282"></a>
+<span class="sourceLineNo">283</span>     * @return Identity object or &lt;code&gt;null&lt;/code&gt; <a name="line.283"></a>
+<span class="sourceLineNo">284</span>     * @throws IdRepoException if the underly components throws<a name="line.284"></a>
+<span class="sourceLineNo">285</span>     * exception while obtaining the identity object<a name="line.285"></a>
+<span class="sourceLineNo">286</span>     */<a name="line.286"></a>
+<span class="sourceLineNo">287</span>    public static AMIdentity getIdentity(SSOToken token, String amsdkdn,<a name="line.287"></a>
+<span class="sourceLineNo">288</span>        String realm) throws IdRepoException {<a name="line.288"></a>
+<span class="sourceLineNo">289</span>        DN amsdkdnObject = null;<a name="line.289"></a>
+<span class="sourceLineNo">290</span>        if (amsdkdn == null || !(amsdkdnObject = new DN(amsdkdn)).isDN()) {<a name="line.290"></a>
+<span class="sourceLineNo">291</span>            Object[] args = { amsdkdn };<a name="line.291"></a>
+<span class="sourceLineNo">292</span>            throw (new IdRepoException(IdRepoBundle.BUNDLE_NAME,<a name="line.292"></a>
+<span class="sourceLineNo">293</span>                "215", args));<a name="line.293"></a>
+<span class="sourceLineNo">294</span>        }<a name="line.294"></a>
+<span class="sourceLineNo">295</span><a name="line.295"></a>
+<span class="sourceLineNo">296</span>        // Try constructing the identity object<a name="line.296"></a>
+<span class="sourceLineNo">297</span>        if (amsdkdn.toLowerCase().startsWith("id=")) {<a name="line.297"></a>
+<span class="sourceLineNo">298</span>            try {<a name="line.298"></a>
+<span class="sourceLineNo">299</span>                return (new AMIdentity(amsdkdnObject, token));<a name="line.299"></a>
+<span class="sourceLineNo">300</span>            } catch (IdRepoException ide) {<a name="line.300"></a>
+<span class="sourceLineNo">301</span>                // this could be a AMSDK DN. Follow the AMSDK rules<a name="line.301"></a>
+<span class="sourceLineNo">302</span>                if (debug.messageEnabled()) {<a name="line.302"></a>
+<span class="sourceLineNo">303</span>                    debug.message("IdUtils:getIdentity(token, " +<a name="line.303"></a>
+<span class="sourceLineNo">304</span>                        amsdkdn + ") got exception: " + ide.getMessage() +<a name="line.304"></a>
+<span class="sourceLineNo">305</span>                        "\n\tContinuing with AMSDK DN check");<a name="line.305"></a>
+<span class="sourceLineNo">306</span>                }<a name="line.306"></a>
+<span class="sourceLineNo">307</span>            }<a name="line.307"></a>
+<span class="sourceLineNo">308</span>        }<a name="line.308"></a>
+<span class="sourceLineNo">309</span><a name="line.309"></a>
+<span class="sourceLineNo">310</span>        // Check for Special Users<a name="line.310"></a>
+<span class="sourceLineNo">311</span>        initializeSpecialUsers();<a name="line.311"></a>
+<span class="sourceLineNo">312</span>        if (specialUsers.contains(DNUtils.normalizeDN(amsdkdnObject))) {<a name="line.312"></a>
+<span class="sourceLineNo">313</span>            return (new AMIdentity(amsdkdnObject, token, LDAPDN.explodeDN(<a name="line.313"></a>
+<span class="sourceLineNo">314</span>                amsdkdnObject, true)[0], IdType.USER, ROOT_SUFFIX));<a name="line.314"></a>
+<span class="sourceLineNo">315</span>        }<a name="line.315"></a>
+<span class="sourceLineNo">316</span><a name="line.316"></a>
+<span class="sourceLineNo">317</span>        // Since "amsdkdn" is not a UUID, check if realm has AMSDK configured<a name="line.317"></a>
+<span class="sourceLineNo">318</span>        // This change is to avoid the issue of IdUtils always checking the <a name="line.318"></a>
+<span class="sourceLineNo">319</span>        // users in AMSDK as IdUtils does not check if AMSDK is configured in <a name="line.319"></a>
+<span class="sourceLineNo">320</span>        // any of the realms. <a name="line.320"></a>
+<span class="sourceLineNo">321</span>        try {<a name="line.321"></a>
+<span class="sourceLineNo">322</span>            if (!ServiceManager.isAMSDKEnabled() || ((realm != null) &amp;&amp; <a name="line.322"></a>
+<span class="sourceLineNo">323</span>                !OrgConfigViaAMSDK.isAMSDKConfigured(realm)) ||<a name="line.323"></a>
+<span class="sourceLineNo">324</span>                    (!ServiceManager.isAMSDKConfigured())) { <a name="line.324"></a>
+<span class="sourceLineNo">325</span>                // Not configured for AMSDK, return<a name="line.325"></a>
+<span class="sourceLineNo">326</span>                return (null);<a name="line.326"></a>
+<span class="sourceLineNo">327</span>            }<a name="line.327"></a>
+<span class="sourceLineNo">328</span>        } catch (SMSException smse) {<a name="line.328"></a>
+<span class="sourceLineNo">329</span>            // Ignore the exception and continue<a name="line.329"></a>
+<span class="sourceLineNo">330</span>        } <a name="line.330"></a>
+<span class="sourceLineNo">331</span><a name="line.331"></a>
+<span class="sourceLineNo">332</span>        // Initialize root realm suffix, org and user naming attributes<a name="line.332"></a>
+<span class="sourceLineNo">333</span>        initializeForGetIdentity();<a name="line.333"></a>
+<span class="sourceLineNo">334</span><a name="line.334"></a>
+<span class="sourceLineNo">335</span>        // Determine if the amsdkdn is valid. Obtain name &amp; type<a name="line.335"></a>
+<span class="sourceLineNo">336</span>        String name = null;<a name="line.336"></a>
+<span class="sourceLineNo">337</span>        IdType type = null;<a name="line.337"></a>
+<span class="sourceLineNo">338</span>        try {<a name="line.338"></a>
+<span class="sourceLineNo">339</span>            // Since we would using AMSDK, get AMDirectoryManager preload<a name="line.339"></a>
+<span class="sourceLineNo">340</span>            // all the attributes and check if it exists<a name="line.340"></a>
+<span class="sourceLineNo">341</span>            IDirectoryServices dsServices = <a name="line.341"></a>
+<span class="sourceLineNo">342</span>                AMDirectoryAccessFactory.getDirectoryServices();<a name="line.342"></a>
+<span class="sourceLineNo">343</span>            // Preload/cache all the attributes assuming it is a user<a name="line.343"></a>
+<span class="sourceLineNo">344</span>            // Mainly for performance reasons, since getObjectType would<a name="line.344"></a>
+<span class="sourceLineNo">345</span>            // force multiple another directory lookup<a name="line.345"></a>
+<span class="sourceLineNo">346</span>            try {<a name="line.346"></a>
+<span class="sourceLineNo">347</span>                if (amsdkdn.startsWith(USER_NAMING_ATTR)) {<a name="line.347"></a>
+<span class="sourceLineNo">348</span>                    dsServices.getAttributes(token, amsdkdn, AMObject.USER);<a name="line.348"></a>
+<span class="sourceLineNo">349</span>                }<a name="line.349"></a>
+<span class="sourceLineNo">350</span>            } catch (Exception e) {<a name="line.350"></a>
+<span class="sourceLineNo">351</span>                // Ignore the exception and continue since this for cache<a name="line.351"></a>
+<span class="sourceLineNo">352</span>            }<a name="line.352"></a>
+<span class="sourceLineNo">353</span><a name="line.353"></a>
+<span class="sourceLineNo">354</span>            // Getting object type would use the cached attributes<a name="line.354"></a>
+<span class="sourceLineNo">355</span>            int sdkType = dsServices.getObjectType(token, amsdkdn);<a name="line.355"></a>
+<span class="sourceLineNo">356</span><a name="line.356"></a>
+<span class="sourceLineNo">357</span>            // Convert the sdkType to IdRepo type<a name="line.357"></a>
+<span class="sourceLineNo">358</span>            type = getType(AMStoreConnection.getObjectName(sdkType));<a name="line.358"></a>
+<span class="sourceLineNo">359</span>            name = AMConstants.CONTAINER_DEFAULT_TEMPLATE_ROLE;<a name="line.359"></a>
+<span class="sourceLineNo">360</span>            if (!type.equals(IdType.REALM)) {<a name="line.360"></a>
+<span class="sourceLineNo">361</span>                name = LDAPDN.explodeDN(amsdkdnObject, true)[0];<a name="line.361"></a>
+<span class="sourceLineNo">362</span>            }<a name="line.362"></a>
+<span class="sourceLineNo">363</span>        } catch (AMException ame) {<a name="line.363"></a>
+<span class="sourceLineNo">364</span>            // Debug the message and return null<a name="line.364"></a>
+<span class="sourceLineNo">365</span>            if (debug.messageEnabled()) {<a name="line.365"></a>
+<span class="sourceLineNo">366</span>                debug.message("IdUtils.getIdentity: Unable to resolve " +<a name="line.366"></a>
+<span class="sourceLineNo">367</span>                    "AMSDK DN: " + amsdkdn, ame);<a name="line.367"></a>
+<span class="sourceLineNo">368</span>            }<a name="line.368"></a>
+<span class="sourceLineNo">369</span>            return (null);<a name="line.369"></a>
+<span class="sourceLineNo">370</span>        } catch (SSOException ssoe) {<a name="line.370"></a>
+<span class="sourceLineNo">371</span>            // Debug the message and return null<a name="line.371"></a>
+<span class="sourceLineNo">372</span>            if (debug.messageEnabled()) {<a name="line.372"></a>
+<span class="sourceLineNo">373</span>                debug.message("IdUtils.getIdentity: Unable to resolve " +<a name="line.373"></a>
+<span class="sourceLineNo">374</span>                    "AMSDK DN. Got SSOException", ssoe);<a name="line.374"></a>
+<span class="sourceLineNo">375</span>            }<a name="line.375"></a>
+<span class="sourceLineNo">376</span>            return (null);<a name="line.376"></a>
+<span class="sourceLineNo">377</span>        }<a name="line.377"></a>
+<span class="sourceLineNo">378</span><a name="line.378"></a>
+<span class="sourceLineNo">379</span>        // Need to determine realm for amsdkdn<a name="line.379"></a>
+<span class="sourceLineNo">380</span>        String srealm = ROOT_SUFFIX;<a name="line.380"></a>
+<span class="sourceLineNo">381</span>        if (!amsdkdn.equals(ROOT_SUFFIX) &amp;&amp;<a name="line.381"></a>
+<span class="sourceLineNo">382</span>            !amsdkdn.equals(SERVICES_SUFFIX)) {<a name="line.382"></a>
+<span class="sourceLineNo">383</span>            // Need to get the object type and walk up the tree<a name="line.383"></a>
+<span class="sourceLineNo">384</span>            int index = amsdkdn.indexOf(ORG_NAMING_ATTR);<a name="line.384"></a>
+<span class="sourceLineNo">385</span>            if (index == 0) {<a name="line.385"></a>
+<span class="sourceLineNo">386</span>                srealm = OrgConfigViaAMSDK.getRealmForAMSDK(amsdkdn, realm);<a name="line.386"></a>
+<span class="sourceLineNo">387</span>            } else if (index &gt; 0) {<a name="line.387"></a>
+<span class="sourceLineNo">388</span>                srealm = OrgConfigViaAMSDK.getRealmForAMSDK(<a name="line.388"></a>
+<span class="sourceLineNo">389</span>                    amsdkdn.substring(index), realm);<a name="line.389"></a>
+<span class="sourceLineNo">390</span>            }<a name="line.390"></a>
+<span class="sourceLineNo">391</span>            if (debug.messageEnabled()) {<a name="line.391"></a>
+<span class="sourceLineNo">392</span>                debug.message("IdUtils.getIdentity:: amsdkdn=" +<a name="line.392"></a>
+<span class="sourceLineNo">393</span>                    amsdkdn + " maps to realm=" + srealm);<a name="line.393"></a>
+<span class="sourceLineNo">394</span>            }<a name="line.394"></a>
+<span class="sourceLineNo">395</span>        } else if (amsdkdn.equals(SERVICES_SUFFIX)) {<a name="line.395"></a>
+<span class="sourceLineNo">396</span>            // Since amsdkdn points to services node,<a name="line.396"></a>
+<span class="sourceLineNo">397</span>            // it should be reset to root suffix<a name="line.397"></a>
+<span class="sourceLineNo">398</span>            amsdkdn = ROOT_SUFFIX;<a name="line.398"></a>
+<span class="sourceLineNo">399</span>        }<a name="line.399"></a>
+<span class="sourceLineNo">400</span><a name="line.400"></a>
+<span class="sourceLineNo">401</span>        return (new AMIdentity(amsdkdnObject, token, name, type, srealm));<a name="line.401"></a>
+<span class="sourceLineNo">402</span>    }<a name="line.402"></a>
+<span class="sourceLineNo">403</span><a name="line.403"></a>
+<span class="sourceLineNo">404</span>    /**<a name="line.404"></a>
+<span class="sourceLineNo">405</span>     * Returns the name of service which defines the profile information for<a name="line.405"></a>
+<span class="sourceLineNo">406</span>     * this type. Returns null, if nothing is defined.<a name="line.406"></a>
+<span class="sourceLineNo">407</span>     * <a name="line.407"></a>
+<span class="sourceLineNo">408</span>     * @param type IdType whose service name is needed.<a name="line.408"></a>
+<span class="sourceLineNo">409</span>     * @return Name of the service.<a name="line.409"></a>
+<span class="sourceLineNo">410</span>     */<a name="line.410"></a>
+<span class="sourceLineNo">411</span>    public static String getServiceName(IdType type) {<a name="line.411"></a>
+<span class="sourceLineNo">412</span>        return (String) mapTypesToServiceNames.get(type.getName());<a name="line.412"></a>
+<span class="sourceLineNo">413</span>    }<a name="line.413"></a>
+<span class="sourceLineNo">414</span><a name="line.414"></a>
+<span class="sourceLineNo">415</span>    /**<a name="line.415"></a>
+<span class="sourceLineNo">416</span>     * Returns corresponding &lt;code&gt;IdType&lt;/code&gt; object given a type.<a name="line.416"></a>
+<span class="sourceLineNo">417</span>     * <a name="line.417"></a>
+<span class="sourceLineNo">418</span>     * @param type of object to return.<a name="line.418"></a>
+<span class="sourceLineNo">419</span>     * @return Idtype of type.<a name="line.419"></a>
+<span class="sourceLineNo">420</span>     * @throws IdRepoException if there are no corresponding types.<a name="line.420"></a>
+<span class="sourceLineNo">421</span>     */<a name="line.421"></a>
+<span class="sourceLineNo">422</span>    public static IdType getType(String type) throws IdRepoException {<a name="line.422"></a>
+<span class="sourceLineNo">423</span>        if (type.equalsIgnoreCase("managedrole")) {<a name="line.423"></a>
+<span class="sourceLineNo">424</span>            type = "role";<a name="line.424"></a>
+<span class="sourceLineNo">425</span>        } else if (type.equalsIgnoreCase("organization")<a name="line.425"></a>
+<span class="sourceLineNo">426</span>                || type.equalsIgnoreCase("organizationalunit")) {<a name="line.426"></a>
+<span class="sourceLineNo">427</span>            type = "realm";<a name="line.427"></a>
+<span class="sourceLineNo">428</span>        }<a name="line.428"></a>
+<span class="sourceLineNo">429</span><a name="line.429"></a>
+<span class="sourceLineNo">430</span>        IdType returnType = (IdType) mapSupportedTypes.get(type);<a name="line.430"></a>
+<span class="sourceLineNo">431</span>        if (returnType == null) {<a name="line.431"></a>
+<span class="sourceLineNo">432</span>            Object args[] = { type };<a name="line.432"></a>
+<span class="sourceLineNo">433</span>            throw new IdRepoException(IdRepoBundle.BUNDLE_NAME, "217", args);<a name="line.433"></a>
+<span class="sourceLineNo">434</span>        }<a name="line.434"></a>
+<span class="sourceLineNo">435</span>        return returnType;<a name="line.435"></a>
+<span class="sourceLineNo">436</span>    }<a name="line.436"></a>
+<span class="sourceLineNo">437</span><a name="line.437"></a>
+<span class="sourceLineNo">438</span>    /**<a name="line.438"></a>
+<span class="sourceLineNo">439</span>     * Returns the matching DN from the AM SDK for this entry. This utility is<a name="line.439"></a>
+<span class="sourceLineNo">440</span>     * required by auth.<a name="line.440"></a>
+<span class="sourceLineNo">441</span>     * <a name="line.441"></a>
+<span class="sourceLineNo">442</span>     * @param id  &lt;code&gt;AMIdentity&lt;/code&gt; object.<a name="line.442"></a>
+<span class="sourceLineNo">443</span>     * @return &lt;code&gt;DN&lt;/code&gt; of the object, as represented in the datastore.<a name="line.443"></a>
+<span class="sourceLineNo">444</span>     */<a name="line.444"></a>
+<span class="sourceLineNo">445</span>    public static String getDN(AMIdentity id) {<a name="line.445"></a>
+<span class="sourceLineNo">446</span>        if (id.getDN() != null) {<a name="line.446"></a>
+<span class="sourceLineNo">447</span>            return id.getDN();<a name="line.447"></a>
+<span class="sourceLineNo">448</span>        } else {<a name="line.448"></a>
+<span class="sourceLineNo">449</span>            return id.getUniversalId();<a name="line.449"></a>
+<span class="sourceLineNo">450</span>        }<a name="line.450"></a>
+<span class="sourceLineNo">451</span>    }<a name="line.451"></a>
+<span class="sourceLineNo">452</span><a name="line.452"></a>
+<span class="sourceLineNo">453</span>    /**<a name="line.453"></a>
+<span class="sourceLineNo">454</span>     * Returns an organization which maps to the identifier used by application<a name="line.454"></a>
+<span class="sourceLineNo">455</span>     * <a name="line.455"></a>
+<span class="sourceLineNo">456</span>     * @param orgIdentifier  Organization identifier<a name="line.456"></a>
+<span class="sourceLineNo">457</span>     * @return Organization mapping to that identifier.<a name="line.457"></a>
+<span class="sourceLineNo">458</span>     */<a name="line.458"></a>
+<span class="sourceLineNo">459</span>    public static String getOrganization(SSOToken token, String orgIdentifier)<a name="line.459"></a>
+<span class="sourceLineNo">460</span>            throws IdRepoException, SSOException {<a name="line.460"></a>
+<span class="sourceLineNo">461</span>        // Check in cache first<a name="line.461"></a>
+<span class="sourceLineNo">462</span>        String id = null;<a name="line.462"></a>
+<span class="sourceLineNo">463</span>        if ((id = (String) orgIdentifierToOrgName.get(orgIdentifier)) != null) {<a name="line.463"></a>
+<span class="sourceLineNo">464</span>            return (id);<a name="line.464"></a>
+<span class="sourceLineNo">465</span>        }<a name="line.465"></a>
+<span class="sourceLineNo">466</span><a name="line.466"></a>
+<span class="sourceLineNo">467</span>        // Compute the organization name<a name="line.467"></a>
+<span class="sourceLineNo">468</span>        if (debug.messageEnabled()) {<a name="line.468"></a>
+<span class="sourceLineNo">469</span>            debug.message("IdUtils:getOrganization Input orgname: "<a name="line.469"></a>
+<span class="sourceLineNo">470</span>                    + orgIdentifier);<a name="line.470"></a>
+<span class="sourceLineNo">471</span>        }<a name="line.471"></a>
+<span class="sourceLineNo">472</span>        if (orgIdentifier == null || orgIdentifier.length() == 0<a name="line.472"></a>
+<span class="sourceLineNo">473</span>                || orgIdentifier.equals("/")) {<a name="line.473"></a>
+<span class="sourceLineNo">474</span>            // Return base DN<a name="line.474"></a>
+<span class="sourceLineNo">475</span>            id = DNMapper.orgNameToDN("/");<a name="line.475"></a>
+<span class="sourceLineNo">476</span>        } else if (orgIdentifier.startsWith("/")) {<a name="line.476"></a>
+<span class="sourceLineNo">477</span>            // If orgIdentifier is in "/" format covert to DN and return<a name="line.477"></a>
+<span class="sourceLineNo">478</span>            id = DNMapper.orgNameToDN(orgIdentifier);<a name="line.478"></a>
+<span class="sourceLineNo">479</span>        } else if (DN.isDN(orgIdentifier)) {<a name="line.479"></a>
+<span class="sourceLineNo">480</span>            id = orgIdentifier;<a name="line.480"></a>
+<span class="sourceLineNo">481</span>            try {<a name="line.481"></a>
+<span class="sourceLineNo">482</span>                // Search for realms with orgIdentifier name<a name="line.482"></a>
+<span class="sourceLineNo">483</span>                OrganizationConfigManager ocm = <a name="line.483"></a>
+<span class="sourceLineNo">484</span>                    new OrganizationConfigManager(token, orgIdentifier);<a name="line.484"></a>
+<span class="sourceLineNo">485</span>            } catch (SMSException smse) {<a name="line.485"></a>
+<span class="sourceLineNo">486</span>                // debug message here.<a name="line.486"></a>
+<span class="sourceLineNo">487</span>                if (debug.messageEnabled()) {<a name="line.487"></a>
+<span class="sourceLineNo">488</span>                    debug.message("IdUtils.getOrganization Exception in "<a name="line.488"></a>
+<span class="sourceLineNo">489</span>                            + "getting org name from SMS", smse);<a name="line.489"></a>
+<span class="sourceLineNo">490</span>                }<a name="line.490"></a>
+<span class="sourceLineNo">491</span>                Object[] args = { orgIdentifier };<a name="line.491"></a>
+<span class="sourceLineNo">492</span>                throw new IdRepoException(IdRepoBundle.BUNDLE_NAME, "401", <a name="line.492"></a>
+<span class="sourceLineNo">493</span>                        args);                  <a name="line.493"></a>
+<span class="sourceLineNo">494</span>            }<a name="line.494"></a>
+<span class="sourceLineNo">495</span>        } else if (ServiceManager.isCoexistenceMode()) {<a name="line.495"></a>
+<span class="sourceLineNo">496</span>            // Return the org DN as determined by AMStoreConnection<a name="line.496"></a>
+<span class="sourceLineNo">497</span>            if (debug.messageEnabled()) {<a name="line.497"></a>
+<span class="sourceLineNo">498</span>                debug.message("IdUtils.getOrganization: getting from AMSDK");<a name="line.498"></a>
+<span class="sourceLineNo">499</span>            }<a name="line.499"></a>
+<span class="sourceLineNo">500</span>            try {<a name="line.500"></a>
+<span class="sourceLineNo">501</span>                AMStoreConnection amsc = new AMStoreConnection(token);<a name="line.501"></a>
+<span class="sourceLineNo">502</span>                id = amsc.getOrganizationDN(orgIdentifier, null);<a name="line.502"></a>
+<span class="sourceLineNo">503</span>            } catch (AMException ame) {<a name="line.503"></a>
+<span class="sourceLineNo">504</span>                if (debug.messageEnabled()) {<a name="line.504"></a>
+<span class="sourceLineNo">505</span>                    debug.message("IdUtils.getOrganization Exception in "<a name="line.505"></a>
+<span class="sourceLineNo">506</span>                            + "getting org name from AMSDK", ame);<a name="line.506"></a>
+<span class="sourceLineNo">507</span>                }<a name="line.507"></a>
+<span class="sourceLineNo">508</span>                throw convertAMException(ame);<a name="line.508"></a>
+<span class="sourceLineNo">509</span>            }<a name="line.509"></a>
+<span class="sourceLineNo">510</span>        } else {<a name="line.510"></a>
+<span class="sourceLineNo">511</span>            // Get the realm name from SMS<a name="line.511"></a>
+<span class="sourceLineNo">512</span>            if (debug.messageEnabled()) {<a name="line.512"></a>
+<span class="sourceLineNo">513</span>                debug.message("IdUtils.getOrganization: getting from " +<a name="line.513"></a>
+<span class="sourceLineNo">514</span>                    "SMS realms");<a name="line.514"></a>
+<span class="sourceLineNo">515</span>            }<a name="line.515"></a>
+<span class="sourceLineNo">516</span>            try {<a name="line.516"></a>
+<span class="sourceLineNo">517</span>                boolean foundOrg = false;<a name="line.517"></a>
+<span class="sourceLineNo">518</span>                ServiceManager sm = new ServiceManager(token);<a name="line.518"></a>
+<span class="sourceLineNo">519</span>                // First search for realms with orgIdentifier name<a name="line.519"></a>
+<span class="sourceLineNo">520</span>                OrganizationConfigManager ocm = sm<a name="line.520"></a>
+<span class="sourceLineNo">521</span>                        .getOrganizationConfigManager("/");<a name="line.521"></a>
+<span class="sourceLineNo">522</span>                Set subOrgNames = ocm.getSubOrganizationNames(orgIdentifier,<a name="line.522"></a>
+<span class="sourceLineNo">523</span>                        true);<a name="line.523"></a>
+<span class="sourceLineNo">524</span>                if (subOrgNames != null &amp;&amp; !subOrgNames.isEmpty()) {<a name="line.524"></a>
+<span class="sourceLineNo">525</span>                    if (subOrgNames.size() == 1) {<a name="line.525"></a>
+<span class="sourceLineNo">526</span>                        id = DNMapper.orgNameToDN((String) subOrgNames<a name="line.526"></a>
+<span class="sourceLineNo">527</span>                                .iterator().next());<a name="line.527"></a>
+<span class="sourceLineNo">528</span>                        foundOrg = true;<a name="line.528"></a>
+<span class="sourceLineNo">529</span>                    } else {<a name="line.529"></a>
+<span class="sourceLineNo">530</span>                        for (Iterator items = subOrgNames.iterator();<a name="line.530"></a>
+<span class="sourceLineNo">531</span>                            items.hasNext();) {<a name="line.531"></a>
+<span class="sourceLineNo">532</span>                            // check for orgIdentifier<a name="line.532"></a>
+<span class="sourceLineNo">533</span>                            String subRealmName = (String) items.next();<a name="line.533"></a>
+<span class="sourceLineNo">534</span>                            StringTokenizer st = new StringTokenizer(<a name="line.534"></a>
+<span class="sourceLineNo">535</span>                                    subRealmName, "/");<a name="line.535"></a>
+<span class="sourceLineNo">536</span>                            // Need to handle the scenario where multiple<a name="line.536"></a>
+<span class="sourceLineNo">537</span>                            // sub-realm with the same name should not be<a name="line.537"></a>
+<span class="sourceLineNo">538</span>                            // allowed<a name="line.538"></a>
+<span class="sourceLineNo">539</span>                            while (st.hasMoreTokens()) {<a name="line.539"></a>
+<span class="sourceLineNo">540</span>                                if (st.nextToken().equalsIgnoreCase(<a name="line.540"></a>
+<span class="sourceLineNo">541</span>                                        orgIdentifier)) {<a name="line.541"></a>
+<span class="sourceLineNo">542</span>                                    if (!foundOrg) {<a name="line.542"></a>
+<span class="sourceLineNo">543</span>                                        id = DNMapper.orgNameToDN(subRealmName);<a name="line.543"></a>
+<span class="sourceLineNo">544</span>                                        foundOrg = true;<a name="line.544"></a>
+<span class="sourceLineNo">545</span>                                    } else {<a name="line.545"></a>
+<span class="sourceLineNo">546</span>                                        Object[] args = {orgIdentifier};<a name="line.546"></a>
+<span class="sourceLineNo">547</span>                                        throw new IdRepoException(IdRepoBundle<a name="line.547"></a>
+<span class="sourceLineNo">548</span>                                            .BUNDLE_NAME, "404", args);<a name="line.548"></a>
+<span class="sourceLineNo">549</span>                                    }<a name="line.549"></a>
+<span class="sourceLineNo">550</span>                                }<a name="line.550"></a>
+<span class="sourceLineNo">551</span>                            }<a name="line.551"></a>
+<span class="sourceLineNo">552</span>                        }<a name="line.552"></a>
+<span class="sourceLineNo">553</span>                    }<a name="line.553"></a>
+<span class="sourceLineNo">554</span>                }<a name="line.554"></a>
+<span class="sourceLineNo">555</span><a name="line.555"></a>
+<span class="sourceLineNo">556</span>                // Check if organization name has been determined<a name="line.556"></a>
+<span class="sourceLineNo">557</span>                if (debug.messageEnabled()) {<a name="line.557"></a>
+<span class="sourceLineNo">558</span>                    debug.message("IdUtils.getOrganization: getting from " +<a name="line.558"></a>
+<span class="sourceLineNo">559</span>                        "SMS realms aliases");<a name="line.559"></a>
+<span class="sourceLineNo">560</span>                }<a name="line.560"></a>
+<span class="sourceLineNo">561</span>                // perform organization alias search<a name="line.561"></a>
+<span class="sourceLineNo">562</span>                Set vals = new HashSet();<a name="line.562"></a>
+<span class="sourceLineNo">563</span>                vals.add(orgIdentifier);<a name="line.563"></a>
+<span class="sourceLineNo">564</span>                Set orgAliases = sm.searchOrganizationNames(<a name="line.564"></a>
+<span class="sourceLineNo">565</span>                    IdConstants.REPO_SERVICE,<a name="line.565"></a>
+<span class="sourceLineNo">566</span>                    IdConstants.ORGANIZATION_ALIAS_ATTR, vals);<a name="line.566"></a>
+<span class="sourceLineNo">567</span>                if (!foundOrg &amp;&amp;<a name="line.567"></a>
+<span class="sourceLineNo">568</span>                    ((orgAliases == null) || orgAliases.isEmpty())) {<a name="line.568"></a>
+<span class="sourceLineNo">569</span>                    if (debug.warningEnabled()) {<a name="line.569"></a>
+<span class="sourceLineNo">570</span>                        debug.warning("IdUtils.getOrganization Unable" +<a name="line.570"></a>
+<span class="sourceLineNo">571</span>                            " to find Org name for: " + orgIdentifier);<a name="line.571"></a>
+<span class="sourceLineNo">572</span>                    }<a name="line.572"></a>
+<span class="sourceLineNo">573</span>                    Object[] args = {orgIdentifier};<a name="line.573"></a>
+<span class="sourceLineNo">574</span>                    throw new IdRepoException(IdRepoBundle.BUNDLE_NAME,<a name="line.574"></a>
+<span class="sourceLineNo">575</span>                        "401", args);<a name="line.575"></a>
+<span class="sourceLineNo">576</span>                } else if ((orgAliases != null)  &amp;&amp; (orgAliases.size() &gt; 0) &amp;&amp;<a name="line.576"></a>
+<span class="sourceLineNo">577</span>                    (foundOrg || orgAliases.size() &gt; 1)) {<a name="line.577"></a>
+<span class="sourceLineNo">578</span>                    // Multiple realms should not have the same alias<a name="line.578"></a>
+<span class="sourceLineNo">579</span>                    if (debug.warningEnabled()) {<a name="line.579"></a>
+<span class="sourceLineNo">580</span>                        debug.warning("IdUtils.getOrganization Multiple " +<a name="line.580"></a>
+<span class="sourceLineNo">581</span>                            " matching Orgs found for: " + orgIdentifier);<a name="line.581"></a>
+<span class="sourceLineNo">582</span>                    }<a name="line.582"></a>
+<span class="sourceLineNo">583</span>                    Object[] args = {orgIdentifier};<a name="line.583"></a>
+<span class="sourceLineNo">584</span>                    throw new IdRepoException(IdRepoBundle.BUNDLE_NAME,<a name="line.584"></a>
+<span class="sourceLineNo">585</span>                        "404", args);<a name="line.585"></a>
+<span class="sourceLineNo">586</span>                }<a name="line.586"></a>
+<span class="sourceLineNo">587</span>                if (!foundOrg) {<a name="line.587"></a>
+<span class="sourceLineNo">588</span>                    String tmpS = (String) orgAliases.iterator().next();<a name="line.588"></a>
+<span class="sourceLineNo">589</span>                    id = DNMapper.orgNameToDN(tmpS);<a name="line.589"></a>
+<span class="sourceLineNo">590</span>                }<a name="line.590"></a>
+<span class="sourceLineNo">591</span>            } catch (SMSException smse) {<a name="line.591"></a>
+<span class="sourceLineNo">592</span>                // debug message here.<a name="line.592"></a>
+<span class="sourceLineNo">593</span>                if (debug.messageEnabled()) {<a name="line.593"></a>
+<span class="sourceLineNo">594</span>                    debug.message("IdUtils.getOrganization Exception in "<a name="line.594"></a>
+<span class="sourceLineNo">595</span>                            + "getting org name from SMS", smse);<a name="line.595"></a>
+<span class="sourceLineNo">596</span>                }<a name="line.596"></a>
+<span class="sourceLineNo">597</span>                Object[] args = { orgIdentifier };<a name="line.597"></a>
+<span class="sourceLineNo">598</span>                throw new IdRepoException(IdRepoBundle.BUNDLE_NAME, "401", <a name="line.598"></a>
+<span class="sourceLineNo">599</span>                        args);<a name="line.599"></a>
+<span class="sourceLineNo">600</span>            }<a name="line.600"></a>
+<span class="sourceLineNo">601</span>        }<a name="line.601"></a>
+<span class="sourceLineNo">602</span><a name="line.602"></a>
+<span class="sourceLineNo">603</span>        if (debug.messageEnabled()) {<a name="line.603"></a>
+<span class="sourceLineNo">604</span>            debug.message("IdUtils:getOrganization Search for OrgIdentifier:" +<a name="line.604"></a>
+<span class="sourceLineNo">605</span>                orgIdentifier + " returning realm DN: " + id);<a name="line.605"></a>
+<span class="sourceLineNo">606</span>        }<a name="line.606"></a>
+<span class="sourceLineNo">607</span><a name="line.607"></a>
+<span class="sourceLineNo">608</span>        // Add to cache and return id<a name="line.608"></a>
+<span class="sourceLineNo">609</span>        orgIdentifierToOrgName.put(orgIdentifier, id);<a name="line.609"></a>
+<span class="sourceLineNo">610</span>        return id;<a name="line.610"></a>
+<span class="sourceLineNo">611</span>    }<a name="line.611"></a>
+<span class="sourceLineNo">612</span><a name="line.612"></a>
+<span class="sourceLineNo">613</span>    /**<a name="line.613"></a>
+<span class="sourceLineNo">614</span>     * Clears the cache containing orgIdentifiers to organization names<a name="line.614"></a>
+<span class="sourceLineNo">615</span>     */<a name="line.615"></a>
+<span class="sourceLineNo">616</span>    protected static void clearOrganizationNamesCache() {<a name="line.616"></a>
+<span class="sourceLineNo">617</span>        orgIdentifierToOrgName.clear();<a name="line.617"></a>
+<span class="sourceLineNo">618</span>        orgStatusCache.clear();<a name="line.618"></a>
+<span class="sourceLineNo">619</span>        if (debug.messageEnabled()) {<a name="line.619"></a>
+<span class="sourceLineNo">620</span>            debug.message("IdUtils.clearOrganizationNamesCache called");<a name="line.620"></a>
+<span class="sourceLineNo">621</span>        }<a name="line.621"></a>
+<span class="sourceLineNo">622</span>    }<a name="line.622"></a>
+<span class="sourceLineNo">623</span><a name="line.623"></a>
+<span class="sourceLineNo">624</span>    /**<a name="line.624"></a>
+<span class="sourceLineNo">625</span>     * Returs true or false, depending on if this organization is enabled or<a name="line.625"></a>
+<span class="sourceLineNo">626</span>     * not. The organization string passed to this method should be an<a name="line.626"></a>
+<span class="sourceLineNo">627</span>     * identifier returned from the method<a name="line.627"></a>
+<span class="sourceLineNo">628</span>     * &lt;code&gt; IdUtils.getOrganization &lt;/code&gt;. In the default mode, where<a name="line.628"></a>
+<span class="sourceLineNo">629</span>     * relams are enabled but backward comaptibility is required, this checks<a name="line.629"></a>
+<span class="sourceLineNo">630</span>     * for organization status in the AM enabled Sun DS. Otherwise, it checks<a name="line.630"></a>
+<span class="sourceLineNo">631</span>     * for organization status from the realms tree.<a name="line.631"></a>
+<span class="sourceLineNo">632</span>     * <a name="line.632"></a>
+<span class="sourceLineNo">633</span>     * @param token token SSOToken a valid SSOToken.<a name="line.633"></a>
+<span class="sourceLineNo">634</span>     * @param org name of the organization of interest.<a name="line.634"></a>
+<span class="sourceLineNo">635</span>     * @return &lt;code&gt;true&lt;/code&gt; if org is active; <a name="line.635"></a>
+<span class="sourceLineNo">636</span>     *    otherwise &lt;code&gt;false&lt;/code&gt;<a name="line.636"></a>
+<span class="sourceLineNo">637</span>     * @throws IdRepoException if there are repository related error conditions.<a name="line.637"></a>
+<span class="sourceLineNo">638</span>     * @throws SSOException If user's single sign on token is invalid.<a name="line.638"></a>
+<span class="sourceLineNo">639</span>     */<a name="line.639"></a>
+<span class="sourceLineNo">640</span>    public static boolean isOrganizationActive(SSOToken token, String org)<a name="line.640"></a>
+<span class="sourceLineNo">641</span>            throws IdRepoException, SSOException {<a name="line.641"></a>
+<span class="sourceLineNo">642</span>        // Check the cache<a name="line.642"></a>
+<span class="sourceLineNo">643</span>        if (orgStatusCache.containsKey(org)) {<a name="line.643"></a>
+<span class="sourceLineNo">644</span>            return (((Boolean) orgStatusCache.get(org)).booleanValue());<a name="line.644"></a>
+<span class="sourceLineNo">645</span>        }<a name="line.645"></a>
+<span class="sourceLineNo">646</span>        boolean isActive = true;<a name="line.646"></a>
+<span class="sourceLineNo">647</span>        // Need to initialize ServiceManager by creating the constructor<a name="line.647"></a>
+<span class="sourceLineNo">648</span>        if (!ServiceManager.isCoexistenceMode()) {<a name="line.648"></a>
+<span class="sourceLineNo">649</span>            // Pick it up from the realms tree.<a name="line.649"></a>
+<span class="sourceLineNo">650</span>            try {<a name="line.650"></a>
+<span class="sourceLineNo">651</span>                OrganizationConfigManager ocm = new OrganizationConfigManager(<a name="line.651"></a>
+<span class="sourceLineNo">652</span>                        token, org);<a name="line.652"></a>
+<span class="sourceLineNo">653</span>                if (ocm == null) {<a name="line.653"></a>
+<span class="sourceLineNo">654</span>                    Object[] args = { org };<a name="line.654"></a>
+<span class="sourceLineNo">655</span>                    throw new IdRepoException(IdRepoBundle.BUNDLE_NAME, "401",<a name="line.655"></a>
+<span class="sourceLineNo">656</span>                            args);<a name="line.656"></a>
+<span class="sourceLineNo">657</span>                }<a name="line.657"></a>
+<span class="sourceLineNo">658</span>                Map attributes = ocm.getAttributes(IdConstants.REPO_SERVICE);<a name="line.658"></a>
+<span class="sourceLineNo">659</span>                Set vals = (Set) attributes<a name="line.659"></a>
+<span class="sourceLineNo">660</span>                        .get(IdConstants.ORGANIZATION_STATUS_ATTR);<a name="line.660"></a>
+<span class="sourceLineNo">661</span>                if (vals == null || vals.isEmpty()) {<a name="line.661"></a>
+<span class="sourceLineNo">662</span>                    isActive = true;<a name="line.662"></a>
+<span class="sourceLineNo">663</span>                } else {<a name="line.663"></a>
+<span class="sourceLineNo">664</span>                    String stringActive = (String) vals.iterator().next();<a name="line.664"></a>
+<span class="sourceLineNo">665</span>                    isActive = stringActive.equalsIgnoreCase("Active");<a name="line.665"></a>
+<span class="sourceLineNo">666</span>                }<a name="line.666"></a>
+<span class="sourceLineNo">667</span>            } catch (SMSException smse) {<a name="line.667"></a>
+<span class="sourceLineNo">668</span>                Object args[] = { org };<a name="line.668"></a>
+<span class="sourceLineNo">669</span>                throw new IdRepoException(IdRepoBundle.BUNDLE_NAME, "401", <a name="line.669"></a>
+<span class="sourceLineNo">670</span>                        args);<a name="line.670"></a>
+<span class="sourceLineNo">671</span>            }<a name="line.671"></a>
+<span class="sourceLineNo">672</span>        } else if (ServiceManager.isAMSDKEnabled()) {<a name="line.672"></a>
+<span class="sourceLineNo">673</span>            // Return the org DN as determined by AMStoreConnection.<a name="line.673"></a>
+<span class="sourceLineNo">674</span>            try {<a name="line.674"></a>
+<span class="sourceLineNo">675</span>                AMStoreConnection amsc = new AMStoreConnection(token);<a name="line.675"></a>
+<span class="sourceLineNo">676</span>                AMOrganization orgObj = amsc.getOrganization(org);<a name="line.676"></a>
+<span class="sourceLineNo">677</span>                isActive = orgObj.isActivated();<a name="line.677"></a>
+<span class="sourceLineNo">678</span>            } catch (AMException ame) {<a name="line.678"></a>
+<span class="sourceLineNo">679</span>                throw convertAMException(ame);<a name="line.679"></a>
+<span class="sourceLineNo">680</span>            }<a name="line.680"></a>
+<span class="sourceLineNo">681</span>        }<a name="line.681"></a>
+<span class="sourceLineNo">682</span>        // Add to cache<a name="line.682"></a>
+<span class="sourceLineNo">683</span>        orgStatusCache.put(org, isActive);<a name="line.683"></a>
+<span class="sourceLineNo">684</span>        return isActive;<a name="line.684"></a>
+<span class="sourceLineNo">685</span>    }<a name="line.685"></a>
+<span class="sourceLineNo">686</span><a name="line.686"></a>
+<span class="sourceLineNo">687</span>    private static void initializeForGetIdentity() {<a name="line.687"></a>
+<span class="sourceLineNo">688</span>        // Initialize root realm, if not already initalized<a name="line.688"></a>
+<span class="sourceLineNo">689</span>        if (ROOT_SUFFIX == null) {<a name="line.689"></a>
+<span class="sourceLineNo">690</span>            ROOT_SUFFIX = SMSEntry.getRootSuffix();<a name="line.690"></a>
+<span class="sourceLineNo">691</span>            StringBuilder sb = new StringBuilder(100);<a name="line.691"></a>
+<span class="sourceLineNo">692</span>            sb.append(SMSEntry.SERVICES_RDN)<a name="line.692"></a>
+<span class="sourceLineNo">693</span>                .append(SMSEntry.COMMA).append(ROOT_SUFFIX);<a name="line.693"></a>
+<span class="sourceLineNo">694</span>            SERVICES_SUFFIX = DNUtils.normalizeDN(sb.toString());<a name="line.694"></a>
+<span class="sourceLineNo">695</span>        }<a name="line.695"></a>
+<span class="sourceLineNo">696</span><a name="line.696"></a>
+<span class="sourceLineNo">697</span>        // Initialize organization and user naming attributes<a name="line.697"></a>
+<span class="sourceLineNo">698</span>        if ((ORG_NAMING_ATTR == null) || (USER_NAMING_ATTR == null)) {<a name="line.698"></a>
+<span class="sourceLineNo">699</span>            try {<a name="line.699"></a>
+<span class="sourceLineNo">700</span>                ORG_NAMING_ATTR = AMStoreConnection.getNamingAttribute(<a name="line.700"></a>
+<span class="sourceLineNo">701</span>                    AMObject.ORGANIZATION).toLowerCase() + "=";<a name="line.701"></a>
+<span class="sourceLineNo">702</span>                USER_NAMING_ATTR = AMStoreConnection.getNamingAttribute(<a name="line.702"></a>
+<span class="sourceLineNo">703</span>                    AMObject.USER).toLowerCase() + "=";<a name="line.703"></a>
+<span class="sourceLineNo">704</span>            } catch (AMException ame) {<a name="line.704"></a>
+<span class="sourceLineNo">705</span>                if (debug.warningEnabled()) {<a name="line.705"></a>
+<span class="sourceLineNo">706</span>                    debug.warning("IdUtils: unable to get naming " +<a name="line.706"></a>
+<span class="sourceLineNo">707</span>                        "attribute for org/user. Using \"o\"/\"uid\"");<a name="line.707"></a>
+<span class="sourceLineNo">708</span>                }<a name="line.708"></a>
+<span class="sourceLineNo">709</span>                ORG_NAMING_ATTR = "o=";<a name="line.709"></a>
+<span class="sourceLineNo">710</span>                USER_NAMING_ATTR = "uid=";<a name="line.710"></a>
+<span class="sourceLineNo">711</span>            }<a name="line.711"></a>
+<span class="sourceLineNo">712</span>        }<a name="line.712"></a>
+<span class="sourceLineNo">713</span>    }<a name="line.713"></a>
+<span class="sourceLineNo">714</span><a name="line.714"></a>
+<span class="sourceLineNo">715</span>    private static void initializeSpecialUsers() {<a name="line.715"></a>
+<span class="sourceLineNo">716</span>        // Populate special users<a name="line.716"></a>
+<span class="sourceLineNo">717</span>        if (specialUsers.isEmpty()) {<a name="line.717"></a>
+<span class="sourceLineNo">718</span>            String susers = SystemProperties.get(<a name="line.718"></a>
+<span class="sourceLineNo">719</span>                Constants.AUTHENTICATION_SPECIAL_USERS, "");<a name="line.719"></a>
+<span class="sourceLineNo">720</span>            StringTokenizer st = new StringTokenizer(<a name="line.720"></a>
+<span class="sourceLineNo">721</span>                susers, "|");<a name="line.721"></a>
+<span class="sourceLineNo">722</span>            while (st.hasMoreTokens()) {<a name="line.722"></a>
+<span class="sourceLineNo">723</span>                specialUsers.add(DNUtils.normalizeDN(st.nextToken()));<a name="line.723"></a>
+<span class="sourceLineNo">724</span>            }<a name="line.724"></a>
+<span class="sourceLineNo">725</span>            susers = SystemProperties.get(<a name="line.725"></a>
+<span class="sourceLineNo">726</span>                "com.sun.identity.authentication.super.user", "");<a name="line.726"></a>
+<span class="sourceLineNo">727</span>            specialUsers.add(DNUtils.normalizeDN(susers));<a name="line.727"></a>
+<span class="sourceLineNo">728</span>        }<a name="line.728"></a>
+<span class="sourceLineNo">729</span>    }<a name="line.729"></a>
+<span class="sourceLineNo">730</span>    <a name="line.730"></a>
+<span class="sourceLineNo">731</span>    /**<a name="line.731"></a>
+<span class="sourceLineNo">732</span>     * Returns an IdRepoException based on an &lt;code&gt;AMException&lt;/code&gt;<a name="line.732"></a>
+<span class="sourceLineNo">733</span>     * <a name="line.733"></a>
+<span class="sourceLineNo">734</span>     * @param ame<a name="line.734"></a>
+<span class="sourceLineNo">735</span>     * @return IdRepoException based on ame.<a name="line.735"></a>
+<span class="sourceLineNo">736</span>     */<a name="line.736"></a>
+<span class="sourceLineNo">737</span>    public static IdRepoException convertAMException(AMException ame) {<a name="line.737"></a>
+<span class="sourceLineNo">738</span>        Object[] args = ame.getMessageArgs();<a name="line.738"></a>
+<span class="sourceLineNo">739</span>        String eCode = ame.getErrorCode();<a name="line.739"></a>
+<span class="sourceLineNo">740</span>        IdRepoException ide = null;<a name="line.740"></a>
+<span class="sourceLineNo">741</span>        if (args == null) {<a name="line.741"></a>
+<span class="sourceLineNo">742</span>            ide = new IdRepoException("amProfile", eCode, null);<a name="line.742"></a>
+<span class="sourceLineNo">743</span>        } else { <a name="line.743"></a>
+<span class="sourceLineNo">744</span>            ide = new IdRepoException("amProfile", ame.getErrorCode(), args);<a name="line.744"></a>
+<span class="sourceLineNo">745</span>        }<a name="line.745"></a>
+<span class="sourceLineNo">746</span>        ide.setLDAPErrorCode(ame.getLDAPErrorCode());<a name="line.746"></a>
+<span class="sourceLineNo">747</span>        return ide;<a name="line.747"></a>
+<span class="sourceLineNo">748</span>    }<a name="line.748"></a>
+<span class="sourceLineNo">749</span><a name="line.749"></a>
+<span class="sourceLineNo">750</span>    private static void loadDefaultTypes() {<a name="line.750"></a>
+<span class="sourceLineNo">751</span>        supportedTypes.add(IdType.REALM);<a name="line.751"></a>
+<span class="sourceLineNo">752</span>        supportedTypes.add(IdType.AGENT);<a name="line.752"></a>
+<span class="sourceLineNo">753</span>        supportedTypes.add(IdType.USER);<a name="line.753"></a>
+<span class="sourceLineNo">754</span>        supportedTypes.add(IdType.ROLE);<a name="line.754"></a>
+<span class="sourceLineNo">755</span>        supportedTypes.add(IdType.GROUP);<a name="line.755"></a>
+<span class="sourceLineNo">756</span>        supportedTypes.add(IdType.FILTEREDROLE);<a name="line.756"></a>
+<span class="sourceLineNo">757</span>        mapSupportedTypes.put(IdType.REALM.getName(), IdType.REALM);        <a name="line.757"></a>
+<span class="sourceLineNo">758</span>        mapSupportedTypes.put(IdType.USER.getName(), IdType.USER);<a name="line.758"></a>
+<span class="sourceLineNo">759</span>        mapSupportedTypes.put(IdType.ROLE.getName(), IdType.ROLE);<a name="line.759"></a>
+<span class="sourceLineNo">760</span>        mapSupportedTypes.put(IdType.FILTEREDROLE.getName(),<a name="line.760"></a>
+<span class="sourceLineNo">761</span>                IdType.FILTEREDROLE);<a name="line.761"></a>
+<span class="sourceLineNo">762</span>        mapSupportedTypes.put(IdType.AGENT.getName(), IdType.AGENT);<a name="line.762"></a>
+<span class="sourceLineNo">763</span>        mapSupportedTypes.put(IdType.GROUP.getName(), IdType.GROUP);<a name="line.763"></a>
+<span class="sourceLineNo">764</span>        Set memberSet = new HashSet();<a name="line.764"></a>
+<span class="sourceLineNo">765</span>        memberSet.add(IdType.ROLE);<a name="line.765"></a>
+<span class="sourceLineNo">766</span>        memberSet.add(IdType.GROUP);<a name="line.766"></a>
+<span class="sourceLineNo">767</span>        memberSet.add(IdType.FILTEREDROLE);<a name="line.767"></a>
+<span class="sourceLineNo">768</span>        typesCanBeMemberOf.put(IdType.USER.getName(), memberSet);<a name="line.768"></a>
+<span class="sourceLineNo">769</span>        Set memberShipSet = new HashSet();<a name="line.769"></a>
+<span class="sourceLineNo">770</span>        memberShipSet.add(IdType.USER);<a name="line.770"></a>
+<span class="sourceLineNo">771</span>        typesCanHaveMembers.put(IdType.ROLE.getName(), memberShipSet);<a name="line.771"></a>
+<span class="sourceLineNo">772</span>        typesCanHaveMembers.put(IdType.GROUP.getName(), memberShipSet);<a name="line.772"></a>
+<span class="sourceLineNo">773</span>        typesCanHaveMembers.put(IdType.FILTEREDROLE.getName(), memberShipSet);<a name="line.773"></a>
+<span class="sourceLineNo">774</span>        typesCanAddMembers.put(IdType.GROUP.getName(), memberShipSet);<a name="line.774"></a>
+<span class="sourceLineNo">775</span>        typesCanAddMembers.put(IdType.ROLE.getName(), memberShipSet);<a name="line.775"></a>
+<span class="sourceLineNo">776</span>    }<a name="line.776"></a>
+<span class="sourceLineNo">777</span><a name="line.777"></a>
+<span class="sourceLineNo">778</span>    private static Set getMemberSet(Set members) {<a name="line.778"></a>
+<span class="sourceLineNo">779</span>        Set memberSet = new HashSet(members.size() * 2);<a name="line.779"></a>
+<span class="sourceLineNo">780</span>        for (Iterator iter = members.iterator(); iter.hasNext();) {<a name="line.780"></a>
+<span class="sourceLineNo">781</span>            String currType = (String) iter.next();<a name="line.781"></a>
+<span class="sourceLineNo">782</span>            memberSet.add(new IdType(currType));<a name="line.782"></a>
+<span class="sourceLineNo">783</span>        }<a name="line.783"></a>
+<span class="sourceLineNo">784</span>        return memberSet;<a name="line.784"></a>
+<span class="sourceLineNo">785</span>    }<a name="line.785"></a>
+<span class="sourceLineNo">786</span><a name="line.786"></a>
+<span class="sourceLineNo">787</span>    /**<a name="line.787"></a>
+<span class="sourceLineNo">788</span>     * Returns the user name extracted from the uuid<a name="line.788"></a>
+<span class="sourceLineNo">789</span>     * if the orgName supplied in the parameter is <a name="line.789"></a>
+<span class="sourceLineNo">790</span>     * not same realm name in uuid then &lt;code&gt;IdRepoException&lt;/code&gt;<a name="line.790"></a>
+<span class="sourceLineNo">791</span>     * is thrown<a name="line.791"></a>
+<span class="sourceLineNo">792</span>     * <a name="line.792"></a>
+<span class="sourceLineNo">793</span>     * @param uuid uuid of the user<a name="line.793"></a>
+<span class="sourceLineNo">794</span>     * @param orgName the org user is trying to login to<a name="line.794"></a>
+<span class="sourceLineNo">795</span>     * @return user name<a name="line.795"></a>
+<span class="sourceLineNo">796</span>     * @throws IdRepoException <a name="line.796"></a>
+<span class="sourceLineNo">797</span>     */<a name="line.797"></a>
+<span class="sourceLineNo">798</span>    public static String getIdentityName(String uuid, String orgName)<a name="line.798"></a>
+<span class="sourceLineNo">799</span>        throws IdRepoException {<a name="line.799"></a>
+<span class="sourceLineNo">800</span>        String username = uuid;<a name="line.800"></a>
+<span class="sourceLineNo">801</span>        // Check uuid<a name="line.801"></a>
+<span class="sourceLineNo">802</span>        if ((uuid != null) &amp;&amp; uuid.toLowerCase().startsWith("id=")) {<a name="line.802"></a>
+<span class="sourceLineNo">803</span>            // Could be universal id, get the identity object<a name="line.803"></a>
+<span class="sourceLineNo">804</span>            AMIdentity id = new AMIdentity(null, uuid);<a name="line.804"></a>
+<span class="sourceLineNo">805</span>            username = id.getName();<a name="line.805"></a>
+<span class="sourceLineNo">806</span>            // Check the realm names<a name="line.806"></a>
+<span class="sourceLineNo">807</span>            String realm = DNUtils.normalizeDN(id.getRealm());<a name="line.807"></a>
+<span class="sourceLineNo">808</span>            if (!DNUtils.normalizeDN(orgName).equals(realm)) {<a name="line.808"></a>
+<span class="sourceLineNo">809</span>                Object[] args = {uuid, orgName};<a name="line.809"></a>
+<span class="sourceLineNo">810</span>                throw new IdRepoException(IdRepoBundle.BUNDLE_NAME, "403", args);<a name="line.810"></a>
+<span class="sourceLineNo">811</span>            }<a name="line.811"></a>
+<span class="sourceLineNo">812</span>        }<a name="line.812"></a>
+<span class="sourceLineNo">813</span>        return (username);<a name="line.813"></a>
+<span class="sourceLineNo">814</span>    } <a name="line.814"></a>
+<span class="sourceLineNo">815</span>    <a name="line.815"></a>
+<span class="sourceLineNo">816</span>    // SMS service listener to reinitialize if IdRepo service changes<a name="line.816"></a>
+<span class="sourceLineNo">817</span>    static class IdUtilsListener implements com.sun.identity.sm.ServiceListener <a name="line.817"></a>
+<span class="sourceLineNo">818</span>    {<a name="line.818"></a>
+<span class="sourceLineNo">819</span>        public void schemaChanged(String serviceName, String version) {<a name="line.819"></a>
+<span class="sourceLineNo">820</span>            initialize();<a name="line.820"></a>
+<span class="sourceLineNo">821</span>        }<a name="line.821"></a>
+<span class="sourceLineNo">822</span><a name="line.822"></a>
+<span class="sourceLineNo">823</span>        public void globalConfigChanged(String serviceName, String version,<a name="line.823"></a>
+<span class="sourceLineNo">824</span>            String groupName, String serviceComponent, int type) {<a name="line.824"></a>
+<span class="sourceLineNo">825</span>            initialize();<a name="line.825"></a>
+<span class="sourceLineNo">826</span>            clearOrganizationNamesCache();<a name="line.826"></a>
+<span class="sourceLineNo">827</span>        }<a name="line.827"></a>
+<span class="sourceLineNo">828</span><a name="line.828"></a>
+<span class="sourceLineNo">829</span>        public void organizationConfigChanged(String serviceName,<a name="line.829"></a>
+<span class="sourceLineNo">830</span>            String version, String orgName, String groupName,<a name="line.830"></a>
+<span class="sourceLineNo">831</span>            String serviceComponent, int type) {<a name="line.831"></a>
+<span class="sourceLineNo">832</span>            clearOrganizationNamesCache();<a name="line.832"></a>
+<span class="sourceLineNo">833</span>        }<a name="line.833"></a>
+<span class="sourceLineNo">834</span>    }<a name="line.834"></a>
+<span class="sourceLineNo">835</span>}<a name="line.835"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

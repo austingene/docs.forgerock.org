@@ -1,0 +1,443 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * The contents of this file are subject to the terms of the Common Development and<a name="line.2"></a>
+<span class="sourceLineNo">003</span> * Distribution License (the License). You may not use this file except in compliance with the<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * License.<a name="line.4"></a>
+<span class="sourceLineNo">005</span> *<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * You can obtain a copy of the License at legal/CDDLv1.0.txt. See the License for the<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * specific language governing permission and limitations under the License.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * When distributing Covered Software, include this CDDL Header Notice in each file and include<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * the License file at legal/CDDLv1.0.txt. If applicable, add the following below the CDDL<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * Header, with the fields enclosed by brackets [] replaced by your own identifying<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * information: "Portions copyright [year] [name of copyright owner]".<a name="line.12"></a>
+<span class="sourceLineNo">013</span> *<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * Copyright 2014 ForgeRock, AS.<a name="line.14"></a>
+<span class="sourceLineNo">015</span> */<a name="line.15"></a>
+<span class="sourceLineNo">016</span><a name="line.16"></a>
+<span class="sourceLineNo">017</span>package org.forgerock.openam.entitlement;<a name="line.17"></a>
+<span class="sourceLineNo">018</span><a name="line.18"></a>
+<span class="sourceLineNo">019</span>import com.sun.identity.entitlement.AndCondition;<a name="line.19"></a>
+<span class="sourceLineNo">020</span>import com.sun.identity.entitlement.AndSubject;<a name="line.20"></a>
+<span class="sourceLineNo">021</span>import com.sun.identity.entitlement.DenyOverride;<a name="line.21"></a>
+<span class="sourceLineNo">022</span>import com.sun.identity.entitlement.EntitlementCombiner;<a name="line.22"></a>
+<span class="sourceLineNo">023</span>import com.sun.identity.entitlement.EntitlementCondition;<a name="line.23"></a>
+<span class="sourceLineNo">024</span>import com.sun.identity.entitlement.EntitlementSubject;<a name="line.24"></a>
+<span class="sourceLineNo">025</span>import com.sun.identity.entitlement.NoSubject;<a name="line.25"></a>
+<span class="sourceLineNo">026</span>import com.sun.identity.entitlement.NotCondition;<a name="line.26"></a>
+<span class="sourceLineNo">027</span>import com.sun.identity.entitlement.NotSubject;<a name="line.27"></a>
+<span class="sourceLineNo">028</span>import com.sun.identity.entitlement.OrCondition;<a name="line.28"></a>
+<span class="sourceLineNo">029</span>import com.sun.identity.entitlement.OrSubject;<a name="line.29"></a>
+<span class="sourceLineNo">030</span>import com.sun.identity.entitlement.ResourceAttribute;<a name="line.30"></a>
+<span class="sourceLineNo">031</span>import com.sun.identity.entitlement.StaticAttributes;<a name="line.31"></a>
+<span class="sourceLineNo">032</span>import com.sun.identity.entitlement.UserAttributes;<a name="line.32"></a>
+<span class="sourceLineNo">033</span><a name="line.33"></a>
+<span class="sourceLineNo">034</span>import java.util.Map;<a name="line.34"></a>
+<span class="sourceLineNo">035</span>import java.util.ServiceLoader;<a name="line.35"></a>
+<span class="sourceLineNo">036</span>import java.util.Set;<a name="line.36"></a>
+<span class="sourceLineNo">037</span>import java.util.concurrent.ConcurrentHashMap;<a name="line.37"></a>
+<span class="sourceLineNo">038</span>import java.util.concurrent.ConcurrentMap;<a name="line.38"></a>
+<span class="sourceLineNo">039</span><a name="line.39"></a>
+<span class="sourceLineNo">040</span>/**<a name="line.40"></a>
+<span class="sourceLineNo">041</span> * Provides methods for discovering and loading entitlements conditions and subject implementations. Builds upon the<a name="line.41"></a>
+<span class="sourceLineNo">042</span> * standard Java {@link ServiceLoader} mechanism to allow additional entitlement condition and subject implementations<a name="line.42"></a>
+<span class="sourceLineNo">043</span> * to be registered by client extensions (see {@link EntitlementModule}).<a name="line.43"></a>
+<span class="sourceLineNo">044</span> *<a name="line.44"></a>
+<span class="sourceLineNo">045</span> * @since 12.0.0<a name="line.45"></a>
+<span class="sourceLineNo">046</span> * @supported.all.api<a name="line.46"></a>
+<span class="sourceLineNo">047</span> */<a name="line.47"></a>
+<span class="sourceLineNo">048</span>public final class EntitlementRegistry {<a name="line.48"></a>
+<span class="sourceLineNo">049</span><a name="line.49"></a>
+<span class="sourceLineNo">050</span>    private final ConcurrentMap&lt;String, Class&lt;? extends EntitlementCondition&gt;&gt; conditions =<a name="line.50"></a>
+<span class="sourceLineNo">051</span>            new ConcurrentHashMap&lt;String, Class&lt;? extends EntitlementCondition&gt;&gt;();<a name="line.51"></a>
+<span class="sourceLineNo">052</span>    private final ConcurrentMap&lt;String, Class&lt;? extends EntitlementSubject&gt;&gt; subjects =<a name="line.52"></a>
+<span class="sourceLineNo">053</span>            new ConcurrentHashMap&lt;String, Class&lt;? extends EntitlementSubject&gt;&gt;();<a name="line.53"></a>
+<span class="sourceLineNo">054</span>    private final ConcurrentMap&lt;String, Class&lt;? extends ResourceAttribute&gt;&gt; attributes =<a name="line.54"></a>
+<span class="sourceLineNo">055</span>            new ConcurrentHashMap&lt;String, Class&lt;? extends ResourceAttribute&gt;&gt;();<a name="line.55"></a>
+<span class="sourceLineNo">056</span>    private final ConcurrentMap&lt;String, Class&lt;? extends EntitlementCombiner&gt;&gt; combiners =<a name="line.56"></a>
+<span class="sourceLineNo">057</span>            new ConcurrentHashMap&lt;String, Class&lt;? extends EntitlementCombiner&gt;&gt;();<a name="line.57"></a>
+<span class="sourceLineNo">058</span><a name="line.58"></a>
+<span class="sourceLineNo">059</span>    /**<a name="line.59"></a>
+<span class="sourceLineNo">060</span>     * Lazy initialisation holder for loading and caching module instances. We use lazy loading to reduce startup<a name="line.60"></a>
+<span class="sourceLineNo">061</span>     * overhead and also to ensure that classpaths are fully initialised before loading services.<a name="line.61"></a>
+<span class="sourceLineNo">062</span>     */<a name="line.62"></a>
+<span class="sourceLineNo">063</span>    private enum ServiceLoaderHolder {<a name="line.63"></a>
+<span class="sourceLineNo">064</span>        INSTANCE;<a name="line.64"></a>
+<span class="sourceLineNo">065</span>        final ServiceLoader&lt;EntitlementModule&gt; loader = ServiceLoader.load(EntitlementModule.class);<a name="line.65"></a>
+<span class="sourceLineNo">066</span>    }<a name="line.66"></a>
+<span class="sourceLineNo">067</span><a name="line.67"></a>
+<span class="sourceLineNo">068</span>    /**<a name="line.68"></a>
+<span class="sourceLineNo">069</span>     * Loads all available {@link EntitlementModule} instances and registers them with a new entitlement registry.<a name="line.69"></a>
+<span class="sourceLineNo">070</span>     * Each invocation of this method will attempt to load any known entitlement modules as per<a name="line.70"></a>
+<span class="sourceLineNo">071</span>     * {@link ServiceLoader#load(Class)}. Previously loaded modules will be cached but any newly available modules<a name="line.71"></a>
+<span class="sourceLineNo">072</span>     * will be loaded.<a name="line.72"></a>
+<span class="sourceLineNo">073</span>     *<a name="line.73"></a>
+<span class="sourceLineNo">074</span>     * @return an entitlement registry populated with all known entitlement modules.<a name="line.74"></a>
+<span class="sourceLineNo">075</span>     */<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    public static EntitlementRegistry load() {<a name="line.76"></a>
+<span class="sourceLineNo">077</span><a name="line.77"></a>
+<span class="sourceLineNo">078</span>        EntitlementRegistry registry = new EntitlementRegistry();<a name="line.78"></a>
+<span class="sourceLineNo">079</span><a name="line.79"></a>
+<span class="sourceLineNo">080</span>        // Register standard logical condition and subject types.<a name="line.80"></a>
+<span class="sourceLineNo">081</span>        registry.registerConditionType("AND", AndCondition.class);<a name="line.81"></a>
+<span class="sourceLineNo">082</span>        registry.registerConditionType("OR", OrCondition.class);<a name="line.82"></a>
+<span class="sourceLineNo">083</span>        registry.registerConditionType("NOT", NotCondition.class);<a name="line.83"></a>
+<span class="sourceLineNo">084</span><a name="line.84"></a>
+<span class="sourceLineNo">085</span>        registry.registerSubjectType("AND", AndSubject.class);<a name="line.85"></a>
+<span class="sourceLineNo">086</span>        registry.registerSubjectType("OR", OrSubject.class);<a name="line.86"></a>
+<span class="sourceLineNo">087</span>        registry.registerSubjectType("NOT", NotSubject.class);<a name="line.87"></a>
+<span class="sourceLineNo">088</span><a name="line.88"></a>
+<span class="sourceLineNo">089</span>        /* These conditions are not tested and were removed for OpenAM 12 release.<a name="line.89"></a>
+<span class="sourceLineNo">090</span>           They might be reintroduced in a future release.<a name="line.90"></a>
+<span class="sourceLineNo">091</span><a name="line.91"></a>
+<span class="sourceLineNo">092</span>        // Standard OpenAM entitlement conditions (policy conditions will be loaded later)<a name="line.92"></a>
+<span class="sourceLineNo">093</span>        registry.registerConditionType(NumericAttributeCondition.class);<a name="line.93"></a>
+<span class="sourceLineNo">094</span>        registry.registerConditionType(AttributeLookupCondition.class);<a name="line.94"></a>
+<span class="sourceLineNo">095</span>        registry.registerConditionType(StringAttributeCondition.class);<a name="line.95"></a>
+<span class="sourceLineNo">096</span>        // Standard OpenAM subjects<a name="line.96"></a>
+<span class="sourceLineNo">097</span>        registry.registerSubjectType(AttributeSubject.class);<a name="line.97"></a>
+<span class="sourceLineNo">098</span>        */<a name="line.98"></a>
+<span class="sourceLineNo">099</span><a name="line.99"></a>
+<span class="sourceLineNo">100</span>        // Standard OpenAM subjects<a name="line.100"></a>
+<span class="sourceLineNo">101</span>        registry.registerSubjectType("NONE", NoSubject.class);<a name="line.101"></a>
+<span class="sourceLineNo">102</span><a name="line.102"></a>
+<span class="sourceLineNo">103</span>        // Standard OpenAM resource attribute types<a name="line.103"></a>
+<span class="sourceLineNo">104</span>        registry.registerAttributeType("User", UserAttributes.class);<a name="line.104"></a>
+<span class="sourceLineNo">105</span>        registry.registerAttributeType("Static", StaticAttributes.class);<a name="line.105"></a>
+<span class="sourceLineNo">106</span><a name="line.106"></a>
+<span class="sourceLineNo">107</span>        // Standard OpenAM Decision Combiners<a name="line.107"></a>
+<span class="sourceLineNo">108</span>        registry.registerDecisionCombiner(DenyOverride.class);<a name="line.108"></a>
+<span class="sourceLineNo">109</span><a name="line.109"></a>
+<span class="sourceLineNo">110</span>        ServiceLoader&lt;ConditionTypeRegistry&gt; conditionTypeRegistries = ServiceLoader.load(ConditionTypeRegistry.class);<a name="line.110"></a>
+<span class="sourceLineNo">111</span>        for (ConditionTypeRegistry conditionTypeRegistry : conditionTypeRegistries) {<a name="line.111"></a>
+<span class="sourceLineNo">112</span>            for (Class&lt;? extends EntitlementCondition&gt; condition : conditionTypeRegistry.getEnvironmentConditions()) {<a name="line.112"></a>
+<span class="sourceLineNo">113</span>                registry.registerConditionType(condition);<a name="line.113"></a>
+<span class="sourceLineNo">114</span>            }<a name="line.114"></a>
+<span class="sourceLineNo">115</span><a name="line.115"></a>
+<span class="sourceLineNo">116</span>            for (Class&lt;? extends EntitlementSubject&gt; condition : conditionTypeRegistry.getSubjectConditions()) {<a name="line.116"></a>
+<span class="sourceLineNo">117</span>                registry.registerSubjectType(condition);<a name="line.117"></a>
+<span class="sourceLineNo">118</span>            }<a name="line.118"></a>
+<span class="sourceLineNo">119</span>        }<a name="line.119"></a>
+<span class="sourceLineNo">120</span><a name="line.120"></a>
+<span class="sourceLineNo">121</span>        for (EntitlementModule provider : ServiceLoaderHolder.INSTANCE.loader) {<a name="line.121"></a>
+<span class="sourceLineNo">122</span>            provider.registerCustomTypes(registry);<a name="line.122"></a>
+<span class="sourceLineNo">123</span>        }<a name="line.123"></a>
+<span class="sourceLineNo">124</span><a name="line.124"></a>
+<span class="sourceLineNo">125</span>        return registry;<a name="line.125"></a>
+<span class="sourceLineNo">126</span>    }<a name="line.126"></a>
+<span class="sourceLineNo">127</span><a name="line.127"></a>
+<span class="sourceLineNo">128</span>    /**<a name="line.128"></a>
+<span class="sourceLineNo">129</span>     * Registers an entitlement condition type with the given short name (used in RESTful API calls and in the UI).<a name="line.129"></a>
+<span class="sourceLineNo">130</span>     * Note: short names must be unique across all condition types.<a name="line.130"></a>
+<span class="sourceLineNo">131</span>     *<a name="line.131"></a>
+<span class="sourceLineNo">132</span>     * @param name the short name of the condition type.<a name="line.132"></a>
+<span class="sourceLineNo">133</span>     * @param type the condition type to register.<a name="line.133"></a>
+<span class="sourceLineNo">134</span>     * @throws NameAlreadyRegisteredException if the short name is already registered.<a name="line.134"></a>
+<span class="sourceLineNo">135</span>     */<a name="line.135"></a>
+<span class="sourceLineNo">136</span>    public void registerConditionType(String name, Class&lt;? extends EntitlementCondition&gt; type) {<a name="line.136"></a>
+<span class="sourceLineNo">137</span>        register(name, conditions, type);<a name="line.137"></a>
+<span class="sourceLineNo">138</span>    }<a name="line.138"></a>
+<span class="sourceLineNo">139</span><a name="line.139"></a>
+<span class="sourceLineNo">140</span>    /**<a name="line.140"></a>
+<span class="sourceLineNo">141</span>     * Registers an entitlement condition type using a short name generated from the type name. The short name is<a name="line.141"></a>
+<span class="sourceLineNo">142</span>     * generated as the simple name of the class minus any {@code Condition} suffix. For example, a condition<a name="line.142"></a>
+<span class="sourceLineNo">143</span>     * type {@code org.forgerock.openam.entitlement.TestCondition} would be registered with the short name {@code Test}.<a name="line.143"></a>
+<span class="sourceLineNo">144</span>     *<a name="line.144"></a>
+<span class="sourceLineNo">145</span>     * @param type the condition type to register.<a name="line.145"></a>
+<span class="sourceLineNo">146</span>     * @throws NameAlreadyRegisteredException if the short name is already registered.<a name="line.146"></a>
+<span class="sourceLineNo">147</span>     */<a name="line.147"></a>
+<span class="sourceLineNo">148</span>    public void registerConditionType(Class&lt;? extends EntitlementCondition&gt; type) {<a name="line.148"></a>
+<span class="sourceLineNo">149</span>        String name = type.getSimpleName().replace("Condition", "");<a name="line.149"></a>
+<span class="sourceLineNo">150</span>        registerConditionType(name, type);<a name="line.150"></a>
+<span class="sourceLineNo">151</span>    }<a name="line.151"></a>
+<span class="sourceLineNo">152</span><a name="line.152"></a>
+<span class="sourceLineNo">153</span>    /**<a name="line.153"></a>
+<span class="sourceLineNo">154</span>     * Returns the condition type associated with the given short name, or null if no such condition is registered.<a name="line.154"></a>
+<span class="sourceLineNo">155</span>     *<a name="line.155"></a>
+<span class="sourceLineNo">156</span>     * @param name the short name of the condition type to get.<a name="line.156"></a>
+<span class="sourceLineNo">157</span>     * @return the associated condition type or null if no matching condition type is registered.<a name="line.157"></a>
+<span class="sourceLineNo">158</span>     */<a name="line.158"></a>
+<span class="sourceLineNo">159</span>    public Class&lt;? extends EntitlementCondition&gt; getConditionType(String name) {<a name="line.159"></a>
+<span class="sourceLineNo">160</span>        return conditions.get(name);<a name="line.160"></a>
+<span class="sourceLineNo">161</span>    }<a name="line.161"></a>
+<span class="sourceLineNo">162</span><a name="line.162"></a>
+<span class="sourceLineNo">163</span>    /**<a name="line.163"></a>
+<span class="sourceLineNo">164</span>     * Registers an entitlement combiner.<a name="line.164"></a>
+<span class="sourceLineNo">165</span>     *<a name="line.165"></a>
+<span class="sourceLineNo">166</span>     * @param type the condition type to register.<a name="line.166"></a>
+<span class="sourceLineNo">167</span>     * @throws NameAlreadyRegisteredException if the short name is already registered.<a name="line.167"></a>
+<span class="sourceLineNo">168</span>     */<a name="line.168"></a>
+<span class="sourceLineNo">169</span>    public void registerDecisionCombiner(Class&lt;? extends EntitlementCombiner&gt; type) {<a name="line.169"></a>
+<span class="sourceLineNo">170</span>        register(type.getSimpleName(), combiners, type);<a name="line.170"></a>
+<span class="sourceLineNo">171</span>    }<a name="line.171"></a>
+<span class="sourceLineNo">172</span><a name="line.172"></a>
+<span class="sourceLineNo">173</span>    /**<a name="line.173"></a>
+<span class="sourceLineNo">174</span>     * Registers an entitlement combiner with a given name.<a name="line.174"></a>
+<span class="sourceLineNo">175</span>     *<a name="line.175"></a>
+<span class="sourceLineNo">176</span>     * @param type the combiner type to register.<a name="line.176"></a>
+<span class="sourceLineNo">177</span>     * @throws NameAlreadyRegisteredException if the short name is already registered.<a name="line.177"></a>
+<span class="sourceLineNo">178</span>     */<a name="line.178"></a>
+<span class="sourceLineNo">179</span>    public void registerDecisionCombiner(String name, Class&lt;? extends EntitlementCombiner&gt; type) {<a name="line.179"></a>
+<span class="sourceLineNo">180</span>        register(name, combiners, type);<a name="line.180"></a>
+<span class="sourceLineNo">181</span>    }<a name="line.181"></a>
+<span class="sourceLineNo">182</span><a name="line.182"></a>
+<span class="sourceLineNo">183</span>    /**<a name="line.183"></a>
+<span class="sourceLineNo">184</span>     * Returns the combiner associated with the given short name.<a name="line.184"></a>
+<span class="sourceLineNo">185</span>     *<a name="line.185"></a>
+<span class="sourceLineNo">186</span>     * @param name the short name of the combiner type to get.<a name="line.186"></a>
+<span class="sourceLineNo">187</span>     * @return the associated combiner type or null if no matching combiner type is registered.<a name="line.187"></a>
+<span class="sourceLineNo">188</span>     */<a name="line.188"></a>
+<span class="sourceLineNo">189</span>    public Class&lt;? extends EntitlementCombiner&gt; getCombinerType(String name) {<a name="line.189"></a>
+<span class="sourceLineNo">190</span>        return combiners.get(name);<a name="line.190"></a>
+<span class="sourceLineNo">191</span>    }<a name="line.191"></a>
+<span class="sourceLineNo">192</span><a name="line.192"></a>
+<span class="sourceLineNo">193</span>    /**<a name="line.193"></a>
+<span class="sourceLineNo">194</span>     * Registers an entitlement subject type with the given short name (used in RESTful API calls and in the UI).<a name="line.194"></a>
+<span class="sourceLineNo">195</span>     * Note: short names must be unique across all subject types.<a name="line.195"></a>
+<span class="sourceLineNo">196</span>     *<a name="line.196"></a>
+<span class="sourceLineNo">197</span>     * @param name the short name of the subject type.<a name="line.197"></a>
+<span class="sourceLineNo">198</span>     * @param type the subject type to register.<a name="line.198"></a>
+<span class="sourceLineNo">199</span>     * @throws NameAlreadyRegisteredException if the short name is already registered.<a name="line.199"></a>
+<span class="sourceLineNo">200</span>     */<a name="line.200"></a>
+<span class="sourceLineNo">201</span>    public void registerSubjectType(String name, Class&lt;? extends EntitlementSubject&gt; type) {<a name="line.201"></a>
+<span class="sourceLineNo">202</span>        register(name, subjects, type);<a name="line.202"></a>
+<span class="sourceLineNo">203</span>    }<a name="line.203"></a>
+<span class="sourceLineNo">204</span><a name="line.204"></a>
+<span class="sourceLineNo">205</span>    /**<a name="line.205"></a>
+<span class="sourceLineNo">206</span>     * Registers an entitlement subject type using a short name generated from the type name. The short name is<a name="line.206"></a>
+<span class="sourceLineNo">207</span>     * generated as the simple name of the class minus any {@code Subject} suffix. For example, a subject<a name="line.207"></a>
+<span class="sourceLineNo">208</span>     * type {@code org.forgerock.openam.entitlement.TestSubject} would be registered with the short name {@code Test}.<a name="line.208"></a>
+<span class="sourceLineNo">209</span>     *<a name="line.209"></a>
+<span class="sourceLineNo">210</span>     * @param type the subject type to register.<a name="line.210"></a>
+<span class="sourceLineNo">211</span>     * @throws NameAlreadyRegisteredException if the short name is already registered.<a name="line.211"></a>
+<span class="sourceLineNo">212</span>     */<a name="line.212"></a>
+<span class="sourceLineNo">213</span>    public void registerSubjectType(Class&lt;? extends EntitlementSubject&gt; type) {<a name="line.213"></a>
+<span class="sourceLineNo">214</span>        String name = type.getSimpleName().replace("Subject", "");<a name="line.214"></a>
+<span class="sourceLineNo">215</span>        registerSubjectType(name, type);<a name="line.215"></a>
+<span class="sourceLineNo">216</span>    }<a name="line.216"></a>
+<span class="sourceLineNo">217</span><a name="line.217"></a>
+<span class="sourceLineNo">218</span>    /**<a name="line.218"></a>
+<span class="sourceLineNo">219</span>     * Returns the subject type associated with the given short name, or null if no such subject is registered.<a name="line.219"></a>
+<span class="sourceLineNo">220</span>     *<a name="line.220"></a>
+<span class="sourceLineNo">221</span>     * @param name the short name of the subject type to get.<a name="line.221"></a>
+<span class="sourceLineNo">222</span>     * @return the associated subject type or null if no matching subject type is registered.<a name="line.222"></a>
+<span class="sourceLineNo">223</span>     */<a name="line.223"></a>
+<span class="sourceLineNo">224</span>    public Class&lt;? extends EntitlementSubject&gt; getSubjectType(String name) {<a name="line.224"></a>
+<span class="sourceLineNo">225</span>        return subjects.get(name);<a name="line.225"></a>
+<span class="sourceLineNo">226</span>    }<a name="line.226"></a>
+<span class="sourceLineNo">227</span><a name="line.227"></a>
+<span class="sourceLineNo">228</span>    /**<a name="line.228"></a>
+<span class="sourceLineNo">229</span>     * Registers a resource attribute type with the given short name (used in RESTful API calls and in the UI).<a name="line.229"></a>
+<span class="sourceLineNo">230</span>     * Note: short names must be unique across all resource attribute types.<a name="line.230"></a>
+<span class="sourceLineNo">231</span>     *<a name="line.231"></a>
+<span class="sourceLineNo">232</span>     * @param name the short name of the attribute type.<a name="line.232"></a>
+<span class="sourceLineNo">233</span>     * @param type the attribute type to register.<a name="line.233"></a>
+<span class="sourceLineNo">234</span>     * @throws NameAlreadyRegisteredException if the short name is already registered.<a name="line.234"></a>
+<span class="sourceLineNo">235</span>     */<a name="line.235"></a>
+<span class="sourceLineNo">236</span>    public void registerAttributeType(String name, Class&lt;? extends ResourceAttribute&gt; type) {<a name="line.236"></a>
+<span class="sourceLineNo">237</span>        register(name, attributes, type);<a name="line.237"></a>
+<span class="sourceLineNo">238</span>    }<a name="line.238"></a>
+<span class="sourceLineNo">239</span><a name="line.239"></a>
+<span class="sourceLineNo">240</span>    /**<a name="line.240"></a>
+<span class="sourceLineNo">241</span>     * Registers a resource attribute type using a short name generated from the type name. The short name is<a name="line.241"></a>
+<span class="sourceLineNo">242</span>     * generated as the simple name of the class minus any {@code Attribute} suffix. For example, an attribute<a name="line.242"></a>
+<span class="sourceLineNo">243</span>     * type {@code org.forgerock.openam.entitlement.TestAttribute} would be registered with the short name {@code Test}.<a name="line.243"></a>
+<span class="sourceLineNo">244</span>     *<a name="line.244"></a>
+<span class="sourceLineNo">245</span>     * @param type the attribute type to register.<a name="line.245"></a>
+<span class="sourceLineNo">246</span>     * @throws NameAlreadyRegisteredException if the short name is already registered.<a name="line.246"></a>
+<span class="sourceLineNo">247</span>     */<a name="line.247"></a>
+<span class="sourceLineNo">248</span>    public void registerAttributeType(Class&lt;? extends ResourceAttribute&gt; type) {<a name="line.248"></a>
+<span class="sourceLineNo">249</span>        String name = type.getSimpleName().replace("Attribute", "");<a name="line.249"></a>
+<span class="sourceLineNo">250</span>        registerAttributeType(name, type);<a name="line.250"></a>
+<span class="sourceLineNo">251</span>    }<a name="line.251"></a>
+<span class="sourceLineNo">252</span><a name="line.252"></a>
+<span class="sourceLineNo">253</span>    /**<a name="line.253"></a>
+<span class="sourceLineNo">254</span>     * Returns the attribute type associated with the given short name, or null if no such attribute is registered.<a name="line.254"></a>
+<span class="sourceLineNo">255</span>     *<a name="line.255"></a>
+<span class="sourceLineNo">256</span>     * @param name the short name of the attribute type to get.<a name="line.256"></a>
+<span class="sourceLineNo">257</span>     * @return the associated attribute type or null if no matching attribute type is registered.<a name="line.257"></a>
+<span class="sourceLineNo">258</span>     */<a name="line.258"></a>
+<span class="sourceLineNo">259</span>    public Class&lt;? extends ResourceAttribute&gt; getAttributeType(String name) {<a name="line.259"></a>
+<span class="sourceLineNo">260</span>        return attributes.get(name);<a name="line.260"></a>
+<span class="sourceLineNo">261</span>    }<a name="line.261"></a>
+<span class="sourceLineNo">262</span><a name="line.262"></a>
+<span class="sourceLineNo">263</span>    /**<a name="line.263"></a>
+<span class="sourceLineNo">264</span>     * Returns the short name that the given condition is registered under. If the condition is registered under<a name="line.264"></a>
+<span class="sourceLineNo">265</span>     * multiple names then an arbitrary name is returned. If the condition type is not registered then null is returned.<a name="line.265"></a>
+<span class="sourceLineNo">266</span>     *<a name="line.266"></a>
+<span class="sourceLineNo">267</span>     * @param condition the condition to get a short name for.<a name="line.267"></a>
+<span class="sourceLineNo">268</span>     * @return the short type name of the given condition or null if not registered.<a name="line.268"></a>
+<span class="sourceLineNo">269</span>     */<a name="line.269"></a>
+<span class="sourceLineNo">270</span>    public String getConditionName(EntitlementCondition condition) {<a name="line.270"></a>
+<span class="sourceLineNo">271</span>        for (Map.Entry&lt;String, Class&lt;? extends EntitlementCondition&gt;&gt; candidate : conditions.entrySet()) {<a name="line.271"></a>
+<span class="sourceLineNo">272</span>            if (candidate.getValue() == condition.getClass()) {<a name="line.272"></a>
+<span class="sourceLineNo">273</span>                return candidate.getKey();<a name="line.273"></a>
+<span class="sourceLineNo">274</span>            }<a name="line.274"></a>
+<span class="sourceLineNo">275</span>        }<a name="line.275"></a>
+<span class="sourceLineNo">276</span>        return null;<a name="line.276"></a>
+<span class="sourceLineNo">277</span>    }<a name="line.277"></a>
+<span class="sourceLineNo">278</span><a name="line.278"></a>
+<span class="sourceLineNo">279</span>    /**<a name="line.279"></a>
+<span class="sourceLineNo">280</span>     * Returns the short name that the given subject is registered under. If the subject is registered under<a name="line.280"></a>
+<span class="sourceLineNo">281</span>     * multiple names then an arbitrary name is returned. If the subject type is not registered then null is returned.<a name="line.281"></a>
+<span class="sourceLineNo">282</span>     *<a name="line.282"></a>
+<span class="sourceLineNo">283</span>     * @param subject the subject to get a short name for.<a name="line.283"></a>
+<span class="sourceLineNo">284</span>     * @return the short type name of the given subject or null if not registered.<a name="line.284"></a>
+<span class="sourceLineNo">285</span>     */<a name="line.285"></a>
+<span class="sourceLineNo">286</span>    public String getSubjectName(EntitlementSubject subject) {<a name="line.286"></a>
+<span class="sourceLineNo">287</span>        for (Map.Entry&lt;String, Class&lt;? extends EntitlementSubject&gt;&gt; candidate : subjects.entrySet()) {<a name="line.287"></a>
+<span class="sourceLineNo">288</span>            if (candidate.getValue() == subject.getClass()) {<a name="line.288"></a>
+<span class="sourceLineNo">289</span>                return candidate.getKey();<a name="line.289"></a>
+<span class="sourceLineNo">290</span>            }<a name="line.290"></a>
+<span class="sourceLineNo">291</span>        }<a name="line.291"></a>
+<span class="sourceLineNo">292</span>        return null;<a name="line.292"></a>
+<span class="sourceLineNo">293</span>    }<a name="line.293"></a>
+<span class="sourceLineNo">294</span><a name="line.294"></a>
+<span class="sourceLineNo">295</span>    /**<a name="line.295"></a>
+<span class="sourceLineNo">296</span>     * Returns the short name that the given attribute is registered under. If the attribute is registered under<a name="line.296"></a>
+<span class="sourceLineNo">297</span>     * multiple names then an arbitrary name is returned. If the attribute type is not registered then null is returned.<a name="line.297"></a>
+<span class="sourceLineNo">298</span>     *<a name="line.298"></a>
+<span class="sourceLineNo">299</span>     * @param attribute the attribute to get a short name for.<a name="line.299"></a>
+<span class="sourceLineNo">300</span>     * @return the short type name of the given attribute or null if not registered.<a name="line.300"></a>
+<span class="sourceLineNo">301</span>     */<a name="line.301"></a>
+<span class="sourceLineNo">302</span>    public String getAttributeName(ResourceAttribute attribute) {<a name="line.302"></a>
+<span class="sourceLineNo">303</span>        for (Map.Entry&lt;String, Class&lt;? extends ResourceAttribute&gt;&gt; candidate : attributes.entrySet()) {<a name="line.303"></a>
+<span class="sourceLineNo">304</span>            if (candidate.getValue() == attribute.getClass()) {<a name="line.304"></a>
+<span class="sourceLineNo">305</span>                return candidate.getKey();<a name="line.305"></a>
+<span class="sourceLineNo">306</span>            }<a name="line.306"></a>
+<span class="sourceLineNo">307</span>        }<a name="line.307"></a>
+<span class="sourceLineNo">308</span>        return null;<a name="line.308"></a>
+<span class="sourceLineNo">309</span>    }<a name="line.309"></a>
+<span class="sourceLineNo">310</span><a name="line.310"></a>
+<span class="sourceLineNo">311</span>    /**<a name="line.311"></a>
+<span class="sourceLineNo">312</span>     * Registers the given type under the given short name in the given registry map. If the map already contains an<a name="line.312"></a>
+<span class="sourceLineNo">313</span>     * entry for this short name and it is not identical to the given type then an exception is thrown and the map is<a name="line.313"></a>
+<span class="sourceLineNo">314</span>     * not updated.<a name="line.314"></a>
+<span class="sourceLineNo">315</span>     *<a name="line.315"></a>
+<span class="sourceLineNo">316</span>     * @param shortName the short name to register the type under.<a name="line.316"></a>
+<span class="sourceLineNo">317</span>     * @param map the map to register the type in.<a name="line.317"></a>
+<span class="sourceLineNo">318</span>     * @param type the type to register.<a name="line.318"></a>
+<span class="sourceLineNo">319</span>     * @param &lt;T&gt; the type of types :-)<a name="line.319"></a>
+<span class="sourceLineNo">320</span>     * @throws NameAlreadyRegisteredException if a different type is already registered under this short name.<a name="line.320"></a>
+<span class="sourceLineNo">321</span>     */<a name="line.321"></a>
+<span class="sourceLineNo">322</span>    private &lt;T&gt; void register(String shortName, ConcurrentMap&lt;String, Class&lt;? extends T&gt;&gt; map,<a name="line.322"></a>
+<span class="sourceLineNo">323</span>                              Class&lt;? extends T&gt; type) {<a name="line.323"></a>
+<span class="sourceLineNo">324</span>        Class&lt;? extends T&gt; previous = map.putIfAbsent(shortName, type);<a name="line.324"></a>
+<span class="sourceLineNo">325</span>        if (previous != null &amp;&amp; previous != type) {<a name="line.325"></a>
+<span class="sourceLineNo">326</span>            throw new NameAlreadyRegisteredException(shortName);<a name="line.326"></a>
+<span class="sourceLineNo">327</span>        }<a name="line.327"></a>
+<span class="sourceLineNo">328</span>    }<a name="line.328"></a>
+<span class="sourceLineNo">329</span><a name="line.329"></a>
+<span class="sourceLineNo">330</span>    /**<a name="line.330"></a>
+<span class="sourceLineNo">331</span>     * Returns all the short names of {@link EntitlementCondition}s currently registered in<a name="line.331"></a>
+<span class="sourceLineNo">332</span>     * this {@link EntitlementRegistry}.<a name="line.332"></a>
+<span class="sourceLineNo">333</span>     *<a name="line.333"></a>
+<span class="sourceLineNo">334</span>     * @return A set of strings containing all the unqiue EntitlementConditions registered at point of query.<a name="line.334"></a>
+<span class="sourceLineNo">335</span>     */<a name="line.335"></a>
+<span class="sourceLineNo">336</span>    public Set&lt;String&gt; getConditionsShortNames() {<a name="line.336"></a>
+<span class="sourceLineNo">337</span>        return conditions.keySet();<a name="line.337"></a>
+<span class="sourceLineNo">338</span>    }<a name="line.338"></a>
+<span class="sourceLineNo">339</span><a name="line.339"></a>
+<span class="sourceLineNo">340</span>    /**<a name="line.340"></a>
+<span class="sourceLineNo">341</span>     * Returns all the short names of {@link EntitlementSubject}s currently registered in<a name="line.341"></a>
+<span class="sourceLineNo">342</span>     * this {@link EntitlementRegistry}.<a name="line.342"></a>
+<span class="sourceLineNo">343</span>     *<a name="line.343"></a>
+<span class="sourceLineNo">344</span>     * @return A set of strings containing all the unqiue EntitlementSubject registered at point of query.<a name="line.344"></a>
+<span class="sourceLineNo">345</span>     */<a name="line.345"></a>
+<span class="sourceLineNo">346</span>    public Set&lt;String&gt; getSubjectsShortNames() {<a name="line.346"></a>
+<span class="sourceLineNo">347</span>        return subjects.keySet();<a name="line.347"></a>
+<span class="sourceLineNo">348</span>    }<a name="line.348"></a>
+<span class="sourceLineNo">349</span><a name="line.349"></a>
+<span class="sourceLineNo">350</span>    /**<a name="line.350"></a>
+<span class="sourceLineNo">351</span>     * Returns all the short names of {@link ResourceAttribute}s currently registered in<a name="line.351"></a>
+<span class="sourceLineNo">352</span>     * this {@link EntitlementRegistry}.<a name="line.352"></a>
+<span class="sourceLineNo">353</span>     *<a name="line.353"></a>
+<span class="sourceLineNo">354</span>     * @return A set of strings containing all the unqiue ResourceAttribute registered at point of query.<a name="line.354"></a>
+<span class="sourceLineNo">355</span>     */<a name="line.355"></a>
+<span class="sourceLineNo">356</span>    public Set&lt;String&gt; getAttributesShortNames() {<a name="line.356"></a>
+<span class="sourceLineNo">357</span>        return attributes.keySet();<a name="line.357"></a>
+<span class="sourceLineNo">358</span>    }<a name="line.358"></a>
+<span class="sourceLineNo">359</span><a name="line.359"></a>
+<span class="sourceLineNo">360</span>    /**<a name="line.360"></a>
+<span class="sourceLineNo">361</span>     * Returns all the short names of {@link EntitlementCombiner}s currently registered in<a name="line.361"></a>
+<span class="sourceLineNo">362</span>     * this {@link EntitlementRegistry}.<a name="line.362"></a>
+<span class="sourceLineNo">363</span>     *<a name="line.363"></a>
+<span class="sourceLineNo">364</span>     * @return A set of strings containing all the unqiue EntitlementCombiners registered at point of query.<a name="line.364"></a>
+<span class="sourceLineNo">365</span>     */<a name="line.365"></a>
+<span class="sourceLineNo">366</span>    public Set&lt;String&gt; getCombinersShortNames() {<a name="line.366"></a>
+<span class="sourceLineNo">367</span>        return combiners.keySet();<a name="line.367"></a>
+<span class="sourceLineNo">368</span>    }<a name="line.368"></a>
+<span class="sourceLineNo">369</span><a name="line.369"></a>
+<span class="sourceLineNo">370</span><a name="line.370"></a>
+<span class="sourceLineNo">371</span>}<a name="line.371"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

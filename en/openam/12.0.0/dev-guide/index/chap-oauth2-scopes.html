@@ -1,0 +1,313 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;20.&nbsp;Customizing OAuth 2.0 Scope Handling</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenAM Developer's Guide"><link rel="up" href="index.html" title="OpenAM Developer's Guide"><link rel="prev" href="chap-custom-attr.html" title="Chapter&nbsp;19.&nbsp;Customizing Profile Attributes"><link rel="next" href="chap-scripted-auth-module.html" title="Chapter&nbsp;21.&nbsp;Scripted Authentication"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;20.&nbsp;Customizing OAuth 2.0 Scope Handling</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-custom-attr.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-scripted-auth-module.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-oauth2-scopes"></a>Chapter&nbsp;20.&nbsp;Customizing OAuth 2.0 Scope Handling</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-oauth2-scopes.html#design-oauth2-scopes-plugin">20.1. Designing an OAuth 2.0 Scope Validator Plugin</a></span></dt><dt><span class="section"><a href="chap-oauth2-scopes.html#build-oauth2-scopes-plugin">20.2. Building the OAuth 2.0 Scope Validator Sample Plugin</a></span></dt><dt><span class="section"><a href="chap-oauth2-scopes.html#configure-oauth2-scopes-plugin">20.3. Configuring OpenAM to Use the Plugin</a></span></dt><dt><span class="section"><a href="chap-oauth2-scopes.html#try-oauth2-scopes-plugin">20.4. Trying the Sample Plugin</a></span></dt></dl></div><a class="indexterm" name="d0e11338"></a><p>
+  RFC 6749, <a class="link" href="http://tools.ietf.org/html/rfc6749" target="_blank"><em class="citetitle">The OAuth 2.0 Authorization Framework</em></a>,
+  describes access token scopes as a set of case-sensitive strings
+  defined by the authorization server.
+  Clients can request scopes, and resource owners can authorize them.
+ </p><p>
+  The default scopes implementation in OpenAM treats scopes
+  as profile attributes for the resource owner.
+  When a resource server or other entity uses the access token
+  to get token information from OpenAM,
+  OpenAM populates the scopes with profile attribute values.
+  For example, if one of the scopes is <code class="literal">mail</code>,
+  OpenAM sets <code class="literal">mail</code> to the resource owner's email address
+  in the token information returned.
+ </p><p>
+  You can change this behavior by writing your own scope validator plugin.
+  This chapter shows how to write a custom OAuth 2.0 scope validator plugin
+  for use in an OAuth 2.0 provider (authorization server) configuration.
+ </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="design-oauth2-scopes-plugin"></a>20.1.&nbsp;Designing an OAuth 2.0 Scope Validator Plugin</h2></div></div></div><p>
+   A scope validator plugin implements the
+   <code class="literal">org.forgerock.oauth2.core.ScopeValidator</code> interface.
+   As described in the API specification, the
+   <a class="link" href="http://docs.forgerock.org/en/openam/12.0.0/apidocs/?org/forgerock/oauth2/core/ScopeValidator.html" target="_blank"><code class="literal">ScopeValidator</code> interface</a>
+   has several methods that your plugin overrides.
+  </p><p>
+   The following example plugin sets whether
+   <code class="literal">read</code> and <code class="literal">write</code> permissions were granted.
+  </p><pre class="brush: java;">
+package org.forgerock.openam.examples;
+
+import org.forgerock.oauth2.core.AccessToken;
+import org.forgerock.oauth2.core.ClientRegistration;
+import org.forgerock.oauth2.core.OAuth2Request;
+import org.forgerock.oauth2.core.ScopeValidator;
+import org.forgerock.oauth2.core.Token;
+import org.forgerock.oauth2.core.exceptions.InvalidClientException;
+import org.forgerock.oauth2.core.exceptions.ServerException;
+import org.forgerock.oauth2.core.exceptions.UnauthorizedClientException;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+/**
+ * Custom scope validators implement the
+ * {@link org.forgerock.oauth2.core.ScopeValidator} interface.
+ *
+ * &lt;p&gt;
+ * This example sets read and write permissions according to the scopes set.
+ * &lt;/p&gt;
+ *
+ * &lt;ul&gt;
+ *
+ * &lt;li&gt;
+ * The {@code validateAuthorizationScope} method
+ * adds default scopes, or any allowed scopes provided.
+ * &lt;/li&gt;
+ *
+ * &lt;li&gt;
+ * The {@code validateAccessTokenScope} method
+ * adds default scopes, or any allowed scopes provided.
+ * &lt;/li&gt;
+ *
+ * &lt;li&gt;
+ * The {@code validateRefreshTokenScope} method
+ * adds the scopes from the access token,
+ * or any requested scopes provided that are also in the access token scopes.
+ * &lt;/li&gt;
+ *
+ * &lt;li&gt;
+ * The {@code getUserInfo} method
+ * populates scope values and sets the resource owner ID to return.
+ * &lt;/li&gt;
+ *
+ * &lt;li&gt;
+ * The {@code evaluateScope} method
+ * populates scope values to return.
+ * &lt;/li&gt;
+ *
+ * &lt;li&gt;
+ * The {@code additionalDataToReturnFromAuthorizeEndpoint} method
+ * returns no additional data (an empty Map).
+ * &lt;/li&gt;
+ *
+ * &lt;li&gt;
+ * The {@code additionalDataToReturnFromTokenEndpoint} method
+ * adds no additional data.
+ * &lt;/li&gt;
+ *
+ * &lt;/ul&gt;
+ */
+public class CustomScopeValidator implements ScopeValidator {
+    @Override
+    public Set&lt;String&gt; validateAuthorizationScope(
+            ClientRegistration clientRegistration,
+            Set&lt;String&gt; scope) {
+        if (scope == null || scope.isEmpty()) {
+            return clientRegistration.getDefaultScopes();
+        }
+
+        Set&lt;String&gt; scopes = new HashSet&lt;String&gt;(
+                clientRegistration.getAllowedScopes());
+        scopes.retainAll(scope);
+        return scopes;
+    }
+
+    @Override
+    public Set&lt;String&gt; validateAccessTokenScope(
+            ClientRegistration clientRegistration,
+            Set&lt;String&gt; scope,
+            OAuth2Request request) {
+        if (scope == null || scope.isEmpty()) {
+            return clientRegistration.getDefaultScopes();
+        }
+
+        Set&lt;String&gt; scopes = new HashSet&lt;String&gt;(
+                clientRegistration.getAllowedScopes());
+        scopes.retainAll(scope);
+        return scopes;
+    }
+
+    @Override
+    public Set&lt;String&gt; validateRefreshTokenScope(
+            ClientRegistration clientRegistration,
+            Set&lt;String&gt; requestedScope,
+            Set&lt;String&gt; tokenScope,
+            OAuth2Request request) {
+        if (requestedScope == null || requestedScope.isEmpty()) {
+            return tokenScope;
+        }
+
+        Set&lt;String&gt; scopes = new HashSet&lt;String&gt;(tokenScope);
+        scopes.retainAll(requestedScope);
+        return scopes;
+    }
+
+    /**
+     * Set read and write permissions according to scope.
+     *
+     * @param token The access token presented for validation.
+     * @return The map of read and write permissions,
+     *         with permissions set to {@code true} or {@code false},
+     *         as appropriate.
+     */
+    private Map&lt;String,Object&gt; mapScopes(AccessToken token) {
+        Set&lt;String&gt; scopes = token.getScope();
+        Map&lt;String, Object&gt; map = new HashMap&lt;String, Object&gt;();
+        final String[] permissions = {"read", "write"};
+
+        for (String scope : permissions) {
+            if (scopes.contains(scope)) {
+                map.put(scope, true);
+            } else {
+                map.put(scope, false);
+            }
+        }
+        return map;
+    }
+
+    @Override
+    public Map&lt;String, Object&gt; getUserInfo(
+            AccessToken token,
+            OAuth2Request request)
+            throws UnauthorizedClientException {
+        Map&lt;String, Object&gt; response = mapScopes(token);
+        response.put("sub", token.getResourceOwnerId());
+        return response;
+    }
+
+    @Override
+    public Map&lt;String, Object&gt; evaluateScope(AccessToken token) {
+        return mapScopes(token);
+    }
+
+    @Override
+    public Map&lt;String, String&gt; additionalDataToReturnFromAuthorizeEndpoint(
+            Map&lt;String, Token&gt; tokens,
+            OAuth2Request request) {
+        return new HashMap&lt;String, String&gt;(); // No special handling
+    }
+
+    @Override
+    public void additionalDataToReturnFromTokenEndpoint(
+            AccessToken token,
+            OAuth2Request request)
+            throws ServerException, InvalidClientException {
+        // No special handling
+    }
+}
+  </pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="build-oauth2-scopes-plugin"></a>20.2.&nbsp;Building the OAuth 2.0 Scope Validator Sample Plugin</h2></div></div></div><p>
+   The
+   <a class="link" href="https://github.com/markcraig/openam-scope-sample" target="_blank">sample scope validator plugin source</a>
+   is available online.
+   Get a local clone so that you can try the sample on your system.
+   In the sources you find the following files.
+  </p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="filename">pom.xml</code></span></dt><dd><p>
+      Apache Maven project file for the module
+     </p><p>
+      This file specifies how to build the sample scope validator plugin,
+      and also specifies its dependencies on OpenAM components.
+     </p></dd><dt><span class="term"><code class="filename">src/main/java/org/forgerock/openam/examples/CustomScopeValidator.java</code></span></dt><dd><p>
+      Core class for the sample OAuth 2.0 scope validator plugin
+     </p><p>
+      See <a class="xref" href="chap-oauth2-scopes.html#design-oauth2-scopes-plugin" title="20.1.&nbsp;Designing an OAuth 2.0 Scope Validator Plugin">Section&nbsp;20.1, &#8220;Designing an OAuth 2.0 Scope Validator Plugin&#8221;</a> for a listing.
+     </p></dd></dl></div><p>
+   Build the module using Apache Maven.
+  </p><div class="screen"><pre>
+$ <strong>cd /path/to/openam-scope-sample</strong>
+$ <strong>mvn install</strong>
+<em>[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] Building openam-scope-sample 1.0.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+
+...
+
+[INFO]
+[INFO] --- maven-jar-plugin:2.3.2:jar (default-jar) @ openam-scope-sample ---
+[INFO] Building jar: .../target/openam-scope-sample-1.0.0-SNAPSHOT.jar
+
+...
+
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 1.827s
+[INFO] Finished at: Tue Jun 03 10:40:31 CEST 2014
+[INFO] Final Memory: 27M/357M
+[INFO] ------------------------------------------------------------------------</em>
+  </pre></div><p>
+   After you successfully build the module,
+   you find the .jar in the <code class="filename">target/</code> directory of the project.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configure-oauth2-scopes-plugin"></a>20.3.&nbsp;Configuring OpenAM to Use the Plugin</h2></div></div></div><p>
+   After building your plugin .jar file, copy the .jar file
+   under <code class="filename">WEB-INF/lib/</code> where you deployed OpenAM.
+  </p><p>
+   Restart OpenAM or the container in which it runs.
+  </p><p>
+   In OpenAM console, you can either
+   configure a specific OAuth 2.0 provider to use your plugin,
+   or configure your plugin as the default for new OAuth 2.0 providers.
+   In either case, you need the class name of your plugin.
+   The class name for the sample plugin is
+   <code class="literal">org.forgerock.openam.examples.CustomScopeValidator</code>.
+  </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     To configure a specific OAuth 2.0 provider to use your plugin,
+     add the class name of your scopes plugin under Access Control &gt;
+     <em class="replaceable"><code>Realm Name</code></em> &gt; Services &gt; <em class="replaceable"><code>OAuth2 Provider Name</code></em> &gt; Scope Implementation Class.
+    </p></li><li class="listitem"><p>
+     To configure your plugin as the default for new OAuth 2.0 providers,
+     add the class name of your scopes plugin under Configuration &gt;
+     Global &gt; OAuth2 Provider &gt; Scope Implementation Class.
+    </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="try-oauth2-scopes-plugin"></a>20.4.&nbsp;Trying the Sample Plugin</h2></div></div></div><p>
+   In order to try the sample plugin,
+   make sure you have configured an OAuth 2.0 provider to use the sample plugin.
+   Also, set up an OAuth 2.0 client of the provider
+   that takes scopes <code class="literal">read</code> and <code class="literal">write</code>.
+  </p><p>
+   Next try the provider as shown in the following example.
+  </p><div class="screen"><pre>
+$ <strong>curl \
+ --request POST \
+ --data "grant_type=client_credentials&amp;username=demo&amp;password=changeit\
+&amp;client_id=myClientID&amp;client_secret=password&amp;scope=read" \
+ https://openam.example.com:8443/openam/oauth2/access_token</strong>
+
+<em>{
+    "scope": "read",
+    "expires_in": 59,
+    "token_type": "Bearer",
+    "access_token": "c8860442-daba-4af0-a1d9-b607c03e5a0b"
+}</em>
+
+$ <strong>curl https://openam.example.com:8443/openam/oauth2/tokeninfo\
+?access_token=0d492486-11a7-4175-b116-2fc1cbff6d78</strong>
+<em>{
+    "scope": [
+        "read"
+    ],
+    "grant_type": "client_credentials",
+    "realm": "/",
+    "write": false,
+    "read": true,
+    "token_type": "Bearer",
+    "expires_in": 24,
+    "access_token": "c8860442-daba-4af0-a1d9-b607c03e5a0b"
+}</em>
+  </pre></div><p>
+   As seen in this example, the requested scope <code class="literal">read</code> is
+   authorized, but the <code class="literal">write</code> scope has not been authorized.
+  </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-custom-attr.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-scripted-auth-module.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;19.&nbsp;Customizing Profile Attributes&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;21.&nbsp;Scripted Authentication</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

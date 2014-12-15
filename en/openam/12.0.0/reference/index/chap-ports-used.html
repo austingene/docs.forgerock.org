@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;4.&nbsp;Ports Used</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenAM Reference"><link rel="up" href="index.html" title="OpenAM Reference"><link rel="prev" href="chap-error-messages.html" title="Chapter&nbsp;3.&nbsp;Error Messages"><link rel="next" href="chap-l10n.html" title="Chapter&nbsp;5.&nbsp;Localization"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;4.&nbsp;Ports Used</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-error-messages.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-l10n.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-ports-used"></a>Chapter&nbsp;4.&nbsp;Ports Used</h1></div></div></div><a class="indexterm" name="d0e42353"></a><a class="indexterm" name="d0e42356"></a><p>OpenAM software uses the following TCP/IP ports by default. Sometimes multiple
+ services are configured on a single system with slightly different port numbers. For
+ example, while the default port number for a servlet container such as Tomcat is 8080,
+ a second instance of Tomcat might be configured with a port number of 18080. In
+ all cases shown, communications proceed using TCP.</p><p>When you configure a firewall for OpenAM, make sure to include open ports for any
+ installed and related components, including web services (80, 443), servlet
+ containers (8009, 8080, 8443), and external applications such as a Remote Access Dial In
+ User Service (1645).</p><p>Additional ports may be used, depending on other components of your deployment. If
+ you are using external OpenDJ servers, refer to the <a class="link" href="http://docs.forgerock.org/en/opendj/2.6.0/admin-guide/#appendix-ports-used" target="_blank"><em class="citetitle">Ports Used</em></a>
+ appendix of the OpenDJ Administration Guide.</p><div class="table"><a name="openam-default-ports"></a><div class="table-title">Table&nbsp;4.1.&nbsp;Default TCP/IP Ports Used by OpenAM</div><div class="table-contents"><table summary="Default TCP/IP Ports Used by OpenAM" border="0"><colgroup><col width="20%"><col width="80%"></colgroup><thead><tr><th>Port Number</th><th>Description</th></tr></thead><tbody><tr><td>1689</td><td>Port for Java Management eXtension traffic, disabled by default</td></tr><tr><td>4444</td><td>Port for the embedded administration connector, enabled by default.</td></tr><tr><td>8080</td><td>Web application container port number</td></tr><tr><td>8082</td><td>HTTP port for monitoring OpenAM, disabled by default</td></tr><tr><td>8085</td><td>SNMP port for monitoring OpenAM, disabled by default</td></tr><tr><td>9999</td><td>RMI port for monitoring OpenAM, disabled by default.</td></tr><tr><td>50389, 50899, 58989</td><td>Supports LDAP communication between embedded OpenAM data stores.</td></tr><tr><td>57943, 58943</td><td>
+  Used by the
+  <a href="../../admin-guide/index/chap-auth-services.html#securid-module-conf-hints" class="link"><em class="citetitle">SecurID Authentication Module</em></a>.
+ </td></tr></tbody></table></div></div><br class="table-break"></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-error-messages.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-l10n.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;3.&nbsp;Error Messages&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;5.&nbsp;Localization</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>OpenAM Glossary</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenAM Administration Guide"><link rel="up" href="index.html" title="OpenAM Administration Guide"><link rel="prev" href="chap-troubleshooting.html" title="Chapter&nbsp;24.&nbsp;Troubleshooting"><link rel="next" href="appendix-interface-stability.html" title="Appendix&nbsp;A.&nbsp;Release Levels &amp; Interface Stability"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">OpenAM Glossary</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-troubleshooting.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="appendix-interface-stability.html">Next</a></td></tr></table><hr></div><div lang="en" class="glossary"><div class="titlepage"><div><div><h1 class="title"><a name="openam-glossary"></a>OpenAM Glossary</h1></div></div></div><dl><dt><span class="glossterm">Access control</span></dt><dd class="glossdef"><p>Control to grant or to deny access to a resource</p></dd><dt><span class="glossterm">Account lockout</span></dt><dd class="glossdef"><p>The act of making an account temporarily or permanently inactive
+    after successive authentication failures</p></dd><dt><span class="glossterm">Actions</span></dt><dd class="glossdef"><p>
+    Defined as part of policies,
+    these verbs indicate what authorized subjects can do to resources.
+   </p></dd><dt><span class="glossterm">Advice</span></dt><dd class="glossdef"><p>
+    In the context of a policy decision denying access,
+    a hint to the policy enforcement point about remedial action to take
+    that could result in a decision allowing access.
+   </p></dd><dt><span class="glossterm">Agent administrator</span></dt><dd class="glossdef"><p>User having privileges only to read and write policy agent profile
+   configuration information, typically created to delegate policy agent
+   profile creation to the user installing a policy agent</p></dd><dt><span class="glossterm">Agent authenticator</span></dt><dd class="glossdef"><p>Entity with read-only access to multiple agent profiles defined in the
+    same realm; allows an agent to read web service profiles</p></dd><dt><span class="glossterm">Application</span></dt><dd class="glossdef"><p>
+    In general terms, a service exposing protected resources.
+   </p><p>
+    In the context of OpenAM policies,
+    the application is a template that constrains the policies
+    that govern access to protected resources.
+    An application can have zero or more policies.
+   </p></dd><dt><span class="glossterm">Application type</span></dt><dd class="glossdef"><p>
+    Application types act as templates for creating policy applications.
+   </p><p>
+    Application types define a preset list of actions and functional logic,
+    such as policy lookup and resource comparator logic.
+   </p><p>
+    Application types also define the internal normalization,
+    indexing logic, and comparator logic for applications.
+   </p></dd><dt><span class="glossterm">Attribute-based access control (ABAC)</span></dt><dd class="glossdef"><p>Access control that is based on attributes of a user, such as how old
+    a user is or whether she is a paying customer</p></dd><dt><span class="glossterm">Authentication</span></dt><dd class="glossdef"><p>The act of confirming the identity of a principal</p></dd><dt><span class="glossterm">Authentication chaining</span></dt><dd class="glossdef"><p>A series of authentication modules configured together which a
+   principal must negotiate as configured in order to authenticate
+   successfully</p></dd><dt><span class="glossterm">Authentication level</span></dt><dd class="glossdef"><p>Positive integer associated with an authentication module, usually
+    used to require success with more stringent authentication measures when
+    requesting resources requiring special protection</p></dd><dt><span class="glossterm">Authentication module</span></dt><dd class="glossdef"><p>OpenAM authentication unit that handles one way of obtaining and
+    verifying credentials</p></dd><dt><span class="glossterm">Authorization</span></dt><dd class="glossdef"><p>The act of determining whether to grant or to deny a principal access
+   to a resource</p></dd><dt><span class="glossterm">Authorization Server</span></dt><dd class="glossdef"><p>In OAuth 2.0, issues access tokens to the client after authenticating
+   a resource owner and confirming that the owner authorizes the client to
+   access the protected resource. OpenAM can play this role in the OAuth 2.0
+   authorization framework.</p></dd><dt><span class="glossterm">Auto-federation</span></dt><dd class="glossdef"><p>Arrangement to federate a principal's identity automatically based
+   on a common attribute value shared across the principal's profiles at
+   different providers</p></dd><dt><span class="glossterm">Bulk federation</span></dt><dd class="glossdef"><p>Batch job permanently federating user profiles between a service
+   provider and an identity provider based on a list of matched user
+   identifiers that exist on both providers</p></dd><dt><span class="glossterm">Circle of trust</span></dt><dd class="glossdef"><p>Group of providers, including at least one identity provider, who
+   have agreed to trust each other to participate in a SAML 2.0 provider
+   federation</p></dd><dt><span class="glossterm">Client</span></dt><dd class="glossdef"><p>In OAuth 2.0, requests protected web resources on behalf of the
+   resource owner given the owner's authorization. OpenAM can play this role
+   in the OAuth 2.0 authorization framework.</p></dd><dt><span class="glossterm">Conditions</span></dt><dd class="glossdef"><p>
+    Defined as part of policies,
+    these determine the circumstances under which which a policy applies.
+   </p><p>
+    Environmental conditions reflect circumstances like
+    the client IP address, time of day, how the subject authenticated,
+    or the authentication level achieved
+   </p><p>
+    Subject conditions reflect characteristics of the subject like
+    whether the subject authenticated, the identity of the subject,
+    or claims in the subject's JWT
+   </p></dd><dt><span class="glossterm">Configuration datastore</span></dt><dd class="glossdef"><p>LDAP directory service holding OpenAM configuration data</p></dd><dt><span class="glossterm">Cross-domain single sign on (CDSSO)</span></dt><dd class="glossdef"><p>OpenAM capability allowing single sign on across different DNS
+   domains</p></dd><dt><span class="glossterm">Delegation</span></dt><dd class="glossdef"><p>
+    Granting users administrative privileges with OpenAM
+   </p></dd><dt><span class="glossterm">Entitlement</span></dt><dd class="glossdef"><p>
+    Decision that defines which resource names can and cannot be accessed
+    for a given subject in the context of a particular application,
+    which actions are allowed and which are denied,
+    and any related advice and attributes
+   </p></dd><dt><span class="glossterm">Extended metadata</span></dt><dd class="glossdef"><p>Federation configuration information specific to OpenAM</p></dd><dt><span class="glossterm">Extensible Access Control Markup Language (XACML)</span></dt><dd class="glossdef"><p>Standard, XML-based access control policy language, including a
+   processing model for making authorization decisions based on policies</p></dd><dt><span class="glossterm">Federation</span></dt><dd class="glossdef"><p>Standardized means for aggregating identities, sharing authentication
+   and authorization data information between trusted providers, and allowing
+   principals to access services across different providers without
+   authenticating repeatedly</p></dd><dt><span class="glossterm">Fedlet</span></dt><dd class="glossdef"><p>Service provider application capable of participating in a circle of
+   trust and allowing federation without installing all of OpenAM on the
+   service provider side; OpenAM lets you create both .NET and Java
+   Fedlets.</p></dd><dt><span class="glossterm">Hot swappable</span></dt><dd class="glossdef"><p>Refers to configuration properties for which changes can take effect
+   without restarting the container where OpenAM runs</p></dd><dt><span class="glossterm">Identity</span></dt><dd class="glossdef"><p>Set of data that uniquely describes a person or a thing such as a
+   device or an application</p></dd><dt><span class="glossterm">Identity federation</span></dt><dd class="glossdef"><p>Linking of a principal's identity across multiple providers</p></dd><dt><span class="glossterm">Identity provider (IdP)</span></dt><dd class="glossdef"><p>Entity that produces assertions about a principal (such as how and
+   when a principal authenticated, or that the principal's profile has a
+   specified attribute value)</p></dd><dt><span class="glossterm">Identity repository</span></dt><dd class="glossdef"><p>Data store holding user profiles and group information; different
+   identity repositories can be defined for different realms.</p></dd><dt><span class="glossterm">Java EE policy agent</span></dt><dd class="glossdef"><p>Java web application installed in a web container that acts as a
+   policy agent, filtering requests to other applications in the container
+   with policies based on application resource URLs</p></dd><dt><span class="glossterm">Metadata</span></dt><dd class="glossdef"><p>Federation configuration information for a provider</p></dd><dt><span class="glossterm">Policy</span></dt><dd class="glossdef"><p>
+    Set of rules that define who is granted access to a protected resource
+    when, how, and under what conditions
+   </p></dd><dt><span class="glossterm">Policy Agent</span></dt><dd class="glossdef"><p>Agent that intercepts requests for resources, directs principals to
+    OpenAM for authentication, and enforces policy decisions from OpenAM</p></dd><dt><span class="glossterm">Policy Administration Point (PAP)</span></dt><dd class="glossdef"><p>Entity that manages and stores policy definitions</p></dd><dt><span class="glossterm">Policy Decision Point (PDP)</span></dt><dd class="glossdef"><p>Entity that evaluates access rights and then issues authorization
+   decisions</p></dd><dt><span class="glossterm">Policy Enforcement Point (PEP)</span></dt><dd class="glossdef"><p>Entity that intercepts a request for a resource and then enforces
+   policy decisions from a PDP</p></dd><dt><span class="glossterm">Policy Information Point (PIP)</span></dt><dd class="glossdef"><p>Entity that provides extra information such as user profile attributes
+   that a PDP needs in order to make a decision</p></dd><dt><a name="def-principal"></a><span class="glossterm">Principal</span></dt><dd class="glossdef"><p>
+    Represents an entity that has been authenticated
+    (such as a user, a device, or an application),
+    and thus is distinguished from other entities
+   </p><p>
+    When a <a class="xref" href="openam-glossary.html#def-subject" title="Subject">Subject</a> successfully authenticates,
+    OpenAM associates the Subject with the Principal.
+   </p></dd><dt><span class="glossterm">Privilege</span></dt><dd class="glossdef"><p>
+    In the context of delegated administration,
+    a set of administrative tasks that can be performed by specified subjects
+    in a given realm
+   </p></dd><dt><span class="glossterm">Provider federation</span></dt><dd class="glossdef"><p>Agreement among providers to participate in a circle of trust</p></dd><dt><span class="glossterm">Realm</span></dt><dd class="glossdef"><p>
+    OpenAM unit for organizing configuration and identity information
+   </p><p>
+    Realms can be used for example when different parts of an organization
+    have different applications and user data stores,
+    and when different organizations use the same OpenAM deployment.
+   </p><p>
+    Administrators can delegate realm administration.
+    The administrator assigns administrative privileges to users,
+    allowing them to perform administrative tasks within the realm.
+   </p></dd><dt><span class="glossterm">Referral</span></dt><dd class="glossdef"><p>
+    Allows the policies for an application to be managed in the current realm,
+    and also in sibling and child realms
+   </p><p>
+    During policy evaluation, OpenAM uses referrals
+    to locate the application's policies in other realms
+    in order to find all policies that apply for a given request.
+   </p></dd><dt><span class="glossterm">Resource</span></dt><dd class="glossdef"><p>
+    Something a user can access over the network such as a web page
+   </p><p>
+    Defined as part of policies,
+    these can include wildcards in order to match multiple actual resources.
+   </p></dd><dt><span class="glossterm">Resource owner</span></dt><dd class="glossdef"><p>In OAuth 2.0, entity who can authorize access to protected web
+   resources, such as an end user</p></dd><dt><span class="glossterm">Resource server</span></dt><dd class="glossdef"><p>In OAuth 2.0, server hosting protected web resources, capable of
+    handling access tokens to respond to requests for such resources</p></dd><dt><span class="glossterm">Response attributes</span></dt><dd class="glossdef"><p>
+    Defined as part of policies, these allow OpenAM
+    to return additional information in the form of "attributes"
+    with the response to a policy decision
+   </p></dd><dt><span class="glossterm">Role based access control (RBAC)</span></dt><dd class="glossdef"><p>Access control that is based on whether a user has been granted a set
+   of permissions (a role)</p></dd><dt><span class="glossterm">Security Assertion Markup Language (SAML)</span></dt><dd class="glossdef"><p>Standard, XML-based language for exchanging authentication and
+   authorization data between identity providers and service providers</p></dd><dt><span class="glossterm">Service provider (SP)</span></dt><dd class="glossdef"><p>Entity that consumes assertions about a principal (and provides a
+   service that the principal is trying to access)</p></dd><dt><span class="glossterm">Session</span></dt><dd class="glossdef"><p>In OpenAM a user session is the interval that starts with the user
+   authenticating through OpenAM and ends when the user logs out, or when her
+   session is terminated. OpenAM manages user sessions across one or more
+   applications by issuing a session token used to identify the session and by
+   tracking the session state in order to handle session events like logout and
+   timeout, to permit session constraints, and to notify applications involved
+   in SSO when a session ends.</p></dd><dt><span class="glossterm">Session failover (SFO)</span></dt><dd class="glossdef"><p>Capability to allow another OpenAM server to manage a session when
+   the OpenAM server that initially authenticated the principal goes
+   offline</p></dd><dt><span class="glossterm">Session token</span></dt><dd class="glossdef"><p>Unique identifier issued by OpenAM after successful authentication,
+   used to track a principal's session</p></dd><dt><span class="glossterm">Single log out (SLO)</span></dt><dd class="glossdef"><p>Capability allowing a principal to end a session once, thereby ending
+   her session across multiple applications</p></dd><dt><span class="glossterm">Single sign on (SSO)</span></dt><dd class="glossdef"><p>Capability allowing a principal to authenticate once and gain access
+   to multiple applications without authenticating again</p></dd><dt><span class="glossterm">Site</span></dt><dd class="glossdef"><p>
+    Group of OpenAM servers configured the same way,
+    accessed through a load balancer layer
+   </p><p>
+    The load balancer handles failover to provide service-level availability.
+    Use sticky load balancing based on <code class="literal">amlbcookie</code> values
+    to minimize cross-talk in the site.
+   </p><p>
+    The load balancer can also be used to protect OpenAM services.
+   </p></dd><dt><span class="glossterm">Standard metadata</span></dt><dd class="glossdef"><p>Standard federation configuration information that you can share with
+   other access management software</p></dd><dt><a name="def-subject"></a><span class="glossterm">Subject</span></dt><dd class="glossdef"><p>
+    Entity that requests access to a resource
+   </p><p>
+    When a Subject successfully authenticates,
+    OpenAM associates the Subject with the <a class="xref" href="openam-glossary.html#def-principal" title="Principal">Principal</a>
+    that distinguishes it from other subjects.
+    A Subject can be associated with multiple Principals.
+   </p></dd><dt><span class="glossterm">User data store</span></dt><dd class="glossdef"><p>Data storage service holding principals' profiles; underlying storage
+   can be an LDAP directory service, a relational database, or a custom
+   <code class="literal">IdRepo</code> implementation</p></dd><dt><span class="glossterm">Web policy agent</span></dt><dd class="glossdef"><p>Native library installed in a web server that acts as a policy agent
+   with policies based on web page URLs</p></dd></dl></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-troubleshooting.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="appendix-interface-stability.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;24.&nbsp;Troubleshooting&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Appendix&nbsp;A.&nbsp;Release Levels &amp; Interface Stability</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

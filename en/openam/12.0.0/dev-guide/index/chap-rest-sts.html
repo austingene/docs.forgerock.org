@@ -1,0 +1,1168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;8.&nbsp;RESTful Secure Token Service</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenAM Developer's Guide"><link rel="up" href="index.html" title="OpenAM Developer's Guide"><link rel="prev" href="chap-rest-identity-realm-mgmt.html" title="Chapter&nbsp;7.&nbsp;RESTful Identity and Realm Management Services"><link rel="next" href="chap-jdk.html" title="Chapter&nbsp;9.&nbsp;Using the OpenAM Java SDK"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;8.&nbsp;RESTful Secure Token Service</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-rest-identity-realm-mgmt.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-jdk.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-rest-sts"></a>Chapter&nbsp;8.&nbsp;RESTful Secure Token Service</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-rest-sts.html#rest-sts-intro">8.1. Introduction</a></span></dt><dt><span class="section"><a href="chap-rest-sts.html#rest-sts-saml-config">8.2. REST STS Configuration</a></span></dt><dt><span class="section"><a href="chap-rest-sts.html#rest-sts-token-transformations">8.3. Token Transformations</a></span></dt><dt><span class="section"><a href="chap-rest-sts.html#rest-sts-publish-service">8.4. The Publish Service</a></span></dt><dt><span class="section"><a href="chap-rest-sts.html#rest-sts-code-examples">8.5. REST STS Code Examples</a></span></dt></dl></div><a class="indexterm" name="d0e7383"></a><p>
+  OpenAM provides a RESTful Security Token Service (STS)
+  that allows OpenAM to bridge identities across web and enterprise identity
+  access management (IAM) systems through its token transformation process.
+ </p><p>
+  If you are unfamiliar with STS, you can read the
+  <a class="link" href="http://docs.oasis-open.org/ws-sx/ws-trust/v1.4/ws-trust.html" target="_blank">specification</a>,
+  which is part of the WS-Trust extensions to the Oasis WS-Security
+  standard, governing the management of security tokens in secure message
+  exchanges.
+ </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="rest-sts-intro"></a>8.1.&nbsp;Introduction</h2></div></div></div><p>
+   OpenAM's REST STS framework provides
+   a programmatic means to create STS instances, extending single
+   sign-on (SSO) and other features across token boundaries and systems. You can
+   also create STS instances using the Admin console.
+  </p><p>
+   How does it work? In simple terms, the claims in an x509 or OpenID Connect token
+   are used to map to a subject in the OpenAM datastore, and the state associated
+   with this principal is used to create the claims in the issued SAML2 assertion.
+   Specifically, the process of
+   authenticating the input token type involves mapping an input token state to a
+   principal (for example, for a &lt;username, password&gt; combination).
+   The issued SAML2 assertion asserts the
+   identity of this subject, which can contain AttributeStatements that assert claims
+   related to LDAP attribute state associated with this subject.
+  </p><p>
+   For example, you can create a REST
+   STS instance programmatically or through the Admin console
+   to transform a validated OpenID Connect (OIDC) 1.0 access token,
+   whose principal is mapped to a new SAML 2.0 token, asserting claims mapped
+   in the OIDC access token's scope.
+  </p><p>
+   The following token transformations are currently supported:
+  </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>OpenAM-&gt;SAML2</p></li><li class="listitem"><p>UsernameToken-&gt;SAML2</p></li><li class="listitem"><p>OpenID Connect ID Token-&gt;SAML2</p></li><li class="listitem"><p>X509-&gt;SAML2</p></li></ul></div><p>
+  The generated SAML 2.0 token supports assertion signing and encryption as well
+  as with the Bearer, Holder of Key, or Sender Vouches Subject confirmation:
+ </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><span class="bold"><strong>Holder of Key</strong></span>. Specifies that the subject
+    must contain one or more
+    <code class="literal">KeyInfo</code> elements
+    within the <code class="literal">subjectConfirmationData</code> element so that
+    service provider can validate that the requesting entity is in the possession
+    of the key(s).
+   </p></li><li class="listitem"><p><span class="bold"><strong>Bearer</strong></span>. Specifies that the subject does
+    not contain key material but the
+    subject is considered an acceptable attesting entity. The service
+    provider can accept the assertion or not, and optionally invoke other means or constraints
+    specified in the <code class="literal">subjectConfirmationData</code> element.
+   </p></li><li class="listitem"><p><span class="bold"><strong>Sender Vouches</strong></span>. Specifies that the
+    subject does not contain key material.
+    The service provider can optionally invoke other methods to accept the
+    assertion or not.</p></li></ul></div><p>
+   You can publish REST STS instances in a given realm, each with different
+   configuration characteristics, or update an existing STS instance using the
+   Admin Console (click Access Control &gt; <em class="replaceable"><code>Realm Name</code></em>
+   &gt; STS) or programmatically using the Client SDK.
+ </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="rest-sts-saml-config"></a>8.2.&nbsp;REST STS Configuration</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-rest-sts.html#rest-sts-instance-config">8.2.1. Instance Configuration</a></span></dt><dt><span class="section"><a href="chap-rest-sts.html#signing-n-encryption">8.2.2. Signing and Encryption</a></span></dt><dt><span class="section"><a href="chap-rest-sts.html#rest-sts-plugins">8.2.3. Custom Plug-ins</a></span></dt><dt><span class="section"><a href="chap-rest-sts.html#rest-sts-authncontext">8.2.4. AuthnContext</a></span></dt><dt><span class="section"><a href="chap-rest-sts.html#rest-sts-mapping">8.2.5. SAML Attribute Mapping</a></span></dt></dl></div><p>The following sections presents points about the REST STS configuration.
+  </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-sts-instance-config"></a>8.2.1.&nbsp;Instance Configuration</h3></div></div></div><p>
+    Each REST STS instance issues SAML 2.0 assertions for a single ServiceProvider.
+    As a result, each REST STS instance is configured with the following elements:
+   </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><span class="bold"><strong>Issuer</strong></span>. Corresponds to the
+      Identity Provider (IdP) EntityID.</p></li><li class="listitem"><p><span class="bold"><strong>Service Provider (SP) EntityID</strong></span>. Used in the
+      <code class="literal">AudienceRestriction</code> element of the
+      <code class="literal">Conditions</code> of the issued assertion.</p></li><li class="listitem"><p><span class="bold"><strong>SP Assertion Consumer Service URL</strong></span>.
+      Used as the <code class="literal">Recipient</code>
+      attribute of the <code class="literal">SubjectConfirmation</code> element in
+      <code class="literal">Subject</code> elements, as required
+      for Bearer assertions according to the
+      <a class="link" href="http://docs.oasis-open.org/security/saml/v2.0/saml-profiles-2.0-os.pdf" target="_blank">Web SSO profile</a>.</p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="signing-n-encryption"></a>8.2.2.&nbsp;Signing and Encryption</h3></div></div></div><p>
+    For signing and encryption support, each REST STS instance has a configuration
+    state specifying the keystore location containing the signing and encryption keys.
+   </p><p>
+    If you configure assertion signing, you must specify the keystore path and password,
+    as well as the alias and password corresponding to the
+    private key used to sign the assertion.
+   </p><p>
+    If you configure assertion encryption,
+    you must specify the keystore path and password, as well as the alias
+    corresponding to the SP&#8217;s X509 certificate, which encapsulates the public
+    key used to encrypt the symmetric key that encrypted the generated assertion.
+   </p><div class="note"><h3 class="title">Note</h3><p>
+     You can specify the keystore location using an absolute path on the
+     local filesystem or a path relative to the OpenAM classpath.
+    </p></div><p>
+    You can encrypt the
+    entire assertion, or the <code class="literal">NameID</code> and/or
+    the <code class="literal">AttributeStatement</code> attributes.
+   </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-sts-plugins"></a>8.2.3.&nbsp;Custom Plug-ins</h3></div></div></div><p>
+    All statements constituting a SAML 2.0 assertion can be fully customized.
+    For each REST STS instance, you can write custom plug-ins for the
+    <code class="literal">Conditions</code>, <code class="literal">Subject</code>,
+    <code class="literal">AuthenticationStatements</code>,
+    <code class="literal">AttributeStatements</code>, and
+    <code class="literal">AuthorizationDecisionStatements</code> classes.
+    If you specify the classes in the configuration of the published REST STS instance,
+    these custom classes are consulted to provide the specific statements.
+    See the interfaces in the
+    
+    <code class="literal">org.forgerock.openam.sts.tokengeneration.saml2.statements</code>
+    package for details.
+   </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-sts-authncontext"></a>8.2.4.&nbsp;AuthnContext</h3></div></div></div><p>
+    Each REST STS instance must specify the <code class="literal">AuthnContext</code>
+    in the <code class="literal">AuthenticationStatements</code> of the generated assertion.
+    This <code class="literal">AuthnContext</code> allows the generated SAML 2.0 assertion
+    to specify the manner in which the assertion&#8217;s
+    subject was authenticated. For a token transformation,
+    this <code class="literal">AuthnContext</code> is a function of the input token type.
+   </p><p>
+    By default, the following <code class="literal">AuthnContext</code>
+    string is included in the SAML2 assertion, generated as part of the
+    transformation of the following input token types:
+   </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>OpenAM: <code class="literal">urn:oasis:names:tc:SAML:2.0:ac:classes:PreviousSession</code></p></li><li class="listitem"><p>UsernameToken and OpenID Connect ID Token:
+      <code class="literal">urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport</code></p></li><li class="listitem"><p>X509 Token: <code class="literal">urn:oasis:names:tc:SAML:2.0:ac:classes:X509</code></p></li></ul></div><div class="note"><h3 class="title">Note</h3><p>
+     You can override these default mappings by implementing the
+     <code class="literal">org.forgerock.openam.sts.token.provider.AuthnContextMapper</code> interface, and
+     specifying the name of this implementation in the configuration of the
+     published REST STS instance.
+    </p></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-sts-mapping"></a>8.2.5.&nbsp;SAML Attribute Mapping</h3></div></div></div><p>
+    You can set the mapping of SAML attribute
+    names (Map keys) to local OpenAM attributes (Map values) using
+    the <code class="literal">org.forgerock.openam.sts.tokengeneration.saml2.statements.DefaultAttributeMapper</code>
+    class, which looks at profile attributes in the data stores or in the
+    session properties for each published REST STS instance.
+    The keys define the name of the
+    attributes in the Assertion Attribute statements, and the values define
+    these attribute names.
+    REST STS pulls the data from the subject's directory entry or from the session
+    state that corresponds to the map value.
+   </p><p>
+    The keys can have the following format:
+   </p><div class="screen"><pre>
+[NameFomatURI|]SAML ATTRIBUTE NAME
+   </pre></div><p>
+    If the attribute value is enclosed in
+    quotes, that quoted value is included in the attribute without mapping.
+    Binary attributes should be followed by <code class="literal">;binary</code>
+    as seen in the following example:
+   </p><div class="screen"><pre>
+EmailAddress=mail,
+Address=postaladdress,
+urn:oasis:names:tc:SAML:2.0:attrname-format:uri|urn:mace:dir:attribute-def:cn=cn,
+partnerID="staticPartnerIDValue",
+urn:oasis:names:tc:SAML:2.0:attrname-format:uri|nameID="staticNameIDValue",
+photo=photo;binary,
+urn:oasis:names:tc:SAML:2.0:attrname-format:uri|photo=photo;binary
+  </pre></div><p>
+   If this attribute mapping is insufficient, implement the
+   <code class="literal">org.forgerock.openam.sts.tokengeneration.saml2.statements.AttributeMapper</code>
+   interface and specify the name of the custom <code class="literal">AttributeMapper</code> in the
+   configuration corresponding to your published REST STS instance.
+  </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="rest-sts-token-transformations"></a>8.3.&nbsp;Token Transformations</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-rest-sts.html#rest-sts-auth">8.3.1. Authentication</a></span></dt><dt><span class="section"><a href="chap-rest-sts.html#transform-oidc">8.3.2. Transforming OpenID Connect Tokens</a></span></dt><dt><span class="section"><a href="chap-rest-sts.html#transform-x509-cert">8.3.3. Transforming X509 Certificate</a></span></dt><dt><span class="section"><a href="chap-rest-sts.html#rest-sts-auth-x509">8.3.4. Authentication x509</a></span></dt><dt><span class="section"><a href="chap-rest-sts.html#rest-sts-auth-username">8.3.5. Authentication: Username</a></span></dt><dt><span class="section"><a href="chap-rest-sts.html#rest-sts-auth-oidc">8.3.6. Authentication: OpenID Connect</a></span></dt></dl></div><p>
+   You can configure each REST STS instance with a distinct set of token
+   transformations prgrammatically using the Client SDK or using the Admin Console.
+   You select the transformations under
+   the Supported Token Transforms under General Configuration, where
+   you select a token transformation from a supported list.
+  </p><p>
+   Each transformation has the format:
+  </p><pre class="brush: plain;">
+X-&gt;Y;(don&#8217;t) invalidate interim OpenAM session
+  where
+    "X" refers to the input token type
+    "Y" refers to the output token type (currently limited to SAML 2.0)
+    "(don't) invalidate interim OpenAM session" specifies whether the interim
+     OpenAM session, created during the authentication of the presented input token
+     type, should be invalidated following the creation of the output token type.
+     This setting allows a REST STS instance to support token transformations
+     with or without a residual OpenAM session remaining after the token
+     transformation.
+  </pre><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-sts-auth"></a>8.3.1.&nbsp;Authentication</h3></div></div></div><p>
+   The input tokens in REST STS token transformations are authenticated via
+   OpenAM&#8217;s restful authentication context. This context needs to be configured
+   for every input token type in the set of token transformations. For example,
+   if you select the transformation <code class="literal">OPENIDCONNECT-&gt;SAML2</code>,
+   the STS instance must be configured with information specifying which elements
+   of the OpenAM restful authentication context needs to be consumed to validate
+   the <code class="literal">OPENIDCONNECT</code> token.
+  </p><p>
+   The elements of the configuration tuple are separated by '|'.
+  </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>The first element
+     is the input token type in the token transform:
+     i.e. X509, OPENIDCONNECT, USERNAME, or OPENAM.</p></li><li class="listitem"><p>The second element is the
+     authentication target, either <code class="literal">module</code> or
+     <code class="literal">service</code>.</p></li><li class="listitem"><p>The third element
+     is the name of the authentication module or service.</p></li><li class="listitem"><p>The fourth
+     element (optional) provides the STS authentication context information about the
+     to-be-consumed authentication context.</p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="transform-oidc"></a>8.3.2.&nbsp;Transforming OpenID Connect Tokens</h3></div></div></div><p>
+   When transforming OpenID Connect ID
+   tokens, the OpenID Connect authentication module must be consumed, and thus a
+   deployed REST STS instance must be configured with the name of the header/cookie
+   element where the OpenID Connect ID token is placed.
+   For example, the following Admin Console string defines these
+   configurations:
+  </p><div class="screen"><pre>
+OPENIDCONNECT|module|oidc|oidc_id_token_auth_target_header_key=oidc_id_token.
+  </pre></div><p>
+   In this case, <code class="literal">oidc</code> is the name of the OpenID Connect
+   authentication module created to authenticate OpenID Connect tokens.
+   REST STS looks for the name of the header key in the string
+   <code class="literal">oidc_id_token_auth_target_header_key</code>, which is the
+   header where the <code class="literal">oidc</code> module expects to find the OpenID
+   Connect ID Token.
+  </p><div class="note"><h3 class="title">Note</h3><p>
+    You can create these configurations in a more intuitive,
+    fluent way by using the builders supporting the programmatic publishing of REST STS instances.
+   </p></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="transform-x509-cert"></a>8.3.3.&nbsp;Transforming X509 Certificate</h3></div></div></div><p>
+   When transforming a X509 Certificate, the Certificate module must be consumed,
+   and the published REST STS instance must be configured with the name of the
+   Certificate module (or the service containing the module), and the header name
+   configured for the Certificate module corresponding to where the Certificate
+   module can expect to find the to-be-validated Certificate.
+  </p><p>
+   The following
+   Admin Console string would define these configurations (note that these configurations
+   can be created in a more intuitive, fluent way using the builders supporting
+   the programmatic publishing of REST STS instances):
+  </p><div class="screen"><pre>
+X509|module|cert_module|x509_token_token_auth_target_header_key=client_cert
+  </pre></div><p>
+   In this case <code class="literal">cert_module</code> is the name of the Certificate module, and
+   <code class="literal">client_cert</code> is the header name where Certificate module
+   has been configured to find the client's Certificate.
+   REST STS looks for the name of the header key in the string
+   <code class="literal">x509_token_token_auth_target_header_keyy</code>, which is the
+   header x509 ID Token.
+  </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-sts-auth-x509"></a>8.3.4.&nbsp;Authentication x509</h3></div></div></div><p>
+   An x509 Certificate is a representation of subject identity only
+   when ownership of the associated private key is demonstrated, as performed by
+   the TLS-handshake, and described in the AsymmetricBinding examples 2.2.1 and 2.2.2 in
+   <a class="link" href="http://docs.oasis-open.org/ws-sx/security-policy/examples/ws-sp-usecases-examples.html" target="_blank">WS-SecurityPolicy</a>.
+  </p><p>
+   Because the REST STS is not protected by
+   WS-SecurityPolicy bindings (this is the domain of the SOAP STS), a REST STS
+   token transformation, which defines an x509 Certificate as an input token, can
+   only be consumed by two-way TLS. Here the client must present their certificate,
+   with the TLS handshake certifying that the private key corresponding to the
+   presented certificate is in the possession of the certificate presenter.
+   In such a deployment, REST STS obtains the client's certificate from
+   the <code class="literal">javax.servlet.request.X509Certificate</code> attribute in the
+   <code class="literal">ServletRequest</code>.
+  </p><p>
+   However, if OpenAM is deployed in a TLS-offloaded context,
+   REST STS obtains the client's certificate from the
+   header key defined in the published REST STS instance.
+   The header key is specified in the
+   "Client Certificate Header Key" under the "Deployment Configuration" section
+   of a REST STS instance in the Admin Console, or in the
+   <code class="literal">org.forgerock.openam.sts.rest.config.user.
+   RestDeploymentConfig.RestDeploymentConfigBuilder#offloadedTwoWayTLSHeaderKey</code> method.
+  </p><p>
+   If a header key referencing a client's certificate is defined, then only this
+   header is examined for the client's certificate. If this header is
+   undefined, only the <code class="literal">javax.servlet.request.X509Certificate</code>
+   ServletRequest attribute is examined.
+   Note that the token transformation definition specifying an
+   x509 input token does not actually encapsulate the
+   caller's certificate. This token state only triggers REST STS to
+   consult one of the two locations described above.
+  </p><p>
+   If the REST STS is configured to pull the client&#8217;s certificate out of a specified header, the
+   set of hosts trusted to set this header must also be specified. See the
+   "Trusted Remote Hosts" list in the "Deployment Configuration" section of the
+   Admin Console or the <code class="literal">org.forgerock.openam.sts.rest.config.user.RestDeploymentConfig.
+   RestDeploymentConfigBuilder#tlsOffloadEngineHostIpAddrs</code> method.
+  </p><div class="note"><h3 class="title">Note</h3><p>
+    An entry of &#8216;any&#8217; in this list causes any caller to be trusted.
+   </p></div><p>
+   Authentication of the client-presented certificate is performed by the
+   Certificate module. This module optionally performs certificate revocation list
+   (CRL) or Online Certificate Status Protocol (OCSP) checking,
+   and optionally checks to see that the specified certificate is in a LDAP
+   datastore.
+  </p><p>
+   The Certificate module also expects to reference the
+   caller's certificate in a specified header value, and that the IP addresses
+   of hosts trusted to provide this information must also be specified. See the
+   "Trusted Remote Hosts" and the "Http Header Name for Client Certificate" in
+   the Certificate module configuration at
+   <a href="../../admin-guide/index/chap-auth-services.html#cert-module-conf-hints" class="link">Hints for the
+   Certificate Authentication module</a>. This header must be
+   specified in the Authentication Target Mapping definition for X509 tokens for
+   the published REST STS instance, so that the REST STS instance can know which
+   header should reference the client&#8217;s x509 certificate when consuming the
+   Certificate module.
+  </p><p>
+   For example, given the following authentication target mapping:
+  </p><pre class="brush: plain;">
+X509|module|cert_module|x509_token_token_auth_target_header_key=client_cert
+  </pre><p>
+   X509 specifies that for X509 input tokens, a module named <code class="literal">cert_module</code> should
+   be invoked, and that this module expects to find the client&#8217;s X509
+   Certificate in a header named <code class="literal">client_cert</code>.
+   Thus the string <code class="literal">client_cert</code> must
+   appear in the HTTP Header Name for Client Certificate configuration field for
+   the Certificate module named <code class="literal">cert_module</code>.
+   Also, the IP address of the
+   OpenAM deployment must be added to the Trusted Remote Hosts configuration of
+   the targeted Certificate module.
+  </p><p>
+   For more information on
+   mapping x509 Certificate state to a subject in the OpenAM datastore, see
+   <a href="../../admin-guide/index/chap-auth-services.html#cert-module-conf-hints" class="link">Hints for the
+         Certificate Authentication module</a>.
+  </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-sts-auth-username"></a>8.3.5.&nbsp;Authentication: Username</h3></div></div></div><p>
+   The Username token passed to the REST STS represents the &lt;username, password&gt;
+   combination in clear text. This means that REST STS instances that support
+   Username Token-based token transformations should only be deployed on TLS.
+  </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-sts-auth-oidc"></a>8.3.6.&nbsp;Authentication: OpenID Connect</h3></div></div></div><p>
+   REST STS instances must be configured to consume an appropriately-configured
+   OpenID Connect authentication module for OpenID Connect-based token transformations.
+   The OIDC authentication module expects to reference the <code class="literal">id</code>
+   token in a header value.
+   Thus, the <code class="literal">AuthTargetMapping</code> of the published REST STS
+   instance must be configured with the name of the header configured for the
+   referenced OIDC authentication module.
+  </p><p>
+   The OIDC authentication module must be configured with
+   either the discovery URL, the jwk URL or the client secret corresponding to the
+   issuer, and the issuer name must be set (for OpenAM issued OIDC tokens, the
+   issuer name corresponds to the OpenAM deployment url).
+  </p><p>
+   The OIDC authentication
+   module also checks the authorized party (<code class="literal">azp</code>) and
+   audience (<code class="literal">aud</code>) claims.
+   The OIDC token <code class="literal">aud</code> claim must match that configured for
+   the OIDC authentication module (that is, set to the OAuth2 client's ID).
+   If the OIDC token has a
+   <code class="literal">azp</code> claim, it must match that configured for the OIDC
+   authentication module (again, set to the OAuth2 client ID).
+   You must configure the attribute mappings, so that jwk claim state is mapped
+   to an entry in the OpenAM user data store.
+  </p><p>
+   For additional details on the OpenID Connect authentication
+   module, <a href="../../admin-guide/index/chap-auth-services.html#oidc-module-conf-hints" class="link">
+   Hints for the OpenID Connect Module</a>.
+  </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="rest-sts-publish-service"></a>8.4.&nbsp;The Publish Service</h2></div></div></div><p>
+   REST STS instances configured via the Admin Console or programmatically, are
+   published via the REST STS publish service, exposed at
+   <code class="literal">&lt;server-root&gt;/rest-sts-publish/publish</code>.
+   This restful interface can only
+   be consumed by administrators.
+  </p><p>
+   Performing a GET on the <code class="literal">/rest-sts-publish/publish</code> URL
+   returns the json representation of the configuration state corresponding to
+   all published REST STS instances. Only administrators can perform this GET
+   operation, that is, admin users with the iPDP cookie can receive the return
+   state.
+  </p><p>
+   A particular REST STS instance is identified by:
+  </p><pre class="brush: plain;">
+Realm Name/{deployment_url_element},
+  where
+    Realm Name is the realm in which the REST STS instance is published.
+    {deployment_url_element} is the "Deployment Url Element" set in the Admin
+      Console or via the
+      RestSTSDeploymentConfig.RestDeploymentConfigBuilder#uriElement(String uriElement
+      method.
+  </pre><p>
+   All published REST STS instances are exposed relative to
+   <code class="literal">/rest-sts</code>, so if OpenAM is exposed at
+   <code class="literal">https://host.com:443/openam</code>, and the REST STS instance is published
+   in a realm called "accounting" with a Deployment URl element of
+   <code class="literal">accountingsts</code>, then the URL would be:
+  </p><pre class="brush: plain;">
+https://host.com:443/openam/rest-sts/accounting/accountingsts
+  </pre><p>
+   A json representation of this instance&#8217;s configuration state could be examined
+   by a GET method to:
+  </p><pre class="brush: plain;">
+https://host.com:443/openam/rest-sts-publish/publish/accounting/accountingsts
+  </pre><p>
+   This instance could be deleted by performing a DELETE on
+   <code class="literal">https://host.com:443/openam/rest-sts-publish/publish/accounting/accountingsts</code>.
+  </p><div class="note"><h3 class="title">Note</h3><p>
+    The REST STS Publish and Consume examples are contained within their own maven
+    module (<code class="literal">openam-client-sts</code>), and the contents of this module
+    are added to the <code class="literal">client-sdk</code>. To get the examples to work,
+    there are a number of maven dependencies, specified in the
+    <code class="literal">META-INF/maven/org.forgerock.openam/openam/client-sts/pom.xml</code>
+    file in the <code class="literal">client-sdk.jar</code>. You should review these
+    dependencies prior to setting up the examples.
+   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="rest-sts-code-examples"></a>8.5.&nbsp;REST STS Code Examples</h2></div></div></div><p>
+   The code example shows how to programmatically publish REST STS instances.
+  </p><pre class="brush: plain;">
+package org.forgerock.openam.sts.rest;
+import org.forgerock.json.fluent.JsonException;
+import org.forgerock.json.fluent.JsonValue;
+import org.forgerock.openam.shared.sts.SharedSTSConstants;
+import org.forgerock.openam.sts.AMSTSConstants;
+import org.forgerock.openam.sts.config.user.AuthTargetMapping;
+import org.forgerock.openam.sts.TokenType;
+import org.forgerock.openam.sts.config.user.SAML2Config;
+import org.forgerock.openam.sts.rest.config.user.RestDeploymentConfig;
+import org.forgerock.openam.sts.rest.config.user.RestSTSInstanceConfig;
+import org.forgerock.openam.sts.token.UrlConstituentCatenatorImpl;
+import org.forgerock.openam.utils.IOUtils;
+import org.forgerock.openam.utils.JsonValueBuilder;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import static org.forgerock.json.fluent.JsonValue.field;
+import static org.forgerock.json.fluent.JsonValue.json;
+import static org.forgerock.json.fluent.JsonValue.object;
+
+/**
+ * This class provides an example of how to programatically publish REST STS
+ * instances. It does not provide an exhaustive enumeration of configuration options,
+ * but rather provides an indication of how to consume the various classes used to
+ * build the configuration state corresponding to a published REST STS instance.
+ */
+
+public class RestSTSInstancePublisher {
+
+    private static final String COOKIE = "Cookie";
+    private static final String EQUALS = "=";
+    private final String publishEndpoint;
+    private final String spEntityId;
+    private final String idpEntityId;
+    private final String stsClientCertHeaderName;
+    private final String spACSEndpoint;
+    private final String adminSessionId;
+    private final String createAction;
+
+ /**
+  *
+  * @param publishEndpoint         The url of the publish service. For example,
+  *                                http://myhost.com:8080/openam/rest-sts-publish/publish
+  * @param spEntityId              The entity id of the Service Provider consuming the
+  *                                created SAML2 assertions
+  * @param idpEntityId             The entity id of the Identity Provider for which the
+  *                                REST STS instance is issuing assertions
+  * @param stsClientCertHeaderName If x509-&gt;SAML2 token transformations are being
+  *                                provided in a tls-offloaded context, this value
+  *                                specifies the header name that these offload
+  *                                engines places the client's certificate.
+  *                                Can be null.
+  * @param spACSEndpoint           The url of the Service Provider's Assertion Consumer
+  *                                Service. Required for Bearer assertions to conform to the
+  *                                web-sso profile.
+  * @param adminSessionId          The valid session id (iPlanetDirectoryPro cookie value)
+  *                                for an OpenAM administrator. Required as only admins
+  *                                can consume the REST STS publish service.
+  * @param createAction            Used to append onto the end of the publishEndpoint string,
+  *                                to specify a publish action. The value is ?_action=create
+  */
+
+  public RestSTSInstancePublisher(String publishEndpoint, String spEntityId,
+                                  String idpEntityId, String stsClientCertHeaderName,
+                                  String spACSEndpoint, String adminSessionId,
+                                  String createAction) {
+        this.publishEndpoint = publishEndpoint;
+        this.spEntityId = spEntityId;
+        this.idpEntityId = idpEntityId;
+        this.stsClientCertHeaderName = stsClientCertHeaderName;
+        this.spACSEndpoint = spACSEndpoint;
+        this.adminSessionId = adminSessionId;
+        this.createAction = createAction;
+  }
+
+  /**
+  An example of the json posted as part of this method invocation:
+  {
+     "invocation_context": "invocation_context_client_sdk",
+     "instance_state": {
+        "issuer-name": "http://macbook.dirk.internal.forgerock.com:8080/openam",
+        "saml2-config": {
+           "saml2-name-id-format": "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent",
+           "saml2-token-lifetime-seconds": "600",
+           "saml2-custom-conditions-provider-class-name": null,
+           "saml2-custom-subject-provider-class-name": null,
+           "saml2-custom-attribute-statements-provider-class-name": null,
+           "saml2-custom-attribute-mapper-class-name": null,
+           "saml2-custom-authn-context-mapper-class-name": null,
+           "saml2-custom-authentication-statements-provider-class-name": null,
+           "saml2-custom-authz-decision-statements-provider-class-name": null,
+           "saml2-sign-assertion": "true",
+           "saml2-encrypt-assertion": "true",
+           "saml2-encrypt-attributes": "false",
+           "saml2-encrypt-nameid": "false",
+           "saml2-encryption-algorithm": "http://www.w3.org/2001/04/xmlenc#aes128-cbc",
+           "saml2-encryption-algorithm-strength": "128",
+           "saml2-attribute-map": {
+              "email": "mail"
+           },
+           "saml2-keystore-filename": "/Users/DirkHogan/openam/openam/keystore.jks",
+           "saml2-keystore-password": "changeit",
+           "saml2-sp-acs-url": "http://macbook.dirk.internal.forgerock.com:18080/
+                                openam/Consumer/metaAlias/sp",
+           "saml2-sp-entity-id": "http://macbook.dirk.internal.forgerock.com:18080/
+                                  openam",
+           "saml2-signature-key-alias": "test",
+           "saml2-signature-key-password": "changeit",
+           "saml2-encryption-key-alias": "test"
+        },
+        "deployment-config": {
+           "deployment-url-element": "inst458259670",
+           "deployment-realm": "/",
+           "deployment-auth-target-mappings": {
+              "[Ljava.security.cert.X509Certificate;": {
+                 "mapping-auth-index-type": "module",
+                 "mapping-auth-index-value": "cert_module",
+                 "mapping-context": {
+                    "x509_token_token_auth_target_header_key": "client_cert"
+              }
+           },
+           "org.forgerock.openam.sts.token.model.OpenIdConnectIdToken": {
+              "mapping-auth-index-type": "module",
+              "mapping-auth-index-value": "oidc", "mapping-context": {
+                 "oidc_id_token_auth_target_header_key": "oidc_id_token"
+              }
+           },
+           "org.apache.ws.security.message.token.UsernameToken": {
+              "mapping-auth-index-type": "service",
+              "mapping-auth-index-value": "ldapService"
+           }
+        },
+        "deployment-offloaded-two-way-tls-header-key": "client_cert",
+        "deployment-tls-offload-engine-hosts": [
+           "192.168.1.2",
+           "127.0.0.1"
+        ]
+     },
+     "supported-token-transforms": [
+        {
+           "inputTokenType": "OPENIDCONNECT",
+           "outputTokenType": "SAML2",
+           "invalidateInterimOpenAMSession": true
+        },
+        {
+           "inputTokenType": "USERNAME",
+           "outputTokenType": "SAML2",
+           "invalidateInterimOpenAMSession": true
+        },
+        {
+           "inputTokenType": "OPENAM",
+           "outputTokenType": "SAML2",
+           "invalidateInterimOpenAMSession": false
+        },
+        {
+           "inputTokenType": "X509",
+           "outputTokenType": "SAML2",
+           "invalidateInterimOpenAMSession": true
+        }
+     ]
+   }
+  }
+  */
+
+  public String publishInstance(final String urlElement, String realm) throws Exception {
+      RestSTSInstanceConfig instanceConfig = createRestSTSInstanceConfig(urlElement, realm);
+      String jsonString = buildPublishInvocationJsonValue(instanceConfig).toString();
+      String response = invokeRestSTSInstancePublish(jsonString);
+      return parseInstanceUrl(response);
+  }
+
+  /**
+    The fullSTSId should be the string returned by publishInstance.
+  */
+
+  public String removeInstance(final String fullSTSId) throws Exception {
+      return invokeRestSTSInstanceDeletion(getPublishRemoveInstanceUri(fullSTSId));
+  }
+
+  public List&lt;RestSTSInstanceConfig&gt; getPublishedInstances() throws Exception {
+      String response = getPublishedRestSTSInstancesConfigContent(publishEndpoint);
+      List&lt;RestSTSInstanceConfig&gt; instanceConfigs = new ArrayList&lt;RestSTSInstanceConfig&gt;();
+      JsonValue json;
+      try {
+          json = JsonValueBuilder.toJsonValue(response);
+      } catch (JsonException e) {
+          System.out.println("JsonException parsing response: " + response + "\n Exception: "
+           + e);
+          throw e;
+      }
+      for (String key : json.asMap().keySet()) {
+          JsonValue value = json.get(key);
+          JsonValue jsonInstanceConfig = null;
+          try {
+              jsonInstanceConfig = JsonValueBuilder.toJsonValue(value.asString());
+          } catch (JsonException e) {
+              System.out.println("JsonException caught parsing json for instance.
+               The value: " + value.asString() + "\n Exception: " + e);
+          }
+          RestSTSInstanceConfig instanceConfig
+           = RestSTSInstanceConfig.fromJson(jsonInstanceConfig);
+          instanceConfigs.add(instanceConfig);
+      }
+      return instanceConfigs;
+  }
+
+  private String getPublishedRestSTSInstancesConfigContent(String publishEndpoint)
+      throws Exception {
+      HttpURLConnection connection
+       = (HttpURLConnection)new URL(publishEndpoint).openConnection();
+      connection.setRequestMethod("GET");
+      connection.connect();
+      return readInputStream(connection.getInputStream());
+  }
+
+  private String invokeRestSTSInstancePublish(String invocationPayload)
+      throws IOException {
+      HttpURLConnection connection
+       = (HttpURLConnection)getPublishAddInstanceUri().openConnection();
+      connection.setDoOutput(true);
+      connection.setRequestMethod("POST");
+      connection.setRequestProperty(SharedSTSConstants.CONTENT_TYPE,
+                                    SharedSTSConstants.APPLICATION_JSON);
+      connection.setRequestProperty(COOKIE, getAdminSessionTokenCookie());
+      OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+      writer.write(invocationPayload);
+      writer.close();
+
+      if (connection.getResponseCode() == HttpURLConnection.HTTP_CREATED) {
+          return getSuccessMessage(connection);
+      } else {
+          return getErrorMessage(connection);
+      }
+  }
+
+  private String invokeRestSTSInstanceDeletion(String deletionUrl)
+      throws IOException {
+      HttpURLConnection connection
+       = (HttpURLConnection)new URL(deletionUrl).openConnection();
+      connection.setDoOutput(true);
+      connection.setRequestMethod("DELETE");
+      connection.setRequestProperty(SharedSTSConstants.CONTENT_TYPE,
+                                    SharedSTSConstants.APPLICATION_JSON);
+      connection.setRequestProperty(COOKIE, getAdminSessionTokenCookie());
+      connection.connect();
+
+      if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+          return getSuccessMessage(connection);
+      } else {
+          return getErrorMessage(connection);
+      }
+  }
+
+  private String getSuccessMessage(HttpURLConnection connection) throws IOException {
+      return readInputStream(connection.getInputStream());
+  }
+
+  private String getErrorMessage(HttpURLConnection connection) throws IOException {
+      if (connection.getErrorStream() != null) {
+          return readInputStream(connection.getErrorStream());
+      } else {
+          return readInputStream(connection.getInputStream());
+      }
+  }
+
+  private String getAdminSessionTokenCookie() {
+      return "iPlanetDirectoryPro" + EQUALS + adminSessionId;
+  }
+
+  private String readInputStream(InputStream inputStream) throws IOException {
+      if (inputStream == null) {
+          return "Empty error stream";
+      } else {
+          return IOUtils.readStream(inputStream);
+      }
+  }
+
+  private String parseInstanceUrl(String publishResponse) throws Exception {
+      Object responseContent;
+      try {
+          org.codehaus.jackson.JsonParser parser =
+           new org.codehaus.jackson.map.ObjectMapper()
+               .getJsonFactory()
+               .createJsonParser(publishResponse);
+          responseContent = parser.readValueAs(Object.class);
+      } catch (IOException e) {
+          throw new Exception("Could not map the response from the PublishService
+          to a json object. The response: " + publishResponse + "; The exception: " + e);
+      }
+      return new JsonValue(responseContent).get("url_element").asString();
+  }
+
+  private URL getPublishAddInstanceUri() throws MalformedURLException {
+      return new URL(publishEndpoint + createAction);
+  }
+
+  private String getPublishRemoveInstanceUri(String stsId) throws URISyntaxException {
+      return new UrlConstituentCatenatorImpl().catenateUrlConstituents(publishEndpoint,
+                                                                       stsId);
+  }
+
+  private JsonValue buildPublishInvocationJsonValue(RestSTSInstanceConfig instanceConfig) {
+     return json(object(field(AMSTSConstants.REST_STS_PUBLISH_INVOCATION_CONTEXT,
+                              AMSTSConstants.REST_STS_PUBLISH_INVOCATION_CONTEXT_CLIENT_SDK),
+                        field(AMSTSConstants.REST_STS_PUBLISH_INSTANCE_STATE,
+                              instanceConfig.toJson())));
+  }
+
+  /**
+   * This method creates the RestSTSInstanceConfig instance which determines the
+   * nature of the published rest sts instance. Note that this method does not
+   * take parameters corresponding to all options. It is there only to demonstrate
+   * some of the options which could be set.
+   * @param urlElement  The deployment url of the REST STS instance.
+   * @param realm       The realm in which the rests-sts instance is deployed.
+   *                    Note that the url of the published REST STS instance is
+   *                    composed of the OpenAM deploymentUrl + realm + /urlElement.
+   * @return            A RestSTSInstanceConfig configuring the published REST STS instance
+   * @throws Exception  If something goes wrong
+   */
+
+   private RestSTSInstanceConfig createRestSTSInstanceConfig(String urlElement,
+                                                             String realm) throws Exception {
+
+   /**
+       If you want to target a specific module or service for a particular token
+       type, add it via the addMapping call below.
+       See org.forgerock.openam.forgerockrest.authn.core.AuthIndexType for the
+       list of valid authIndexType values (the second parameter in addMapping).
+       The third parameter is simply the name of the specified module, service, etc.
+       If you want to target the default service, don't add a mapping, or add a
+       mapping corresponding to the default service, as below.
+   */
+   /**
+       Build the context necessary for the OIDC token validation. The value in
+       the map must correspond to the header which the OIDC module consults
+       to obtain the oidc id token.
+   */
+
+   Map&lt;String, String&gt; oidcContext = new HashMap&lt;String, String&gt;();
+   oidcContext.put(AMSTSConstants.OPEN_ID_CONNECT_ID_TOKEN_AUTH_TARGET_HEADER_KEY,
+                   "oidc_id_token");
+   /**
+       Build the context necessary for Cert validation. The value in the map must
+       correspond to the header which the Cert module consults to obtain the
+       client's Certificate.
+   */
+
+   Map&lt;String, String&gt; certContext = new HashMap&lt;String, String&gt;();
+   certContext.put(AMSTSConstants.X509_TOKEN_AUTH_TARGET_HEADER_KEY, "client_cert");
+   AuthTargetMapping mapping = AuthTargetMapping.builder()
+       .addMapping(TokenType.USERNAME, "service", "ldapService")
+       .addMapping(TokenType.OPENIDCONNECT, "module", "oidc", oidcContext)
+       .addMapping(TokenType.X509, "module", "cert_module", certContext)
+       .build();
+   RestDeploymentConfig.RestDeploymentConfigBuilder deploymentConfigBuilder =
+    RestDeploymentConfig.builder()
+       .uriElement(urlElement)
+       .authTargetMapping(mapping)
+       .realm(realm);
+
+   /**
+   If the clientCertHeader field is specified, this implies that the client cert
+   for x509 transformations should be specified in a header field. If this is the
+   case, then the set of IP addrs corresponding to the TLS offload engines must
+   also be specified. Simply specify the ip addr of this client, as it is
+   the one invoking token transformation functionality. If all hosts should be
+   trusted, add 'any' to the list.
+   */
+   if (stsClientCertHeaderName != null) {
+       Set&lt;String&gt; offloadHostsSet = new HashSet&lt;String&gt;();
+       offloadHostsSet.add(InetAddress.getLocalHost().getHostAddress());
+       offloadHostsSet.add("127.0.0.1");
+       deploymentConfigBuilder
+           .offloadedTwoWayTLSHeaderKey(stsClientCertHeaderName)
+           .tlsOffloadEngineHostIpAddrs(offloadHostsSet);
+   }
+   RestDeploymentConfig deploymentConfig = deploymentConfigBuilder.build();
+   SAML2Config saml2Config;
+   try {
+       Map&lt;String, String&gt; attributeMapping = new HashMap&lt;String, String&gt;();
+       attributeMapping.put("email", "mail");
+       saml2Config =
+           SAML2Config.builder()
+             .keystoreFile("/Users/DirkHogan/openam/openam/keystore.jks")  //Mac
+           //.keystoreFile("/home/dhogan/openam/openam/keystore.jks") //linux
+             .keystorePassword("changeit".getBytes(AMSTSConstants.UTF_8_CHARSET_ID))
+             .encryptionKeyAlias("test")
+             .signatureKeyAlias("test")
+             .signatureKeyPassword("changeit".getBytes(AMSTSConstants.UTF_8_CHARSET_ID))
+             .signAssertion(true)
+             .encryptAssertion(true)
+             .encryptionAlgorithm("http://www.w3.org/2001/04/xmlenc#aes128-cbc")
+             .encryptionAlgorithmStrength(128)
+             .attributeMap(attributeMapping)
+             .nameIdFormat("urn:oasis:names:tc:SAML:2.0:nameid-format:persistent")
+             .spEntityId(spEntityId)
+             .spAcsUrl(spACSEndpoint)
+             //custom statement providers could also be specified.
+             .build();
+   } catch (UnsupportedEncodingException e) {
+       throw new Exception(e);
+   }
+   return RestSTSInstanceConfig.builder()
+       .deploymentConfig(deploymentConfig)
+       .saml2Config(saml2Config)
+       .issuerName(idpEntityId)
+       .addSupportedTokenTranslation(
+           TokenType.USERNAME,
+           TokenType.SAML2,
+           AMSTSConstants.INVALIDATE_INTERIM_OPENAM_SESSION)
+       .addSupportedTokenTranslation(
+           TokenType.OPENAM,
+           TokenType.SAML2,
+           !AMSTSConstants.INVALIDATE_INTERIM_OPENAM_SESSION)
+       .addSupportedTokenTranslation(
+           TokenType.OPENIDCONNECT,
+           TokenType.SAML2,
+           AMSTSConstants.INVALIDATE_INTERIM_OPENAM_SESSION)
+       .addSupportedTokenTranslation(
+           TokenType.X509,
+           TokenType.SAML2,
+           AMSTSConstants.INVALIDATE_INTERIM_OPENAM_SESSION)
+       .build();
+   }
+}
+  </pre><p>
+   The following code example shows how to consume REST STS token transformations.
+  </p><pre class="brush: plain;">
+package org.forgerock.openam.sts.rest;
+import org.forgerock.json.fluent.JsonValue;
+import org.forgerock.openam.shared.sts.SharedSTSConstants;
+import org.forgerock.openam.sts.AMSTSConstants;
+import org.forgerock.openam.sts.service.invocation.OpenAMTokenState;
+import org.forgerock.openam.sts.service.invocation.OpenIdConnectTokenState;
+import org.forgerock.openam.sts.service.invocation.ProofTokenState;
+import org.forgerock.openam.sts.service.invocation.RestSTSServiceInvocationState;
+import org.forgerock.openam.sts.service.invocation.SAML2TokenState;
+import org.forgerock.openam.sts.service.invocation.UsernameTokenState;
+import org.forgerock.openam.sts.service.invocation.X509TokenState;
+import org.forgerock.openam.sts.token.SAML2SubjectConfirmation;
+import org.forgerock.openam.utils.IOUtils;
+import org.forgerock.util.encode.Base64;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
+
+/**
+ * This class demonstrates consumption of REST STS token transformations.
+ */
+
+public class RestSTSConsumer {
+    private static final boolean INSERT_X509_CERT_IN_HEADER = true;
+    private final URL restSTSInstanceUrl;
+    private final String stsClientCertHeaderName;
+    /**
+     *
+     * @param restSTSInstanceTranslateUrl The full url of the REST STS instance,
+     *        with the translate action specified. For example, for a REST STS
+     *        instance with a deployment url of instanceId, published to the root
+     *        realm, the url would be:
+     *        http://amhost.com:8080/openam/rest-sts/instanceId?_action=translate
+     *        A REST STS instance published to realm fred with a deployment
+     *        url of instanceId2, the url would be:
+     *        http://amhost.com:8080/openam/rest-sts/fred/instanceId2?_action=translate
+     *        A REST STS instance published to realm bobo, a subrealm of fred
+     *        with a deployment url of instanceId3, the url would be:
+     *        http://amhost.com:8080/openam/rest-sts/fred/bobo/instanceId3?_action=translate
+     * @param stsClientCertHeaderName The header name, configured for the REST STS instance,
+     *                                where this instance expects to find the client's cert.
+     *                                Necessary for x509-&gt;SAML2 token transformations
+     * @throws MalformedURLException  In case the specified restSTSInstanceTranslateUrl
+     *                                is mal-formed.
+     */
+   public RestSTSConsumer(String restSTSInstanceTranslateUrl,
+                          String stsClientCertHeaderName) throws MalformedURLException {
+       this.stsClientCertHeaderName = stsClientCertHeaderName;
+       restSTSInstanceUrl = new URL(restSTSInstanceTranslateUrl);
+       System.out.println("RestSTSConsumer consumes the REST STS at url: "
+        + restSTSInstanceUrl.toString());
+   }
+   /**
+   * Invokes a UsernameToken-&gt;SAML2 token transformation.
+   *
+   * Sample json posted at the REST STS instance in this method:
+   * {
+   *    "input_token_state": {
+   *       "token_type": "USERNAME",
+   *       "username": "user",
+   *       "password": "userpassword"
+   *    },
+   *    "output_token_state": {
+   *       "token_type": "SAML2",
+   *       "subject_confirmation": "BEARER"
+   *    }
+   * }
+   *
+   * @param username The username in the UsernameToken
+   * @param password The password in the UsernameToken
+   * @param subjectConfirmation The SAML2 SubjectConfirmation.
+   *                            For HoK, the certificate in the file /cert.jks
+   *                            on the classpath is included.
+   * @return The string representation of the SAML2 Assertion
+   * @throws Exception If transformation fails
+   */
+
+   public String transformUntToSAML2(String username, String password,
+                                     SAML2SubjectConfirmation subjectConfirmation)
+                                     throws Exception {
+       UsernameTokenState untState = UsernameTokenState.builder()
+           .username(username.getBytes(AMSTSConstants.UTF_8_CHARSET_ID))
+           .password(password.getBytes(AMSTSConstants.UTF_8_CHARSET_ID))
+           .build();
+   RestSTSServiceInvocationState invocationState = RestSTSServiceInvocationState.builder()
+       .inputTokenState(untState.toJson())
+       .outputTokenState(buildSAML2TokenState(subjectConfirmation).toJson())
+       .build();
+   final String response = invokeTokenTranslation(invocationState.toJson().toString(),
+                                                  !INSERT_X509_CERT_IN_HEADER);
+   return parseTokenResponse(response);
+   }
+
+   /**
+   * Invokes a OpenAMToken-&gt;SAML2 token transformation.
+   *
+   * Sample json posted at the REST STS instance in this method:
+   * {
+   *    "input_token_state": {
+   *       "token_type": "OPENAM",
+   *       "session_id": "AQI...NDI4NTUxMTQ3NDY5Ng..*"
+   *    },
+   *    "output_token_state": {
+   *       "token_type": "SAML2",
+   *       "subject_confirmation": "BEARER"
+   *    }
+   * }
+   *
+   * @param sessionId the OpenAM session ID. Corresponds to the iPlanetDirectoryPro
+   *                                         (or equivalent) cookie.
+   * @param subjectConfirmation The SAML2 SubjectConfirmation. For HoK, the certificate
+   *                            in the file /cert.jks on the classpath is included.
+   * @return The string representation of the SAML2 Assertion
+   * @throws Exception If transformation fails
+   */
+
+   public String transformOpenAMToSAML2(String sessionId,
+                                        SAML2SubjectConfirmation subjectConfirmation)
+                                        throws Exception {
+       OpenAMTokenState sessionState = OpenAMTokenState.builder()
+           .sessionId(sessionId)
+           .build();
+       RestSTSServiceInvocationState invocationState = RestSTSServiceInvocationState
+           .builder()
+           .inputTokenState(sessionState.toJson())
+           .outputTokenState(buildSAML2TokenState(subjectConfirmation).toJson())
+           .build();
+   final String response = invokeTokenTranslation(invocationState.toJson().toString(),
+                                                  !INSERT_X509_CERT_IN_HEADER);
+   return parseTokenResponse(response);
+   }
+
+   /**
+   * Invokes a OIDCToken-&gt;SAML2 token transformation
+   * Sample json posted at the REST STS instance in this method (HoK SubjectConfirmation,
+   * with token elements truncated):
+   * {
+   *    "input_token_state": {
+   *       "token_type": "OPENIDCONNECT",
+   *       "oidc_id_token": "eyAiYWxQ.euTNnNDExNTkyMjEyIH0.kuNlKwyvZJqaC8EYpDyPJMiEcII"
+   *    },
+   *    "output_token_state": {
+   *       "token_type": "SAML2",
+   *       "subject_confirmation": "HOLDER_OF_KEY",
+   *       "proof_token_state": {
+   *        "base64EncodedCertificate": "MIMbFAAOBjQAwgYkCgYEArSQc/U75GB2AtKhbGS5pimrW0Y0Q=="
+   *       }
+   *    }
+   * }
+   * @param oidcTokenValue The OpenIdConnect ID token. Note that the targeted
+   *                       REST STS instance has to be deployed with a
+   *                       AuthTargetMapping which references an instance of the
+   *                       OIDC module with configuration state necessary to
+   *                       validate an OIDC token from a specific issuer.
+   * @param subjectConfirmation The SAML2 SubjectConfirmation. For HoK, the
+   *                            certificate in the file /cert.jks on the
+   *                            classpath is included.
+   * @return The string representation of the SAML2 Assertion
+   * @throws Exception If transformation fails
+   */
+   public String transformOpenIdConnectToSAML2(SAML2SubjectConfirmation subjectConfirmation,
+                                               String oidcTokenValue)
+                                               throws Exception {
+       OpenIdConnectTokenState tokenState = OpenIdConnectTokenState
+           .builder()
+           .tokenValue(oidcTokenValue)
+           .build();
+       RestSTSServiceInvocationState invocationState = RestSTSServiceInvocationState
+           .builder()
+           .inputTokenState(tokenState.toJson())
+           .outputTokenState(buildSAML2TokenState(subjectConfirmation).toJson())
+           .build();
+       final String response = invokeTokenTranslation(invocationState.toJson().toString(),
+                                                      !INSERT_X509_CERT_IN_HEADER);
+       return parseTokenResponse(response);
+   }
+
+   /**
+   * Invokes a X509-&gt;SAML2 token transformation
+   *
+   * Sample json posted at the REST STS instance in this method:
+   * {
+   *    "input_token_state": {
+   *       "token_type": "X509"
+   *    },
+   *    "output_token_state": {
+   *       "token_type": "SAML2",
+   *       "subject_confirmation": "SENDER_VOUCHES"
+   *    }
+   * }
+   *
+   * Note that the targeted REST STS module has to be deployed with an
+   * AuthTargetMapping that references an instance of the Certificate module
+   * configured to reference the client's certificate from the header specified
+   * in the AuthTargetMapping, and configured to trust the local OpenAM instance.
+   * In addition, the "Certificate Field Used to Access User Profile" should be set
+   * to subject CN. The CN used in the test cert deployed with OpenAM, and used
+   * in this integration test, is 'test', so a subject with a uid of "test" has
+   * to be created for account mapping to work. Likewise the published REST STS
+   * instance must also be configured to trust the host running this test, and must
+   * be configured to reference the client's certificate in the header specified
+   * by stsClientCertHeaderName (unless the REST STS is being consumed via
+   * two-way-TLS, in which case the stsClientCertHeaderName is irrelevant,
+   * as the REST STS references the client's certificate via the
+   * javax.servlet.request.X509Certificate ServletRequest attribute.
+   *
+   * @param subjectConfirmation The SAML2 SubjectConfirmation. For HoK, the certificate
+   *                            in the file /cert.jks on the classpath is included.
+   * @return The string representation of the SAML2 Assertion
+   * @throws Exception If transformation fails
+   */
+
+   public String transformX509ToSAML2(SAML2SubjectConfirmation subjectConfirmation)
+    throws Exception {
+       X509TokenState tokenState = new X509TokenState();
+       RestSTSServiceInvocationState invocationState = RestSTSServiceInvocationState
+           .builder()
+           .inputTokenState(tokenState.toJson())
+           .outputTokenState(buildSAML2TokenState(subjectConfirmation).toJson())
+           .build();
+       final String response = invokeTokenTranslation(invocationState.toJson().toString(),
+                                                      INSERT_X509_CERT_IN_HEADER);
+       return parseTokenResponse(response);
+   }
+   private SAML2TokenState buildSAML2TokenState(SAML2SubjectConfirmation subjectConfirmation)
+    throws Exception {
+       if (SAML2SubjectConfirmation.HOLDER_OF_KEY.equals(subjectConfirmation)) {
+           ProofTokenState proofTokenState = ProofTokenState
+               .builder()
+               .x509Certificate(getCertificate())
+               .build();
+           return SAML2TokenState.builder()
+               .saml2SubjectConfirmation(subjectConfirmation)
+               .proofTokenState(proofTokenState)
+               .build();
+       } else {
+           return SAML2TokenState.builder()
+               .saml2SubjectConfirmation(subjectConfirmation)
+               .build();
+       }
+   }
+
+   private String getEncodedCertificate() throws IOException, CertificateException {
+       return Base64.encode(getCertificate().getEncoded());
+   }
+
+   private X509Certificate getCertificate() throws IOException, CertificateException {
+       return (X509Certificate) CertificateFactory.getInstance("X.509")
+                                    .generateCertificate(getClass()
+                                    .getResourceAsStream("/cert.jks"));
+   }
+
+   private String invokeTokenTranslation(String invocationPayload,
+                                         boolean insertX509CertInHeader)
+    throws IOException, CertificateException {
+       HttpURLConnection connection = (HttpURLConnection)restSTSInstanceUrl.openConnection();
+       connection.setDoOutput(true);
+       connection.setRequestMethod("POST");
+       connection.setRequestProperty(SharedSTSConstants.CONTENT_TYPE,
+                                     SharedSTSConstants.APPLICATION_JSON);
+       if (insertX509CertInHeader) {
+           connection.setRequestProperty(stsClientCertHeaderName, getEncodedCertificate());
+       }
+       OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+       writer.write(invocationPayload);
+       writer.close();
+       if (connection.getResponseCode() == HttpURLConnection.HTTP_CREATED) {
+           return getSuccessMessage(connection);
+       } else {
+           return getErrorMessage(connection);
+       }
+   }
+
+   private String getSuccessMessage(HttpURLConnection connection) throws IOException {
+       return readInputStream(connection.getInputStream());
+   }
+
+   private String getErrorMessage(HttpURLConnection connection) throws IOException {
+       if (connection.getErrorStream() != null) {
+           return readInputStream(connection.getErrorStream());
+       } else {
+           return readInputStream(connection.getInputStream());
+       }
+   }
+
+   private String readInputStream(InputStream inputStream) throws IOException {
+       if (inputStream == null) {
+           return "Empty error stream";
+       } else {
+           return IOUtils.readStream(inputStream);
+       }
+   }
+
+   private String parseTokenResponse(String response) throws Exception {
+       Object responseContent;
+       try {
+           org.codehaus.jackson.JsonParser parser =
+            new org.codehaus.jackson.map.ObjectMapper()
+                .getJsonFactory()
+                .createJsonParser(response);
+           responseContent = parser.readValueAs(Object.class);
+       } catch (IOException e) {
+           throw new Exception("Could not map the response from the rest-sts instance at url "
+              + restSTSInstanceUrl + " to a json object. The response: "
+              + response + "; The exception: " + e);
+       }
+       JsonValue assertionJson =
+        new JsonValue(responseContent).get(AMSTSConstants.ISSUED_TOKEN);
+       if (assertionJson.isNull() || !assertionJson.isString()) {
+           throw new Exception("The json response returned from the rest-sts instance at url "
+              + restSTSInstanceUrl + " did not have a non-null string  element for the "
+              + AMSTSConstants.ISSUED_TOKEN + " key. The json: "
+              + responseContent.toString());
+       }
+       return assertionJson.asString();
+   }
+}
+  </pre></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-rest-identity-realm-mgmt.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-jdk.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;7.&nbsp;RESTful Identity and Realm Management Services&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;9.&nbsp;Using the OpenAM Java SDK</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

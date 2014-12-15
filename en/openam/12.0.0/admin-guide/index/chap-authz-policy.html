@@ -1,0 +1,817 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;3.&nbsp;Defining Authorization Policies</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenAM Administration Guide"><link rel="up" href="index.html" title="OpenAM Administration Guide"><link rel="prev" href="chap-auth-services.html" title="Chapter&nbsp;2.&nbsp;Defining Authentication Services"><link rel="next" href="chap-realms.html" title="Chapter&nbsp;4.&nbsp;Configuring Realms"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;3.&nbsp;Defining Authorization Policies</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-auth-services.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-realms.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-authz-policy"></a>Chapter&nbsp;3.&nbsp;Defining Authorization Policies</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-authz-policy.html#what-is-authz">3.1. About Authorization in OpenAM</a></span></dt><dt><span class="section"><a href="chap-authz-policy.html#policy-resolution">3.2. How OpenAM Reaches Policy Decisions</a></span></dt><dt><span class="section"><a href="chap-authz-policy.html#configure-authz-apps">3.3. Configuring Applications, Policies, and Referrals</a></span></dt><dt><span class="section"><a href="chap-authz-policy.html#delegate-policy">3.4. Delegating Policy Management</a></span></dt></dl></div><p>
+  <em class="firstterm">Authorization</em> is determining
+  whether to grant or to deny a user access to a resource.
+  <em class="firstterm">Policies</em> define how to determine
+  whether to grant or deny access.
+  This chapter describes how to configure authorization policies in OpenAM.
+ </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="what-is-authz"></a>3.1.&nbsp;About Authorization in OpenAM</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-authz-policy.html#what-is-authz-policies">3.1.1. OpenAM Policies and Applications</a></span></dt><dt><span class="section"><a href="chap-authz-policy.html#what-is-authz-decision">3.1.2. OpenAM Policy Decisions</a></span></dt><dt><span class="section"><a href="chap-authz-policy.html#what-is-authz-example">3.1.3. Example Authorization</a></span></dt></dl></div><a class="indexterm" name="d0e7393"></a><p>
+   Applications rely on OpenAM for access management,
+   which breaks down into authentication,
+   or determining who is trying to access a resource,
+   and authorization,
+   or determining whether to grant or deny access.
+   This is because whether access is granted generally depends on
+   what the policies about access are,
+   who is trying to gain access,
+   and perhaps some other conditions,
+   such as whether the access itself needs to happen over a secure channel
+   or what time of day it is.
+  </p><p>
+   To return to the international airport example
+   from the discussion on authentication
+   the policy might be that passengers with valid passports and visas
+   presenting valid plane tickets
+   are allowed through to the gate where the plane is waiting to take off,
+   but only under the condition that the plane is going to leave soon.
+   (You cannot expect to get to the gate today
+   with a scheduled departure for three months from now.)
+  </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="what-is-authz-policies"></a>3.1.1.&nbsp;OpenAM Policies and Applications</h3></div></div></div><a class="indexterm" name="d0e7403"></a><div class="variablelist"><p>
+     To allow OpenAM to determine whether to grant access,
+     you define authorization <em class="firstterm">policies</em>.
+     A policy defines the following.
+    </p><dl class="variablelist"><dt><span class="term"><em class="firstterm">resources</em></span></dt><dd><p>
+       The resource definitions constrain which resources,
+       such as web pages or access to the boarding area,
+       the policy applies to.
+      </p></dd><dt><span class="term"><em class="firstterm">actions</em></span></dt><dd><p>
+       The actions are verbs that describe
+       what the policy allows users to do to the resources,
+       such as read a web page, submit a web form, or access the boarding area.
+      </p></dd><dt><span class="term"><em class="firstterm">subject conditions</em></span></dt><dd><p>
+       The subject conditions constrain who the policy applies to,
+       such as all authenticated users, only administrators,
+       or only passengers with valid tickets for planes leaving soon.
+      </p></dd><dt><span class="term"><em class="firstterm">environment conditions</em></span></dt><dd><p>
+       The environment conditions set
+       the circumstances under which the policy applies,
+       such as only during work hours,
+       only when accessing from a specific IP address,
+       or only when the flight is scheduled to leave within the next four hours.
+      </p></dd><dt><span class="term"><em class="firstterm">response attributes</em></span></dt><dd><p>
+       The response attributes define information
+       that OpenAM attaches to a response following a policy decision,
+       such as a name, email address, or frequent flyer status.
+      </p></dd></dl></div><p>
+    When queried about whether to let a user through to a protected resource,
+    OpenAM decides to authorize access or not based on applicable policies
+    as described below in <a class="xref" href="chap-authz-policy.html#what-is-authz-decision" title="3.1.2.&nbsp;OpenAM Policy Decisions">Section&nbsp;3.1.2, &#8220;OpenAM Policy Decisions&#8221;</a>.
+    OpenAM communicates its decision to the application
+    using OpenAM for access management.
+    In the common case, this is a policy agent
+    installed on the server where the application runs.
+    The agent then enforces the authorization decision from OpenAM.
+   </p><div class="mediaobject" align="center"><a name="figure-realm-app-policy-overview"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/realm-app-policy-overview.png" align="middle" height="360" alt="Shows the relationship between Realms, Applications and Policies, and how a policy agent requests authorization decisions from OpenAM."></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-realm-app-policy-overview.html" target="longdesc">D</a>]</span></div></div><p>
+    To act as a template for the policies,
+    OpenAM uses <em class="firstterm">applications</em>.
+    An application can constrain the resources that its policies apply to.
+    For example, an application for Example.com's HR service
+    might constrain all policies to apply to resources under
+    <code class="literal">http*://example.com/hr*</code> and
+    <code class="literal">http*://example.com/hr*?*</code>.
+    The list of applications is the first thing that you see
+    when editing policies through OpenAM console.
+    You create or select an application,
+    and then configure the policies for that application.
+   </p><p>
+    Applications have associated types.
+    The default application type that represents web resources
+    is <code class="literal">iPlanetAMWebAgentService</code>,
+    which defines resources as URL patterns and actions as HTTP methods.
+    OpenAM policy agents use a default application type based on this type,
+    which is called <code class="literal">iPlanetAMWebAgentService</code>.
+    This is the application type for policies
+    that you edit through OpenAM console.
+    OpenAM supports other application types as well
+    that you can manage over the policy REST APIs.
+   </p><p>
+    For applications that are not of type <code class="literal">iPlanetAmWebAgentService</code>,
+    such as CREST applications, you must manage these applications over REST.
+    OpenAM policy agents work with applications of type
+    <code class="literal">iPlanetAmWebAgentService</code>, so your policy evaluation points (PEPs)
+    should use the REST endpoints for policy decision requests.
+   </p><div class="tip"><h3 class="title">Tip</h3><p>
+     When you configure a policy agent,
+     if the application for its policies is not named
+     <code class="literal">iPlanetAMWebAgentService</code>,
+     then you must edit the policy agent configuration,
+     setting the application name to match your application.
+    </p><p>
+     The application you specify must exist in the evaluation realm
+     that you specify for the policy agent.
+    </p></div><p>
+    When policies for an application are administered in multiple realms,
+    you set up a <em class="firstterm">referral</em> between applications.
+    When finding all policies that apply for a given request,
+    OpenAM follows the referrals
+    to locate the application's policies in other realms.
+    This is useful, for example,
+    when the same policy agents protect multiple applications.
+    The OpenAM policy editor does allow you to manage referrals as well,
+    though the referral editor is not enabled by default.
+   </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="what-is-authz-decision"></a>3.1.2.&nbsp;OpenAM Policy Decisions</h3></div></div></div><p>
+    OpenAM relies on policies to reach authorization decisions,
+    such as whether to grant or to deny access to a resource.
+    OpenAM acts as the <em class="firstterm">policy decision point</em> (PDP),
+    whereas OpenAM policy agents act as
+    <em class="firstterm">policy enforcement points</em> (PEP).
+    In other words, a policy agent or other PEP takes responsibility only
+    for enforcing a policy decision rendered by OpenAM.
+    When you configured applications and their policies in OpenAM,
+    you used OpenAM as a
+    <em class="firstterm">policy administration point</em> (PAP).
+
+   </p><p>
+    Concretely speaking, when a PEP requests a policy decision from OpenAM
+    it specifies the target resource(s),
+    the application (default: <code class="literal">iPlanetAMWebAgentService</code>),
+    and information about the subject and the environment.
+    OpenAM as the PDP retrieves policies within the specified application
+    that apply to the target resource(s).
+    OpenAM then evaluates those policies to make a decision
+    based on the conditions matching those of the subject and environment.
+    When multiple policies apply for a particular resource,
+    the default logic for combining decisions is that
+    the first evaluation resulting in a decision to deny access
+    takes precedence over all other evaluations.
+    OpenAM only allows access if all applicable policies evaluate
+    to a decision to allow access.
+   </p><p>
+    OpenAM communicates the policy decision to the PEP.
+    The concrete decision,
+    applying policy for a subject under the specified conditions,
+    is called an <em class="firstterm">entitlement</em>.
+   </p><p>
+    The entitlement indicates the resource(s) it applies to,
+    the actions permitted and denied for each resource,
+    and optionally response attributes and <em class="firstterm">advice</em>.
+   </p><p>
+    When OpenAM denies a request due to a failed condition,
+    OpenAM can send advice to the PEP,
+    and the PEP can then take remedial action.
+    For instance, suppose a user comes to a web site
+    having authenticated with an email address and password,
+    which is configured as authentication level 0.
+    Had the user authenticated using a one-time password,
+    the user would have had authentication level 1 in their session.
+    Yet, because they have authentication level 0,
+    they currently cannot access the desired page,
+    as the policy governing access requires authentication level 1.
+    OpenAM sends advice, prompting the PEP
+    to have the user re-authenticate using a one-time password module,
+    gaining authentication level 1,
+    and thus having OpenAM grant access to the protected page.
+   </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="what-is-authz-example"></a>3.1.3.&nbsp;Example Authorization</h3></div></div></div><p>
+    Consider the case where OpenAM protects a user profile web page.
+    An OpenAM policy agent installed in the web server
+    intercepts client requests to enforce policy.
+    The policy says that only authenticated users
+    can access the page to view and to update their profiles.
+   </p><p>
+    When a user browses to the profile page,
+    the OpenAM policy agent intercepts the request.
+    The policy agent notices that the request is to access a protected resource,
+    but the request is coming from a user who has not yet logged in
+    and consequently has no authorization to visit the page.
+    The policy agent therefore redirects the user's browser
+    to OpenAM to authenticate.
+   </p><p>
+    OpenAM receives the redirected user,
+    serving a login page that collects the user's email and password.
+    With the email and password credentials,
+    OpenAM authenticates the user, and creates a session for the user.
+    OpenAM then redirects the user to the policy agent,
+    which gets the policy decision from OpenAM for the page to access,
+    and grants access to the page.
+   </p><p>
+    OpenAM and the policy agent use cookies set in the user's browser
+    to share an opaque reference to the session with OpenAM.
+    While the user has a valid session with OpenAM,
+    the user can go away to another page in the browser,
+    come back to the profile page,
+    and gain access without having to enter their email and password again.
+   </p><p>
+    Notice how OpenAM and the policy agent handle the access in the example.
+    The web site developer can offer a profile page,
+    but the web site developer never has to manage login,
+    or handle who can access a page.
+    As OpenAM administrator, you can change
+    authentication and authorization independently of updates to the web site.
+    You might need to agree with web site developers
+    on how OpenAM identifies users
+    so web developers can identify users by their own names when they log in.
+    By using OpenAM and policy agents for authentication and authorization,
+    your organization no longer needs to update web applications
+    when you want to add external access to your Intranet for roaming users,
+    open some of your sites to partners,
+    only let managers access certain pages of your HR web site,
+    or allow users already logged in to their desktops to visit protected sites
+    without having to type their credentials again.
+   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="policy-resolution"></a>3.2.&nbsp;How OpenAM Reaches Policy Decisions</h2></div></div></div><p>OpenAM has to match policies to resources to take policy decisions.
+  For a policy to match, the resource has to match one of the resource patterns
+   defined in the policy. The user making the request has to match a subject.
+   Furthermore, at least one condition for each condition type has to be
+   satisfied.</p><p>If more than one policy matches, OpenAM has to reconcile differences.
+  When multiple policies match, the order in which OpenAM uses them to make a
+  policy decision is not deterministic. However, a deny decision overrides an
+  allow decision, and so by default once OpenAM reaches a deny decision it
+  stops checking further policies. (If you want OpenAM to continue checking
+  despite the deny, see Configuration &gt; Global &gt; Policy Configuration
+  &gt; Continue Evaluation on Deny Decision.)</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configure-authz-apps"></a>3.3.&nbsp;Configuring Applications, Policies, and Referrals</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-authz-policy.html#configure-apps-with-console">3.3.1. Configuring Applications by Using the OpenAM Console</a></span></dt><dt><span class="section"><a href="chap-authz-policy.html#configure-policies-with-console">3.3.2. Configuring Policies by Using the OpenAM Console</a></span></dt><dt><span class="section"><a href="chap-authz-policy.html#configure-referrals-with-console">3.3.3. Configuring Referrals by Using the OpenAM Console</a></span></dt><dt><span class="section"><a href="chap-authz-policy.html#policy-patterns-wildcards">3.3.4. Specifying Resource Patterns with Wildcards</a></span></dt><dt><span class="section"><a href="chap-authz-policy.html#script-policy">3.3.5. Importing and Exporting Policies</a></span></dt></dl></div><p>You can configure applications, policies and referrals by using the
+   policy editor in the OpenAM console, by using the REST interface,
+   or by using the <span class="command"><strong>ssoadm</strong></span> command.</p><p>This section explains how to use the OpenAM console to configure
+   applications, policies and referrals to protect a web site or web
+   application.</p><p>To configure applications and policies to protect
+   other types of resource, you must use the REST API or
+   the <span class="command"><strong>ssoadm</strong></span> command. For more information on the REST API,
+   see the <em class="citetitle">Developer's Guide</em> chapters
+   <a href="../../dev-guide/index/chap-rest-authz-policy.html#rest-api-authz-applications" class="link">
+    <em class="citetitle">Defining Applications</em></a> and
+   <a href="../../dev-guide/index/chap-rest-authz-policy.html#rest-api-authz-policies" class="link">
+    <em class="citetitle">Managing Policies</em></a>. For more
+   information on the <span class="command"><strong>ssoadm</strong></span> command,
+   see the <em class="citetitle">OpenAM Reference Guide</em> chapter
+   <a href="../../reference/index/ssoadm-1.html" class="link">
+    <em class="citetitle">ssoadm</em></a>.</p><div lang="en" class="section"><div class="titlepage"><div><div><h3 class="title"><a name="configure-apps-with-console"></a>3.3.1.&nbsp;Configuring Applications by Using the OpenAM Console</h3></div></div></div><a class="indexterm" name="d0e7596"></a><p>This section describes the process of creating applications, which are
+     used as templates for policies protecting a web site or web application,
+     using the OpenAM console.</p><div class="procedure"><a name="create-app-xui"></a><div class="procedure-title">Procedure&nbsp;3.1.&nbsp;To Configure an Application by Using the Policy Editor</div><ol class="procedure" type="1"><li class="step"><p>In the OpenAM console, select Access Control &gt; <em class="replaceable"><code>Realm
+            Name</code></em> &gt; Policies.</p><ol type="a" class="substeps"><li class="step"><p>To create a new application, click Add New
+                Application.</p></li><li class="step"><p>To modify an existing application, in the row
+               containing the application, click the Edit
+               Application icon.</p></li><li class="step"><p>To discard any changes and return to the previous page,
+              click Cancel.</p></li></ol></li><li class="step"><p>Provide a name for the application, and optionally a
+             description, and then click Next.
+            </p>
+
+         
+           Failed to include para-special-characters
+          
+
+        </li><li class="step"><p>Define resource patterns that policies within this
+      application use as the basis for their rules, by following the steps
+      below:</p><ol type="a" class="substeps"><li class="step"><p>In the Available patterns section, click
+             the row containing an asterisk (<code class="literal">*</code>) to move the
+             pattern to the Create your resources section.</p><div class="mediaobject" align="center"><a name="figure-resource-patterns-step1"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="./images/resource-pattern-templates-step1.png" align="middle" height="360" alt="Move available starter patterns to the right of the screen to configure the resource patterns that policies in this application use."></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-resource-patterns-step1.html" target="longdesc">D</a>]</span></div></div></li><li class="step"><p>Optionally, in the Create your resources section, replace the
+             asterisk with a pattern that the policies in the application use as
+             a template for specifying resources.</p><div class="mediaobject" align="center"><a name="figure-resource-patterns-step2"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/resource-pattern-templates-step2.png" align="middle" height="360" alt="Create resource patterns, with optional wildcards, that policies in this application use."></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-resource-patterns-step2.html" target="longdesc">D</a>]</span></div></div><p>For information on specifying patterns that the
+          policies use for matching resources, see
+          <a href="../../admin-guide/index/chap-authz-policy.html#policy-patterns-wildcards" class="link">
+           <em class="citetitle">Specifying Resource Patterns with Wildcards</em></a>.</p></li><li class="step"><p>Click the Add icon to move the pattern into
+         the Resources section.</p><div class="mediaobject" align="center"><a name="figure-resource-patterns-step3"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/resource-pattern-templates-step3.png" align="middle" height="360" alt="Add the completed resource template to the Resources section by clicking the Add icon."></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-resource-patterns-step3.html" target="longdesc">D</a>]</span></div></div></li></ol><div class="tip"><h3 class="title">Tip</h3><p>To remove a resource pattern,
+       click the Delete icon.</p></div><p>Repeat these steps to add all the resource patterns your
+            policies may require, and then click Next.</p></li><li class="step"><p>Review your configuration.</p><div class="tip"><h3 class="title">Tip</h3><p>If the configuration is not visible, click the maximized
+             link to switch to maximized view.</p></div><p>To make changes to the configuration, either click the step in
+            the list, or click the item to amend in the Review
+           Configuration and Finish section to jump to the relevant
+          step, and make your changes.</p><p>When the configuration is complete,
+             click Finish.</p></li></ol></div><div class="itemizedlist"><p>
+    To make use of the new application and any policies it contains,
+    you must perform one of the following procedures:
+   </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Configure a policy agent to use the application for
+     policy decisions.
+    </p><p>
+     For details see the procedure
+     <a href="../../admin-guide/index/chap-realms.html#agent-realm-application-for-policy-decisions" class="link"><em class="citetitle">To Specify the Realm and Application for Policy Decisions</em></a>.
+    </p></li><li class="listitem"><p>
+     Create a referral to the realm the application is in.
+    </p><p>
+     For details see the procedure
+     <a href="../../admin-guide/index/chap-authz-policy.html#create-referral-xui" class="link"><em class="citetitle">To Enable Referrals in the Policy Editor</em></a>.
+    </p></li></ul></div></div><div lang="en" class="section"><div class="titlepage"><div><div><h3 class="title"><a name="configure-policies-with-console"></a>3.3.2.&nbsp;Configuring Policies by Using the OpenAM Console</h3></div></div></div><p>This section describes the process of configuring policies to
+     protect a web site or web application by using the OpenAM console.</p><div class="procedure"><a name="create-policy-xui"></a><div class="procedure-title">Procedure&nbsp;3.2.&nbsp;To Configure a Policy by Using the OpenAM Console</div><a class="indexterm" name="d0e7718"></a><a class="indexterm" name="d0e7723"></a><ol class="procedure" type="1"><li class="step"><p>In the OpenAM console, select Access Control &gt; <em class="replaceable"><code>Realm
+    Name</code></em> &gt; Policies, and then click the name of the
+    application to configure a policy in.</p><ol type="a" class="substeps"><li class="step"><p>To create a new policy, click Add New Policy.</p></li><li class="step"><p>To modify an existing policy, click the name of the
+    policy.</p></li><li class="step"><p>To discard any changes and return to the previous page,
+    click Cancel.</p></li></ol></li><li class="step"><p>Provide a name for the policy, and optionally a
+    description, and then click Next.
+   </p><p lang="en">
+  Do not use special characters within policy, application or referral names
+  (for example, "my+referral") using the Policy Editor or REST endpoints as
+  OpenAM returns a 400 Bad Request error.
+  The special characters are: double quotes ("), plus sign (+), comma (,),
+  less than (&lt;), equals (=), greater than (&gt;), backslash (\), and
+  null (\u0000).
+ </p></li><li class="step"><p>To define resources that the policy applies to,
+    follow the steps below:</p><ol type="a" class="substeps"><li class="step"><p>In the Available patterns section, click the
+      row containing the pattern to use as the template for a resource pattern
+      to move it to the Create your resources section.</p><div class="mediaobject" align="center"><a name="figure-resource-patterns-policies-step1"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/resource-pattern-step1.png" align="middle" height="360" alt="Modify the resource patterns to specify the resources the policy applies to."></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-resource-patterns-policies-step1.html" target="longdesc">D</a>]</span></div></div></li><li class="step"><p>Optionally, in the Create your resources
+      section, replace the asterisks with values to define the resources
+      that the policy applies to.</p><div class="mediaobject" align="center"><a name="figure-resource-patterns-policies-step2"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/resource-pattern-step2.png" align="middle" height="360" alt="Edit the resource pattern if required."></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-resource-patterns-policies-step2.html" target="longdesc">D</a>]</span></div></div><p>For information on specifying patterns for matching resources, see
+      <a href="../../admin-guide/index/chap-authz-policy.html#policy-patterns-wildcards" class="link">
+    <em class="citetitle">Specifying Resource Patterns with Wildcards</em></a>.</p></li><li class="step"><p>Click the Add icon to move the resource into
+      the Resources section.</p><div class="mediaobject" align="center"><a name="figure-resource-patterns-policies-step3"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/resource-pattern-step3.png" align="middle" height="360" alt="Add the completed resource to the Resources section by clicking the Add icon."></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-resource-patterns-policies-step3.html" target="longdesc">D</a>]</span></div></div></li></ol><div class="tip"><h3 class="title">Tip</h3><p>To remove a resource pattern,
+    click the Delete icon.</p></div><p>Repeat these steps to add all the resources your
+    policy applies to,  and then click Next.</p></li><li class="step"><p>
+    Select the HTTP 1.1 methods that the policy applies to, and whether to
+    <code class="literal">Allow</code> or <code class="literal">Deny</code> those methods on the
+    resources specified earlier, and then click Next.</p><p>For more information on HTTP 1.1 methods, see <a class="link" href="https://tools.ietf.org/html/rfc2616#section-9" target="_blank"><em class="citetitle">Method Definitions</em></a> and <a class="link" href="https://tools.ietf.org/html/rfc5789" target="_blank"><em class="citetitle">PATCH Method for HTTP</em></a>.</p></li><li class="step"><p>Define conditions in the OpenAM console
+      by combining logical operators with blocks of configured
+      parameters to create a rule set that the policy uses to filter
+      requests for resources. You can nest logical operators at multiple
+      levels to create complex rule sets.</p><p>To define the subjects that the policy applies to,
+      complete the following steps:</p><ol type="a" class="substeps"><li class="step"><p>To add a subject condition, click the Subject
+        Condition button, choose the type from
+        the drop-down menu, specify any required
+        Subject Values, and then drag the block into a
+        drop-point in a logical block above.</p><div class="tip"><h3 class="title">Tip</h3><p>Valid drop-points in which to drop a block are displayed with
+        a striped horizontal bar.</p><div class="mediaobject" align="center"><a name="policy-editor-valid-drop-points"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/policy-editor-valid-drop-points.png" align="middle" height="360" alt="Valid drop-points to drop a block are shown with a striped horizontal band."></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="policy-editor-valid-drop-points.html" target="longdesc">D</a>]</span></div></div></div><p>The available Subject Condition Types are:</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">Authenticated Users</span></dt><dd><p>Any user that has successfully authenticated with OpenAM.</p></dd><dt><span class="term">Users &amp; Groups</span></dt><dd><p>A user or group as defined in the Subjects tab of the
+           realm the policy is created in.</p><p>Select one or more users or groups from the
+           Subject Values drop-down menu, which displays
+           the subjects available within the realm.</p><p>To remove an entry, click the value,
+           and then press <span class="keycap"><strong>Delete</strong></span> (Windows/GNU/Linux)
+           or <span class="keycap"><strong>Backspace</strong></span> (Mac OS X).</p></dd><dt><span class="term">Jwt Claim</span></dt><dd><p>Validate a claim within a JSON Web Token (JWT).</p><p>Type the name of the claim to validate in
+           Claim Name, for example <code class="literal">sub</code>,
+           and the required value in Claim Value,
+           for example <code class="literal">UserA</code>.</p><div class="note"><h3 class="title">Note</h3><p>This condition type only supports string
+           equality comparisons, and is case-sensitive.</p></div></dd><dt><span class="term">Never Match</span></dt><dd><p>
+           Never match any subject, with the result not that access is denied,
+           but instead that the policy itself does not match
+           and therefore cannot be evaluated in order to allow access.
+          </p><p>
+           If you do not set a subject condition, "Never Match" is the default.
+           In other words,
+           you must set a subject condition for the policy to apply.
+          </p><p>
+           To match regardless of the subject, configure a subject condition
+           that is <code class="literal">NOT</code> "Never Match".
+          </p></dd></dl></div></li><li class="step"><p>To add a logical operator, click the Logical
+       button, choose between <code class="literal">AND</code>, <code class="literal">NOT</code>,
+       and <code class="literal">OR</code> from the drop-down menu,
+       and then drag the block into a valid drop point in the rule set
+       above.</p></li><li class="step"><p>Continue combining logical operators and subject
+       conditions, and then click Next.</p></li></ol></li><li class="step"><p>To configure environment conditions in the policy,
+   complete the following steps:</p><ol type="a" class="substeps"><li class="step"><p>To add an environment condition, click the Environment Condition
+        button, choose the type from the drop-down menu,
+        specify any required parameters, and then drag the block into a
+        drop-point in a logical block above.</p><div class="tip"><h3 class="title">Tip</h3><p>Valid drop-points in which to drop a block are displayed with
+        a striped horizontal bar.</p><div class="mediaobject" align="center"><a name="policy-editor-valid-drop-points-environment"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/policy-editor-valid-drop-points.png" align="middle" height="360" alt="Valid drop-points to drop a block are shown with a striped horizontal band."></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="policy-editor-valid-drop-points-environment.html" target="longdesc">D</a>]</span></div></div></div><p>The available environment condition types are:</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">Active Session Time</span></dt><dd><p>Make the policy depend on how long the user's session has been
+           active, as specified in Max Session Time. To
+           terminate the session if it has been active for longer than the
+           specified time, set Terminate Sessions to
+           <code class="literal">True</code>. The user will need to re-authenticate.</p></dd><dt><span class="term">Authentication by Module Chain</span></dt><dd><p>Make the policy depend on the service that was used to
+           authenticate the user.</p></dd><dt><span class="term">Authentication by Module Instance</span></dt><dd><p>Make the policy depend on the authentication
+           module used to authenticate, specified in Authentication
+            Scheme. Specify a timeout for
+           application authentication in Application Idle
+            Timeout Scheme and the name of the application in
+           Application Name.</p></dd><dt><span class="term">Authentication Level (greater than or equal to)</span></dt><dd><p>Make the policy depend on the minimum acceptable authentication
+           level specified in Authentication Level.</p></dd><dt><span class="term">Authentication to a Realm</span></dt><dd><p>Make the policy depend on the realm to which the user
+           authenticated.</p></dd><dt><span class="term">Current Session Properties</span></dt><dd><p>Make the policy depend on properties set in the user's session.</p><p>Type the value to search for in Properties,
+           and set Ignore Value Case to <code class="literal">True</code>
+           to make the search case-insensitive.</p></dd><dt><span class="term">Identity Membership</span></dt><dd><p>Make the policy apply if the UUID of the invocator is a member
+           of at least one of the AMIdentity objects specified in AM
+            Identity Name.</p><p>Often used to filter requests on the identity of a
+           Web Service Client (WSC).</p></dd><dt><span class="term">IPv4 Address/DNS Name</span></dt><dd><p>Make the policy depend on the IP version 4 address that
+           the request originated from.</p><div class="note"><h3 class="title">Note</h3><p>The IP address is taken from the
+           <code class="literal">requestIp</code> value of policy decision requests. If
+           this is not provided, the IP address stored in the SSO token is
+           used instead.</p></div><p>
+          Specify a range of addresses to test against by
+           entering four sets of up to three digits, separated by full stops
+           (<span class="keycap"><strong>.</strong></span>) in both Start IP and
+           End IP.</p><div class="note"><h3 class="title">Note</h3><p>If only one of these values is provided, it is used as a
+           single IP address to match.</p></div><p>Optionally, specify a DNS name in DNS Name to filter requests to
+           that domain.</p></dd><dt><span class="term">IPv6 Address/DNS Name</span></dt><dd><p>Make the policy depend on the IP version 6 address that
+           the request originated from.</p><div class="note"><h3 class="title">Note</h3><p>The IP address is taken from the
+           <code class="literal">requestIp</code> value of policy decision requests. If
+           this is not provided, the IP address stored in the SSO token is
+           used instead.</p></div><p>Specify a range of addresses to test against by entering eight
+           sets of four hexadecimal characters, separated by a colon
+           (<span class="keycap"><strong>:</strong></span>) in both Start IP and
+           End IP.</p><div class="note"><h3 class="title">Note</h3><p>If only one of these values is provided, it is used as a
+           single IP address to match.</p></div><p>Optionally, specify a DNS name in
+          DNS Name to filter requests to those coming
+           from the specified domain.</p><div class="tip"><h3 class="title">Tip</h3><p>Use an asterisk (<span class="keycap"><strong>*</strong></span>) in the DNS
+           name to match multiple subdomains. For example
+           <code class="literal">*.example.com</code> applies to requests coming from
+           <code class="literal">www.example.com</code>, <code class="literal">secure.example.com</code>,
+           or any other subdomain of <code class="literal">example.com</code>.</p></div></dd><dt><span class="term">LDAP Filter Condition</span></dt><dd><p>Make the policy depend on whether
+           the user's entry can be found using the LDAP search filter you specify
+           in the directory configured for the policy service, which by default
+           is the identity repository. See Configuration &gt; Global &gt; Policy
+           Configuration &gt; Realm Attributes &gt; Primary LDAP Server.</p><p>Alternatively you can set this for the realm under Access Control
+           &gt; <em class="replaceable"><code>Realm Name</code></em> &gt; Services &gt; Policy
+           Configuration.</p></dd><dt><span class="term">OAuth2 Scope</span></dt><dd><p>
+           Make the policy depend on whether an authorization request
+           includes all of the specified OAuth 2.0 scopes.
+          </p><p>
+           Scope names must follow OAuth 2.0 scope syntax described in RFC 6749,
+           <a class="link" href="https://tools.ietf.org/html/rfc6749#section-3.3" target="_blank"><em class="citetitle">Access Token Scope</em></a>.
+           As described in that section,
+           separate multiple scope strings with spaces,
+           such as <code class="literal">openid profile</code>.
+          </p><p>
+           The scope strings match regardless of order in which they occur,
+           so <code class="literal">openid profile</code>
+           is equivalent to <code class="literal">profile openid</code>.
+          </p><p>
+           The condition is also met when additional scope strings are provided
+           beyond those required to match the specified list.
+           For example,
+           if the condition specifies <code class="literal">openid profile</code>,
+           then <code class="literal">openid profile email</code> also matches.
+          </p></dd><dt><span class="term">Resource/Environment/IP Address</span></dt><dd><p>Make the policy apply to a complex condition such as whether the
+           user is making a request from the localhost and has also authenticated
+           with the LDAP authentication module.</p><p>Entries must take the form of an
+           <code class="literal">IF...ELSE</code> statement. The <code class="literal">IF</code> statement can specify either
+           <code class="literal">IP</code> to match the user's IP address, or
+           <code class="literal">dnsName</code> to match their DNS name.</p><p>If the <code class="literal">IF</code> statement is true,
+           the <code class="literal">THEN</code> statement must also be true for the
+           condition to be fulfilled. If not, relevant advice is returned in the
+           policy evaluation request.</p><p>The available parameters for the
+           <code class="literal">THEN</code> statement are as follows:</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">module</code></span></dt><dd><p>The module that was used to authenticate the user, for
+               example <code class="literal">DataStore</code>.</p></dd><dt><span class="term"><code class="literal">service</code></span></dt><dd><p>The service that was used to authenticate the user.</p></dd><dt><span class="term"><code class="literal">authlevel</code></span></dt><dd><p>The minimum required authentication level.</p></dd><dt><span class="term"><code class="literal">role</code></span></dt><dd><p>The role of the authenticated user.</p></dd><dt><span class="term"><code class="literal">user</code></span></dt><dd><p>The name of the authenticated user.</p></dd><dt><span class="term"><code class="literal">redirectURL</code></span></dt><dd><p>The URL the user was redirected from.</p></dd><dt><span class="term"><code class="literal">realm</code></span></dt><dd><p>The realm that was used to authenticate the user.</p></dd></dl></div><p>The IP address can be IPv4, IPv6, or a hybrid of the two.</p><p>Example:
+           <code class="literal">IF IP=[127.0.0.1] THEN role=admins</code>.</p></dd><dt><span class="term">Time (day, date, time, and timezone)</span></dt><dd><p>Make the policy depend on when the policy is evaluated.</p><p>The values for day, date and time must be set in pairs,
+           a start and an end. Incomplete pairings are highlighted
+           in red.</p><div class="mediaobject" align="center"><a name="policy-editor-mismatched-time-pairs"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/policy-editor-mismatched-time-pairs.png" align="middle" height="360" alt="Missing values are highlighted in red."></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="policy-editor-mismatched-time-pairs.html" target="longdesc">D</a>]</span></div></div></dd></dl></div></li><li class="step"><p>To add a logical operator, click the Logical
+    button, choose between <code class="literal">AND</code>, <code class="literal">NOT</code>,
+    and <code class="literal">OR</code> from the drop-down menu,
+    and then drag the block into a valid drop point in the rule set
+    above.</p></li><li class="step"><p>Continue combining logical operators and environment
+     conditions, and when finished, click Next.</p></li></ol></li><li class="step"><p>Add policy response attributes, retrieved from the user entry in the
+    identity repository, into the headers of the request at policy decision time.
+    The policy agent for the protected resources/applications or the protected resources/applications themselves
+    retrieve the policy response attributes to customize or personalize the application.
+    Policy response attributes come in two formats: subject
+    attributes and static attributes.
+   </p><ol type="a" class="substeps"><li class="step"><p>To add subject attributes, click an empty space in the Subject
+      attributes field, and select the subject attribute to add to the
+      response.</p><p>To remove an entry, click the value,
+      and then press <span class="keycap"><strong>Delete</strong></span> (Windows/GNU/Linux) or
+      <span class="keycap"><strong>Backspace</strong></span> (Mac OS X)</p></li><li class="step"><p>To add a static attribute, type in a Key and a Value in the fields,
+      and then click the Add icon.
+     </p><p>To remove an entry, click the Delete icon in
+      the row containing the Key: Value pair.</p></li><li class="step"><p>Continue adding subject and static attributes,
+      and when finished, click Next.</p></li></ol></li><li class="step"><p>Review your configuration.</p><div class="tip"><h3 class="title">Tip</h3><p>If the configuration is not visible, click the maximized
+    link to switch to maximized view.</p></div><p>To make changes to the configuration, either click the relevant step,
+    or click the item to jump to the relevant step and make amendments to
+    the configuration.</p><p>When the configuration is completed, click Finish.</p></li></ol></div></div><div lang="en" class="section"><div class="titlepage"><div><div><h3 class="title"><a name="configure-referrals-with-console"></a>3.3.3.&nbsp;Configuring Referrals by Using the OpenAM Console</h3></div></div></div><p>This section describes the process of creating referrals within an
+     application by using the OpenAM Console.</p><p>By default, referrals are not displayed in the policy editor
+  within the OpenAM console.</p><div class="procedure"><a name="enable-referrals-xui"></a><div class="procedure-title">Procedure&nbsp;3.3.&nbsp;To Enable Referrals in the Policy Editor</div><a class="indexterm" name="d0e8253"></a><ul class="procedure"><li class="step"><p>In the OpenAM console, select Configuration &gt; Global &gt; Policy
+   Configuration, set Activate Referrals to
+   <code class="literal">Enabled</code>, and then click Save.</p></li></ul></div><p>Referrals enable applications and policies to exist in
+  different realms, and redirect incoming authorization requests to those
+  realms.</p><div class="procedure"><a name="create-referral-xui"></a><div class="procedure-title">Procedure&nbsp;3.4.&nbsp;To Configure Referrals by Using the Policy Editor</div><a class="indexterm" name="d0e8269"></a><ol class="procedure" type="1"><li class="step"><p>In the OpenAM console, select Access Control &gt; <em class="replaceable"><code>Realm
+    Name</code></em> &gt; Policies, and then click the name of the
+    application to create a referral in.</p><ol type="a" class="substeps"><li class="step"><p>To create a new referral, click Add New Referral.</p></li><li class="step"><p>To modify an existing referral, click the name of the
+     referral.</p></li><li class="step"><p>To discard any changes and return to the previous page,
+     click Cancel.</p></li></ol></li><li class="step"><p>Provide a name for the referral, and then click Next.</p><p lang="en">
+  Do not use special characters within policy, application or referral names
+  (for example, "my+referral") using the Policy Editor or REST endpoints as
+  OpenAM returns a 400 Bad Request error.
+  The special characters are: double quotes ("), plus sign (+), comma (,),
+  less than (&lt;), equals (=), greater than (&gt;), backslash (\), and
+  null (\u0000).
+ </p></li><li class="step"><p>To define resources that the referral applies to,
+    follow the steps below:</p><ol type="a" class="substeps"><li class="step"><p>In the Available patterns section, click the
+      row containing the pattern to use as the template for a resource pattern
+      to move it to the Create your resources section.</p><div class="mediaobject" align="center"><a name="figure-resource-patterns-referrals-step1"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/resource-pattern-step1.png" align="middle" height="360" alt="Modify the resource patterns to specify the resources the policy applies to."></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-resource-patterns-referrals-step1.html" target="longdesc">D</a>]</span></div></div></li><li class="step"><p>Optionally, in the Create your resources section, replace the
+      asterisks with values to define the resources that the referral applies
+      to.</p><div class="mediaobject" align="center"><a name="figure-resource-referrals-step2"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/resource-pattern-step2.png" align="middle" height="360" alt="Edit the resource pattern if required."></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-resource-referrals-step2.html" target="longdesc">D</a>]</span></div></div><p>For information on specifying patterns for matching resources, see
+      <a href="../../admin-guide/index/chap-authz-policy.html#policy-patterns-wildcards" class="link">
+       <em class="citetitle">Specifying Resource Patterns with Wildcards</em>
+      </a>.</p></li><li class="step"><p>Click the Add icon to move the resource into the Resources
+      section.</p><div class="mediaobject" align="center"><a name="figure-resource-referrals-step3"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/resource-pattern-step3.png" align="middle" height="360" alt="Add the completed resource to the Resources section by clicking the Add icon."></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-resource-referrals-step3.html" target="longdesc">D</a>]</span></div></div></li></ol><div class="tip"><h3 class="title">Tip</h3><p>To remove a resource, click the Delete icon.</p></div><p>Repeat these steps to add all the resources your
+    referral applies to,  and then click Next.</p></li><li class="step"><p>
+    In the Available realms drop-down, select a realm to which the
+    referral redirects requests, and then click the Add icon. You can add
+    multiple target realms.</p><div class="note"><h3 class="title">Note</h3><p>A referral can only redirect requests to a child,
+    or sibling of the realm it is created in. The Available
+     realms drop-down only displays valid realms.</p></div><p>To remove an entry, click the Delete icon in the
+    row containing the realm to remove.</p></li><li class="step"><p>Review your configuration.</p><div class="tip"><h3 class="title">Tip</h3><p>If the configuration is not visible, click the maximized
+    link to switch to maximized view.</p></div><p>To make changes to the configuration, either click the relevant step,
+    or click the item to jump to the relevant step and make amendments to
+    the configuration.</p><p>When the configuration is completed, click Finish.</p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="policy-patterns-wildcards"></a>3.3.4.&nbsp;Specifying Resource Patterns with Wildcards</h3></div></div></div><div lang="en" class="itemizedlist"><p>
+  Resource patterns can specify an individual URL or resource name to protect.
+  Alternatively, a resource pattern can match URLs or resource names by using
+  wildcards.
+ </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+   The wildcards you can use are <code class="literal">*</code> and <code class="literal">-*-</code>.
+  </p><p>
+   These wildcards can be used throughout resource patterns
+   to match URLs or resource names.
+   For a resource pattern used to match URLs, wildcards can be employed to match
+   the scheme, host, port, path, and query string of the resource.
+  </p></li><li class="listitem"><p>
+   The wildcard <code class="literal">*</code> matches multiple levels in a path.
+  </p><p>
+   For example, <code class="literal">http://www.example.com/*</code> matches
+   <code class="literal">http://www.example.com/</code>,
+   <code class="literal">http://www.example.com/index.html</code>, and also
+   <code class="literal">http://www.example.com/company/images/logo.png</code>.
+  </p></li><li class="listitem"><p>
+   The wildcard <code class="literal">-*-</code> matches a single level in a path.
+  </p><p>
+   For example, <code class="literal">http://www.example.com/-*-</code> matches
+   <code class="literal">http://www.example.com/index.html</code> but does not match
+   <code class="literal">http://www.example.com/company/images/logo.png</code>.
+  </p></li><li class="listitem"><p>
+   Wildcards do not match <code class="literal">?</code>.
+   You must explicitly add patterns to match URLs with query strings.
+  </p><p>
+   When used at the end of a pattern after a <code class="literal">?</code> character,
+   <code class="literal">*</code> matches one or more characters,
+   not zero or more characters.
+  </p><p>
+   For example, <code class="literal">http://www.example.com/*?*</code> matches
+   <code class="literal">http://www.example.com/users?_action=create</code>, but not
+   <code class="literal">http://www.example.com/users?</code>.
+  </p><p>
+   For example, to match everything under
+   <code class="literal">http://www.example.com/</code> specify three patterns,
+   one for <code class="literal">http://www.example.com/*</code>,
+   one for <code class="literal">http://www.example.com/*?</code>, and
+   one for <code class="literal">http://www.example.com/*?*</code>.
+  </p><p>
+   When defining patterns to match URLs with query strings, OpenAM sorts the
+   query string field-value pairs alphabetically by field name
+   when normalizing URLs before checking whether a policy matches.
+   Therefore the query string
+   <code class="literal">?subject=SPBnfm+t5PlP+ISyQhVlplE22A8=&amp;action=get</code>
+   is equivalent to the query string
+   <code class="literal">?action=get&amp;subject=SPBnfm+t5PlP+ISyQhVlplE22A8=</code>.
+  </p></li><li class="listitem"><p>
+   Duplicate slashes (<code class="literal">/</code>)
+   are not considered part of the resource name to match.
+   A trailing slash is considered by OpenAM as part of the resource name.
+  </p><p>
+   For example,
+   <code class="literal">http://www.example.com//path/</code>,
+   and <code class="literal">http://www.example.com/path//</code>
+   are treated in the same way.
+  </p><p>
+   <code class="literal">http://www.example.com/path</code>,
+   and <code class="literal">http://www.example.com/path/</code>
+   are considered two distinct resources.
+  </p></li><li class="listitem"><p>
+   Wildcards can be used to match protocols, host names, and port numbers.
+  </p><p>
+   For example, <code class="literal">*://*:*/*</code> matches
+   <code class="literal">http://www.example.com:80/index.html</code>,
+   <code class="literal">https://www.example.com:443/index.html</code>, and
+   <code class="literal">http://www.example.net:8080/index.html</code>.
+  </p><p>
+   When a port number is not explicitly specified,
+   then the default port number is implied.
+   Therefore <code class="literal">http://www.example.com/*</code>
+   is the same as <code class="literal">http://www.example.com:80/*</code>,
+   and <code class="literal">https://www.example.com/*</code>
+   is the same as <code class="literal">https://www.example.com:443/*</code>.
+  </p></li><li class="listitem"><p>
+   Wildcards cannot be escaped.
+  </p></li><li class="listitem"><p>
+   Do not mix <code class="literal">*</code> and <code class="literal">-*-</code> in the same
+   pattern.
+  </p></li><li class="listitem"><p>
+   By default, comparisons are not case sensitive.
+   The delimiter, wildcards and case sensitivity are configurable.
+   To see examples of other configurations, browse in the OpenAM Console to
+   Configuration &gt; Global &gt; Policy Configuration &gt; Resource Comparator.
+  </p></li></ul></div></div><div lang="en" class="section"><div class="titlepage"><div><div><h3 class="title"><a name="script-policy"></a>3.3.5.&nbsp;Importing and Exporting Policies</h3></div></div></div><a class="indexterm" name="d0e8539"></a><p>You can import and export policies to and from files.</p><p>You can use these files to backup policies, transfer policies between
+  OpenAM instances, or store policy configuration in a version
+  control system such as Git or Subversion.</p><p>The default, preferred format for importing and
+  exporting OpenAM policies is <a class="link" href="http://docs.oasis-open.org/xacml/3.0/xacml-3.0-core-spec-os-en.html" target="_blank">
+<em class="citetitle">eXtensible Access Control Markup Language (XACML) Version 3.0</em></a>.</p><div class="note"><h3 class="title">Note</h3><p>OpenAM can only import XACML 3.0 files that were either created by
+ an OpenAM instance, or that have had minor manual modifications,
+ due to the reuse of some XACML 3.0 parameters for non-standard
+ information.</p></div><p>You can import and export policies by using the policy editor in
+ the OpenAM console, using the REST API, or with the <span class="command"><strong>ssoadm</strong></span>
+ command.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+    <a class="xref" href="chap-authz-policy.html#export-policy-to-xacml-xui" title="Procedure&nbsp;3.5.&nbsp;To Export Policies in XACML Format (OpenAM Console)">Procedure&nbsp;3.5, &#8220;To Export Policies in XACML Format (OpenAM Console)&#8221;</a>
+   </p></li><li class="listitem"><p><a class="xref" href="chap-authz-policy.html#import-policy-in-xacml-xui" title="Procedure&nbsp;3.6.&nbsp;To Import Policies in XACML Format (OpenAM Console)">Procedure&nbsp;3.6, &#8220;To Import Policies in XACML Format (OpenAM Console)&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-authz-policy.html#export-policy-to-xacml-ssoadm" title="Procedure&nbsp;3.7.&nbsp;To Export Policies in XACML Format (Command Line)">Procedure&nbsp;3.7, &#8220;To Export Policies in XACML Format (Command Line)&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-authz-policy.html#import-policy-in-xacml-ssoadm" title="Procedure&nbsp;3.8.&nbsp;To Import Policies in XACML Format (Command Line)">Procedure&nbsp;3.8, &#8220;To Import Policies in XACML Format (Command Line)&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-authz-policy.html#import-policy-in-xml-ssoadm" title="Procedure&nbsp;3.9.&nbsp;To Import Policies in XML Format (Command Line)">Procedure&nbsp;3.9, &#8220;To Import Policies in XML Format (Command Line)&#8221;</a></p></li></ul></div><div class="procedure"><a name="export-policy-to-xacml-xui"></a><div class="procedure-title">Procedure&nbsp;3.5.&nbsp;To Export Policies in XACML Format (OpenAM Console)</div><ul class="procedure"><li class="step"><p>In the OpenAM console, select Access Control &gt; <em class="replaceable"><code>Realm
+     Name</code></em> &gt; Policies, and then click Export
+    All Policies.</p></li></ul></div><div class="procedure"><a name="import-policy-in-xacml-xui"></a><div class="procedure-title">Procedure&nbsp;3.6.&nbsp;To Import Policies in XACML Format (OpenAM Console)</div><ol class="procedure" type="1"><li class="step"><p>In the OpenAM console, select Access Control &gt; <em class="replaceable"><code>Realm
+    Name</code></em> &gt; Policies, and then click Import
+    Policies.</p></li><li class="step"><p>Browse to the XACML format file, select it,
+    and then click Open.</p></li></ol></div><div class="procedure"><a name="export-policy-to-xacml-ssoadm"></a><div class="procedure-title">Procedure&nbsp;3.7.&nbsp;To Export Policies in XACML Format (Command Line)</div><ul class="procedure"><li class="step"><p>Use the <span class="command"><strong>ssoadm list-xacml</strong></span> command.</p><div class="screen"><pre>
+$ <strong>ssoadm \
+ list-xacml \
+ --realm "/" \
+ --adminid amadmin \
+ --password-file /tmp/pwd.txt</strong>
+<em>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+ &lt;PolicySet
+  xmlns="urn:oasis:names:tc:xacml:3.0:core:schema:wd-17"
+  PolicyCombiningAlgId="urn...rule-combining-algorithm:deny-overrides"
+  Version="2014.11.25.17.41.15.597"
+  PolicySetId="/:2014.11.25.17.41.15.597"&gt;
+  &lt;Target /&gt;
+  &lt;Policy
+   RuleCombiningAlgId="urn...rule-combining-algorithm:deny-overrides"
+   Version="2014.11.25.17.40.08.067"
+   PolicyId="myPolicy"&gt;
+   &lt;Description /&gt;
+   &lt;Target&gt;
+    &lt;AnyOf&gt;
+     &lt;AllOf&gt;
+      &lt;Match
+       MatchId="urn...entitlement:json-subject-match"&gt;
+       &lt;AttributeValue
+        DataType="urn...entitlement.conditions.subject.AuthenticatedUsers"&gt;
+        {}
+       &lt;/AttributeValue&gt;
+       &lt;AttributeDesignator
+        MustBePresent="true"
+        DataType="urn...entitlement.conditions.subject.AuthenticatedUsers"
+        AttributeId="urn...entitlement:json-subject"
+        Category="urn:oasis:names:tc:xacml:1.0:subject-category:access-subject" /&gt;
+      &lt;/Match&gt;
+     &lt;/AllOf&gt;
+    &lt;/AnyOf&gt;
+    &lt;AnyOf&gt;
+     &lt;AllOf&gt;
+      &lt;Match
+       MatchId="urn...entitlement:resource-match:application:iPlanetAMWebAgentService"&gt;
+       &lt;AttributeValue
+        DataType="htp://www.w3.org/2001/XMLSchema#string"&gt;
+        http://www.example.com:8000/*?*
+       &lt;/AttributeValue&gt;
+       &lt;AttributeDesignator
+        MustBePresent="true"
+        DataType="htp://www.w3.org/2001/XMLSchema#string"
+        AttributeId="urn:oasis:names:tc:xacml:1.0:resource:resource-id"
+        Category="urn...attribute-category:resource" /&gt;
+      &lt;/Match&gt;
+     &lt;/AllOf&gt;
+    &lt;/AnyOf&gt;
+    &lt;AnyOf&gt;
+     &lt;AllOf&gt;
+      &lt;Match
+       MatchId="urn...application-match"&gt;
+       &lt;AttributeValue
+        DataType="htp://www.w3.org/2001/XMLSchema#string"&gt;
+        iPlanetAMWebAgentService
+       &lt;/AttributeValue&gt;
+       &lt;AttributeDesignator
+        MustBePresent="false"
+        DataType="htp://www.w3.org/2001/XMLSchema#string"
+        AttributeId="urn...application-id"
+        Category="urn...application-category" /&gt;
+      &lt;/Match&gt;
+     &lt;/AllOf&gt;
+    &lt;/AnyOf&gt;
+    &lt;AnyOf&gt;
+     &lt;AllOf&gt;
+      &lt;Match
+       MatchId="urn...entitlement:action-match:application:iPlanetAMWebAgentService"&gt;
+       &lt;AttributeValue
+        DataType="htp://www.w3.org/2001/XMLSchema#string"&gt;
+        POST
+       &lt;/AttributeValue&gt;
+       &lt;AttributeDesignator
+        MustBePresent="true"
+        DataType="htp://www.w3.org/2001/XMLSchema#string"
+        AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
+        Category="urn...attribute-category:action" /&gt;
+      &lt;/Match&gt;
+     &lt;/AllOf&gt;
+     &lt;AllOf&gt;
+      &lt;Match
+       MatchId="urn...entitlement:action-match:application:iPlanetAMWebAgentService"&gt;
+       &lt;AttributeValue
+        DataType="htp://www.w3.org/2001/XMLSchema#string"&gt;
+        GET
+       &lt;/AttributeValue&gt;
+       &lt;AttributeDesignator
+        MustBePresent="true"
+        DataType="htp://www.w3.org/2001/XMLSchema#string"
+        AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
+        Category="urn...attribute-category:action" /&gt;
+      &lt;/Match&gt;
+     &lt;/AllOf&gt;
+    &lt;/AnyOf&gt;
+   &lt;/Target&gt;
+   &lt;VariableDefinition
+    VariableId="....entitlement.applicationName"&gt;
+    &lt;AttributeValue
+     DataType="htp://www.w3.org/2001/XMLSchema#string"&gt;
+     iPlanetAMWebAgentService
+    &lt;/AttributeValue&gt;
+   &lt;/VariableDefinition&gt;
+   &lt;VariableDefinition
+    VariableId="...privilege.createdBy"&gt;
+    &lt;AttributeValue
+     DataType="htp://www.w3.org/2001/XMLSchema#string"&gt;
+     id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org
+    &lt;/AttributeValue&gt;
+   &lt;/VariableDefinition&gt;
+   &lt;VariableDefinition
+    VariableId="...privilege.lastModifiedBy"&gt;
+    &lt;AttributeValue
+     DataType="htp://www.w3.org/2001/XMLSchema#string"&gt;
+     id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org
+    &lt;/AttributeValue&gt;
+   &lt;/VariableDefinition&gt;
+   &lt;VariableDefinition
+    VariableId="...privilege.creationDate"&gt;
+    &lt;AttributeValue
+     DataType="htp://www.w3.org/2001/XMLSchema#dateTime"&gt;
+     2014-11-25T17:40:08.067
+    &lt;/AttributeValue&gt;
+   &lt;/VariableDefinition&gt;
+   &lt;VariableDefinition
+    VariableId="...privilege.lastModifiedDate"&gt;
+    &lt;AttributeValue
+     DataType="htp://www.w3.org/2001/XMLSchema#dateTime"&gt;
+     2014-11-25T17:40:08.067
+    &lt;/AttributeValue&gt;
+   &lt;/VariableDefinition&gt;
+   &lt;Rule
+    Effect="Permit"
+    RuleId="null:permit-rule"&gt;
+    &lt;Description&gt;Permit Rule&lt;/Description&gt;
+    &lt;Target&gt;
+     &lt;AnyOf&gt;
+      &lt;AllOf&gt;
+       &lt;Match
+        MatchId="urn...entitlement:action-match:application:iPlanetAMWebAgentService"&gt;
+        &lt;AttributeValue
+         DataType="htp://www.w3.org/2001/XMLSchema#string"&gt;
+         POST
+        &lt;/AttributeValue&gt;
+        &lt;AttributeDesignator
+         MustBePresent="true"
+         DataType="htp://www.w3.org/2001/XMLSchema#string"
+         AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
+         Category="urn...attribute-category:action" /&gt;
+       &lt;/Match&gt;
+      &lt;/AllOf&gt;
+      &lt;AllOf&gt;
+       &lt;Match
+        MatchId="urn...entitlement:action-match:application:iPlanetAMWebAgentService"&gt;
+        &lt;AttributeValue
+         DataType="htp://www.w3.org/2001/XMLSchema#string"&gt;
+         GET
+        &lt;/AttributeValue&gt;
+        &lt;AttributeDesignator
+         MustBePresent="true"
+         DataType="htp://www.w3.org/2001/XMLSchema#string"
+         AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
+         Category="urn...attribute-category:action" /&gt;
+       &lt;/Match&gt;
+      &lt;/AllOf&gt;
+     &lt;/AnyOf&gt;
+    &lt;/Target&gt;
+    &lt;Condition&gt;
+     &lt;Apply
+      FunctionId="urn...entitlement:json-subject-and-condition-satisfied"&gt;
+      &lt;AttributeValue
+       DataType="urn...entitlement.conditions.subject.AuthenticatedUsers"
+       privilegeComponent="entitlementSubject"&gt;
+       {}
+      &lt;/AttributeValue&gt;
+     &lt;/Apply&gt;
+    &lt;/Condition&gt;
+   &lt;/Rule&gt;
+  &lt;/Policy&gt;
+ &lt;/PolicySet&gt;
+
+ Policy definitions were returned under realm, /.
+ </em>
+</pre></div></li></ul></div><div class="procedure"><a name="import-policy-in-xacml-ssoadm"></a><div class="procedure-title">Procedure&nbsp;3.8.&nbsp;To Import Policies in XACML Format (Command Line)</div><ul class="procedure"><li class="step"><p>Use the <span class="command"><strong>ssoadm create-xacml</strong></span> command.</p><div class="screen"><pre>
+$ <strong>ssoadm \
+ create-xacml \
+ --realm "/" \
+ --adminid amadmin \
+ --password-file /tmp/pwd.txt \
+ --xmlfile policy.xml</strong>
+
+ <em>Policies were created under realm, /.</em>
+</pre></div></li></ul></div><div class="procedure"><a name="import-policy-in-xml-ssoadm"></a><div class="procedure-title">Procedure&nbsp;3.9.&nbsp;To Import Policies in XML Format (Command Line)</div><p>You can import policies stored in non-XACML XML format. Once imported,
+    the policy can then be exported in the XACML format using either the OpenAM
+    console or the <span class="command"><strong>ssoadm list-xacml</strong></span> command.</p><ul class="procedure"><li class="step"><p>To import policies stored in non-XACML XML format, use the
+     <span class="command"><strong>ssoadm create-policies</strong></span> command.</p><div class="screen"><pre>
+$ <strong>ssoadm \
+ create-policies \
+ --realm "/" \
+ --adminid amadmin \
+ --password-file /tmp/pwd.txt \
+ --xmlfile policy.xml</strong>
+
+ <em>Policies were created under realm, /.</em>
+</pre></div></li></ul></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="delegate-policy"></a>3.4.&nbsp;Delegating Policy Management</h2></div></div></div><a class="indexterm" name="d0e8661"></a><p>
+   To delegate policy management and other administrative tasks, use privileges.
+   You set privileges in OpenAM console on the Privileges page for a realm.
+  </p><p>
+   For details see the procedure,
+   <a href="../../admin-guide/index/chap-realms.html" class="link"><em class="citetitle">To Delegate Administration</em></a>.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-auth-services.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-realms.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;2.&nbsp;Defining Authentication Services&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;4.&nbsp;Configuring Realms</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

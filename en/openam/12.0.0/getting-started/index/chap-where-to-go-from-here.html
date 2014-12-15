@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;2.&nbsp;Where To Go From Here</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="Getting Started With OpenAM"><link rel="up" href="index.html" title="Getting Started With OpenAM"><link rel="prev" href="chap-first-steps.html" title="Chapter&nbsp;1.&nbsp;Protecting a Web Site With OpenAM"><link rel="next" href="ix01.html" title="Index"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;2.&nbsp;Where To Go From Here</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-first-steps.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ix01.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-where-to-go-from-here"></a>Chapter&nbsp;2.&nbsp;Where To Go From Here</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-where-to-go-from-here.html#user-self-service-features">2.1. User Self-Service Features</a></span></dt><dt><span class="section"><a href="chap-where-to-go-from-here.html#sso-features">2.2. Single Sign On</a></span></dt><dt><span class="section"><a href="chap-where-to-go-from-here.html#federation">2.3. Standards-Based Federation</a></span></dt><dt><span class="section"><a href="chap-where-to-go-from-here.html#policy-and-xacml">2.4. Access Policies</a></span></dt><dt><span class="section"><a href="chap-where-to-go-from-here.html#protect-any-application">2.5. Protect Any Web Application</a></span></dt><dt><span class="section"><a href="chap-where-to-go-from-here.html#modern-api">2.6. Modern APIs For Developers</a></span></dt><dt><span class="section"><a href="chap-where-to-go-from-here.html#getting-help">2.7. Getting Help With Your Project</a></span></dt></dl></div><a class="indexterm" name="d0e1120"></a><p>OpenAM can do much more than protect web pages. In addition to being
+ the right foundation for building highly available, Internet-scale access
+ management services, OpenAM has a rich set of features that make it the right
+ choice for a variety of different deployments. This chapter describes some of
+ the features of OpenAM and indicates where in the documentation you can find
+ out more about them.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="user-self-service-features"></a>2.1.&nbsp;User Self-Service Features</h2></div></div></div><a class="indexterm" name="d0e1130"></a><a class="indexterm" name="d0e1135"></a><p>The easier it is for users to handle their own registration, to reset
+  forgotten passwords, and to access the applications they need without a call
+  to your help desk, the more you save when supporting them for these
+  tasks.</p><p>OpenAM has access to the identity repositories where user profiles are
+  stored. OpenAM is therefore well placed to help you manage self-service
+  features that involve user profiles.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><span class="bold"><strong>User Self-Registration</strong></span>.
+     OpenAM provides user self-registration as
+     a feature of OpenAM's REST APIs. New users can safely sign up
+     in OpenAM without your administrators or help desk having to get
+     involved.
+    </p><p>
+     For information on configuring self-registration, see the
+     <a href="../../admin-guide/index/chap-pwd-reset.html#user-self-registration" class="link">
+     <em class="citetitle">User Self-Registration</em></a> section in the
+     <em class="citetitle">OpenAM Administration Guide</em>.
+    </p><p>For details on building your own self-registration application using
+    the REST API, see the
+    <a href="../../dev-guide/index/chap-rest-user-services.html#rest-api-self-registration" class="link"><em class="citetitle">User
+    Self-Registration</em></a> section in the
+     <em class="citetitle">OpenAM Developer's Guide</em>.</p></li><li class="listitem"><p><span class="bold"><strong>Password Reset</strong></span>.
+     OpenAM can help users reset their passwords on their own. OpenAM
+     handles both the case where a user knows their password and wants to change
+     it, and also the case where the user has forgotten their password and needs
+     to reset it, possibly after answering security questions.</p><p>For details on setting up password reset capabilities, see the
+     <a href="../../admin-guide/index/chap-pwd-reset.html#forgotten-pwd-reset" class="link">
+      <em class="citetitle">Resetting Forgotten Passwords</em></a> chapter in
+     the <em class="citetitle">OpenAM Administration Guide</em>.</p><p>For details on building your own application to handle password reset
+     using the REST API, see the
+     <a href="../../dev-guide/index/chap-rest-user-services.html#rest-api-password-reset" class="link"><em class="citetitle">Resetting
+     Forgotten Passwords</em></a> section in the
+     <em class="citetitle">OpenAM Developer's Guide</em>.</p></li><li class="listitem"><p><span class="bold"><strong>Dashboard Service</strong></span>.
+     Users often have a number of applications assigned to them, especially
+     if your organization has standardized on software as a service, for example
+     for email, document sharing, support ticketing, customer relationship
+     management, web conferencing, and so forth. It can be handy to present these
+     applications on a user's web-based dashboard with the user's profile, and
+     to assign applications to the user's dashboard automatically based on the
+     user's profile.</p><p>The OpenAM cloud dashboard service makes this relatively easy to
+    set up. For basic information on using the service, see the
+    <em class="citetitle">Administration Guide</em> chapter, <a href="../../admin-guide/index/chap-dashboard.html" class="link"><em class="citetitle">Configuring the
+    Dashboard Service</em></a>.</p></li></ul></div><p>OpenAM's user-facing pages are fully customizable and easy to skin
+  for your organization. The <a href="../../install-guide/index/index.html" class="link"><em class="citetitle">Installation
+  Guide</em></a> has details on how to customize user-facing
+  pages.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="sso-features"></a>2.2.&nbsp;Single Sign On</h2></div></div></div><a class="indexterm" name="d0e1216"></a><a class="indexterm" name="d0e1221"></a><p>Single sign on (SSO) is a core feature of OpenAM. Once you have set up
+  OpenAM you protect as many applications in the network domain as you want.
+  Simply install policy agents for the additional servers, and add policies
+  for the resources served by the applications. Users can then authenticate
+  to start a session on any site in the domain, and they remain authenticated
+  for all sites in the domain. No need to log in again (unless the session
+  ends, or unless a policy requires stronger authentication). See the
+  <em class="citetitle">Administration Guide</em> chapter, <a href="../../admin-guide/index/chap-sso.html" class="link"><em class="citetitle">Configuring
+  Single Sign-On within One Domain</em></a> for details.</p><p>Many organizations manage more than one domain. When you have multiple
+  distinct domains in a single organization, cookies set in one domain are not
+  returned to servers in another domain. Also in many organizations, sub-domains
+  are controlled independently, leading to the need to protect against someone
+  setting up a rogue sub-domain to hijack session cookies. OpenAM's cross
+  domain single sign on (CDSSO) provides a safe mechanism for your OpenAM
+  servers in one domain to work with policy agents from other domains,
+  protecting against potential session cookie hijacking. CDSSO allows users to
+  sign on in one of your domains and not have to sign on again when they visit
+  another of your domains.</p><p>CDSSO works through cooperation between policy agents and the
+  <code class="literal">CDCServlet</code> in OpenAM. Together, the policy agents and
+  OpenAM use federation capabilities to translate from one domain to another.
+  For details on how to configure policy agents for CDSSO, see the
+  <em class="citetitle">Administration Guide</em> chapter, <a href="../../admin-guide/index/chap-cdsso.html" class="link"><em class="citetitle">Configuring
+  Cross-Domain Single Sign On</em></a>.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="federation"></a>2.3.&nbsp;Standards-Based Federation</h2></div></div></div><a class="indexterm" name="d0e1252"></a><a class="indexterm" name="d0e1257"></a><p>When you need to federate identities across not just different domains
+  but instead across different organizations with separate access management
+  solutions, then you need interoperable federation technologies. Perhaps your
+  organization acts as an identity provider for other organizations providing
+  services. Perhaps you provide the services and allow users to use their
+  identity from another organization to access your services. Either way OpenAM
+  has the capability to integrate well in federated access management
+  scenarios.</p><div class="itemizedlist"><p>OpenAM supports standards-based federation technologies.</p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Security Assertion Markup Language (SAML) 2.0 grew out of earlier
+    work on SAML 1.x and in the Liberty Alliance. SAML defines XML-based,
+    standard formats and profiles for federating identities. SAML 2.0 is
+    supported by a wide range of applications including major software as a
+    service (SaaS) offerings. OpenAM supports SAML 2.0 and earlier standards,
+    and can function as a hub in deployments where different standards are
+    used. For details on OpenAM's SAML 2.0 capabilities, see the
+    <em class="citetitle">Administration Guide</em> chapter, <a href="../../admin-guide/index/chap-federation.html" class="link"><em class="citetitle">Managing SAML
+    2.0 Federation</em></a>.</p><p>When your deployment serves as an identity provider for a SAML
+    federation, OpenAM makes it easy to develop applications called Fedlets that
+    your service providers can easily deploy to participate in the federation.
+    For details see the <em class="citetitle">Developer's Guide</em> chapters,
+    <a href="../../dev-guide/index/chap-fedlet-java.html" class="link"><em class="citetitle">Using Fedlets
+    in Java Web Applications</em></a> and <a href="../../dev-guide/index/chap-fedlet-dotnet.html" class="link"><em class="citetitle">Using Fedlets
+    in .NET Web Applications</em></a>.</p></li><li class="listitem"><p>OAuth 2.0 and OpenID Connect 1.0 are open standards for authorization
+    using REST APIs to allow users to authorize third-party access to their
+    resources. These standards make it easier to federate modern web
+    applications. OAuth for example is widely used in social applications.</p><p>OpenAM offers support both for OAuth 2.0 and also for OpenID Connect
+    1.0. OpenAM can play the roles of authorization server and of client in
+    OAuth 2.0, while managing the profiles of the resource owners. When acting
+    as a client, OpenAM policy agents can be used on resource servers to enforce
+    authorization. For details see the <em class="citetitle">Administration Guide</em>
+    chapter, <a href="../../admin-guide/index/chap-oauth2.html" class="link"><em class="citetitle">Managing OAuth
+    2.0 Authorization</em></a>.</p><p>OpenAM can play the OpenID Connect 1.0 provider role as well, with
+    support for Basic and Implicit client profiles as well as discovery,
+    dynamic registration, and session management. For details see the
+    <em class="citetitle">Administration Guide</em> chapter, <a href="../../admin-guide/index/chap-openid-connect.html" class="link"><em class="citetitle">Managing OpenID
+    Connect 1.0 Authorization</em></a>.</p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="policy-and-xacml"></a>2.4.&nbsp;Access Policies</h2></div></div></div><a class="indexterm" name="d0e1314"></a><a class="indexterm" name="d0e1319"></a><p>In the first chapter of this guide you created an OpenAM access policy
+  and saw how it worked. OpenAM can handle large numbers of access policies,
+  each of which gives you centralized control over who can access what
+  resources, when, and under what circumstances. For details see the
+  <em class="citetitle">Administration Guide</em> chapter, <a href="../../admin-guide/index/chap-authz-policy.html" class="link"><em class="citetitle">Defining
+  Authorization Policies</em></a>.</p><p>OpenAM also supports standards-based access policies defined using the
+  eXtensible Access Control Markup Language (XACML). XACML defines an XML
+  Attribute-Based Access Control (ABAC) language with Role-Based Access Control
+  (RBAC) features as well. For details on using XACML policies with OpenAM see
+  the <em class="citetitle">Administration Guide</em> chapter, <span class="olink"><em class="citetitle">Defining
+  Entitlements</em></span>.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="protect-any-application"></a>2.5.&nbsp;Protect Any Web Application</h2></div></div></div><a class="indexterm" name="d0e1345"></a><a class="indexterm" name="d0e1350"></a><p>In the first chapter of the guide you installed a web policy agent to
+  enforce OpenAM's authorization decisions on Apache HTTP Server. That web
+  policy agent is only one of many policy agents that work with OpenAM.
+  As described in the <em class="citetitle">Administration Guide</em> chapter, <a href="../../admin-guide/index/chap-agents.html" class="link"><em class="citetitle">Configuring Policy
+  Agent Profiles</em></a>, you find policy agents for different web
+  servers, for a variety of Java EE web application containers, for protecting
+  SOAP-based web services, and for OAuth 2.0 clients.</p><p>
+   For details about web policy agents also see the
+   <a class="link" href="http://docs.forgerock.org/en/openam-pa/3.3.0/web-users-guide/#web-users-guide" target="_blank"><em class="citetitle">Web Policy Agent User's Guide</em></a>.
+  </p><p>
+   For details about Java EE policy agents also see the
+   <a class="link" href="http://docs.forgerock.org/en/openam-pa/3.3.0/jee-users-guide/#jee-users-guide" target="_blank"><em class="citetitle">Java EE Policy Agent User's Guide</em></a>.
+  </p><p>Furthermore <a class="link" href="http://openig.forgerock.org" target="_blank">OpenIG Identity Gateway</a> works with applications where you want to
+  protect access, but you cannot install a policy agent. For example, you might
+  have a web application running in a server for which no policy agent has been
+  developed. Or you might be protecting an application where you simply cannot
+  install a policy agent. In that case, OpenIG functions as a flexible reverse
+  proxy with standard SAML 2.0 capabilities. For details see the <a class="link" href="http://docs.forgerock.org/en/openig/" target="_blank"><em class="citetitle">OpenIG documentation</em></a>.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="modern-api"></a>2.6.&nbsp;Modern APIs For Developers</h2></div></div></div><a class="indexterm" name="d0e1388"></a><a class="indexterm" name="d0e1393"></a><div class="itemizedlist"><p>For client application developers, OpenAM offers REST, Java, and C
+   APIs.</p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>OpenAM REST APIs make the common CRUD (create, read, update,
+    delete) easy to use in modern web applications. They also offer extended
+    actions and query capabilities for access management functionality.</p><p>To get started, see the <em class="citetitle">Developer's Guide</em>
+    chapter, <a href="../../dev-guide/index/chap-rest.html" class="link"><em class="citetitle">Using RESTful
+    Web Services</em></a>.</p></li><li class="listitem"><p>OpenAM Java APIs provided through the OpenAM Java SDK let your Java
+    and Java EE applications call on OpenAM for authentication and authorization
+    in both OpenAM and federated environments.</p><p>To get started, see the <em class="citetitle">Developer's Guide</em>
+    chapter, <a href="../../dev-guide/index/chap-jdk.html" class="link"><em class="citetitle">Using the
+    OpenAM Java SDK</em></a>.</p></li><li class="listitem"><p>The OpenAM C SDK provides APIs for native applications, such as new
+    web server policy agents. The C SDK is built for Linux, Solaris, and Windows
+    platforms.</p><p>To get started, see the <em class="citetitle">Developer's Guide</em>
+    chapter, <a href="../../dev-guide/index/chap-csdk.html" class="link"><em class="citetitle">Using the
+    OpenAM C API</em></a>.</p></li></ul></div><p>OpenAM provides built-in support for many identity repositories,
+  web servers and web application containers, access management standards,
+  and all the flexible, configurable capabilities mentioned in this chapter.
+  Yet, for some deployments you might still need to extend what OpenAM can do.
+  For such cases OpenAM defines Service Provider Interfaces (SPIs) where you
+  can integrate your own plugins. See the <em class="citetitle">Developer's Guide</em>
+  section, <a href="../../dev-guide/index/chap-api-overview.html#openam-spis" class="link"><em class="citetitle">OpenAM
+  SPIs</em></a>, for a list of extension points, and the related
+  documentation in that guide for examples.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="getting-help"></a>2.7.&nbsp;Getting Help With Your Project</h2></div></div></div><a class="indexterm" name="d0e1449"></a><a class="indexterm" name="d0e1454"></a><a class="indexterm" name="d0e1459"></a><a class="indexterm" name="d0e1462"></a><p>You can purchase OpenAM support subscriptions and training courses
+  from ForgeRock and from consulting partners around the world and in your
+  area. To contact ForgeRock, send mail to <a class="link" href="mailto:info@forgerock.com" target="_top">info@forgerock.com</a>. To find a
+  partner in your area, see <a class="link" href="http://forgerock.com/partners/find-a-partner/" target="_blank">http://forgerock.com/partners/find-a-partner/</a>.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-first-steps.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ix01.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;1.&nbsp;Protecting a Web Site With OpenAM&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Index</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

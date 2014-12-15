@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;8.&nbsp;Configuring User Self-Service Features</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenAM Administration Guide"><link rel="up" href="index.html" title="OpenAM Administration Guide"><link rel="prev" href="chap-mobile.html" title="Chapter&nbsp;7.&nbsp;Working with Mobile Devices &amp; Applications"><link rel="next" href="chap-sso.html" title="Chapter&nbsp;9.&nbsp;Configuring Single Sign-On within One Domain"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;8.&nbsp;Configuring User Self-Service Features</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-mobile.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-sso.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-pwd-reset"></a>Chapter&nbsp;8.&nbsp;Configuring User Self-Service Features</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-pwd-reset.html#user-self-registration">8.1. Configuring User Self-Registration</a></span></dt><dt><span class="section"><a href="chap-pwd-reset.html#about-pwd-reset">8.2. About Password Reset</a></span></dt><dt><span class="section"><a href="chap-pwd-reset.html#forgotten-pwd-reset">8.3. Resetting Forgotten Passwords (Legacy)</a></span></dt></dl></div><a class="indexterm" name="d0e22885"></a><p>This chapter focuses on how to enable OpenAM features that allow users
+  to self register from the Login page and reset their own
+  passwords in secure fashion.
+ </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="user-self-registration"></a>8.1.&nbsp;Configuring User Self-Registration</h2></div></div></div><p>
+   OpenAM provides a self-registration feature that allows users to add
+   themselves to the system.
+   On the Login page, the user clicks a Register link, which sends a request to
+   the OpenAM server. OpenAM responds to request by sending a
+   Register Your Account page where the user enters his or her email address.
+  </p><p>
+   After the user enters his or her email, OpenAM responds by sending a
+   notification containing a confirmation link to the user's email address.
+   When the user clicks the link, OpenAM confirms the operation and presents the user
+   with a registration page where the user enters their account information.
+  </p><div class="procedure"><a name="configure-user-self-registration"></a><div class="procedure-title">Procedure&nbsp;8.1.&nbsp;To Configure User Self-Registration</div><ol class="procedure" type="1"><li class="step"><p>Configure the Email Service to send mail
+     notifications to users who self-register.
+    </p><p>
+     You can configure these globally
+     in OpenAM console at Configuration &gt; Global &gt; Email Service.
+     Alternatively, you can configure them for an individual realm under
+     Access Control &gt; <em class="replaceable"><code>Realm Name</code></em> &gt; Services.</p></li><li class="step"><p>Configure User Self Service to enable self-registration.
+    </p><p>
+     You can configure these globally in OpenAM console at
+     Configure &gt; Global &gt; User Self Service. On the User Self Service page, click
+     the <code class="literal">Enabled</code> checkbox next to Self-Registration for Users,
+     and then click Save.
+    </p></li></ol></div><p>
+   At this point users can self-register by clicking a Register link on the
+   Login page.
+  </p><div class="mediaobject" align="center"><a name="figure-user-self-register-login"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/user-self-register-login.png" align="middle" height="360" alt="User Self-Registration link"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-user-self-register-login.html" target="longdesc">D</a>]</span></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="about-pwd-reset"></a>8.2.&nbsp;About Password Reset</h2></div></div></div><p>Users who know their passwords, but must reset them because for example
+   the password is going to expire, can reset their passwords by successfully
+   authenticating to OpenAM, visiting their end user pages, such as
+   <code class="literal">http://openam.example.com:8080/openam/XUI/#profile/</code>, and
+   clicking Change Security Data to display the change password page.</p><div class="figure"><a name="figure-console-change-pwd-xui"></a><div class="figure-title">Figure&nbsp;8.1.&nbsp;OpenAM Security Data Change page</div><div class="figure-contents"><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/console-change-pwd-xui.png" align="middle" height="360" alt="OpenAM Change Password page"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="ld-d0e22937.html" target="longdesc">D</a>]</span></div></div></div></div><br class="figure-break"><p>You therefore do not need to configure password reset for users
+  who can remember their current password. Instead, you point them to the
+  <code class="literal">XUI/#profile</code> page to let them do it themselves.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="forgotten-pwd-reset"></a>8.3.&nbsp;Resetting Forgotten Passwords (Legacy)</h2></div></div></div><p>
+   OpenAM can provide self-service password reset for forgotten passwords
+   when end user pages are served by the classic UI.
+   To enable self-service password reset, you must configure the password
+   reset service itself, which consists mainly of setting up secret questions,
+   and configuring an SMTP mail server to send reset passwords to the users
+   of the service.
+  </p><div class="tip"><h3 class="title">Tip</h3><p>Users must be able to access their mail after the service resets
+   their passwords, or they will not be able to receive the new password.
+   Therefore, do not set up the service to reset the password used to access
+   the email account specified in the user's profile.</p></div><div class="procedure"><a name="set-up-pwd-reset-service"></a><div class="procedure-title">Procedure&nbsp;8.2.&nbsp;To Set Up the Password Reset Service</div><p>You can configure the password reset service for OpenAM, letting
+   each realm inherit the global settings. Alternatively, you can choose to
+   configure the service only for an individual realm.</p><div class="tip"><h3 class="title">Tip</h3><p>
+     Resetting a user password can have repercussions on the user profile.
+     For example, a user data store directory service
+     could enforce a policy to require password changes on reset.
+     OpenAM's LDAP authentication module can deal with policies
+     based on the Behera Internet-Draft,
+     <a class="link" href="http://tools.ietf.org/html/draft-behera-ldap-password-policy-09" target="_blank">Password Policy for LDAP Directories</a>,
+     though its default DataStore authentication module cannot.
+    </p><p>
+     When the user data store directory service
+     enforces password reset policies,
+     then either use the LDAP authentication module
+     in the authentication chain,
+     or rely on some other means of resetting user passwords.
+    </p></div><ol class="procedure" type="1"><li class="step"><p>Configure the Password Reset service in one of the following ways.</p><ul class="stepalternatives">
+     <li class="step"><p>To configure the service globally for all realms, login to OpenAM
+      Console as administrator and browse to Configuration &gt; Global &gt;
+      Password Reset in the Global Properties list.</p></li>
+
+     <li class="step"><p>To configure the service for a particular realm, login to OpenAM
+      console as the realm administrator and browse to Access Control &gt;
+      <em class="replaceable"><code>Realm Name</code></em> &gt; Services, then click Add...
+      to add a new Password Reset service configuration.</p></li>
+    </ul></li><li class="step"><p>In the Password Reset page, use the following hints to adjust
+    settings, and then save your work.</p><p>In addition to the User Validation and Secret Question values
+    provided, you must configure at least the Bind DN and Bind Password
+    of the user who can reset passwords in the LDAP data store.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">User Validation</span></dt><dd><p>OpenAM uses this LDAP attribute and the value entered by the
+       user to look up the user profile in the data store.</p></dd><dt><span class="term">Secret Question</span></dt><dd><p>This list corresponds to property values held in the file
+       <code class="filename">amPasswordReset.properties</code> inside
+       <code class="filename">openam-core-12.0.0.jar</code>, which you can find
+       under <code class="filename">WEB-INF/lib/</code> where OpenAM is installed.</p><p>To make changes, extract a version from
+       <code class="filename">openam-core-12.0.0.jar</code>, copy it to
+       <code class="filename">WEB-INF/classes/</code> where OpenAM is deployed, and
+       then edit
+       <code class="filename">WEB-INF/classes/amPasswordReset.properties</code>.</p><p>Localized versions of this file are named
+       <code class="filename">amPasswordReset_<em class="replaceable"><code>locale</code></em>.properties</code>.
+       You should localize only the questions at the end, leaving the rest of
+       the localized file as is. For example if the default properties file
+       contains:</p><pre class="literallayout">favourite-restaurant=What is your favorite restaurant?</pre><p>Then <code class="filename">WEB-INF/classes/amPasswordReset_fr.properties</code>
+       ought to contain:</p><pre class="literallayout">favourite-restaurant=Quel est votre restaurant pr&eacute;f&eacute;r&eacute; ?</pre><p>After changing these files, you must restart OpenAM.</p></dd><dt><span class="term">Search Filter</span></dt><dd><p>An additional LDAP search filter you specify here is &amp;-ed
+       with the filter constructed for user validation to find the user
+       entry in the data store.</p></dd><dt><span class="term">Base DN</span></dt><dd><p>If you specify no base DN for the search, the search for the user
+       entry starts from the base DN for the realm.</p></dd><dt><span class="term">Bind DN</span></dt><dd><p>The DN of the user with access to change passwords in the
+       LDAP data store.</p></dd><dt><span class="term">Bind Password</span></dt><dd><p>The password of the user with access to change passwords in the
+       LDAP data store.</p></dd><dt><span class="term">Reset Password Creator</span></dt><dd><p>Classname of a plugin that implements the
+       <code class="literal">PasswordGenerator</code> interface.</p><p>Default: <code class="literal">com.sun.identity.password.plugins.RandomPasswordGenerator</code></p></dd><dt><span class="term">Password Reset Notification Class</span></dt><dd><p>Classname of a plugin that implements the
+       <code class="literal">NotifyPassword</code> interface.</p><p>Default: <code class="literal">com.sun.identity.password.plugins.EmailPassword</code></p></dd><dt><span class="term">Password Reset</span></dt><dd><p>Enables the service.</p></dd><dt><span class="term">Personal Question</span></dt><dd><p>When enabled, allows the user to create custom secret
+       questions.</p></dd><dt><span class="term">Maximum Number of Questions</span></dt><dd><p>Maximum number of questions to ask during password reset.</p></dd><dt><span class="term">Force Change Password on Next Login</span></dt><dd><p>When enabled, the user must change her password next time she
+       logs in after OpenAM resets her password.</p></dd><dt><span class="term">Password Reset Failure Lockout</span></dt><dd><p>When enabled, the user only gets the specified number of tries
+       before her account is locked.</p></dd><dt><span class="term">Password Reset Failure Lockout Count</span></dt><dd><p>If Password Reset Failure Lockout is enabled, this specifies the
+       maximum number of tries to reset a password within the specified
+       interval before the user's account is locked.</p></dd><dt><span class="term">Password Reset Failure Lockout Interval</span></dt><dd><p>This interval applies when Password Reset Failure Lockout is
+       enabled, and when Password Reset Failure Lockout Count is set. During
+       this interval, a user can try to reset her password the specified
+       number of times before being locked out. For example, if this interval
+       is 5 minutes and the count is set to 3, a user gets 3 tries during
+       a given 5 minute interval to reset her password.</p></dd><dt><span class="term">Email Address to Send Lockout Notification</span></dt><dd><p>This specifies the administrator address(es) which receive(s)
+       notification on user account lockout. Each address must be a full
+       email address such as <code class="literal">admin@example.com</code>, or
+       <code class="literal">admin@host.domain</code>.</p><p>OpenAM must be able to send mail through an SMTP-capable service
+       for this to work. See <a class="xref" href="chap-pwd-reset.html#set-up-mail-notification" title="Procedure&nbsp;8.3.&nbsp;To Set Up SMTP Mail Notification">Procedure&nbsp;8.3, &#8220;To Set Up SMTP Mail Notification&#8221;</a>.</p></dd><dt><span class="term">Warn User After N Failures</span></dt><dd><p>If you configure Password Reset Failure Lockout, set this to
+       warn users who are about to use up their count of tries.</p></dd><dt><span class="term">Password Reset Failure Lockout Duration</span></dt><dd><p>If you configure Password Reset Failure Lockout, set this to a
+       number of minutes other than <code class="literal">0</code> so that lockout is
+       temporary, requiring only that the locked-out user wait to try again
+       to reset her password, rather than necessarily require help from
+       an administrator.</p></dd><dt><span class="term">Password Reset Lockout Attribute Name</span></dt><dd><p>If you configure Password Reset Failure Lockout, then OpenAM sets
+       sets data store attribute to <code class="literal">inactive</code> upon
+       lockout.</p></dd><dt><span class="term">Password Reset Lockout Attribute Value</span></dt><dd><p>If set to <code class="literal">inactive</code>, then a user who is locked
+       out cannot attempt to reset her password if the Password Reset
+       Failure Lockout Duration is <code class="literal">0</code>.</p></dd><dt><span class="term">Password Reset E-mail Attribute Name</span></dt><dd><p>Identity attribute that holds the user's email address.</p><p>Default: <code class="literal">mail</code></p></dd></dl></div></li><li class="step"><p>If you changed Secret Questions in the
+    <code class="filename">WEB-INF/classes/amPasswordReset.properties</code> file or in
+    any localized versions, restart OpenAM for the changes to take
+    effect.</p></li></ol></div><div class="procedure"><a name="set-up-mail-notification"></a><div class="procedure-title">Procedure&nbsp;8.3.&nbsp;To Set Up SMTP Mail Notification</div><p>By default, OpenAM expects the SMTP service to listen on
+   <code class="literal">localhost:25</code>. You can change these settings.</p><ol class="procedure" type="1"><li class="step"><p>In the OpenAM console, click the Configuration &gt; Servers and
+    Sites &gt; Default Server Settings.</p></li><li class="step"><p>In the Edit server-default page, scroll down to Mail Server to
+    change the Mail Server Host Name or Mail Server Port Number.</p></li><li class="step"><p>Save your work.</p></li><li class="step"><p>By default, OpenAM sends password reset notifications from
+    <code class="literal">&lt;Password-Administrator&gt;</code>.</p><p>To set a valid from address, extract
+    <code class="filename">amPasswordResetModuleMsgs.properties</code> from
+    <code class="filename">openam-core-12.0.0.jar</code>, copy it to
+    <code class="filename">WEB-INF/classes/</code> where OpenAM is deployed, and then
+    edit the file to change the <code class="literal">fromAddress.label</code> property
+    value, as in the following example.</p><pre class="literallayout">fromAddress.label=no-reply@example.com</pre><p>Save your work, and then restart OpenAM for the properties file change
+    to take effect.</p></li></ol></div><div class="procedure"><a name="prepare-users-for-pwd-reset"></a><div class="procedure-title">Procedure&nbsp;8.4.&nbsp;To Prepare Users to Reset Passwords</div><p>Before a user can reset her password, she must choose answers for
+   secret questions.</p><ol class="procedure" type="1"><li class="step"><p>When her account is first created, direct the user to her
+    <code class="literal">idm/EndUser</code> page, such as
+    <code class="literal">http://openam.example.com:8080/openam/idm/EndUser</code>,
+    where she can provide a valid email address to recover the reset password
+    and can edit Password Reset Options.</p><div class="mediaobject" align="center"><a name="figure-console-end-user"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/console-end-user.png" align="middle" height="360" alt="The OpenAM end user page"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-console-end-user.html" target="longdesc">D</a>]</span></div></div><p>By default OpenAM console redirects end users to this page when
+    they login.</p></li><li class="step"><p>After the user updates her secret questions, she can use the
+    password reset service when necessary.</p><div class="mediaobject" align="center"><a name="figure-console-secret-questions"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/console-secret-questions.png" align="middle" height="360" alt="The OpenAM secret question page"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-console-secret-questions.html" target="longdesc">D</a>]</span></div></div><div class="note"><h3 class="title">Note</h3><p>Answers to secret questions are case sensitive.</p></div></li></ol></div><div class="procedure"><a name="redirect-to-reset-pwd"></a><div class="procedure-title">Procedure&nbsp;8.5.&nbsp;To Direct Users to Reset Passwords</div><p>Having setup her email and answers to secret questions, the user
+   can use the reset password service.</p><p>Create a test subject and use these steps to validate your
+   configuration.</p><ol class="procedure" type="1"><li class="step"><p>Send the user with a forgotten password to enter her user ID at
+    the password reset URL.</p><p>If the user is in the default realm use <code class="literal">password</code>
+    at the end of the URL to OpenAM, as in
+    <code class="literal">http://openam.example.com:8080/openam/password</code>.</p><p>If the password reset service is enabled only for the user's realm
+    and not the parent realm, or the realm to reset the password is different
+    from the user's default realm, use <code class="literal">ui/PWResetUserValidation?realm=<em class="replaceable"><code>realm
+    name</code></em>, as in</code>
+    <code class="literal">http://openam.example.com:8080/openam/ui/PWResetUserValidation?realm=<em class="replaceable"><code>realm
+    name</code></em></code>.</p><div class="mediaobject" align="center"><a name="figure-console-user-validation"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/console-user-validation.png" align="middle" height="360" alt="The OpenAM user validation page"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-console-user-validation.html" target="longdesc">D</a>]</span></div></div></li><li class="step"><p>The user answers the specified questions, and clicks OK.</p><p>OpenAM resets the password, sending mail to the SMTP service
+    you configured.</p><div class="mediaobject" align="center"><a name="figure-console-answer-questions"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/console-answer-questions.png" align="middle" height="360" alt="The OpenAM user validation page"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-console-answer-questions.html" target="longdesc">D</a>]</span></div></div><p>When the user clicks OK, OpenAM sends the email and shows a
+    confirmation message.</p><p>The user receives the email with a line such as the following.</p><pre class="literallayout">Your OpenAM password was changed to:  647bWluw</pre></li><li class="step"><p>The user logs in using the new password.</p><p>If you configured the system to force a change on password reset,
+    then OpenAM requires the user to change her password.</p></li></ol></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-mobile.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-sso.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;7.&nbsp;Working with Mobile Devices &amp; Applications&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;9.&nbsp;Configuring Single Sign-On within One Domain</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

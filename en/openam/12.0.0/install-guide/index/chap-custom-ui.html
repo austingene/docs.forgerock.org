@@ -1,0 +1,451 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;6.&nbsp;Customizing the OpenAM End User Pages</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenAM Installation Guide"><link rel="up" href="index.html" title="OpenAM Installation Guide"><link rel="prev" href="chap-install-das.html" title="Chapter&nbsp;5.&nbsp;Installing OpenAM Distributed Authentication"><link rel="next" href="chap-cts.html" title="Chapter&nbsp;7.&nbsp;Configuring the Core Token Service (CTS)"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;6.&nbsp;Customizing the OpenAM End User Pages</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-install-das.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-cts.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-custom-ui"></a>Chapter&nbsp;6.&nbsp;Customizing the OpenAM End User Pages</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-custom-ui.html#basic-xui-configuration">6.1. Configuring the XUI</a></span></dt><dt><span class="section"><a href="chap-custom-ui.html#update-classic-ui">6.2. Updating the Classic UI (Legacy)</a></span></dt><dt><span class="section"><a href="chap-custom-ui.html#lookup-for-ui-files">6.3. How OpenAM Looks Up UI Files</a></span></dt></dl></div><a class="indexterm" name="d0e3809"></a><p>
+  When you deploy OpenAM to protect your web-based applications,
+  users can be redirected to OpenAM pages for login and logout.
+ </p><p>
+  The end user pages have ForgeRock styling and branding by default.
+  You likely want to change at least the images to reflect your organization.
+  You might want different customizations for different realms.
+  This chapter addresses how to get started customizing OpenAM end user pages
+  for your organizations and supported locales.
+ </p><div class="itemizedlist"><p>
+   You configure which set of OpenAM pages the end user sees.
+  </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+    By default, end users see the XUI pages.
+   </p><p>
+    See <a class="xref" href="chap-custom-ui.html#basic-xui-configuration" title="6.1.&nbsp;Configuring the XUI">Section&nbsp;6.1, &#8220;Configuring the XUI&#8221;</a> for details.
+   </p></li><li class="listitem"><p>
+    For backwards compatibility, OpenAM bundles the classic UI pages as well.
+    This can be useful when upgrading as it allows you to use customizations
+    developed with earlier versions of OpenAM.
+   </p><p>
+    To enable the classic UI, disable the XUI.
+   </p><a class="indexterm" name="d0e3831"></a><p>
+    You can disable XUI globally for an OpenAM server in OpenAM console under
+    Configuration &gt; Authentication &gt; Core &gt; Global Attributes.
+    Clear XUI Interface Enabled, save your work, and log out.
+    When you return to the login page, you see the classic UI.
+   </p></li></ul></div><p>
+  While customizing the UI, you can set the advanced server property,
+  <code class="literal">org.forgerock.openam.core.resource.lookup.cache.enabled</code>,
+  to <code class="literal">false</code> to allow OpenAM immediately to pick up changes
+  to the files as you customize them.
+  This includes both the XML callback files for authentication modules
+  used both by the XUI and also by the classic UI,
+  and the JSP files used by the classic UI.
+  You can set advanced server properties in OpenAM console under
+  Configuration &gt; Servers and Sites &gt; <em class="replaceable"><code>Server Name</code></em> &gt; Advanced.
+  Before using OpenAM in production, set
+  <code class="literal">org.forgerock.openam.core.resource.lookup.cache.enabled</code>
+  back to the default setting, <code class="literal">true</code>.
+ </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="basic-xui-configuration"></a>6.1.&nbsp;Configuring the XUI</h2></div></div></div><a class="indexterm" name="d0e3858"></a><p>
+      XUI is the default UI for OpenAM.
+      Compared with the classic UI, XUI does more on the client side.
+      XUI is based on JavaScript that accesses OpenAM REST APIs,
+      and is styled with
+      <a class="link" href="http://lesscss.org/" target="_blank">LESS CSS</a>.
+     </p><p>
+      Interface Stability:
+      <a href="../../admin-guide/index/appendix-interface-stability.html#interface-stability" class="link">Evolving</a>
+     </p><p>
+      The main XUI configuration file,
+      <code class="filename">XUI/themeConfig.json</code> under the directory
+      where you unpack OpenAM,
+      serves to customize the look and feel of end user pages.
+      For details, see the <em class="citetitle">Reference</em> chapter on
+      <a href="../../reference/index/chap-xui-parameters.html" class="link"><em class="citetitle">XUI Configuration Parameters</em></a>.
+     </p><p>
+      You can set different themes for different realms
+      by adding each realm configuration to the array of "themes",
+      with the realm "name", "path", and "realms" fields set appropriately.
+      The following example shows a new theme for <code class="literal">myRealm</code>
+      added after the default theme.
+     </p><pre class="brush: javascript;">
+{
+     "themes": [
+         {
+            "name": "default",
+            "path": "",
+            "realms": [".*"],
+            "regex"" true,
+
+         . . .
+
+                 "footer": {
+                    "mailto": "info@forgerock.com",
+                    "phone": ""
+                 }
+             }
+         },
+         {
+            "name": "myRealm",
+            "path": "path/to/myRealm/",
+            "realms": ["myRealm.*"],
+            "regex": true,
+
+         . . .
+
+                "footer": {
+                    "mailto": "info@example.com",
+                    "phone": "+1 555 555 5555"
+                }
+            }
+         }
+     ]
+}</pre><p>
+      Make sure <code class="filename">themeConfig.json</code> is valid JSON
+      after you apply your changes.
+      If in doubt, use a validator such as
+      <a class="link" href="http://jsonlint.com" target="_blank">http://jsonlint.com</a>.
+     </p><p>If you want to keep a parameter used in the default realm, just delete it from the later realm. Except
+     for the following parameters, realm parameters inherit values from the default: <code class="literal">name</code>,
+     <code class="literal">path</code>, <code class="literal">realms</code>, and <code class="literal">regex</code>.</p><p>When configuring new or revised parameters, keep the following tips in mind:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>The <code class="literal">path</code> to the directory with custom realm settings requires a
+             trailing forward slash <code class="literal">/</code>.</p></li><li class="listitem"><p>Logos may require custom height and width parameters.</p></li><li class="listitem"><p>Each of the <code class="literal">lessVars</code> parameters are based on variables defined in files
+             in the <code class="filename">XUI/css/user</code> directory.</p></li><li class="listitem"><p>After making changes, use available tools to make sure the file uses correct JSON syntax.</p></li><li class="listitem"><p>Each realm after the default requires at least the <code class="literal">name</code>,
+             <code class="literal">path</code>, <code class="literal">realms</code>, and <code class="literal">regex</code>
+             parameters.</p></li></ul></div><p>When testing different options, make sure to clear the browser cache on a regular basis. Otherwise, changes
+     that you have made might not be shown in your browser.</p><p>
+      Much of the text supplied in XUI
+      is stored in <code class="filename">translation.json</code> files for each locale.
+      To customize the English text,
+      edit <code class="filename">XUI/locales/en/translation.json</code>
+      under the directory where OpenAM is unpacked for deployment.
+      To prepare a translation for a new locale, copy the English file,
+      <code class="filename">XUI/locales/en/translation.json</code>,
+      to <code class="filename">XUI/locales/<em class="replaceable"><code>new-locale</code></em>/</code>
+      and edit the copy changing only the values not the keys,
+      and taking care not to change the JSON structure or to render it invalid.
+     </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="update-classic-ui"></a>6.2.&nbsp;Updating the Classic UI (Legacy)</h2></div></div></div><a class="indexterm" name="d0e3977"></a><p>
+      To customize the classic UI,
+      first you copy the pages to customize to the proper location,
+      and then you customize the files themselves.
+     </p><p>
+      Interface Stability:
+      <a href="../../admin-guide/index/appendix-interface-stability.html#interface-stability" class="link">Deprecated</a>
+     </p><p>
+      Classic UI provides pages localized for English, French, German, Spanish,
+      Japanese, Korean, Simplified Chinese, and Traditional Chinese,
+      but you might require additional language support for your organization.
+     </p><p>
+      Classic UI images are located under <code class="filename">images/</code>,
+      and CSS under <code class="filename">css/</code>
+      where OpenAM files are unpacked for deployment.
+      If you choose to modify images for your deployment,
+      maintain image size dimensions to avoid having to change page layout.
+     </p><p>When developing with a web container that deploys
+         OpenAM in a temporary location, such as JBoss or Jetty, restarting the
+         container can overwrite your changes with the deployable .war content. For
+         those web containers, you should also prepare a deployable .war containing
+         your changes, and redeploy that file to check your work.</p><div class="tip"><h3 class="title">Tip</h3><p>For production deployment you must package your changes in a custom
+         OpenAM deployable .war file. To create a deployable .war, unpack the
+         OpenAM .war file from <code class="filename">~/Downloads/openam</code>
+         into a staging directory, apply your changes in the staging directory, and
+         use the <span class="command"><strong>jar</strong></span> command  to prepare the deployable .war.</p></div><div class="itemizedlist"><p>The procedures below describe how to update a deployed version of
+             OpenAM, so that you can see your changes without redeploying the application.
+             This approach works for development as long as your web container does
+             not overwrite changes.</p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="xref" href="chap-custom-ui.html#copy-ui-to-customize-top-level-realm" title="Procedure&nbsp;6.1.&nbsp;To Copy the Pages to Customize For the Top-Level Realm">Procedure&nbsp;6.1, &#8220;To Copy the Pages to Customize For the Top-Level Realm&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-custom-ui.html#copy-ui-to-customize-subrealm" title="Procedure&nbsp;6.2.&nbsp;To Copy the Pages to Customize For Another Realm">Procedure&nbsp;6.2, &#8220;To Copy the Pages to Customize For Another Realm&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-custom-ui.html#customize-ui-copy" title="Procedure&nbsp;6.3.&nbsp;To Customize Files You Copied">Procedure&nbsp;6.3, &#8220;To Customize Files You Copied&#8221;</a></p></li></ul></div><div class="procedure"><a name="copy-ui-to-customize-top-level-realm"></a><div class="procedure-title">Procedure&nbsp;6.1.&nbsp;To Copy the Pages to Customize For the Top-Level Realm</div><p>Rather than changing the default pages, customize your own copy.</p><ol class="procedure" type="1"><li class="step"><p>Change to the <code class="filename">config/auth</code> directory where
+   you deployed OpenAM.</p><div class="screen"><pre>
+$ <strong>cd /path/to/tomcat/webapps/openam/config/auth</strong>
+   </pre></div></li><li class="step"><p>Copy the default files and optionally the localized files to
+   <code class="filename"><em class="replaceable"><code>suffix</code></em>[_<em class="replaceable"><code>locale</code></em>]/html</code>,
+   where <em class="replaceable"><code>suffix</code></em> is the value of the RDN of the
+   configuration suffix, such as <code class="literal">openam</code> if you use the
+   default configuration suffix <code class="literal">dc=openam,dc=forgerock,dc=org</code>,
+   and the optional <em class="replaceable"><code>locale</code></em> is, for example,
+   <code class="literal">jp</code> for Japanese, or <code class="literal">zh_CN</code> for
+   Simplified Chinese.</p><p>The following example copies the files for the Top-Level Realm
+   (<code class="literal">/</code>) for a custom French locale.</p><div class="screen"><pre>
+$ <strong>mkdir -p openam/html</strong>
+$ <strong>cp -r default/* openam/html</strong>
+$ <strong>mkdir -p openam_fr/html</strong>
+$ <strong>cp -r default_fr/* openam_fr/html</strong>
+   </pre></div><p>
+    See <a class="xref" href="chap-custom-ui.html#lookup-for-ui-files" title="6.3.&nbsp;How OpenAM Looks Up UI Files">Section&nbsp;6.3, &#8220;How OpenAM Looks Up UI Files&#8221;</a> for details.
+   </p></li><li class="step"><p>
+    You can now either follow
+    the steps in <a class="xref" href="chap-custom-ui.html#copy-ui-to-customize-subrealm" title="Procedure&nbsp;6.2.&nbsp;To Copy the Pages to Customize For Another Realm">Procedure&nbsp;6.2, &#8220;To Copy the Pages to Customize For Another Realm&#8221;</a>,
+    or in <a class="xref" href="chap-custom-ui.html#customize-ui-copy" title="Procedure&nbsp;6.3.&nbsp;To Customize Files You Copied">Procedure&nbsp;6.3, &#8220;To Customize Files You Copied&#8221;</a>.
+   </p></li></ol></div><div class="procedure"><a name="copy-ui-to-customize-subrealm"></a><div class="procedure-title">Procedure&nbsp;6.2.&nbsp;To Copy the Pages to Customize For Another Realm</div><p>As for the top-level realm, customize your own copy rather than the
+  default pages.</p><ol class="procedure" type="1"><li class="step"><p>Change to the <code class="filename">config/auth</code> directory where
+   you deployed OpenAM.</p><div class="screen"><pre>
+$ <strong>cd /path/to/tomcat/webapps/openam/config/auth</strong>
+   </pre></div></li><li class="step"><p>Depending on which locale you want to customize, copy the default
+   files and optionally the localized files to
+   <code class="filename"><em class="replaceable"><code>suffix</code></em>[_<em class="replaceable"><code>locale</code></em>]/services/<em class="replaceable"><code>realm</code></em>/html</code>, where
+   <em class="replaceable"><code>suffix</code></em> is the value of the RDN of the
+   configuration suffix, which is <code class="literal">openam</code> if you use the
+   default configuration suffix <code class="literal">dc=openam,dc=forgerock,dc=org</code>.</p><p>The following example copies the files for a custom French locale and
+   a realm named <code class="literal">ventes</code>.</p><div class="screen"><pre>
+$ <strong>mkdir -p openam/services/ventes/html</strong>
+$ <strong>cp -r default/* openam/services/ventes/html</strong>
+$ <strong>mkdir -p openam_fr/services/ventes/html</strong>
+$ <strong>cp -r default_fr/* openam_fr/services/ventes/html</strong>
+   </pre></div></li><li class="step"><p>
+    You can now follow the steps in <a class="xref" href="chap-custom-ui.html#customize-ui-copy" title="Procedure&nbsp;6.3.&nbsp;To Customize Files You Copied">Procedure&nbsp;6.3, &#8220;To Customize Files You Copied&#8221;</a>.
+   </p></li></ol></div><div class="procedure"><a name="customize-ui-copy"></a><div class="procedure-title">Procedure&nbsp;6.3.&nbsp;To Customize Files You Copied</div><p>The .jsp files from the <code class="filename">default/</code> directory
+  reference the images used in the OpenAM pages, and retrieve localized text
+  from the .xml files. Thus you customize appearance through the .jsp files,
+  being careful not to change the functionality itself. You customize the
+  localized text through the .xml files.</p><ol class="procedure" type="1"><li class="step"><p>Modify appearance if you must by editing the .jsp, image, and
+   CSS files without changing any of the JSP tags that govern how the pages
+   work.</p></li><li class="step"><p>Modify the localized text, using UTF-8 without escaped characters, by
+   changing only the original text strings in the .xml files.</p><p>For example, to change the text in the default OpenAM login screen in
+   the top-level realm for the French locale, edit
+   <code class="filename">openam_fr/html/DataStore.xml</code>.</p></li><li class="step"><p>
+    After making the changes, restart OpenAM or the web container where it runs.
+   </p></li><li class="step"><p>
+    Test the changes you have made.
+   </p><p>The following screen shot shows a customized French login page
+   where the string <code class="literal">Nom d'utilisateur</code> has been replaced
+   with the string <code class="literal">Votre identifiant</code>, and the string
+   <code class="literal">Mot de passe</code> has been replaced with the string
+   <code class="literal">Votre mot de passe</code> in
+   <code class="filename">openam_fr/html/DataStore.xml</code>.</p><div class="mediaobject" align="center"><a name="figure-modified-fr-login"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/modified-fr-login.png" align="middle" height="360" alt="Example customized OpenAM login page"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-modified-fr-login.html" target="longdesc">D</a>]</span></div></div></li><li class="step"><p>
+    As mentioned in the tip at the outset of this section,
+    build a customized OpenAM .war that includes your tested changes,
+    and use this customized .war to deploy OpenAM.
+   </p></li></ol></div><div class="procedure"><a name="customize-ui-elements"></a><div class="procedure-title">Procedure&nbsp;6.4.&nbsp;To Customize UI Elements</div><p>
+    To customize classic UI elements such as button text on the login screen,
+    follow these steps.
+   </p><ol class="procedure" type="1"><li class="step"><p>
+     Unpack the core OpenAM library, <code class="filename">openam-core-12.0.0.jar</code>,
+     that contains the text in Java properties files.
+    </p><p>
+     This library is available under <code class="filename">WEB-INF/lib/</code>
+     where OpenAM is unpacked for deployment.
+     In the following example OpenAM is deployed on Apache Tomcat.
+    </p><div class="screen"><pre>
+$ <strong>mkdir openam-core &amp;&amp; cd openam-core</strong>
+$ <strong>jar xf /path/to/tomcat/webapps/openam/WEB-INF/lib/openam-core-12.0.0.jar</strong>
+    </pre></div></li><li class="step"><p>
+     Edit only property values in the appropriate properties files.
+    </p></li><li class="step"><p>
+     Prepare a new core OpenAM library with your modifications.
+    </p><div class="screen"><pre>
+$ <strong>jar cf ../openam-core-12.0.0.jar *</strong>
+    </pre></div></li><li class="step"><p>
+     Replace the existing core OpenAM library with your modified version.
+    </p><p>
+     The following example replaces the library only in a deployed OpenAM server.
+    </p><div class="screen"><pre>
+$ <strong>cp openam-core-12.0.0.jar /path/to/tomcat/webapps/openam/WEB-INF/lib/</strong>
+    </pre></div><p>
+     When preparing for production deployment make the modification
+     in the OpenAM war file, <code class="filename">OpenAM-12.0.0.war</code>, instead.
+    </p></li><li class="step"><p>
+     Restart OpenAM or the container in which it runs to load the changes.
+    </p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="lookup-for-ui-files"></a>6.3.&nbsp;How OpenAM Looks Up UI Files</h2></div></div></div><a class="indexterm" name="d0e4269"></a><p>
+   This section provides a more complete description
+   of how OpenAM looks up UI files.
+  </p><div class="note"><h3 class="title">Note</h3><p>
+   Case mismatch can cause failures in the UI lookup for some systems.
+   To ensure lookup success and for consistency,
+   use lowercase names for your customized directories
+   except for locale territories.
+   All of the default directories are already lowercase.
+  </p></div><p>
+   Locale settings play an important role in how OpenAM looks up UI files.
+   A locale consists of a language and optionally a territory
+   such as <code class="literal">en</code> to specify the English language,
+   or <code class="literal">en_GB</code> to specify British English.
+   Locale settings are determined at authentication time,
+   and are then set in the authentication context.
+   To change locales, the user must reauthenticate.
+   OpenAM allows you and also clients to set locale in the ways described below.
+  </p><div class="orderedlist"><p>
+    When finding the UI files that best match the user's locale,
+    OpenAM takes two locale settings into account.
+   </p><ol class="orderedlist" type="1"><li class="listitem"><p>
+     Requested locale
+    </p><p>
+     OpenAM arrives at the requested locale based on
+     an optional <code class="literal">locale</code> query string parameter,
+     an optional HTTP <code class="literal">Accept-Language</code> header from the browser,
+     and the Default Locale set in the configuration for OpenAM.
+    </p></li><li class="listitem"><p>
+     Platform locale
+    </p><p>
+     When OpenAM cannot find a match for the user's requested locale,
+     it tries to use the platform locale,
+     which is the locale for the Java Virtual Machine (JVM) where OpenAM runs.
+    </p><p>
+     If neither the requested locale nor the platform locale result in a match,
+     OpenAM returns the default files that are not localized.
+    </p></li></ol></div><div class="variablelist"><p>
+    OpenAM uses the following information to look up the UI files.
+   </p><dl class="variablelist"><dt><span class="term">Configuration suffix RDN value</span></dt><dd><p>
+      When you set up OpenAM to store its configuration in a directory server,
+      you provide the distinguished name of the configuration suffix,
+      by default <code class="literal">dc=openam,dc=forgerock,dc=org</code>.
+      Therefore, the default relative distinguished name attribute value
+      is <code class="literal">openam</code>.
+     </p></dd><dt><span class="term">Client locale query string parameter</span></dt><dd><p>
+      The client can request a locale by using the <code class="literal">locale</code>
+      query string parameter when performing an HTTP GET on the login page.
+     </p><p>
+      For example, a client can specify <code class="literal">locale=fr</code>
+      to request the French language.
+     </p></dd><dt><span class="term">Client (browser) locale language and territory</span></dt><dd><p>
+      The client can specify a locale
+      by using the HTTP <code class="literal">Accept-Language</code> header.
+      End users set this behavior by choosing languages and territory settings
+      in their web browser preferences.
+     </p><p>
+      The value of this header can include a list of languages
+      with information about how strongly the user prefers each language.
+      OpenAM uses the first language in the list.
+     </p></dd><dt><span class="term">Default locale</span></dt><dd><p>
+      You set the default locale in OpenAM when you install OpenAM core services.
+      You can change the default locale either through OpenAM console under
+      Configuration &gt; Servers and Sites &gt; <em class="replaceable"><code>server-name</code></em>
+      &gt; General &gt; System &gt; Default Locale,
+      or by setting the server configuration property,
+      <code class="literal">com.iplanet.am.locale</code>.
+     </p><p>
+      Default locale only affects the requested locale.
+      Do not confuse the Default Locale setting
+      with the locale that OpenAM uses
+      when it cannot find matching UI files for the requested locale.
+     </p><p>
+      Default: <code class="literal">en_US</code>
+     </p></dd><dt><span class="term">Requested locale</span></dt><dd><p>
+      OpenAM determines the requested locale based on multiple settings.
+     </p><p>
+      If the <code class="literal">locale</code> query string parameter is set,
+      OpenAM uses this setting as the requested locale.
+     </p><p>
+      Otherwise, if the client set the <code class="literal">Accept-Language</code> header,
+      OpenAM uses this setting as the requested locale.
+     </p><p>
+      Otherwise OpenAM uses the default locale as the requested locale.
+     </p></dd><dt><span class="term">Platform locale language and territory</span></dt><dd><p>
+      The locale for the Java Virtual Machine (JVM) where OpenAM runs
+      is the platform locale.
+      Platform locale is the alternative when
+      OpenAM cannot find files for the requested locale.
+     </p><p>
+      By default the JVM uses the system locale.
+      You can, however, set the JVM platform locale when starting Java
+      by using Java system properties.
+      The following example that sets the platform locale
+      to the Hungarian language in Hungary.
+     </p><pre class="brush: shell;">
+java -Duser.language=hu -Duser.region=HU other options
+     </pre><p>
+      See the documentation about your JVM for details.
+     </p><p>
+      If OpenAM cannot find matching UI files either for the requested locale
+      or for the platform locale,
+      it returns UI files that are not localized.
+     </p></dd><dt><span class="term">Realm</span></dt><dd><p>
+      Realms can be nested.
+      OpenAM uses the nesting as necessary to look for files
+      specific to a subrealm before looking in the parent realm.
+     </p><p>
+      For all realms below the top level realm,
+      OpenAM adds a <code class="filename">services</code> directory
+      to the search path before the realm.
+     </p></dd><dt><span class="term">Client name</span></dt><dd><p>
+      Client names identify the type of client.
+      The default, <code class="literal">html</code>, is the only client name used
+      unless client detection mode is enabled.
+      When client detection mode is enabled,
+      the client name can be different for mobile clients, for example.
+     </p></dd><dt><span class="term">File name</span></dt><dd><p>
+      File names are not themselves localized.
+      For example, <code class="filename">Login.jsp</code> has the same name in all locales.
+     </p></dd></dl></div><p>
+   OpenAM tries first to find the most specific file
+   for the realm and locale requested,
+   gradually falling back on less specific alternatives,
+   then on other locales.
+   The first and most specific location is as follows.
+  </p><div class="literallayout"><p><em class="replaceable"><code>suffix</code></em>_<em class="replaceable"><code>requested-locale-language</code></em>_<em class="replaceable"><code>requested-locale-territory</code></em>/services/<em class="replaceable"><code>realm</code></em>/<em class="replaceable"><code>client-name</code></em>/<em class="replaceable"><code>file-name</code></em></p></div><div class="example"><a name="example-ui-file-lookup"></a><div class="example-title">Example&nbsp;6.1.&nbsp;UI File Lookup</div><div class="example-contents"><p>
+    OpenAM looks up <code class="filename">Login.jsp</code> in the following order
+    for a realm named <code class="literal">myRealm</code>,
+    with the requested locale being <code class="literal">en_GB</code>,
+    the platform locale being <code class="literal">hu_HU</code>,
+    and the configuration suffix named <code class="literal">dc=openam,dc=forgerock,dc=org</code>.
+    The client name used in this example
+    is the generic client name <code class="literal">html</code>.
+   </p><pre class="brush: plain;">
+openam_en_GB/services/myRealm/html/Login.jsp
+openam_en_GB/services/myRealm/Login.jsp
+openam_en_GB/services/html/Login.jsp
+openam_en_GB/services/Login.jsp
+openam_en_GB/html/Login.jsp
+openam_en_GB/Login.jsp
+openam_en/services/myRealm/html/Login.jsp
+openam_en/services/myRealm/Login.jsp
+openam_en/services/html/Login.jsp
+openam_en/services/Login.jsp
+openam_en/html/Login.jsp
+openam_en/Login.jsp
+openam_hu_HU/services/myRealm/html/Login.jsp
+openam_hu_HU/services/myRealm/Login.jsp
+openam_hu_HU/services/html/Login.jsp
+openam_hu_HU/services/Login.jsp
+openam_hu_HU/html/Login.jsp
+openam_hu_HU/Login.jsp
+openam_hu/services/myRealm/html/Login.jsp
+openam_hu/services/myRealm/Login.jsp
+openam_hu/services/html/Login.jsp
+openam_hu/services/Login.jsp
+openam_hu/html/Login.jsp
+openam_hu/Login.jsp
+openam/services/myRealm/html/Login.jsp
+openam/services/myRealm/Login.jsp
+openam/services/html/Login.jsp
+openam/services/Login.jsp
+openam/html/Login.jsp
+openam/Login.jsp
+default_en_GB/services/myRealm/html/Login.jsp
+default_en_GB/services/myRealm/Login.jsp
+default_en_GB/services/html/Login.jsp
+default_en_GB/services/Login.jsp
+default_en_GB/html/Login.jsp
+default_en_GB/Login.jsp
+default_en/services/myRealm/html/Login.jsp
+default_en/services/myRealm/Login.jsp
+default_en/services/html/Login.jsp
+default_en/services/Login.jsp
+default_en/html/Login.jsp
+default_en/Login.jsp
+default_hu_HU/services/myRealm/html/Login.jsp
+default_hu_HU/services/myRealm/Login.jsp
+default_hu_HU/services/html/Login.jsp
+default_hu_HU/services/Login.jsp
+default_hu_HU/html/Login.jsp
+default_hu_HU/Login.jsp
+default_hu/services/myRealm/html/Login.jsp
+default_hu/services/myRealm/Login.jsp
+default_hu/services/html/Login.jsp
+default_hu/services/Login.jsp
+default_hu/html/Login.jsp
+default_hu/Login.jsp
+default/services/myRealm/html/Login.jsp
+default/services/myRealm/Login.jsp
+default/services/html/Login.jsp
+default/services/Login.jsp
+default/html/Login.jsp
+default/Login.jsp
+   </pre></div></div><br class="example-break"></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-install-das.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-cts.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;5.&nbsp;Installing OpenAM Distributed Authentication&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;7.&nbsp;Configuring the Core Token Service (CTS)</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

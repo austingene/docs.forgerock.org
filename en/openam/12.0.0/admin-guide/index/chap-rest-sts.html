@@ -1,0 +1,248 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;15.&nbsp;The RESTful Security Token Service</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenAM Administration Guide"><link rel="up" href="index.html" title="OpenAM Administration Guide"><link rel="prev" href="chap-saml-1.html" title="Chapter&nbsp;14.&nbsp;Managing SAML 1.x Single Sign-On"><link rel="next" href="chap-dashboard.html" title="Chapter&nbsp;16.&nbsp;Configuring the Dashboard Service"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;15.&nbsp;The RESTful Security Token Service</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-saml-1.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-dashboard.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-rest-sts"></a>Chapter&nbsp;15.&nbsp;The RESTful Security Token Service</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-rest-sts.html#sts-about">15.1. About the REST-STS</a></span></dt><dt><span class="section"><a href="chap-rest-sts.html#sts-configure">15.2. Configuring the Security Token Service</a></span></dt></dl></div><p>
+    This chapter specifies the configuration requirements associated with the
+    RESTful Security Token Service (REST-STS). Like previous implementations of
+    STS, this implementation secures identity tokens and messages.
+  </p><p>
+   The REST-STS is inspired by the WS-Trust STS. The REST-STS supports one
+   basic operation: token transformation. This chapter describes how you can
+   configure REST-STS token transformations through the OpenAM UI.
+  </p><p>
+   Different Identity Relationship Management (IRM) services require different
+   token types. Given the variety of token types in use today, it can be
+   helpful to have a service that you can configure to transform tokens.
+  </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="sts-about"></a>15.1.&nbsp;About the REST-STS</h2></div></div></div><div class="note"><h3 class="title">Note</h3><p>
+       Do not use the WSP and WSC agent UI tools described in <a class="link" href="admin-guide#chap-agents" target="_blank"><em class="citetitle">Configuring Policy Agent
+       Profiles</em>.</a>
+      </p></div><p>
+      The OpenAM implementation of REST-STS supports a variety of
+      token transformations, as well as different attributes from SAML2
+      assertions, along with different encryption contexts.
+     </p><p>
+      The REST-STS UI currently includes transformations from three types of
+      tokens:
+     </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+        <code class="literal">UNT</code>: Username Token. May be associated with
+        usernames and/or associated passwords.
+       </p></li><li class="listitem"><p>
+        <code class="literal">OpenID Connect</code>: OpenID Connect token.
+       </p></li><li class="listitem"><p>
+        <code class="literal">OpenAM</code>: OpenAM session token.
+       </p></li></ul></div><p>
+      At this time, the ForgeRock REST-STS supports conversions from these
+      types of tokens to a SAML2 token. For the conversion, you can
+      configure OpenAM to invalidate the interim OpenAM session.
+     </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="sts-configure"></a>15.2.&nbsp;Configuring the Security Token Service</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-rest-sts.html#rest-sts-general">15.2.1. REST STS General Configuration</a></span></dt><dt><span class="section"><a href="chap-rest-sts.html#rest-sts-deployment">15.2.2. REST STS Deployment Configuration</a></span></dt><dt><span class="section"><a href="chap-rest-sts.html#rest-sts-keystore">15.2.3. REST STS Keystore Configuration</a></span></dt><dt><span class="section"><a href="chap-rest-sts.html#rest-sts-saml2">15.2.4. REST STS SAML2 Token Configuration</a></span></dt></dl></div><p>
+     To access the REST-STS configuration menu for your realm, navigate to
+     Access Control &gt; <em class="replaceable"><code>Realm Name</code></em> &gt; STS. When
+     you see the <em class="replaceable"><code>Realm Name</code></em> - REST STS Instances
+     menu, click Add. You should see an excerpt of the REST Security Token
+     Service menu in the following screen shot.
+    </p><div class="mediaobject" align="center"><a name="rest-sts-access-menu"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/rest-sts-access-menu.png" align="middle" height="360" alt="The REST Security Token Service UI"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="rest-sts-access-menu.html" target="longdesc">D</a>]</span></div></div><p>
+     The REST STS configuration menu is subdivided into four sections:
+    </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-sts-general"></a>15.2.1.&nbsp;REST STS General Configuration</h3></div></div></div><p>
+      At the top of the REST STS configuration menu, you can set up the
+      General Configuration for the system.
+     </p><p>
+      You will first add a name for the REST-STS token issuer. You can pick any
+      name; the REST-STS includes that name with the <code class="literal">issuer</code>
+      label for each token.
+     </p><p>
+      You can then select from one of the noted types of token transformations.
+      Be aware, you should not select both "invalidate" and "don't invalidate"
+      options for the same token transformation.
+     </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-sts-deployment"></a>15.2.2.&nbsp;REST STS Deployment Configuration</h3></div></div></div><p>
+      In the Deployment Configuration section, you can assign a specific
+      endpoint for the REST STS, and set up the mapping for each token
+      transformation.
+     </p><p>
+      OpenAM includes what you enter in the
+      <code class="literal">Deployment Url Element</code> text box in the REST-STS
+      endpoint, as well as the name of the REST-STS instance. As an example,
+      assume that you've set the <code class="literal">Deployment Url Element</code> to
+      <code class="literal">instance1</code>, on a realm named <code class="literal">NewRealm</code>.
+     </p><p>
+      In that case, the STS Endpoint URI would be
+      <code class="literal">rest-sts/NewRealm/instance1</code>, and the REST STS Instance
+      would be <code class="literal">NewRealm/instance1</code>.
+     </p><p>
+      Under Authentication Target Mappings, you can configure two or three
+      pieces of information related to each input token. The default options
+      shown in this field are known as a <code class="literal">tuple</code>, an ordered
+      list of elements. Each element is separated with a pipe character:
+      "<code class="literal">|</code>".
+     </p><div class="variablelist"><dl class="variablelist"><dt><span class="term">Authentication target type</span></dt><dd><p>
+         Whether the target is a module or service
+        </p></dd><dt><span class="term">Name of the authentication module or service</span></dt><dd><p>
+         Two default options are included: the <code class="literal">ldapService</code>
+         service for usernames, and <code class="literal">OPENIDCONNECT</code> module to
+         identify elements of the OpenAM RESTful authentication context that
+         should be consumed to validate that OpenID Connect token.
+        </p><p>
+         The <code class="literal">OPENIDCONNECT</code> module supports the transformation
+         of a token from OpenID Connect to SAML2.
+        </p></dd><dt><span class="term">Authentication context information (optional)</span></dt><dd><p>
+         Defines STS authentication context information about the token to be
+         consumed. In the case shown in the default, the name of the token to
+         be consumed is <code class="literal">oidc_id_token</code>.
+        </p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-sts-keystore"></a>15.2.3.&nbsp;REST STS Keystore Configuration</h3></div></div></div><p>
+      The REST STS can use the same keystore as is used for OpenAM. While the
+      version of Java that you use includes its own version of the
+      <span class="command"><strong>keytool</strong></span> command, the location where you set up the
+      keystore file may vary.
+     </p><p>
+      For example, you may use the procedure <a class="link" href="http://docbook.org/roles/xlink/role/olink       xlink:href=admin-guide#openam-with-https-on-tomcat" target="_blank"><em class="citetitle">To Set Up
+      OpenAM With HTTPS on Tomcat</em></a>, if you use Tomcat as
+      the container for OpenAM.
+     </p><p>
+      The following describes the purpose of each entry under 
+      <code class="literal">Keystore Configuration</code>:
+     </p><div class="variablelist"><dl class="variablelist"><dt><span class="term">Keystore Path</span></dt><dd><p>
+         You can set this to the location of the keystore file of your choice.
+         For reference, the default OpenAM keystore file is
+         <code class="filename">keystore.jks</code>, and you can find it in the OpenAM
+         configuration directory, as described in the following installation
+         procedure: <a class="link" href="install-guide#deploy-openam" target="_blank"><em class="citetitle">
+          To Deploy OpenAM</em></a>
+        </p></dd><dt><span class="term">Keystore Password</span></dt><dd><p>
+         Enter the password for the keystore file, normally
+         <code class="filename">keystore.jks</code>. The default password for that file
+         packaged with OpenAM is <code class="literal">changeit</code>.
+        </p></dd><dt><span class="term">Encryption Key Alias</span></dt><dd><p>
+         Alias used for the encryption key; you may use that alias with the
+         <span class="command"><strong>keytool</strong></span> command.
+        </p></dd><dt><span class="term">Encryption Key Password</span></dt><dd><p>
+         Enter the password for the encryption key.
+        </p></dd><dt><span class="term">Signature Key Alias</span></dt><dd><p>
+         The REST-STS uses a signature key to verify X.509 tokens. Enter the 
+         desired alias for that signature key.
+        </p></dd><dt><span class="term">Signature Key Password</span></dt><dd><p>
+         Enter the password for the signature key.
+        </p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-sts-saml2"></a>15.2.4.&nbsp;REST STS SAML2 Token Configuration</h3></div></div></div><p>
+      This REST-STS configuration UI supports token transformations from
+      username, Open ID Connect, and OpenAM tokens to SAML2 format. Configure
+      the options shown in this part of the REST-STS UI menu to customize
+      how OpenAM will create those SAML2 tokens.
+     </p><p>
+      Several options require you to include the specific classes, either in a
+      custom <code class="literal">.jar</code> file or classes configured in files in the
+      <code class="literal">WEB-INF/classes</code> directory.
+     </p><div class="variablelist"><dl class="variablelist"><dt><span class="term">NameIdFormat</span></dt><dd><p>
+         Specify the name identifier format for the SAML2 token that you want
+         REST-STS to generate.
+        </p></dd><dt><span class="term">Token Lifetime (Seconds)</span></dt><dd><p>
+         Enter the desired lifetime for the SAML2 token that you want REST-STS
+         to generate. The default is 10 minutes.
+        </p></dd><dt><span class="term">Custom Conditions Provider Class Name (optional)</span></dt><dd><p>
+         If you need to customize the conditions for the issued SAML2 token,
+         specify the class name of the implementation in the associated text
+         box.
+        </p><p>
+         Implement the specified class name with the<code class="literal">
+         org.forgerock.openam.sts.tokengeneration.saml2.statements.ConditionsProvider
+        </code>interface.
+        </p></dd><dt><span class="term">Custom Subject Provider Class Name (optional)</span></dt><dd><p>
+         If you need to define a custom provider for the SAML2 token, enter
+         the class name of the provider here.
+        </p><p>
+         Implement the specified class name with the<code class="literal">
+         org.forgerock.openam.sts.tokengeneration.saml2.statements.SubjectProvider
+         </code>interface.
+        </p></dd><dt><span class="term">Custom Authentication Statements Class Name (optional)</span></dt><dd><p>
+         If you need to create a custom authentication statement for the SAML2
+         token, enter the class name of the statement here.
+        </p><p>
+         Implement the specified class name with the<code class="literal">
+         org.forgerock.openam.sts.tokengeneration.saml2.statements.AuthenticationStatementsProvider
+         </code>interface.
+        </p></dd><dt><span class="term">Custom Attribute Statements Class Name (optional)</span></dt><dd><p>
+         If you need to define a custom attribute statement for the SAML2
+         token, enter the class name of the statement here.
+        </p><p>
+         Implement the specified class name with the<code class="literal">
+         org.forgerock.openam.sts.tokengeneration.saml2.statements.AttributeStatementsProvider
+        </code>interface.
+        </p></dd><dt><span class="term">Custom Authorization Decision Statements Class Name (optional)</span></dt><dd><p>
+         If you need to set up a custom authorization decision statement for
+         the SAML2 token, enter the class name of the statement here.
+        </p><p>
+         Implement the specified class name with the<code class="literal">
+         org.forgerock.openam.sts.tokengeneration.saml2.statements.AuthzDecisionStatementsProvider
+        </code>interface.
+        </p></dd><dt><span class="term">Custom Attribute Mapper Class Name (optional)</span></dt><dd><p>
+         If you need to define a custom attribute mapper for the SAML2 token,
+         enter the class name of the mapper here.
+        </p><p>
+         Implement the specified class name with the<code class="literal">
+         org.forgerock.openam.sts.tokengeneration.saml2.statements.AttributeMapper
+        </code>interface.
+        </p></dd><dt><span class="term">Custom Authentication Context Class Name (optional)</span></dt><dd><p>
+         If you need to note a custom AuthContext mapper for the SAML2 token,
+         enter the class name of the context here.
+        </p><p>
+         If you need to include an <code class="literal">AuthnContext</code> mapping,
+         implemented by the<code class="literal">
+         org.forgerock.openam.sts.token.provider.AuthnContextMapperImpl
+         </code> class, enter the class name of the following
+         interface:<code class="literal">
+          org.forgerock.openam.sts.tokengeneration.saml2.statements.AuthnContextMapper
+        </code>.
+        </p></dd><dt><span class="term">Canonicalization Algorithm</span></dt><dd><p>
+         For more information on the two options shown see the W3C
+         Recommendation document entitled: <a class="link" href="http://www.w3.org/TR/2002/REC-xml-exc-c14n-20020718/" target="_blank">
+         <em class="citetitle">Exclusive XML Canonicalization</em>.
+         </a>
+        </p></dd><dt><span class="term">Sign Assertion</span></dt><dd><p>
+         If checked, this implementation of the REST-STS will sign the
+         assertion of the associated token.
+        </p></dd><dt><span class="term">Assertion audiences</span></dt><dd><p>
+         If you need to restrict the audience for the newly created SAML2
+         tokens, enter appropriate assertion audiences here. Values so entered
+         will be used to populate the <code class="literal">Audience</code> based on the
+         <code class="literal">AudienceRestriction</code> element, as defined in section
+         4.1.4.2 of the OASIS document entitled: <a class="link" href="http://docs.oasis-open.org/security/saml/v2.0/saml-profiles-2.0-os.pdf" target="_blank">
+         <em class="citetitle">Profiles for the OASIS Security Assertion Markup Language
+         (SAML) v2.0</em>.
+         </a>
+        </p></dd><dt><span class="term">Attribute Mappings</span></dt><dd><p>
+         You should configure mappings between SAML2 attribute names (Map keys)
+         and local OpenAM attributes (Map values).
+        </p><p>
+         The <code class="literal">DefaultAttributeMapper</code> looks at profile
+         attributes in configured data stores, or in session properties.
+        </p><p>
+         The map keys will define the names of the attributes included in
+         <code class="literal">Assertion Attribute</code> statements.
+        </p><p>
+         The data pulled from the subject's directory entry or session state
+         corresponding to the map value will define the value corresponding
+         to the name of the attribute.
+        </p><p>
+         Map keys can be set up in the following format:
+         <code class="literal">[NameFormatURI]|SAML_ATTRIBUTE_NAME</code>.
+        </p><p>
+         If the attribute value is enclosed in quotes, that quoted value will
+         be included in the attribute without mapping. Binary attributes should
+         be followed by <code class="literal">';binary'</code>
+        </p><p>
+         Beyond that, examples for appropriate mappings include:
+        </p><div class="screen"><pre>EmailAddress=mail</pre></div><div class="screen"><pre>Address=postaladdress</pre></div><div class="screen"><pre>urn:oasis:names:tc:SAML:2.0:attrname-format:uri|urn:mace:dir:attribute-def:cn=cn</pre></div><div class="screen"><pre>partnerID="staticPartnerIDValue"</pre></div><div class="screen"><pre>urn:oasis:names:tc:SAML:2.0:attrname-format:uri|nameID="staticNameIDValue"</pre></div><div class="screen"><pre>photo=photo;binary</pre></div><div class="screen"><pre>urn:oasis:names:tc:SAML:2.0:attrname-format:uri|photo=photo;binary</pre></div></dd></dl></div></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-saml-1.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-dashboard.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;14.&nbsp;Managing SAML 1.x Single Sign-On&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;16.&nbsp;Configuring the Dashboard Service</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

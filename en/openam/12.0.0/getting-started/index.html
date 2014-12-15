@@ -1,0 +1,511 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Getting Started With OpenAM</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><meta name="description" content="Quick introduction to OpenAM for new users and readers evaluating the product. OpenAM provides open source Authentication, Authorization, Entitlement and Federation software."><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div lang="en" class="book"><div class="titlepage"><div><div><h1 class="title"><a name="getting-started"></a>Getting Started With OpenAM</h1></div><div><h2 class="subtitle">Version 12.0.0</h2></div><div><div class="authorgroup"><div class="author"><h3 class="author"><span class="firstname">Mark </span> <span class="surname">Craig</span></h3><div lang="en" class="affiliation"><span class="orgname">ForgeRock AS<br></span><div class="address"><p><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="street">33&nbsp;New&nbsp;Montgomery&nbsp;St.</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="otheraddr">Suite&nbsp;1500</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="city">San&nbsp;Francisco</span>,&nbsp;<span class="state">CA</span>&nbsp;<span class="postcode">94105</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="country">USA</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="phone">+1&nbsp;415-599-1100&nbsp;(US)</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<code class="uri">www.forgerock.com</code><br>
+&nbsp;&nbsp;&nbsp;</p></div></div></div></div></div><div><p class="releaseinfo">Software release date: December 17, 2014</p></div><div><p class="copyright">Copyright &copy; 2013-2014 ForgeRock AS</p></div><div><a href="legalnotice.html">Legal Notice</a></div><div><p class="pubdate">Publication date: December 15, 2014</p></div><div><div class="abstract"><div class="abstract-title">Abstract</div><p>Quick introduction to OpenAM for new users and readers evaluating
+   the product. OpenAM provides open source Authentication, Authorization,
+   Entitlement and Federation software.</p></div></div></div><hr></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="chapter"><a href="#chap-first-steps">1. Protecting a Web Site With OpenAM</a></span></dt><dt><span class="chapter"><a href="#chap-where-to-go-from-here">2. Where To Go From Here</a></span></dt><dt><span class="index"><a href="#d13474e1472">Index</a></span></dt></dl></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-first-steps"></a>Chapter&nbsp;1.&nbsp;Protecting a Web Site With OpenAM</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="#how-openam-helps-manage-access">1.1. How OpenAM Helps Manage Access to Resources</a></span></dt><dt><span class="section"><a href="#software-you-need">1.2. Software Required To Try Out OpenAM</a></span></dt><dt><span class="section"><a href="#software-setup">1.3. Setting Up the Software</a></span></dt><dt><span class="section"><a href="#try-it-out">1.4. Trying It Out</a></span></dt></dl></div><p>You can get started with OpenAM using this chapter. Follow the steps in
+ this chapter to learn how to protect a web site with OpenAM.</p><div class="important"><h3 class="title">Important</h3><p>
+   You need a Linux, Solaris, or Windows system
+   that can run the web policy agent
+   (see the <em class="citetitle">Web Policy Agent Release Notes</em> section,
+   <a class="link" href="http://docs.forgerock.org/en/openam-pa/3.3.0/web-release-notes/#web-pa-platform-requirements" target="_blank"><em class="citetitle">Web Policy Agents Platform Requirements</em></a>)
+   with a minimum of 1 GB of free RAM memory,
+   a few hundred MB of free disk space,
+   a web browser and Internet connection to download software.
+  </p><p>If you are running Mac OS X, set up a virtual machine running Linux to
+  try these procedures because the web policy agent is not built for Apache HTTP
+  Server on Mac OS X.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="how-openam-helps-manage-access"></a>1.1.&nbsp;How OpenAM Helps Manage Access to Resources</h2></div></div></div><a class="indexterm" name="d13474e150"></a><p>OpenAM provides a service called <em class="firstterm">access management</em>,
+  which involves managing access to resources available over the network.
+  Once you set up OpenAM to manage access, you have a centralized service to
+  take control of who can access what resources, when, and under what
+  conditions. In this chapter you manage access to a single web page. Yet, a
+  resource can be just about anything accessible over the network from a
+  web page, to an application, to a web service.</p><p>OpenAM centralizes access control by handling both
+  <em class="firstterm">authentication</em> and also
+  <em class="firstterm">authorization</em>. Authentication is confirming an
+  identity, for example confirming that a user has successfully logged in.
+  Authorization is determining whether to grant access to someone who has
+  authenticated.</p><p>OpenAM centralizes authentication by using a variety of authentication
+  modules. Authentication modules connect to identity repositories that store
+  identities and provide authentication services. The identity repositories can
+  be implemented as LDAP directories, relational databases, RADIUS, Windows
+  authentication, one-time password services, other standards-based access
+  management systems and much more. OpenAM lets you chain together the
+  authentication services used. Authentication chains let you configure
+  stronger authentication for more sensitive resources for example. They also
+  let you set up modules that remember a device when the user logs in
+  successfully. Or that evaluate the risk given the login circumstances and
+  therefore can require more credentials when a user is logging in from an
+  unusual location. This chapter uses OpenAM's built-in identity repository
+  and authentication modules to make it easier to get started.</p><p>OpenAM centralizes authorization by letting you use OpenAM to manage
+  access policies separate from applications and resources. Instead of building
+  access policy into a web application, you install a policy agent with the
+  web application to request policy decisions from OpenAM. This way you can
+  avoid issues that could arise when developers must embed policy decisions
+  into their applications. With OpenAM, if policy changes or an issue is found
+  after the application is deployed, you have only to change the policy
+  definition in OpenAM, not deploy a new version of the application. OpenAM
+  makes the authorization decisions, and policy agents enforce the decisions
+  on OpenAM's behalf.</p><p>The rest of this chapter has you demonstrate OpenAM access management
+  by installing OpenAM, creating a policy, and installing a policy agent on
+  a web server to enforce the policy for a web page.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="software-you-need"></a>1.2.&nbsp;Software Required To Try Out OpenAM</h2></div></div></div><a class="indexterm" name="d13474e177"></a><a class="indexterm" name="d13474e182"></a><p>In order to set up OpenAM to protect a web page, you install the
+  following software, all of which is freely available. This chapter covers
+  how to install the software, with the exception of the Java Development
+  Kit.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Java Development Kit</p><p>OpenAM is a Java web application, and requires a Java Development Kit
+    installed on the system where it runs.</p><p>The web policy agent installer is also a Java program.</p></li><li class="listitem"><p>Apache HTTP Server</p><p>Apache HTTP Server serves the web page to protect with OpenAM.</p></li><li class="listitem"><p>Apache Tomcat</p><p>As a Java web web application OpenAM runs inside a web container,
+    in this case Apache Tomcat.</p></li><li class="listitem"><p>OpenAM core server with OpenAM Console</p><p>This is the main web application for OpenAM. OpenAM sets up an OpenDJ
+    directory server at configuration time to use in this case both to hold
+    OpenAM's configuration and also to serve as an identity store and
+    authentication service.</p></li><li class="listitem"><p>OpenAM Apache Policy Agent</p><p>You install a policy agent in Apache HTTP Server. The policy agent
+    intercepts requests from users, and enforces access policy decisions made
+    by OpenAM. The policy agent enforces policy both by redirecting users to
+    OpenAM for authentication and by contacting OpenAM to get authorization
+    decisions for resources such as the web page to protect.</p></li></ul></div><p>Follow the steps in the next sections of this chapter to see how
+  OpenAM can protect a web site without changing the web site itself.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="software-setup"></a>1.3.&nbsp;Setting Up the Software</h2></div></div></div><a class="indexterm" name="d13474e220"></a><p>This section includes the following procedures that detail how to
+  set up OpenAM to protect a web page.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="xref" href="#prepare-etc-hosts" title="Procedure&nbsp;1.1.&nbsp;To Prepare Your Hosts File">Procedure&nbsp;1.1, &#8220;To Prepare Your Hosts File&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="#install-apache-http" title="Procedure&nbsp;1.2.&nbsp;To Install Apache HTTP Server">Procedure&nbsp;1.2, &#8220;To Install Apache HTTP Server&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="#install-apache-tomcat" title="Procedure&nbsp;1.3.&nbsp;To Install Apache Tomcat">Procedure&nbsp;1.3, &#8220;To Install Apache Tomcat&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="#install-openam" title="Procedure&nbsp;1.4.&nbsp;To Install OpenAM">Procedure&nbsp;1.4, &#8220;To Install OpenAM&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="#configure-policy" title="Procedure&nbsp;1.5.&nbsp;To Configure a Policy in OpenAM">Procedure&nbsp;1.5, &#8220;To Configure a Policy in OpenAM&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="#create-web-policy-agent-profile" title="Procedure&nbsp;1.6.&nbsp;To Create a Web Policy Agent Profile">Procedure&nbsp;1.6, &#8220;To Create a Web Policy Agent Profile&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="#install-web-policy-agent" title="Procedure&nbsp;1.7.&nbsp;To Install OpenAM Web Policy Agent">Procedure&nbsp;1.7, &#8220;To Install OpenAM Web Policy Agent&#8221;</a></p></li></ul></div><p>The procedures in this section are written for use on a Linux system.
+  If you are running Microsoft Windows, adapt the examples accordingly.</p><div class="procedure"><a name="prepare-etc-hosts"></a><div class="procedure-title">Procedure&nbsp;1.1.&nbsp;To Prepare Your Hosts File</div><a class="indexterm" name="d13474e255"></a><a class="indexterm" name="d13474e260"></a><p>OpenAM requires that you use fully qualified domain names when
+   protecting web resources. This is because OpenAM uses <a class="link" href="http://en.wikipedia.org/wiki/HTTP_cookie" target="_blank">HTTP cookies</a>
+   to keep track of sessions for single sign on, and setting and reading
+   cookies depends on the server name and domain.</p><p>You can get started with OpenAM however without setting up separate
+   systems for each fully qualified domain name. Instead, give your system
+   <code class="literal">openam.example.com</code> and <code class="literal">www.example.com</code>
+   aliases by editing your <a class="link" href="http://en.wikipedia.org/wiki/Hosts_(file)" target="_blank">hosts file</a>.</p><p>Alternatively, if you already have DNS set up, you can use that
+   instead of using your hosts file.</p><ul class="procedure"><li class="step"><p>Add the aliases to your hosts file using your preferred text
+    editor.</p><div class="screen"><pre>
+$ <strong>sudo vi /etc/hosts</strong>
+<em>Password:</em>
+
+### Edit /etc/hosts ###
+
+$ <strong>cat /etc/hosts | grep openam</strong>
+<em>127.0.0.1    localhost openam.example.com www.example.com</em>
+    </pre></div></li></ul></div><div class="procedure"><a name="install-apache-http"></a><div class="procedure-title">Procedure&nbsp;1.2.&nbsp;To Install Apache HTTP Server</div><a class="indexterm" name="d13474e303"></a><a class="indexterm" name="d13474e308"></a><p>Apache HTTP Server is a popular web server, and one that is well
+   supported by OpenAM's web policy agents. Apache HTTP Server might already
+   be installed on your system, but since you are installing software only
+   to get started with OpenAM, install the web server separately rather than
+   modify any existing installations.</p><p>Full installation instructions are available <a class="link" href="http://httpd.apache.org/docs/2.2/install.html" target="_blank">online</a>.
+   The following steps are inspired by the <em class="citetitle">Overview for the
+   impatient</em> for Apache HTTP Server 2.2 in the online
+   documentation.</p><ol class="procedure" type="1"><li class="step"><p>Make sure you have the tools installed to build Apache HTTP Server
+    2.2 from source.</p><p>On Linux distributions, you need development tools including the C
+    compiler. How you install these depends on your distribution.</p><p>This might work for Red Hat and CentOS distributions:</p><div class="screen"><pre>
+# <strong>yum groupinstall 'Development Tools'</strong>
+    </pre></div><p>This might work for Ubuntu distributions:</p><div class="screen"><pre>
+$ <strong>sudo apt-get install build-essential checkinstall</strong>
+    </pre></div></li><li class="step"><p>Download Apache HTTP Server 2.2 sources from <a class="link" href="http://httpd.apache.org/download.cgi" target="_blank">the Apache download
+    page</a>.</p><p>The OpenAM web policy agent requires Apache Portable Runtime 1.3 or
+    later, so make sure you download Apache HTTP Server 2.2.9 or later.</p></li><li class="step"><p>Extract the download.</p></li><li class="step"><p>Configure the sources for compilation.</p><p>The <code class="option">--prefix</code> option can be used so that the
+    web server is installed in a location where you can write files.</p><div class="screen"><pre>
+$ <strong>cd ~/Downloads/httpd-2.2.25</strong>
+$ <strong>./configure --prefix=/path/to/apache</strong>
+    </pre></div></li><li class="step"><p>Compile Apache HTTP Server.</p><div class="screen"><pre>
+$ <strong>make</strong>
+    </pre></div></li><li class="step"><p>Install Apache HTTP Server.</p><div class="screen"><pre>
+$ <strong>make install</strong>
+    </pre></div></li><li class="step"><p>Edit the configuration to set the server name to
+    <code class="literal">www.example.com</code> and the port to one such as 8000 that
+    the web server process can use when starting with your user ID.</p><div class="screen"><pre>
+$ <strong>vi /path/to/apache/conf/httpd.conf</strong>
+$ <strong>grep 8000 /path/to/apache/conf/httpd.conf</strong>
+<em>Listen 8000
+ServerName www.example.com:8000</em>
+    </pre></div></li><li class="step"><p>Test that Apache HTTP Server is working.</p><ol type="a" class="substeps"><li class="step"><p>
+       Make sure that your system's firewall does not block the port
+       that Apache HTTP Server uses.
+      </p><p>
+       See the documentation for your version of your system regarding
+       how to allow traffic through the firewall on a specific port.
+       A variety of firewalls are in use on Linux systems.
+       Which one is in use depends on your specific distribution.
+      </p></li><li class="step"><p>Start the web server.</p><div class="screen"><pre>
+$ <strong>/path/to/apache/bin/apachectl -k start</strong>
+      </pre></div></li><li class="step"><p>Browse to the home page, such as
+      <code class="literal">http://www.example.com:8000</code>.</p><div class="mediaobject" align="center"><a name="figure-web-server-home-page"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/web-server-home-page.png" align="middle" height="360" alt="Apache HTTP Server home page stating It works!"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-web-server-home-page.html" target="longdesc">D</a>]</span></div></div><p>This is the page to protect with OpenAM. Make sure you have
+      successfully gotten to this point before you proceed.</p></li></ol></li></ol></div><div class="procedure"><a name="install-apache-tomcat"></a><div class="procedure-title">Procedure&nbsp;1.3.&nbsp;To Install Apache Tomcat</div><a class="indexterm" name="d13474e438"></a><a class="indexterm" name="d13474e443"></a><p>OpenAM runs as a Java web application inside an application container.
+   Apache Tomcat is one such application container that runs on a variety of
+   platforms. The following instructions are loosely based on the
+   <code class="filename">RUNNING.txt</code> file delivered with Tomcat.</p><ol class="procedure" type="1"><li class="step"><p>Make sure you have a recent Java Development Kit release installed.</p><p>One way of checking the version of the Java Development Kit is to
+    list the version of the <span class="command"><strong>javac</strong></span> compiler.</p><div class="screen"><pre>
+$ <strong>javac -version</strong>
+    </pre></div><p>If the <span class="command"><strong>javac</strong></span> compiler is not found, then either
+    you do not have a Java Development Kit installed, or it is installed but
+    not on your <code class="literal">PATH</code>.</p><p>The <a href="../release-notes/index.html#java-requirements" class="link"><em class="citetitle">OpenAM Release
+    Notes</em></a> indicate what versions of Java Development Kit
+    are supported. Supported Java Development Kit versions also work for Apache
+    Tomcat.</p></li><li class="step"><p>Download Apache Tomcat 7 from its <a class="link" href="http://tomcat.apache.org/download-70.cgi" target="_blank">download page</a>.</p></li><li class="step"><p>Extract the download.</p><div class="screen"><pre>
+$ <strong>cd /path/to</strong>
+$ <strong>unzip ~/Downloads/apache-tomcat-7.0.42.zip</strong>
+$ <strong>mv apache-tomcat-7.0.42 tomcat</strong></pre></div></li><li class="step"><p>On UNIX-like systems, make the scripts in Tomcat's
+    <code class="filename">bin/</code> directory executable.</p><div class="screen"><pre>
+$ <strong>chmod +x /path/to/tomcat/bin/*.sh</strong>
+    </pre></div></li><li class="step"><p>Set the <code class="literal">JAVA_HOME</code> environment variable to the
+    file system location of the Java Development Kit.</p><p>On Linux, you might set <code class="literal">JAVA_HOME</code> as follows.</p><pre class="literallayout">export JAVA_HOME=/path/to/jdk</pre></li><li class="step"><p>Edit Tomcat's <code class="filename">catalina.sh</code> script to set the
+    <code class="literal">JAVA_HOME</code> environment variable to the file system
+    location of the Java Development Kit, and to set the heap and permanent
+    generation size appropriately.</p><div class="screen"><pre>
+$ <strong>vi /path/to/tomcat/bin/catalina.sh</strong>
+$ <strong>grep ^JAVA_HOME /path/to/tomcat/bin/catalina.sh</strong>
+<em>JAVA_HOME=/path/to/jdk</em>
+$ <strong>grep ^CATALINA /path/to/tomcat/bin/catalina.sh</strong>
+<em>CATALINA_OPTS="-Xmx1024m -XX:MaxPermSize=256m"</em>
+    </pre></div></li><li class="step"><p>
+     Make sure that your system's firewall does not block the port
+     that Apache Tomcat uses.
+    </p><p>
+     See the documentation for your version of your system regarding
+     how to allow traffic through the firewall on a specific port.
+     A variety of firewalls are in use on Linux systems.
+     Which one is in use depends on your specific distribution.
+    </p></li><li class="step"><p>Start Tomcat.</p><div class="screen"><pre>
+$ <strong>/path/to/tomcat/bin/startup.sh</strong>
+    </pre></div><p>It might take Tomcat several seconds to start. When Tomcat has
+    successfully started, you should see an informational message indicating
+    how long startup took in the
+    <code class="filename">/path/to/tomcat/logs/catalina.out</code> log file:</p><pre class="literallayout">INFO: Server startup in 4655 ms</pre></li><li class="step"><p>Browse to Tomcat's home page, such as
+    <code class="literal">http://openam.example.com:8080</code>.</p><div class="mediaobject" align="center"><a name="figure-tomcat-home-page"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/tomcat-home-page.png" align="middle" height="360" alt="Apache Tomcat home page"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-tomcat-home-page.html" target="longdesc">D</a>]</span></div></div><p>Apache Tomcat is going to serve the OpenAM web application. Make sure
+    you have successfully gotten to this point before you proceed.</p></li></ol></div><div class="procedure"><a name="install-openam"></a><div class="procedure-title">Procedure&nbsp;1.4.&nbsp;To Install OpenAM</div><a class="indexterm" name="d13474e588"></a><p>OpenAM is a web application that you deploy into Apache Tomcat and then
+   configure for use.</p><ol class="procedure" type="1"><li class="step"><p>Download the OpenAM .war (web archive) file either from the ForgeRock
+    <a class="link" href="http://forgerock.com/download-stack/" target="_blank"><em class="citetitle">Enterprise Downloads</em></a> page, or from the
+    project nightly <a class="link" href="http://forgerock.org/openam.html" target="_blank"><em class="citetitle">Builds</em></a> page.</p><p>Enterprise downloads are tested, stable releases.</p><p>Nightly builds include the very latest features, but are not
+    thoroughly tested. Some functionality might not be finished.</p></li><li class="step"><p>Deploy the .war file in Tomcat as <code class="filename">openam.war</code>.</p><div class="screen"><pre>
+$ <strong>mv ~/Downloads/openam*.war /path/to/tomcat/webapps/openam.war</strong>
+    </pre></div><p>Tomcat deploys OpenAM under the
+    <code class="filename">/path/to/tomcat/webapps/openam/</code> directory, and you can
+    access the web application in a browser at
+    <code class="literal">http://openam.example.com:8080/openam/</code>.</p></li><li class="step"><p>Browse to OpenAM where it is deployed in Tomcat, for example
+    <code class="literal">http://openam.example.com:8080/openam/</code>, to configure
+    the application.</p></li><li class="step"><p>On the OpenAM home page, click Create Default Configuration. </p><div class="mediaobject" align="center"><a name="figure-openam-home-page"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/openam-home-page.png" align="middle" height="360" alt="OpenAM home page"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-openam-home-page.html" target="longdesc">D</a>]</span></div></div></li><li class="step"><p>Review the software license agreement. If you agree to the license,
+    click "I accept the license agreement", and then click Continue. </p><div class="mediaobject" align="center"><a name="figure-openam-license-default"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/openam-license-default.png" align="middle" height="360" alt="OpenAM License Agreement"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-openam-license-default.html" target="longdesc">D</a>]</span></div></div></li><li class="step"><p>Set the Default User [amAdmin] password to
+    <code class="literal">password</code> and the Default Policy Agent [UrlAccessAgent]
+    password to <code class="literal">secret12</code>, and then click Create
+    Configuration to configure OpenAM.</p><div class="mediaobject" align="center"><a name="figure-openam-default-configuration"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/openam-default-configuration.png" align="middle" height="360" alt="OpenAM Default Configuration"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-openam-default-configuration.html" target="longdesc">D</a>]</span></div></div><p>If you were configuring OpenAM for real-world use, you would not use
+    either of those passwords, but this is only to get started with OpenAM. The
+    <code class="literal">amadmin</code> user is the OpenAM administrator, who is like
+    a super user in that <code class="literal">amadmin</code> has full control over
+    the OpenAM configuration.</p><p>The <code class="literal">UrlAccessAgent</code> is not used in this guide.</p></li><li class="step"><p>When you see the Configuration Complete! dialog, click the Proceed to
+    Login link, and then log in as <code class="literal">amadmin</code> with password
+    <code class="literal">password</code>.</p><p>After login, OpenAM should direct you to the console at
+    <code class="literal">http://openam.example.com:8080/openam/task/Home</code> and then
+    to the Common Tasks tab.</p><div class="mediaobject" align="center"><a name="figure-openam-common-tasks"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/openam-common-tasks.png" align="middle" height="360" alt="OpenAM Common Tasks"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-openam-common-tasks.html" target="longdesc">D</a>]</span></div></div><p>In your home directory, you find that OpenAM has stored its
+    configuration, including the embedded OpenDJ directory server, in a
+    folder named after the server instance, <code class="filename">~/openam/</code>. It
+    has also added a hidden folder, <code class="filename">~/.openamcfg/</code>, with
+    a file used by OpenAM when it starts up. If you ruin your configuration
+    of OpenAM somehow, the quickest way to start over is to stop Tomcat,
+    delete these two folders, and configure OpenAM again.</p><p>OpenAM core server and OpenAM Console is now configured. Make sure
+    you have successfully logged in to OpenAM Console before you proceed.</p></li></ol></div><div class="procedure"><a name="configure-policy"></a><div class="procedure-title">Procedure&nbsp;1.5.&nbsp;To Configure a Policy in OpenAM</div><a class="indexterm" name="d13474e722"></a><a class="indexterm" name="d13474e727"></a><p>OpenAM authenticates users and then makes authorization decisions.
+   The authorization decisions are based on access policies that indicate
+   who can do what, when, and under what conditions. Follow these steps to
+   create a policy that allows all authenticated users to perform an HTTP GET
+   (for example, to browse) the Apache HTTP home page that you set up
+   earlier.</p><ol class="procedure" type="1"><li class="step"><p>In OpenAM Console, click the Access Control tab,
+     then in the Realms table click the link to
+     <code class="literal">/ (Top Level Realm)</code>.</p><p>OpenAM allows you to organize identities, policies, and policy agent
+    profiles into realms as described in the <em class="citetitle">Administration
+    Guide</em> chapter, <a href="../admin-guide/index.html#chap-realms" class="link"><em class="citetitle">Configuring
+    Realms</em></a>. For now, use the default top level realm.</p></li><li class="step"><p>In the Console page for the top level realm,
+     click the Policies tab, click
+     <code class="literal">iPlanetAMWebAgentService</code>, and
+     then click Add New Policy.</p><p>For more information on the relationship between realms,
+     applications, and policies, see <em class="citetitle">Administration
+      Guide</em> chapter, <a href="../admin-guide/index.html#what-is-authz" class="link">
+      <em class="citetitle">About Authorization in OpenAM</em></a>.</p></li><li class="step"><p>Give your new policy the name <code class="literal">Authenticated users can get
+    Apache HTTP home page</code>, and then click Next.</p></li><li class="step"><p>In the Specify Resources step, click
+    <code class="literal">*://*:*/*</code> to move the pattern to the
+     Create your resources section. Then, replace the
+     asterisks so that the pattern reads:
+     <code class="literal">http://www.example.com:8000/*</code>, and then click the
+     Add icon.</p><div class="mediaobject" align="center"><a name="figure-openam-policy-rule"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/openam-policy-rule.png" align="middle" height="360" alt="OpenAM Policy Rule"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-openam-policy-rule.html" target="longdesc">D</a>]</span></div></div><p>Click Next to proceed.</p></li><li class="step"><p>In the Select Actions step, select the
+    <code class="literal">GET</code> and
+    <code class="literal">POST</code> actions,
+    ensure their value is set to <code class="literal">Allow</code>, and
+    then click Next.</p></li><li class="step"><p>In the Define Subject Conditions step, click
+     Subject Condition, from the
+     type drop-down choose <code class="literal">Authenticated
+      Users</code>and then drag the grey block into the green
+     <code class="literal">AND</code> logical block above.</p><div class="mediaobject" align="center"><a name="figure-openam-policy-subjects"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/openam-policy-subjects.png" align="middle" height="360" alt="OpenAM Policy Subjects"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-openam-policy-subjects.html" target="longdesc">D</a>]</span></div></div><p>Click Next to proceed.</p></li><li class="step"><p>In the Define Environment Conditions and
+     Specify Response Attributes steps, click
+     Next.</p></li><li class="step"><p>Review your configuration. It should resemble the following:</p><div class="mediaobject" align="center"><a name="figure-openam-policy-review"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/openam-policy-review.png" align="middle" height="360" alt="Review OpenAM Policy"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-openam-policy-review.html" target="longdesc">D</a>]</span></div></div><div class="tip"><h3 class="title">Tip</h3><p>If the configuration is not visible, click the
+      <span class="emphasis"><em>maximized</em></span> link.</p></div><p>To make changes to the configuration, either click the relevant step,
+      or click the item to jump to the relevant step and make amendments to
+      the configuration.</p><p>When the configuration is completed, click Finish.</p></li></ol></div><p>Next you must create a web policy agent profile before installing
+   the agent in Apache HTTP Server to enforce your new policy.</p><div class="procedure"><a name="create-web-policy-agent-profile"></a><div class="procedure-title">Procedure&nbsp;1.6.&nbsp;To Create a Web Policy Agent Profile</div><a class="indexterm" name="d13474e850"></a><a class="indexterm" name="d13474e855"></a><p>OpenAM stores profile information about policy agents centrally by
+   default. You can then manage the policy agent profile through OpenAM Console.
+   The policy agent can retrieve its configuration from its OpenAM profile at
+   installation time and when it starts up, and OpenAM can notify the policy
+   agent of changes to its configuration. Following these steps before
+   installing the policy agent itself.</p><ol class="procedure" type="1"><li class="step"><p>In OpenAM Console, browse to Access Control &gt; / (Top Level Realm) &gt;
+    Agents &gt; Web, and then click New in the Agents table.</p></li><li class="step"><p>In the page to configure your new web policy agent, set the following
+    values.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">Name</span></dt><dd><p><code class="literal">WebAgent</code></p></dd><dt><span class="term">Password</span></dt><dd><p><code class="literal">password</code></p></dd><dt><span class="term">Configuration</span></dt><dd><p>Keep the default, <code class="literal">Centralized</code></p></dd><dt><span class="term">Server URL</span></dt><dd><p><code class="literal">http://openam.example.com:8080/openam</code></p></dd><dt><span class="term">Agent URL</span></dt><dd><p><code class="literal">http://www.example.com:8000</code></p><p>8000 is the port number you set previously for Apache HTTP
+       Server.</p></dd></dl></div><div class="mediaobject" align="center"><a name="figure-web-agent-profile"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/web-agent-profile.png" align="middle" height="360" alt="New Web Agent Profile"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-web-agent-profile.html" target="longdesc">D</a>]</span></div></div></li><li class="step"><p>Click Create to save the new web policy agent profile in OpenAM.</p><p>Next you must install a policy agent in Apache HTTP Server to enforce
+    your new policy.</p></li></ol></div><div class="procedure"><a name="install-web-policy-agent"></a><div class="procedure-title">Procedure&nbsp;1.7.&nbsp;To Install OpenAM Web Policy Agent</div><a class="indexterm" name="d13474e923"></a><a class="indexterm" name="d13474e928"></a><p>OpenAM policy agents enforce policies defined in OpenAM. The agent's
+   job is to make sure that users have the right to access resources they
+   request. And yet the agent does not make the policy decisions. Instead, the
+   agent calls on OpenAM for policy decisions, using the information presented
+   by the user (or the user's client application), such as the single sign on
+   token in the HTTP cookie that OpenAM uses to keep track of user sessions.
+   In essence the agent is a gatekeeper for OpenAM.</p><p>The agent runs inside of Apache HTTP Server as a library that the
+   server loads at startup time. When a request comes in, the agent redirects
+   users to OpenAM for authentication and calls on OpenAM for policy decisions
+   as necessary.</p><ol class="procedure" type="1"><li class="step"><p>Download the OpenAM policy agent for your version of Apache HTTP
+    Server either from the ForgeRock <a class="link" href="http://forgerock.com/download-stack/" target="_blank"><em class="citetitle">Enterprise Downloads</em></a> page, or from the
+    project nightly <a class="link" href="http://forgerock.org/openam.html" target="_blank"><em class="citetitle">Builds</em></a> page.</p></li><li class="step"><p>Create a password file that the agent installer reads when first
+    connecting to OpenAM to read its profile.</p><p>The password file should be read-only by the user who installs
+    the policy agent.</p><div class="screen"><pre>
+$ <strong>echo password &gt; /tmp/pwd.txt</strong>
+$ <strong>chmod 400 /tmp/pwd.txt</strong>
+    </pre></div><p>The password is stored encrypted after installation.</p></li><li class="step"><p>Make sure OpenAM is running.</p><p>You can check for example by logging into OpenAM Console.</p></li><li class="step"><p>Stop Apache HTTP Server while you install the policy agent.</p><div class="screen"><pre>
+$ <strong>/path/to/apache/bin/apachectl stop</strong>
+    </pre></div></li><li class="step"><p>Extract the download.</p><div class="screen"><pre>
+$ <strong>cd /path/to</strong>
+$ <strong>unzip ~/Downloads/apache_v22_Linux_agent*.zip</strong>
+    </pre></div></li><li class="step"><p>Install the web policy agent in Apache HTTP Server, making sure that
+    you provide the correct information to the installer as shown in the
+    following example.</p><p lang="en">When you run the command, you will be prompted to read and accept the
+  software license agreement for the agent installation.
+  You can suppress the license agreement prompt by including the
+  <code class="option">--acceptLicense</code> option on the command line.
+  The inclusion of the option indicates that you have read and accepted
+  the terms stated in the license.
+  To view the license agreement, open <code class="filename">&lt;server-root&gt;/legal-notices/license.txt</code>.
+ </p><div class="screen"><pre>
+$ <strong>cd /path/to/web_agents/apache22_agent/bin</strong>
+$ <strong>./agentadmin --install --acceptLicense</strong>
+<em>...
+
+-----------------------------------------------
+SUMMARY OF YOUR RESPONSES
+-----------------------------------------------
+Apache Server Config Directory : /path/to/apache/conf
+OpenAM server URL : http://openam.example.com:8080/openam
+Agent URL : http://www.example.com:8000
+Agent Profile name : WebAgent
+Agent Profile Password file name : /tmp/pwd.txt
+
+...</em>
+       </pre></div></li><li class="step"><p>Start Apache HTTP Server, and check that the web policy agent seems
+    to be correctly configured.</p><div class="screen"><pre>
+$ <strong>/path/to/apache/bin/apachectl -k start</strong>
+$ <strong>tail /path/to/apache/logs/error_log</strong>
+<em>...[notice] Apache/2.2.25 (Unix) Web Policy Agent/3.0 configured -- resuming
+ normal operations</em>
+    </pre></div><p>Assuming everything up to now has worked correctly, you can now try
+    your installation to see OpenAM in action.</p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="try-it-out"></a>1.4.&nbsp;Trying It Out</h2></div></div></div><a class="indexterm" name="d13474e1029"></a><div class="orderedlist"><p>Now that you have completed <a class="xref" href="#software-setup" title="1.3.&nbsp;Setting Up the Software">Section&nbsp;1.3, &#8220;Setting Up the Software&#8221;</a>,
+   you can try accessing the protected web page to see OpenAM at work.</p><ol class="orderedlist" type="1"><li class="listitem"><p>Log out of OpenAM Console so that you can see the need to login when
+    you try to access the Apache "It works!" page.</p></li><li class="listitem"><p>Browse to <code class="literal">http://www.example.com:8000</code> to attempt
+    to access the Apache "It works!" page.</p><p>At this point, the policy agent intercepts your request for the page.
+    Your browser does not return a cookie indicating an OpenAM session, so the
+    policy agent redirects you to OpenAM to authenticate.</p></li><li class="listitem"><p>Log in as the built-in default OpenAM demonstration user
+    <code class="literal">demo</code> with password <code class="literal">changeit</code>.</p><div class="mediaobject" align="center"><a name="figure-openam-login"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/openam-login.png" align="middle" height="360" alt="OpenAM Login Page"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-openam-login.html" target="longdesc">D</a>]</span></div></div><p>On successful login, OpenAM sets a session cookie named
+    <code class="literal">iPlanetDirectoryPro</code> in your browser for the domain
+    <code class="literal">.example.com</code>. The cookie is then returned to servers
+    in the <code class="literal">example.com</code> domain such as
+    <code class="literal">openam.example.com</code> and
+    <code class="literal">www.example.com</code>.</p><p>If you examine this cookie in your browser, you notice that it has
+    a value such as
+    <code class="literal">AQIC5wM2LY4SfcwciyfvJcQDUIB7kIWEH187Df_txqLdAVc.*AAJTSQACMDEAAlNLABMxMDYwNzY1MjQ0NTE0ODI2NTkx*</code>.
+    This is the SSO Token value. The value is in fact an encrypted reference to
+    the session that is stored only by OpenAM. So only OpenAM can determine
+    whether you are actually logged in, or instead that the session is no longer
+    valid and you need to authenticate again.</p><p>The OpenAM session is used for single sign on. When the browser
+    presents the cookie to a server in the domain, the agent on the server can
+    check with OpenAM using the SSO Token as a reference to the session. This
+    allows OpenAM to make policy decisions based on who is authenticated, or
+    to prompt for additional authentication as necessary.</p><p>Your single sign on session can end in a few ways.  For example, when
+    examining the cookie in your browser, you should notice that it expires when
+    the browser session ends (when you shut down your browser). Alternatively,
+    you can log out of OpenAM explicitly. Sessions can also expire. OpenAM
+    sets two limits, one that causes your session to expire if it remains
+    inactive for a configurable period of time (default: 30 minutes), and
+    another that caps the session lifetime (default: 2 hours).</p></li><li class="listitem"><p>After successful login, notice that you are redirected to the Apache
+    "It works!" page.</p><div class="mediaobject" align="center"><a name="figure-web-server-home-page-again"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/web-server-home-page.png" align="middle" height="360" alt="Apache HTTP Server home page stating It works!"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-web-server-home-page-again.html" target="longdesc">D</a>]</span></div></div><p>In the background, OpenAM redirected your browser again to the page
+    you tried to access originally, <code class="literal">http://www.example.com:8000</code>.
+    This time the web policy agent intercepted the request and found the SSO
+    Token, so it could request a policy decision from OpenAM regarding whether
+    the user with the SSO Token has access to get
+    <code class="literal">http://www.example.com:8000/</code>. OpenAM replied to the policy
+    agent that it could allow access, and the policy agent allowed Apache HTTP
+    Server to send back the web page.</p></li></ol></div><p>Congratulations on protecting your first web site with OpenAM! Notice
+   that you had only to install software and to configure things in OpenAM. You
+   did not have to change your web site at all in order to add single sign on
+   and to set up access policies.</p><p>OpenAM can do much more than protect web pages. Read the next chapter
+   to learn more.</p></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-where-to-go-from-here"></a>Chapter&nbsp;2.&nbsp;Where To Go From Here</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="#user-self-service-features">2.1. User Self-Service Features</a></span></dt><dt><span class="section"><a href="#sso-features">2.2. Single Sign On</a></span></dt><dt><span class="section"><a href="#federation">2.3. Standards-Based Federation</a></span></dt><dt><span class="section"><a href="#policy-and-xacml">2.4. Access Policies</a></span></dt><dt><span class="section"><a href="#protect-any-application">2.5. Protect Any Web Application</a></span></dt><dt><span class="section"><a href="#modern-api">2.6. Modern APIs For Developers</a></span></dt><dt><span class="section"><a href="#getting-help">2.7. Getting Help With Your Project</a></span></dt></dl></div><a class="indexterm" name="d13474e1120"></a><p>OpenAM can do much more than protect web pages. In addition to being
+ the right foundation for building highly available, Internet-scale access
+ management services, OpenAM has a rich set of features that make it the right
+ choice for a variety of different deployments. This chapter describes some of
+ the features of OpenAM and indicates where in the documentation you can find
+ out more about them.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="user-self-service-features"></a>2.1.&nbsp;User Self-Service Features</h2></div></div></div><a class="indexterm" name="d13474e1130"></a><a class="indexterm" name="d13474e1135"></a><p>The easier it is for users to handle their own registration, to reset
+  forgotten passwords, and to access the applications they need without a call
+  to your help desk, the more you save when supporting them for these
+  tasks.</p><p>OpenAM has access to the identity repositories where user profiles are
+  stored. OpenAM is therefore well placed to help you manage self-service
+  features that involve user profiles.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><span class="bold"><strong>User Self-Registration</strong></span>.
+     OpenAM provides user self-registration as
+     a feature of OpenAM's REST APIs. New users can safely sign up
+     in OpenAM without your administrators or help desk having to get
+     involved.
+    </p><p>
+     For information on configuring self-registration, see the
+     <a href="../admin-guide/index.html#user-self-registration" class="link">
+     <em class="citetitle">User Self-Registration</em></a> section in the
+     <em class="citetitle">OpenAM Administration Guide</em>.
+    </p><p>For details on building your own self-registration application using
+    the REST API, see the
+    <a href="../dev-guide/index.html#rest-api-self-registration" class="link"><em class="citetitle">User
+    Self-Registration</em></a> section in the
+     <em class="citetitle">OpenAM Developer's Guide</em>.</p></li><li class="listitem"><p><span class="bold"><strong>Password Reset</strong></span>.
+     OpenAM can help users reset their passwords on their own. OpenAM
+     handles both the case where a user knows their password and wants to change
+     it, and also the case where the user has forgotten their password and needs
+     to reset it, possibly after answering security questions.</p><p>For details on setting up password reset capabilities, see the
+     <a href="../admin-guide/index.html#forgotten-pwd-reset" class="link">
+      <em class="citetitle">Resetting Forgotten Passwords</em></a> chapter in
+     the <em class="citetitle">OpenAM Administration Guide</em>.</p><p>For details on building your own application to handle password reset
+     using the REST API, see the
+     <a href="../dev-guide/index.html#rest-api-password-reset" class="link"><em class="citetitle">Resetting
+     Forgotten Passwords</em></a> section in the
+     <em class="citetitle">OpenAM Developer's Guide</em>.</p></li><li class="listitem"><p><span class="bold"><strong>Dashboard Service</strong></span>.
+     Users often have a number of applications assigned to them, especially
+     if your organization has standardized on software as a service, for example
+     for email, document sharing, support ticketing, customer relationship
+     management, web conferencing, and so forth. It can be handy to present these
+     applications on a user's web-based dashboard with the user's profile, and
+     to assign applications to the user's dashboard automatically based on the
+     user's profile.</p><p>The OpenAM cloud dashboard service makes this relatively easy to
+    set up. For basic information on using the service, see the
+    <em class="citetitle">Administration Guide</em> chapter, <a href="../admin-guide/index.html#chap-dashboard" class="link"><em class="citetitle">Configuring the
+    Dashboard Service</em></a>.</p></li></ul></div><p>OpenAM's user-facing pages are fully customizable and easy to skin
+  for your organization. The <a href="../install-guide/index.html#install-guide" class="link"><em class="citetitle">Installation
+  Guide</em></a> has details on how to customize user-facing
+  pages.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="sso-features"></a>2.2.&nbsp;Single Sign On</h2></div></div></div><a class="indexterm" name="d13474e1216"></a><a class="indexterm" name="d13474e1221"></a><p>Single sign on (SSO) is a core feature of OpenAM. Once you have set up
+  OpenAM you protect as many applications in the network domain as you want.
+  Simply install policy agents for the additional servers, and add policies
+  for the resources served by the applications. Users can then authenticate
+  to start a session on any site in the domain, and they remain authenticated
+  for all sites in the domain. No need to log in again (unless the session
+  ends, or unless a policy requires stronger authentication). See the
+  <em class="citetitle">Administration Guide</em> chapter, <a href="../admin-guide/index.html#chap-sso" class="link"><em class="citetitle">Configuring
+  Single Sign-On within One Domain</em></a> for details.</p><p>Many organizations manage more than one domain. When you have multiple
+  distinct domains in a single organization, cookies set in one domain are not
+  returned to servers in another domain. Also in many organizations, sub-domains
+  are controlled independently, leading to the need to protect against someone
+  setting up a rogue sub-domain to hijack session cookies. OpenAM's cross
+  domain single sign on (CDSSO) provides a safe mechanism for your OpenAM
+  servers in one domain to work with policy agents from other domains,
+  protecting against potential session cookie hijacking. CDSSO allows users to
+  sign on in one of your domains and not have to sign on again when they visit
+  another of your domains.</p><p>CDSSO works through cooperation between policy agents and the
+  <code class="literal">CDCServlet</code> in OpenAM. Together, the policy agents and
+  OpenAM use federation capabilities to translate from one domain to another.
+  For details on how to configure policy agents for CDSSO, see the
+  <em class="citetitle">Administration Guide</em> chapter, <a href="../admin-guide/index.html#chap-cdsso" class="link"><em class="citetitle">Configuring
+  Cross-Domain Single Sign On</em></a>.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="federation"></a>2.3.&nbsp;Standards-Based Federation</h2></div></div></div><a class="indexterm" name="d13474e1252"></a><a class="indexterm" name="d13474e1257"></a><p>When you need to federate identities across not just different domains
+  but instead across different organizations with separate access management
+  solutions, then you need interoperable federation technologies. Perhaps your
+  organization acts as an identity provider for other organizations providing
+  services. Perhaps you provide the services and allow users to use their
+  identity from another organization to access your services. Either way OpenAM
+  has the capability to integrate well in federated access management
+  scenarios.</p><div class="itemizedlist"><p>OpenAM supports standards-based federation technologies.</p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Security Assertion Markup Language (SAML) 2.0 grew out of earlier
+    work on SAML 1.x and in the Liberty Alliance. SAML defines XML-based,
+    standard formats and profiles for federating identities. SAML 2.0 is
+    supported by a wide range of applications including major software as a
+    service (SaaS) offerings. OpenAM supports SAML 2.0 and earlier standards,
+    and can function as a hub in deployments where different standards are
+    used. For details on OpenAM's SAML 2.0 capabilities, see the
+    <em class="citetitle">Administration Guide</em> chapter, <a href="../admin-guide/index.html#chap-federation" class="link"><em class="citetitle">Managing SAML
+    2.0 Federation</em></a>.</p><p>When your deployment serves as an identity provider for a SAML
+    federation, OpenAM makes it easy to develop applications called Fedlets that
+    your service providers can easily deploy to participate in the federation.
+    For details see the <em class="citetitle">Developer's Guide</em> chapters,
+    <a href="../dev-guide/index.html#chap-fedlet-java" class="link"><em class="citetitle">Using Fedlets
+    in Java Web Applications</em></a> and <a href="../dev-guide/index.html#chap-fedlet-dotnet" class="link"><em class="citetitle">Using Fedlets
+    in .NET Web Applications</em></a>.</p></li><li class="listitem"><p>OAuth 2.0 and OpenID Connect 1.0 are open standards for authorization
+    using REST APIs to allow users to authorize third-party access to their
+    resources. These standards make it easier to federate modern web
+    applications. OAuth for example is widely used in social applications.</p><p>OpenAM offers support both for OAuth 2.0 and also for OpenID Connect
+    1.0. OpenAM can play the roles of authorization server and of client in
+    OAuth 2.0, while managing the profiles of the resource owners. When acting
+    as a client, OpenAM policy agents can be used on resource servers to enforce
+    authorization. For details see the <em class="citetitle">Administration Guide</em>
+    chapter, <a href="../admin-guide/index.html#chap-oauth2" class="link"><em class="citetitle">Managing OAuth
+    2.0 Authorization</em></a>.</p><p>OpenAM can play the OpenID Connect 1.0 provider role as well, with
+    support for Basic and Implicit client profiles as well as discovery,
+    dynamic registration, and session management. For details see the
+    <em class="citetitle">Administration Guide</em> chapter, <a href="../admin-guide/index.html#chap-openid-connect" class="link"><em class="citetitle">Managing OpenID
+    Connect 1.0 Authorization</em></a>.</p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="policy-and-xacml"></a>2.4.&nbsp;Access Policies</h2></div></div></div><a class="indexterm" name="d13474e1314"></a><a class="indexterm" name="d13474e1319"></a><p>In the first chapter of this guide you created an OpenAM access policy
+  and saw how it worked. OpenAM can handle large numbers of access policies,
+  each of which gives you centralized control over who can access what
+  resources, when, and under what circumstances. For details see the
+  <em class="citetitle">Administration Guide</em> chapter, <a href="../admin-guide/index.html#chap-authz-policy" class="link"><em class="citetitle">Defining
+  Authorization Policies</em></a>.</p><p>OpenAM also supports standards-based access policies defined using the
+  eXtensible Access Control Markup Language (XACML). XACML defines an XML
+  Attribute-Based Access Control (ABAC) language with Role-Based Access Control
+  (RBAC) features as well. For details on using XACML policies with OpenAM see
+  the <em class="citetitle">Administration Guide</em> chapter, <span class="olink"><em class="citetitle">Defining
+  Entitlements</em></span>.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="protect-any-application"></a>2.5.&nbsp;Protect Any Web Application</h2></div></div></div><a class="indexterm" name="d13474e1345"></a><a class="indexterm" name="d13474e1350"></a><p>In the first chapter of the guide you installed a web policy agent to
+  enforce OpenAM's authorization decisions on Apache HTTP Server. That web
+  policy agent is only one of many policy agents that work with OpenAM.
+  As described in the <em class="citetitle">Administration Guide</em> chapter, <a href="../admin-guide/index.html#chap-agents" class="link"><em class="citetitle">Configuring Policy
+  Agent Profiles</em></a>, you find policy agents for different web
+  servers, for a variety of Java EE web application containers, for protecting
+  SOAP-based web services, and for OAuth 2.0 clients.</p><p>
+   For details about web policy agents also see the
+   <a class="link" href="http://docs.forgerock.org/en/openam-pa/3.3.0/web-users-guide/#web-users-guide" target="_blank"><em class="citetitle">Web Policy Agent User's Guide</em></a>.
+  </p><p>
+   For details about Java EE policy agents also see the
+   <a class="link" href="http://docs.forgerock.org/en/openam-pa/3.3.0/jee-users-guide/#jee-users-guide" target="_blank"><em class="citetitle">Java EE Policy Agent User's Guide</em></a>.
+  </p><p>Furthermore <a class="link" href="http://openig.forgerock.org" target="_blank">OpenIG Identity Gateway</a> works with applications where you want to
+  protect access, but you cannot install a policy agent. For example, you might
+  have a web application running in a server for which no policy agent has been
+  developed. Or you might be protecting an application where you simply cannot
+  install a policy agent. In that case, OpenIG functions as a flexible reverse
+  proxy with standard SAML 2.0 capabilities. For details see the <a class="link" href="http://docs.forgerock.org/en/openig/" target="_blank"><em class="citetitle">OpenIG documentation</em></a>.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="modern-api"></a>2.6.&nbsp;Modern APIs For Developers</h2></div></div></div><a class="indexterm" name="d13474e1388"></a><a class="indexterm" name="d13474e1393"></a><div class="itemizedlist"><p>For client application developers, OpenAM offers REST, Java, and C
+   APIs.</p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>OpenAM REST APIs make the common CRUD (create, read, update,
+    delete) easy to use in modern web applications. They also offer extended
+    actions and query capabilities for access management functionality.</p><p>To get started, see the <em class="citetitle">Developer's Guide</em>
+    chapter, <a href="../dev-guide/index.html#chap-rest" class="link"><em class="citetitle">Using RESTful
+    Web Services</em></a>.</p></li><li class="listitem"><p>OpenAM Java APIs provided through the OpenAM Java SDK let your Java
+    and Java EE applications call on OpenAM for authentication and authorization
+    in both OpenAM and federated environments.</p><p>To get started, see the <em class="citetitle">Developer's Guide</em>
+    chapter, <a href="../dev-guide/index.html#chap-jdk" class="link"><em class="citetitle">Using the
+    OpenAM Java SDK</em></a>.</p></li><li class="listitem"><p>The OpenAM C SDK provides APIs for native applications, such as new
+    web server policy agents. The C SDK is built for Linux, Solaris, and Windows
+    platforms.</p><p>To get started, see the <em class="citetitle">Developer's Guide</em>
+    chapter, <a href="../dev-guide/index.html#chap-csdk" class="link"><em class="citetitle">Using the
+    OpenAM C API</em></a>.</p></li></ul></div><p>OpenAM provides built-in support for many identity repositories,
+  web servers and web application containers, access management standards,
+  and all the flexible, configurable capabilities mentioned in this chapter.
+  Yet, for some deployments you might still need to extend what OpenAM can do.
+  For such cases OpenAM defines Service Provider Interfaces (SPIs) where you
+  can integrate your own plugins. See the <em class="citetitle">Developer's Guide</em>
+  section, <a href="../dev-guide/index.html#openam-spis" class="link"><em class="citetitle">OpenAM
+  SPIs</em></a>, for a list of extension points, and the related
+  documentation in that guide for examples.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="getting-help"></a>2.7.&nbsp;Getting Help With Your Project</h2></div></div></div><a class="indexterm" name="d13474e1449"></a><a class="indexterm" name="d13474e1454"></a><a class="indexterm" name="d13474e1459"></a><a class="indexterm" name="d13474e1462"></a><p>You can purchase OpenAM support subscriptions and training courses
+  from ForgeRock and from consulting partners around the world and in your
+  area. To contact ForgeRock, send mail to <a class="link" href="mailto:info@forgerock.com" target="_top">info@forgerock.com</a>. To find a
+  partner in your area, see <a class="link" href="http://forgerock.com/partners/find-a-partner/" target="_blank">http://forgerock.com/partners/find-a-partner/</a>.</p></div></div><div class="index"><div class="titlepage"><div><div><h1 class="title"><a name="d13474e1472"></a>Index</h1></div></div></div><div class="index"><div class="indexdiv"><h3>A</h3><dl><dt>Apache HTTP server</dt><dd><dl><dt>installing, <a class="indexterm" href="#software-setup">Setting Up the Software</a></dt></dl></dd><dt>Apache Tomcat</dt><dd><dl><dt>installing, <a class="indexterm" href="#software-setup">Setting Up the Software</a></dt></dl></dd><dt>APIs</dt><dd><dl><dt>about, <a class="indexterm" href="#modern-api">Modern APIs For Developers</a></dt></dl></dd></dl></div><div class="indexdiv"><h3>H</h3><dl><dt>hosts file</dt><dd><dl><dt>preparing, <a class="indexterm" href="#software-setup">Setting Up the Software</a></dt></dl></dd></dl></div><div class="indexdiv"><h3>O</h3><dl><dt>OpenAM</dt><dd><dl><dt>Apache HTTP server, <a class="indexterm" href="#software-setup">Setting Up the Software</a></dt><dt>Apache Tomcat, <a class="indexterm" href="#software-setup">Setting Up the Software</a></dt><dt>APIs, <a class="indexterm" href="#modern-api">Modern APIs For Developers</a></dt><dt>hosts file, <a class="indexterm" href="#software-setup">Setting Up the Software</a></dt><dt>how it manages access, <a class="indexterm" href="#how-openam-helps-manage-access">How OpenAM Helps Manage Access to Resources</a></dt><dt>installing, <a class="indexterm" href="#software-setup">Setting Up the Software</a></dt><dt>policies, <a class="indexterm" href="#software-setup">Setting Up the Software</a>, <a class="indexterm" href="#policy-and-xacml">Access Policies</a></dt><dt>protecting web apps, <a class="indexterm" href="#protect-any-application">Protect Any Web Application</a></dt><dt>required software, <a class="indexterm" href="#software-you-need">Software Required To Try Out OpenAM</a></dt><dt>setting up, <a class="indexterm" href="#software-setup">Setting Up the Software</a></dt><dt>Single sign-on, <a class="indexterm" href="#sso-features">Single Sign On</a></dt><dt>Standards-based federation, <a class="indexterm" href="#federation">Standards-Based Federation</a></dt><dt>support, <a class="indexterm" href="#getting-help">Getting Help With Your Project</a></dt><dt>training, <a class="indexterm" href="#getting-help">Getting Help With Your Project</a></dt><dt>trying it out, <a class="indexterm" href="#try-it-out">Trying It Out</a></dt><dt>User self-service features, <a class="indexterm" href="#user-self-service-features">User Self-Service Features</a></dt><dt>Web policy agent, <a class="indexterm" href="#software-setup">Setting Up the Software</a></dt><dt>Web policy agent profiles, <a class="indexterm" href="#software-setup">Setting Up the Software</a></dt><dt>Where to go after install, <a class="indexterm" href="#chap-where-to-go-from-here">Where To Go From Here</a></dt></dl></dd></dl></div><div class="indexdiv"><h3>P</h3><dl><dt>policies</dt><dd><dl><dt>accessing, <a class="indexterm" href="#policy-and-xacml">Access Policies</a></dt><dt>configuring, <a class="indexterm" href="#software-setup">Setting Up the Software</a></dt></dl></dd></dl></div><div class="indexdiv"><h3>R</h3><dl><dt>required software, <a class="indexterm" href="#software-you-need">Software Required To Try Out OpenAM</a></dt></dl></div><div class="indexdiv"><h3>S</h3><dl><dt>Single sign on</dt><dd><dl><dt>about, <a class="indexterm" href="#sso-features">Single Sign On</a></dt></dl></dd><dt>Standards-based Federation</dt><dd><dl><dt>about, <a class="indexterm" href="#federation">Standards-Based Federation</a></dt></dl></dd><dt>Support subscriptions, <a class="indexterm" href="#getting-help">Getting Help With Your Project</a></dt></dl></div><div class="indexdiv"><h3>T</h3><dl><dt>training, <a class="indexterm" href="#getting-help">Getting Help With Your Project</a></dt></dl></div><div class="indexdiv"><h3>U</h3><dl><dt>User self-service features</dt><dd><dl><dt>about, <a class="indexterm" href="#user-self-service-features">User Self-Service Features</a></dt></dl></dd></dl></div><div class="indexdiv"><h3>W</h3><dl><dt>Web applications</dt><dd><dl><dt>protecting, <a class="indexterm" href="#protect-any-application">Protect Any Web Application</a></dt></dl></dd><dt>Web policy agent</dt><dd><dl><dt>creating profiles, <a class="indexterm" href="#software-setup">Setting Up the Software</a></dt><dt>installing, <a class="indexterm" href="#software-setup">Setting Up the Software</a></dt></dl></dd></dl></div></div></div></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

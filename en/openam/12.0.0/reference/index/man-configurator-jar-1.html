@@ -1,0 +1,209 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>configurator.jar</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenAM Reference"><link rel="up" href="rn01.html" title="OpenAM Command Line Tools"><link rel="prev" href="amverifyarchive-1.html" title="amverifyarchive"><link rel="next" href="man-upgrade-jar.html" title="upgrade.jar"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">configurator.jar</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="amverifyarchive-1.html">Prev</a>&nbsp;</td><th width="60%" align="center">OpenAM Command Line Tools</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="man-upgrade-jar.html">Next</a></td></tr></table><hr></div><div lang="en" class="refentry"><a name="man-configurator-jar-1"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>configurator.jar &#8212; install or upgrade OpenAM using a configuration file</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">configurator.jar</code>  {options}</p></div></div><div class="refsect1"><a name="d0e808"></a><h2>Description</h2><p>This executable .jar file, openam-configurator-tool-12.0.0.jar, lets you
+  perform silent installation, configuring a deployed OpenAM server by applying
+  settings from a configuration file.</p></div><div class="refsect1"><a name="d0e813"></a><h2>Options</h2><p>The following options are supported.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="option">-f | --file <em class="replaceable"><code>configuration-file</code></em></code></span></dt><dd><p>Configure a deployed OpenAM web application archive using the
+     specified configuration file. Installation and upgrade configuration
+     files are described in the sections below.</p></dd><dt><span class="term"><code class="option">--acceptLicense</code></span></dt><dd><p>Auto-accept the software license agreement and suppress the display
+     of the licence acceptance screen to the user. If the configuration file
+     contains the <code class="literal">ACCEPT_LICENSES</code> property,
+     it will have precedence over the command-line option.</p></dd><dt><span class="term"><code class="option">-? | --help</code></span></dt><dd><p>Display the usage message.</p></dd></dl></div></div><div class="refsect1"><a name="d0e845"></a><h2>Installation Configuration File</h2><p>Base your configuration on the <code class="filename">sampleconfiguration</code>
+  file delivered with OpenAM, and using the hints in this section, or the
+  comments included in the file.</p><div class="variablelist"><div class="variablelist-title">Server Properties</div><p>These properties pertain to the OpenAM server instance.</p><dl class="variablelist"><dt><span class="term">SERVER_URL</span></dt><dd><p>URL to the web container where you want OpenAM to run, such as
+     <code class="literal">http://openam.example.com:8080</code></p></dd><dt><span class="term">DEPLOYMENT_URI</span></dt><dd><p>URI where you want to deploy OpenAM on the web container, such as
+     <code class="literal">/openam</code></p></dd><dt><span class="term">BASE_DIR</span></dt><dd><p>Configuration directory where OpenAM stores files and embedded
+     configuration directory servers, such as
+     <code class="literal">$HOME/openam</code></p></dd><dt><span class="term">locale</span></dt><dd><p>The user locale, such as <code class="literal">en_GB</code></p></dd><dt><span class="term">PLATFORM_LOCALE</span></dt><dd><p>The locale of the OpenAM server, such as
+     <code class="literal">en_US</code></p></dd><dt><span class="term">AM_ENC_KEY</span></dt><dd><p>The password encryption key, which must be the same on all servers
+     in a multi-server installation, such as
+     <code class="literal">O6QWwHPO4os+zEz3Nqn/2daAYWyiFE32</code>. If left blank,
+     installing OpenAM generates a random password encryption key that you can
+     later view in OpenAM console under Configuration &gt; Servers and Sites
+     &gt; <em class="replaceable"><code>Server Name</code></em> &gt; Security.</p></dd><dt><span class="term">ADMIN_PWD</span></dt><dd><p>Password of the OpenAM administrator user
+     <code class="literal">amadmin</code>, which must be at least 8 characters in length
+     and must match that of other servers in a multiserver deployment</p></dd><dt><span class="term">AMLDAPUSERPASSWD</span></dt><dd><p>Password of the default policy agent
+     <code class="literal">UrlAccessAgent</code>, which must be at least 8 characters in
+     length and must not be the same as the value of
+     <code class="literal">ADMIN_PWD</code></p></dd><dt><span class="term">COOKIE_DOMAIN</span></dt><dd><p>Name of the trusted DNS domain OpenAM returns to a browser when it
+     grants a session ID to a user, such as
+     <code class="literal">.example.com</code></p></dd><dt><span class="term">ACCEPT_LICENSES</span></dt><dd><p>Optional boolean property that can be set to always auto-accept
+       the software license agreement and suppress the display of the
+       license acceptance screen to the user.
+       A value of <code class="literal">true</code> auto-accepts the license;
+       any other value will be assumed to equal <code class="literal">false</code>,
+       resulting in the presentation of the license.
+       Default value is <code class="literal">false</code>.
+       This property takes precedence over the <code class="literal">--acceptLicense</code>
+       option, which can also be passed in to the application with the
+       openam-configurator-tool-12.0.0.jar file.</p></dd></dl></div><div class="variablelist"><div class="variablelist-title">Configuration Store Properties</div><p>These properties pertain to the directory server where OpenAM
+   stores its configuration.</p><dl class="variablelist"><dt><span class="term">DATA_STORE</span></dt><dd><p>Type of the configuration data store. The value
+     <code class="literal">embedded</code> means set up OpenAM with an embedded, OpenDJ
+     based configuration store. The value <code class="literal">dirServer</code> means
+     an external directory server, such as OpenDJ, or Sun Java System Directory
+     Server. If you set this to <code class="literal">dirServer</code>, and the
+     configuration store contains the configuration of other OpenAM servers,
+     then the server is added to the existing multiserver installation.</p></dd><dt><span class="term">DIRECTORY_SSL</span></dt><dd><p>To use LDAP without SSL, set this to <code class="literal">SIMPLE</code>. To
+     use LDAP with SSL, set this to <code class="literal">SSL</code>.</p></dd><dt><span class="term">DIRECTORY_SERVER</span></dt><dd><p>Fully qualified domain name of the configuration store directory
+     server host, such as <code class="literal">opendj.example.com</code></p></dd><dt><span class="term">DIRECTORY_PORT</span></dt><dd><p>LDAP or LDAPS port number for the configuration store directory
+     server, such as 389 or 636</p></dd><dt><span class="term">DIRECTORY_ADMIN_PORT</span></dt><dd><p>Administration port number for the configuration store directory
+     server, such as 4444</p></dd><dt><span class="term">DIRECTORY_JMX_PORT</span></dt><dd><p>Java Management eXtension port number, such as
+     <code class="literal">1689</code>, used with the OpenDJ embedded configuration
+     store</p></dd><dt><span class="term">ROOT_SUFFIX</span></dt><dd><p>Root suffix distinguished name (DN) for the configuration store,
+     such as <code class="literal">o=openam</code></p></dd><dt><span class="term">DS_DIRMGRDN</span></dt><dd><p>Distinguished name of the directory manager of the configuration
+     store, such as <code class="literal">cn=Directory Manager</code></p></dd><dt><span class="term">DS_DIRMGRPASSWD</span></dt><dd><p>Password for the directory manager of the configuration store</p></dd></dl></div><div class="variablelist"><div class="variablelist-title">User Data Store Properties</div><p>These properties pertain to the directory server where OpenAM stores
+   user profiles. If you do not include these properties, or you leave these
+   properties commented out, then OpenAM uses the same directory server as
+   it uses for the configuration store.</p><dl class="variablelist"><dt><span class="term">USERSTORE_TYPE</span></dt><dd><p>The type of directory server used. Valid values include the
+     following.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="literal">LDAPv3ForOpenDS</code>: ForgeRock 0penDJ or
+       Sun OpenDS</p></li><li class="listitem"><p><code class="literal">LDAPv3ForAD</code>: Active Directory with
+       host and port settings</p></li><li class="listitem"><p><code class="literal">LDAPv3ForADDC</code>: Active Directory with a
+       Domain Name setting</p></li><li class="listitem"><p><code class="literal">LDAPv3ForADAM</code>: Active Directory Application
+       Mode</p></li><li class="listitem"><p><code class="literal">LDAPv3ForODSEE</code>: Sun Java System Directory
+       Server</p></li><li class="listitem"><p><code class="literal">LDAPv3ForTivoli</code>: IBM Tivoli Directory
+       Server</p></li></ul></div></dd><dt><span class="term">USERSTORE_SSL</span></dt><dd><p>To use LDAP without SSL, set this to <code class="literal">SIMPLE</code>. To
+     use LDAP with SSL, set this to <code class="literal">SSL</code>.</p></dd><dt><span class="term">USERSTORE_DOMAINNAME</span></dt><dd><p>If <code class="literal">USERSTORE_TYPE</code> is
+     <code class="literal">LDAPv3ForADDC</code>, you set this to the Active Directory
+     Domain Name, such as <code class="literal">ad.example.com</code>, and then set only
+     the <code class="literal">USERSTORE_SSL</code>, <code class="literal">USERSTORE_MGRDN</code>,
+     and <code class="literal">USERSTORE_PASSWD</code> additional parameters. This lets
+     Active Directory use DNS to retrieve service locations. Otherwise, do not
+     use.</p></dd><dt><span class="term">USERSTORE_HOST</span></dt><dd><p>Fully qualified domain name of the user data store directory
+     server, such as <code class="literal">opendj.example.com</code></p></dd><dt><span class="term">USERSTORE_PORT</span></dt><dd><p>Port number of the user data store. Default for LDAP is 389, and
+     for LDAP over SSL is 636.</p></dd><dt><span class="term">USERSTORE_SUFFIX</span></dt><dd><p>Root suffix distinguished name for the user data in the directory,
+     such as <code class="literal">dc=example,dc=com</code></p></dd><dt><span class="term">USERSTORE_MGRDN</span></dt><dd><p>Distinguished name of the directory manager of the user data store,
+     such as <code class="literal">cn=Directory Manager</code></p></dd><dt><span class="term">USERSTORE_PASSWD</span></dt><dd><p>Password for the directory manager of the user data store</p></dd></dl></div><div class="variablelist"><div class="variablelist-title">Site Properties</div><p>These properties pertain when you configure multiple OpenAM servers
+   in a site deployment, where a load balancer spreads request across multiple
+   servers. Use the <code class="literal">DS_EMB_REPL*</code> and
+   <code class="literal">existingserverid</code> properties only for the second and
+   subsequent servers in a site configuration.</p><dl class="variablelist"><dt><span class="term">LB_SITE_NAME</span></dt><dd><p>The name of the OpenAM site</p></dd><dt><span class="term">LB_PRIMARY_URL</span></dt><dd><p>The load balancer URL for the site, such as
+     <code class="literal">http://lb.example.com:80/openam</code>.</p></dd><dt><span class="term">LB_SESSION_HA_SFO</span></dt><dd><p>Whether to enable session persistence and failover for the site.
+     Default: <code class="literal">false</code></p></dd><dt><span class="term">DS_EMB_REPL_FLAG</span></dt><dd><p>Enable use of the embedded configuration store by setting this
+     parameter to <code class="literal">embReplFlag</code>, only if the
+     <code class="literal">DATA_STORE</code> parameter is set to
+     <code class="literal">embedded</code>. Use the other <code class="literal">DS_EMB_REPL*</code>
+     parameters in this section to set up configuration store data
+     replication.</p></dd><dt><span class="term">DS_EMB_REPL_REPLPORT1</span></dt><dd><p>Replication port number for the new OpenAM server you are
+     installing, such as 58989</p></dd><dt><span class="term">DS_EMB_REPL_HOST2</span></dt><dd><p>Host name of an existing OpenAM server housing the configuration
+     store directory server with which to replicate, such as
+     <code class="literal">openam1.example.com</code></p></dd><dt><span class="term">DS_EMB_REPL_ADMINPORT2</span></dt><dd><p>Administration port number for the configuration store directory
+     server used by the existing OpenAM server, such as 4444</p></dd><dt><span class="term">DS_EMB_REPL_REPLPORT2</span></dt><dd><p>Replication port number for the configuration store directory
+     server used by the existing OpenAM server, such as 50899</p></dd><dt><span class="term">existingserverid</span></dt><dd><p>Full URL of the existing OpenAM server, such as
+     <code class="literal">http://server1.example.com:8080/openam</code></p></dd></dl></div></div><div class="refsect1"><a name="d0e1239"></a><h2>Upgrade Configuration File</h2><p>Base your configuration on the <code class="filename">sampleconfiguration</code>
+  file delivered with OpenAM, and using the hints in this section, or the
+  comments included in the file.</p><div class="variablelist"><div class="variablelist-title">Upgrade Properties</div><dl class="variablelist"><dt><span class="term">SERVER_URL</span></dt><dd><p>URL to the web container where OpenAM runs, such as
+     <code class="literal">http://openam.example.com:8080</code></p></dd><dt><span class="term">DEPLOYMENT_URI</span></dt><dd><p>URI where OpenAM is deployed on the web container, such as
+     <code class="literal">/openam</code></p></dd><dt><span class="term">ACCEPT_LICENSES</span></dt><dd><p>Optional boolean property that can be set to always auto-accept
+      the software license agreement and suppress displaying the
+      license acceptance screen to the user.
+      A value of <code class="literal">true</code> auto-accepts the license;
+      any other value will be assumed to equal <code class="literal">false</code>,
+      resulting in the presentation of the license.
+      Default value is <code class="literal">false</code>.
+      This property takes precedence over the <code class="literal">--acceptLicense</code>
+      option, which can also be passed in to the application with the
+      openam-configurator-tool-12.0.0.jar file.</p></dd></dl></div></div><div class="refsect1"><a name="d0e1284"></a><h2>Examples</h2><p>The following example shows a configuration file to install a server
+  with an external user data store.</p><pre class="brush: plain;"># Server properties, AM_ENC_KEY="" means generate random key
+SERVER_URL=http://openam.example.com:8080
+DEPLOYMENT_URI=/openam
+BASE_DIR=$HOME/openam
+locale=en_US
+PLATFORM_LOCALE=en_US
+AM_ENC_KEY=
+ADMIN_PWD=change3me
+AMLDAPUSERPASSWD=secret12
+COOKIE_DOMAIN=.example.com
+ACCEPT_LICENSES=true
+
+# Embedded configuration data store
+DATA_STORE=embedded
+DIRECTORY_SSL=SIMPLE
+DIRECTORY_SERVER=openam.example.com
+DIRECTORY_PORT=50389
+DIRECTORY_ADMIN_PORT=4444
+DIRECTORY_JMX_PORT=1689
+ROOT_SUFFIX=o=openam
+DS_DIRMGRDN=cn=Directory Manager
+DS_DIRMGRPASSWD=chang3me
+
+# External OpenDJ based user data store
+USERSTORE_TYPE=LDAPv3ForOpenDS
+USERSTORE_SSL=SIMPLE
+#USERSTORE_DOMAINNAME=ad.example.com 
+USERSTORE_HOST=opendj.example.com
+USERSTORE_PORT=389
+USERSTORE_SUFFIX=dc=example,dc=com
+USERSTORE_MGRDN=cn=Directory Manager
+USERSTORE_PASSWD=secret12
+
+# Uncomment to specify the site for the first server in a site configuration
+#LB_SITE_NAME=lb
+#LB_PRIMARY_URL=http://lb.example.com:80/openam</pre><p>The following example shows a configuration file to install the second
+  server in a site configuration.</p><pre class="brush: plain;"># Server properties, AM_ENC_KEY from first server
+SERVER_URL=http://server2.example.com:8080
+DEPLOYMENT_URI=/openam
+BASE_DIR=$HOME/openam
+locale=en_US
+PLATFORM_LOCALE=en_US
+AM_ENC_KEY=O6QWwHPO4os+zEz3Nqn/2daAYWyiFE32
+ADMIN_PWD=change3me
+AMLDAPUSERPASSWD=secret12
+COOKIE_DOMAIN=.example.com
+ACCEPT_LICENSES=true
+
+# Embedded configuration data store
+DATA_STORE=embedded
+DIRECTORY_SSL=SIMPLE
+DIRECTORY_SERVER=server2.example.com
+DIRECTORY_PORT=50389
+DIRECTORY_ADMIN_PORT=4444
+DIRECTORY_JMX_PORT=1689
+ROOT_SUFFIX=o=openam
+DS_DIRMGRDN=cn=Directory Manager
+DS_DIRMGRPASSWD=chang3me
+
+# External OpenDJ based user data store
+USERSTORE_TYPE=LDAPv3ForOpenDS
+USERSTORE_SSL=SIMPLE
+#USERSTORE_DOMAINNAME=ad.example.com 
+USERSTORE_HOST=opendj.example.com
+USERSTORE_PORT=389
+USERSTORE_SUFFIX=dc=example,dc=com
+USERSTORE_MGRDN=cn=Directory Manager
+USERSTORE_PASSWD=secret12
+
+# Site properties
+LB_SITE_NAME=lb
+LB_PRIMARY_URL=http://lb.example.com:80/openam
+DS_EMB_REPL_FLAG=embReplFlag
+DS_EMB_REPL_REPLPORT1=58989
+DS_EMB_REPL_HOST2=server1.example.com
+DS_EMB_REPL_ADMINPORT2=4444
+DS_EMB_REPL_REPLPORT2=50889
+existingserverid=http://server1.example.com:8080/openam</pre><p>The following example shows a configuration file to upgrade an
+  OpenAM server.</p><pre class="brush: plain;">SERVER_URL=https://openam.example.com:8080
+DEPLOYMENT_URI=/openam
+ACCEPT_LICENSES=true</pre><p>The following example uses a configuration file with the
+   <code class="option">--acceptLicense</code> option on the command line.</p><div class="screen"><pre>
+$ <strong>java \
+ -jar openam-configurator-tool-12.0.0.jar \
+ -f <em><strong>config.file</strong></em> \
+ --acceptLicense</strong>
+    </pre></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="amverifyarchive-1.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="rn01.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="man-upgrade-jar.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">amverifyarchive&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;upgrade.jar</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

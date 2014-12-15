@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;11.&nbsp;Handling Single Sign-On Using OpenAM Java SDK</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenAM Developer's Guide"><link rel="up" href="index.html" title="OpenAM Developer's Guide"><link rel="prev" href="chap-authentication.html" title="Chapter&nbsp;10.&nbsp;Authenticating Using OpenAM Java SDK"><link rel="next" href="chap-policy-decisions.html" title="Chapter&nbsp;12.&nbsp;Requesting Policy Decisions Using OpenAM Java SDK"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;11.&nbsp;Handling Single Sign-On Using OpenAM Java SDK</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-authentication.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-policy-decisions.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-session"></a>Chapter&nbsp;11.&nbsp;Handling Single Sign-On Using OpenAM Java SDK</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-session.html#session-receiving-notifications">11.1. Receiving Notifications</a></span></dt></dl></div><a class="indexterm" name="d0e8323"></a><p>This chapter looks at handling session tokens with the OpenAM Java SDK.
+ The class shown in this chapter is
+ <code class="literal">com.sun.identity.samples.sso.SSOTokenSample</code>.</p><p>When a user authenticates successfully, OpenAM sets up a single sign-on
+ (SSO) session for the user. The session is associated with an SSO token that
+ holds information about the authentication, and also about the user's
+ environment and session. OpenAM deletes the session when the authentication
+ context <code class="literal">logout()</code> method is called, or when a session timeout
+ is reached. At that point the SSO token is no longer valid.</p><p>Before you continue, make sure that the packages described in the
+   <a href="../../dev-guide/index/chap-jdk.html" class="link">Using the OpenAM Java SDK</a>
+   chapter are installed.</p><p>When your application has an <code class="literal">AuthContext</code> after
+ successful authentication, you can retrieve the SSO token from the context.
+ You also can get the token as shown in the sample client by passing an SSO
+ token ID from OpenAM to an <code class="literal">SSOTokenManager</code>.</p><p>If your application needs to be notified of changes, you can register
+ an <code class="literal">SSOTokenListener</code> on the token by using the token's
+ <code class="literal">addSSOTokenListener()</code> method. OpenAM then calls your
+ <code class="literal">SSOTokenListener</code> <code class="literal">ssoTokenChanged()</code>
+ method when the session times out, is disposed of, or has a property that
+ changes.</p><p>The sample client takes an SSO token ID to get the token from OpenAM,
+ and then displays some information from the SSO token. The implementation of
+ the sample client follows.</p><pre class="brush: java;">package com.sun.identity.samples.sso;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.net.InetAddress;
+import com.iplanet.sso.SSOException;
+import com.iplanet.sso.SSOToken;
+import com.iplanet.sso.SSOTokenID;
+import com.iplanet.sso.SSOTokenManager;
+
+public class SSOTokenSample {
+    private SSOTokenManager manager;
+    private SSOToken token;
+
+    private SSOTokenSample(String tokenID)
+        throws SSOException
+    {
+        if (validateToken(tokenID)) {
+            setGetProperties(token);
+        }
+    }
+
+    private boolean validateToken(String tokenID)
+        throws SSOException
+    {
+        boolean validated = false;
+        manager = SSOTokenManager.getInstance();
+        token = manager.createSSOToken(tokenID);
+
+        // isValid method returns true for valid token.
+        if (manager.isValidToken(token)) {
+                // let us get all the values from the token
+            String host = token.getHostName();
+            java.security.Principal principal = token.getPrincipal();
+            String authType = token.getAuthType();
+            int level = token.getAuthLevel();
+            InetAddress ipAddress = token.getIPAddress();
+            long maxTime = token.getMaxSessionTime();
+            long idleTime = token.getIdleTime();
+            long maxIdleTime = token.getMaxIdleTime();
+                
+            System.out.println("SSOToken host name: " + host);
+            System.out.println("SSOToken Principal name: " +
+                principal.getName());
+            System.out.println("Authentication type used: " + authType);
+            System.out.println("IPAddress of the host: " +
+                ipAddress.getHostAddress());
+            validated = true;
+        }
+
+        return validated;
+    }
+
+    private void setGetProperties(SSOToken token)
+        throws SSOException
+    {
+        /*
+         * Validate the token again, with another method
+         * if token is invalid, this method throws an exception
+         */
+        manager.validateToken(token);
+        System.out.println("SSO Token validation test Succeeded.");
+            
+        // Get the SSOTokenID associated with the token and print it.
+        SSOTokenID id = token.getTokenID();
+        String tokenId = id.toString();
+        System.out.println("Token ID: " + tokenId);
+
+        // Set and get properties in the token.
+        token.setProperty("TimeZone", "PST");
+        token.setProperty("County", "SantaClara");
+        String tZone = token.getProperty("TimeZone");
+        String county = token.getProperty("County");
+
+        System.out.println("Property: TimeZone: " + tZone); 
+        System.out.println("Property: County: " + county); 
+    }
+
+    public static void main(String[] args) {
+        try {
+            System.out.print("Enter SSOToken ID: ");
+            String ssoTokenID = (new BufferedReader(
+                new InputStreamReader(System.in))).readLine();
+            new SSOTokenSample(ssoTokenID.trim());
+        } catch (SSOException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.exit(0);
+    }
+
+}</pre><p>Before you run the script that calls the sample, authenticate to OpenAM
+ in order to have OpenAM generate the SSO token ID. To see the SSO token ID,
+ use the RESTful <code class="literal">authenticate</code> command as shown in the
+ following example, or alternatively run the
+ <code class="literal">SSOTokenSampleServlet</code> web-based sample.</p><div class="screen"><pre>
+$ <strong>curl \
+ --request POST \
+ --data "username=demo&amp;password=changeit" \
+ http://openam.example.com:8080/openam/identity/authenticate</strong>
+<em>token.id=AQIC5wM2LY4Sfcyy10grl...AlNLABQtNjI4OTkyNTUxNTc4MDQ3NzEzOQ..*</em>
+$ <strong>sh scripts/SSOTokenSample.sh</strong>
+<em>Enter SSOToken ID:</em> <strong>AQIC5wM2LY4Sfcyy10grl...AlNLABQtNjI4OTkyNTUxNTc4MDQ3NzEzOQ..*</strong>
+<em>SSOToken host name: 172.16.203.239
+SSOToken Principal name: id=demo,ou=user,dc=openam,dc=forgerock,dc=org
+Authentication type used: DataStore
+IPAddress of the host: 172.16.203.239
+SSO Token validation test Succeeded.
+Token ID: AQIC5wM2LY4Sfcyy10grl...AlNLABQtNjI4OTkyNTUxNTc4MDQ3NzEzOQ..*
+Property: TimeZone: PST
+Property: County: SantaClara</em>
+ </pre></div><p>Notice both the properties populated by OpenAM, and also the two
+ properties, <code class="literal">TimeZone</code> and <code class="literal">County</code>, that
+ are set by the sample client.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="session-receiving-notifications"></a>11.1.&nbsp;Receiving Notifications</h2></div></div></div><p>If your application implements a listener for change notification, such
+  as a <code class="literal">SessionListener</code> to handle notification when a session
+  is invalidated, then you must configure the following settings in the
+  <code class="filename">AMConfig.properties</code> configuration file for your
+  application.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">com.iplanet.am.notification.url</span></dt><dd><p>Set this parameter to
+     <code class="literal">http://<em class="replaceable"><code>host</code></em>:<em class="replaceable"><code>port</code></em>/<em class="replaceable"><code>context</code></em>/notificationservice</code>.</p></dd><dt><span class="term">com.iplanet.am.sdk.caching.enabled</span></dt><dd><p>Set this parameter to <code class="literal">true</code>.</p></dd><dt><span class="term">com.iplanet.am.serverMode</span></dt><dd><p>Set this parameter to <code class="literal">false</code>.</p></dd><dt><span class="term">com.sun.identity.client.notification.url</span></dt><dd><p>Set this parameter to
+     <code class="literal">http://<em class="replaceable"><code>host</code></em>:<em class="replaceable"><code>port</code></em>/<em class="replaceable"><code>context</code></em>/notificationservice</code>.</p></dd><dt><span class="term">com.sun.identity.idm.cache.enabled</span></dt><dd><p>Set this parameter to <code class="literal">true</code>.</p></dd><dt><span class="term">com.sun.identity.idm.remote.notification.enabled</span></dt><dd><p>Set this parameter to <code class="literal">true</code>.</p></dd><dt><span class="term">com.sun.identity.sm.cache.enabled</span></dt><dd><p>Set this parameter to <code class="literal">true</code>.</p></dd><dt><span class="term">com.sun.identity.sm.enableDataStoreNotification</span></dt><dd><p>Set this parameter to <code class="literal">true</code>.</p></dd></dl></div><p>The above configuration to access the notification service also applies
+  for other types of listeners, such as <code class="literal">ServiceListener</code>, and
+  <code class="literal">IdEventListener</code> implementations. See the <a class="link" href="http://docs.forgerock.org/en/openam/12.0.0/apidocs/" target="_blank"><em class="citetitle">OpenAM Java SDK API
+  Specification</em></a> for details on the available listener
+  interfaces.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-authentication.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-policy-decisions.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;10.&nbsp;Authenticating Using OpenAM Java SDK&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;12.&nbsp;Requesting Policy Decisions Using OpenAM Java SDK</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

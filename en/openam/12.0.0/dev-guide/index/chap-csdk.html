@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;17.&nbsp;Using the OpenAM C API</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenAM Developer's Guide"><link rel="up" href="index.html" title="OpenAM Developer's Guide"><link rel="prev" href="chap-sae.html" title="Chapter&nbsp;16.&nbsp;Using Secure Attribute Exchange"><link rel="next" href="chap-extending.html" title="Chapter&nbsp;18.&nbsp;Extending OpenAM"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;17.&nbsp;Using the OpenAM C API</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-sae.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-extending.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-csdk"></a>Chapter&nbsp;17.&nbsp;Using the OpenAM C API</h1></div></div></div><a class="indexterm" name="d0e10945"></a><p>This chapter introduces OpenAM C SDK. OpenAM C SDK is available for
+ selected platforms on the OpenAM <a class="link" href="http://forgerock.org/openam.html" target="_blank">nightly builds page</a>.
+ Contact <a class="link" href="mailto:info@forgerock.com" target="_top">info@forgerock.com</a>
+ if you need OpenAM C SDK support.</p><p>To prepare to install OpenAM C SDK, first download the version for your
+ platform and unpack the archive as in the following example.</p><div class="screen"><pre>
+$ <strong>mkdir -p /path/to/openam-client</strong>
+$ <strong>cd /path/to/openam-client</strong>
+$ <strong>unzip ~/Downloads/common_3_0_Linux_64bit.zip</strong>
+ </pre></div><p>All C SDK deliveries are .zip files, and the filenames are self-explanatory.
+ The <code class="filename">SunOS</code> in some of the .zip files refer to the Solaris
+ OS.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="filename">common_3_0_Linux.zip</code></p></li><li class="listitem"><p><code class="filename">common_3_0_Linux_64bit.zip</code></p></li><li class="listitem"><p><code class="filename">common_3_0_windows.zip</code></p></li><li class="listitem"><p><code class="filename">common_3_0_windows_64bit.zip</code></p></li><li class="listitem"><p><code class="filename">common_3_0_SunOS_x86.zip</code></p></li><li class="listitem"><p><code class="filename">common_3_0_SunOS_64bit.zip</code></p></li><li class="listitem"><p><code class="filename">common_3_0_SunOS_sparc.zip</code></p></li><li class="listitem"><p><code class="filename">common_3_0_SunOS_sparc_64bit.zip</code></p></li></ul></div><div class="variablelist"><p>Once unpacked, you have several directories that include
+  the SDK, and also sample client applications.</p><dl class="variablelist"><dt><span class="term"><code class="filename">bin/</code></span></dt><dd><p>The <span class="command"><strong>crypt_util</strong></span> or <span class="command"><strong>cryptit.exe</strong></span>
+    command for encrypting passwords</p></dd><dt><span class="term"><code class="filename">config/</code></span></dt><dd><p>Configuration data for the SDK</p></dd><dt><span class="term"><code class="filename">include/</code></span></dt><dd><p>Header files for the SDK</p></dd><dt><span class="term"><code class="filename">lib/</code></span></dt><dd><p>SDK and other required libraries</p></dd><dt><span class="term"><code class="filename">samples/</code></span></dt><dd><p>Sample code</p></dd></dl></div><div class="procedure"><a name="build-openam-csdk-client"></a><div class="procedure-title">Procedure&nbsp;17.1.&nbsp;To Build OpenAM C SDK Samples</div><ol class="procedure" type="1"><li class="step"><p>Review the <code class="filename">samples/README.TXT</code> file to complete
+   any specific instructions required for your platform. The two commands
+   shown here confirm that the specified system is a 64-bit Linux OS. Make
+   sure it matches the C SDK package that you have downloaded.</p><div class="screen"><pre>
+$ <strong>uname -s</strong>
+<em>Linux</em>
+$ <strong>uname -m</strong>
+<em>x86_64</em>
+   </pre></div></li><li class="step"><p>Set up <code class="filename">OpenSSOAgentBootstrap.properties</code>
+   and <code class="filename">OpenSSOAgentConfiguration.properties</code> as appropriate
+   for your environment.</p><p>Base your work on the template files in the
+   <code class="filename">config/</code> directory. You can find the Password Encryption
+   Key in the OpenAM console under Configuration &gt; Servers and Sites &gt;
+   <em class="replaceable"><code>Server Name</code></em> &gt; Security.</p></li><li class="step"><p>Try one of the samples you built to test your build.</p><div class="screen"><pre>
+$ <strong>LD_LIBRARY_PATH=../lib \
+ ./am_auth_test \
+ -f ../config/OpenSSOAgentBootstrap.properties \
+ -u demo \
+ -p changeit \
+ -o /</strong>
+<em>   Login  1 Succeeded!
+      SSOToken = AQIC5wM2LY4SfcxZfk4EzC9Y46P9cXG9ogwf2ixnYOeZ0K0.*AAJTSQACMDE.*
+      Organization = /
+      Module Instance Name [0] = SAE
+      Module Instance Name [1] = LDAP
+      Module Instance Name [2] = WSSAuthModule
+      Module Instance Name [3] = Federation
+      Module Instance Name [4] = HOTP
+      Module Instance Name [5] = DataStore
+   Logout 1 Succeeded!</em>
+   </pre></div></li></ol></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-sae.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-extending.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;16.&nbsp;Using Secure Attribute Exchange&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;18.&nbsp;Extending OpenAM</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

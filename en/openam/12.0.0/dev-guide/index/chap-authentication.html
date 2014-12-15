@@ -1,0 +1,248 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;10.&nbsp;Authenticating Using OpenAM Java SDK</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenAM Developer's Guide"><link rel="up" href="index.html" title="OpenAM Developer's Guide"><link rel="prev" href="chap-jdk.html" title="Chapter&nbsp;9.&nbsp;Using the OpenAM Java SDK"><link rel="next" href="chap-session.html" title="Chapter&nbsp;11.&nbsp;Handling Single Sign-On Using OpenAM Java SDK"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;10.&nbsp;Authenticating Using OpenAM Java SDK</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-jdk.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-session.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-authentication"></a>Chapter&nbsp;10.&nbsp;Authenticating Using OpenAM Java SDK</h1></div></div></div><a class="indexterm" name="d0e8219"></a><p>This chapter looks at authentication with the OpenAM Java SDK and at the
+ sample client, <code class="filename">Login.java</code>, which demonstrates
+ authenticating to OpenAM from a client application, provided a realm, user
+ name, and password. This is the sample you ran to test installation of the
+ command-line SDK samples. The class shown in this chapter is
+ <code class="literal">com.sun.identity.samples.authentication.Login</code>.</p><p>Before you continue, make sure that the packages described in the
+  <a href="../../dev-guide/index/chap-jdk.html" class="link">Using the OpenAM Java SDK</a>
+  chapter are installed.</p><div class="orderedlist"><p>With OpenAM, your client application performs the following steps
+  to handle authentication.</p><ol class="orderedlist" type="1"><li class="listitem"><p>Sets up an <code class="literal">AuthContext</code>, based on the realm in
+   which the user authenticates.</p></li><li class="listitem"><p>Starts the login process by calling the <code class="literal">AuthContext</code>
+   <code class="literal">login()</code> method.</p></li><li class="listitem"><p>Handling authentication callbacks to retrieve credentials from the
+   user who is authenticating.</p><p>Your application loops through the authentication callbacks by using
+   the <code class="literal">AuthContext</code> <code class="literal">getRequirements()</code> and
+   <code class="literal">hasMoreRequirements()</code> methods. Each time it finishes
+   populating a callback with the credentials retrieved, your application calls
+   <code class="literal">submitRequirements()</code> to send the credentials to
+   OpenAM's Authentication Service.</p></li><li class="listitem"><p>After handling all authentication callbacks, your application
+   calls the <code class="literal">AuthContext</code> <code class="literal">getStatus()</code>
+   method.</p><p>On login success, OpenAM sets up an <code class="literal">SSOToken</code> that
+   holds information about the authentication, and also about the user's
+   environment and session.</p></li><li class="listitem"><p>When the user logs out, your application can end the session by
+   calling the <code class="literal">AuthContext</code> <code class="literal">logout()</code>
+   method.</p></li></ol></div><p>The <code class="literal">AuthContext</code> class is provided by the
+ <code class="literal">com.sun.identity.authentication</code> package, part of the
+ OpenAM client API. Callback classes are provided by the
+ <code class="literal">javax.security.auth.callback</code> package, which provides
+ callbacks for choices, confirmations, locales, names, passwords, text input,
+ and text output.</p><p>See the <a class="link" href="http://docs.forgerock.org/en/openam/12.0.0/apidocs/" target="_blank"><em class="citetitle">OpenAM Public API JavaDoc</em></a> for
+ reference.</p><p>As the sample client gets the realm (called organization in the sample),
+ locale, and authentication module to set up the authentication context,
+ there is not need for a language callback to get the local afterwards. The
+ <code class="filename">Login.java</code> example does, however, show simple ways of
+ handling callbacks for the command-line context. The implementation of
+ the sample client follows.</p><pre class="brush: java;">package com.sun.identity.samples.authentication;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import javax.security.auth.callback.Callback;
+import javax.security.auth.callback.ChoiceCallback;
+import javax.security.auth.callback.NameCallback;
+import javax.security.auth.callback.PasswordCallback;
+import javax.security.auth.callback.TextInputCallback;
+import javax.security.auth.callback.TextOutputCallback;
+import javax.security.auth.callback.UnsupportedCallbackException;
+import com.sun.identity.authentication.AuthContext;
+import com.sun.identity.authentication.spi.AuthLoginException;
+import com.sun.identity.shared.debug.Debug;
+
+public class Login {
+    private String loginIndexName;
+    private String orgName;
+    private String locale;
+    
+    private Login(String loginIndexName, String orgName) {
+        this.loginIndexName = loginIndexName;
+        this.orgName = orgName;
+    }
+    
+    private Login(String loginIndexName, String orgName, String locale) {
+        this.loginIndexName = loginIndexName;
+        this.orgName = orgName;
+        this.locale = locale;
+    }
+    
+    protected AuthContext getAuthContext()
+        throws AuthLoginException {
+        AuthContext lc = new AuthContext(orgName);
+        AuthContext.IndexType indexType = AuthContext.IndexType.MODULE_INSTANCE;
+        if (locale == null || locale.length() == 0) {
+            lc.login(indexType, loginIndexName);
+        } else {
+            lc.login(indexType, loginIndexName, locale);
+        }
+        debugMessage(loginIndexName + ": Obtained login context");
+        return lc;
+    }
+    
+    private void addLoginCallbackMessage(Callback[] callbacks)
+    throws UnsupportedCallbackException {
+        int i = 0;
+        try {
+            for (i = 0; i &lt; callbacks.length; i++) {
+                if (callbacks[i] instanceof TextOutputCallback) {
+                    handleTextOutputCallback((TextOutputCallback)callbacks[i]);
+                } else if (callbacks[i] instanceof NameCallback) {
+                    handleNameCallback((NameCallback)callbacks[i]);
+                } else if (callbacks[i] instanceof PasswordCallback) {
+                    handlePasswordCallback((PasswordCallback)callbacks[i]);
+                } else if (callbacks[i] instanceof TextInputCallback) {
+                    handleTextInputCallback((TextInputCallback)callbacks[i]);
+                } else if (callbacks[i] instanceof ChoiceCallback) {
+                    handleChoiceCallback((ChoiceCallback)callbacks[i]);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new UnsupportedCallbackException(callbacks[i],e.getMessage());
+        }
+    }
+    
+    private void handleTextOutputCallback(TextOutputCallback toc) {
+        debugMessage("Got TextOutputCallback");
+        // display the message according to the specified type
+        
+        switch (toc.getMessageType()) {
+            case TextOutputCallback.INFORMATION:
+                debugMessage(toc.getMessage());
+                break;
+            case TextOutputCallback.ERROR:
+                debugMessage("ERROR: " + toc.getMessage());
+                break;
+            case TextOutputCallback.WARNING:
+                debugMessage("WARNING: " + toc.getMessage());
+                break;
+            default:
+                debugMessage("Unsupported message type: " +
+                    toc.getMessageType());
+        }
+    }
+    
+    private void handleNameCallback(NameCallback nc)
+        throws IOException {
+        // prompt the user for a username
+        System.out.print(nc.getPrompt());
+        System.out.flush();
+        nc.setName((new BufferedReader
+            (new InputStreamReader(System.in))).readLine());
+    }
+    
+    private void handleTextInputCallback(TextInputCallback tic)
+        throws IOException {
+        // prompt for text input
+        System.out.print(tic.getPrompt());
+        System.out.flush();
+        tic.setText((new BufferedReader
+            (new InputStreamReader(System.in))).readLine());
+    }
+    
+    private void handlePasswordCallback(PasswordCallback pc)
+        throws IOException {
+        // prompt the user for sensitive information
+        System.out.print(pc.getPrompt());
+        System.out.flush();
+        String passwd = (new BufferedReader(new InputStreamReader(System.in))).
+            readLine();
+        pc.setPassword(passwd.toCharArray());
+    }
+    
+    private void handleChoiceCallback(ChoiceCallback cc)
+        throws IOException {
+        // ignore the provided defaultValue
+        System.out.print(cc.getPrompt());
+        
+        String[] strChoices = cc.getChoices();
+        for (int j = 0; j &lt; strChoices.length; j++) {
+            System.out.print("choice[" + j + "] : " + strChoices[j]);
+        }
+        System.out.flush();
+        cc.setSelectedIndex(Integer.parseInt((new BufferedReader
+            (new InputStreamReader(System.in))).readLine()));
+    }
+    
+    protected boolean login(AuthContext lc)
+        throws UnsupportedCallbackException {
+        boolean succeed = false;
+        Callback[] callbacks = null;
+        
+        // get information requested from module
+        while (lc.hasMoreRequirements()) {
+            callbacks = lc.getRequirements();
+            if (callbacks != null) {
+                addLoginCallbackMessage(callbacks);
+                lc.submitRequirements(callbacks);
+            }
+        }
+        
+        if (lc.getStatus() == AuthContext.Status.SUCCESS) {
+            System.out.println("Login succeeded.");
+            succeed = true;
+        } else if (lc.getStatus() == AuthContext.Status.FAILED) {
+            System.out.println("Login failed.");
+        } else {
+            System.out.println("Unknown status: " + lc.getStatus());
+        }
+        
+        return succeed;
+    }
+    
+    protected void logout(AuthContext lc)
+        throws AuthLoginException {
+        lc.logout();
+        System.out.println("Logged Out!!");
+    }
+    
+    static void debugMessage(String msg) {
+        System.out.println(msg);
+    }
+    
+    public static void main(String[] args) {
+        try {
+            System.out.print("Realm (e.g. /): ");
+            String orgName = (new BufferedReader(
+                new InputStreamReader(System.in))).readLine();
+
+            System.out.print("Login module name (e.g. DataStore or LDAP): ");
+            String moduleName = (new BufferedReader(
+                new InputStreamReader(System.in))).readLine();
+            
+            System.out.print("Login locale (e.g. en_US or fr_FR): ");
+            String locale = (new BufferedReader(
+                new InputStreamReader(System.in))).readLine();
+            
+            Login login = new Login(moduleName, orgName, locale);
+            AuthContext lc = login.getAuthContext();
+            if (login.login(lc)) {
+                login.logout(lc);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (AuthLoginException e) {
+            e.printStackTrace();
+        } catch (UnsupportedCallbackException e) {
+            e.printStackTrace();
+        }
+        System.exit(0);
+    }
+}</pre></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-jdk.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-session.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;9.&nbsp;Using the OpenAM Java SDK&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;11.&nbsp;Handling Single Sign-On Using OpenAM Java SDK</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

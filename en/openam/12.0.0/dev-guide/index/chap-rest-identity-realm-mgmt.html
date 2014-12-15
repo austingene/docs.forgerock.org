@@ -1,0 +1,1231 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;7.&nbsp;RESTful Identity and Realm Management Services</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenAM Developer's Guide"><link rel="up" href="index.html" title="OpenAM Developer's Guide"><link rel="prev" href="chap-rest-user-services.html" title="Chapter&nbsp;6.&nbsp;RESTful User Self-Service"><link rel="next" href="chap-rest-sts.html" title="Chapter&nbsp;8.&nbsp;RESTful Secure Token Service"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;7.&nbsp;RESTful Identity and Realm Management Services</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-rest-user-services.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-rest-sts.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-rest-identity-realm-mgmt"></a>Chapter&nbsp;7.&nbsp;RESTful Identity and Realm Management Services</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-rest-identity-realm-mgmt.html#rest-api-crud-identity">7.1. Identity Management</a></span></dt><dt><span class="section"><a href="chap-rest-identity-realm-mgmt.html#rest-api-crud-realm">7.2. Realm Management</a></span></dt></dl></div><a class="indexterm" name="d0e6391"></a><p>This chapter shows how to use the OpenAM RESTful interfaces for identity
+  and realm management.
+ </p><p>In this chapter, long URLs are wrapped to fit the printed page, as some
+  of the output is formatted for easier reading.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="rest-api-crud-identity"></a>7.1.&nbsp;Identity Management</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-rest-identity-realm-mgmt.html#rest-api-create-identity">7.1.1. Creating Identities</a></span></dt><dt><span class="section"><a href="chap-rest-identity-realm-mgmt.html#rest-api-read-identity">7.1.2. Reading Identities</a></span></dt><dt><span class="section"><a href="chap-rest-identity-realm-mgmt.html#rest-api-update-identity">7.1.3. Updating Identities</a></span></dt><dt><span class="section"><a href="chap-rest-identity-realm-mgmt.html#rest-api-delete-identity">7.1.4. Deleting Identities</a></span></dt><dt><span class="section"><a href="chap-rest-identity-realm-mgmt.html#rest-api-query-identity">7.1.5. Listing Identities</a></span></dt><dt><span class="section"><a href="chap-rest-identity-realm-mgmt.html#rest-api-retrieve-identity-using-session-cookie">7.1.6. Retrieving Identities Using the Session Cookie</a></span></dt><dt><span class="section"><a href="chap-rest-identity-realm-mgmt.html#rest-api-change-password">7.1.7. Changing Passwords</a></span></dt><dt><span class="section"><a href="chap-rest-identity-realm-mgmt.html#rest-api-create-legacy">7.1.8. Creating Identities (Legacy API)</a></span></dt><dt><span class="section"><a href="chap-rest-identity-realm-mgmt.html#rest-api-read-legacy">7.1.9. Reading &amp; Searching for Identities (Legacy API)</a></span></dt><dt><span class="section"><a href="chap-rest-identity-realm-mgmt.html#rest-api-update-legacy">7.1.10. Updating Identities (Legacy API)</a></span></dt><dt><span class="section"><a href="chap-rest-identity-realm-mgmt.html#rest-api-delete-legacy">7.1.11. Deleting Identities (Legacy API)</a></span></dt></dl></div><a class="indexterm" name="d0e6401"></a><p>This section shows how to create, read, update, delete, and list
+  identities using the RESTful APIs.</p><div class="important"><h3 class="title">Important</h3><p>OpenAM is not primarily an identity data store, nor is it provisioning
+   software. For storing identity data, consider <a class="link" href="http://forgerock.com/what-we-offer/open-identity-stack/opendj/" target="_blank">OpenDJ</a>.
+   For provisioning, consider <a class="link" href="http://forgerock.com/what-we-offer/open-identity-stack/openidm/" target="_blank">OpenIDM</a>.
+   Both of these products provide REST APIs as well.</p></div><div class="itemizedlist"><p>OpenAM has two REST APIs for managing identities.</p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Under the <code class="literal">/json/agents</code>,
+    <code class="literal">/json/groups</code>, and <code class="literal">/json/users</code>,
+    you find the newer JSON-based APIs. The newer APIs follow the ForgeRock
+    common REST pattern creating, reading, updating, deleting, and querying
+    resources.</p><p>Examples in this section do not repeat the authentication shown
+    in <a href="../../dev-guide/index/chap-rest.html#rest-api-auth" class="link">Authorization &amp; Policy Management</a>.
+
+    For browser-based clients, you
+    can rely on OpenAM cookies rather than construct the header in your
+    application. Managing agent profiles, groups, realms, and users with
+    these APIs of course require authorization. The examples shown in this
+    section were performed with the token ID gained after authenticating
+    as OpenAM administrator.</p><p>Although the examples here show user management, you can use
+    <code class="literal">/json/agents</code>, <code class="literal">/json/groups</code>,
+    <code class="literal">/json/realms</code> in similar fashion. See
+    <a class="xref" href="chap-rest-identity-realm-mgmt.html#rest-api-crud-realm" title="7.2.&nbsp;Realm Management">Section&nbsp;7.2, &#8220;Realm Management&#8221;</a> for examples related to realms.</p><div class="itemizedlist"><p>The following sections cover this JSON-based API.</p><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p><a class="xref" href="chap-rest-identity-realm-mgmt.html#rest-api-create-identity" title="7.1.1.&nbsp;Creating Identities">Section&nbsp;7.1.1, &#8220;Creating Identities&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-rest-identity-realm-mgmt.html#rest-api-read-identity" title="7.1.2.&nbsp;Reading Identities">Section&nbsp;7.1.2, &#8220;Reading Identities&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-rest-identity-realm-mgmt.html#rest-api-update-identity" title="7.1.3.&nbsp;Updating Identities">Section&nbsp;7.1.3, &#8220;Updating Identities&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-rest-identity-realm-mgmt.html#rest-api-delete-identity" title="7.1.4.&nbsp;Deleting Identities">Section&nbsp;7.1.4, &#8220;Deleting Identities&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-rest-identity-realm-mgmt.html#rest-api-query-identity" title="7.1.5.&nbsp;Listing Identities">Section&nbsp;7.1.5, &#8220;Listing Identities&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-rest-identity-realm-mgmt.html#rest-api-change-password" title="7.1.7.&nbsp;Changing Passwords">Section&nbsp;7.1.7, &#8220;Changing Passwords&#8221;</a></p></li></ul></div></li><li class="listitem"><p>Under the <code class="literal">/identity</code> endpoint, you find the
+    backwards-compatible, legacy API.</p><div class="itemizedlist"><p>The following sections cover this backwards-compatible API.</p><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p><a class="xref" href="chap-rest-identity-realm-mgmt.html#rest-api-create-legacy" title="7.1.8.&nbsp;Creating Identities (Legacy API)">Section&nbsp;7.1.8, &#8220;Creating Identities (Legacy API)&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-rest-identity-realm-mgmt.html#rest-api-read-legacy" title="7.1.9.&nbsp;Reading &amp; Searching for Identities (Legacy API)">Section&nbsp;7.1.9, &#8220;Reading &amp; Searching for Identities (Legacy API)&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-rest-identity-realm-mgmt.html#rest-api-update-legacy" title="7.1.10.&nbsp;Updating Identities (Legacy API)">Section&nbsp;7.1.10, &#8220;Updating Identities (Legacy API)&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-rest-identity-realm-mgmt.html#rest-api-delete-legacy" title="7.1.11.&nbsp;Deleting Identities (Legacy API)">Section&nbsp;7.1.11, &#8220;Deleting Identities (Legacy API)&#8221;</a></p></li></ul></div></li></ul></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-api-create-identity"></a>7.1.1.&nbsp;Creating Identities</h3></div></div></div><p>OpenAM lets administrators create a user profile by making 
+   an HTTP POST of the JSON representation of the profile to
+   <code class="literal">/json/<em class="replaceable"><code>subrealm</code></em>/users/?_action=create</code>.
+   To add a user to the Top Level Realm, you do not need to specify the realm.</p><p>The following example shows an administrator creating a new user. The
+   only required fields are <code class="literal">username</code> and
+   <code class="literal">userpassword</code>. If no other name is provided, the entry
+   you make for <code class="literal">username</code> defaults to both the user id and the
+   user's last name.</p><div class="screen"><pre>
+$ <strong>curl \
+ --request POST \
+ --header "iplanetDirectoryPro: AQIC5w...2NzEz*" \
+ --header "Content-Type: application/json" \
+ --data \
+ '{
+   "username": "bjensen",
+   "userpassword": "secret12",
+   "mail": "bjensen@example.com"
+ }' \
+ https://openam.example.com:8443/openam/json/users/?_action=create</strong>
+<em>{
+    "username": "bjensen",
+    "realm": "/",
+    "uid": [
+        "bjensen"
+    ],
+    "mail": [
+        "bjensen@example.com"
+    ],
+    "sn": [
+        "bjensen"
+    ],
+    "userpassword": [
+        "{SSHA}0pXpKLPRKCGY7g3YqZygJmKMW6IC2BLJimmlwg=="
+    ],
+    "cn": [
+        "bjensen"
+    ],
+    "inetuserstatus": [
+        "Active"
+    ],
+    "dn": [
+        "uid=bjensen,ou=people,dc=openam,dc=forgerock,dc=org"
+    ],
+    "objectclass": [
+        "person",
+        "sunIdentityServerLibertyPPService",
+        "sunFederationManagerDataStore",
+        "inetorgperson",
+        "iPlanetPreferences",
+        "iplanet-am-auth-configuration-service",
+        "organizationalperson",
+        "sunFMSAML2NameIdentifier",
+        "inetuser",
+        "iplanet-am-managed-person",
+        "sunAMAuthAccountLockout",
+        "iplanet-am-user-service",
+        "top"
+    ],
+    "universalid": [
+        "id=bjensen,ou=user,dc=openam,dc=forgerock,dc=org"
+    ]
+}</em>
+   </pre></div><p>Alternatively, administrators can create user profiles with specific
+    user IDs by doing an HTTP PUT of the JSON representation of the changes to
+    <code class="literal">/json/users/<em class="replaceable"><code>user-id</code></em></code>, as
+    shown in the following example:</p><div class="screen"><pre>
+$ <strong>curl \
+ --request PUT \
+ --header "iplanetDirectoryPro: AQIC5w...2NzEz*" \
+ --header "Content-Type: application/json" \
+ --header "If-None-Match: *" \
+ --data \
+ '{
+   "username": "janedoe",
+   "userpassword": "secret12",
+   "mail": "janedoe@example.com"
+ }' \
+ https://openam.example.com:8443/openam/json/users/janedoe</strong>
+<em>{
+    "username": "janedoe",
+    "realm": "/",
+    "uid": [
+        "janedoe"
+    ],
+    "mail": [
+        "janedoe@example.com"
+    ],
+    "sn": [
+        "janedoe"
+    ],
+    "userpassword": [
+        "{SSHA}e4DJoxvYVW/nsp62XJf29ZADE16YQgrxK+XuKA=="
+    ],
+    "cn": [
+        "janedoe"
+    ],
+    "inetuserstatus": [
+        "Active"
+    ],
+    "dn": [
+        "uid=janedoe,ou=people,dc=openam,dc=forgerock,dc=org"
+    ],
+    "objectclass": [
+        "devicePrintProfilesContainer",
+        "person",
+        "sunIdentityServerLibertyPPService",
+        "inetorgperson",
+        "sunFederationManagerDataStore",
+        "iPlanetPreferences",
+        "iplanet-am-auth-configuration-service",
+        "organizationalperson",
+        "sunFMSAML2NameIdentifier",
+        "inetuser",
+        "forgerock-am-dashboard-service",
+        "iplanet-am-managed-person",
+        "iplanet-am-user-service",
+        "sunAMAuthAccountLockout",
+        "top"
+    ],
+    "universalid": [
+        "id=janedoe,ou=user,dc=openam,dc=forgerock,dc=org"
+    ]
+}</em>
+    </pre></div><p>As shown in the examples, OpenAM returns the JSON representation of
+    the profile on successful creation. On failure, OpenAM returns a JSON
+    representation of the error including the
+    <a class="link" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html" target="_blank">HTTP status code</a>. For example,
+    version 2.0 of the CREST <code class="literal">/json/users</code>, <code class="literal">/json/groups</code>,
+    and <code class="literal">/json/agents</code> endpoints return 403 if the user making
+    the request is not authorized to do so.
+   </p><p>The same HTTP POST and PUT mechanisms also work for other objects
+   such as policy agent profiles and groups.</p><div class="screen"><pre>
+$ <strong>curl \
+ --request POST \
+ --header "iPlanetDirectoryPro: AQIC5w...2NzEz*" \
+ --header "Content-Type: application/json" \
+ --data \
+ '{
+   "name":"myWebAgent","realm":"/",
+   "com.sun.identity.agents.config.fqdn.default":["www.example.com"],
+   "sunidentityserverdevicekeyvalue":
+     ["agentRootURL=http://www.example.com:80/"],
+   "com.sun.identity.agents.config.remote.logfile":
+     ["amAgent_www_example_com_80.log"],
+   "com.sun.identity.agents.config.repository.location":["centralized"],
+   "agenttype":["WebAgent"],
+    "com.sun.identity.agents.config.cdsso.cdcservlet.url":
+     ["[0]=https://openam.example.com:8443/openam/cdcservlet"],
+   "com.sun.identity.client.notification.url":
+     ["http://www.example.com:80/UpdateAgentCacheServlet?shortcircuit=false"],
+   "com.sun.identity.agents.config.agenturi.prefix":
+     ["http://www.example.com:80/amagent"],
+   "userpassword":["password"],
+   "com.sun.identity.agents.config.login.url":
+     ["[0]=https://openam.example.com:8443/openam/UI/Login"],
+   "com.sun.identity.agents.config.logout.url":
+     ["[0]=https://openam.example.com:8443/openam/UI/Logout"],
+   "sunidentityserverdevicestatus":["Active"]
+ }' \
+ https://openam.example.com:8443/openam/json/agents/?_action=create</strong>
+<em>{
+    "name": "myWebAgent",
+    "realm": "/",
+    "com.sun.identity.agents.config.cdsso.enable": [
+        "false"
+    ],
+    "com.sun.identity.agents.config.cdsso.cookie.domain": [
+        "[0]="
+    ],
+    "com.sun.identity.agents.config.get.client.host.name": [
+        "false"
+    ],
+    "com.sun.identity.agents.config.profile.attribute.fetch.mode": [
+        "NONE"
+    ],
+    "com.sun.identity.agents.config.notenforced.ip": [
+        "[0]="
+    ],
+    "com.sun.identity.agents.config.fqdn.check.enable": [
+        "true"
+    ],
+    "com.sun.identity.agents.config.cleanup.interval": [
+        "30"
+    ],
+    "com.sun.identity.agents.config.notenforced.url.attributes.enable": [
+        "false"
+    ],
+    "com.sun.identity.agents.config.ignore.preferred.naming.url": [
+        "true"
+    ],
+    "com.sun.identity.agents.config.client.ip.header": [],
+    "com.sun.identity.agents.config.session.attribute.mapping": [
+        "[]="
+    ],
+    "com.sun.identity.agents.config.audit.accesstype": [
+        "LOG_NONE"
+    ],
+    "com.sun.identity.agents.config.proxy.override.host.port": [
+        "false"
+    ],
+    "com.sun.identity.agents.config.load.balancer.enable": [
+        "false"
+    ],
+    "com.sun.identity.agents.config.encode.url.special.chars.enable": [
+        "false"
+    ],
+    "com.sun.identity.agents.config.convert.mbyte.enable": [
+        "false"
+    ],
+    "com.sun.identity.agents.config.domino.check.name.database": [
+        "false"
+    ],
+    "com.sun.identity.agents.config.iis.owa.enable": [
+        "false"
+    ],
+    "com.sun.identity.agents.config.override.port": [
+        "false"
+    ],
+    "com.sun.identity.agents.config.policy.clock.skew": [
+        "0"
+    ],
+    "com.sun.identity.agents.config.sso.only": [
+        "false"
+    ],
+    "com.sun.identity.agents.config.iis.owa.enable.session.timeout.url": [],
+    "com.sun.identity.agents.config.domino.ltpa.config.name": [
+        "LtpaToken"
+    ],
+    "com.sun.identity.agents.config.cookie.reset": [
+        "[0]="
+    ],
+    "com.sun.identity.agents.config.fqdn.default": [
+        "www.example.com"
+    ],
+    "sunIdentityServerDeviceKeyValue": [
+        "agentRootURL=http://www.example.com:80/"
+    ],
+    "com.sun.identity.agents.config.domino.ltpa.cookie.name": [
+        "LtpaToken"
+    ],
+    "com.sun.identity.agents.config.iis.password.header": [
+        "false"
+    ],
+    "com.sun.identity.agents.config.response.attribute.mapping": [
+        "[]="
+    ],
+    "com.sun.identity.agents.config.userid.param.type": [
+        "session"
+    ],
+    "com.sun.identity.agents.config.url.comparison.case.ignore": [
+        "true"
+    ],
+    "com.sun.identity.agents.config.profile.attribute.cookie.maxage": [
+        "300"
+    ],
+    "com.sun.identity.agents.config.remote.logfile": [
+        "amAgent_www_example_com_80.log"
+    ],
+    "com.sun.identity.agents.config.domino.ltpa.enable": [
+        "false"
+    ],
+    "com.sun.identity.agents.config.notenforced.url": [
+        "[0]="
+    ],
+    "com.sun.identity.agents.config.notification.enable": [
+        "true"
+    ],
+    "com.sun.identity.agents.config.profile.attribute.cookie.prefix": [
+        "HTTP_"
+    ],
+    "com.sun.identity.agents.config.logout.cookie.reset": [
+        "[0]="
+    ],
+    "com.sun.identity.agents.config.polling.interval": [
+        "60"
+    ],
+    "com.sun.identity.agents.config.attribute.multi.value.separator": [
+        "|"
+    ],
+    "com.sun.identity.agents.config.debug.file.rotate": [
+        "true"
+    ],
+    "com.sun.identity.agents.config.debug.level": [
+        "Error"
+    ],
+    "com.sun.identity.agents.config.local.log.rotate": [
+        "false"
+    ],
+    "com.sun.identity.agents.config.repository.location": [
+        "centralized"
+    ],
+    "com.sun.identity.agents.config.client.ip.validation.enable": [
+        "false"
+    ],
+    "com.sun.identity.agents.config.override.protocol": [
+        "false"
+    ],
+    "AgentType": [
+        "WebAgent"
+    ],
+    "com.sun.identity.agents.config.logout.redirect.url": [],
+    "com.sun.identity.agents.config.ignore.path.info": [
+        "false"
+    ],
+    "com.sun.identity.agents.config.override.notification.url": [
+        "false"
+    ],
+    "com.sun.identity.agents.config.session.attribute.fetch.mode": [
+        "NONE"
+    ],
+    "com.sun.identity.agents.config.policy.cache.polling.interval": [
+        "3"
+    ],
+    "com.sun.identity.agents.config.cdsso.cdcservlet.url": [
+        "[0]=https://openam.example.com:8443/openam/cdcservlet"
+    ],
+    "com.sun.identity.agents.config.cookie.name": [
+        "iPlanetDirectoryPro"
+    ],
+    "com.sun.identity.agents.config.profile.attribute.mapping": [
+        "[]="
+    ],
+    "com.sun.identity.agents.config.iis.filter.priority": [
+        "HIGH"
+    ],
+    "com.sun.identity.agents.config.iis.auth.type": [],
+    "com.sun.identity.client.notification.url": [
+        "http://www.example.com:80/UpdateAgentCacheServlet?shortcircuit=false"
+    ],
+    "com.sun.identity.agents.config.cookie.secure": [
+        "false"
+    ],
+    "com.sun.identity.agents.config.ignore.path.info.for.not.enforced.list": [
+        "true"
+    ],
+    "com.sun.identity.agents.config.remote.log.interval": [
+        "5"
+    ],
+    "com.sun.identity.agents.config.notenforced.url.invert": [
+        "false"
+    ],
+    "universalid": [
+        "id=myWebAgent,ou=agent,dc=openam,dc=forgerock,dc=org"
+    ],
+    "com.sun.identity.agents.config.replaypasswd.key": [],
+    "com.sun.identity.agents.config.iis.owa.enable.change.protocol": [
+        "false"
+    ],
+    "com.sun.identity.agents.config.userid.param": [
+        "UserToken"
+    ],
+    "userpassword": [
+        "{SHA-1}W6ph5Mm5Pz8GgiULbPgzG37mj9g="
+    ],
+    "com.sun.identity.agents.config.response.attribute.fetch.mode": [
+        "NONE"
+    ],
+    "com.sun.identity.agents.config.freeformproperties": [
+        "sunidentityserverdevicestatus=Active",
+        "sunidentityserverdevicekeyvalue=agentRootURL=http://www.example.com:80/",
+        "realm=/",
+        "name=myWebAgent"
+    ],
+    "com.sun.identity.agents.config.postdata.preserve.enable": [
+        "false"
+    ],
+    "com.sun.identity.agents.config.log.disposition": [
+        "REMOTE"
+    ],
+    "com.sun.identity.agents.config.agenturi.prefix": [
+        "http://www.example.com:80/amagent"
+    ],
+    "com.sun.identity.agents.config.override.host": [
+        "false"
+    ],
+    "com.sun.identity.agents.config.cookie.reset.enable": [
+        "false"
+    ],
+    "com.sun.identity.agents.config.local.log.size": [
+        "52428800"
+    ],
+    "com.sun.identity.agents.config.access.denied.url": [],
+    "com.sun.identity.agents.config.debug.file.size": [
+        "10000000"
+    ],
+    "com.sun.identity.agents.config.change.notification.enable": [
+        "true"
+    ],
+    "com.sun.identity.agents.config.anonymous.user.enable": [
+        "false"
+    ],
+    "com.sun.identity.agents.config.domino.ltpa.org.name": [],
+    "com.sun.identity.agents.config.agent.logout.url": [
+        "[0]="
+    ],
+    "com.sun.identity.agents.config.poll.primary.server": [
+        "5"
+    ],
+    "com.sun.identity.agents.config.fqdn.mapping": [
+        "[]="
+    ],
+    "com.sun.identity.agents.config.auth.connection.timeout": [
+        "2"
+    ],
+    "com.sun.identity.agents.config.client.hostname.header": [],
+    "com.sun.identity.agents.config.iis.logonuser": [
+        "false"
+    ],
+    "com.sun.identity.agents.config.ignore.server.check": [
+        "false"
+    ],
+    "com.sun.identity.agents.config.fetch.from.root.resource": [
+        "false"
+    ],
+    "com.sun.identity.agents.config.login.url": [
+        "[0]=https://openam.example.com:8443/openam/UI/Login"
+    ],
+    "com.sun.identity.agents.config.redirect.param": [
+        "goto"
+    ],
+    "com.sun.identity.agents.config.logout.url": [
+        "[0]=https://openam.example.com:8443/openam/UI/Logout"
+    ],
+    "sunIdentityServerDeviceStatus": [
+        "Active"
+    ],
+    "com.sun.identity.agents.config.sso.cache.polling.interval": [
+        "3"
+    ],
+    "com.sun.identity.agents.config.anonymous.user.id": [
+        "anonymous"
+    ],
+    "com.sun.identity.agents.config.encode.cookie.special.chars.enable": [
+        "false"
+    ],
+    "com.sun.identity.agents.config.locale": [
+        "en_US"
+    ],
+    "com.sun.identity.agents.config.postcache.entry.lifetime": [
+        "10"
+    ]
+}</em>
+   </pre></div><div class="screen"><pre>
+$ <strong>curl \
+ --request POST \
+ --header "iPlanetDirectoryPro: AQIC5w...2NzEz*" \
+ --header "Content-Type: application/json" \
+ --data '{
+   "username":"newGroup",
+   "uniquemember":["uid=demo,ou=people,dc=openam,dc=forgerock,dc=org"]
+ }' \
+ https://openam.example.com:8443/openam/json/groups?_action=create</strong>
+<em>{
+    "username": "newGroup",
+    "realm": "/",
+    "uniqueMember": [
+        "uid=demo,ou=people,dc=openam,dc=forgerock,dc=org"
+    ],
+    "cn": [
+        "newGroup"
+    ],
+    "dn": [
+        "cn=newGroup,ou=groups,dc=openam,dc=forgerock,dc=org"
+    ],
+    "objectclass": [
+        "groupofuniquenames",
+        "top"
+    ],
+    "universalid": [
+        "id=newGroup,ou=group,dc=openam,dc=forgerock,dc=org"
+    ]
+}</em>
+
+$ <strong>curl \
+ --request PUT \
+ --header "If-None-Match: *" \
+ --header "iPlanetDirectoryPro: AQIC5w...2NzEz*" \
+ --header "Content-Type: application/json" \
+ --data '{
+   "username":"anotherGroup",
+   "uniquemember":["uid=demo,ou=people,dc=openam,dc=forgerock,dc=org"]
+ }' \
+ https://openam.example.com:8443/openam/json/groups/anotherGroup</strong>
+<em>{
+    "username": "anotherGroup",
+    "realm": "/",
+    "uniqueMember": [
+        "uid=demo,ou=people,dc=openam,dc=forgerock,dc=org"
+    ],
+    "cn": [
+        "anotherGroup"
+    ],
+    "dn": [
+        "cn=anotherGroup,ou=groups,dc=openam,dc=forgerock,dc=org"
+    ],
+    "objectclass": [
+        "groupofuniquenames",
+        "top"
+    ],
+    "universalid": [
+        "id=anotherGroup,ou=group,dc=openam,dc=forgerock,dc=org"
+    ]
+}</em>
+   </pre></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-api-read-identity"></a>7.1.2.&nbsp;Reading Identities</h3></div></div></div><p>OpenAM lets users and administrators read profiles by requesting an HTTP
+   GET on <code class="literal">/json/<em class="replaceable"><code>subrealm</code></em>/users/<em class="replaceable"><code>user-id</code></em></code>.
+   This allows users and administrators to verify user data, status, and directory.
+   If users or administrators see missing or incorrect information, they can write 
+   down the correct information and add it using <a class="xref" href="chap-rest-identity-realm-mgmt.html#rest-api-update-identity" title="7.1.3.&nbsp;Updating Identities">Section&nbsp;7.1.3, &#8220;Updating Identities&#8221;</a>.
+   To read a profile on the Top Level Realm, you do not need to specify the realm.</p><p>Users can review the data associated with their accounts and administrators 
+   can read other user's profiles. The following example shows an administrator 
+   accessing user data. Users can view their information by changing
+   <code class="literal">username=amadmin</code> to <code class="literal"><em class="replaceable"><code>user-id</code></em></code>.</p><div class="screen"><pre>
+$ <strong>curl \
+ --header "iplanetDirectoryPro: AQIC5w...2NzEz*" \
+ https://openam.example.com:8443/openam/json/users/demo</strong>
+<em>{
+    "username": "demo",
+    "realm": "dc=openam,dc=forgerock,dc=org",
+    "uid": [
+        "demo"
+    ],
+    "userpassword": [
+        "{SSHA}BKPAKRS3QKkvQRw25MfXbVC4VEuVNUf+yCaejg=="
+    ],
+    "sn": [
+        "demo"
+    ],
+    "cn": [
+        "demo"
+    ],
+    "inetuserstatus": [
+        "Active"
+    ],
+    "dn": [
+        "uid=demo,ou=people,dc=openam,dc=forgerock,dc=org"
+    ],
+    "objectclass": [
+        "devicePrintProfilesContainer",
+        "person",
+        "sunIdentityServerLibertyPPService",
+        "inetorgperson",
+        "sunFederationManagerDataStore",
+        "iPlanetPreferences",
+        "iplanet-am-auth-configuration-service",
+        "organizationalperson",
+        "sunFMSAML2NameIdentifier",
+        "inetuser",
+        "forgerock-am-dashboard-service",
+        "iplanet-am-managed-person",
+        "iplanet-am-user-service",
+        "sunAMAuthAccountLockout",
+        "top"
+    ],
+    "universalid": [
+        "id=demo,ou=user,dc=openam,dc=forgerock,dc=org"
+    ]
+}</em>
+    </pre></div><p>Use the <code class="literal">_fields</code> query string parameter to restrict
+   the list of attributes returned. This parameter takes a comma-separated list
+   of JSON object fields to include in the result.</p><div class="screen"><pre>
+$ <strong>curl \
+ --header "iPlanetDirectoryPro: AQIC5w...2NzEz*" \
+ https://openam.example.com:8443/openam/json/users/demo?_fields=username,uid</strong>
+<em>{"username":"demo","uid":["demo"]}</em>
+   </pre></div><p>As shown in the examples, OpenAM returns the JSON representation of the
+   profile on success. On failure, OpenAM returns a JSON representation of the
+   error including the
+   <a class="link" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html" target="_blank">HTTP status code</a>.</p><p>Using HTTP GET to read also works for other objects such as agent
+   profiles and groups.</p><div class="screen"><pre>
+$ <strong>curl \
+ --header "iplanetDirectoryPro: AQIC5w...2NzEz*" \
+ https://openam.example.com:8443/openam/json/agents/myClientID</strong>
+<em>{
+    "username": "myClientID",
+    "realm": "dc=openam,dc=forgerock,dc=org",
+    "com.forgerock.openam.oauth2provider.accesstoken": [],
+    "com.forgerock.openam.oauth2provider.clientsessionuri": [],
+    "com.forgerock.openam.oauth2provider.defaultscopes": [
+        "[0]="
+    ],
+    "com.forgerock.openam.oauth2provider.clientname": [],
+    "com.forgerock.openam.oauth2provider.clienttype": [
+        "Confidential"
+    ],
+    "universalid": [
+        "id=myClientID,ou=agent,dc=openam,dc=forgerock,dc=org"
+    ],
+    "com.forgerock.openam.oauth2provider.responsetypes": [
+        "[6]=code token id_token",
+        "[0]=code",
+        "[2]=id_token",
+        "[4]=token id_token",
+        "[3]=code token",
+        "[1]=token",
+        "[5]=code id_token"
+    ],
+    "userpassword": [
+        "{SHA-1}W6ph5Mm5Pz8GgiULbPgzG37mj9g="
+    ],
+    "com.forgerock.openam.oauth2provider.name": [
+        "[0]="
+    ],
+    "com.forgerock.openam.oauth2provider.redirectionuris": [
+        "[0]="
+    ],
+    "com.forgerock.openam.oauth2provider.idtokensignedresponsealg": [
+        "HS256"
+    ],
+    "com.forgerock.openam.oauth2provider.scopes": [
+        "[0]="
+    ],
+    "com.forgerock.openam.oauth2provider.postlogoutredirecturi": [],
+    "sunidentityserverdevicestatus": [
+        "Active"
+    ],
+    "agenttype": [
+        "OAuth2Client"
+    ],
+    "com.forgerock.openam.oauth2provider.description": [
+        "[0]="
+    ]
+}</em>
+   </pre></div><p>The <code class="literal">_prettyPrint</code> query string parameter can make
+   the resulting JSON easier to read when you are viewing the resulting JSON
+   directly.</p><div class="screen"><pre>
+$ <strong>curl \
+ --header "iPlanetDirectoryPro: AQIC5w...2NzEz*" \
+ https://openam.example.com:8443/openam/json/groups/myGroup?_prettyPrint=true</strong>
+<em>{
+    "username": "myGroup",
+    "realm": "dc=openam,dc=forgerock,dc=org",
+    "uniquemember": [
+        "uid=demo,ou=people,dc=openam,dc=forgerock,dc=org"
+    ],
+    "cn": [
+        "myGroup"
+    ],
+    "dn": [
+        "cn=myGroup,ou=groups,dc=openam,dc=forgerock,dc=org"
+    ],
+    "objectclass": [
+        "groupofuniquenames",
+        "top"
+    ],
+    "universalid": [
+        "id=myGroup,ou=group,dc=openam,dc=forgerock,dc=org"
+    ]
+}</em>
+   </pre></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-api-update-identity"></a>7.1.3.&nbsp;Updating Identities</h3></div></div></div><p>OpenAM lets users update their own profiles, and lets administrators
+   update other users' profiles. To update an identity do an HTTP PUT of the JSON 
+   representation of the changes to <code class="literal">/json/<em class="replaceable"><code>subrealm</code></em>/users/<em class="replaceable"><code>user-id</code></em></code>.
+   To update a profile on the Top Level Realm, you do not need to specify the realm.</p><p>The following example shows how users can update their own
+    profiles.</p><div class="screen"><pre>
+$ <strong>curl \
+ --request PUT \
+ --header "iplanetDirectoryPro: AQIC5...Y3MTAx*" \
+ --header "Content-Type: application/json" \
+ --data '{ "mail": "demo@example.com" }' \
+ https://openam.example.com:8443/openam/json/users/demo</strong>
+<em>{
+    "username": "demo",
+    "realm": "/",
+    "uid": [
+        "demo"
+    ],
+    "mail": [
+        "demo@example.com"
+    ],
+    "sn": [
+        "demo"
+    ],
+    "userpassword": [
+        "{SSHA}S14oR2gusLWtiDkAS4twj63slXNNaMKpwrOWdw=="
+    ],
+    "cn": [
+        "demo"
+    ],
+    "inetuserstatus": [
+        "Active"
+    ],
+    "dn": [
+        "uid=demo,ou=people,dc=openam,dc=forgerock,dc=org"
+    ],
+    "objectclass": [
+        "person",
+        "sunIdentityServerLibertyPPService",
+        "sunFederationManagerDataStore",
+        "inetorgperson",
+        "iPlanetPreferences",
+        "iplanet-am-auth-configuration-service",
+        "organizationalperson",
+        "sunFMSAML2NameIdentifier",
+        "inetuser",
+        "iplanet-am-managed-person",
+        "sunAMAuthAccountLockout",
+        "iplanet-am-user-service",
+        "top"
+    ],
+    "universalid": [
+        "id=demo,ou=user,dc=openam,dc=forgerock,dc=org"
+    ]
+}</em>
+    </pre></div><p>As shown in the example, OpenAM returns the JSON representation of the
+   profile on success. On failure, OpenAM returns a JSON representation of the
+   error including the
+   <a class="link" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html" target="_blank">HTTP status code</a>.</p><p>
+    You can use HTTP PUT to update other objects as well,
+    such as policy agent profiles and groups.
+   </p><p>
+    The following example creates a web policy agent profile.
+   </p><div class="screen"><pre>
+$ <strong>curl \
+ --request PUT \
+ --header "iPlanetDirectoryPro: AQIC5...Y3MTAx*" \
+ --header "Content-Type: application/json" \
+ --header "If-None-Match: *" \
+ --data '{
+  "username" : "myWebAgent",
+  "realm" : "/",
+  "com.sun.identity.agents.config.fqdn.default" : [ "www.example.com" ],
+  "sunIdentityServerDeviceKeyValue" :
+   [ "agentRootURL=http://www.example.com:80/" ],
+  "com.sun.identity.agents.config.remote.logfile" :
+   [ "amAgent_www_example_com_80.log" ],
+  "com.sun.identity.agents.config.repository.location" : [ "centralized" ],
+  "AgentType" : [ "WebAgent" ],
+  "com.sun.identity.agents.config.cdsso.cdcservlet.url" :
+   [ "[0]=https://openam.example.com:8443/openam/cdcservlet" ],
+  "com.sun.identity.client.notification.url" :
+   [ "http://www.example.com:80/UpdateAgentCacheServlet?shortcircuit=false" ],
+  "universalid" : [ "id=myWebAgent,ou=agent,dc=openam,dc=forgerock,dc=org" ],
+  "userpassword" : [ "changeit" ],
+  "com.sun.identity.agents.config.agenturi.prefix" :
+   [ "http://www.example.com:80/amagent" ],
+  "com.sun.identity.agents.config.login.url" :
+   [ "[0]=https://openam.example.com:8443/openam/UI/Login" ],
+  "com.sun.identity.agents.config.logout.url" :
+   [ "[0]=https://openam.example.com:8443/openam/UI/Logout" ],
+  "sunIdentityServerDeviceStatus" : [ "Active" ]
+ }' \
+ https://openam.example.com:8443/openam/json/agents/myWebAgent?_prettyPrint=true</strong>
+   </pre></div><p>
+    When you create a policy agent profile,
+    OpenAM returns the full profile in JSON format.
+   </p><p>Notice in the following example that updates <code class="literal">myGroup</code>
+   the object class value is not included in the JSON sent to OpenAM.</p><div class="screen"><pre>
+$ <strong>curl \
+ --request PUT \
+ --header "iPlanetDirectoryPro: AQIC5...Y3MTAx*" \
+ --header "Content-Type: application/json" \
+ --data '{
+   "name":"myGroup",
+   "realm":"/",
+   "uniquemember":["uid=demo,ou=people,dc=openam,dc=forgerock,dc=org"],
+   "cn":["myGroup"],
+   "description":["Updated the group"]
+ }' \
+ https://openam.example.com:8443/openam/json/groups/myGroup</strong>
+<em>{
+    "name": "myGroup",
+    "realm": "/",
+    "uniqueMember": [
+        "uid=demo,ou=people,dc=openam,dc=forgerock,dc=org"
+    ],
+    "cn": [
+        "myGroup"
+    ],
+    "dn": [
+        "cn=myGroup,ou=groups,dc=openam,dc=forgerock,dc=org"
+    ],
+    "objectclass": [
+        "groupofuniquenames",
+        "top"
+    ],
+    "universalid": [
+        "id=myGroup,ou=group,dc=openam,dc=forgerock,dc=org"
+    ]
+}</em>
+   </pre></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-api-delete-identity"></a>7.1.4.&nbsp;Deleting Identities</h3></div></div></div><p>OpenAM lets administrators delete a user profile by making an HTTP DELETE 
+   call to <code class="literal">/json/<em class="replaceable"><code>subrealm</code></em>/users/<em class="replaceable"><code>user-id</code></em></code>.
+   To delete a user from the Top Level Realm, you do not need to specify the realm.</p><p>The following example removes a user from the top level
+   realm. Only administrators should delete users. The user id is the only
+   field required to delete a user.</p><div class="screen"><pre>
+$ <strong>curl \
+ --request DELETE \
+ --header "iplanetDirectoryPro: AQIC5w...2NzEz*" \
+ https://openam.example.com:8443/openam/json/users/bjensen</strong>
+<em>{"success":"true"}</em>
+   </pre></div><p>On success, OpenAM returns a JSON object indicating success. On
+   failure, OpenAM returns a JSON representation of the error including the
+   <a class="link" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html" target="_blank">HTTP status code</a>.</p><p>You can use this same logic for other resources such as performing an
+   HTTP DELETE of an agent profile or of a group.</p><div class="screen"><pre>
+$ <strong>curl \
+ --request DELETE \
+ --header "iplanetDirectoryPro: AQIC5w...2NzEz*" \
+ https://openam.example.com:8443/openam/json/agents/myOAuth2ClientAgent</strong>
+<em>{"success":"true"}</em>
+   </pre></div><div class="screen"><pre>
+$ <strong>curl \
+ --request DELETE \
+ --header "iPlanetDirectoryPro: AQIC5w...2NzEz*" \
+ https://openam.example.com:8443/openam/json/groups/myGroup</strong>
+<em>{"success":"true"}</em>
+   </pre></div><div class="note"><h3 class="title">Note</h3><p>Deleting a user does not automatically remove any of the user's sessions.
+    After deleting a user, check for any sessions for the user and remove them under the Console's Sessions tab.
+    </p></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-api-query-identity"></a>7.1.5.&nbsp;Listing Identities</h3></div></div></div><p>OpenAM lets administrators list identities by making an HTTP GET
+   call to <code class="literal">/json/<em class="replaceable"><code>subrealm</code></em>/users/?_queryId=*</code>. To query the Top Level Realm, you do not need
+   to specify the realm.</p><div class="screen"><pre>
+$ <strong>curl \
+ --header "iPlanetDirectoryPro: AQIC5w...2NzEz*" \
+ "https://openam.example.com:8443/openam/json/users?_queryID=*"</strong>
+<em>{
+  "result" : [ "amAdmin", "demo", "anonymous" ],
+  "resultCount" : 3,
+  "pagedResultsCookie" : null,
+  "remainingPagedResults" : -1
+}</em>
+   </pre></div><p>This also works for other types of objects, such as agent profiles and
+   groups.</p><div class="screen"><pre>
+$ <strong>curl \
+ --header "iPlanetDirectoryPro: AQIC5w...2NzEz*" \
+ "https://openam.example.com:8443/openam/json/agents?_queryID=*"</strong>
+<em>{
+  "result" : [ "wsp", "wsc", "agentAuth", "SecurityTokenService" ],
+  "resultCount" : 4,
+  "pagedResultsCookie" : null,
+  "remainingPagedResults" : -1
+}</em>
+   </pre></div><div class="screen"><pre>
+$ <strong>curl \
+ --header "iPlanetDirectoryPro: AQIC5w...2NzEz*" \
+ "https://openam.example.com:8443/openam/json/groups?_queryID=*"</strong>
+<em>{
+  "result" : [ "myOtherGroup", "myGroup" ],
+  "resultCount" : 2,
+  "pagedResultsCookie" : null,
+  "remainingPagedResults" : -1
+}</em>
+   </pre></div><p>As the result lists include all objects, this capability to list
+   identity names is mainly useful in testing.</p><p>As shown in the examples, OpenAM returns the JSON representation of
+   the resource list if successful. On failure, OpenAM returns a JSON
+   representation of the error including the
+   <a class="link" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html" target="_blank">HTTP status code</a>.</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-api-retrieve-identity-using-session-cookie"></a>7.1.6.&nbsp;Retrieving Identities Using the Session Cookie</h3></div></div></div><p>If you only have access to the <code class="literal">iPlanetDirectoryPro</code>
+    session cookie, you can retrieve the user ID by performing an HTTP POST
+    operation on the <code class="literal">/json/users</code>
+    endpoint using the <code class="literal">idFromSession</code> action.
+   </p><div class="screen"><pre>
+$ <strong>curl \
+ --verbose \
+ --request POST \
+ --header "iplanetdirectorypro: AQIC5wM2LY4SfczUFNs-TJwFrCVAKgR0NulIAyNaIkQmjis.*AAJTSQACMDEA
+ AlNLABQtNTQ3NDE2Njc5ODk4MjYzMzA2MQ..*" \
+ --header "Content-Type: application/json" http://openam.example.com:8080/openam/json/users?_action=idFromSession</strong>
+<em>
+{
+  "id":"demo",
+  "realm":"/",
+  "dn":"id=demo,ou=user,dc=openam,dc=forgerock,dc=org",
+  "successURL":"/openam/console",
+  "fullLoginURL":null
+}</em>
+   </pre></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-api-change-password"></a>7.1.7.&nbsp;Changing Passwords</h3></div></div></div><a class="indexterm" name="d0e6818"></a><a class="indexterm" name="d0e6823"></a><p>
+   A user can change their own password
+    with an HTTP POST to <code class="literal">/json/<em class="replaceable"><code>subrealm</code></em>/users/<em class="replaceable"><code>username</code></em>?_action=changePassword</code>
+    including the new password as the value of <code class="literal">userpassword</code> in the request
+    data.</p><p> A user must provide the current password, which is set in the request
+    as the value of the <code class="literal">currentpassword</code>.</p><p>For the case where the user has forgotten their password, see
+    <a href="../../dev-guide/index/chap-rest-user-services.html#rest-api-password-reset" class="link">Resetting Forgotten Passwords</a> instead.
+   </p><p>
+    The following example shows a successful request to change the <span class="emphasis"><em>demo</em></span>
+    user's password to <span class="emphasis"><em>password</em></span>.
+   </p><div class="screen"><pre>
+$ <strong>curl \
+ --request POST \
+ --header "iPlanetDirectoryPro: AQIC5w...NTcy*" \
+ --header "Content-Type: application/json" \
+ --data '{
+     "currentpassword":"changeit",
+     "userpassword":"password"
+ }' \
+ https://openam.example.com:8443/openam/json/users/demo?_action=changePassword</strong>
+<em>{}</em>
+   </pre></div><p>
+    On success, the response is an empty JSON object {} as shown in the
+    example.</p><p>On failure, OpenAM returns a JSON representation of the error including the
+    <a class="link" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html" target="_blank">HTTP status code</a>. See also <a href="../../dev-guide/index/chap-rest.html#rest-api-status-codes" class="link">REST Status Codes</a>
+    for more information.
+   </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-api-create-legacy"></a>7.1.8.&nbsp;Creating Identities (Legacy API)</h3></div></div></div><p>Interface Stability: <a href="../../admin-guide/index/appendix-interface-stability.html#interface-stability" class="link">Deprecated</a></p><p>OpenAM lets you create user profiles, and also create web and J2EE
+   policy agent profiles. When you create an entry, you must provide the
+   following parameters.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">admin</span></dt><dd><p>Valid token for the user with permissions to add the identity</p></dd><dt><span class="term">identity_name</span></dt><dd><p>A unique name for the identity to create</p></dd><dt><span class="term">identity_attribute_names</span></dt><dd><p>LDAP attribute names for attributes to create</p></dd><dt><span class="term">identity_attribute_values_<em class="replaceable"><code>name</code></em></span></dt><dd><p>LDAP attribute values for the identity to create. For example,
+      <code class="literal">identity_attribute_names=sn&amp;identity_attribute_values_sn=Jensen</code>.</p></dd><dt><span class="term">identity_realm</span></dt><dd><p>The realm in which to create the identity</p></dd><dt><span class="term">identity_type</span></dt><dd><p>Either <code class="literal">user</code> or <code class="literal">AgentOnly</code></p></dd></dl></div><div class="screen"><pre>
+$ <strong>curl "https://openam.example.com:8443/openam/identity/create?\
+admin=AQIC5wM2LY4SfcxSYA8eG-vrNHb_W7nG8XkfAGyRyuaebDY.*AAJTSQACMDE.*\
+&amp;identity_name=testuser\
+&amp;identity_attribute_names=cn\
+&amp;identity_attribute_values_cn=Test%20User\
+&amp;identity_attribute_names=sn\
+&amp;identity_attribute_values_sn=User\
+&amp;identity_attribute_names=userpassword\
+&amp;identity_attribute_values_userpassword=secret12\
+&amp;identity_realm=%2F\
+&amp;identity_type=user"</strong>
+    </pre></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-api-read-legacy"></a>7.1.9.&nbsp;Reading &amp; Searching for Identities (Legacy API)</h3></div></div></div><p>Interface Stability: <a href="../../admin-guide/index/appendix-interface-stability.html#interface-stability" class="link">Deprecated</a></p><p>Reading is similar to attribute retrieval, as described in
+    <a href="../../dev-guide/index/chap-rest.html#rest-api-tokens" class="link">Token Validation</a>,
+   but obtained using the token of
+   a user with permissions to perform the search, as shown in the following
+   example.</p><div class="screen"><pre>
+$ <strong>curl "https://openam.example.com:8443/openam/identity/read?\
+admin=AQIC5wM2LY4SfcxSYA8eG-vrNHb_W7nG8XkfAGyRyuaebDY.*AAJTSQACMDE.*\
+&amp;name=testuser\
+&amp;attributes_names=realm\
+&amp;attributes_values_realm=%2F"</strong>
+<em>identitydetails.name=testuser
+identitydetails.type=user
+identitydetails.realm=o=openam
+identitydetails.attribute=
+identitydetails.attribute.name=uid
+identitydetails.attribute.value=testuser
+identitydetails.attribute=
+identitydetails.attribute.name=sn
+identitydetails.attribute.value=User
+identitydetails.attribute=
+identitydetails.attribute.name=userpassword
+identitydetails.attribute.value={SSHA}AzpT+N1sjrQhL1wfX2ETWh/Aqbd+lH9LOlhDqg==
+identitydetails.attribute=
+identitydetails.attribute.name=cn
+identitydetails.attribute.value=Test User
+identitydetails.attribute=
+identitydetails.attribute.name=inetuserstatus
+identitydetails.attribute.value=Active
+identitydetails.attribute=
+identitydetails.attribute.name=dn
+identitydetails.attribute.value=uid=testuser,ou=people,dc=example,dc=com
+identitydetails.attribute=
+identitydetails.attribute.name=objectclass
+identitydetails.attribute.value=person
+identitydetails.attribute.value=sunIdentityServerLibertyPPService
+identitydetails.attribute.value=inetorgperson
+identitydetails.attribute.value=sunFederationManagerDataStore
+identitydetails.attribute.value=iPlanetPreferences
+identitydetails.attribute.value=iplanet-am-auth-configuration-service
+identitydetails.attribute.value=organizationalperson
+identitydetails.attribute.value=sunFMSAML2NameIdentifier
+identitydetails.attribute.value=inetuser
+identitydetails.attribute.value=iplanet-am-managed-person
+identitydetails.attribute.value=iplanet-am-user-service
+identitydetails.attribute.value=sunAMAuthAccountLockout
+identitydetails.attribute.value=top
+identitydetails.attribute=
+identitydetails.attribute.name=universalid
+identitydetails.attribute.value=id=testuser,ou=user,o=openam</em>
+   </pre></div><p>You can search for user IDs by providing the following
+   parameters.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">admin</span></dt><dd><p>Valid token for the user with access to perform the search</p></dd><dt><span class="term">attributes_names</span></dt><dd><p>LDAP attribute names for attributes to search</p></dd><dt><span class="term">attributes_values_<em class="replaceable"><code>name</code></em></span></dt><dd><p>LDAP attribute values for the identity to search. For example,
+      <code class="literal">attribute_names=sn&amp;attribute_values_sn=Jensen</code>.</p></dd><dt><span class="term">filter</span></dt><dd><p>Additional LDAP filter component to limit the search results
+      returned</p></dd></dl></div><div class="screen"><pre>
+$ <strong>curl "https://openam.example.com:8443/openam/identity/search?\
+admin=AQIC5wM2LY4SfcxSYA8eG-vrNHb_W7nG8XkfAGyRyuaebDY.*AAJTSQACMDE.*\
+&amp;attributes_names=sn\
+&amp;attributes_values_sn=Jensen\
+&amp;attributes_names=mail\
+&amp;attributes_values_mail=bjensen*\
+&amp;attributes_names=realm\
+&amp;attributes_values_realm=%2F"</strong>
+<em>string=bjensen</em>
+   </pre></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-api-update-legacy"></a>7.1.10.&nbsp;Updating Identities (Legacy API)</h3></div></div></div><p>Interface Stability: <a href="../../admin-guide/index/appendix-interface-stability.html#interface-stability" class="link">Deprecated</a></p><p>You can update an identity with the same parameters used to create
+   identities, provided the token corresponds to a user with access to
+   update the identity.</p><div class="screen"><pre>
+$ <strong>curl "https://openam.example.com:8443/openam/identity/update?\
+admin=AQIC5wM2LY4SfcxSYA8eG-vrNHb_W7nG8XkfAGyRyuaebDY.*AAJTSQACMDE.*\
+&amp;identity_name=testuser\
+&amp;identity_attribute_names=mail\
+&amp;identity_attribute_values_mail=testuser%40example.com\
+&amp;identity_realm=%2F\
+&amp;identity_type=user"</strong>
+   </pre></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-api-delete-legacy"></a>7.1.11.&nbsp;Deleting Identities (Legacy API)</h3></div></div></div><p>Interface Stability: <a href="../../admin-guide/index/appendix-interface-stability.html#interface-stability" class="link">Deprecated</a></p><p>You can also delete an identity.</p><div class="screen"><pre>
+$ <strong>curl "https://openam.example.com:8443/openam/identity/delete?\
+admin=AQIC5wM2LY4SfcxSYA8eG-vrNHb_W7nG8XkfAGyRyuaebDY.*AAJTSQACMDE.*\
+&amp;identity_name=testuser\
+&amp;identity_realm=%2F\
+&amp;identity_type=user"</strong>
+   </pre></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="rest-api-crud-realm"></a>7.2.&nbsp;Realm Management</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-rest-identity-realm-mgmt.html#rest-api-parameters-realm">7.2.1. Default Parameters for Realms</a></span></dt><dt><span class="section"><a href="chap-rest-identity-realm-mgmt.html#rest-api-create-realm">7.2.2. Creating Realms</a></span></dt><dt><span class="section"><a href="chap-rest-identity-realm-mgmt.html#rest-api-read-realm">7.2.3. Reading Realms</a></span></dt><dt><span class="section"><a href="chap-rest-identity-realm-mgmt.html#rest-api-list-realm">7.2.4. Listing Realms</a></span></dt><dt><span class="section"><a href="chap-rest-identity-realm-mgmt.html#rest-api-update-realm">7.2.5. Updating Realms</a></span></dt><dt><span class="section"><a href="chap-rest-identity-realm-mgmt.html#rest-api-delete-realm">7.2.6. Deleting Realms</a></span></dt></dl></div><a class="indexterm" name="d0e7030"></a><p>This section shows how to create, read, update, and delete realms 
+  using the RESTful APIs.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Under the <code class="literal">/json/realms</code> endpoint, you find the 
+    newer JSON-based API.</p><div class="itemizedlist"><p>The following sections cover this JSON-based API.</p><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p><a class="xref" href="chap-rest-identity-realm-mgmt.html#rest-api-parameters-realm" title="7.2.1.&nbsp;Default Parameters for Realms">Section&nbsp;7.2.1, &#8220;Default Parameters for Realms&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-rest-identity-realm-mgmt.html#rest-api-create-realm" title="7.2.2.&nbsp;Creating Realms">Section&nbsp;7.2.2, &#8220;Creating Realms&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-rest-identity-realm-mgmt.html#rest-api-read-realm" title="7.2.3.&nbsp;Reading Realms">Section&nbsp;7.2.3, &#8220;Reading Realms&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-rest-identity-realm-mgmt.html#rest-api-list-realm" title="7.2.4.&nbsp;Listing Realms">Section&nbsp;7.2.4, &#8220;Listing Realms&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-rest-identity-realm-mgmt.html#rest-api-update-realm" title="7.2.5.&nbsp;Updating Realms">Section&nbsp;7.2.5, &#8220;Updating Realms&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-rest-identity-realm-mgmt.html#rest-api-delete-realm" title="7.2.6.&nbsp;Deleting Realms">Section&nbsp;7.2.6, &#8220;Deleting Realms&#8221;</a></p></li></ul></div></li></ul></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-api-parameters-realm"></a>7.2.1.&nbsp;Default Parameters for Realms</h3></div></div></div><p>Realms have a number of fields entered with the default loading.
+    The following table provides information on what the default realm settings are,
+    and these settings can be updated, added, or deleted when updating
+    a realm.</p><div class="table"><a name="realm-parameter"></a><div class="table-title">Table&nbsp;7.1.&nbsp;Realm Parameters for JSON-based API</div><div class="table-contents"><table summary="Realm Parameters for JSON-based API" width="100%" border="0"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Realm Parameter</th><th>Default</th><th>Purpose</th></tr></thead><tbody><tr><td>realm</td><td>None - the only required field to add a realm</td><td><p>The name of the realm</p>
+         <p>Example: <code class="literal">myRealm</code></p></td></tr><tr><td>sunOrganizationStatus</td><td>Active</td><td><p>The status of the realm</p>
+         <p><code class="literal">Active</code> or <code class="literal">Inactive</code></p></td></tr><tr><td>sunOrganizationAliases</td><td>None</td><td><p>Any applicable aliases associated with the realm. Be aware that
+        an alias can only be used once. Entering an alias used by another realm
+        will remove the alias from that realm and you will lose configuration.</p>
+         <p>Example: <code class="literal">opensso.example.com</code></p></td></tr><tr><td>serviceNames</td><td><code class="literal">sunAMAuthHOTPService</code>
+        <code class="literal">iPlanetAMAuthConfiguration</code>        
+        <code class="literal">sunAMAuthFederationService</code>
+        <code class="literal">sunIdentityRepositoryService</code>
+        <code class="literal">iPlanetAMPolicyConfigService</code>
+        <code class="literal">iPlanetAMAuthService</code>
+        <code class="literal">iPlanetAMAuthLDAPService</code>
+        <code class="literal">sunAMAuthDataStoreService</code>
+        <code class="literal">sunAMAuthSAEService</code>
+        <code class="literal">sunAMDelegationService</code>
+        <code class="literal">sunAMAuthWSSAuthModuleService</code>
+        <code class="literal">iPlanetAMAuthOATHService</code>
+        </td><td>Services needed for the realm, including authentication modules</td></tr></tbody></table></div></div><br class="table-break"></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-api-create-realm"></a>7.2.2.&nbsp;Creating Realms</h3></div></div></div><p>OpenAM lets administrators create a realm by making 
+   an HTTP POST of the JSON representation of the profile to
+   <code class="literal">/json/realms/?_action=create</code>.</p><p>You can create realms using an HTTP POST of the JSON representation 
+    of the profile to <code class="literal">/json/realms/?_action=create</code>, as shown in 
+    the following example. The only required field is <code class="literal">realm</code>, 
+    but the realm will not be active if the status is not set.</p><div class="screen"><pre>
+$ <strong>curl \
+ --request POST \
+ --header "iplanetDirectoryPro: AQIC5w...2NzEz*" \
+ --header "Content-Type: application/json" \
+ --data '{ "realm": "myRealm" }' \
+ https://openam.example.com:8443/openam/json/realms/?_action=create</strong>
+<em>{"realmCreated":"/myRealm"}</em>
+     </pre></div><p>You can also set the <code class="literal">sunOrganizationAliases</code> parameter,
+    but it can only be assigned to one realm (usually the top level realm). Before
+    setting this parameter, make sure it is not already assigned elsewhere. If you 
+    replace remove it from another realm, you will lose your configuration.</p><p>Alternatively, administrators can create realms by the specific realm
+    name using the HTTP PUT of the JSON representation of the changes to 
+    <code class="literal">/json/realms/<em class="replaceable"><code>realm-id</code></em></code>, as
+    shown in the following example:</p><div class="screen"><pre>
+$ <strong>curl \
+ --request PUT \
+ --header "iplanetDirectoryPro: AQIC5w...2NzEz*" \
+ --header "Content-Type: application/json" \
+ --data '{ }' \
+ https://openam.example.com:8443/openam/json/realms/myRealm</strong>
+     </pre></div><p>
+     OpenAM returns the JSON representation of the profile on success.
+     On failure, OpenAM returns a JSON representation of the error including the
+     <a class="link" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html" target="_blank">HTTP status code</a>.
+    </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-api-read-realm"></a>7.2.3.&nbsp;Reading Realms</h3></div></div></div><p>OpenAM lets administrators read realms by requesting an HTTP GET on 
+   <code class="literal">/json/realms/<em class="replaceable"><code>realm-id</code></em></code>. This 
+   allows administrators to review all active realm services for the realm, 
+   like policy configuration and modules. If users or administrators see missing 
+   information (such as Active status) or incorrect information, they can write 
+   down the correct information and add it using <a class="xref" href="chap-rest-identity-realm-mgmt.html#rest-api-update-realm" title="7.2.5.&nbsp;Updating Realms">Section&nbsp;7.2.5, &#8220;Updating Realms&#8221;</a></p><p>The following example shows an administrator receiving information about
+    a realm called <code class="literal">myRealm</code>.</p><div class="screen"><pre>
+$ <strong>curl \
+ --header "iplanetDirectoryPro: AQIC5w...2NzEz*" \
+ https://openam.example.com:8443/openam/json/realms/myRealm</strong>
+<em>{
+    "serviceNames":[
+      "sunAMAuthHOTPService",
+      "iPlanetAMAuthConfiguration",
+      "sunAMAuthFederationService",
+      "sunIdentityRepositoryService",
+      "iPlanetAMPolicyConfigService",
+      "iPlanetAMAuthService",
+      "iPlanetAMAuthLDAPService",
+      "sunAMAuthDataStoreService",
+      "sunAMAuthSAEService",
+      "sunAMDelegationService",
+      "sunAMAuthWSSAuthModuleService",
+      "iPlanetAMAuthOATHService"
+    ]
+}</em>
+    </pre></div><p>As shown in the example, OpenAM returns the JSON representation of the
+    profile on success. On failure, OpenAM returns a JSON representation of the
+    error including the
+    <a class="link" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html" target="_blank">HTTP status code</a>.</p><p>
+    To read the top-level realm,
+    use <code class="literal">toplevelrealm</code> with the
+    <code class="literal">realms</code> endpoint.
+   </p><div class="screen"><pre>
+$ <strong>curl \
+ --header "iplanetDirectoryPro: AQIC5w...2NzEz*" \
+ https://openam.example.com:8443/openam/json/realms/toplevelrealm</strong>
+<em>{
+      "serviceNames" : [
+       "sunAMAuthFederationService",
+       "sunEntitlementIndexes",
+       "iPlanetAMAuthService",
+       "sunAMAuthDataStoreService",
+       "sunAMAuthWSSAuthModuleService",
+       "sunAMDelegationService",
+       "iPlanetAMAuthOATHService",
+       "iPlanetAMAuthConfiguration",
+       "sunAMAuthHOTPService",
+       "sunIdentityRepositoryService",
+       "iPlanetAMPolicyConfigService",
+       "iPlanetAMAuthLDAPService",
+       "sunEntitlementService",
+       "iPlanetAMPolicyService",
+       "sunAMAuthSAEService",
+       "AgentService" ]
+}</em>
+   </pre></div><p>
+    If the realm you want to read is not an immediate subrealm
+    of the top-level realm,
+    specify its parent realm to the left
+    of <code class="literal">realms</code> in the URL, and specify
+    the realm's final qualifier to the right of <code class="literal">realms</code>. For example,
+    to read the <code class="literal">/myRealm/myRealmsChildRealm</code> realm:
+   </p><div class="screen"><pre>
+$ <strong>curl \
+ --header "iplanetDirectoryPro: AQIC5w...2NzEz*" \
+ https://openam.example.com:8443/openam/json/myRealm/realms/myRealmsChildRealm</strong>
+<em>{
+      "serviceNames" : [
+       "sunAMAuthHOTPService",
+       "iPlanetAMAuthConfiguration",
+       "sunAMAuthFederationService",
+       "sunIdentityRepositoryService",
+       "iPlanetAMPolicyConfigService",
+       "iPlanetAMAuthService",
+       "iPlanetAMAuthLDAPService",
+       "sunAMAuthDataStoreService",
+       "sunAMAuthSAEService",
+       "sunAMDelegationService",
+       "sunAMAuthWSSAuthModuleService",
+       "iPlanetAMAuthOATHService"
+      ]
+}</em>
+   </pre></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-api-list-realm"></a>7.2.4.&nbsp;Listing Realms</h3></div></div></div><p>
+    To list a realm and its subrealms, perform an HTTP GET on the endpoint,
+    setting the <code class="literal">_queryFilter</code> query string parameter
+    as in the following example, which lists the top-level realm and all of
+    its subrealms:
+   </p><div class="screen"><pre>
+ $ <strong>curl \
+ --header "iPlanetDirectoryPro: AQIC5..." \
+ https://openam.example.com:8443/openam/json/realms?_queryFilter=true</strong>
+ <em>{
+     "result" : [ "/", "/myRealm", "/myRealm/myRealmsChildRealm" ],
+     "resultCount" : 3,
+     "pagedResultsCookie" : null,
+     "remainingPagedResults" : -1
+ }</em>
+   </pre></div><p>
+    You can start listing realms from below the top-level realm by placing the
+    starting realm name in the URL. The following example lists the realm
+    <code class="literal">myRealm</code> and all of its subrealms.
+   </p><div class="screen"><pre>
+$ <strong>curl \
+ --header "iPlanetDirectoryPro: AQIC5..." \
+ https://openam.example.com:8443/openam/json/myRealm/realms?_queryFilter=true</strong>
+ <em>{
+     "result" : [ "/myRealm", "/myRealm/myRealmsChildRealm" ],
+     "resultCount" : 2,
+     "pagedResultsCookie" : null,
+     "remainingPagedResults" : -1
+ }</em>
+ </pre></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-api-update-realm"></a>7.2.5.&nbsp;Updating Realms</h3></div></div></div><p>OpenAM lets administrators update realms. To update a realm, do an HTTP PUT 
+   of the JSON representation of the changes to
+   <code class="literal">/json/realms/<em class="replaceable"><code>realm-id</code></em></code>.</p><p>The following example shows how to update a realm called
+     <code class="literal">myRealm</code>. The example command sets the realm's
+     status to Inactive.
+    </p><div class="screen"><pre>
+$ <strong>curl \
+ --request PUT \
+ --header "iplanetDirectoryPro: AQIC5...Y3MTAx*" \
+ --header "Content-Type: application/json" \
+ --data '{ "sunOrganizationStatus": "Inactive" }' \
+ https://openam.example.com:8443/openam/json/realms/myRealm</strong>
+     </pre></div><p>OpenAM returns the JSON representation of the
+    profile on success. On failure, OpenAM returns a JSON representation of the
+    error including the
+    <a class="link" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html" target="_blank">HTTP status code</a>.</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-api-delete-realm"></a>7.2.6.&nbsp;Deleting Realms</h3></div></div></div><p>OpenAM lets administrators delete a realm by making an HTTP DELETE call to
+   <code class="literal">/json/realms/<em class="replaceable"><code>realm-id</code></em></code>.</p><p>The following example deletes a realm called <code class="literal">myRealm</code>.
+     The top level realm cannot be deleted. Only administrators
+     should delete realms. The name of the realm is the only field required to
+     delete the realm.</p><p>Make sure that you do not have any information you need within a realm 
+    before deleting it. Once a realm is deleted, the only way to restore it is 
+    to return to a backed up deployment of OpenAM.</p><div class="screen"><pre>
+$ <strong>curl \
+ --request DELETE \
+ --header "iplanetDirectoryPro: AQIC5w...2NzEz*" \
+ https://openam.example.com:8443/openam/json/realms/myRealm</strong>
+<em>{"success":"true"}</em>
+    </pre></div><p>On success, OpenAM returns a JSON object indicating success. On
+    failure, OpenAM returns a JSON representation of the error including the
+    <a class="link" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html" target="_blank">HTTP status code</a>.</p><p>
+    If the realm you want to delete is not an immediate subrealm
+    of the top-level realm,
+    specify its parent realm to the left
+    of <code class="literal">realms</code> in the URL, and specify
+    the realm's final qualifier to the
+    right of <code class="literal">realms</code>. For example,
+    to delete the <code class="literal">/myRealm/myRealmsChildRealm</code> realm:
+   </p><div class="screen"><pre>
+ $ <strong>curl \
+ --request DELETE
+ --header "iplanetDirectoryPro: AQIC5w...2NzEz*" \
+ https://openam.example.com:8443/openam/json/myRealm/realms/myRealmsChildRealm</strong>
+ <em>{ "success":"true" }</em>
+   </pre></div></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-rest-user-services.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-rest-sts.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;6.&nbsp;RESTful User Self-Service&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;8.&nbsp;RESTful Secure Token Service</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

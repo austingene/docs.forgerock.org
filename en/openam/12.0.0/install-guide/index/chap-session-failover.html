@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;8.&nbsp;Setting Up OpenAM Session Failover</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenAM Installation Guide"><link rel="up" href="index.html" title="OpenAM Installation Guide"><link rel="prev" href="chap-cts.html" title="Chapter&nbsp;7.&nbsp;Configuring the Core Token Service (CTS)"><link rel="next" href="chap-uninstall.html" title="Chapter&nbsp;9.&nbsp;Removing OpenAM Software"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;8.&nbsp;Setting Up OpenAM Session Failover</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-cts.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-uninstall.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-session-failover"></a>Chapter&nbsp;8.&nbsp;Setting Up OpenAM Session Failover</h1></div></div></div><a class="indexterm" name="d0e5463"></a><a class="indexterm" name="d0e5468"></a><p>
+  This chapter covers setting up session failover (SFO).
+  Session failover allows another OpenAM server to manage a session
+  when the server that initially authenticated the user is down.
+  This means the user does not need to log in again,
+  even though the server that authenticated them is down.
+ </p><p>
+  Session failover (high availability for sessions) builds
+  on OpenAM service availability.
+  Before configuring session failover,
+  you must therefore first make the overall OpenAM service highly available.
+  This is done by setting up OpenAM in a site configuration.
+  You can find instructions for setting up a site configuration in the chapter,
+  <a href="../../install-guide/index/chap-install-multiple.html" class="link"><em class="citetitle">Installing Multiple Servers</em></a>.
+ </p><p>
+  Session failover also relies on a shared Core Token Service (CTS)
+  to store user session data.
+  The service is shared with other OpenAM servers in the same OpenAM Site.
+  When an OpenAM server goes down, other servers in the Site
+  can read user session information from the CTS,
+  so the user with a valid session does not have to log in again.
+  When the original OpenAM server becomes available again,
+  it can also read session information from the CTS,
+  and can carry on serving users with active sessions.
+  By default the Core Token Service uses the embedded OpenDJ directory server.
+  For more information on configuring the Core Token Service, see the chapter,
+  <a href="../../install-guide/index/chap-cts.html" class="link"><em class="citetitle">Configuring the Core Token Service (CTS)</em></a>.
+ </p><p>
+  In deployments with multiple OpenAM Sites,
+  session failover can function across Sites.
+  In order for this to work, all Sites must use
+  the same, global, underlying Core Token Service,
+  which is replicated across all Sites.
+  Then when an entire Site fails or becomes unavailable,
+  OpenAM servers in another Site detect the failure of the Site's load balancer
+  and attempt to recover the user session from the global Core Token Service.
+ </p><p>
+  In the event of a failure,
+  client applications can connect to an OpenAM server in an active data center
+  as shown in <a class="xref" href="chap-session-failover.html#figure-global-cts" title="Figure&nbsp;8.1.&nbsp;Core Token Service For Global Session Failover">Figure&nbsp;8.1, &#8220;Core Token Service For Global Session Failover&#8221;</a>.
+ </p><div class="figure"><a name="figure-global-cts"></a><div class="figure-title">Figure&nbsp;8.1.&nbsp;Core Token Service For Global Session Failover</div><div class="figure-contents"><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/global-cts.png" align="middle" height="360" alt="Global CTS"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="ld-d0e5494.html" target="longdesc">D</a>]</span></div></div></div></div><br class="figure-break"><p>
+  For more information on how this is done with OpenDJ directory server,
+  see the OpenDJ documentation on
+  <a class="link" href="http://docs.forgerock.org/en/opendj/2.6.0/admin-guide/#chap-replication" target="_blank"><em class="citetitle">Managing Data Replication</em></a>.
+ </p><div class="procedure"><a name="enable-session-failover"></a><div class="procedure-title">Procedure&nbsp;8.1.&nbsp;To Configure Session Failover After Installation</div><a class="indexterm" name="d0e5511"></a><p>
+   Session failover requires an OpenAM Site configuration
+   with a Core Token Service.
+  </p><p>
+   If you did not configure session persistence and availability during
+   initial configuration,
+   first complete the steps in the procedure,
+   <a href="../../install-guide/index/chap-install-multiple.html#configure-site-load-balancing" class="link"><em class="citetitle">To Configure Site Load Balancing</em></a>,
+   and then follow these steps.
+  </p><ol class="procedure" type="1"><li class="step"><p>
+    In the OpenAM console for one of the servers in the Site,
+    under Configuration &gt; Global, click Session.
+   </p></li><li class="step"><p>
+    Under Secondary Configuration Instance, click New.
+   </p><p>
+    If the server is not part of a Site,
+    or if the configuration server does not support the Core Token Service,
+    the New button is grayed out.
+   </p></li><li class="step"><p>
+    In the Add Sub Configuration page,
+    check that the Name is set to the name of the site.
+   </p></li><li class="step"><p>
+    To activate the Session Persistence and High Availability Failover option,
+    check the Enabled box.
+   </p></li><li class="step"><p>To ensure that local OpenAM instances resolve sessions from the Core
+    Token Service session store rather than by using crosstalk, check the Reduce
+    Crosstalk Enabled box. For more information about crosstalk, see the section,
+    <a href="../../install-guide/index/chap-install-multiple.html" class="link"><em class="citetitle">To Configure Site Load Balancing</em></a>.
+   </p><p>Do not disable reduced crosstalk unless advised to do so by ForgeRock
+    Technical Support.
+   </p></li><li class="step"><p>
+    Set reduced crosstalk options.
+   </p><p>
+    Session logout/destroy broadcasting enables
+    notification to all servers in an OpenAM site when a user logs out or
+    her session is destroyed by the OpenAM server. The broadcast notifications
+    are in addition to normal session logout/destroy notifications sent to
+    interested clients and servers.
+   </p><p>
+    Without session logout/destroy broadcasting,
+    it is possible for a user to log out
+    from one OpenAM server and then access her session on another server during
+    the brief window between the logout and session store replication.
+    Enabling session
+    logout/destroy broadcasting ensures that logged out and destroyed sessions
+    have the correct state on all OpenAM servers.
+   </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+      Select Disabled if you do not want the OpenAM server to broadcast session
+      logout/destroy messages. Session logout/destroy broadcasting is disabled
+      by default. Disabling broadcasting is suitable when you do not need the
+      highest level of security. Disable broadcasting when you do not expect
+      users to maliciously attempt to access logged out or destroyed sessions.
+     </p></li><li class="listitem"><p>
+      Specify one of the two broadcast options to achieve a higher level of
+      security, at a cost of incurring additional network I/O. Select
+      "Broadcast only to local site servers" if your session store
+      supports a single OpenAM site. Select
+      "Broadcast to servers in all sites" if your session store
+      supports multiple OpenAM sites.
+     </p></li></ul></div><p>
+    The Reduced Crosstalk Purge
+    Delay option specifies the amount of time (in minutes) before
+    sessions are purged from OpenAM servers after the server receives
+    session logout/destroy broadcast notification. The delay ensures that
+    sessions are in memory during the time between
+    session logout/destruction and session store replication.
+   </p><p>
+    The default purge delay is 1 minute, which should be adequate unless
+    session store replication is abnormally slow on your network.
+   </p></li><li class="step"><p>
+    Click Add to save your work.
+   </p></li><li class="step"><p>
+    Restart all the OpenAM servers in the site.
+   </p></li></ol></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-cts.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-uninstall.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;7.&nbsp;Configuring the Core Token Service (CTS)&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;9.&nbsp;Removing OpenAM Software</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

@@ -1,0 +1,604 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;20.&nbsp;Monitoring OpenAM Services</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenAM Administration Guide"><link rel="up" href="index.html" title="OpenAM Administration Guide"><link rel="prev" href="chap-certs-keystores.html" title="Chapter&nbsp;19.&nbsp;Managing Certificates"><link rel="next" href="chap-tuning.html" title="Chapter&nbsp;21.&nbsp;Tuning OpenAM"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;20.&nbsp;Monitoring OpenAM Services</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-certs-keystores.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-tuning.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-monitoring"></a>Chapter&nbsp;20.&nbsp;Monitoring OpenAM Services</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-monitoring.html#monitoring-interfaces">20.1. Monitoring Interfaces</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#cts-monitoring">20.2. Monitoring CTS Tokens</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#is-openam-alive">20.3. Is OpenAM Running?</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#debug-logging">20.4. Debug Logging</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#session-mgmt">20.5. Session Management</a></span></dt></dl></div><p>This chapter covers how to monitor OpenAM services to ensure
+ appropriate performance and service availability.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="monitoring-interfaces"></a>20.1.&nbsp;Monitoring Interfaces</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-monitoring.html#monitoring-web-pages">20.1.1. Web Based Monitoring</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#monitoring-jmx">20.1.2. JMX Monitoring</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#monitoring-snmp">20.1.3. SNMP Monitoring</a></span></dt></dl></div><a class="indexterm" name="d0e32034"></a><p>OpenAM lets you monitor OpenAM over protocol through web pages,
+  Java Management Extensions (JMX), or Simple Network Management Protocol
+  (SNMP). The services are based on JMX.</p><p>To configure monitoring services, login to OpenAM console as OpenAM
+  administrator, and browse to Configuration &gt; System &gt; Monitoring.
+  Alternatively you can use the <span class="command"><strong>ssoadm set-attr-defs</strong></span>
+  command.</p><div class="screen"><pre>
+$ <strong>ssoadm \
+ set-attr-defs \
+ --servicename iPlanetAMMonitoringService \
+ --schematype Global \
+ --adminid amadmin \
+ --password-file /tmp/pwd.txt \
+ --attributevalues iplanet-am-monitoring-enabled=true</strong>
+  </pre></div><p>Restart OpenAM for the changes to take effect. You must also restart
+  OpenAM if you disable monitoring.</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="monitoring-web-pages"></a>20.1.1.&nbsp;Web Based Monitoring</h3></div></div></div><p>You can configure OpenAM to allow you to access a web based view of
+   OpenAM MBeans on port 8082 where the core server runs, such as
+   <code class="literal">http://openam-ter.example.com:8082/</code>. Either use the
+   console, or use the <span class="command"><strong>ssoadm</strong></span> command.</p><div class="screen"><pre>
+$ <strong>ssoadm \
+ set-attr-defs \
+ --servicename iPlanetAMMonitoringService \
+ --schematype Global \
+ --adminid amadmin \
+ --password-file /tmp/pwd.txt \
+ --attributevalues iplanet-am-monitoring-http-enabled=true</strong>
+   </pre></div><p>The default authentication file allows you to authenticate over HTTP
+   as user <code class="literal">demo</code>, password <code class="literal">changeit</code>. The
+   user name and password are kept in the file specified, with the password
+   encrypted.</p><div class="screen"><pre>
+$ <strong>cat openam/openam/openam_mon_auth</strong>
+<em>demo AQICMBCKlwx6G3vzK3TYYRbtTpNYAagVIPNP</em>
+   </pre></div><p>Or:</p><div class="screen"><pre>
+$ <strong>cat openam/openam/opensso_mon_auth</strong>
+<em>demo AQICvSe+tXEg8TUUT8ekzHb8IRzVSvm1Lc2u</em>
+   </pre></div><p>You can encrypt a new password using the <span class="command"><strong>ampassword</strong></span>
+   command. After changing the authentication file, you must restart OpenAM
+   for the changes to take effect.</p><div class="mediaobject" align="center"><a name="figure-web-based-monitoring"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/web-based-monitoring.png" align="middle" height="360" alt="OpenAM MBeans in a browser"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-web-based-monitoring.html" target="longdesc">D</a>]</span></div></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="monitoring-jmx"></a>20.1.2.&nbsp;JMX Monitoring</h3></div></div></div><a class="indexterm" name="d0e32109"></a><p>You can configure OpenAM to allow you to listen for Java Management
+   eXtension (JMX) clients, by default on port 9999. Either use the OpenAM
+   console page under Configuration &gt; System &gt; Monitoring and make sure
+   both Monitoring Status and Monitoring RMI interface status are both set to
+   Enabled, or use the <span class="command"><strong>ssoadm</strong></span> command.</p><div class="screen"><pre>
+$ <strong>ssoadm \
+ set-attr-defs \
+ --servicename iPlanetAMMonitoringService \
+ --schematype Global \
+ --adminid amadmin \
+ --password-file /tmp/pwd.txt \
+ --attributevalues iplanet-am-monitoring-enabled=true \
+  iplanet-am-monitoring-rmi-enabled=true</strong>
+   </pre></div><p>A number of tools support JMX, including <span class="command"><strong>jvisualvm</strong></span>
+   and <span class="command"><strong>jconsole</strong></span>. When you use <span class="command"><strong>jconsole</strong></span>
+   to browse OpenAM MBeans for example, the default URL for the OpenAM running
+   on the local system is
+   <code class="literal">service:jmx:rmi:///jndi/rmi://localhost:9999/server</code>.</p><div class="screen"><pre>
+$ <strong>jconsole service:jmx:rmi:///jndi/rmi://localhost:9999/server &amp;</strong>
+   </pre></div><p>You can also browse the MBeans by connecting to your web application
+   container, and browsing to the OpenAM MBeans. By default, JMX monitoring for
+   your container is likely to be accessible only locally, using the process
+   ID.</p><div class="mediaobject" align="center"><a name="figure-jconsole-to-openam"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/jconsole-to-openam.png" align="middle" height="360" alt="Jconsole browsing OpenAM MBeans"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-jconsole-to-openam.html" target="longdesc">D</a>]</span></div></div><p>Also see <a class="link" href="http://docs.oracle.com/javase/1.5.0/docs/guide/management/agent.html" target="_blank">Monitoring and Management Using JMX</a> for instructions on how to
+   connect remotely, how to use SSL, and so forth.</p><div class="important"><h3 class="title">Important</h3><p>JMX has a limitation in that
+   some Operations and CTS tables cannot be properly serialized from OpenAM to JMX.
+   As a result, only a portion of OpenAM's monitoring information is available through JMX.
+   SNMP is a preferred monitoring option over JMX and exposes all OpenAM tables,
+   especially for CTS, with no serialization limitations.</p></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="monitoring-snmp"></a>20.1.3.&nbsp;SNMP Monitoring</h3></div></div></div><a class="indexterm" name="d0e32164"></a><p>You can configure OpenAM to allow you to listen on port 8085 for SNMP
+   monitoring. Either use the console, or use the <span class="command"><strong>ssoadm</strong></span>
+   command.</p><div class="screen"><pre>
+$ <strong>ssoadm \
+ set-attr-defs \
+ --servicename iPlanetAMMonitoringService \
+ --schematype Global \
+ --adminid amadmin \
+ --password-file /tmp/pwd.txt \
+ --attributevalues iplanet-am-monitoring-snmp-enabled=true</strong>
+   </pre></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="cts-monitoring"></a>20.2.&nbsp;Monitoring CTS Tokens</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-monitoring.html#cts-monitor-commands">20.2.1. CTS SNMP Monitoring</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#snmp-policy-evaluation">20.2.2. SNMP Monitoring For Policy Evaluation</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#snmp-sessions">20.2.3. SNMP Monitoring For Sessions</a></span></dt></dl></div><a class="indexterm" name="d0e32182"></a><p>
+   The <a href="../../install-guide/index/chap-cts.html" class="link">OpenAM Core
+   Token Service</a> (CTS) provides persistent and highly available
+   token storage for a several components within OpenAM, including
+   user sessions, OAuth 2.0 and SAML 2.0 tokens.
+  </p><p>
+   Depending on system load and usage, the CTS can produce a
+   large quantity of tokens, which can be short lived. This style of
+   usage is significantly different form typical LDAP usage. As such,
+   systems administrators may be interested in monitoring this usage
+   as part of LDAP directory maintenance.
+  </p><p>
+   The CTS functions only with one external LDAP service, OpenDJ.
+  </p><p>
+   To that end, the current state of CTS tokens on a system
+   can be monitored over SNMP. The current state of different types
+   of CTS tokens are associated with different Object Identifiers (OIDs)
+   in a Management Information Base (MIB).
+  </p><p>
+   To enable SNMP, see <a href="../../admin-guide/index/chap-monitoring.html#monitoring-snmp" class="link">
+   <em class="citetitle">SNMP Monitoring</em>.</a>
+  </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="cts-monitor-commands"></a>20.2.1.&nbsp;CTS SNMP Monitoring</h3></div></div></div><p>
+    Once activated, SNMP monitoring works over UDP by default. You may
+    want to install one of many available network monitoring tools. For
+    the purpose of this section, basic SNMP service and monitoring tools
+    have been installed on a GNU/Linux system. The same commands should
+    work on a Mac OS X system.
+   </p><p>SNMP depends on labels known as Object Identifiers (OIDs). These
+    are uniquely defined labels, organized in tree format. For OpenAM, they
+    are configured in a Management Information Base file named
+    <a class="link" href="https://svn.forgerock.org/openam/trunk/openam/openam-schema/openam-mib-schema/src/main/resources/mib/FORGEROCK-OPENAM-CTS.mib" target="_blank">
+    <code class="filename">FORGEROCK-OPENAM-CTS.mib</code></a>.
+   </p><p>
+    For detailed information on configured OIDs, see the OpenAM Reference
+    chapter on the <a href="../../reference/index/chap-cts-oids.html" class="link">
+    <em class="citetitle">Core Token Service (CTS) Object Identifiers (OIDs)</em>.
+    </a>
+   </p><p>
+    With the OIDs in hand, you can set up an SNMP server to collect
+    the data. You would also need SNMP utility commands with associated
+    OIDs to measure the current state of a component. First, to verify
+    the operation of SNMP on a GNU/Linux system, over port 8085,
+    using SNMP version 2c, run the following command:</p><div class="screen"><pre>
+# <strong>snmpstatus -c public -v 2c localhost</strong>
+   </pre></div><p>The output should normally specify communications over UDP. If you
+   get a <code class="literal">timeout</code> message, the SNMP service may not be
+   running.</p><p>You can get the value for a specific OID. For example, the
+    following command would retrieve the cumulative count for CTS
+    create operations, over port 8085:</p><div class="screen"><pre>
+# <strong>snmpget -c public -v 2c :8085 enterprises.36733.1.2.3.3.1.1.1</strong>
+   </pre></div><p>
+    For one view of the tree of OIDs, you can use the
+    <span class="command"><strong>snmpwalk</strong></span> command. For example, the following command
+    lists all OIDs related to CTS:
+   </p><div class="screen"><pre>
+# <strong>snmpwalk -c public -v 2c :8085 enterprises.36733.1.2.3</strong>
+   </pre></div><p>
+    A number of CTS OIDs are listed with a <code class="literal">Counter64</code> value.
+    As defined in <a class="link" href="http://tools.ietf.org/search/rfc2578#section-7.1.10" target="_blank">
+    <em class="citetitle">RFC 2578</em>,</a> an OID so configured has a maximum
+    value of <code class="literal">2^64 - 1</code>.
+   </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="snmp-policy-evaluation"></a>20.2.2.&nbsp;SNMP Monitoring For Policy Evaluation</h3></div></div></div><a class="indexterm" name="d0e32273"></a><p>
+    You can monitor policy evaluation performance over SNMP.
+    OpenAM records statistics for up to
+    a number of recent policy evaluation requests.
+    (You can configure the number in OpenAM Console
+    under Configuration &gt; System &gt; Monitoring.
+    For details, see the system configuration reference section,
+    <a href="../../reference/index/chap-config-ref.html#system-monitoring" class="link"><em class="citetitle">Monitoring</em></a>.)
+   </p><p>
+    Interface Stability:
+    <a href="../../admin-guide/index/appendix-interface-stability.html#interface-stability" class="link">Evolving</a>
+   </p><p>
+    As described in <a class="xref" href="chap-monitoring.html#cts-monitor-commands" title="20.2.1.&nbsp;CTS SNMP Monitoring">Section&nbsp;20.2.1, &#8220;CTS SNMP Monitoring&#8221;</a>,
+    SNMP uses OIDs defined in a Management Information Base (MIB) file
+    that specifies the statistics OpenAM keeps for policy evaluation operations,
+    <a class="link" href="https://svn.forgerock.org/openam/trunk/openam/openam-schema/openam-mib-schema/src/main/resources/mib/FORGEROCK-OPENAM-POLICY.mib" target="_blank"><code class="filename">FORGEROCK-OPENAM-POLICY.mib</code></a>.
+    Adapt the examples in <a class="xref" href="chap-monitoring.html#cts-monitor-commands" title="20.2.1.&nbsp;CTS SNMP Monitoring">Section&nbsp;20.2.1, &#8220;CTS SNMP Monitoring&#8221;</a>
+    to read monitoring statistics about policy evaluation on the command line.
+   </p><p>
+    When monitoring is active, OpenAM records statistics about
+    both the numbers and rates of policy evaluations performed,
+    and also the times taken to process policy evaluations.
+   </p><p>
+    The statistics are all read-only.
+    The base OID for policy evaluation statistics is
+    <code class="literal">enterprises.36733.1.2.2.1</code>.
+    The following table describes the values that you can read.
+   </p><div class="table"><a name="snmp-policy-evaluation-oids"></a><div class="table-title">Table&nbsp;20.1.&nbsp;OIDs Used in SNMP Monitoring For Policy Evaluation</div><div class="table-contents"><table summary="OIDs Used in SNMP Monitoring For Policy Evaluation" border="0"><colgroup><col width="40%"><col width="40%"><col width="20%"></colgroup><thead><tr><th>OID</th><th>Description</th><th>Syntax</th></tr></thead><tbody><tr><td>
+        <p>
+         <code class="literal">enterprises.36733.1.2.2.1.1.1</code>
+        </p>
+       </td><td>
+        <p>
+         Cumulative number of policy evaluations for specific resources (self)
+        </p>
+       </td><td>
+        <p>
+         <code class="literal">Counter64</code>
+        </p>
+       </td></tr><tr><td>
+        <p>
+         <code class="literal">enterprises.36733.1.2.2.1.1.2</code>
+        </p>
+       </td><td>
+        <p>
+         Average rate of policy evaluations for specific resources (self)
+        </p>
+       </td><td>
+        <p>
+         <code class="literal">Counter64</code>
+        </p>
+       </td></tr><tr><td>
+        <p>
+         <code class="literal">enterprises.36733.1.2.2.1.1.3</code>
+        </p>
+       </td><td>
+        <p>
+         Minimum rate of policy evaluations for specific resources (self)
+        </p>
+       </td><td>
+        <p>
+         <code class="literal">Counter64</code>
+        </p>
+       </td></tr><tr><td>
+        <p>
+         <code class="literal">enterprises.36733.1.2.2.1.1.4</code>
+        </p>
+       </td><td>
+        <p>
+         Maximum rate of policy evaluations for specific resources (self)
+        </p>
+       </td><td>
+        <p>
+         <code class="literal">Counter64</code>
+        </p>
+       </td></tr><tr><td>
+        <p>
+         <code class="literal">enterprises.36733.1.2.2.1.2.1</code>
+        </p>
+       </td><td>
+        <p>
+         Cumulative number of policy evaluations for a tree of resources (subtree)
+        </p>
+       </td><td>
+        <p>
+         <code class="literal">Counter64</code>
+        </p>
+       </td></tr><tr><td>
+        <p>
+         <code class="literal">enterprises.36733.1.2.2.1.2.2</code>
+        </p>
+       </td><td>
+        <p>
+         Average rate of policy evaluations for a tree of resources (subtree)
+        </p>
+       </td><td>
+        <p>
+         <code class="literal">Counter64</code>
+        </p>
+       </td></tr><tr><td>
+        <p>
+         <code class="literal">enterprises.36733.1.2.2.1.2.3</code>
+        </p>
+       </td><td>
+        <p>
+         Minimum rate of policy evaluations for a tree of resources (subtree)
+        </p>
+       </td><td>
+        <p>
+         <code class="literal">Counter64</code>
+        </p>
+       </td></tr><tr><td>
+        <p>
+         <code class="literal">enterprises.36733.1.2.2.1.2.4</code>
+        </p>
+       </td><td>
+        <p>
+         Maximum rate of policy evaluations for a tree of resources (subtree)
+        </p>
+       </td><td>
+        <p>
+         <code class="literal">Counter64</code>
+        </p>
+       </td></tr><tr><td>
+        <p>
+         <code class="literal">enterprises.36733.1.2.2.1.2.1.1</code>
+        </p>
+       </td><td>
+        <p>
+         Average length of time to evaluate a policy for a specific resource (self)
+        </p>
+       </td><td>
+        <p>
+         <code class="literal">Counter64</code>
+        </p>
+       </td></tr><tr><td>
+        <p>
+         <code class="literal">enterprises.36733.1.2.2.1.2.1.2</code>
+        </p>
+       </td><td>
+        <p>
+         Slowest evaluation time for a specific resource (self)
+        </p>
+       </td><td>
+        <p>
+         <code class="literal">SnmpAdminString</code>
+        </p>
+       </td></tr><tr><td>
+        <p>
+         <code class="literal">enterprises.36733.1.2.2.1.2.2.1</code>
+        </p>
+       </td><td>
+        <p>
+         Average length of time to evaluate a policy for a tree of resources (subtree)
+        </p>
+       </td><td>
+        <p>
+         <code class="literal">Counter64</code>
+        </p>
+       </td></tr><tr><td>
+        <p>
+         <code class="literal">enterprises.36733.1.2.2.1.2.2.2</code>
+        </p>
+       </td><td>
+        <p>
+         Slowest evaluation time for a tree of resources (subtree)
+        </p>
+       </td><td>
+        <p>
+         <code class="literal">SnmpAdminString</code>
+        </p>
+       </td></tr><tr><td>
+        <p>
+         <code class="literal">enterprises.36733.1.2.2.1.3.1</code>
+        </p>
+       </td><td>
+        <p>
+         Slowest individual policy evaluation time overall
+        </p>
+       </td><td>
+        <p>
+         <code class="literal">SnmpAdminString</code>
+        </p>
+       </td></tr></tbody></table></div></div><br class="table-break"></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="snmp-sessions"></a>20.2.3.&nbsp;SNMP Monitoring For Sessions</h3></div></div></div><a class="indexterm" name="d0e32611"></a><p>
+    You can monitor session statistics over SNMP.
+    OpenAM records statistics for up to
+    a configurable number of recent sessions.
+    (You can configure the number in OpenAM Console
+    under Configuration &gt; System &gt; Monitoring.
+    For details, see the system configuration reference section,
+    <a href="../../reference/index/chap-config-ref.html#system-monitoring" class="link"><em class="citetitle">Monitoring</em></a>.)
+   </p><p>
+    Interface Stability:
+    <a href="../../admin-guide/index/appendix-interface-stability.html#interface-stability" class="link">Evolving</a>
+   </p><p>
+    As described in <a class="xref" href="chap-monitoring.html#cts-monitor-commands" title="20.2.1.&nbsp;CTS SNMP Monitoring">Section&nbsp;20.2.1, &#8220;CTS SNMP Monitoring&#8221;</a>,
+    SNMP uses OIDs defined in a Management Information Base (MIB) file
+    that specifies the statistics OpenAM keeps for policy evaluation operations,
+    <a class="link" href="https://svn.forgerock.org/openam/trunk/openam/openam-schema/openam-mib-schema/src/main/resources/mib/FORGEROCK-OPENAM-SESSION.mib" target="_blank"><code class="filename">FORGEROCK-OPENAM-SESSION.mib</code></a>.
+    Adapt the examples in <a class="xref" href="chap-monitoring.html#cts-monitor-commands" title="20.2.1.&nbsp;CTS SNMP Monitoring">Section&nbsp;20.2.1, &#8220;CTS SNMP Monitoring&#8221;</a>
+    to read monitoring statistics about sessions on the command line.
+   </p><p>
+    When monitoring is active, OpenAM records statistics about
+    both the numbers of internal, remote, and CTS sessions,
+    and also the times taken to process sessions.
+   </p><p>
+    The statistics are all read-only.
+    The base OID for session statistics is
+    <code class="literal">enterprises.36733.1.2.1</code>.
+    Times are expressed in nanoseconds rather than milliseconds,
+    as many operations take less than one millisecond.
+    The following table describes the values that you can read.
+   </p><div class="table"><a name="snmp-sessions-oids"></a><div class="table-title">Table&nbsp;20.2.&nbsp;OIDs Used in SNMP Monitoring For Sessions</div><div class="table-contents"><table summary="OIDs Used in SNMP Monitoring For Sessions" border="0"><colgroup><col width="40%"><col width="40%"><col width="20%"></colgroup><thead><tr><th>OID</th><th>Description</th><th>Syntax</th></tr></thead><tbody><tr><td>
+        <p>
+         <code class="literal">enterprises.36733.1.2.1.1.1</code>
+        </p>
+       </td><td>
+        <p>
+         Total number of current internal sessions
+        </p>
+       </td><td>
+        <p>
+         <code class="literal">Counter64</code>
+        </p>
+       </td></tr><tr><td>
+        <p>
+         <code class="literal">enterprises.36733.1.2.1.1.2</code>
+        </p>
+       </td><td>
+        <p>
+         Average time it takes to refresh an internal session
+        </p>
+       </td><td>
+        <p>
+         <code class="literal">Counter64</code>
+        </p>
+       </td></tr><tr><td>
+        <p>
+         <code class="literal">enterprises.36733.1.2.1.1.3</code>
+        </p>
+       </td><td>
+        <p>
+         Average time it takes to logout an internal session
+        </p>
+       </td><td>
+        <p>
+         <code class="literal">Counter64</code>
+        </p>
+       </td></tr><tr><td>
+        <p>
+         <code class="literal">enterprises.36733.1.2.1.1.4</code>
+        </p>
+       </td><td>
+        <p>
+         Average time it takes to destroy an internal session
+        </p>
+       </td><td>
+        <p>
+         <code class="literal">Counter64</code>
+        </p>
+       </td></tr><tr><td>
+        <p>
+         <code class="literal">enterprises.36733.1.2.1.1.5</code>
+        </p>
+       </td><td>
+        <p>
+         Average time it takes to set a property on an internal session
+        </p>
+       </td><td>
+        <p>
+         <code class="literal">Counter64</code>
+        </p>
+       </td></tr><tr><td>
+        <p>
+         <code class="literal">enterprises.36733.1.2.1.2.1</code>
+        </p>
+       </td><td>
+        <p>
+         Total number of current remote sessions
+        </p>
+       </td><td>
+        <p>
+         <code class="literal">Counter64</code>
+        </p>
+       </td></tr><tr><td>
+        <p>
+         <code class="literal">enterprises.36733.1.2.1.2.2</code>
+        </p>
+       </td><td>
+        <p>
+         Average time it takes to refresh a remote session
+        </p>
+       </td><td>
+        <p>
+         <code class="literal">Counter64</code>
+        </p>
+       </td></tr><tr><td>
+        <p>
+         <code class="literal">enterprises.36733.1.2.1.2.3</code>
+        </p>
+       </td><td>
+        <p>
+         Average time it takes to logout a remote session
+        </p>
+       </td><td>
+        <p>
+         <code class="literal">Counter64</code>
+        </p>
+       </td></tr><tr><td>
+        <p>
+         <code class="literal">enterprises.36733.1.2.1.2.4</code>
+        </p>
+       </td><td>
+        <p>
+         Average time it takes to destroy a remote session
+        </p>
+       </td><td>
+        <p>
+         <code class="literal">Counter64</code>
+        </p>
+       </td></tr><tr><td>
+        <p>
+         <code class="literal">enterprises.36733.1.2.1.2.5</code>
+        </p>
+       </td><td>
+        <p>
+         Average time it takes to set a property on a remote session
+        </p>
+       </td><td>
+        <p>
+         <code class="literal">Counter64</code>
+        </p>
+       </td></tr><tr><td>
+        <p>
+         <code class="literal">enterprises.36733.1.2.1.3.1</code>
+        </p>
+       </td><td>
+        <p>
+         Total number of sessions currently in the Core Token Service (CTS)
+        </p>
+       </td><td>
+        <p>
+         <code class="literal">Counter64</code>
+        </p>
+       </td></tr><tr><td>
+        <p>
+         <code class="literal">enterprises.36733.1.2.1.3.2</code>
+        </p>
+       </td><td>
+        <p>
+         Average time it takes to refresh a CTS session
+        </p>
+       </td><td>
+        <p>
+         <code class="literal">Counter64</code>
+        </p>
+       </td></tr><tr><td>
+        <p>
+         <code class="literal">enterprises.36733.1.2.1.3.3</code>
+        </p>
+       </td><td>
+        <p>
+         Average time it takes to logout a CTS session
+        </p>
+       </td><td>
+        <p>
+         <code class="literal">Counter64</code>
+        </p>
+       </td></tr><tr><td>
+        <p>
+         <code class="literal">enterprises.36733.1.2.1.3.4</code>
+        </p>
+       </td><td>
+        <p>
+         Average time it takes to destroy a CTS session
+        </p>
+       </td><td>
+        <p>
+         <code class="literal">Counter64</code>
+        </p>
+       </td></tr><tr><td>
+        <p>
+         <code class="literal">enterprises.36733.1.2.1.3.5</code>
+        </p>
+       </td><td>
+        <p>
+         Average time it takes to set a property on a CTS session
+        </p>
+       </td><td>
+        <p>
+         <code class="literal">Counter64</code>
+        </p>
+       </td></tr></tbody></table></div></div><br class="table-break"></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="is-openam-alive"></a>20.3.&nbsp;Is OpenAM Running?</h2></div></div></div><a class="indexterm" name="d0e32993"></a><p>You can check over HTTP whether OpenAM is up, using
+  <code class="filename">isAlive.jsp</code>. Point your application to the file
+  under the OpenAM URL, such as
+  <code class="literal">http://openam.example.com:8080/openam/isAlive.jsp</code>.</p><p>If you get a success code (with <code class="literal">Server is ALIVE:</code> in
+  the body of the page returned), then OpenAM is in operation.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="debug-logging"></a>20.4.&nbsp;Debug Logging</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-monitoring.html#log-debug-levels">20.4.1. Setting Debug Logging Levels</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#log-debug-single-file">20.4.2. Debug Logging to a Single File</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#log-debug-selective-capture">20.4.3. Debug Logging by Service</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#log-rotate-debug">20.4.4. Rotating Debug Logs</a></span></dt></dl></div><a class="indexterm" name="d0e33014"></a><p>
+   OpenAM services capture a variety of information in debug logs.
+   Unlike audit log records, debug log records are unstructured.
+   Debug logs contain a variety of types of information that is useful
+   when troubleshooting OpenAM, including stack traces.
+   The level of debug log record output is configurable.
+   Debug log records are always written to flat files.
+  </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="log-debug-levels"></a>20.4.1.&nbsp;Setting Debug Logging Levels</h3></div></div></div><a class="indexterm" name="d0e33024"></a><p>
+    To adjust the debug level while OpenAM is running, login to the OpenAM
+    console as OpenAM administrator, and browse to Configuration &gt; Servers
+    and Sites &gt; <em class="replaceable"><code>Server Name</code></em> &gt; General, and then
+    scroll down to Debugging. The default level for debug logging is Error.
+    This level is appropriate for normal production operations, in which case
+    no debug log messages are expected.
+   </p><p>
+    Setting the debug log level to Warning increases the volume of messages.
+    Setting the debug log level to Message dumps detailed trace messages. Unless
+    told to do so by qualified support personnel, do not use Warning and Message
+    levels in production.
+   </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="log-debug-single-file"></a>20.4.2.&nbsp;Debug Logging to a Single File</h3></div></div></div><a class="indexterm" name="d0e33039"></a><p>
+    During development, you might find it useful to log all debug messages
+    to a single file. In order to do so, set Merge Debug Files to
+    <code class="literal">on</code>.
+   </p><p>
+    After changing this setting, restart OpenAM or the container in which
+    it runs for the change to take effect.
+   </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="log-debug-selective-capture"></a>20.4.3.&nbsp;Debug Logging by Service</h3></div></div></div><a class="indexterm" name="d0e33054"></a><p>OpenAM lets you capture debug log messages selectively for a specific
+   service. This can be useful when you must turn on debugging in a production
+   system where you want to avoid excessive logging, but must gather messages
+   when you reproduce a problem.</p><div class="orderedlist"><p>Perform these steps to capture debug messages for a specific
+    service.</p><ol class="orderedlist" type="1"><li class="listitem"><p>Login to OpenAM console as administrator,
+     <code class="literal">amadmin</code>.</p></li><li class="listitem"><p>Browse to <code class="filename">Debug.jsp</code>, for example
+     <code class="literal">http://openam.example.com:8080/openam/Debug.jsp</code>.</p><p>No links to this page are provided in the console.</p></li><li class="listitem"><p>Select the service to debug and also the level required given the
+     hints provided in the <code class="filename">Debug.jsp</code> page.</p><p>The change takes effect immediately.</p></li><li class="listitem"><p>Promptly reproduce the problem you are investigating.</p></li><li class="listitem"><p>After reproducing the problem, immediately return to the
+     <code class="filename">Debug.jsp</code> page, and revert to normal log levels
+     to avoid filling up the disk where debug logs are stored.</p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="log-rotate-debug"></a>20.4.4.&nbsp;Rotating Debug Logs</h3></div></div></div><a class="indexterm" name="d0e33101"></a><p>By default OpenAM does not rotate debug logs. To rotate debug logs,
+   edit <code class="filename">WEB-INF/classes/debugconfig.properties</code> where
+   OpenAM is deployed.</p><div class="variablelist"><p>The <code class="filename">debugconfig.properties</code> file includes
+    the following properties.</p><dl class="variablelist"><dt><span class="term"><code class="literal">org.forgerock.openam.debug.prefix</code></span></dt><dd><p>This property specifies the debug log file prefix applied when
+      OpenAM rotates a debug log file. The property has no default. It takes
+      a string as the property value.</p></dd><dt><span class="term"><code class="literal">org.forgerock.openam.debug.suffix</code></span></dt><dd><p>This property specifies the debug log file suffix applied when
+      OpenAM rotates a debug log file. The property takes a
+      <code class="literal">SimpleDateFormat</code> string. The default is
+      <code class="literal">-MM.dd.yyyy-kk.mm</code>.</p></dd><dt><span class="term"><code class="literal">org.forgerock.openam.debug.rotation</code></span></dt><dd><p>This property specifies an interval in minutes between debug
+      log rotations. Set this to a value greater than zero to enable debug
+      log rotation.</p></dd></dl></div><p>After you edit the <code class="filename">debugconfig.properties</code> file,
+   you must restart OpenAM or the web container where it runs for the changes
+   to take effect.</p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="session-mgmt"></a>20.5.&nbsp;Session Management</h2></div></div></div><a class="indexterm" name="d0e33152"></a><p>OpenAM console lets the administrator view and manage current
+  user sessions under the Sessions tab page.</p><div class="mediaobject" align="center"><a name="figure-session-management"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/session-management.png" align="middle" height="360" alt="Session management tab page"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-session-management.html" target="longdesc">D</a>]</span></div></div><p>To end a user session manually, select the user's session, and then
+  click the Invalidate Session button. As a result, the user has to
+  authenticate again.</p><div class="note"><h3 class="title">Note</h3><p>Deleting a user does not automatically remove any of the user's sessions.
+      After deleting a user, check for any sessions for the user and remove them under the Console's Sessions tab.
+      </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-certs-keystores.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-tuning.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;19.&nbsp;Managing Certificates&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;21.&nbsp;Tuning OpenAM</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

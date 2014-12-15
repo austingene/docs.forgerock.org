@@ -1,0 +1,827 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;7.&nbsp;Service Endpoints</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenAM Reference"><link rel="up" href="index.html" title="OpenAM Reference"><link rel="prev" href="chap-standards.html" title="Chapter&nbsp;6.&nbsp;Supported Standards"><link rel="next" href="chap-xui-parameters.html" title="Chapter&nbsp;8.&nbsp;XUI Configuration Parameters"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;7.&nbsp;Service Endpoints</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-standards.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-xui-parameters.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-endpoints"></a>Chapter&nbsp;7.&nbsp;Service Endpoints</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-endpoints.html#jsp-endpoints">7.1. JSP Endpoints</a></span></dt><dt><span class="section"><a href="chap-endpoints.html#maindirectory-jsp-endpoints">7.2. Main Directory JSP Endpoints</a></span></dt><dt><span class="section"><a href="chap-endpoints.html#ui-jsp-endpoints">7.3. User Interface JSP Endpoints</a></span></dt><dt><span class="section"><a href="chap-endpoints.html#default-authentication-configuration-jsp-endpoints">7.4. Default Authentication JSP Endpoints</a></span></dt><dt><span class="section"><a href="chap-endpoints.html#default-federation-jsp-endpoints">7.5. Default Federation JSP Endpoints</a></span></dt><dt><span class="section"><a href="chap-endpoints.html#console-agent-configuration-jsp-endpoints">7.6. Console Agent Configuration JSP Endpoints</a></span></dt><dt><span class="section"><a href="chap-endpoints.html#console-ajax-jsp-endpoints">7.7. Console Ajax JSP Endpoints</a></span></dt><dt><span class="section"><a href="chap-endpoints.html#console-authentication-jsp-endpoints">7.8. Console Authentication JSP Endpoints</a></span></dt><dt><span class="section"><a href="chap-endpoints.html#console-base-jsp-endpoints">7.9. Base Console JSP Endpoints</a></span></dt><dt><span class="section"><a href="chap-endpoints.html#console-delegation-jsp-endpoints">7.10. Delegation Console JSP Endpoints</a></span></dt><dt><span class="section"><a href="chap-endpoints.html#console-federation-jsp-endpoints">7.11. Federation Console JSP Endpoints</a></span></dt><dt><span class="section"><a href="chap-endpoints.html#console-idm-jsp-endpoints">7.12. IDM Console JSP Endpoints</a></span></dt><dt><span class="section"><a href="chap-endpoints.html#console-realm-jsp-endpoints">7.13. Console Realm JSP Endpoints</a></span></dt><dt><span class="section"><a href="chap-endpoints.html#console-service-jsp-endpoints">7.14. Service Console JSP Endpoints</a></span></dt><dt><span class="section"><a href="chap-endpoints.html#console-session-jsp-endpoints">7.15. Session Console JSP Endpoints</a></span></dt><dt><span class="section"><a href="chap-endpoints.html#console-task-jsp-endpoints">7.16. Task Console JSP Endpoints</a></span></dt><dt><span class="section"><a href="chap-endpoints.html#console-user-jsp-endpoints">7.17. User Console JSP Endpoints</a></span></dt><dt><span class="section"><a href="chap-endpoints.html#console-web-services-jsp-endpoints">7.18. Web Services Console JSP Endpoints</a></span></dt><dt><span class="section"><a href="chap-endpoints.html#oauth-jsp-endpoints">7.19. OAuth JSP Endpoints</a></span></dt><dt><span class="section"><a href="chap-endpoints.html#password-jsp-endpoints">7.20. Password JSP Endpoints</a></span></dt><dt><span class="section"><a href="chap-endpoints.html#saml2-jsp-endpoints">7.21. SAML2 JSP Endpoints</a></span></dt><dt><span class="section"><a href="chap-endpoints.html#wsfederation-jsp-endpoints">7.22. WS Federation JSP Endpoints</a></span></dt><dt><span class="section"><a href="chap-endpoints.html#web-inf-endpoints">7.23. WEB-INF Endpoints</a></span></dt><dt><span class="section"><a href="chap-endpoints.html#json-rest-endpoints">7.24. JSON REST Endpoints</a></span></dt><dt><span class="section"><a href="chap-endpoints.html#well-known-endpoints">7.25. Well-Known Endpoints</a></span></dt></dl></div><a class="indexterm" name="d0e42892"></a><p>A service endpoint is a URL which serves as the access port for a web
+  service. It may be a standard HTML-based web page, or it may be a *.jsp page.</p><p>As every service endpoint is a potential security issue, it may be appropriate
+  to restrict access to some of those endpoints that you do not use. But be careful.
+  Some endpoints, such as <code class="literal">isAlive.jsp</code> in the main
+  /path/to/tomcat/webapps/openam directory, are essential and should not be
+  blocked or changed.</p><p>Given the large number of available endpoints, this chapter has been
+  organized primarily by subdirectory.
+  Most of the directories were created when the OpenAM war archive was copied to
+  the appropriate web application container, such as the webapps/ subdirectory.</p><p>OpenAM may expose several hundred service endpoints, listed in this chapter.
+  Each endpoint shown is listed relative to the deployment URL.
+  For example, if you have deployed OpenAM at
+  <code class="literal">https://openam.example.com:8443/openam/</code>,
+  the full URL to the <code class="literal">isAlive.jsp</code> endpoint is
+  <code class="literal">https://openam.example.com:8443/openam/isAlive.jsp</code>.</p><p>OpenAM includes two types of endpoints. One is based on URL patterns,
+  shown with the <code class="literal">url-pattern</code> tag. You can find these patterns
+  in the <code class="filename">web.xml</code> file, in the
+  <code class="filename">/path/to/tomcat/webapps/openam/WEB-INF</code> directory.
+  The other type is based on *.jsp pages, starting in the main
+  <code class="filename">/path/to/tomcat/webapps/openam</code> directory, and also
+  in many associated subdirectories. If you copied or created a WAR archive to a
+  name other than <code class="literal">openam.war</code>, as described in the installation
+  guide, substitute for the second <code class="literal">openam</code> accordingly.</p><p>Some of these endpoints can be applied directly to a URL when you've
+  connected to the OpenAM server; for example, if you've configured OpenAM on
+  <code class="literal">http://idp.example.com:8080/openam</code>, you can log in and
+  review debug options by navigating to
+  <code class="literal">http://idp.example.com:8080/openam/Debug.jsp</code>.</p><p>Other endpoints can only be used when called by some option in the OpenAM
+  console. For example, while the <code class="literal">AgentAdd.jsp</code> endpoint exists
+  in the console/agentconfig subdirectory, you would get an error by navigating
+  directly to a URL such as
+  <code class="literal">http://sp.example.com:8080/openam/console/agentconfig/AgentAdd.jsp</code>.
+  For that particular endpoint, you'll have click through the options required
+  to add an agent. (Access Control &gt; <em class="replaceable"><code>realm name</code></em> &gt;
+  Agents &gt; Agent &gt; New)</p><p>In general, this chapter does not include dynamic endpoints, such as those
+  that may include security tokens. The endpoints described in this chapter are
+  based on files included in the installation of an OpenAM server.</p><p>There have been two security advisories related to OpenAM endpoints:
+  <a class="link" href="http://www.forgerock.org/security_advisory1.html" target="_blank">OpenAM
+         Security Advisory #201203</a> and
+        <a class="link" href="http://www.forgerock.org/security_advisory2.html" target="_blank">OpenAM
+         Security Advisory #201204</a>
+ </p><div class="itemizedlist"><p>Several options are available for endpoints at risk. Recommendations
+   from the noted security advisories include the following:</p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Filter requests to prevent or restrict access to vulnerable endpoints
+    with a reverse proxy or equivalent hardware device. Such options can be
+    configured to limit access by IP address or fully-qualified domain name.
+   </p></li><li class="listitem"><p>Use a patch. If available, download links should be listed in the
+    security advisory. The patch may be limited to one or more endpoint files.</p></li><li class="listitem"><p>Remove access from the configuration. If a problematic endpoint is
+    configured in the web.xml file of the aforementioned WEB-INF subdirectory,
+    you can remove the section that points to that endpoint.</p></li><li class="listitem"><p>Remove the endpoint file from the configuration. Some endpoint files,
+    such as <code class="literal">proxy.jsp</code> or <code class="literal">ssoadm.jsp</code>,
+    are not essential to the basic operation of OpenAM.</p></li></ul></div><p>Of course, you can take additional steps to help secure your OpenAM
+  deployment. For more information, see the the chapter on
+  <a href="../../admin-guide/index/chap-securing.html" class="link">
+   <em class="citetitle">Securing OpenAM in the Administration Guide</em></a>.
+ </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="jsp-endpoints"></a>7.1.&nbsp;JSP Endpoints</h2></div></div></div><a class="indexterm" name="d0e43000"></a><p>The OpenAM WAR archive includes *.jsp files in a number of different
+   categories. Many are associated with the applicable subdirectory, such as
+   <code class="literal">console/realm</code>.
+   The following sections will examine each *.jsp file, divided by subdirectories.</p><p>In some highlighted cases, the noted *.jsp file appears in the code for
+   one or more .java files. If you remove the noted *.jsp file from the container,
+   there is a risk that will break some functionality within OpenAM. In other
+   cases, such as any files related to the GUI installation wizard,
+   the applicable *.jsp file can be safely removed from a production system.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="maindirectory-jsp-endpoints"></a>7.2.&nbsp;Main Directory JSP Endpoints</h2></div></div></div><a class="indexterm" name="d0e43016"></a><p>If you're working in Tomcat, you'll find the endpoints in this subsection
+   in the <code class="filename">/path/to/tomcat/webapps/openam</code> directory.
+   For other web application containers, you may find the endpoints in a
+   different <code class="literal">openam</code> subdirectory.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">Debug.jsp</code></span></dt><dd><p>Supports debug logging by service. For more information, see the
+      <em class="citetitle">Administration Guide</em>
+       chapter on <a href="../../admin-guide/index/chap-monitoring.html#log-debug-selective-capture" class="link">
+      <em class="citetitle">Debug Logging by Service.</em></a>
+     </p></dd><dt><span class="term"><code class="literal">encode.jsp</code></span></dt><dd><p>Enables access to a page that encodes text passwords. The algorithm
+      is based on <code class="literal">PBEWithMD5AndDES</code>, password-based encryption
+      (PBE) using the MD5 message-digest algorithm, configured with the data encryption
+      standard (DES)</p></dd><dt><span class="term"><code class="literal">getServerInfo.jsp</code></span></dt><dd><p>Supports requests for server information. As <code class="literal">getServerInfo.jsp</code>
+     is encoded in some .java files, you should retain <code class="literal">getServerInfo.jsp</code>
+     in your deployment.
+    </p></dd><dt><span class="term"><code class="literal">isAlive.jsp</code></span></dt><dd><p>Verifies the current status of the OpenAM service; the "Server is ALIVE:"
+      message also verifies activity on OpenAM systems behind load balancers.
+      This can be a useful tool in a production environment.
+     </p></dd><dt><span class="term"><code class="literal">nowritewarning.jsp</code></span></dt><dd><p>Displays a permission error message, used by the GUI-based installation
+      wizard.</p></dd><dt><span class="term"><code class="literal">proxyidpfinder.jsp</code></span></dt><dd><p>Supports access to a remote identity provider, through the federation
+      broker.
+     </p></dd><dt><span class="term"><code class="literal">services.jsp</code></span></dt><dd><p>Lists active services within OpenAM. The details shown on this page
+      can be used with the <code class="literal">ssoadm</code> command to create a second
+      OpenAM server with matching services. Be aware, the <code class="literal">amadmin</code>
+      administrative user is hard-coded into this file. If you change the identity
+      of the administrative user to something other than <code class="literal">amadmin</code>,
+      that user won't have access to <code class="literal">services.jsp</code>.</p></dd><dt><span class="term"><code class="literal">showServerConfig.jsp</code></span></dt><dd><p>Specifies configuration information for the system, including the URL,
+      the OS, the Java VM, the configuration directory, and more.</p></dd><dt><span class="term"><code class="literal">ssoadm.jsp</code></span></dt><dd><p>Supports GUI-based access to the options associated with the
+      <code class="literal">ssoadm</code> command.
+      The <code class="literal">ssoadm.jsp</code> file is disabled by default.
+      Instructions for enabling this feature are available from
+      the <em class="citetitle">Administration Guide</em> entry on
+      <a href="../../admin-guide/index/chap-admin-tools.html#openam-ssoadm-jsp-overview" class="link">
+      <em class="citetitle">OpenAM ssoadm.jsp.</em></a></p></dd><dt><span class="term"><code class="literal">validateWait.jsp</code></span></dt><dd><p>May be called by the <code class="literal">validator.jsp</code> or
+      <code class="literal">validatorMain.jsp</code> files, to display progress in
+      verifying the status of federation.
+     </p></dd><dt><span class="term"><code class="literal">validator.jsp</code></span></dt><dd><p>Refers to the ValidateSAML2 function to identify the realm, IdP and SP
+      for the federation.</p></dd><dt><span class="term"><code class="literal">validatorAuthFail.jsp</code></span></dt><dd><p>Starts an "Authentication Failed" message.</p></dd><dt><span class="term"><code class="literal">validatorFooter.jsp</code></span></dt><dd><p>Incorporates a "Back to Login" button in <code class="literal">validatorMain.jsp</code>.
+     </p></dd><dt><span class="term"><code class="literal">validatorMain.jsp</code></span></dt><dd><p>Sets up a federation connectivity test. If you've set up a Federation
+      Circle of Trust, this file is accessible from the "Test Federation
+      Connectivity" option in the main OpenAM console.</p></dd><dt><span class="term"><code class="literal">validatorRpt.jsp</code></span></dt><dd><p>Opens a "Connectivity Test Results" window, specifying the status of a
+      federation circle of trust.
+      Tests relate to IdP authentication, SP authentication, account linking,
+      single log out, single sign on, and account unlinking.</p></dd><dt><span class="term"><code class="literal">validatorStatus.jsp</code></span></dt><dd><p>Adds information to <code class="literal">validator.jsp</code> and
+     <code class="literal">validatorMain.jsp</code> with federation status information as
+     it relates to the currently configured circle of trust.</p></dd></dl></div><p>All of the <code class="literal">validat*.jsp</code> files near the end of this list
+   relate to testing and verifying federation. It requires at least one identity
+   provider (IDP) and one service provider (SP). At least one of these components
+   must be configured remotely to set up a valid Circle of Trust (COT).
+   If federation does not apply to your configuration, the <code class="literal">validat*.jsp</code>
+   files are not essential to your configuration.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ui-jsp-endpoints"></a>7.3.&nbsp;User Interface JSP Endpoints</h2></div></div></div><a class="indexterm" name="d0e43214"></a><p>The endpoints in this section can be found in several
+   <code class="filename">com_sun_web_ui/jsp/</code> subdirectories. These endpoints
+   appear to relate to JavaHelp; per OPENAM-806, this functionality was removed
+   from OpenAM, starting with version 9.5.3.
+   Thus, the endpoints in this section, with one possible exception
+   (<code class="literal">Masthead.jsp</code> in the <code class="literal">com_sun_web_ui/jsp/version</code>
+   subdirectory) may no longer serve any purpose.
+  </p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">DateTimeWindow.jsp</code></span></dt><dd><p>The only endpoint in the com_sun_web_ui/jsp/datetime subdirectory.
+      May be a legacy endpoint; it calls a DateTimeWindowViewBean class;
+      the corresponding .java file does not exist in the current trunk.
+     </p></dd><dt><span class="term"><code class="literal">Help.jsp</code></span></dt><dd><p>One of two endpoints in the com_sun_web_ui/jsp/help subdirectory.
+       May be a legacy endpoint; it calls a HelpViewBean class; the
+       corresponding .java file does not exist in the current trunk.
+      </p></dd><dt><span class="term"><code class="literal">Masthead.jsp</code></span></dt><dd><p>One of two endpoints in the com_sun_web_ui/jsp/help subdirectory.
+      Also exists in a slightly different format in the com_sun_web_ui/jsp/help2
+      subdirectory, as well as the com_sun_web_ui/jsp/version subdirectory.
+      May be a legacy endpoint; it calls a MastheadViewBean class; the
+      Masthead.jsp file and the corresponding MastheadViewBean.java were last
+      changed in 2004. (However, the Masthead.jsp file in the
+      com_sun_web_ui/jsp/version subdirectory includes a VersionViewBean.java
+      file that is used by the Version.jsp endpoint used in the console/base
+      subdirectory.
+     </p></dd><dt><span class="term"><code class="literal">ButtonNav.jsp</code></span></dt><dd><p>Specifies an endpoint in the com_sun_web_ui/jsp/help2 directory.
+      Points to a ButtonNavViewBean class; the associated .java file no longer
+      exists in the trunk.
+     </p></dd><dt><span class="term"><code class="literal">Help2Ie.jsp</code></span></dt><dd><p>Specifies an endpoint in the com_sun_web_ui/jsp/help2 directory.
+      Points to a Help2ViewBean class; the associated .java file no longer exists
+      in the trunk.
+     </p></dd><dt><span class="term"><code class="literal">Help2Nav4.jsp</code></span></dt><dd><p>Specifies an endpoint in the com_sun_web_ui/jsp/help2 directory.
+      Points to a Help2ViewBean class; the associated .java file no longer exists
+      in the trunk.
+     </p></dd><dt><span class="term"><code class="literal">Help2Nav6up.jsp</code></span></dt><dd><p>Specifies an endpoint in the com_sun_web_ui/jsp/help2 directory.
+      Points to a Help2ViewBean class; the associated .java file no longer exists
+      in the trunk.
+     </p></dd><dt><span class="term"><code class="literal">Navigator.jsp</code></span></dt><dd><p>Specifies an endpoint in the com_sun_web_ui/jsp/help2 directory.
+      Points to a NavigatorViewBean class; the associated .java file no longer
+      exists in the trunk.
+     </p></dd><dt><span class="term"><code class="literal">AdvancedSort.jsp</code></span></dt><dd><p>Specifies an endpoint in the com_sun_web_ui/jsp/table directory.</p></dd><dt><span class="term"><code class="literal">Table.jsp</code></span></dt><dd><p>Specifies an endpoint in the com_sun_web_ui/jsp/table directory.
+      Points to a TableViewBean class; the associated .java file no longer exists
+      in the trunk.</p></dd><dt><span class="term"><code class="literal">WizardWindow.jsp</code></span></dt><dd><p>Points to an endpoint in the com_sun_web_ui/jsp/wizard subdirectory.
+      Points to a WizardWindowViewBean class, which appears to be unused by any
+      other .jsp file.
+     </p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="default-authentication-configuration-jsp-endpoints"></a>7.4.&nbsp;Default Authentication JSP Endpoints</h2></div></div></div><a class="indexterm" name="d0e43314"></a><p>Many of the .jsp files in this category can be modified to help you modify
+   the messages that appear to users in the OpenAM console. Standard messages
+   for most of these endpoints can be found in the <code class="literal">amAuth.properties</code> and
+   <code class="literal">amAuthUI.properties</code> files.
+   You'll find the endpoints in this subsection in the <code class="literal">config/auth/default</code>
+   subdirectory.
+  </p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">account_expired.jsp</code></span></dt><dd><p>Specifies an error page for account expiration. The message
+       displayed to the user can be modified in the <code class="literal">amAuthUI.properties</code>
+       file.</p></dd><dt><span class="term"><code class="literal">authException.jsp</code></span></dt><dd><p>Option to Exception.jsp; called if there is an existing resource
+       bundle, as specified in <code class="literal">AuthExceptionViewBean.java</code>.
+      </p></dd><dt><span class="term"><code class="literal">auth_error_template.jsp</code></span></dt><dd><p>Specifies an error page for authentication errors. The message
+       displayed to the user can be modified in the <code class="literal">amAuthUI.properties</code>
+       file.
+      </p></dd><dt><span class="term"><code class="literal">disclaimer.jsp</code></span></dt><dd><p>Associated with the self-registration module, which can be configured
+       in the OpenAM Console, under Access Control &gt; Realm Name &gt; Authentication
+       &gt; Module Instances.
+       The default disclaimer is associated with the <code class="literal">disclaimer.notice</code>
+       parameter, defined in the <code class="literal">amAuthUI.properties</code> file.</p></dd><dt><span class="term"><code class="literal">disclaimerDeclined.jsp</code></span></dt><dd><p>Associated with the self-registration module, which can be configured in the OpenAM Console, under
+                    Access Control &gt; Realm Name &gt; Authentication &gt; Module Instances. The default disclaimer_denied message is
+                    associated with the disclaimer.declined parameter, defined in the amAuthUI.properties file.</p></dd><dt><span class="term"><code class="literal">Exception.jsp</code></span></dt><dd><p>Includes the following error message: "Authentication Service is not initialized." Cited by several
+                    other .java files in the code, so it should not be removed in a secure deployment..</p></dd><dt><span class="term"><code class="literal">invalidAuthlevel.jsp</code></span></dt><dd><p>Used to specify an issue with the authentication level. The default invalidauthlevel and contactadmin
+                    messages can be redefined in the amAuthUI.properties file.</p></dd><dt><span class="term"><code class="literal">invalidPCookieUserID.jsp</code></span></dt><dd><p>Notes a problem with a specified user name for a cookie, which presumably does not exist in the
+                    relevant domain. The default cookie.notpersistent and contactadmin messages can be modified in the
+                    amAuthUI.properties file.</p></dd><dt><span class="term"><code class="literal">invalid_domain.jsp</code></span></dt><dd><p>Displays a "No such Organization found" message when a domain is not defined in the OpenAM database.
+                    Refers to the nosuch.domain parameter in the amAuthUI.properties file.</p></dd><dt><span class="term"><code class="literal">login_denied.jsp</code></span></dt><dd><p>Defines the response of OpenAM to a user who enters an undefined profile. Uses the
+                    userhasnosuchprofile.org and contactadmin parameters in the amAuthUI.properties file.</p></dd><dt><span class="term"><code class="literal">login_failed_template.jsp</code></span></dt><dd><p>Provides a message in the event of a login failure. The message uses the auth.failed parameter
+                    in the amAuthUI.properties file.</p></dd><dt><span class="term"><code class="literal">Login.jsp</code></span></dt><dd><p>Specifies a regular authentication template. As noted in the
+                    <em class="citetitle">Administration Guide</em> entry on <a href="../../admin-guide/index/chap-securing.html#secure-openam-administration" class="link">
+                        <em class="citetitle">Securing OpenAM Administration</em></a>,
+                    the Login.jsp file may be customized for different deployments.</p></dd><dt><span class="term"><code class="literal">Logout.jsp</code></span></dt><dd><p>The Logout.jsp file may also be customized for different deployments.</p></dd><dt><span class="term"><code class="literal">maxSessions.jsp</code></span></dt><dd><p>Specifies the message given to users when the number of sessions has hit the preconfigured limit.
+                    The default is 5000, defined in the OpenAM console under Configuration &gt; Servers and Sites &gt;
+                    Default Server Settings &gt; Session. The message uses the session.max.limit parameter defined in the
+                    amAuthUI.properties file.</p></dd><dt><span class="term"><code class="literal">membership.jsp</code></span></dt><dd><p>Specifies information for the page associated with the self-registration module.</p></dd><dt><span class="term"><code class="literal">Message.jsp</code></span></dt><dd><p>Calls text messages related to the authentication process.</p></dd><dt><span class="term"><code class="literal">module_denied.jsp</code></span></dt><dd><p>Includes a message to a target user that he does not have access to a specified module. The message
+                    uses the authmodule.denied parameter defined in the amAuthUI.properties file..</p></dd><dt><span class="term"><code class="literal">module_template.jsp</code></span></dt><dd><p>Adds a page which can be used to help customize appropriate modules.</p></dd><dt><span class="term"><code class="literal">new_org.jsp</code></span></dt><dd><p>Includes a warning when a user is trying to access a different realm. The message uses the newOrg.agree
+                    parameter, as defined in the amAuthUI.properties file.</p></dd><dt><span class="term"><code class="literal">noConfig.jsp</code></span></dt><dd><p>Specifies the lack of a defined configuration module. The message uses the noconfig.found parameter,
+                    defined in the amAuthUI.properties file.</p></dd><dt><span class="term"><code class="literal">OAuthActivate.jsp</code></span></dt><dd><p>Shows a default template for entering an activation code.
+                    Used by OAuth.xml for password changes. As this file is not configured for OAuth2, the file is
+                    deprecated and may be removed from a future release.</p></dd><dt><span class="term"><code class="literal">OAuthPwd.jsp</code></span></dt><dd><p>Displays a password change screen, with an option for terms and conditions of service. As this file
+                    is not configured for OAuth2, it is deprecated and may be removed from a future release.</p></dd><dt><span class="term"><code class="literal">org_inactive.jsp</code></span></dt><dd><p>Transmits the message that the target organization is not active in the OpenAM database.</p></dd><dt><span class="term"><code class="literal">profileError.jsp</code></span></dt><dd><p>Specifies the message that is sent when there's a failure in the use of the self-registration module.
+                    Associated with the profile.error parameter, defined in the amAuthUI.properties file.</p></dd><dt><span class="term"><code class="literal">Redirect.jsp</code></span></dt><dd><p>Notes a file used by other code to redirect users for events such as login failures.</p></dd><dt><span class="term"><code class="literal">register.jsp</code></span></dt><dd><p>Identifies the page with the self-registration template.</p></dd><dt><span class="term"><code class="literal">session_timeout.jsp</code></span></dt><dd><p>Adds a message to a user when a session has gone past its allocated login time. Uses the
+                    session.timeout parameter, defined in the amAuthUI.properties file.</p></dd><dt><span class="term"><code class="literal">userDenied.jsp</code></span></dt><dd><p>Associated with role-based authentication. Tells a user when the required role has not been configured
+                    for that user. Message defined by the user.not.inrole parameter, defined in the amAuthUI.properties
+                    file.</p></dd><dt><span class="term"><code class="literal">user_inactive.jsp</code></span></dt><dd><p>Identifies a message sent to a user that is not currently active in the database. Message defined by
+                    the usernot.active parameter, as shown in the amAuthUI.properties file.</p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="default-federation-jsp-endpoints"></a>7.5.&nbsp;Default Federation JSP Endpoints</h2></div></div></div><a class="indexterm" name="d0e43564"></a><p>Many of the files in this config/federation/default subdirectory use the
+   com.sun.liberty.LibertyManager interface. In general, you'll want to keep these
+   files in a production deployment, to support adding to and deleting users from
+   different Circles Of Trust (COT). Many of these files are customizable for
+   different organizational interfaces. Interfaces in different languages may be
+   configured in slightly different subdirectories such as config/federation/default_fr.
+  </p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">cdclogin.jsp</code></span></dt><dd><p>Supports a non-blank page for cross-domain single sign-ons;
+      associated with a Cross-Domain Controller (CDC) servlet.
+     </p></dd><dt><span class="term"><code class="literal">CommonLogin.jsp</code></span></dt><dd><p>Supports links to login pages of trusted identity providers.
+     </p></dd><dt><span class="term"><code class="literal">Error.jsp</code></span></dt><dd><p>Sets up an error message, using the com.sun.liberty.LibertyManager
+      interface.
+     </p></dd><dt><span class="term"><code class="literal">Federate.jsp</code></span></dt><dd><p>Supports a connection to providers that can be configured in a federation.</p></dd><dt><span class="term"><code class="literal">FederationDone.jsp</code></span></dt><dd><p>Specifies the status of a federation request; the default response is
+      either "The user has cancelled account federation." or "Federation has been
+      successfully completed with the remote provider."
+     </p></dd><dt><span class="term"><code class="literal">Footer.jsp</code></span></dt><dd><p>Sets up code that you can use to include a custom footer on all pages.
+     </p></dd><dt><span class="term"><code class="literal">Header.jsp</code></span></dt><dd><p>Sets up code that you can use to include a custom header on all pages;
+      the default version is configured with the OpenAM logo.
+     </p></dd><dt><span class="term"><code class="literal">ListOfCOTs.jsp</code></span></dt><dd><p>When a service provider (SP) belongs to more than one COT, this page prompts
+      the user to select a preferred identity provider (IDP).
+     </p></dd><dt><span class="term"><code class="literal">LogoutDone.jsp</code></span></dt><dd><p>Specifies success or failure during a logout operation. Where a user
+      has an account on multiple providers, he may see the following message:
+      "Unable to log the user out from one or more providers where the user may
+      still have active sessions."
+     </p></dd><dt><span class="term"><code class="literal">NameRegistration.jsp</code></span></dt><dd><p>Supports registration with a new remote provider; this endpoint is
+      associated with NameRegistrationDone.jsp.
+     </p></dd><dt><span class="term"><code class="literal">NameRegistrationDone.jsp</code></span></dt><dd><p>Displays different messages based on a registration attempt with a
+      remote provider. The message varies depending on whether the request was
+      successful, a failure, or cancelled.
+     </p></dd><dt><span class="term"><code class="literal">Termination.jsp</code></span></dt><dd><p>Supports defederation from an existing remote provider; goes with
+      TerminationDone.jsp.
+     </p></dd><dt><span class="term"><code class="literal">TerminationDone.jsp</code></span></dt><dd><p>Displays different messages based on a defederation attempt with a
+      remote provider. The message varies depending on whether the request was
+      successful, a failure, or cancelled.
+     </p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="console-agent-configuration-jsp-endpoints"></a>7.6.&nbsp;Console Agent Configuration JSP Endpoints</h2></div></div></div><a class="indexterm" name="d0e43670"></a><p>The JSP files in the console/agentconfig subdirectory relate to the configuration of Web Agents. To see
+        what is done by each JSP file, log into the console as the administrator. Select Access Control &gt;
+            <em class="replaceable"><code>[Some Realm]</code></em> &gt;
+        Agents. Several of the options that appear corresponds to the JSP files in the target subdirectory.</p><p>Some of the endpoints include messages from relevant sections of the amConsole.properties file. The agents
+        in this directory are part of the com.sun.identity.console.agentconfig package.</p><p>Several endpoints relate to Web Service Client (WSC) policy agents, which secure outgoing requests and
+            validate incoming requests from Web Service Providers (WSP). For more information, see the chapter on
+            <a href="../../admin-guide/index/chap-agents.html" class="link">
+            <em class="citetitle">Configuring Policy Agent Profiles</em> in the Administrative Guide</a>.</p><p>If you are not using agent functionality such as that related to the Security Token Service (STS), the
+        related endpoints listed in this section may not be essential in a production deployment.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">AgentAdd.jsp</code></span></dt><dd><p>Includes a newly created web agent for a specified realm. The AgentAdd page appears in the OpenAM
+        console after an agent is added to a realm.</p></dd><dt><span class="term"><code class="literal">AgentConfigInherit.jsp</code></span></dt><dd><p>Allows an administrator to review default settings for the agent, as configured in the Inheritance
+                  Settings page. Inheritance assumes that agent is part of a previously configured group.
+                  To access Inheritance Settings, refer to the <a href="../../admin-guide/index/chap-agents.html#create-agent-profiles" class="link">
+                  <em class="citetitle">Creating Agent Profiles" section of the Administration Guide</em></a>.</p></dd><dt><span class="term"><code class="literal">AgentDump.jsp</code></span></dt><dd><p>Displays information about the current configuration of an agent or an agent group,
+                  and how it might be exported.</p></dd><dt><span class="term"><code class="literal">AgentExportPolicy.jsp</code></span></dt><dd><p>Shows how the information about an agent may be exported.</p></dd><dt><span class="term"><code class="literal">AgentGroup.jsp</code></span></dt><dd><p>Includes a newly created agent group for common web agents within a specified realm.
+                  The AgentGroup page appears in the OpenAM console after an agent is added to a realm.</p></dd><dt><span class="term"><code class="literal">AgentGroupMembers.jsp</code></span></dt><dd><p>Supports the display of agents that are members of a specified agent group.</p></dd><dt><span class="term"><code class="literal">Agents.jsp</code></span></dt><dd><p>Enables access to a form to specify a new agent to add. The same form is used for every category of
+              new agents configured from the OpenAM console, when you navigate to Access Control -&gt; [Realm name] -&gt;
+              Agents.</p></dd><dt><span class="term"><code class="literal">Home.jsp</code></span></dt><dd><p>Per comments in the HomeViewBean, this file should forward requests for other agents.</p></dd><dt><span class="term"><code class="literal">WebServiceClientEdit.jsp</code></span></dt><dd><p>Includes customizable options for web service clients. Accessible when you edit and then save
+                  or export the configuration for a specific web service client.</p></dd><dt><span class="term"><code class="literal">WebServiceProviderEdit.jsp</code></span></dt><dd><p>Includes customizable options for web service providers. Accessible when you edit and then save
+                  or export the configuration for a specific web service provider.</p></dd><dt><span class="term"><code class="literal">WebServiceSTSEdit.jsp</code></span></dt><dd><p>Includes customizable options for web service STS providers. Accessible
+                  when you edit and then save or export the configuration for a specific web service STS provider.</p></dd><dt><span class="term"><code class="literal">WebServiceUserCredAdd.jsp</code></span></dt><dd><p>Supports the configuration of an WSP agent username and password.</p></dd><dt><span class="term"><code class="literal">WebServiceUserCredEdit.jsp</code></span></dt><dd><p>Supports changes to an WSP agent username and password.</p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="console-ajax-jsp-endpoints"></a>7.7.&nbsp;Console Ajax JSP Endpoints</h2></div></div></div><a class="indexterm" name="d0e43795"></a><p>The only JSP file that appears to be active in this subdirectory is AjaxProxy.jsp, which appears to be
+        used by several other endpoints.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">AjaxProxy.jsp</code></span></dt><dd><p>Specifies an element used by several other endpoints, including ConfigureGoogleApps.jsp
+                        and ConfigureSalesForceApps.jsp.</p></dd><dt><span class="term"><code class="literal">FileUpload.jsp</code></span></dt><dd><p>Used by the FileUploader.jsp endpoint, described in the section on Federation Console JSP
+                    Endpoints.</p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="console-authentication-jsp-endpoints"></a>7.8.&nbsp;Console Authentication JSP Endpoints</h2></div></div></div><a class="indexterm" name="d0e43822"></a><p>You can find console authentication endpoints in the console/authentication subdirectory. The associated
+    endpoints relate to authentication settings in a realm. To access these endpoints, navigate to Access Control &gt;
+        <em class="replaceable"><code>[some realm]</code></em> &gt; Authentication.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">AuthConfig.jsp</code></span></dt><dd><p>Part of the creation of a New Authentication Chain; associated with the Authentication
+                    Chaining section of the Authentication tab for a realm.</p></dd><dt><span class="term"><code class="literal">AuthProperties.jsp</code></span></dt><dd><p>Specifies properties that might be configured under the authentication tab for a specific or
+                    top-level realm.</p></dd><dt><span class="term"><code class="literal">CoreAttributes.jsp</code></span></dt><dd><p>Associated with the Core section of the Authentication tab of a specific or the top-level
+                        realm. Includes options for Realm Attributes, Persistent Cookies, Account Lockout, and
+                    Post-Authentication Processing.</p></dd><dt><span class="term"><code class="literal">EditAuthType.jsp</code></span></dt><dd><p>Supports changes to Module Instances, under the Authentication tab of a specific or the
+                        top-level realm.</p></dd><dt><span class="term"><code class="literal">NewAuthConfig.jsp</code></span></dt><dd><p>Associated with the creation of a New Authentication Chain, an option available from the
+                        Authentication Chaining section of the Authentication tab.</p></dd><dt><span class="term"><code class="literal">NewAuthInstance.jsp</code></span></dt><dd><p>Supports the implementation of a new authentication module, available from the Module
+                        Instances section of the Authentication tab.</p></dd><dt><span class="term"><code class="literal">ReorderAuthChains.jsp</code></span></dt><dd><p>Supports a change in sequence of authentication criteria; to access, select an existing
+                        Authentication Chaining service under the Authentication tab for a specified realm.</p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="console-base-jsp-endpoints"></a>7.9.&nbsp;Base Console JSP Endpoints</h2></div></div></div><a class="indexterm" name="d0e43887"></a><p>The endpoints in this subdirectory (console/base) relate to options associated with the "home page" for the
+    OpenAM GUI console; in essence, these are the options available when you log in as the administrative user
+    (typically <code class="literal">amadmin</code>).</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">AMAdminFrame.jsp</code></span></dt><dd><p>Defaults to the opening page for the OpenAM console.</p></dd><dt><span class="term"><code class="literal">AMInvalidURL.jsp</code></span></dt><dd><p>Provides an "Invalid URL" error message.</p></dd><dt><span class="term"><code class="literal">AMLogin.jsp</code></span></dt><dd><p>Redirects users to the default login page; assumes no user is currently logged into OpenAM.
+                    </p></dd><dt><span class="term"><code class="literal">AMPost.jsp</code></span></dt><dd><p>Endpoint that either returns success of a post or an "Invalid or Missing Input" error.</p></dd><dt><span class="term"><code class="literal">AMUncaughtException.jsp</code></span></dt><dd><p>Default uncaught exception error message endpoint: "An error occurred while processing this
+                    request. Contact your administrator."</p></dd><dt><span class="term"><code class="literal">Authenticated.jsp</code></span></dt><dd><p>Displays a "You're logged in" information message.</p></dd><dt><span class="term"><code class="literal">CloseWindow.jsp</code></span></dt><dd><p>Endpoint that closes existing windows.</p></dd><dt><span class="term"><code class="literal">Message.jsp</code></span></dt><dd><p>Specifies a template endpoint used for messages.</p></dd><dt><span class="term"><code class="literal">Version.jsp</code></span></dt><dd><p>Specifies current version information, copyright notice, and licensing.</p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="console-delegation-jsp-endpoints"></a>7.10.&nbsp;Delegation Console JSP Endpoints</h2></div></div></div><a class="indexterm" name="d0e43966"></a><p>The two service endpoints under the console/delegation subdirectory relate to the privileges associated
+            with configured realms.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">Delegation.jsp</code></span></dt><dd><p>Associated with the privileges for a realm. The privileges can be assigned for different
+                        groups of users, as configured via Access Control &gt; <em class="replaceable"><code>[realm]</code></em> &gt;
+                    Subjects &gt; Group.</p></dd><dt><span class="term"><code class="literal">DelegationProperties.jsp</code></span></dt><dd><p>Supports changes in properties for group privileges, described in the Delegation.jsp endpoint.
+                        To get to these properties, select Access Control &gt; <em class="replaceable"><code>[some realm]</code></em>
+                        &gt; Privileges &gt; <em class="replaceable"><code>[name of group]</code></em>.</p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="console-federation-jsp-endpoints"></a>7.11.&nbsp;Federation Console JSP Endpoints</h2></div></div></div><a class="indexterm" name="d0e44002"></a><p>The JSP files in this section relate to federation, specified in the console/federation subdirectory.
+            Specifically, when you access the OpenAM GUI console
+        and click the Federation tab, the variety of options that you select call the JSP files in this directory.
+        References in each JSP file in that subdirectory are associated with the Federation tab.</p><p>Generally, the JSP files in this directory are essential if you want to add or modify federation partners
+        in your Circles of Trust (COT), SAMLv2 / ID-FF / WS-Federation entity providers, and SAML 1.x configured
+            partners.</p><p>If you're not using the legacy elements of federation, such as Liberty ID-FF, WS-Federation, and SAML 1.x,
+            you may be able to delete related service endpoints in a more secure deployment.</p><p>Many of the endpoints in this section are accessible from the OpenAM console, under the Federation tab.
+        Some of the endpoints are accessible only after you've created an appropriate entity provider, such as
+        SAMLv2, ID-FF, or WS-Federation.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">CreateCOT.jsp</code></span></dt><dd><p>When you create a Circle of Trust (COT) via Federation &gt; New, you can access the
+                        COT Configuration window. You can then access all configured COTs.</p></dd><dt><span class="term"><code class="literal">CreateSAML2MetaData.jsp</code></span></dt><dd><p>Used when creating a new entity provider, configured with the SAML2 protocol.</p></dd><dt><span class="term"><code class="literal">FSAuthDomainsEditViewBean.jsp</code></span></dt><dd><p>Associated with an edit of a COT; to access, select a previously configured COT.</p></dd><dt><span class="term"><code class="literal">FSSAMLSelectTrustedPartnerType.jsp</code></span></dt><dd><p>Opened when you configure a new Trusted Partner under the SAML 1.x Configuration section.</p></dd><dt><span class="term"><code class="literal">FSSAMLService.jsp</code></span></dt><dd><p>Associated with FSSAMLServiceViewBean, which is used by a number of other JSP files in the
+            console/federation subdirectory.</p></dd><dt><span class="term"><code class="literal">FSSAMLSetTrustedPartnerType.jsp</code></span></dt><dd><p>Associated with the FSSAMLSetTrustedPartnersEdit.jsp file; used when you select a configured SAML 1.x
+            Configuration trusted partner.</p></dd><dt><span class="term"><code class="literal">FSSAMLSiteIDAdd.jsp</code></span></dt><dd><p>Supports the addition of a Site ID for a SAML-configured partner.</p></dd><dt><span class="term"><code class="literal">FSSAMLSiteIDEdit.jsp</code></span></dt><dd><p>Supports the modification of a Site ID for a SAML-configured partner.</p></dd><dt><span class="term"><code class="literal">FSSAMLTargetURLsAdd.jsp</code></span></dt><dd><p>Includes a new POST to a specified URL.</p></dd><dt><span class="term"><code class="literal">FSSAMLTargetURLsEdit.jsp</code></span></dt><dd><p>Supports editing of a POST to a specified URL.</p></dd><dt><span class="term"><code class="literal">FSSAMLTrustedPartnersAdd.jsp</code></span></dt><dd><p>Called when you create a new "trusted partner" in the SAML 1.x Configuration area of the Federation
+            window.</p></dd><dt><span class="term"><code class="literal">FSSAMLTrustedPartnersEdit.jsp</code></span></dt><dd><p>Called when you edit an existing "trusted partner" in the SAML 1.x Configuration area of the Federation
+            window.</p></dd><dt><span class="term"><code class="literal">Federation.jsp</code></span></dt><dd><p>Cited when you click New in the "Circle of Trust" section of the Federation window.</p></dd><dt><span class="term"><code class="literal">FileUploader.jsp</code></span></dt><dd><p>Called by the ImportEntity.jsp file, to support uploads of metadata files associated with a previously
+            configured entity provider.</p></dd><dt><span class="term"><code class="literal">IDFFAffiliate.jsp</code></span></dt><dd><p>Specifies an IDFF affiliate in a COT.</p></dd><dt><span class="term"><code class="literal">IDFFGeneral.jsp</code></span></dt><dd><p>Includes general parameters associated with an IDFF affiliate in a COT. The corresponding
+        IDFFGeneralViewBean parameter is cited only in this and the IDFFGeneralViewBean.java files.</p></dd><dt><span class="term"><code class="literal">IDFFIDP.jsp</code></span></dt><dd><p>Associated with the Identity Provider (IDP) for IDFF.</p></dd><dt><span class="term"><code class="literal">ISFFSP.jsp</code></span></dt><dd><p>Associated with the Service Provider (SP) for IDFF.</p></dd><dt><span class="term"><code class="literal">ImportEntity.jsp</code></span></dt><dd><p>Supports the import of pre-existing metadata files which define an entity provider. Allows you to
+        import metadata from a URL to a desired Realm.</p></dd><dt><span class="term"><code class="literal">SAMLv2Affiliate.jsp</code></span></dt><dd><p>Enables a view of SAML version 2 affiliates.</p></dd><dt><span class="term"><code class="literal">SAMLv2AttrAuthority.jsp</code></span></dt><dd><p>Associated with an IDP acting as an attribute authority.</p></dd><dt><span class="term"><code class="literal">SAMLv2AttrQuery.jsp</code></span></dt><dd><p>Supports queries and saves of SAML2 attribute metadata.</p></dd><dt><span class="term"><code class="literal">SAMLv2AuthnAuthority.jsp</code></span></dt><dd><p>Enables communication with an IDP acting as an authentication authority.</p></dd><dt><span class="term"><code class="literal">SAMLv2General.jsp</code></span></dt><dd><p>Identifies general properties of a SAML version 2 affiliate.</p></dd><dt><span class="term"><code class="literal">SAMLv2IDPAdvanced.jsp</code></span></dt><dd><p>Supports the configuration of advanced properties for a SAMLv2 IDP.</p></dd><dt><span class="term"><code class="literal">SAMLv2AssertionContent.jsp</code></span></dt><dd><p>Associated with the Assertion Content tab, accessible when you select Federation &gt; Entity Providers
+            &gt; <em class="replaceable"><code>Provider Name</code></em>.</p></dd><dt><span class="term"><code class="literal">SAMLv2AssertionProcessing.jsp</code></span></dt><dd><p>Associated with the Assertion Processing tab, accessible when you select Federation &gt; Entity Providers
+            &gt; <em class="replaceable"><code>Provider Name</code></em>.</p></dd><dt><span class="term"><code class="literal">SAMLv2IDPServices.jsp</code></span></dt><dd><p>Supports the configuration of IDP service properties for a SAML2 provider.</p></dd><dt><span class="term"><code class="literal">SAMLv2PDP.jsp</code></span></dt><dd><p>Enables the configuration of a SAMLv2-based Policy Decision Point (PDP).</p></dd><dt><span class="term"><code class="literal">SAMLv2PEP.jsp</code></span></dt><dd><p>Enables the configuration of a SAMLv2-based Policy Enforcement Point (PEP).</p></dd><dt><span class="term"><code class="literal">SAMLv2SPAdvanced.jsp</code></span></dt><dd><p>Supports the configuration of advanced properties for a SP. Accessible when you select Federation &gt;
+        Entity Providers &gt; <em class="replaceable"><code>Provider Name</code></em> &gt; SP &gt; Advanced.</p></dd><dt><span class="term"><code class="literal">SAMLv2SPAssertionContent.jsp</code></span></dt><dd><p>Associated with the Assertion Content tab; supports the configuration of such for SPs; It is accessible
+            when you select Federation &gt; Entity Providers &gt; <em class="replaceable"><code>Provider Name</code></em> &gt; SP &gt;
+        Assertion Content.</p></dd><dt><span class="term"><code class="literal">SAMLv2SPAssertionProcessing.jsp</code></span></dt><dd><p>Associated with the Assertion Content tab; supports the configuration of assertion processing-related
+            properties for SPs. It is accessible
+            when you select Federation &gt; Entity Providers &gt; <em class="replaceable"><code>Provider Name</code></em> &gt; SP &gt;
+            Assertion Processing.</p></dd><dt><span class="term"><code class="literal">SAMLv2SPServices.jsp</code></span></dt><dd><p>Supports the configuration of services-related properties for an SP. It is accessible
+            when you select Federation &gt; Entity Providers &gt; <em class="replaceable"><code>Provider Name</code></em> &gt; SP &gt;
+            Services.</p></dd><dt><span class="term"><code class="literal">WSFedGeneral.jsp</code></span></dt><dd><p>Associated with the configuration of a legacy WS-Federation entity provider.</p></dd><dt><span class="term"><code class="literal">WSFedIDP.jsp</code></span></dt><dd><p>Supports the configuration of an IDP under WS-Federation.</p></dd><dt><span class="term"><code class="literal">WSFedSP.jsp</code></span></dt><dd><p>Supports the configuration of an SP under WS-Federation.</p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="console-idm-jsp-endpoints"></a>7.12.&nbsp;IDM Console JSP Endpoints</h2></div></div></div><a class="indexterm" name="d0e44305"></a><p>This group of service endpoints are associated with an identity management (IDM) interface from OpenAM.
+        You can find these endpoints in the console/idm subdirectory. You may not need all of the functionality
+        provided by the endpoints in this section.</p><p>Some of the endpoints in this section include references to UM*.jsp endpoints, User Console JSP Endpoints
+        located in the console/user subdirectory, and described later in this chapter.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">EndUser.jsp</code></span></dt><dd><p>Accesses the information page for the currently logged in user.</p></dd><dt><span class="term"><code class="literal">Entities.jsp</code></span></dt><dd><p>Opens the list of currently configured users, available via Access Control &gt;
+                        <em class="replaceable"><code>[selected realm]</code></em> &gt; Subjects.</p></dd><dt><span class="term"><code class="literal">EntityAdd.jsp</code></span></dt><dd><p>Used when adding a new user or group.</p></dd><dt><span class="term"><code class="literal">EntityDiscoveryDescriptionAdd.jsp</code></span></dt><dd><p>Associated with the Discovery Service. To access that service, select a non-administrative
+                        user and select the Services tab. The EntityDiscoveryDescriptionAdd.jsp file is used when
+                        selecting a new Security Mechanism ID
+                    as a Service Description as a new Discovery Resource Offering.</p></dd><dt><span class="term"><code class="literal">EntityDiscoveryDescriptionEdit.jsp</code></span></dt><dd><p>Associated with an edit of an existing Security Mechanism ID.</p></dd><dt><span class="term"><code class="literal">EntityEdit.jsp</code></span></dt><dd><p>Called when saving changes to an existing user.</p></dd><dt><span class="term"><code class="literal">EntityMembers.jsp</code></span></dt><dd><p>Lists the members of a configured group.</p></dd><dt><span class="term"><code class="literal">EntityMembersFilteredIdentity.jsp</code></span></dt><dd><p>Lists the members of a configured group based on some filter.</p></dd><dt><span class="term"><code class="literal">EntityMembership.jsp</code></span></dt><dd><p>Accessed when a regular user is made a member of a previously configured group.</p></dd><dt><span class="term"><code class="literal">EntityResourceOffering.jsp</code></span></dt><dd><p>Supports custom resource offering entries for a previously configured user. Also seen when
+                        accessing the UMUserResourceOffering.jsp file.</p></dd><dt><span class="term"><code class="literal">EntityResourceOfferingAdd.jsp</code></span></dt><dd><p>Supports entries of new resource offerings for a previously configured user. Also seen when
+                        accessing the UMUserResourceOfferingAdd.jsp file.</p></dd><dt><span class="term"><code class="literal">EntityResourceOfferingEdit.jsp</code></span></dt><dd><p>Supports edits of existing resource offerings for a previously configured user. Also seen when
+                        accessing the UMUserResourceOfferingEdit.jsp file.</p></dd><dt><span class="term"><code class="literal">EntityServices.jsp</code></span></dt><dd><p>Supports a new service for a specific user. As of this writing, available services are:
+                    Dashboard, Discovery Service, Liberty Personal Profile Service, and Session.</p></dd><dt><span class="term"><code class="literal">Home.jsp</code></span></dt><dd><p>Opens a list of currently configured users.</p></dd><dt><span class="term"><code class="literal">ServicesAdd.jsp</code></span></dt><dd><p>Accessible after adding a new service for a currently configured user; associated with
+                        the EntityServices.jsp file.</p></dd><dt><span class="term"><code class="literal">ServicesEdit.jsp</code></span></dt><dd><p>Accessible for editing services associated with a currently configured user.</p></dd><dt><span class="term"><code class="literal">ServicesNoAttribute.jsp</code></span></dt><dd><p>Used if a configured organization has no available attributes.</p></dd><dt><span class="term"><code class="literal">ServicesSelect.jsp</code></span></dt><dd><p>Opened when adding a service for a specific user.</p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="console-realm-jsp-endpoints"></a>7.13.&nbsp;Console Realm JSP Endpoints</h2></div></div></div><a class="indexterm" name="d0e44449"></a><p>If you want to know how to configure services and data stores within a realm, you'll want to understand
+        the workings of these service endpoints. If you want to customize realms in production, you'll want to keep
+        these endpoints available on an OpenAM console. You can find these endpoints in the console/realm
+        subdirectory.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">HomePage.jsp</code></span></dt><dd><p>Associated with the main Access Control page in the OpenAM GUI console, which lists configured
+                        realms. If you call realm/HomePage.jsp directly, it cites messages associated with changes for
+                        a specific user, and functions more closely associated with JSP endpoints in the console/idm
+                        subdirectory.</p></dd><dt><span class="term"><code class="literal">IDRepo.jsp</code></span></dt><dd><p>Enables links with directory server data stores within a realm. To access, select Access
+                    Control &gt; <em class="replaceable"><code>[some realm]</code></em> &gt; Data Stores &gt; New. You should see
+                    a variety of supported directory server data stores, such as Active Directory, OpenDJ, and
+                    Tivoli Directory Server.</p></dd><dt><span class="term"><code class="literal">IDRepoAdd.jsp</code></span></dt><dd><p>Appears when you add a data store; associated with the IDRepo.jsp service endpoint.</p></dd><dt><span class="term"><code class="literal">IDRepoEdit.jsp</code></span></dt><dd><p>Appears when you edit an existing data store; associated with the IDRepo.jsp service
+                        endpoint.</p></dd><dt><span class="term"><code class="literal">IDRepoSelectType.jsp</code></span></dt><dd><p>Includes a list of supported data stores, from Active Directory to OpenDJ; associated with
+                        the IDRepo.jsp service endpoint.</p></dd><dt><span class="term"><code class="literal">RMRealm.jsp</code></span></dt><dd><p>Supports the configuration of a new realm, or editing of an existing realm.</p></dd><dt><span class="term"><code class="literal">RMRealmAdd.jsp</code></span></dt><dd><p>Supports the addition of a new realm; associated with the RMRealm.jsp service endpoint.</p></dd><dt><span class="term"><code class="literal">RealmDiscoveryDescriptionAdd.jsp</code></span></dt><dd><p>Supports a new description for a realm; associated with the RealmResourceOffering.jsp service
+                        endpoint. </p></dd><dt><span class="term"><code class="literal">RealmDiscoveryDescriptionEdit.jsp</code></span></dt><dd><p>Supports an edited description; associated with the RealmResourceOffering.jsp service endpoint.
+                    </p></dd><dt><span class="term"><code class="literal">RealmProperties.jsp</code></span></dt><dd><p>Works with the pages that allow you to edit an existing realm.</p></dd><dt><span class="term"><code class="literal">RealmResourceOffering.jsp</code></span></dt><dd><p>Supports the configuration of a security mechanism to a new realm resource offering. Requires
+                        the configuration of the discovery service, and the configuration of a directory resource
+                        offering for the specified realm.</p></dd><dt><span class="term"><code class="literal">RealmResourceOfferingAdd.jsp</code></span></dt><dd><p>Supports the addition of a security mechanism to a new realm resource offering. Requires
+                        the configuration of the discovery service, and the configuration of a directory resource
+                        offering for the specified realm.</p></dd><dt><span class="term"><code class="literal">RealmResourceOfferingEdit.jsp</code></span></dt><dd><p>Supports the editing of a security mechanism for an existing realm resource offering. Requires
+                        the configuration of the discovery service, and the configuration of a directory resource
+                        offering for the specified realm.</p></dd><dt><span class="term"><code class="literal">Services.jsp</code></span></dt><dd><p>Supports the configuration of a service within a specified realm.</p></dd><dt><span class="term"><code class="literal">ServicesAdd.jsp</code></span></dt><dd><p>Supports the addition of a service to a specified realm; available services to add include
+                        Administration, Dashboard, Discovery, Globalization Settings, OAuth2 Provider, Password Reset,
+                        Session, and User.</p></dd><dt><span class="term"><code class="literal">ServicesCannotAssignService.jsp</code></span></dt><dd><p>If a desired service is not compatible with directory data available from an organization, it
+                        is rejected.</p></dd><dt><span class="term"><code class="literal">ServicesEdit.jsp</code></span></dt><dd><p>Supports the editing of an existing service; associated with the Services.jsp endpoint.</p></dd><dt><span class="term"><code class="literal">ServicesNoAttribute.jsp</code></span></dt><dd><p>Supports the editing of an existing service; called if the attribute cannot be found or
+                        changed.</p></dd><dt><span class="term"><code class="literal">ServicesSelect.jsp</code></span></dt><dd><p>Implements step 1 of the addition of a new service; associated with the Services.jsp
+                        endpoint.</p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="console-service-jsp-endpoints"></a>7.14.&nbsp;Service Console JSP Endpoints</h2></div></div></div><a class="indexterm" name="d0e44602"></a><p> You can find the JSP files in this category in the console/service subdirectory. Most of the endpoints
+            are accessible in the console, from various options associated with the Configuration menu. If you
+        don't use some of the functionality described such as Liberty ID-FF or SOAP binding, you may be able to
+        delete the associated endpoints.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">G11NCharsetAliasAdd.jsp</code></span></dt><dd><p>Supports the configuration of a new character set alias. Accessible from the Globalization
+                        Settings &gt; Charset Aliases submenu.</p></dd><dt><span class="term"><code class="literal">G11NCharsetAliasEdit.jsp</code></span></dt><dd><p>Supports the editing of an existing character set alias. Accessible from the Globalization
+                        Settings &gt; Charset Aliases submenu.</p></dd><dt><span class="term"><code class="literal">G11NSupportedCharsetAdd.jsp</code></span></dt><dd><p>Supports the configuration of a new character set supported by a locale. Accessible from the
+                        Globalization Settings &gt; Charsets Supported by Each Locale submenu.</p></dd><dt><span class="term"><code class="literal">G11NCharsetAliasEdit.jsp</code></span></dt><dd><p>Supports the editing of an existing character set supported by a locale. Accessible from the
+                        Globalization Settings &gt; Charsets Supported by Each Locale submenu.</p></dd><dt><span class="term"><code class="literal">MAPClientManager.jsp</code></span></dt><dd><p>Supports a list of client types. Associated with the Default Client Type option available
+                        via Configuration &gt; System &gt; Client Detection.</p></dd><dt><span class="term"><code class="literal">MAPCreateDevice.jsp</code></span></dt><dd><p>Supports creation of client devices.</p></dd><dt><span class="term"><code class="literal">MAPCreateDeviceTwo.jsp</code></span></dt><dd><p>Supports creation of client devices.</p></dd><dt><span class="term"><code class="literal">MAPDeviceProfile.jsp</code></span></dt><dd><p>Supports step 1 of creating a new client device.</p></dd><dt><span class="term"><code class="literal">MAPDuplicationDevice.jsp</code></span></dt><dd><p>Used with duplicate client devices.</p></dd><dt><span class="term"><code class="literal">SCConfig.jsp</code></span></dt><dd><p>Associated with basic Service Configuration data, and the other endpoints accessible from
+                        the Configuration menu.</p></dd><dt><span class="term"><code class="literal">SCConfigAuth.jsp</code></span></dt><dd><p>Supports the configuration of available authentication databases. You can get to this window
+                    by selecting Configuration &gt; Authentication.</p></dd><dt><span class="term"><code class="literal">SCConfigConsole.jsp</code></span></dt><dd><p>Supports the configuration of administrative an globalization console properties. You can get
+                        to this window by selecting Configuration &gt; Console.</p></dd><dt><span class="term"><code class="literal">SCConfigGlobal.jsp</code></span></dt><dd><p>Supports the configuration of OpenAM global properties. You can get to this window by
+                        selecting Configuration &gt; Global.</p></dd><dt><span class="term"><code class="literal">SCConfigSystem.jsp</code></span></dt><dd><p>Supports the configuration of OpenAM system properties. You can get to this window by
+                        selecting Configuration &gt; System.</p></dd><dt><span class="term"><code class="literal">SCPlatform30.jsp</code></span></dt><dd><p>Accesses current global attributes and cookie domain settings. To get to this window, select
+                    Configuration &gt; System &gt; Platform.</p></dd><dt><span class="term"><code class="literal">SCPolicy.jsp</code></span></dt><dd><p>Supports a view of the current policy configuration. To access this window, select
+                        Configuration &gt; Global &gt; Policy Configuration.</p></dd><dt><span class="term"><code class="literal">SCPolicyResourceComparatorAdd.jsp</code></span></dt><dd><p>Supports the addition of a new resource comparator to the current policy configuration.
+                        To access the relevant window, select Configuration &gt; Global &gt; Policy Configuration.</p></dd><dt><span class="term"><code class="literal">SCPolicyResourceComparatorEdit.jsp</code></span></dt><dd><p>Supports the editing of an existing resource comparator in the current policy configuration.
+                        To access the relevant window, select Configuration &gt; Global &gt; Policy Configuration.</p></dd><dt><span class="term"><code class="literal">SCSAML2SOAPBinding.jsp</code></span></dt><dd><p>Enables a review of current SAMLv2 SOAP binding request handlers. Associated with SOAP-based
+                        communications, using SAMLv2 requests, between a client and a server.
+                        To access the relevant screen, select Configuration &gt; Global &gt; SAMLv2 SOAP Binding.</p></dd><dt><span class="term"><code class="literal">SCSAML2SOAPBindingRequestHandlerListAdd.jsp</code></span></dt><dd><p>Allows you to add a new SAMLv2 SOAP binding request handler.
+                        To access the relevant screen, select Configuration &gt; Global &gt; SAMLv2 SOAP Binding.</p></dd><dt><span class="term"><code class="literal">SCSAML2SOAPBindingRequestHandlerListDup.jsp</code></span></dt><dd><p>Allows you to duplicate an existing SAMLv2 SOAP binding request handler.
+                        To access the relevant screen, select Configuration &gt; Global &gt; SAMLv2 SOAP Binding.</p></dd><dt><span class="term"><code class="literal">SCSAML2SOAPBindingRequestHandlerListEdit.jsp</code></span></dt><dd><p>Allows you to edit an existing SAMLv2 SOAP binding request handler.
+                        To access the relevant screen, select Configuration &gt; Global &gt; SAMLv2 SOAP Binding.</p></dd><dt><span class="term"><code class="literal">SCSOAPBinding.jsp</code></span></dt><dd><p>Enables a review of current SOAP binding request handlers. Associated with the Liberty
+                        Alliance Project Identity Federation Framework (Liberty ID-FF).</p></dd><dt><span class="term"><code class="literal">SCSOAPBindingRequestHandlerListAdd.jsp</code></span></dt><dd><p>Allows you to add a new SOAP binding request handler. Associated with the Liberty
+                        Alliance Project Identity Federation Framework (Liberty ID-FF).</p></dd><dt><span class="term"><code class="literal">SCSOAPBindingRequestHandlerListDup.jsp</code></span></dt><dd><p>Allows you to duplicate an existing SOAP binding request handler. Associated with the Liberty
+                        Alliance Project Identity Federation Framework (Liberty ID-FF).</p></dd><dt><span class="term"><code class="literal">SCSOAPBindingRequestHandlerListEdit.jsp</code></span></dt><dd><p>Allows you to edit an existing SOAP binding request handler. Associated with the Liberty
+                        Alliance Project Identity Federation Framework (Liberty ID-FF).</p></dd><dt><span class="term"><code class="literal">SecurityTokenService.jsp</code></span></dt><dd><p>Supports the configuration of tokens associated with the Security Token Service (STS). To
+                        access the associated screen, select Configuration &gt; Global &gt; Security Token Service.</p></dd><dt><span class="term"><code class="literal">ServerAdd.jsp</code></span></dt><dd><p>Supports the addition of an OpenAM server to work behind a load balancer in support of
+                        Session Failover (SFO). Available from Configuration &gt; Servers and Sites, in the Servers
+                    subsection.</p></dd><dt><span class="term"><code class="literal">ServerClone.jsp</code></span></dt><dd><p>Supports the cloning of an existing OpenAM server to work behind a load balancer in support of
+                        Session Failover (SFO). Available from Configuration &gt; Servers and Sites, in the Servers
+                        subsection.</p></dd><dt><span class="term"><code class="literal">ServerConfigInherit.jsp</code></span></dt><dd><p>Supports the inheritance of the default configuration for servers, as it relates to SFO.</p></dd><dt><span class="term"><code class="literal">ServerConfigXMLAddServer.jsp</code></span></dt><dd><p>Enables the configuration fo a new server; relates to SFO.</p></dd><dt><span class="term"><code class="literal">ServerConfigXML.jsp</code></span></dt><dd><p>Supports the review of the XML settings of an existing server, as it relates to SFO.</p></dd><dt><span class="term"><code class="literal">ServerEditAdvanced.jsp</code></span></dt><dd><p>Supports the editing of advanced properties for default servers, in the configuration of
+                        servers for SFO. To access, select Configuration &gt; Severs and Sites &gt; Default Server
+                        Settings, and click Advanced.</p></dd><dt><span class="term"><code class="literal">ServerEditGeneral.jsp</code></span></dt><dd><p>Supports the editing of general properties for default servers, such as the base directory,
+                        default locale, debug level, mail server for notifications, and more. Relates to the
+                        configuration of servers for SFO. To access, select Configuration &gt; Severs and Sites &gt;
+                        Default Server Settings, and click General.</p></dd><dt><span class="term"><code class="literal">ServerEditSDK.jsp</code></span></dt><dd><p>Supports the editing of SDK-related properties for default servers, associated with SFO.
+                        Supports editing of settings such as datastore notifications, event service connection retries,
+                        LDAP connections, Time To Live (TTL) for user entries, and more. To access, select Configuration
+                        &gt; Severs and Sites &gt; Default Server Settings, and click SDK.</p></dd><dt><span class="term"><code class="literal">ServerEditSecurity.jsp</code></span></dt><dd><p>Supports the editing of security properties for default servers; associated with SFO.
+                        Includes default security settings such as encryption keys, cookie encoding, key stores, and
+                        certificate management. To access, select Configuration &gt; Severs and Sites &gt;
+                        Default Server Settings, and click Security.</p></dd><dt><span class="term"><code class="literal">ServerEditSession.jsp</code></span></dt><dd><p>Supports the editing of session properties for default servers; associated with SFO.
+                        Note the Session Limit default specifies a maximum of 5000, well short of the 100,000 sessions
+                        that can be handled by a standard 3GB dual-core production system. To access, select
+                        Configuration &gt; Severs and Sites &gt; Default Server Settings, and click Session.</p></dd><dt><span class="term"><code class="literal">ServerSite.jsp</code></span></dt><dd><p>Associated with the addition or editing of a load balancer that distributes requests to other
+                        OpenAM servers. Available from the Configuration &gt; Servers and Sites, in the Servers
+                        subsection.</p></dd><dt><span class="term"><code class="literal">SiteAdd.jsp</code></span></dt><dd><p>Enables the configuration of a load balancer to distribute requests to other existing OpenAM
+                        servers. Available from the Configuration &gt; Servers and Sites, in the Sites subsection.</p></dd><dt><span class="term"><code class="literal">SiteEdit.jsp</code></span></dt><dd><p>Enables changes to a configured load balancer in how it distributes requests to other existing
+                        OpenAM servers. Available from the Configuration &gt; Servers and Sites, in the Sites
+                        subsection.</p></dd><dt><span class="term"><code class="literal">SMDiscoveryBootstrapRefOffAdd.jsp</code></span></dt><dd><p>Includes new resource offerings for the discovery service, bootstrapped using a standard such
+                        as SAML2.</p></dd><dt><span class="term"><code class="literal">SMDiscoveryBootstrapRefOffEdit.jsp</code></span></dt><dd><p>Supports the editing of existing resource offerings for the discovery service, bootstrapped
+                        with a standard such as SAML2.</p></dd><dt><span class="term"><code class="literal">SMDiscoveryDescriptionAdd.jsp</code></span></dt><dd><p>Includes the addition of of new options for the discovery service.</p></dd><dt><span class="term"><code class="literal">SMDiscoveryDescriptionEdit.jsp</code></span></dt><dd><p>Supports the editing of existing options for the discovery service.</p></dd><dt><span class="term"><code class="literal">SMDiscoveryProviderResourceIdMapperAdd.jsp</code></span></dt><dd><p>Supports the mapping of a new resource ID for the discovery service.</p></dd><dt><span class="term"><code class="literal">SMDiscoveryProviderResourceIdMapperEdit.jsp</code></span></dt><dd><p>Supports the editing of an existing resource ID for the discovery service.</p></dd><dt><span class="term"><code class="literal">SMDiscoveryService.jsp</code></span></dt><dd><p>Supports a review and configuration of the Discovery Server, for global attributes, the
+                        ResourceID Mapper plug-in, and bootstrapping.</p></dd><dt><span class="term"><code class="literal">SMG11N.jsp</code></span></dt><dd><p>Allows you to configure globalization settings for OpenAM; accessible via Configuration &gt;
+                        Console &gt; Globalization Settings.</p></dd><dt><span class="term"><code class="literal">SMG11N.jsp</code></span></dt><dd><p>Allows you to configure globalization settings for OpenAM; accessible via Configuration &gt;
+                        Console &gt; Globalization Settings.</p></dd><dt><span class="term"><code class="literal">STSExportPolicy.jsp</code></span></dt><dd><p>Allows you to review and copy STS policies for export, input, and output. You can review this
+                        via Configuration &gt; Global &gt; Security Token Service &gt; Export Policy.</p></dd><dt><span class="term"><code class="literal">SubConfigAdd.jsp</code></span></dt><dd><p>Allows you to configure a secondary configuration instance; accessible via Configuration &gt;
+                        Global &gt; Session.</p></dd><dt><span class="term"><code class="literal">SubConfigEdit.jsp</code></span></dt><dd><p>Allows you to edit an existing secondary configuration instance; accessible via
+                        Configuration &gt; Global &gt; Session.</p></dd><dt><span class="term"><code class="literal">SubSchemaTypeSelect.jsp</code></span></dt><dd><p>Allows you to configure a schema associated with breadcrumbs.</p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="console-session-jsp-endpoints"></a>7.15.&nbsp;Session Console JSP Endpoints</h2></div></div></div><a class="indexterm" name="d0e45003"></a><p>There are currently two service endpoints configured in the console/session subdirectory, related to
+            login sessions.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">SMProfile.jsp</code></span></dt><dd><p>Provides information on current login session statistics. Available from the Sessions tab from
+                        the main console.</p></dd><dt><span class="term"><code class="literal">SessionHAStatistics.jsp</code></span></dt><dd><p>Supports session high availability statistics collection.</p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="console-task-jsp-endpoints"></a>7.16.&nbsp;Task Console JSP Endpoints</h2></div></div></div><a class="indexterm" name="d0e45030"></a><p>The service endpoints in the console/task subdirectory relate to the options available from the default
+        start page when an administrator logs into the OpenAM console. If you don't use Google Apps or Salesforce,
+        you may not need some of the functionality in the associated endpoints.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">CompleteCreateHostedIDP.jsp</code></span></dt><dd><p>Provides information on what the administrator can do after configuring an Identity Provider
+                        (IDP). Options listed include registering a remote Service Provider (SP), creating a fedlet,
+                        configuring Google Apps, and configuring Salesforce CRM. Includes links to such functionality,
+                    which depend on the configuration of a Circle of Trust (CoT).</p></dd><dt><span class="term"><code class="literal">ConfigureGoogleApps.jsp</code></span></dt><dd><p>Supports the configuration of Google Apps for Single-sign on (SSO). Requires a CoT
+                        configured with an IDP.</p></dd><dt><span class="term"><code class="literal">ConfigureGoogleAppsComplete.jsp</code></span></dt><dd><p>Enables entries to configure the SP. Includes steps "To Enable Access to the Google Apps
+                        API."</p></dd><dt><span class="term"><code class="literal">ConfigureGoogleAppsWarning.jsp</code></span></dt><dd><p>Includes a default warning message related to the ConfigureGoogleApps.jsp endpoint. The
+                    message is self-explanatory, though grammatically questionable: "Unable to configure because there
+                    are no circle of trust with Identity Provider."</p></dd><dt><span class="term"><code class="literal">ConfigureOAuth2.jsp</code></span></dt><dd><p>Supports the configuration of OAuth2 Authorization. For more information, see the
+                        the chapter on <a href="../../admin-guide/index/chap-oauth2.html" class="link">
+                            <em class="citetitle">Managing OAuth2 Authorization in the Administration Guide</em></a>.
+                    </p></dd><dt><span class="term"><code class="literal">ConfigureSalesForceApps.jsp</code></span></dt><dd><p>Accessible when you select the Configure Salesforce CRM link shown in the main GUI console.
+                        Requires IDP and SP information for an appropriate CoT, where OpenAM is the IDP and Salesforce
+                    is configured as the SP.</p></dd><dt><span class="term"><code class="literal">ConfigureSalesForceAppsComplete.jsp</code></span></dt><dd><p>Supports the configuration of SSO with a Salesforce CRM account. Includes instructions on
+                        the settings to add to an applicable Salesforce account.</p></dd><dt><span class="term"><code class="literal">ConfigureSalesForceAppsFinishWarning.jsp</code></span></dt><dd><p>Sets up a warning message related to a need for a Salesforce Login URL for the configuration.
+                        </p></dd><dt><span class="term"><code class="literal">CreateFedlet.jsp</code></span></dt><dd><p>A fedlet supports federation for a SP that does not already have its own federation solution.
+                    For more information, see the
+                        the chapter on <a href="../../dev-guide/index/chap-fedlet-java.html" class="link">
+                            <em class="citetitle">Using Fedlets in Java Web Applications in the Development Guide
+                                </em></a>.</p></dd><dt><span class="term"><code class="literal">CreateFedletWarning.jsp</code></span></dt><dd><p>Sets up a warning message related to the prerequisite for a CoT with the IDP.</p></dd><dt><span class="term"><code class="literal">CreateHostedIDP.jsp</code></span></dt><dd><p>Supports the configuration of a SAMLv2 IDP on the local instance of OpenAM.</p></dd><dt><span class="term"><code class="literal">CreateHostedSP.jsp</code></span></dt><dd><p>Supports the configuration of a SAMLv2 SP on the local instance of OpenAM.</p></dd><dt><span class="term"><code class="literal">CreateRemoteIDP.jsp</code></span></dt><dd><p>Supports the configuration of a SAMLv2 IDP on a remote system, within a configured CoT.</p></dd><dt><span class="term"><code class="literal">CreateRemoteSP.jsp</code></span></dt><dd><p>Supports the configuration of a SAMLv2 SP on a remote system, within a configured CoT.</p></dd><dt><span class="term"><code class="literal">Home.jsp</code></span></dt><dd><p>Endpoint that redirects the client to the startup page for OpenAM.</p></dd><dt><span class="term"><code class="literal">ValidateSAML2Setup.jsp</code></span></dt><dd><p>Supports the test of a federation connection between an IDP and SP in a CoT.</p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="console-user-jsp-endpoints"></a>7.17.&nbsp;User Console JSP Endpoints</h2></div></div></div><a class="indexterm" name="d0e45165"></a><p>Endpoints in the console/user subdirectory support account configuration tasks. Many of these
+        endpoints are accessible by realm. From the home page screen, select Access Control &gt;
+            <em class="replaceable"><code>[realm]</code></em> &gt; Subjects &gt; <em class="replaceable"><code>[name of user]</code></em>. This
+        should open up an Edit User screen</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">UMChangeUserPassword.jsp</code></span></dt><dd><p>This service endpoint is normally opened in a separate window to enable a user (or
+                        administrator) to change their login password. Accessible from the Edit User screen. All
+                    you need to do from the screen is click Edit next to the Password entry.</p></dd><dt><span class="term"><code class="literal">UMUserDiscoveryDescriptionAdd.jsp</code></span></dt><dd><p>Relates to the security mechanism identifier associated wih a user. To access from the screen
+                    for an individual user, select Services &gt; Discovery Service &gt; Add &gt; scroll down to the
+                    Service Description box &gt; New Description &gt; select and Add a Security Mechanism ID.
+                    Example IDs include urn:liberty:security:2003-08:ClientTLS:SAML, which relates to the former
+                    Liberty Alliance project, using Transaction Layer Security (TLS) on the client, with SAML
+                    assertions.</p></dd><dt><span class="term"><code class="literal">UMUserDiscoveryDescriptionEdit.jsp</code></span></dt><dd><p>Supports editing of the security mechanism identifier associated with a user. Closely related
+                        to the UMUserDiscoveryDescriptionAdd.jsp endpoint.</p></dd><dt><span class="term"><code class="literal">UMUserPasswordResetOptions.jsp</code></span></dt><dd><p>Allows you to "Force Change Password on Next Login". Accessible from the Edit User screen for
+                        a specific user, via the "Password Reset Options" entry near the bottom of the window.</p></dd><dt><span class="term"><code class="literal">UMUserResourceOffering.jsp</code></span></dt><dd><p>Accessible as an option to the Discovery Service for a specific user. To access from the Edit
+                        User screen for a specific user, select Services &gt; Discovery Service &gt; Add.</p></dd><dt><span class="term"><code class="literal">UMUserResourceOfferingAdd.jsp</code></span></dt><dd><p>Accessible as an option to the Discovery Service for a specific user. To access from the Edit
+                        User screen for a specific user, select Services &gt; Discovery Service &gt; Add.</p></dd><dt><span class="term"><code class="literal">UMUserResourceOfferingEdit.jsp</code></span></dt><dd><p>Accessible as an option to the Discovery Service for a specific user. To edit an existing
+                        resource offering, navigate to the Edit User screen for a specific user, select Services &gt;
+                        Discovery Service &gt; <em class="replaceable"><code>[some previously configured service]</code></em>.</p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="console-web-services-jsp-endpoints"></a>7.18.&nbsp;Web Services Console JSP Endpoints</h2></div></div></div><a class="indexterm" name="d0e45236"></a><p>Web services include endpoints in the console/webservices subdirectory. You can use them to define legacy
+            options for services such as the Liberty Identity Federation Framework (ID-FF). As such, these endpoints
+            may be less essential to your implementation of OpenAM.
+        For more information, see the
+            <a class="link" href="http://www.forgerock.org/security_advisory2.html" target="_blank"><em class="citetitle">OpenAM Wiki on Web Services
+            </em></a>.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">WSAuthNServices.jsp</code></span></dt><dd><p>Supports the configuration of various mechanism handlers for authentication, including
+                        CRAM-MD5, PLAIN, and SSOToken.</p></dd><dt><span class="term"><code class="literal">WSAuthNServicesHandlersAdd.jsp</code></span></dt><dd><p>Supports the addition of a new mechanism handler for authentication.</p></dd><dt><span class="term"><code class="literal">WSAuthNServicesHandlersEdit.jsp</code></span></dt><dd><p>Supports changes to an existing mechanism handler for authentication.</p></dd><dt><span class="term"><code class="literal">WSPPServiceDSAttributeMapListAdd.jsp</code></span></dt><dd><p>Enables the addition of a new LDAP attribute, with a name prefix.</p></dd><dt><span class="term"><code class="literal">WSPPServiceDSAttributeMapListEdit.jsp</code></span></dt><dd><p>Enables the editing of an existing LDAP attribute, with a name prefix.</p></dd><dt><span class="term"><code class="literal">WSPPServiceSupportedContainerAdd.jsp</code></span></dt><dd><p>Enables the creation of a new supported container for ID-FF.</p></dd><dt><span class="term"><code class="literal">WSPPServiceSupportedContainerEdit.jsp</code></span></dt><dd><p>Enables the editing of an existing container.</p></dd><dt><span class="term"><code class="literal">WSPersonalProfileService.jsp</code></span></dt><dd><p>Allows you to configure ID-FF for global attributes, supported containers, PPLDAP attributes
+                        and alternative security mechanisms.</p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="oauth-jsp-endpoints"></a>7.19.&nbsp;OAuth JSP Endpoints</h2></div></div></div><a class="indexterm" name="d0e45309"></a><p>Includes endpoints in the oauth, oauth2, and oauth2c subdirectories. Some of the service endpoints in the
+            oauth subdirectory are based on OAuth 1.0, which may be deprecated in an upcoming release.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">deleteconsumer.jsp</code></span></dt><dd><p>This endpoint is used to delete consumer systems, which get resources from service providers
+                        (SPs) based on OAuth 1.0 tokens.</p></dd><dt><span class="term"><code class="literal">deletetoken.jsp</code></span></dt><dd><p>This endpoint is used to delete an existing OAuth 1.0 token.</p></dd><dt><span class="term"><code class="literal">index.jsp</code></span></dt><dd><p>Specifies an endpoint used to register and delete service consumers, which get resources
+                    from SPs. Provides access to registerconsumer.jsp and deleteconsumer.jsp. Associated with OAuth 1.0.
+                    </p></dd><dt><span class="term"><code class="literal">registerconsumer.jsp</code></span></dt><dd><p>Defines an endpoint used to register a consumer of services from SPs. Associated with OAuth
+                    1.0.</p></dd><dt><span class="term"><code class="literal">userconsole.jsp</code></span></dt><dd><p>Allows a user to authorize or revoke a request for an OAuth 1.0 token..</p></dd><dt><span class="term"><code class="literal">registerClient.jsp</code></span></dt><dd><p>Enables registration of an OAuth 2.0 client with the OpenAM OAuth 2.0 authorization service.
+                    For details, see the Administration Guide chapter on
+                        <a href="../../admin-guide/index/chap-oauth2.html#register-oauth2-client" class="link">
+                            <em class="citetitle">Managing OAuth 2.0 Authorization</em></a>.
+                    </p></dd><dt><span class="term"><code class="literal">OAuthLogout.jsp</code></span></dt><dd><p>Used to log out the resource owner with teh OAuth 2.0 provider. For more information, see
+                        the Administration Guide chapter on
+                        <a href="../../admin-guide/index/chap-oauth2.html#register-oauth2-client" class="link">
+                            <em class="citetitle">Defining Authentication Services</em></a>.
+                        </p></dd><dt><span class="term"><code class="literal">OAuthProxy.jsp</code></span></dt><dd><p>Endpoint used for redirection. For more information, see the Administration Guide chapter on
+                        <a href="../../admin-guide/index/chap-oauth2.html#register-oauth2-client" class="link">
+                        <em class="citetitle">Managing OAuth 2.0 Authorization</em></a>.</p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="password-jsp-endpoints"></a>7.20.&nbsp;Password JSP Endpoints</h2></div></div></div><a class="indexterm" name="d0e45394"></a><p>The endpoints in this section can be found in the password/ui subdirectory. Each of these endpoints use
+        the PWResetViewBeanBase.java file, as a class to set up messages. You can view some of these endpoints by
+        omitting the <code class="literal">password</code>. For example, to view the effect of the PWResetUserValidation.jsp
+        endpoint on an OpenAM system using an URL of openam.example.org in a standard Tomcat container, navigate to
+        http://openam.exmaple.org/openam/ui/PWResetUserValidation.jsp. You can set associated options from
+        the main console by selecting Configuration &gt; Global &gt; Password Reset. For more information on the
+            process, see the chapter on <a href="../../admin-guide/index/chap-pwd-reset.html" class="link">
+                <em class="citetitle">Configuring Password Reset in the Administration Guide</em></a>.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">PWResetBase.jsp</code></span></dt><dd><p>This simple endpoint includes a redirection of the ServiceURI, and specifies OpenAM as the
+                    ProductName. It's cited by the other endpoints in the password/ui subdirectory.</p></dd><dt><span class="term"><code class="literal">PWResetInvalidURL.jsp</code></span></dt><dd><p>This endpoint is called with the PWResetInvalidURLViewBean class, when a module servlet gets
+                        an invalid URL.</p></dd><dt><span class="term"><code class="literal">PWResetQuestion.jsp</code></span></dt><dd><p>Starts the password reset process by prompting for the User ID. For more information on the
+                    process, see the method for the associated <code class="literal">PWResetQuestionModel</code>, available from
+                        the <a class="link" href="http://download.forgerock.org/downloads/openam/javadocs/internal/com/sun/identity/password/ui/model/PWResetQuestionModel.html                         " target="_blank">Interface PWResetQuestionModel specification page</a>.</p></dd><dt><span class="term"><code class="literal">PWResetSuccess.jsp</code></span></dt><dd><p>Specifies the endpoint that is called when an account password is successfully reset.</p></dd><dt><span class="term"><code class="literal">PWResetUncaughtException.jsp</code></span></dt><dd><p>Specifies a "Contact your administrator" message when there is an error in a related endpoint.
+                    </p></dd><dt><span class="term"><code class="literal">PWResetUserValidation.jsp</code></span></dt><dd><p>Opens a screen that prompts for a user ID (UID). If that UID is found in the database,
+                    configured with an accessible email address, on a system connected to a mail server,
+                        a reset link is sent to that address.</p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="saml2-jsp-endpoints"></a>7.21.&nbsp;SAML2 JSP Endpoints</h2></div></div></div><a class="indexterm" name="d0e45463"></a><p>You can find the endpoints described in this section in the saml2/jsp subdirectory. As of this writing,
+        some of these endpoints are not used in the current implementation of OpenAM. Active endpoints in this category
+            are discussed in the chapter on <a href="../../admin-guide/index/chap-federation.html" class="link">
+                <em class="citetitle">Managing SAML2 Federation in the Administration Guide</em></a>.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">default.jsp</code></span></dt><dd><p>May be used by other files to return a success or failure message. While the default.jsp name
+                        is common in the trunk, the jsp/default.jsp filename is used only by SPSingleLogout.java, which
+                        is not commonly used.</p></dd><dt><span class="term"><code class="literal">exportmetadata.jsp</code></span></dt><dd><p>Supports the export of XML-based metadata with other providers within a circle of trust (CoT).
+                        Currently used. For more information, see
+                        the chapter on <a href="../../admin-guide/index/chap-federation.html" class="link">
+                            <em class="citetitle">Managing SAML2 Federation in the Administration Guide</em></a>.</p></dd><dt><span class="term"><code class="literal">fedletAttrQuery.jsp</code></span></dt><dd><p>Supports the configuration of SAML attribute query headers.</p></dd><dt><span class="term"><code class="literal">fedletAttrResp.jsp</code></span></dt><dd><p>Supports the configuration of SAML attribute response headers.</p></dd><dt><span class="term"><code class="literal">fedletSSOInit.jsp</code></span></dt><dd><p>Previously used to start single sign-on at the Fedlet.</p></dd><dt><span class="term"><code class="literal">fedletSampleApp.jsp</code></span></dt><dd><p>Specifies a sample fedlet application that can be removed in production.</p></dd><dt><span class="term"><code class="literal">fedletXACMLQuery.jsp</code></span></dt><dd><p>Enables a sample SAML XACML query handler; used for testing, to prompt users to specify a
+                        resource URL along with an action (GET, POST).</p></dd><dt><span class="term"><code class="literal">fedletXACMLResp.jsp</code></span></dt><dd><p>Retrieves a sample SAML XACML resource URL for a yes, no, or maybe decision
+                        (PERMIT, DENY, or INDETERMINATE).</p></dd><dt><span class="term"><code class="literal">idpMNIPOST.jsp</code></span></dt><dd><p>The MNI in several JSP files relate to ManageNameID, which sets up corresponding accounts
+                        on IDPs and SPs. This particular JSP file processes a request from an IDP through an HTTP
+                        redirect.</p></dd><dt><span class="term"><code class="literal">idpMNIRedirect.jsp</code></span></dt><dd><p>The MNI in several JSP files relate to ManageNameID, which sets up corresponding accounts
+                        on IDPs and SPs. This particular JSP file processes a request from an IDP through an HTTP
+                        redirect. It uses a metadata-based alias, an entity ID for the service provider, and the type
+                    of MNI request; examples include <code class="literal">NewID</code> and <code class="literal">terminate</code>.</p></dd><dt><span class="term"><code class="literal">idpMNIRequestInit.jsp</code></span></dt><dd><p>The MNI in several JSP files relate to ManageNameID, which sets up corresponding accounts
+                        on IDPs and SPs. As described in the
+                        <a href="../../admin-guide/index/chap-federation.html#change-federation" class="link">
+                        <em class="citetitle">Managing SAML2 Federation in the Administration Guide</em></a> chapter of
+                        the Administration Guide, it allows you to change federation of persistently linked accounts.
+                    The chapter also includes an example of this endpoint at work.</p></dd><dt><span class="term"><code class="literal">idpSSOFederate.jsp</code></span></dt><dd><p>Specifies an endpoint that takes authentication requests from an SP, with a <code class="literal">
+                        SAMLRequest</code> data, a <code class="literal">metaAlias</code> and a <code class="literal">RelayState</code>
+                        with information from the target URL.</p></dd><dt><span class="term"><code class="literal">idpSSOInit.jsp</code></span></dt><dd><p>Specifies an endpoint that starts SSO, either from cache, or by verifying <code class="literal">metaAlias
+                        </code> and SP identifier data.For more information, see
+                        the chapter on <a href="../../admin-guide/index/chap-federation.html" class="link">
+                            <em class="citetitle">Managing SAML2 Federation in the Administration Guide</em></a>.</p></dd><dt><span class="term"><code class="literal">idpSingleLogoutInit.jsp</code></span></dt><dd><p>Starts a <code class="literal">LogoutRequest</code> from the identity provider.For more information, see
+                        the chapter on <a href="../../admin-guide/index/chap-federation.html" class="link">
+                            <em class="citetitle">Managing SAML2 Federation in the Administration Guide</em></a>.</p></dd><dt><span class="term"><code class="literal">idpSingleLogoutPOST.jsp</code></span></dt><dd><p>Specifies an endpoint that receives logout requests from IDPs and receives logout responses
+                        from SPs. Also sends logout responses to SPs.</p></dd><dt><span class="term"><code class="literal">idpSingleLogoutRedirect.jsp</code></span></dt><dd><p>Takes the <code class="literal">SAMLRequest</code> and <code class="literal">SAMLResponse</code> messages for
+                        logouts from the SP. May also handle the <code class="literal">RelayState</code> directive.</p></dd><dt><span class="term"><code class="literal">SA_IDP.jsp</code></span></dt><dd><p>Used for SAML authentication for communication with identity providers (IDPs).</p></dd><dt><span class="term"><code class="literal">SA_SP.jsp</code></span></dt><dd><p>Used for SAML authentication for communication with service providers (SPs).</p></dd><dt><span class="term"><code class="literal">saeerror.jsp</code></span></dt><dd><p>Returns an error message related to Secure Attribute Exchange (SAE). Currently used only by
+                    the SA_IDP.jsp and SA_SP.jsp endpoints.</p></dd><dt><span class="term"><code class="literal">saml2error.jsp</code></span></dt><dd><p>Endpoint that may return one of many error codes, specified in the comments of the file.</p></dd><dt><span class="term"><code class="literal">spAssertionConsumer.jsp</code></span></dt><dd><p>Used on a SP, to interpret information from an IDP. The request to the IDP is an <code class="literal">
+                        AuthnRequest</code>; the response from the IDP is read by this endpoint.</p></dd><dt><span class="term"><code class="literal">spMNIPOST.jsp</code></span></dt><dd><p>The MNI in several JSP files relate to ManageNameID, which sets up corresponding accounts
+                        on IDPs and SPs. This particular endpoint takes the associated request, using an HTTP Redirect,
+                        from a SP. Less commonly used.</p></dd><dt><span class="term"><code class="literal">spMNIRedirect.jsp</code></span></dt><dd><p>This particular endpoint handles the <code class="literal">ManageNameIDRequest</code>
+                        and <code class="literal">ManageNameIDResponse</code> messages with the help of HTTP Redirect. Less
+                        commonly used. </p></dd><dt><span class="term"><code class="literal">spMNIRequestInit.jsp</code></span></dt><dd><p>This particular endpoint supports changes to federation of persistently linked
+                        accounts, in a fashion similar to idpMNIRequestInit.jsp. For an example of this endpoint in
+                        work, see the chapter on <a href="../../admin-guide/index/chap-federation.html" class="link">
+                            <em class="citetitle">Managing SAML2 Federation in the Administration Guide</em></a>.</p></dd><dt><span class="term"><code class="literal">spSSOInit.jsp</code></span></dt><dd><p>Supports SSO messages from the SP. For more information and an example of how this endpoint is
+                        used, see the chapter on <a href="../../admin-guide/index/chap-federation.html" class="link">
+                            <em class="citetitle">Managing SAML2 Federation in the Administration Guide</em></a>.</p></dd><dt><span class="term"><code class="literal">spSingleLogoutInit.jsp</code></span></dt><dd><p>Supports SSO messages from the SP. For more information, see
+                        the chapter on <a href="../../admin-guide/index/chap-federation.html" class="link">
+                            <em class="citetitle">Managing SAML2 Federation in the Administration Guide</em></a>.</p></dd><dt><span class="term"><code class="literal">spSingleLogoutPOST.jsp</code></span></dt><dd><p>Specifies an endpoint that receives logout requests from SPs and receives logout responses
+                        from IDPs. Also sends logout responses to IDPs. Converse endpoint to idpSingleLogoutPOST.jsp.</p></dd><dt><span class="term"><code class="literal">spSingleLogoutRedirect.jsp</code></span></dt><dd><p>Takes the <code class="literal">SAMLRequest</code> and <code class="literal">SAMLResponse</code> messages for
+                        logouts from the IDP. May also handle the <code class="literal">RelayState</code> directive. Converse
+                        endpoint to idpSingleLogoutRedirect.jsp.</p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="wsfederation-jsp-endpoints"></a>7.22.&nbsp;WS Federation JSP Endpoints</h2></div></div></div><a class="indexterm" name="d0e45761"></a><p>The endpoints described in this section, in the wsfederation/jsp subdirectory, relate to Kantara Initiative
+            standards that originated with the Liberty Alliance Project Identity Federation Framework.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">logout.jsp</code></span></dt><dd><p>Shows a page after a successful logout.</p></dd><dt><span class="term"><code class="literal">multi.jsp</code></span></dt><dd><p>Used for multi-federation protocol configurations.</p></dd><dt><span class="term"><code class="literal">post.jsp</code></span></dt><dd><p>Sets up a form for single sign-on (SSO) responses sent from the IDP to the SP.</p></dd><dt><span class="term"><code class="literal">realmSelection.jsp</code></span></dt><dd><p>Default display if no realms are defined.</p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="web-inf-endpoints"></a>7.23.&nbsp;WEB-INF Endpoints</h2></div></div></div><a class="indexterm" name="d0e45802"></a><p>The OpenAM WAR archive includes pointers to different URL patterns in the web.xml file. The following
+            section includes a description of each of the identified URL patterns.</p><p>Many of the endpoints in this section are based on what you would add to an OpenAM URL. Many of the
+        endpoints described in the web.xml file are not directly related to the .jsp files described in other parts
+        of this chapter.</p><p>The endpoints in this chapter are taken from all items tagged with the <code class="literal">url-pattern</code>
+        label. These endpoints are listed in that they appear in the web.xml file available at the time of this writing;
+        the list is changed frequently. If you want to disable one or more of these endpoints, you may be able to
+            delete them from the web.xml file.</p><p>Each of the <code class="literal">url-pattern</code>s shown in the web.xml file is associated with elements such as
+        a <code class="literal">filter-name</code> or a <code class="literal">servlet-name</code>. The definitions that follow use those
+             elements to help identify the function
+        of each endpoint listed in the web.xml file. Many of these elements can be directly related to a .java file.
+        </p><p>The endpoints in this section are in the order found in the list of <code class="literal">url-pattern</code> entries
+        shown in the web.xml file at the time of this writing.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">/*</code></span></dt><dd><p>This entry is more of a filter for all endpoints. It's associated with the
+                        ResponseValidationFilter, which checks for valid URLs. It's also associated with the
+                    AMSetupFilter.java file; on systems not yet configured, it redirects users to the setup wizard.
+                    </p></dd><dt><span class="term"><code class="literal">ws/*</code></span></dt><dd><p>Specifies a group of URLs related to authentication endpoints, as it is associated with the
+                    AuthNFilter.java and AuthZFilter.java files. However, those files (and the associated
+                        RestServiceManager.java file) are not called by any other files in the trunk.</p></dd><dt><span class="term"><code class="literal">/login</code></span></dt><dd><p>With the help of the LoginLogoutMapping.java file, this would forward to the /UI/Login.jsp
+                        endpoint.</p></dd><dt><span class="term"><code class="literal">/logout</code></span></dt><dd><p>With the help of the LoginLogoutMapping.java file, this would forward to the /UI/Logout.jsp
+                        endpoint.</p></dd><dt><span class="term"><code class="literal">/UI/*</code></span></dt><dd><p>With the help of the LoginServlet.java file, this forwards to the default login page for
+                        an OpenAM system.</p></dd><dt><span class="term"><code class="literal">/config/configurator</code></span></dt><dd><p>Uses the AMSetupServlet, which as noted in the associated .java file, "is the first class
+                        to get loaded by the Servlet * container"</p></dd><dt><span class="term"><code class="literal">/setup/setSetupProgress</code></span></dt><dd><p>Used by the installation wizard to display the progress.</p></dd><dt><span class="term"><code class="literal">/upgrade/setUpgradeProgress</code></span></dt><dd><p>Used by the upgrade wizard to display progress.</p></dd><dt><span class="term"><code class="literal">/ui/*</code></span></dt><dd><p>Associated with the servlet named PWResetServlet,
+                     associated with password resets.</p></dd><dt><span class="term"><code class="literal">/gateway</code></span></dt><dd><p>Used with the servlet named GatewayServlet. Associated with the Gateway.java file, which takes
+                        an authentication module and forwards it to a login URL.</p></dd><dt><span class="term"><code class="literal">/GetHttpSession</code></span></dt><dd><p>The associated .java file is associated with Session Failover (SFO).</p></dd><dt><span class="term"><code class="literal">/sessionservice, /profileservice, /policyservice, /namingservice, /loggingservice,
+                /authservice, /notificationservice</code></span></dt><dd><p>All of these endpoints are associated with
+                        <a class="link" href="http://www.forgerock.org/security_advisory1.html" target="_blank">
+                            OpenAM Security Advisory #201203</a>. As suggested in the advisory, if you're using
+                    OpenAM version 9.5.4 or 10.0.0, you should be sure to apply the updates required to upgrade your
+                    systems to versions 9.5.5 or 10.0.1 (or higher).</p></dd><dt><span class="term"><code class="literal">/jaxrpc/*, /identityservices/*</code></span></dt><dd><p>These endpoints provide information on configured web services, including the port name,
+                        status, URL, and implementation class. Both endpoints show the same data. The IdentityServices
+                        servlet name points to the following description: "Web Service Endpoint - Identity Services".
+                    </p></dd><dt><span class="term"><code class="literal">/SMSServlet</code></span></dt><dd><p>Includes system configuration information when available, as documented in the comments to
+                    the AMSystemConfig.java file.</p></dd><dt><span class="term"><code class="literal">/notification</code></span></dt><dd><p>The associated servlet named notificationservlet appears to be commonly used. When the URL is
+                    entered, the default output is 200, associated with an URL success message.</p></dd><dt><span class="term"><code class="literal">/entitlementmonitor</code></span></dt><dd><p>Used by the NetworkMonitor.java file, which is essential to the monitoring of OpenAM
+                        services.</p></dd><dt><span class="term"><code class="literal">/identity/*</code></span></dt><dd><p>Possibly a legacy endpoint. While the associated IdentityServicesHandler servlet is identified
+                        as "REST Endpoint - Identity Services", it is only cited in the IdentityServicesHandler.java
+                        file.</p></dd><dt><span class="term"><code class="literal">/resources/*</code></span></dt><dd><p>Linked to an oauth servlet. The associated
+                        com.sun.identity.oauth.service.RestService class is rarely used.</p></dd><dt><span class="term"><code class="literal">/authentication/*</code></span></dt><dd><p>Associated with the servlet named AuthServlet. The associated AuthServer.java file is the
+                    controller servlet for realm authentication pages. When the URL is entered prior to login, it
+                    defaults to the standard login page.</p></dd><dt><span class="term"><code class="literal">/base/*</code></span></dt><dd><p>Associated with the servlet named AMBaseServlet. While the associated AMBaseServlet.java file
+                        is rarely used, the URL prior to login defaults to the standard login page.</p></dd><dt><span class="term"><code class="literal">/service/*</code></span></dt><dd><p>Associated with the servlet named SCServlet. While the associated SCServlet.java file
+                        is rarely used, the URL prior to login defaults to the standard login page.</p></dd><dt><span class="term"><code class="literal">/session/*</code></span></dt><dd><p>Associated with the servlet named SMServlet. While the associated SMServlet.java file
+                        is rarely used, the URL prior to login defaults to the standard login page.</p></dd><dt><span class="term"><code class="literal">/realm/*</code></span></dt><dd><p>Associated with the servlet named RMServlet. While the associated RMServlet.java file
+                        is rarely used, the URL prior to login defaults to the standard login page.</p></dd><dt><span class="term"><code class="literal">/policy/*</code></span></dt><dd><p>Associated with the servlet named PMServlet. While the associated PMServlet.java file
+                        is rarely used, the URL prior to login defaults to the standard login page.</p></dd><dt><span class="term"><code class="literal">/idm/*</code></span></dt><dd><p>Associated with the servlet named IDMServlet. While the associated IDMServlet.java file
+                        is rarely used, the URL prior to login defaults to the standard login page.</p></dd><dt><span class="term"><code class="literal">/user/*</code></span></dt><dd><p>Associated with the servlet named UMServlet. While the associated UMServlet.java file
+                        is rarely used, the URL prior to login defaults to the standard login page.</p></dd><dt><span class="term"><code class="literal">/delegation/*</code></span></dt><dd><p>Associated with the servlet named DelegationServlet. While the associated
+                        DelegationServlet.java file
+                        is rarely used, the URL prior to login defaults to the standard login page.</p></dd><dt><span class="term"><code class="literal">/task/*</code></span></dt><dd><p>Associated with the servlet named TaskServlet. While the associated TaskServlet.java file
+                        is rarely used, the URL prior to login defaults to the standard login page.</p></dd><dt><span class="term"><code class="literal">/agentconfig/*</code></span></dt><dd><p>Associated with the servlet named AgentConfigurationServlet. The associated
+                        AgentConfigurationServlet class is called by the amAccessControl.xml file, which
+                        suggests that it can be configured from the GUI console, through the Agents section of the
+                        Access Control menu. It is rarely used otherwise. The URL prior to login defaults to the
+                    standard login page.</p></dd><dt><span class="term"><code class="literal">/ccversion/*</code></span></dt><dd><p>Associated with the servlet named click-servlet. There is no associated click-servlet.java
+                        or ClickServlet.java file.</p></dd><dt><span class="term"><code class="literal">/federation/*</code></span></dt><dd><p>Associated with the servlet named FSServlet. While the associated FSServlet.java file
+                        is rarely used, the URL prior to login defaults to the standard login page.</p></dd><dt><span class="term"><code class="literal">/webservices</code></span></dt><dd><p>Used by the WSServlet.java and SecurityTokenService.java files. If you're using web services
+                        and/or the Security Token Service (STS), you may want to keep this in place.</p></dd><dt><span class="term"><code class="literal">/sts</code></span></dt><dd><p>Associated with the STS. Be aware, this endpoint exposes basic service and port information
+                        for STS, Metadata Exchange (MEX), Simple Object Access Protocol 1.1 (SOAP11),
+                        and Web Service Definition Language (WSDL) endpoints
+                        without logons.</p></dd><dt><span class="term"><code class="literal">/sts/mex</code></span></dt><dd><p>Associated with the STS. Be aware, this endpoint exposes basic service and port information
+                        for STS, Metadata Exchange (MEX), Simple Object Access Protocol 1.1 (SOAP11),
+                        and Web Service Definition Language (WSDL) endpoints
+                        without logons.</p></dd><dt><span class="term"><code class="literal">/sts/soap11</code></span></dt><dd><p>Associated with the STS. Be aware, this endpoint exposes basic service and port information
+                        for STS, Metadata Exchange (MEX), Simple Object Access Protocol 1.1 (SOAP11),
+                        and Web Service Definition Language (WSDL) endpoints
+                        without logons.</p></dd><dt><span class="term"><code class="literal">/sts/mexsoap11</code></span></dt><dd><p>Associated with the STS. Unlike related STS endpoints, it returns a 404 message by default.
+                    </p></dd><dt><span class="term"><code class="literal">/SPMniSoap/*</code></span></dt><dd><p>Used by a servlet named SPMniSoap; associated with a
+                        com.sun.identity.saml2.servlet.SPManageNameIDServiceSOAP servlet class. The associated .java
+                        file works with Manage Name ID communications using SOAP binding from the SP. As the former
+                        spMNISOAP.jsp file no longer exists in the trunk, this may be a legacy endpoint.</p></dd><dt><span class="term"><code class="literal">/SPMniPOST/*</code></span></dt><dd><p>Used by a servlet named spMNIPOST.jsp; previously defined in the SAML2 JSP Endpoints section.
+                    </p></dd><dt><span class="term"><code class="literal">/SPMniRedirect/*</code></span></dt><dd><p>Used by a servlet named spMNIRedirect.jsp; previously defined in the SAML2 JSP Endpoints
+                        section.
+                    </p></dd><dt><span class="term"><code class="literal">/SPMniInit/*</code></span></dt><dd><p>Used by a servlet named spMNIRequestInit.jsp; previously defined in the SAML2 JSP Endpoints section.
+                    </p></dd><dt><span class="term"><code class="literal">/SPECP/*</code></span></dt><dd><p>The associated SPECPService class receives and processes single logout (SLO) requests, using
+                        SOAP bindings on the SP. 
+                    </p></dd><dt><span class="term"><code class="literal">/SPSloSoap/*</code></span></dt><dd><p>The associated SPSingleLogoutServiceSOAP class receives and processes single logout
+                        (SLO) requests, using SOAP bindings on the SP. 
+                    </p></dd><dt><span class="term"><code class="literal">/SPSloPOST/*</code></span></dt><dd><p>Used by a servlet named spSingleLogoutPOST.jsp; previously defined in the SAML2 JSP Endpoints
+                        section.
+                    </p></dd><dt><span class="term"><code class="literal">/SPSloRedirect/*</code></span></dt><dd><p>Used by a servlet named spSingleLogoutRedirect.jsp; previously defined in the SAML2 JSP
+                        Endpoints section.
+                    </p></dd><dt><span class="term"><code class="literal">/SPSloInit/*</code></span></dt><dd><p>Used by a servlet named spSingleLogoutInit.jsp; previously defined in the SAML2 JSP Endpoints
+                        section.
+                    </p></dd><dt><span class="term"><code class="literal">/Consumer/*, /SSORedirect/*</code></span></dt><dd><p>Used by a servlet named spAssertionConsumer.jsp; previously defined in the SAML2 JSP Endpoints
+                        section.
+                    </p></dd><dt><span class="term"><code class="literal">/SSOPOST/*, /SSORedirect/*</code></span></dt><dd><p>Used by a servlet named idpSSOFederate.jsp; previously defined in the SAML2 JSP Endpoints
+                        section.
+                    </p></dd><dt><span class="term"><code class="literal">/SSORedirect/*</code></span></dt><dd><p>Used by a servlet named idpSSOFederate.jsp; previously defined in the SAML2 JSP Endpoints
+                        section.
+                    </p></dd><dt><span class="term"><code class="literal">/NIMSoap/*</code></span></dt><dd><p>Used by a servlet named NameIDMappingServiceSOAP. 
+                    </p></dd><dt><span class="term"><code class="literal">/AIDReqUri/*</code></span></dt><dd><p>Used by a servlet named AssertionIDRequestServiceSoap. 
+                    </p></dd><dt><span class="term"><code class="literal">/AIDReqSoap/*</code></span></dt><dd><p>Used by a servlet named AssertionIDRequestServiceSoap. 
+                    </p></dd><dt><span class="term"><code class="literal">/AuthnQueryServiceSoap/*</code></span></dt><dd><p>Used by a servlet named AuthnQueryServiceSoap. 
+                    </p></dd><dt><span class="term"><code class="literal">/AttributeServiceSoap/*</code></span></dt><dd><p>Used by a servlet named AttributeServiceSoap. 
+                    </p></dd><dt><span class="term"><code class="literal">/SSOSoap/*</code></span></dt><dd><p>Used by a servlet named SSOSoap. 
+                    </p></dd><dt><span class="term"><code class="literal">/IDPMniSoap/*</code></span></dt><dd><p>Used by a servlet named IDPMniSoap. 
+                    </p></dd><dt><span class="term"><code class="literal">/IDPMniPOST/*</code></span></dt><dd><p>Used by a servlet named idpMNIPOST.jsp; previously defined in the SAML2 JSP Endpoints
+                        section.
+                    </p></dd><dt><span class="term"><code class="literal">/IDPMniRedirect/*</code></span></dt><dd><p>Used by a servlet named idpMNIRedirect.jsp; previously defined in the SAML2 JSP Endpoints
+                        section.
+                    </p></dd><dt><span class="term"><code class="literal">/IDPMniInit/*</code></span></dt><dd><p>Used by a servlet named idpMNIRequestInit.jsp; previously defined in the SAML2 JSP Endpoints
+                        section.
+                    </p></dd><dt><span class="term"><code class="literal">/IDPSloSoap/*</code></span></dt><dd><p>Used by a servlet named IDPSloSoap. 
+                    </p></dd><dt><span class="term"><code class="literal">/IDPSloPOST/*</code></span></dt><dd><p>Used by a servlet named idpSingleLogoutPOST.jsp; previously defined in the SAML2 JSP Endpoints
+                        section.
+                    </p></dd><dt><span class="term"><code class="literal">/IDPSloRedirect/*</code></span></dt><dd><p>Used by a servlet named idpSingleLogoutRedirect.jsp; previously defined in the SAML2 JSP
+                        Endpoints section.
+                    </p></dd><dt><span class="term"><code class="literal">/IDPSloInit/*</code></span></dt><dd><p>Used by a servlet named idpSingleLogoutInit.jsp; previously defined in the SAML2 JSP Endpoints
+                        section.
+                    </p></dd><dt><span class="term"><code class="literal">/ArtifactResolver/*</code></span></dt><dd><p>Used by a servlet named IDPArtifactResolver. 
+                    </p></dd><dt><span class="term"><code class="literal">/spssoinit</code></span></dt><dd><p>Used by a servlet named spSSOInit.jsp; previously defined in the SAML2 JSP Endpoints
+                        section.
+                    </p></dd><dt><span class="term"><code class="literal">/idpssoinit</code></span></dt><dd><p>Used by a servlet named idpSSOInit.jsp; previously defined in the SAML2 JSP Endpoints
+                        section.
+                    </p></dd><dt><span class="term"><code class="literal">/idpSSOFederate</code></span></dt><dd><p>Used by a servlet named idpSSOFederate.jsp; previously defined in the SAML2 JSP Endpoints
+                        section.
+                    </p></dd><dt><span class="term"><code class="literal">/idpsaehandler/*</code></span></dt><dd><p>Used by a servlet named SA_IDP.jsp; previously defined in the SAML2 JSP Endpoints
+                        section.
+                    </p></dd><dt><span class="term"><code class="literal">/spsaehandler/*</code></span></dt><dd><p>Used by a servlet named IDP_SP.jsp; previously defined in the SAML2 JSP Endpoints
+                        section.
+                    </p></dd><dt><span class="term"><code class="literal">/idpfinder</code></span></dt><dd><p>Used by a servlet named IDPFinderService; The associated
+                        FSIDPFinderService.java file can be used to find a preferred IDP with a common domain cookie.
+                    </p></dd><dt><span class="term"><code class="literal">/cdcservlet</code></span></dt><dd><p>Used by a servlet named CDCServlet. It is associated with a Cross Domain Controller Servlet,
+                        as described in the
+                        the chapter on <a href="../../admin-guide/index/chap-cdsso.html" class="link">
+                            <em class="citetitle">Configuring Cross-Domain Single Sign On in the Administration Guide
+                            </em></a>.
+                    </p></dd><dt><span class="term"><code class="literal">/SAMLAwareServlet</code></span></dt><dd><p>Used by a servlet named SAMLAwareServlet. It is associated with communications between a
+                        client, an SP, and an IDP. The transfer service on the IDP is the SAML Aware Servlet, and is
+                        part of the client web browser artifact profile. It validates a session token from a request run
+                        through the IDP.
+                        
+                    </p></dd><dt><span class="term"><code class="literal">/SAMLPOSTProfileServlet</code></span></dt><dd><p>Used by a servlet named SAMLPOSTProfileServlet. It is associated with communications between a
+                        client, an SP, and an IDP. The transfer service on the IDP is the SAML Aware Servlet, and is
+                        part of the client web browser POST profile, which supplies assertion IDs, and returns the
+                        response to the client browser.
+                        
+                    </p></dd><dt><span class="term"><code class="literal">/SAMLSOAPReceiver</code></span></dt><dd><p>Used by a servlet named SAMLSOAPReceiver. The servlet extracts a SAML request from a message
+                        sent in SOAP format. That message can be a query for authorization, attributes, or
+                        authentication. It supports POST messages only.
+                        
+                    </p></dd><dt><span class="term"><code class="literal">/AssertionManagerServlet/*</code></span></dt><dd><p>Used by a servlet named AssertionManagerServlet. It supports dynamic substitution, using
+                        the host name, port number, and the deployment location.
+                        
+                    </p></dd><dt><span class="term"><code class="literal">/FSAssertionManagerServlet/*</code></span></dt><dd><p>Used by a servlet named FSAssertionManagerServlet. It provides remote interfaces for the
+                        assertion manager class.
+                    </p></dd><dt><span class="term"><code class="literal">/SecurityTokenManagerServlet/*</code></span></dt><dd><p>Used by a servlet named SecurityTokenManagerServlet. It supports dynamic substitution, using
+                        session parameters.
+                        
+                    </p></dd><dt><span class="term"><code class="literal">/preLogin</code></span></dt><dd><p>Used by a servlet named preLoginHandler. As there is no associated .java or .jsp file, it
+                        may be a legacy endpoint.
+                    </p></dd><dt><span class="term"><code class="literal">/postLogin/*</code></span></dt><dd><p>Used by a servlet named postLoginHandler. As there is no associated .java or .jsp file, it
+                        may be a legacy endpoint.
+                    </p></dd><dt><span class="term"><code class="literal">/federation</code></span></dt><dd><p>Used by a servlet named FederationServlet. Associated with the
+                        com.sun.identity.federation.login.FSFederationHandler class. The matching
+                        FSFederationHandler.java file processes requests to initiate a federation.
+                    </p></dd><dt><span class="term"><code class="literal">/consentHandler</code></span></dt><dd><p>Used by a servlet named consentHandler. Associated with the
+                        com.sun.identity.federation.login.FSConsentHandler class. The matching
+                        FSConsentHandler.java file processes redirect requests
+                        in an existing federation.
+                    </p></dd><dt><span class="term"><code class="literal">/ProcessLogout/*</code></span></dt><dd><p>Used by a servlet named ProcessLogout. Associated with the
+                        FSProcessLogoutServlet class. It is designed to handle single logout requests related to
+                        Kantara / Liberty ID-FF processes.
+                    </p></dd><dt><span class="term"><code class="literal">/ReturnLogout/*</code></span></dt><dd><p>Used by a servlet named ReturnLogout. Associated with the
+                        FSReturnLogoutServlet class. It is designed to handle single logout responses related to
+                        Kantara / Liberty ID-FF processes. (Note the subtle
+                     difference with the ProcessLogout endpoint which handles logout requests.)
+                    </p></dd><dt><span class="term"><code class="literal">/liberty-logout</code></span></dt><dd><p>Used by a servlet named LogoutServlet. Associated with the
+                        FSSingleLogoutServlet class. It is designed to start single logout requests related to
+                        Kantara / Liberty ID-FF processes.
+                    </p></dd><dt><span class="term"><code class="literal">/SingleSignOnService/*</code></span></dt><dd><p>Used by a servlet named SingleSignOnService. Associated with the
+                        FSSSOAndFedService class. Configured for SSO on the IDP.
+ 
+                    </p></dd><dt><span class="term"><code class="literal">/IntersiteTransferService</code></span></dt><dd><p>Used by a servlet named IntersiteTransferService. Associated with the
+                        FSIntersiteTransferService class. It is designed to send a <code class="literal">AuthnRequest</code> to an
+                        IDP.
+                    </p></dd><dt><span class="term"><code class="literal">/AssertionConsumerService/*</code></span></dt><dd><p>Used by a servlet named AssertionConsumerService. Associated with the
+                        FSAssertionConsumerService class. For more information, see the chapter on
+                       <a href="../../admin-guide/index/chap-federation.html" class="link">
+                            <em class="citetitle">Managing SAML 2.0 Federation in the Administration Guide</em></a>.
+                    </p></dd><dt><span class="term"><code class="literal">/SOAPReceiver/*</code></span></dt><dd><p>Used by a servlet named SOAPReceiver. Associated with the
+                        FSSOAPReceiver class. SOAP endpoint that handles federation and specifies a URI to the SP.
+                    </p></dd><dt><span class="term"><code class="literal">/federation-terminate</code></span></dt><dd><p>Used by a servlet named FederationTerminationServlet. Associated with the
+                        FSTerminationInitiationServlet.java file, used to initiate termination of a federation
+                        connection. The IDP will send the termination request to the associated URL.
+                    </p></dd><dt><span class="term"><code class="literal">/ProcessTermination/*</code></span></dt><dd><p>Used by a servlet named ProcessTermination. Associated with the
+                        FSTerminationRequestServlet class. The associated .java file is used when a request is
+                        received by a remote SP.
+                    
+                    </p></dd><dt><span class="term"><code class="literal">/ReturnTermination/*</code></span></dt><dd><p>Used by a servlet named ReturnTermination. Associated with the
+                        FSTerminationReturnServlet class. The associated .java file is used to define a URL used by an
+                        IP to send termination responses.
+                    </p></dd><dt><span class="term"><code class="literal">/InitiateRegistration/*</code></span></dt><dd><p>Used by a servlet named InitiateRegistration. Associated with the
+                        FSRegistrationInitiationServlet class. The associated .java file is used to handle the
+                        registration request from a remote IDP.
+                    </p></dd><dt><span class="term"><code class="literal">/ProcessRegistration/*</code></span></dt><dd><p>Used by a servlet named ProcessRegistration. Associated with the
+                        FSRegistrationRequestServlet class. Processes registration requests from remote SPs.
+                    </p></dd><dt><span class="term"><code class="literal">/ReturnRegistration/*</code></span></dt><dd><p>Used by a servlet named ReturnRegistration. Associated with the
+                        FSRegistrationReturnServlet class. Defines a URL for IDPs to send registration responses.
+                    </p></dd><dt><span class="term"><code class="literal">/Liberty/*</code></span></dt><dd><p>Used by a servlet named WSSOAPReceiver. Associated with the
+                        SOAPReceiver class. Defines an endpoint that handles SOAP requests.
+                    </p></dd><dt><span class="term"><code class="literal">/WSPRedirectHandler/*</code></span></dt><dd><p>Used by a servlet named WSPRedirectHandler. Associated with the
+                        WSPRedirectHandlerServlet class. Used by the SP for user redirects.
+                    </p></dd><dt><span class="term"><code class="literal">/idffwriter, /saml2writer</code></span></dt><dd><p>Used by a servlet with a matching name (idffwriter, saml2writer). Associated with the
+                        CookieWriterServlet class. Used by the IDP to help the web container find app-specific info
+                        such as Java classes or Java Archives (JARs).
+                    </p></dd><dt><span class="term"><code class="literal">/idffreader, /saml2reader</code></span></dt><dd><p>Used by a servlet with a matching name (idffreader, saml2reader). Associated with the
+                        CookieReaderServlet class. Used by the SP to help find the preferred IDP.
+                    </p></dd><dt><span class="term"><code class="literal">/multiprotocolrelay</code></span></dt><dd><p>Used by a servlet named MultiProtocolRelayServlet. Associated with the
+                        MultiProtocolRelayServlet class. Used as a RelayState to continue to the next protocol;
+                        associated with a federation.
+                    </p></dd><dt><span class="term"><code class="literal">/WSFederationServlet/*, /FederationMetadata/*</code></span></dt><dd><p>Used by a servlet named WSFederationServlet. Associated with the
+                        WSFederationServlet class. Used as a service endpoint for WS-Federation.
+                    </p></dd><dt><span class="term"><code class="literal">/RealmSelection/*</code></span></dt><dd><p>Used by am endpoint named realmSelection.jsp. Previously defined in the WS-Federation
+                        JSP Endpoints section.
+                    </p></dd><dt><span class="term"><code class="literal">/saml2query/*</code></span></dt><dd><p>Used by a servlet named saml2query. Associated with the QueryHandlerServlet class. The
+                        corresponding .java file receives and processes SAML2 queries.
+                    </p></dd><dt><span class="term"><code class="literal">/federationws/*</code></span></dt><dd><p>Used by a servlet named federationrest. Associated with the ServletContainer class. Does not
+                        appear to be included in any current .java or .jsp file, so it may be a legacy endpoint.
+                    </p></dd><dt><span class="term"><code class="literal">/xacml/*</code></span></dt><dd><p>Used by a servlet named XACMLContentAdapter. Associated with the XacmlContentHandlerService
+                        class. Provides the main endpoint for all XACML requests. 
+                    </p></dd><dt><span class="term"><code class="literal">/frrest/oauth2/*</code></span></dt><dd><p>Used by a servlet named OAuth2Rest. Associated with the RestTokenDispatcher class.
+                        class.  For more information, see the
+                        the chapter on <a href="../../dev-guide/index/chap-rest-oauth2-oidc.html" class="link">
+                            <em class="citetitle">RESTful OAuth2 2.0 and OpenID Connect 1.0 Services</em></a>.</p></dd><dt><span class="term"><code class="literal">/oauth2/registerClient.jsp</code></span></dt><dd><p>Used by a servlet named OAuth2RegisterClient. For more information, see the
+                        the Administration Guide chapter on <a href="../../admin-guide/index/chap-oauth2.html" class="link">
+                            <em class="citetitle">Managing OAuth 2.0 Authorization</em></a>.</p></dd><dt><span class="term"><code class="literal">/oauth2/*</code></span></dt><dd><p>Used by a servlet named OAuth2RestletAdapter. Associated with the RestTokenDispatcher class.
+                        For more information, see the chapter on
+                        the chapter on <a href="../../dev-guide/index/chap-rest-oauth2-oidc.html" class="link">
+                            <em class="citetitle">RESTful OAuth2 2.0 and OpenID Connect 1.0 Services</em></a>.</p></dd><dt><span class="term"><code class="literal">/json/*</code></span></dt><dd><p>Used by a servlet named ForgeRockRest. Associated with the HttpServlet class.
+                        For more information, see the chapter on
+                        <a href="../../dev-guide/index/chap-rest.html" class="link">
+                            <em class="citetitle">Using RESTful Web Services</em></a>. In addition, you
+                    can read more about associated REST endpoints in <a href="../../reference/index/chap-endpoints.html#json-rest-endpoints" class="link">reference#json-rest-endpoints</a>
+                    <em class="citetitle">JSON REST Endpoints</em></p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="json-rest-endpoints"></a>7.24.&nbsp;JSON REST Endpoints</h2></div></div></div><a class="indexterm" name="d0e46666"></a><p>The endpoints in this section document the REST-based JSON interfaces
+   used for authentication and authorization.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">/json/agents</span></dt><dd><p>Authorization: Supports the PassThroughAuthorizationFilter.
+      No authorization logic is performed in the filter. Information is logged.
+      The authorization logic is performed by the underlying identity services.
+     </p></dd><dt><span class="term">/json/applications</span></dt><dd><p>Authorization: sets constraints for the policies that can be defined
+      for a particular application.
+      Application resources are represented in JSON and built from standard JSON
+      objects and values (strings, numbers, objects, arrays, true, false, and null).
+     </p></dd><dt><span class="term">/json/applicationtypes</span></dt><dd><p>Authorization: sets constraints for the policies that can be defined
+      for a particular application.
+      Application resources are represented in JSON and are built from standard
+      JSON objects and values (strings, numbers, objects, arrays, true, false, and null).
+     </p></dd><dt><span class="term">/json/authenticate</span></dt><dd><p>Authentication: Supports HTTP GET and POST methods. Can handle
+       Integrated Windows Authentication.
+      </p><p>Authorization: No filter.</p></dd><dt><span class="term">/json/conditiontypes</span></dt><dd><p>Authorization: describe the JSON representation of conditions that
+      you can use in policy definitions.
+      Condition types are server-wide, and do not differ by realm. Hence the URI
+      for the conditiontypes API does not contain a realm component.
+     </p></dd><dt><span class="term">/json/dashboard</span></dt><dd><p>Authorization: Supports the PassThroughAuthorizationFilter.
+      No authorization logic is performed in the filter. Information is logged.
+     </p></dd><dt><span class="term">/json/decisioncombiners</span></dt><dd><p>Authorization: Decision combiners describe how to resolve policy
+      decisions when multiple policies apply.
+      Decision combiners are server-wide, and do not differ by realm.
+      Hence the URI for the decision combiners API does not contain a realm component.
+      No authorization logic is performed in the filter. Information is logged.
+     </p></dd><dt><span class="term">/json/groups</span></dt><dd><p>Authorization: Supports the PassThroughAuthorizationFilter.
+      No authorization logic is performed in the filter. Information is logged.
+      The authorization logic is performed by the underlying identity services.
+     </p></dd><dt><span class="term">/json[/<em class="replaceable"><code>realm</code></em>][/
+     <em class="replaceable"><code>subrealm</code></em>]/policies</span></dt><dd><p>Authorization: Supports the management of policies; both for
+      requesting policy decisions, and also for administering policy definitions.
+      You can specify for specific realms.
+     </p></dd><dt><span class="term">/json/serverinfo</span></dt><dd><p>Authorization: Supports the PassThroughAuthorizationFilter.
+      No authorization logic is performed in the filter. Information is logged.
+      One sub-endpoint, <code class="literal">/json/serverinfo/cookieDomains</code>, supports
+      HTTP GET.
+     </p></dd><dt><span class="term">/json/sessions</span></dt><dd><p>Authorization: Supports the SessionResourceAuthZFilter.
+      Allows POST <code class="literal">_action=logout</code> for all users. Other functionality is limited
+      to the administrative superuser, which is typically <code class="literal">amadmin</code>.
+     </p></dd><dt><span class="term">/json/subjectattributes</span></dt><dd><p>Authorization:
+      Search for all names of available subject attributes to which
+      a policy applies.
+      There are no restrictions on the search and no pagination cookie is set.
+      The subject attribute names are all returned as one
+      in a "result" array named <code class="literal">applicationTypeNames</code>.
+     </p></dd><dt><span class="term">/json/subjecttypes</span></dt><dd><p>Authorization: Describe the JSON representation of subjects that you
+      can use in policy definitions. Subject types are server-wide, and do not
+      differ by realm. Hence, the URI for the subject types API does not contain
+      a realm component.
+     </p></dd><dt><span class="term">/json/tokens</span></dt><dd><p>Authorization: Supports the AdminAuthorizationFilter. Access limited
+      to the <code class="literal">amadmin</code> administrative superuser.
+     </p><p>
+      Access is disabled by default.
+     </p></dd><dt><span class="term">/json/users</span></dt><dd><p>Authentication: Supports HTTP POST. Uses the <code class="literal">_action</code>
+      query parameter with the following allowed values: <code class="literal">register</code>,
+      <code class="literal">confirm</code>, <code class="literal">forgotPassword</code>, and
+      <code class="literal">forgotPasswordReset</code>.
+     </p><p>Authorization: Supports the PassThroughAuthorizationFilter.
+      No authorization logic is performed in the filter. Information is logged.
+      The authorization logic is performed by the underlying identity services.
+     </p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="well-known-endpoints"></a>7.25.&nbsp;Well-Known Endpoints</h2></div></div></div><a class="indexterm" name="d0e46809"></a><a class="indexterm" name="d0e46814"></a><p>The endpoints described in this section are <a class="link" href="http://tools.ietf.org/html/rfc5785" target="_blank">Well-Known
+     URIs</a> supported by OpenAM.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">/.well-known/openid-configuration</code></span></dt><dd><p>Exposes OpenID Provider configuration by HTTP GET as specified by
+        OpenID Connect Discovery 1.0. No query string parameters are
+        required.</p></dd><dt><span class="term"><code class="literal">/.well-known/webfinger</code></span></dt><dd><p>Allows a client to retrieve the provider URL for an end user by
+        HTTP GET as specified by OpenID Connect Discovery 1.0.</p><p>For an example, see <a href="../../admin-guide/index/chap-openid-connect.html#configure-openid-connect-discovery" class="link"><em class="citetitle">Configuring
+        OpenAM For OpenID Connect Discovery</em></a>.</p></dd></dl></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-standards.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-xui-parameters.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;6.&nbsp;Supported Standards&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;8.&nbsp;XUI Configuration Parameters</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

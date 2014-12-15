@@ -1,0 +1,225 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;4.&nbsp;Installing Multiple Servers</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenAM Installation Guide"><link rel="up" href="index.html" title="OpenAM Installation Guide"><link rel="prev" href="chap-install-tools.html" title="Chapter&nbsp;3.&nbsp;Installing OpenAM Tools"><link rel="next" href="chap-install-das.html" title="Chapter&nbsp;5.&nbsp;Installing OpenAM Distributed Authentication"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;4.&nbsp;Installing Multiple Servers</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-install-tools.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-install-das.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-install-multiple"></a>Chapter&nbsp;4.&nbsp;Installing Multiple Servers</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-install-multiple.html#considerations-multiple-servers">4.1. Things to Consider When Installing Multiple Servers</a></span></dt><dt><span class="section"><a href="chap-install-multiple.html#configure-sites">4.2. Configuring OpenAM Sites</a></span></dt><dt><span class="section"><a href="chap-install-multiple.html#handle-request-headers">4.3. Handling HTTP Request Headers</a></span></dt></dl></div><a class="indexterm" name="d0e3109"></a><a class="indexterm" name="d0e3114"></a><a class="indexterm" name="d0e3119"></a><p>
+  This chapter covers what to do when installing multiple OpenAM servers.
+ </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="considerations-multiple-servers"></a>4.1.&nbsp;Things to Consider When Installing Multiple Servers</h2></div></div></div><p>
+   When installing multiple servers, consider the following points.
+  </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     You generally install multiple servers to provide service availability.
+     If one server is down for any reason, another server can respond instead.
+     This means that you need something between incoming traffic and OpenAM
+     to route around servers that are down.
+    </p><p>
+     OpenAM has the concept of OpenAM <em class="firstterm">site</em> for this purpose.
+     In an OpenAM site, multiple OpenAM servers are configured in the same way,
+     and accessed through a load balancer layer.<a href="#ftn.d0e3140" class="footnote" name="d0e3140"><sup class="footnote">[1]</sup></a>
+     The load balancer can be implemented in hardware or software,
+     but it is separate and independent from OpenAM software.
+     When installed properly, a site configuration improves service availability,
+     as the load balancer routes around OpenAM servers that are down,
+     sending traffic to other servers in the site.
+    </p></li><li class="listitem"><p>
+     You can use a load balancer layer to protect OpenAM services as well.
+     The load balancer can restrict access to OpenAM services,
+     throttle traffic, offload HTTPS encryption, and so forth.
+    </p><p>
+     As an alternative, or in addition,
+     you can use a separate reverse proxy service,
+     or the OpenAM distributed authentication UI.
+     The distributed authentication UI exposes a subset of OpenAM functionality.
+     For instructions on setting up the distributed authentication UI, see
+     <a href="../../install-guide/index/chap-install-das.html" class="link"><em class="citetitle">Installing OpenAM Distributed Authentication</em></a>.
+    </p></li><li class="listitem"><p>
+     When you are protecting OpenAM with a load balancer or proxy service,
+     configure your container so that OpenAM can trust
+     the load balancer or proxy service.
+     OpenAM trusts the distributed authentication UI
+     as the distributed authentication UI uses
+     credentials registered with OpenAM.
+    </p></li><li class="listitem"><p>
+      OpenAM authentication can depend on information
+      about the user to authenticate,
+      such as the IP address where the request originated.
+      When OpenAM is accessed through a load balancer or proxy layer,
+      pass this information along using request headers.
+      Also configure OpenAM to consume and to forward the headers as necessary.
+      See <a class="xref" href="chap-install-multiple.html#handle-request-headers" title="4.3.&nbsp;Handling HTTP Request Headers">Section&nbsp;4.3, &#8220;Handling HTTP Request Headers&#8221;</a> for details.
+    </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configure-sites"></a>4.2.&nbsp;Configuring OpenAM Sites</h2></div></div></div><a class="indexterm" name="d0e3164"></a><p>
+   The most expedient way to configure a server in a site
+   is to set the site up during the initial OpenAM configuration.
+   In the GUI configurator, this is done in the Site Configuration screen.
+   It is also possible to configure a site separately.
+  </p><div class="itemizedlist"><p>
+    This section includes the following procedures.
+   </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     <a class="xref" href="chap-install-multiple.html#configure-site-after-installation" title="Procedure&nbsp;4.1.&nbsp;To Configure a Site with a First OpenAM Server">Procedure&nbsp;4.1, &#8220;To Configure a Site with a First OpenAM Server&#8221;</a>
+    </p></li><li class="listitem"><p>
+     <a class="xref" href="chap-install-multiple.html#configure-site-load-balancing" title="Procedure&nbsp;4.2.&nbsp;To Configure Site Load Balancing">Procedure&nbsp;4.2, &#8220;To Configure Site Load Balancing&#8221;</a>
+    </p></li></ul></div><div class="procedure"><a name="configure-site-after-installation"></a><div class="procedure-title">Procedure&nbsp;4.1.&nbsp;To Configure a Site with a First OpenAM Server</div><p>
+    You might already have configured an OpenAM server before realizing
+    that a site is what you want.
+   </p><p>
+    The following steps show how to set up the site for the first OpenAM server.
+   </p><ol class="procedure" type="1"><li class="step"><p>
+     Login to OpenAM Console as administrator,
+     by default <code class="literal">amadmin</code>,
+     and then browse to Configuration &gt; Servers and Sites &gt; Sites.
+    </p></li><li class="step"><p>
+     Click New to start configuring the new site.
+    </p></li><li class="step"><p>
+     On the New Site page enter the site name,
+     and set the Primary URL to the load balancer URL
+     that is the entry point for the site,
+     such as <code class="literal">https://lb.example.com/openam</code>.
+    </p><p>
+     The site URL is the URL to the load balancer in front of
+     the OpenAM servers in the site.
+     For example, if your load balancer listens for
+     HTTPS on host <code class="literal">lb.example.com</code>
+     and port <code class="literal">443</code>,
+     with OpenAM under <code class="literal">/openam</code>,
+     then your site URL is <code class="literal">https://lb.example.com/openam</code>.
+    </p><p>
+     Client applications and policy agents access the servers in the site
+     through the site URL.
+    </p></li><li class="step"><p>
+     Click Save to keep the site configuration.
+    </p></li><li class="step"><p>
+     Under Configuration &gt; Servers and Sites &gt; Server,
+     click the link to the server configuration.
+    </p></li><li class="step"><p>
+     On the server configuration General tab page,
+     set the Parent Site to the name of the site you just created,
+     and then click Save to keep your changes.
+    </p><p>
+     At this point the server is part of the new site you have configured.
+    </p><p>
+     For all additional servers in the OpenAM site,
+     add them to the site at configuration time as described in
+     <a href="../../install-guide/index/chap-install-core.html#add-servers-to-site" class="link"><em class="citetitle">To Add a Server to a Site</em></a>.
+    </p></li></ol></div><div class="procedure"><a name="configure-site-load-balancing"></a><div class="procedure-title">Procedure&nbsp;4.2.&nbsp;To Configure Site Load Balancing</div><p>
+    If you did not set up the site during initial configuration,
+    first follow the instructions in
+    <a class="xref" href="chap-install-multiple.html#configure-site-after-installation" title="Procedure&nbsp;4.1.&nbsp;To Configure a Site with a First OpenAM Server">Procedure&nbsp;4.1, &#8220;To Configure a Site with a First OpenAM Server&#8221;</a>,
+    and then follow all the steps below.
+   </p><ol class="procedure" type="1"><li class="step"><p>
+     For each OpenAM server in the site, select
+     Configuration &gt; Servers and Sites &gt; Servers &gt; <em class="replaceable"><code>Server Name</code></em>,
+     set Parent Site to the site you created,
+     and then Save your work.
+    </p></li><li class="step"><p>
+     Make the <code class="literal">amlbcookie</code> value unique for each OpenAM server.
+    </p><p>
+     In an OpenAM site, the server that authenticated a user
+     is the server that continues to manage that user's session,
+     unless the server is no longer available.
+     The load balancer should send subsequent requests to that server
+     to avoid overhead resulting from the server that gets the
+     request being different from the server that authenticated the user.
+    </p><p>
+     When traffic is protected with HTTPS, this approach requires
+     that you terminate the connection on the load balancer.
+     You then either re-encrypt the traffic from the load balancer to OpenAM,
+     or make connections from the load balancer to OpenAM over HTTP.
+    </p><ol type="a" class="substeps"><li class="step"><p>
+       For each OpenAM server console in the site, browse to
+       Configuration &gt; Servers and Sites &gt; Servers
+       &gt; <em class="replaceable"><code>Server Name</code></em> &gt; Advanced,
+       and set <code class="literal">com.iplanet.am.lbcookie.value</code>
+       to a unique value.
+      </p><p>
+       By default, the cookie value is set to the OpenAM server ID.
+      </p><p>
+       Changes take effect only after you restart the OpenAM server.
+      </p></li><li class="step"><p>
+       Restart each OpenAM server where you changed the cookie value.
+      </p><p>
+       You can then check the cookie value by logging in to OpenAM console,
+       and examining the <code class="literal">amlbcookie</code> cookie in your browser.
+      </p></li></ol></li><li class="step"><p>
+     Configure your load balancer to perform sticky load balancing
+     based on the <code class="literal">amlbcookie</code> value.
+    </p><p>
+     In other words, the load balancer layer must keep track of
+     which <code class="literal">amlbcookie</code> cookie value
+     corresponds to which OpenAM server.
+    </p><p>
+     When the load balancer receives a request,
+     it inspects the value of the <code class="literal">amlbcookie</code> cookie,
+     and then forwards the request to the corresponding OpenAM server.
+    </p></li></ol></div><div class="note"><h3 class="title">Note</h3><p>Sticky load balancing based on the value of the
+    <code class="literal">amlbcookie</code> cookie does not guarantee request forwarding
+    to the corresponding OpenAM server in all cases. For example,
+    ForgeRock Common REST API calls do not typically use cookies. Therefore,
+    load balancers are not able to route these calls to the OpenAM server
+    on which a user's session resides.
+   </p><p>
+    When an OpenAM request to read a session arrives at a server that does not
+    hold the user's session, the OpenAM server attempts to locate the session
+    from the Core Token Service session store by default.
+   </p><p>
+    OpenAM servers can also use crosstalk to locate
+    remote sessions. With crosstalk, OpenAM servers
+    communicate with each other through a back channel to locate remote sessions.
+    Because crosstalk generates network traffic, locating sessions from the
+    Core Token Service session store is preferred for performance reasons.
+   </p><p>
+    Requests to log out or set a session attribute always use crosstalk to
+    ensure the integrity of the update requests.
+   </p><p>
+   See
+   <a href="../../install-guide/index/chap-session-failover.html" class="link"><em class="citetitle">Setting Up OpenAM Session Failover</em></a>
+   for information about configuring remote session location options.
+  </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="handle-request-headers"></a>4.3.&nbsp;Handling HTTP Request Headers</h2></div></div></div><a class="indexterm" name="d0e3321"></a><p>
+   HTTP requests can include information needed for access management,
+   such as the client IP address used for adaptive risk-based authentication.
+  </p><p>
+   Configure your load balancer or proxy to
+   pass the information to OpenAM by using request headers.
+   For example, the load balancer or proxy can send the client IP address
+   by using the <code class="literal">X-Forwarded-For</code> HTTP request header.
+  </p><p>
+   If you use the distributed authentication UI, you can retain headers
+   by using the <code class="literal">openam.retained.http.request.headers</code> setting
+   as described in
+   <a href="../../install-guide/index/chap-install-das.html" class="link"><em class="citetitle">Installing OpenAM Distributed Authentication</em></a>.
+  </p><p>
+   Also configure OpenAM to consume and to forward the headers as necessary.
+   When configuring OpenAM through the console, you set the following properties
+   under Configuration &gt; Servers and Sites &gt; Servers
+   &gt; <em class="replaceable"><code>Server Name</code></em> &gt; Advanced.
+  </p><p>
+   For example, to configure OpenAM to look for the client IP address
+   in the <code class="literal">X-Forwarded-For</code> request header,
+   set the advanced configuration property
+   <code class="literal">com.sun.identity.authentication.client.ipAddressHeader</code>
+   to <code class="literal">X-Forwarded-For</code>.
+  </p><p>
+   In a site configuration where one OpenAM server
+   can forward requests to another OpenAM server,
+   you can retain the header by adding it to the advanced configuration property
+   <code class="literal">openam.retained.http.request.headers</code>.
+   If <code class="literal">X-Forwarded-For</code> is the only additional header to retain,
+   set <code class="literal">openam.retained.http.request.headers</code> to
+   <code class="literal">X-DSAMEVersion,X-Forwarded-For</code>, for example.
+  </p></div><div class="footnotes"><br><hr class="footnote-hr"><div id="ftn.d0e3140" class="footnote"><p><a href="#d0e3140" class="para"><sup class="para">[1] </sup></a>
+       Technically it is possible to configure a site with only one OpenAM server.
+      </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-install-tools.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-install-das.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;3.&nbsp;Installing OpenAM Tools&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;5.&nbsp;Installing OpenAM Distributed Authentication</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

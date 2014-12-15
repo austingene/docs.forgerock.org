@@ -1,0 +1,417 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>OpenAM Upgrade Guide</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><meta name="description" content="This guide shows you how to upgrade OpenAM. OpenAM provides open source Authentication, Authorization, Entitlement, and Federation software."><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div lang="en" class="book"><div class="titlepage"><div><div><h1 class="title"><a name="upgrade-guide"></a>OpenAM Upgrade Guide</h1></div><div><h2 class="subtitle">Version 12.0.0</h2></div><div><div class="authorgroup"><div class="author"><h3 class="author"><span class="firstname">Mark </span> <span class="surname">Craig</span></h3></div><div class="author"><h3 class="author"><span class="firstname">Gene </span> <span class="surname">Hirayama</span></h3></div><div class="author"><h3 class="author"><span class="firstname">Mike </span> <span class="surname">Jang</span></h3></div><div class="author"><h3 class="author"><span class="firstname">Vanessa </span> <span class="surname">Richie</span></h3><div lang="en" class="affiliation"><span class="orgname">ForgeRock AS<br></span><div class="address"><p><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="street">33&nbsp;New&nbsp;Montgomery&nbsp;St.</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="otheraddr">Suite&nbsp;1500</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="city">San&nbsp;Francisco</span>,&nbsp;<span class="state">CA</span>&nbsp;<span class="postcode">94105</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="country">USA</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="phone">+1&nbsp;415-599-1100&nbsp;(US)</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<code class="uri">www.forgerock.com</code><br>
+&nbsp;&nbsp;&nbsp;</p></div></div></div></div></div><div><p class="releaseinfo">Software release date: December 17, 2014</p></div><div><p class="copyright">Copyright &copy; 2011-2014 ForgeRock AS</p></div><div><a href="legalnotice.html">Legal Notice</a></div><div><p class="pubdate">Publication date: December 15, 2014</p></div><div><div class="abstract"><div class="abstract-title">Abstract</div><p>This guide shows you how to upgrade OpenAM. OpenAM provides open source
+   Authentication, Authorization, Entitlement, and Federation software.</p></div></div></div><hr></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="preface"><a href="#preface">Preface</a></span></dt><dt><span class="chapter"><a href="#chap-about-upgrades">1. About Upgrading OpenAM</a></span></dt><dt><span class="chapter"><a href="#chap-upgrade-servers">2. Upgrading OpenAM Servers</a></span></dt><dt><span class="chapter"><a href="#chap-legacy-servers">3. Migrating Legacy Servers</a></span></dt><dt><span class="chapter"><a href="#chap-upgrade-components">4. Upgrading OpenAM Components</a></span></dt><dt><span class="index"><a href="#d0e954">Index</a></span></dt></dl></div><div lang="en" class="preface"><div class="titlepage"><div><div><h1 class="title"><a name="preface"></a>Preface</h1></div></div></div><p>This guide describes how to upgrade OpenAM servers, policy agents, and
+ tools.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e159"></a>1.&nbsp;Who Should Use this Guide</h2></div></div></div><p>This guide is for anyone who needs to upgrade an OpenAM deployment.
+  This guide assumes you are familiar with OpenAM installation and
+  configuration, and that you are familiar with the current OpenAM
+  deployment that you plan to upgrade.</p><p>You do not need to be an OpenAM wizard to learn something from
+  this guide, though a background in access management and maintaining
+  web application software can help. You do need some background in
+  managing services on your operating systems and in your application
+  servers. You can nevertheless get started with this guide, and then
+  learn more as you go.</p></div><div lang="en" class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="formatting-conventions"></a>2.&nbsp;Formatting Conventions</h2></div></div></div><p>
+  Most examples in the documentation are created on GNU/Linux or Mac OS X.
+
+  Where it is helpful to make a distinction between operating environments,
+  examples for UNIX, GNU/Linux, Mac OS X, and so forth are labeled (UNIX).
+  Mac OS X specific examples can be labeled (Mac OS X).
+  Examples for Microsoft Windows can be labeled (Windows).
+
+  To avoid repetition, however, file system directory names are
+  often given only in UNIX format as in <code class="filename">/path/to/server</code>,
+  even if the text applies to <code class="filename">C:\path\to\server</code> as well.
+ </p><p>
+  Absolute path names usually begin with the placeholder
+  <code class="filename">/path/to/</code>.
+
+  This path might translate to <code class="filename">/opt/</code>,
+  <code class="filename">C:\Program Files\</code>, or somewhere else on your system.
+ </p><p>
+  Command line, terminal sessions are formatted as follows.
+ </p><div class="screen"><pre>$ <strong>echo $JAVA_HOME</strong>
+<em>/path/to/jdk</em></pre></div><p>
+  Command output is sometimes formatted for narrower, more readable output
+  even though formatting parameters are not shown in the command.
+  In the following example, the query string parameter
+  <code class="literal">_prettyPrint=true</code> is omitted.
+ </p><div class="screen"><pre>
+$ <strong>curl https://bjensen:hifalutin@opendj.example.com:8443/users/newuser</strong>
+<em>{
+  "_rev" : "000000005b337348",
+  "schemas" : [ "urn:scim:schemas:core:1.0" ],
+  "contactInformation" : {
+    "telephoneNumber" : "+1 408 555 1212",
+    "emailAddress" : "newuser@example.com"
+  },
+  "_id" : "newuser",
+  "name" : {
+    "familyName" : "New",
+    "givenName" : "User"
+  },
+  "userName" : "newuser@example.com",
+  "displayName" : "New User",
+  "meta" : {
+    "created" : "2014-06-03T09:58:27Z"
+  },
+  "manager" : [ {
+    "_id" : "kvaughan",
+    "displayName" : "Kirsten Vaughan"
+  } ]
+}</em>
+ </pre></div><p>
+  Program listings are formatted as follows.
+ </p><pre class="brush: java;">class Test {
+    public static void main(String [] args)  {
+        System.out.println("This is a program listing.");
+    }
+}</pre></div><div lang="en" class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="accessing-doc-online"></a>3.&nbsp;Accessing Documentation Online</h2></div></div></div><p>
+  ForgeRock core documentation, such as what you are now reading, aims to be
+  technically accurate and complete with respect to the software documented.
+ </p><div class="itemizedlist"><p>
+   Core documentation therefore follows a three-phase review process
+   designed to eliminate errors.
+  </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+    Product managers and software architects review project documentation design
+    with respect to the users' software lifecycle needs.
+   </p></li><li class="listitem"><p>
+    Subject matter experts review proposed documentation changes for
+    technical accuracy and completeness
+    with respect to the corresponding software.
+   </p></li><li class="listitem"><p>
+    Quality experts validate implemented documentation changes for
+    technical validity with respect to the software,
+    technical completeness with respect to the scope of the document,
+    and usability for the expected audience.
+   </p></li></ul></div><p>
+  The review process helps to ensure that documentation published for
+  a ForgeRock release is technically accurate and complete.
+ </p><p>
+  Fully reviewed, published core documentation is available at
+  <a class="link" href="http://docs.forgerock.org/" target="_blank">http://docs.forgerock.org/</a>.
+
+  Use this documentation when working with a ForgeRock Enterprise release.
+ </p><p>
+  In-progress documentation can be found at each project site under the
+  <a class="link" href="http://forgerock.org" target="_blank">Developer Community</a> projects page.
+
+  Use this documentation when trying a nightly build.
+ </p><p>
+  The ForgeRock <a class="link" href="https://wikis.forgerock.org/" target="_blank">Community Wikis</a> and provide additional, user-created information.
+
+  We encourage you to
+  <a class="link" href="https://sso.forgerock.com/openam/UI/Login" target="_blank">join the community</a>, so that you can update the Wikis, too.
+ </p></div><div lang="en" class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="joining-the-community"></a>4.&nbsp;Joining the ForgeRock Community</h2></div></div></div><p>
+  After you
+  <a class="link" href="https://backstage.forgerock.com/#/account/register" target="_blank">sign up</a> to join the ForgeRock community,
+  you can edit the
+  <a class="link" href="https://wikis.forgerock.org/" target="_blank">Community Wikis</a>,
+  and also log bugs and feature requests in the
+  <a class="link" href="https://bugster.forgerock.org/" target="_blank">issue tracker</a>.
+ </p><p>
+  If you have a question regarding a project but cannot find an answer
+  in the project documentation or Wiki, browse to the
+  <a class="link" href="http://forgerock.org" target="_blank">Developer Community</a> page for the project,
+  where you can find details on joining the project mailing lists,
+  and find links to mailing list archives.
+
+  You can also suggest updates to documentation through the
+  <a class="link" href="https://lists.forgerock.org/mailman/listinfo/docs" target="_blank">ForgeRock docs mailing list</a>.
+ </p><p>
+  The Community Wikis describe how to check out and build source code.
+
+  Should you want to contribute a patch, test, or feature,
+  or want to author part of the core documentation,
+  first have a look on the ForgeRock site at
+  <a class="link" href="http://forgerock.org/get_involved.html" target="_blank">how to get involved</a>.
+ </p></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-about-upgrades"></a>Chapter&nbsp;1.&nbsp;About Upgrading OpenAM</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="#upgrade-planning">1.1. Planning the Upgrade</a></span></dt><dt><span class="section"><a href="#upgrade-policies">1.2. Upgrading &amp; Policies</a></span></dt><dt><span class="section"><a href="#upgrade-best-practices">1.3. Best Practices for Upgrades</a></span></dt></dl></div><a class="indexterm" name="d0e284"></a><p>This chapter covers common aspects of upgrading an OpenAM deployment,
+ whether you are moving to a new maintenance release, upgrading to a new major
+ release, or migrating from a legacy release to a newer OpenAM release.</p><p>Release levels, and how much change to expect in a maintenance, minor,
+ or major release, are defined in the <em class="citetitle">Administration Guide</em>
+ section, <a href="../admin-guide/index.html#release-levels" class="link"><em class="citetitle">ForgeRock Product
+ Release Levels</em></a>. Release levels are identified by version
+ number.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="upgrade-planning"></a>1.1.&nbsp;Planning the Upgrade</h2></div></div></div><a class="indexterm" name="d0e303"></a><div class="itemizedlist"><p>How much you must do to upgrade OpenAM software depends on the
+   magnitude of the differences between the version you currently use and
+   the new version.</p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Maintenance releases have a limited effect on current functionality
+    but contain necessary bug and security fixes. You should keep up to date
+    with maintenance releases as the fixes are important and the risk of
+    affecting service is minimal.</p></li><li class="listitem"><p>When upgrading to a new major or minor release, always plan and test
+    the changes before carrying out the upgrade in production. Make sure you
+    read release notes for intervening versions with care, identifying any
+    changes likely to affect your deployment, and then plan accordingly.</p></li><li class="listitem"><p>These suggestions are true both for OpenAM server components, and
+    also for policy agents.</p></li></ul></div><p>To upgrade from OpenAM server 9.5 and later you can use the Upgrade
+  Wizard. The OpenAM server Upgrade Wizard, added in OpenAM 10.0.0, appears
+  when you replace a deployed OpenAM server .war with a newer version and browse
+  to the deployment URL. The Upgrade Wizard brings the OpenAM configuration,
+  including the version number, up to date with the new version. The CLI
+  counterpart of the Upgrade Wizard is openam-upgrade-tool-12.0.0.jar,
+  which you install as described in <a href="../install-guide/index.html#install-openam-config-tools" class="link"><em class="citetitle">To Set Up Configuration Tools</em></a>.</p><p>For legacy releases, meaning OpenAM server version 9.0 and earlier
+  including Sun Access Manager and OpenSSO releases, you must reinstall and
+  configure OpenAM server rather than upgrade. Moving to a new release from a
+  legacy release is therefore a migration, rather than a simple upgrade.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="upgrade-policies"></a>1.2.&nbsp;Upgrading &amp; Policies</h2></div></div></div><a class="indexterm" name="d0e331"></a><a class="indexterm" name="d0e336"></a><p>
+   When upgrading from OpenAM 11 and earlier versions,
+   the upgrade process changes how OpenAM represents policies.
+   Most earlier policies transform directly to the newer representation.
+  </p><p>
+   If however the upgrade process encounters problems during the transformation,
+   it writes messages about the problems in the upgrade log.
+   When you open a policy in the policy editor
+   that caused problems during the upgrade process,
+   the policy editor shows the issues,
+   but does not let you fix them directly.
+   Instead you must create equivalent, corrected policies
+   in order to use them in OpenAM.
+  </p><p>
+   You should therefore plan to test policy upgrade
+   before upgrading the service,
+   and to correct any problems encountered before using the upgraded service.
+  </p><p>
+   For details on how to configure OpenAM policies,
+   see the <em class="citetitle">Administration Guide</em> chapter,
+   <a href="../admin-guide/index.html#chap-authz-policy" class="link"><em class="citetitle">Defining Authorization Policies</em></a>.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="upgrade-best-practices"></a>1.3.&nbsp;Best Practices for Upgrades</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="#plan-upgrade-downtime">1.3.1. Route Around Servers During Downtime</a></span></dt><dt><span class="section"><a href="#pre-upgrade-backup">1.3.2. Back Up the Deployment</a></span></dt><dt><span class="section"><a href="#pre-upgrade-customization">1.3.3. Apply Customization Before Upgrading</a></span></dt><dt><span class="section"><a href="#post-upgrade-rollback">1.3.4. Plan for Rollback</a></span></dt></dl></div><a class="indexterm" name="d0e359"></a><a class="indexterm" name="d0e364"></a><p>Be prepared before you begin an upgrade, even if the upgrade is for a
+   maintenance release.</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="plan-upgrade-downtime"></a>1.3.1.&nbsp;Route Around Servers During Downtime</h3></div></div></div><p>Upgrading servers takes at least one of your OpenAM sites down while
+    the server configurations are being brought up to date with the newer
+    version. Plan for this site to be down, routing client applications to
+    another site until the upgrade process is complete and you have validated
+    the result. Make sure client application owners are well aware of the
+    change, and let them know what to expect.</p><p>If you only have a single OpenAM site, make sure the downtime happens
+    in a low usage window, and make sure you let client application owners plan
+    accordingly.</p><p>During an upgrade you must restrict access to OpenAM Console: The
+    Upgrade Wizard page does not require authorization; any user with access
+    to OpenAM Console immediately after you deploy the new .war can therefore
+    initiate the upgrade process.</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="pre-upgrade-backup"></a>1.3.2.&nbsp;Back Up the Deployment</h3></div></div></div><a class="indexterm" name="d0e381"></a><a class="indexterm" name="d0e386"></a><p>Always back up your deployment before you upgrade, as you must be
+    able to roll back should something go wrong during the upgrade
+    process.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Backing up your configuration as described in <a href="../admin-guide/index.html#chap-backup-restore" class="link"><em class="citetitle">Backing Up
+      and Restoring OpenAM Configurations</em></a> is good for
+      production environments.</p></li><li class="listitem"><p>In preparation for upgrading OpenAM servers and their
+      configurations, also take LDIF backups of the configuration store data
+      in the directory servers. If possible, stop servers before upgrading
+      and take a file system backup of the deployed servers and also of their
+      configuration directories as well. This can make it easier to roll back
+      from a failed upgrade.</p><p>For example, if you deploy OpenAM server in Apache Tomcat under
+      <code class="literal">/openam</code>, you might take a file system backup of the
+      following directories for each OpenAM server.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p><code class="filename">/path/to/tomcat/webapps/openam/</code></p></li><li class="listitem"><p><code class="filename">~/openam/</code></p></li><li class="listitem"><p><code class="filename">~/.openamcfg/</code></p></li></ul></div></li><li class="listitem"><p>When upgrading web policy agents, take a file system backup of the
+      policy agent installation and configuration directories.</p><p>When upgrading Java EE policy agents, it can be easier to uninstall
+      the new version and reinstall the old version than to restore from file
+      system backup.</p></li><li class="listitem"><p>When upgrading tools, keep copies of any tools scripts that you
+      have edited for your deployment. Also back up any trust stores used to
+      connect securely.</p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="pre-upgrade-customization"></a>1.3.3.&nbsp;Apply Customization Before Upgrading</h3></div></div></div><a class="indexterm" name="d0e431"></a><a class="indexterm" name="d0e436"></a><p>Before you upgrade OpenAM servers, prepare a .war file that contains
+    any customizations you require.</p><div class="itemizedlist"><p>Customizations include any changes you have made to the OpenAM
+     server installation, such as the following.</p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Plugins and extensions such as custom authentication modules,
+      response attribute providers, post authentication plugins, SAML 2.0 attribute
+      mappers, and OAuth 2.0 scope implementations</p><p>These are described in the <a href="../dev-guide/index.html#dev-guide" class="link"><em class="citetitle">Developer's
+      Guide</em></a>.</p></li><li class="listitem"><p>Customized JSPs, redesigned login or service pages, additional CSS
+      and visual content, and modified authentication module callback
+      files</p><p>These are described in the <a href="../install-guide/index.html#chap-custom-ui" class="link"><em class="citetitle">Installation
+      Guide</em></a>.</p></li><li class="listitem"><p>Any changes to OpenAM classes</p></li><li class="listitem"><p>Any changes or additional Java class libraries (such as .jar files
+      in <code class="filename">WEB-INF/lib</code></p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="post-upgrade-rollback"></a>1.3.4.&nbsp;Plan for Rollback</h3></div></div></div><a class="indexterm" name="d0e474"></a><a class="indexterm" name="d0e479"></a><p>Sometimes even a well-planned upgrade operation fails to go smoothly.
+    In such cases, you need a plan to roll back smoothly to the pre-upgrade
+    version.</p><p>For OpenAM servers, you can roll back by restoring from file system
+    backup. If you use an external configuration directory service, restore the
+    old configuration from LDIF before restarting the old servers.</p><p>For web policy agents, you can roll back by restoring from file system
+    backup. If you used configuration only available to newer agents, restore
+    the pre-upgrade configuration before restarting the old agents.</p><p>For Java EE policy agents, uninstall the newer agents and reinstall
+    the older agents, including the old configurations.</p></div></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-upgrade-servers"></a>Chapter&nbsp;2.&nbsp;Upgrading OpenAM Servers</h1></div></div></div><a class="indexterm" name="d0e494"></a><p>This chapter covers upgrade from OpenAM core server 9.5 or later to the
+ current version. For other OpenAM components, see <a href="../upgrade-guide/index.html#chap-upgrade-components" class="link"><em class="citetitle">Upgrading OpenAM
+ Components</em></a>.</p><p>OpenAM server upgrade relies on the Upgrade Wizard to make the
+ necessary changes to the configuration store. You must then restart OpenAM or
+ the container in which it runs. Even a version number change requires that you
+ run the Upgrade Wizard, so needing to run the Upgrade Wizard says nothing about
+ the significance of the changes that have been made to OpenAM. You must run
+ the Upgrade Wizard even for maintenance releases.</p><p>Make sure you try upgrading OpenAM in a test environment before applying
+ the upgrade in your production environment.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="xref" href="#upgrade-server" title="Procedure&nbsp;2.1.&nbsp;To Upgrade From OpenAM 9.5 or Later">Procedure&nbsp;2.1, &#8220;To Upgrade From OpenAM 9.5 or Later&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="#after-upgrading-from-11" title="Procedure&nbsp;2.2.&nbsp;To Complete Upgrade from OpenAM 11.0">Procedure&nbsp;2.2, &#8220;To Complete Upgrade from OpenAM 11.0&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="#after-upgrading-from-10-1" title="Procedure&nbsp;2.3.&nbsp;To Complete Upgrade from OpenAM 10.1.0 Xpress">Procedure&nbsp;2.3, &#8220;To Complete Upgrade from OpenAM 10.1.0 Xpress&#8221;</a></p></li></ul></div><div class="procedure"><a name="upgrade-server"></a><div class="procedure-title">Procedure&nbsp;2.1.&nbsp;To Upgrade From OpenAM 9.5 or Later</div><a class="indexterm" name="d0e522"></a><p>Follow these steps to upgrade a site of OpenAM servers (version 9.5 or
+  later). During the upgrade process, you must take the OpenAM servers in the
+  site out of production, instead redirecting client application traffic
+  elsewhere. This is required because upgrade involves making changes to
+  OpenAM's configuration model. If the upgrade fails, you must be able to
+  roll back before the configuration changes impact other sites.</p><div class="important"><h3 class="title">Important</h3><p>
+    Do <span class="emphasis"><em>not</em></span> perform an upgrade
+    by deploying the new version
+    and then importing an existing configuration
+    by running the <span class="command"><strong>ssoadm import-svc-config</strong></span> command.
+    Importing an outdated configuration can result in a corrupted installation.
+   </p></div><ol class="procedure" type="1"><li class="step"><p>Prepare your customized OpenAM server .war file.</p></li><li class="step"><p>Back up the deployment.</p></li><li class="step"><p>Route client application traffic to another site during the upgrade.</p></li><li class="step"><p>For servers in the site, stop OpenAM, or if necessary stop the
+   container where OpenAM runs.</p></li><li class="step"><p>For servers in the site, deploy your customized server .war file.</p><p>When you deploy the new .war file, you might have to delete working
+   files left by the old installation. For example, if you deploy on Apache
+   Tomcat, replacing <code class="filename">/path/to/tomcat/webapps/openam.war</code>,
+   then also recursively delete the
+   <code class="filename">/path/to/tomcat/webapps/openam/</code>
+   and <code class="filename">/path/to/tomcat/work/Catalina/localhost/openam/</code>
+   directories before restarting the server.</p></li><li class="step"><p>For servers in the site, restart OpenAM or the container where it runs.</p></li><li class="step"><p>For the first server in the site, follow the instructions in the
+   Upgrade Wizard.</p><p>
+    Alternatively for a silent, unattended upgrade,
+    you can use the <code class="filename">openam-upgrade-tool-12.0.0.jar</code> tool
+    to upgrade the server configuration in a command-line script.
+   </p><p>
+    First you must install the tool.
+    The procedure,
+    <a href="../install-guide/index.html#install-openam-config-tools" class="link"><em class="citetitle">To Set Up Configuration Tools</em></a>,
+    describes how to install the tool.
+   </p><p>
+    The upgraded server must be deployed and running when you use the tool.
+   </p><p>
+    The openam-upgrade-tool-12.0.0.jar relies on a properties file
+    to upgrade OpenAM server.
+   </p><div class="screen"><pre>
+$ <strong>cp sampleupgrade upgrade.properties</strong>
+$ <strong>vi upgrade.properties</strong>
+$ <strong>grep -v "^#" upgrade.properties</strong>
+<em>SERVER_URL=http://openam.example.com:8080
+DEPLOYMENT_URI=/openam
+ACCEPT_LICENSES=true</em>
+   </pre></div><p>
+    When the new OpenAM server .war file is deployed and running,
+    you can upgrade by using the tool with the properties file.
+   </p><div class="screen"><pre>
+$ <strong>java -jar openam-upgrade-tool-12.0.0.jar --file upgrade.properties</strong>
+<em>
+Writing Backup; Done.
+Upgrading Services
+New service iPlanetAMAuthPersistentCookieService; Done.
+New service iPlanetAMAuthOpenIdConnectService; Done.
+New service OAuth2Provider; Done.
+New service iPlanetAMAuthDevicePrintModuleService; Done.
+New service crestPolicyService; Done.
+New service RestSecurity; Done.
+New service MailServer; Done.
+New service dashboardService; Done.
+New service iPlanetAMAuthOATHService; Done.
+Add Organization schema to sunFAMSAML2Configuration; Done.
+Upgrade sunAMAuthHOTPService; Done.
+Upgrade sunAMAuthADService; Done.
+Upgrade sunAMAuthOAuthService; Done.
+Upgrade iPlanetAMAuthCertService; Done.
+Upgrade sunIdentityRepositoryService; Done.
+Upgrade iPlanetAMPasswordResetService; Done.
+Upgrade iPlanetAMSessionService; Done.
+Upgrade iPlanetAMAuthService; Done.
+Upgrade iPlanetAMAuthLDAPService; Done.
+Upgrade sunAMAuthDataStoreService; Done.
+Upgrade AgentService; Done.
+New sub schema sunIdentityRepositoryService; Done.
+New sub schema AgentService; Done.
+Delete service sunFAMLibertyInteractionService; Done.
+Delete service sunFAMLibertySecurityService; Done.
+Creating entitlement application type crestPolicyService; Done.
+Creating entitlement application crestPolicyService; Done.
+Re-enabling Generic LDAPv3 Data Store; Done.
+Upgrading data store embedded; Done.
+Updating Platform Properties; Done.
+Writing Upgrade Log; Done.
+
+Upgrade Complete.
+</em>
+   </pre></div><p>
+    For additional information about the command-line tool,
+    see the reference documentation for
+    <a href="../reference/index.html#man-upgrade-jar" class="link">upgrade.jar</a>.
+   </p></li><li class="step"><p>If you want to configure the upgraded system for the Core Token Service (CTS),
+   read <a href="../install-guide/index.html#chap-cts" class="link">
+   <em class="citetitle">Configuring the Core Token Service</em></a>. For a list of
+   supported directory services, see the <a href="../release-notes/index.html#data-store-requirements" class="link">
+   <em class="citetitle">Data Store Requirements</em> section of the Release Notes.</a></p></li><li class="step"><p>Validate that the service is performing as expected.</p></li><li class="step"><p>Allow client application traffic to flow to the upgraded site.</p></li></ol></div><div class="procedure"><a name="after-upgrading-from-11"></a><div class="procedure-title">Procedure&nbsp;2.2.&nbsp;To Complete Upgrade from OpenAM 11.0</div><a class="indexterm" name="d0e636"></a><p>
+   After upgrade from OpenAM 11.0.x,
+   all OAuth 2.0 client configurations inherit the default response types:
+  </p><table border="0" summary="Simple list" class="simplelist"><tr><td>code</td></tr><tr><td>token</td></tr><tr><td>id_token</td></tr><tr><td>code token</td></tr><tr><td>token id_token</td></tr><tr><td>code id_token</td></tr><tr><td>code token id_token</td></tr></table><ul class="procedure"><li class="step"><p>
+    For each OAuth 2.0 client configuration,
+    edit the list of response types to remove any
+    that are not supported or not required.
+   </p></li></ul></div><div class="procedure"><a name="after-upgrading-from-10-1"></a><div class="procedure-title">Procedure&nbsp;2.3.&nbsp;To Complete Upgrade from OpenAM 10.1.0 Xpress</div><a class="indexterm" name="d0e664"></a><p>When upgrading from OpenAM 10.1.0 Xpress, the upgrade tool does not
+   change the Dashboard service LDAP schema, although the object IDs used in
+   the Dashboard service LDAP schema definitions are not correct.</p><p>You can fix the object IDs manually using the OpenDJ
+   <span class="command"><strong>ldapmodify</strong></span> command. The command is delivered with OpenDJ
+   directory server.</p><ol class="procedure" type="1"><li class="step"><p>Update the LDAP schema defined in the OpenDJ directory server where
+   OpenAM stores its configuration.</p><p>Make the change on one of the replicated OpenDJ configuration
+   directory servers.</p><p>The example command shown below uses the <span class="command"><strong>ldapmodify</strong></span>
+   command delivered with the embedded OpenDJ configuration directory server
+   for OpenAM with deployment URI <code class="literal">/openam</code>. When you use the
+   embedded OpenDJ configuration directory server, the password for the
+   <code class="literal">cn=Directory Manager</code> account is the same password used
+   by <code class="literal">amadmin</code>.</p><p>The LDAP schema definitions are stored on the LDAP subentry
+   with distinguished name <code class="literal">cn=schema</code>. You use the
+   following LDIF format definitions to correct the object IDs in the
+   definitions.</p><div class="screen"><pre>
+$ <strong>cd ~/openam/opends/bin</strong>
+$ <strong>cat dash.ldif</strong>
+<em>dn: cn=schema
+changetype: modify
+delete: objectClasses
+objectClasses: ( 1.3.6.1.4.1.1466.101.120.1433 NAME
+  'forgerock-am-dashboard-service' AUXILIARY MAY (
+   assignedDashboard ) X-ORIGIN 'Forgerock' )
+-
+delete: attributeTypes
+attributeTypes: ( 1.3.6.1.4.1.36733.2.1.9.2.811 NAME ( 'assignedDashboard' )
+  DESC 'Dashboard App registry' SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+  X-ORIGIN 'OpenAM' )
+-
+add: attributeTypes
+attributeTypes: ( 1.3.6.1.4.1.36733.2.2.1.3.1 NAME ( 'assignedDashboard' )
+  DESC 'Dashboard App registry' SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+  X-ORIGIN 'OpenAM' )
+-
+add: objectClasses
+objectClasses: ( 1.3.6.1.4.1.36733.2.2.2.3.1 NAME
+  'forgerock-am-dashboard-service' AUXILIARY MAY (
+  assignedDashboard ) X-ORIGIN 'Forgerock' )
+</em>
+$ <strong>./ldapmodify -p 50389 -D "cn=Directory Manager" -w password -f ./dash.ldif</strong>
+<em>Processing MODIFY request for cn=schema
+MODIFY operation successful for DN cn=schema</em>
+   </pre></div></li><li class="step"><p>If you want to configure the upgraded system with a different
+   directory service for the Core Token Service (CTS), read <a href="../install-guide/index.html#chap-cts" class="link">
+   <em class="citetitle">Configuring the Core Token Service</em></a>.For a list of
+   supported directory services, see the <a href="../release-notes/index.html#data-store-requirements" class="link">
+   <em class="citetitle">Data Store Requirements</em> section of the Release Notes.</a></p></li></ol></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-legacy-servers"></a>Chapter&nbsp;3.&nbsp;Migrating Legacy Servers</h1></div></div></div><a class="indexterm" name="d0e734"></a><p>Rather than upgrade legacy servers (OpenAM 9.0, OpenSSO and Sun Access
+ Manager servers), you instead migrate from your existing deployment to a new
+ deployment.</p><p>For complex legacy deployments, ForgeRock can assist you in the
+ migration process. Send mail to <a class="link" href="mailto:info@forgerock.com" target="_top">info@forgerock.com</a> for more information.</p><div class="procedure"><a name="upgrade-legacy"></a><div class="procedure-title">Procedure&nbsp;3.1.&nbsp;To Upgrade A Legacy Deployment</div><ol class="procedure" type="1"><li class="step"><p>Prepare your customized OpenAM server .war file.</p></li><li class="step"><p>Prepare a new deployment, installing servers from the new, customized
+   .war file as described in the <em class="citetitle">Installation Guide</em>,
+   starting with the instructions in <a href="../install-guide/index.html#chap-install-core" class="link"><em class="citetitle">Installing OpenAM
+   Core Services</em></a>.</p></li><li class="step"><p>After installation, configure the new servers in the same way as the
+   old servers, adapting as necessary.</p><p>You can use the <span class="command"><strong>ssoadm do-batch</strong></span> command to apply
+   multiple changes with one command.</p></li><li class="step"><p>Validate that the new service is performing as expected.</p></li><li class="step"><p>Redirect client application traffic from the old deployment to the new
+   deployment.</p></li></ol></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-upgrade-components"></a>Chapter&nbsp;4.&nbsp;Upgrading OpenAM Components</h1></div></div></div><a class="indexterm" name="d0e780"></a><p>This chapter is concerned with upgrades for policy agents, OpenAM tools,
+ and the OpenAM distributed authentication UI.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="xref" href="#upgrade-web-policy-agents" title="Procedure&nbsp;4.1.&nbsp;To Upgrade Web Policy Agents">Procedure&nbsp;4.1, &#8220;To Upgrade Web Policy Agents&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="#upgrade-java-ee-policy-agents" title="Procedure&nbsp;4.2.&nbsp;To Upgrade Java EE Policy Agents">Procedure&nbsp;4.2, &#8220;To Upgrade Java EE Policy Agents&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="#upgrade-tools" title="Procedure&nbsp;4.3.&nbsp;To Upgrade OpenAM Tools">Procedure&nbsp;4.3, &#8220;To Upgrade OpenAM Tools&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="#upgrade-das" title="Procedure&nbsp;4.4.&nbsp;To Upgrade OpenAM Distributed Authentication Server">Procedure&nbsp;4.4, &#8220;To Upgrade OpenAM Distributed Authentication Server&#8221;</a></p></li></ul></div><div class="procedure"><a name="upgrade-web-policy-agents"></a><div class="procedure-title">Procedure&nbsp;4.1.&nbsp;To Upgrade Web Policy Agents</div><a class="indexterm" name="d0e805"></a><a class="indexterm" name="d0e812"></a><ol class="procedure" type="1"><li class="step"><p>Back up the policy agent installation and configuration directories.</p><p>Also back up the configuration if it is stored centrally in OpenAM.</p></li><li class="step"><p>Redirect client traffic away from the protected application.</p></li><li class="step"><p>Stop the web server where the policy agent is installed.</p></li><li class="step"><p>
+    Remove the old policy agent as described in the
+    <a class="link" href="http://docs.forgerock.org/en/openam-pa/3.3.0/web-users-guide/#web-users-guide" target="_blank"><em class="citetitle">OpenAM Web Policy Agent User's Guide</em></a>.
+   </p><p>
+    If the uninstallation process has changed, refer to the version of the
+    <em class="citetitle">Web Policy Agent Installation Guide</em> that corresponds
+    to your web policy agent.
+   </p></li><li class="step"><p>
+    Install the new policy agent using the existing configuration.
+   </p></li><li class="step"><p>Start the web server where the policy agent is installed.</p><p>For new features, the policy agent uses the default configuration
+   until you make changes.</p></li><li class="step"><p>Validate that the policy agent is performing as expected.</p></li><li class="step"><p>Allow client traffic to flow to the protected application.</p></li></ol></div><div class="procedure"><a name="upgrade-java-ee-policy-agents"></a><div class="procedure-title">Procedure&nbsp;4.2.&nbsp;To Upgrade Java EE Policy Agents</div><a class="indexterm" name="d0e857"></a><a class="indexterm" name="d0e864"></a><ol class="procedure" type="1"><li class="step"><p>Back up the policy agent installation and configuration directories.</p><p>Also back up the configuration if it is stored centrally in OpenAM.</p></li><li class="step"><p>Redirect client traffic away from the protected application.</p></li><li class="step"><p>Uninstall the old policy agent.</p></li><li class="step"><p>Install the new policy agent.</p><p>For new features, the policy agent uses the default configuration
+   until you make changes.</p></li><li class="step"><p>Validate that the policy agent is performing as expected.</p></li><li class="step"><p>Allow client traffic to flow to the protected application.</p></li></ol></div><div class="procedure"><a name="upgrade-tools"></a><div class="procedure-title">Procedure&nbsp;4.3.&nbsp;To Upgrade OpenAM Tools</div><a class="indexterm" name="d0e894"></a><a class="indexterm" name="d0e901"></a><p>Since OpenAM 10.1, the session tools are no longer needed. Upgrading
+  other tools consists of installing new tools and customizing tools scripts
+  as necessary.</p><ol class="procedure" type="1"><li class="step"><p>Install new versions of the tools.</p></li><li class="step"><p>Apply any customizations you made to the scripts, referring to the
+   old tools installation as necessary.</p></li><li class="step"><p>Once the new tools are working, you can delete the old tools.</p></li></ol></div><div class="procedure"><a name="upgrade-das"></a><div class="procedure-title">Procedure&nbsp;4.4.&nbsp;To Upgrade OpenAM Distributed Authentication Server</div><a class="indexterm" name="d0e920"></a><a class="indexterm" name="d0e927"></a><p>If you deployed the distributed authentication server (DAS) .war file,
+  then you must upgrade the DAS when you upgrade other OpenAM servers.</p><ol class="procedure" type="1"><li class="step"><p>Redirect client application traffic away from the server.</p></li><li class="step"><p>Stop the DAS or the container in which it runs.</p></li><li class="step"><p>Deploy the new DAS .war file.</p><p>When you deploy the new .war file, you might have to delete working
+   files left by the old installation.</p></li><li class="step"><p>Restart the DAS or the container in which it runs.</p></li><li class="step"><p>Validate that the DAS is working as expected.</p></li><li class="step"><p>Allow client application traffic to flow back to the server.</p></li></ol></div></div><div class="index"><div class="titlepage"><div><div><h1 class="title"><a name="d0e954"></a>Index</h1></div></div></div><div class="index"><div class="indexdiv"><h3>B</h3><dl><dt>backups, <a class="indexterm" href="#pre-upgrade-backup">Back Up the Deployment</a></dt><dt>best practices, <a class="indexterm" href="#upgrade-best-practices">Best Practices for Upgrades</a></dt></dl></div><div class="indexdiv"><h3>C</h3><dl><dt>customizations, <a class="indexterm" href="#pre-upgrade-customization">Apply Customization Before Upgrading</a></dt></dl></div><div class="indexdiv"><h3>D</h3><dl><dt>distributed authentication</dt><dd><dl><dt>upgrading, <a class="indexterm" href="#chap-upgrade-components">Upgrading OpenAM Components</a></dt></dl></dd></dl></div><div class="indexdiv"><h3>J</h3><dl><dt>Java EE policy agents</dt><dd><dl><dt>upgrading, <a class="indexterm" href="#chap-upgrade-components">Upgrading OpenAM Components</a></dt></dl></dd></dl></div><div class="indexdiv"><h3>L</h3><dl><dt>legacy servers</dt><dd><dl><dt>migrating, <a class="indexterm" href="#chap-legacy-servers">Migrating Legacy Servers</a></dt></dl></dd></dl></div><div class="indexdiv"><h3>O</h3><dl><dt>OpenAM</dt><dd><dl><dt>components</dt><dd><dl><dt>upgrading, <a class="indexterm" href="#chap-upgrade-components">Upgrading OpenAM Components</a></dt></dl></dd><dt>distributed authentication</dt><dd><dl><dt>upgrading, <a class="indexterm" href="#chap-upgrade-components">Upgrading OpenAM Components</a></dt></dl></dd><dt>Java EE policy agents</dt><dd><dl><dt>upgrading, <a class="indexterm" href="#chap-upgrade-components">Upgrading OpenAM Components</a></dt></dl></dd><dt>tools</dt><dd><dl><dt>upgrading, <a class="indexterm" href="#chap-upgrade-components">Upgrading OpenAM Components</a></dt></dl></dd><dt>upgrading, <a class="indexterm" href="#chap-upgrade-servers">Upgrading OpenAM Servers</a></dt><dt>upgrading 10.1.0 Xpress, <a class="indexterm" href="#chap-upgrade-servers">Upgrading OpenAM Servers</a></dt><dt>upgrading 11.0, <a class="indexterm" href="#chap-upgrade-servers">Upgrading OpenAM Servers</a></dt><dt>upgrading 9.5 or later, <a class="indexterm" href="#chap-upgrade-servers">Upgrading OpenAM Servers</a></dt><dt>web policy agents</dt><dd><dl><dt>upgrading, <a class="indexterm" href="#chap-upgrade-components">Upgrading OpenAM Components</a></dt></dl></dd></dl></dd></dl></div><div class="indexdiv"><h3>P</h3><dl><dt>policy</dt><dd><dl><dt>changes during upgrade, <a class="indexterm" href="#upgrade-policies">Upgrading &amp; Policies</a></dt></dl></dd></dl></div><div class="indexdiv"><h3>R</h3><dl><dt>rollbacks, <a class="indexterm" href="#post-upgrade-rollback">Plan for Rollback</a></dt></dl></div><div class="indexdiv"><h3>T</h3><dl><dt>tools</dt><dd><dl><dt>upgrading, <a class="indexterm" href="#chap-upgrade-components">Upgrading OpenAM Components</a></dt></dl></dd></dl></div><div class="indexdiv"><h3>U</h3><dl><dt>upgrades</dt><dd><dl><dt>about, <a class="indexterm" href="#chap-about-upgrades">About Upgrading OpenAM</a></dt><dt>affecting policies, <a class="indexterm" href="#upgrade-policies">Upgrading &amp; Policies</a></dt><dt>and backups, <a class="indexterm" href="#pre-upgrade-backup">Back Up the Deployment</a></dt><dt>applying customizations, <a class="indexterm" href="#pre-upgrade-customization">Apply Customization Before Upgrading</a></dt><dt>best practices, <a class="indexterm" href="#upgrade-best-practices">Best Practices for Upgrades</a></dt><dt>planning, <a class="indexterm" href="#upgrade-planning">Planning the Upgrade</a></dt><dt>planning for rollbacks, <a class="indexterm" href="#post-upgrade-rollback">Plan for Rollback</a></dt></dl></dd></dl></div><div class="indexdiv"><h3>W</h3><dl><dt>web policy agents</dt><dd><dl><dt>upgrading, <a class="indexterm" href="#chap-upgrade-components">Upgrading OpenAM Components</a></dt></dl></dd></dl></div></div></div></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

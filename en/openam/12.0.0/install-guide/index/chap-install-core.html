@@ -1,0 +1,192 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;2.&nbsp;Installing OpenAM Core Services</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenAM Installation Guide"><link rel="up" href="index.html" title="OpenAM Installation Guide"><link rel="prev" href="chap-prepare-install.html" title="Chapter&nbsp;1.&nbsp;Preparing For Installation"><link rel="next" href="chap-install-tools.html" title="Chapter&nbsp;3.&nbsp;Installing OpenAM Tools"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;2.&nbsp;Installing OpenAM Core Services</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-prepare-install.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-install-tools.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-install-core"></a>Chapter&nbsp;2.&nbsp;Installing OpenAM Core Services</h1></div></div></div><a class="indexterm" name="d0e1835"></a><a class="indexterm" name="d0e1840"></a><p>This chapter covers tasks required for a full install of OpenAM server
+ with or without OpenAM Console.</p><p>This chapter does not cover installation for enforcing policies on
+ resource servers. To manage access to resources on other servers, you can use
+ OpenIG or OpenAM policy agents.</p><p><a class="link" href="http://openig.forgerock.org/" target="_blank">OpenIG</a>
+ is a high-performance reverse proxy server with specialized session management
+ and credential replay functionality. It can function as a standards-based 
+ policy enforcement point.</p><p>
+  OpenAM policy agents provide policy enforcement
+  on supported web servers and Java EE containers,
+  and are tightly integrated with OpenAM.
+  See the
+  <a class="link" href="http://docs.forgerock.org/en/openam-pa/3.3.0/web-users-guide/#web-users-guide" target="_blank"><em class="citetitle">OpenAM Web Policy Agent User's Guide</em></a>,
+  or the
+  <span class="olink"><em class="citetitle">OpenAM Java EE Policy Agent User's Guide</em></span>
+  for instructions on installing OpenAM policy agents
+  in supported web servers and Java EE application containers.
+ </p><div class="table"><a name="decide-how-to-install"></a><div class="table-title">Table&nbsp;2.1.&nbsp;Deciding How To Install OpenAM</div><div class="table-contents"><table summary="Deciding How To Install OpenAM" width="100%" border="0"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>If you want to...</th><th>Then see...</th></tr></thead><tbody><tr><td>Install quickly for evaluation using default settings</td><td>
+      <p><a class="xref" href="chap-install-core.html#deploy-openam" title="Procedure&nbsp;2.1.&nbsp;To Deploy OpenAM">Procedure&nbsp;2.1, &#8220;To Deploy OpenAM&#8221;</a> and <a class="xref" href="chap-install-core.html#configure-openam-defaults" title="Procedure&nbsp;2.2.&nbsp;To Configure OpenAM With Defaults">Procedure&nbsp;2.2, &#8220;To Configure OpenAM With Defaults&#8221;</a></p>
+
+      <p>Alternatively, follow the full example in the <a href="../../getting-started/index/index.html" class="link"><em class="citetitle">Getting
+      Started</em></a> guide.</p>
+     </td></tr><tr><td>Install OpenAM server and console, choosing settings</td><td><a class="xref" href="chap-install-core.html#deploy-openam" title="Procedure&nbsp;2.1.&nbsp;To Deploy OpenAM">Procedure&nbsp;2.1, &#8220;To Deploy OpenAM&#8221;</a> and <a class="xref" href="chap-install-core.html#configure-openam-custom" title="Procedure&nbsp;2.4.&nbsp;To Custom Configure OpenAM">Procedure&nbsp;2.4, &#8220;To Custom Configure OpenAM&#8221;</a></td></tr><tr><td>Erase the configuration and start over</td><td><a class="xref" href="chap-install-core.html#delete-config-start-over" title="Procedure&nbsp;2.3.&nbsp;To Delete an OpenAM Configuration Before Redeploying">Procedure&nbsp;2.3, &#8220;To Delete an OpenAM Configuration Before Redeploying&#8221;</a></td></tr><tr><td>Add an OpenAM server to a site</td><td><a class="xref" href="chap-install-core.html#deploy-openam" title="Procedure&nbsp;2.1.&nbsp;To Deploy OpenAM">Procedure&nbsp;2.1, &#8220;To Deploy OpenAM&#8221;</a>, and
+     <a class="xref" href="chap-install-core.html#add-servers-to-site" title="Procedure&nbsp;2.5.&nbsp;To Add a Server to a Site">Procedure&nbsp;2.5, &#8220;To Add a Server to a Site&#8221;</a></td></tr><tr><td>Install OpenAM server only (no console)</td><td><a class="xref" href="chap-install-core.html#which-war-to-deploy" title="Table&nbsp;2.2.&nbsp;Determine Which War File to Deploy">Table&nbsp;2.2, &#8220;Determine Which War File to Deploy&#8221;</a>,
+     <a class="xref" href="chap-install-core.html#deploy-openam" title="Procedure&nbsp;2.1.&nbsp;To Deploy OpenAM">Procedure&nbsp;2.1, &#8220;To Deploy OpenAM&#8221;</a>, and
+     <a class="xref" href="chap-install-core.html#deploy-coreonly" title="Procedure&nbsp;2.6.&nbsp;To Deploy OpenAM Core Server (No Console)">Procedure&nbsp;2.6, &#8220;To Deploy OpenAM Core Server (No Console)&#8221;</a></td></tr><tr><td>Install <span class="command"><strong>ssoadm</strong></span> for CLI configuration</td><td><a href="../../install-guide/index/chap-install-tools.html" class="link"><em class="citetitle">Installing
+     OpenAM Tools</em></a>, or <a href="../../admin-guide/index/chap-admin-tools.html#openam-ssoadm-jsp-overview" class="link">OpenAM ssoadm.jsp</a>
+     in the <em class="citetitle">Administration Guide</em></td></tr><tr><td>Perform a command-line install</td><td><a href="../../install-guide/index/chap-install-tools.html#install-openam-config-tools" class="link"><em class="citetitle">To Set Up
+     Configuration Tools</em></a></td></tr><tr><td>Install OpenAM in your DMZ</td><td><a href="../../install-guide/index/chap-install-das.html" class="link"><em class="citetitle">Installing
+     OpenAM Distributed Authentication</em></a></td></tr><tr><td>Skin OpenAM for your organization</td><td><a href="../../install-guide/index/chap-custom-ui.html" class="link"><em class="citetitle">Customizing
+     the OpenAM End User Pages</em></a></td></tr><tr><td>Uninstall OpenAM</td><td><a href="../../install-guide/index/chap-uninstall.html" class="link"><em class="citetitle">Removing
+     OpenAM Software</em></a></td></tr></tbody></table></div></div><br class="table-break"><p>Select the <code class="filename">.war</code> file based on the type of
+  deployment you need, as defined in the following table.</p><div class="table"><a name="which-war-to-deploy"></a><div class="table-title">Table&nbsp;2.2.&nbsp;Determine Which War File to Deploy</div><div class="table-contents"><table summary="Determine Which War File to Deploy" width="100%" border="0"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>If you want to...</th><th>Use...</th></tr></thead><tbody><tr><td>Install an OpenAM server including OpenAM Console</td><td><code class="filename">OpenAM-12.0.0.war</code></td></tr><tr><td>Install OpenAM server without OpenAM Console</td><td><code class="filename">OpenAM-ServerOnly-12.0.0.war</code></td></tr><tr><td>Install OpenAM distributed authentication UI</td><td><code class="filename">OpenAM-DistAuth-12.0.0.war</code></td></tr></tbody></table></div></div><br class="table-break"><div class="procedure"><a name="deploy-openam"></a><div class="procedure-title">Procedure&nbsp;2.1.&nbsp;To Deploy OpenAM</div><a class="indexterm" name="d0e2000"></a><p>The <code class="filename">OpenAM-12.0.0.war</code> file contains OpenAM
+  server with OpenAM Console. How you deploy the .war file depends on your web
+  application container.</p><ol class="procedure" type="1"><li class="step"><p>Deploy the .war file on your container.</p><p>For example, copy the file to deploy on Apache Tomcat.</p><div class="screen"><pre>$ cp OpenAM-12.0.0.war /path/to/tomcat/webapps/openam.war</pre></div><p>You change the file name to <code class="filename">openam.war</code> when
+   deploying in Tomcat so that the deployment URI is
+   <code class="literal">/openam</code>.</p><div class="note"><h3 class="title">Note</h3><p>
+     In order to be properly configured, OpenAM requires a deployment URI
+     with a non-empty string after <code class="literal">/</code>.
+
+     Do not deploy OpenAM at the root context.
+
+     Do not rename the .war file to <code class="filename">ROOT.war</code>
+     before deploying on Tomcat, for example.
+    </p></div><p>It can take several seconds for OpenAM to be deployed in your
+   container.</p></li><li class="step"><p>Browse to the initial configuration screen, for example at
+   <code class="literal">http://openam.example.com:8080/openam</code>.</p><div class="mediaobject" align="center"><a name="figure-openam-start"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/openam-start.png" align="middle" height="360" alt="Initial OpenAM configuration screen"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-openam-start.html" target="longdesc">D</a>]</span></div></div></li></ol></div><div class="procedure"><a name="configure-openam-defaults"></a><div class="procedure-title">Procedure&nbsp;2.2.&nbsp;To Configure OpenAM With Defaults</div><a class="indexterm" name="d0e2053"></a><p>The default configuration option configures the embedded OpenDJ server
+  using default ports&#8212;if the ports are already in use, OpenAM uses
+  free ports&#8212;as both configuration store and identity store.</p><p>The default configuration sets the cookie domain based on the fully
+  qualified domain name of the system. For an FQDN
+  <code class="literal">openam.example.com</code>, the cookie domain is set to
+  <code class="literal">.example.com</code>.</p><p>Configuration settings are saved to the home directory of the user
+  running the web application container in a directory named after the
+  deployment URI. In other words if OpenAM is deployed under
+  <code class="literal">/openam</code>, then the configuration is saved under
+  <code class="filename">$HOME/openam/</code>.</p><ol class="procedure" type="1"><li class="step"><p>In the initial configuration screen, click
+   Create Default Configuration under Default Configuration.</p></li><li class="step"><p>Review the software license agreement. If you agree to the license,
+       click "I accept the license agreement", and then click Continue.</p><div class="mediaobject" align="center"><a name="figure-openam-license"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/openam-license-dialog.png" align="middle" height="360" alt="OpenAM default configuration license"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-openam-license.html" target="longdesc">D</a>]</span></div></div></li><li class="step"><p>Provide different passwords for the default OpenAM administrator,
+   <code class="literal">amadmin</code>, and default Policy Agent users.</p><div class="mediaobject" align="center"><a name="figure-openam-default-conf"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/openam-default-conf.png" align="middle" height="360" alt="OpenAM default configuration"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-openam-default-conf.html" target="longdesc">D</a>]</span></div></div></li><li class="step"><p>When the configuration completes, click Proceed to Login, and then
+   login as the OpenAM administrator with the first of the two passwords you
+   provided.</p><div class="mediaobject" align="center"><a name="figure-openam-first-login"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/openam-first-login.png" align="middle" height="360" alt="OpenAM first login"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-openam-first-login.html" target="longdesc">D</a>]</span></div></div><p>After successful login, OpenAM redirects you to OpenAM Console.</p><div class="mediaobject" align="center"><a name="figure-openam-console-first-time"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/openam-console.png" align="middle" height="360" alt="OpenAM Console home page"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-openam-console-first-time.html" target="longdesc">D</a>]</span></div></div></li></ol></div><div class="procedure"><a name="delete-config-start-over"></a><div class="procedure-title">Procedure&nbsp;2.3.&nbsp;To Delete an OpenAM Configuration Before Redeploying</div><a class="indexterm" name="d0e2134"></a><a class="indexterm" name="d0e2139"></a><p>If you are unhappy with your configuration and want to start over from
+  the beginning, follow these steps.</p><ol class="procedure" type="1"><li class="step"><p>Stop the OpenAM web application to clear the configuration held
+   in memory.</p><p>The following example shuts down Tomcat for example.</p><div class="screen"><pre>$ /path/to/tomcat/bin/shutdown.sh
+Password: 
+Using CATALINA_BASE:   /path/to/tomcat
+Using CATALINA_HOME:   /path/to/tomcat
+Using CATALINA_TMPDIR: /path/to/tomcat/temp
+Using JRE_HOME:        /path/to/jdk/jre
+Using CLASSPATH:
+       /path/to/tomcat/bin/bootstrap.jar:/path/to/tomcat/bin/tomcat-juli.jar</pre></div></li><li class="step"><p>Delete OpenAM configuration files, by default under the
+   <code class="filename">$HOME</code> of the user running the web application
+   container.</p><div class="screen"><pre>$ rm -rf $HOME/openam $HOME/.openamcfg</pre></div><p>When using the internal OpenAM configuration store, this step
+   deletes the embedded directory server and all of its contents. This is why
+   you stop the application server before removing the configuration.</p><p>If you use an external configuration store, also delete the entries
+   under the configured OpenAM suffix (by default
+   dc=openam,dc=forgerock,dc=org).</p></li><li class="step"><p>Restart the OpenAM web application.</p><p>The following example starts the Tomcat container.</p><div class="screen"><pre>$ /path/to/tomcat/bin/startup.sh
+Password: 
+Using CATALINA_BASE:   /path/to/tomcat
+Using CATALINA_HOME:   /path/to/tomcat
+Using CATALINA_TMPDIR: /path/to/tomcat/temp
+Using JRE_HOME:        /path/to/jdk/jre
+Using CLASSPATH:
+       /path/to/tomcat/bin/bootstrap.jar:/path/to/tomcat/bin/tomcat-juli.jar</pre></div></li></ol></div><div class="procedure"><a name="configure-openam-custom"></a><div class="procedure-title">Procedure&nbsp;2.4.&nbsp;To Custom Configure OpenAM</div><a class="indexterm" name="d0e2177"></a><ol class="procedure" type="1"><li class="step"><p>In the initial configuration screen, click
+   Create New Configuration under Custom Configuration.</p></li><li class="step"><p>Read the license agreement. If you agree to the license, click
+   "I agree to the license agreement", and then click Continue.</p></li><li class="step"><p>On the Default User Password page, provide a password having at least
+    8 characters for the OpenAM Administrator, <code class="literal">amadmin</code>.</p><div class="mediaobject" align="center"><a name="figure-openam-conf-amadmin"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/openam-conf-amadmin.png" align="middle" height="360" alt="OpenAM amadmin password"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-openam-conf-amadmin.html" target="longdesc">D</a>]</span></div></div></li><li class="step"><p>Make sure the server settings are valid for your configuration.</p><div class="mediaobject" align="center"><a name="figure-openam-conf-server-settings"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/openam-conf-server-settings.png" align="middle" height="360" alt="OpenAM server settings"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-openam-conf-server-settings.html" target="longdesc">D</a>]</span></div></div><div class="variablelist"><dl class="variablelist"><dt><span class="term">Server URL</span></dt><dd><p>Provide a valid URL to the base of your OpenAM web
+      container, including a fully qualified domain name (FQDN).</p><p>In a test environment, you can fake the FQDN by adding it to
+      your <code class="filename">/etc/hosts</code> as an alias. The following excerpt
+      shows lines from the <code class="filename">/etc/hosts</code> file on a Linux
+      system where OpenAM is installed.</p><pre class="brush: plain;">127.0.0.1 localhost.localdomain localhost
+::1 localhost6.localdomain6 localhost6
+127.0.1.1 openam openam.example.com</pre></dd><dt><span class="term">Cookie Domain</span></dt><dd><p>Starts with a dot (<code class="literal">.</code>).</p></dd><dt><span class="term">Platform Locale</span></dt><dd><p>Supported locales include en_US (English), de (German),
+      es (Spanish), fr (French), ja (Japanese), ko (Korean),
+      zh_CN (Simplified Chinese), and zh_TW (Traditional Chinese).</p></dd><dt><span class="term">Configuration Directory</span></dt><dd><p>Location on server for OpenAM configuration files. OpenAM must
+      be able to write to this directory.</p></dd></dl></div></li><li class="step"><p>In the Configuration Store screen, you can accept the defaults
+   to allow OpenAM to store configuration data in an embedded directory.
+   The embedded directory can be configured separately to replicate data
+   for high availability if necessary.</p><div class="mediaobject" align="center"><a name="figure-openam-conf-store"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/openam-conf-store.png" align="middle" height="360" alt="OpenAM configuration store"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-openam-conf-store.html" target="longdesc">D</a>]</span></div></div><p>You can also add this OpenAM installation to an existing deployment,
+   providing the URL of the site. See <a class="xref" href="chap-install-core.html#add-servers-to-site" title="Procedure&nbsp;2.5.&nbsp;To Add a Server to a Site">Procedure&nbsp;2.5, &#8220;To Add a Server to a Site&#8221;</a>
+   for details.</p><p>Alternatively, if you already manage an OpenDJ or DSEE deployment,
+   you can choose to store OpenAM configuration data in your existing
+   directory service. You must, however, create the suffix to store
+   configuration data on the directory server before you configure
+   OpenAM. OpenAM does not create the suffix when you use an external
+   configuration store.</p><p>When you create a new OpenAM custom configuration that uses an
+   external LDAP directory server for the configuration data store, you must
+   use a root suffix DN with at least two domain components, such as
+   <code class="literal">dc=example,dc=com</code>.</p></li><li class="step"><p>In the User Store screen, you configure where OpenAM looks for
+   user identities.</p><p>OpenAM must have write access to the directory service you choose,
+   as it adds to the directory schema needed to allow OpenAM to manage access
+   for users in the user store.</p><div class="mediaobject" align="center"><a name="figure-openam-conf-user-store"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/openam-conf-user-store.png" align="middle" height="360" alt="OpenAM user store settings"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-openam-conf-user-store.html" target="longdesc">D</a>]</span></div></div><div class="variablelist"><dl class="variablelist"><dt><span class="term">User Data Store Type</span></dt><dd><p>If you have a directory service already provisioned with users in
+      a supported user data store, then select that type of directory from the
+      options available.</p></dd><dt><span class="term">SSL/TLS Enabled</span></dt><dd><p>To use a secure connection, check this box, then make sure
+      the Port you define corresponds to the port on which the directory
+      listens for StartTLS or SSL connections. When using this option you also
+      need to make sure the trust store used by the JVM running OpenAM has the
+      necessary certificates installed.</p></dd><dt><span class="term">Directory Name</span></dt><dd><p>FQDN for the host housing the directory service</p></dd><dt><span class="term">Port</span></dt><dd><p>LDAP directory port. The default for LDAP and LDAP with StartTLS
+      to protect the connection is port 389. The default for LDAP over SSL
+      is port 636. Your directory service might use a different port.</p></dd><dt><span class="term">Root Suffix</span></dt><dd><p>Base distinguished name (DN) where user data are stored</p></dd><dt><span class="term">Login ID</span></dt><dd><p>Directory administrator user DN. The administrator must be capable
+      of updating schema and user data.</p></dd><dt><span class="term">Password</span></dt><dd><p>Password for the directory administrator user</p></dd></dl></div></li><li class="step"><p>In the Site Configuration screen, you can set up OpenAM as part of
+   a site where the load is balanced across multiple OpenAM servers.</p><p>If you have a site configuration with a load balancer, you can enable
+   session high availability persistence and failover. OpenAM then stores
+   sessions across server restarts, so that users do not have to login
+   again.</p><p>If you then add additional servers to this OpenAM site, OpenAM performs
+   <em class="firstterm">session failover</em>, storing session data in a directory
+   service that is shared by different OpenAM servers. The shared storage means
+   that if an OpenAM server fails, other OpenAM servers in the site have access
+   to the user's session data and can serve requests about that user. As a
+   result the user does not have to log in again. If session failover is
+   important for your deployment, also follow the instructions in <a href="../../install-guide/index/chap-session-failover.html" class="link"><em class="citetitle">Setting Up
+   OpenAM Session Failover</em></a>.</p><div class="mediaobject" align="center"><a name="figure-openam-conf-site"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/openam-conf-site.png" align="middle" height="360" alt="OpenAM site configuration"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-openam-conf-site.html" target="longdesc">D</a>]</span></div></div><p>It is possible to set up a site after initial installation and
+   configuration. Doing so is described in the chapter on
+   <em class="citetitle">Setting Up OpenAM Session Failover</em>.</p></li><li class="step"><p>In the Agent Information screen, provide a password having at least
+   8 characters to be used by policy agents to connect to OpenAM.</p><div class="mediaobject" align="center"><a name="figure-openam-conf-pa"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/openam-conf-pa.png" align="middle" height="360" alt="OpenAM policy agent password"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-openam-conf-pa.html" target="longdesc">D</a>]</span></div></div></li><li class="step"><p>Check the summary screen, and if necessary click Previous to return to
+   earlier screens if necessary to fix configuration errors.</p><div class="mediaobject" align="center"><a name="figure-openam-conf-summary"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/openam-conf-summary.png" align="middle" height="360" alt="OpenAM configuration summary"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-openam-conf-summary.html" target="longdesc">D</a>]</span></div></div><p>After you click Create Configuration in the summary screen,
+   configuration proceeds, logging progress that you can read in your browser
+   and later in the installation log. The process ends, and OpenAM shows the
+   Proceed to Login prompt.</p><div class="mediaobject" align="center"><a name="figure-openam-proceed-to-login"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/openam-proceed-to-login.png" align="middle" height="360" alt="OpenAM proceed to login prompt"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-openam-proceed-to-login.html" target="longdesc">D</a>]</span></div></div></li><li class="step"><p>When the configuration completes, click Proceed to Login, and then
+   login as the OpenAM administrator, <code class="literal">amadmin</code>.</p><div class="mediaobject" align="center"><a name="figure-openam-first-login-admin"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/openam-first-login.png" align="middle" height="360" alt="OpenAM first login"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-openam-first-login-admin.html" target="longdesc">D</a>]</span></div></div><p>After login, OpenAM redirects you to the OpenAM Console page.</p><div class="mediaobject" align="center"><a name="figure-openam-console"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/openam-console.png" align="middle" height="360" alt="OpenAM Console home page"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-openam-console.html" target="longdesc">D</a>]</span></div></div><p>You can also access OpenAM Console by browsing to the Console URL, such
+   as <code class="literal">http://openam.example.com:8080/openam/console</code>.</p></li><li class="step"><p>Restrict permissions to the configuration directory (by default
+   <code class="filename">$HOME/openam</code>, where
+   $HOME corresponds to the user who runs the web container). Prevent other
+   users from accessing files in the configuration directory.</p></li></ol></div><div class="procedure"><a name="add-servers-to-site"></a><div class="procedure-title">Procedure&nbsp;2.5.&nbsp;To Add a Server to a Site</div><a class="indexterm" name="d0e2435"></a><a class="indexterm" name="d0e2442"></a><p>High availability requires redundant servers in case of failure.
+  With OpenAM, you configure an OpenAM site with multiple servers in a
+  pool behind a load balancing service that exposes a single URL as an entry
+  point to the site.</p><p>Follow these steps to configure a server to belong to an existing
+  site.</p><ol class="procedure" type="1"><li class="step"><p>In the initial configuration screen, under Custom Configuration click
+   Create New Configuration.</p></li><li class="step"><p>In the first screen, enter the same password entered for the OpenAM
+   Administrator, <code class="literal">amadmin</code>, when you configured the first
+   server in the site.</p></li><li class="step"><p>Configure server settings as required.</p><p>The cookie domain should be identical to that of the first server in
+   the site.</p></li><li class="step"><p>In the configuration store screen, select Add to Existing Deployment,
+   and enter as the Server URL the URL of the first OpenAM server in the
+   site.</p><p>The directory used to store configuration data should belong to the
+   same directory service used for this purpose by other OpenAM servers in
+   the site. If you use the embedded OpenDJ directory server, for example,
+   you can have the configurator set up data replication with embedded directory
+   servers used by other servers in the site.</p><p>Settings for the user store are then shared with the existing server,
+   so the corresponding wizard screen is skipped.</p></li><li class="step"><p>In the site configuration screen, select <code class="literal">Yes</code> and
+    enter the same site configuration details as you did for the first server
+    in the site.</p><p>Settings for agent information are also shared with the existing server,
+   so the corresponding wizard screen is skipped.</p></li><li class="step"><p>In the summary screen, verify the settings you chose, and then click
+   Create Configuration.</p></li><li class="step"><p>When the configuration process finishes, click Proceed to Login,
+   and then login as the OpenAM administrator to access OpenAM Console.</p></li></ol></div><div class="procedure"><a name="deploy-coreonly"></a><div class="procedure-title">Procedure&nbsp;2.6.&nbsp;To Deploy OpenAM Core Server (No Console)</div><a class="indexterm" name="d0e2489"></a><p>You can deploy OpenAM server without OpenAM console by performing the
+  following steps.</p><ol class="procedure" type="1"><li class="step"><p>Deploy the <code class="filename">OpenAM-ServerOnly-12.0.0.war</code> file 
+    in your container.</p><p>For example, copy the file to deploy on Apache Tomcat:</p><div class="screen"><pre>
+$ <strong>cp OpenAM-ServerOnly-12.0.0.war /path/to/tomcat/webapps/coreonly.war</strong>
+   </pre></div></li><li class="step"><p>Browse to the configuration application, such as
+    <code class="literal">http://openam.example.com:8080/coreonly/</code>, and configure
+    OpenAM core services as in <a class="xref" href="chap-install-core.html#configure-openam-custom" title="Procedure&nbsp;2.4.&nbsp;To Custom Configure OpenAM">Procedure&nbsp;2.4, &#8220;To Custom Configure OpenAM&#8221;</a>.</p></li><li class="step"><p>After configuration, restrict permissions to the configuration
+   directory, such as <code class="filename">$HOME/coreonly/</code> where
+   <code class="literal">$HOME</code> corresponds to the user who runs the web
+   container. Prevent other users from accessing files in the configuration
+   directory.</p></li></ol></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-prepare-install.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-install-tools.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;1.&nbsp;Preparing For Installation&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;3.&nbsp;Installing OpenAM Tools</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

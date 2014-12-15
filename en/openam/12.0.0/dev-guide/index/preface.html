@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Preface</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenAM Developer's Guide"><link rel="up" href="index.html" title="OpenAM Developer's Guide"><link rel="prev" href="index.html" title="OpenAM Developer's Guide"><link rel="next" href="chap-api-overview.html" title="Chapter&nbsp;1.&nbsp;OpenAM APIs and Protocols"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Preface</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="index.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-api-overview.html">Next</a></td></tr></table><hr></div><div lang="en" class="preface"><div class="titlepage"><div><div><h1 class="title"><a name="preface"></a>Preface</h1></div></div></div><p>This guide demonstrates how to handle sessions to permit single sign
+ on and single log out in OpenAM client applications. This guide further
+ demonstrates how to use the OpenAM APIs including both APIs for client
+ applications, and also SPIs for authentication, policy, service management,
+ delegation, and identity storage. Finally, this guide demonstrates how to
+ write your own web policy agent.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e175"></a>1.&nbsp;Who Should Use this Guide</h2></div></div></div><p>This guide is written for developers who adapt client applications
+  to use OpenAM access management capabilities. It is also written for
+  designers and developers extending and integrating OpenAM services for
+  their organizations.</p><p>You do not need to be an OpenAM wizard to learn something from
+  this guide, though a background in access management and developing
+  web applications or developing for web and application servers can help.
+  You can nevertheless get started with this guide, and then learn more as you
+  go along.</p></div><div lang="en" class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="formatting-conventions"></a>2.&nbsp;Formatting Conventions</h2></div></div></div><p>
+  Most examples in the documentation are created on GNU/Linux or Mac OS X.
+
+  Where it is helpful to make a distinction between operating environments,
+  examples for UNIX, GNU/Linux, Mac OS X, and so forth are labeled (UNIX).
+  Mac OS X specific examples can be labeled (Mac OS X).
+  Examples for Microsoft Windows can be labeled (Windows).
+
+  To avoid repetition, however, file system directory names are
+  often given only in UNIX format as in <code class="filename">/path/to/server</code>,
+  even if the text applies to <code class="filename">C:\path\to\server</code> as well.
+ </p><p>
+  Absolute path names usually begin with the placeholder
+  <code class="filename">/path/to/</code>.
+
+  This path might translate to <code class="filename">/opt/</code>,
+  <code class="filename">C:\Program Files\</code>, or somewhere else on your system.
+ </p><p>
+  Command line, terminal sessions are formatted as follows.
+ </p><div class="screen"><pre>$ <strong>echo $JAVA_HOME</strong>
+<em>/path/to/jdk</em></pre></div><p>
+  Command output is sometimes formatted for narrower, more readable output
+  even though formatting parameters are not shown in the command.
+  In the following example, the query string parameter
+  <code class="literal">_prettyPrint=true</code> is omitted.
+ </p><div class="screen"><pre>
+$ <strong>curl https://bjensen:hifalutin@opendj.example.com:8443/users/newuser</strong>
+<em>{
+  "_rev" : "000000005b337348",
+  "schemas" : [ "urn:scim:schemas:core:1.0" ],
+  "contactInformation" : {
+    "telephoneNumber" : "+1 408 555 1212",
+    "emailAddress" : "newuser@example.com"
+  },
+  "_id" : "newuser",
+  "name" : {
+    "familyName" : "New",
+    "givenName" : "User"
+  },
+  "userName" : "newuser@example.com",
+  "displayName" : "New User",
+  "meta" : {
+    "created" : "2014-06-03T09:58:27Z"
+  },
+  "manager" : [ {
+    "_id" : "kvaughan",
+    "displayName" : "Kirsten Vaughan"
+  } ]
+}</em>
+ </pre></div><p>
+  Program listings are formatted as follows.
+ </p><pre class="brush: java;">class Test {
+    public static void main(String [] args)  {
+        System.out.println("This is a program listing.");
+    }
+}</pre></div><div lang="en" class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="accessing-doc-online"></a>3.&nbsp;Accessing Documentation Online</h2></div></div></div><p>
+  ForgeRock core documentation, such as what you are now reading, aims to be
+  technically accurate and complete with respect to the software documented.
+ </p><div class="itemizedlist"><p>
+   Core documentation therefore follows a three-phase review process
+   designed to eliminate errors.
+  </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+    Product managers and software architects review project documentation design
+    with respect to the users' software lifecycle needs.
+   </p></li><li class="listitem"><p>
+    Subject matter experts review proposed documentation changes for
+    technical accuracy and completeness
+    with respect to the corresponding software.
+   </p></li><li class="listitem"><p>
+    Quality experts validate implemented documentation changes for
+    technical validity with respect to the software,
+    technical completeness with respect to the scope of the document,
+    and usability for the expected audience.
+   </p></li></ul></div><p>
+  The review process helps to ensure that documentation published for
+  a ForgeRock release is technically accurate and complete.
+ </p><p>
+  Fully reviewed, published core documentation is available at
+  <a class="link" href="http://docs.forgerock.org/" target="_blank">http://docs.forgerock.org/</a>.
+
+  Use this documentation when working with a ForgeRock Enterprise release.
+ </p><p>
+  In-progress documentation can be found at each project site under the
+  <a class="link" href="http://forgerock.org" target="_blank">Developer Community</a> projects page.
+
+  Use this documentation when trying a nightly build.
+ </p><p>
+  The ForgeRock <a class="link" href="https://wikis.forgerock.org/" target="_blank">Community Wikis</a> and provide additional, user-created information.
+
+  We encourage you to
+  <a class="link" href="https://sso.forgerock.com/openam/UI/Login" target="_blank">join the community</a>, so that you can update the Wikis, too.
+ </p></div><div lang="en" class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="joining-the-community"></a>4.&nbsp;Joining the ForgeRock Community</h2></div></div></div><p>
+  After you
+  <a class="link" href="https://backstage.forgerock.com/#/account/register" target="_blank">sign up</a> to join the ForgeRock community,
+  you can edit the
+  <a class="link" href="https://wikis.forgerock.org/" target="_blank">Community Wikis</a>,
+  and also log bugs and feature requests in the
+  <a class="link" href="https://bugster.forgerock.org/" target="_blank">issue tracker</a>.
+ </p><p>
+  If you have a question regarding a project but cannot find an answer
+  in the project documentation or Wiki, browse to the
+  <a class="link" href="http://forgerock.org" target="_blank">Developer Community</a> page for the project,
+  where you can find details on joining the project mailing lists,
+  and find links to mailing list archives.
+
+  You can also suggest updates to documentation through the
+  <a class="link" href="https://lists.forgerock.org/mailman/listinfo/docs" target="_blank">ForgeRock docs mailing list</a>.
+ </p><p>
+  The Community Wikis describe how to check out and build source code.
+
+  Should you want to contribute a patch, test, or feature,
+  or want to author part of the core documentation,
+  first have a look on the ForgeRock site at
+  <a class="link" href="http://forgerock.org/get_involved.html" target="_blank">how to get involved</a>.
+ </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="index.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-api-overview.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">OpenAM Developer's Guide&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;1.&nbsp;OpenAM APIs and Protocols</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

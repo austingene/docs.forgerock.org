@@ -1,0 +1,328 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;3.&nbsp;Installing OpenAM Tools</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenAM Installation Guide"><link rel="up" href="index.html" title="OpenAM Installation Guide"><link rel="prev" href="chap-install-core.html" title="Chapter&nbsp;2.&nbsp;Installing OpenAM Core Services"><link rel="next" href="chap-install-multiple.html" title="Chapter&nbsp;4.&nbsp;Installing Multiple Servers"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;3.&nbsp;Installing OpenAM Tools</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-install-core.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-install-multiple.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-install-tools"></a>Chapter&nbsp;3.&nbsp;Installing OpenAM Tools</h1></div></div></div><a class="indexterm" name="d0e2532"></a><p>OpenAM tools are found in <code class="filename">.zip</code> files where you
+ unpacked the archive of the entire package, such as
+ <code class="filename">~/Downloads/openam</code>.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="filename">SSOAdminTools-12.0.0.zip</code></span></dt><dd><p>Administration tools: <span class="command"><strong>ampassword</strong></span>,
+    <span class="command"><strong>ssoadm</strong></span> and <span class="command"><strong>amverifyarchive</strong></span></p><p>See <a class="xref" href="chap-install-tools.html#install-openam-admin-tools" title="Procedure&nbsp;3.1.&nbsp;To Set Up Administration Tools">Procedure&nbsp;3.1, &#8220;To Set Up Administration Tools&#8221;</a>.</p></dd><dt><span class="term"><code class="filename">SSOConfiguratorTools-12.0.0.zip</code></span></dt><dd><p>Configuration and upgrade tools, alternatives to using
+    the GUI configuration wizard</p><p>See <a class="xref" href="chap-install-tools.html#install-openam-config-tools" title="Procedure&nbsp;3.2.&nbsp;To Set Up Configuration Tools">Procedure&nbsp;3.2, &#8220;To Set Up Configuration Tools&#8221;</a>.</p></dd></dl></div><div class="procedure"><a name="install-openam-admin-tools"></a><div class="procedure-title">Procedure&nbsp;3.1.&nbsp;To Set Up Administration Tools</div><a class="indexterm" name="d0e2580"></a><p>
+   The <span class="command"><strong>ssoadm</strong></span> administration tool
+   requires access to OpenAM configuration files,
+   and therefore must be installed on the same host as OpenAM core services.
+
+   The <span class="command"><strong>ssoadm</strong></span> tool is not designed to run on a host
+   where only the distributed authentication service (DAS) is installed.
+  </p><p>The <span class="command"><strong>ssoadm</strong></span> tool also provides the ability to auto-accept
+   the software license agreement and suppress the license acceptance screen
+   to the user.
+   To do so, you can add the <code class="literal">--acceptLicense</code> option to the
+   <span class="command"><strong>setup</strong></span> or <span class="command"><strong>setup.bat</strong></span>
+   script before you install the tool. If the option is not present, you must
+   scroll through and accept the license interactively.</p><ol class="procedure" type="1"><li class="step"><p>Make sure OpenAM is installed and running before proceeding.</p></li><li class="step"><p>Make sure the <code class="literal">JAVA_HOME</code> environment variable
+   is properly set.</p><div class="screen"><pre>
+$ <strong>echo $JAVA_HOME</strong>
+<em>/path/to/jdk</em>
+   </pre></div></li><li class="step"><p>Create a file system directory to unpack the tools.</p><div class="screen"><pre>
+$ <strong>mkdir -p /path/to/openam-tools/admin</strong>
+   </pre></div></li><li class="step"><p>Unpack the tools.</p><div class="screen"><pre>
+$ <strong>cd /path/to/openam-tools/admin</strong>
+$ <strong>unzip ~/Downloads/openam/SSOAdminTools-12.0.0.zip</strong>
+   </pre></div></li><li class="step"><p>Optional. Add <code class="literal">--acceptLicense</code> to the
+    <span class="command"><strong>java</strong></span> command at the end of the <span class="command"><strong>setup</strong></span> or
+    <span class="command"><strong>setup.bat</strong></span> script to auto-accept the license agreement and
+    suppress the license acceptance screen to the user.</p><pre class="brush: shell;">
+$JAVA_HOME/bin/java -D"load.config=yes" \
+                    -D"help.print=$help_print" \
+                    -D"path.AMConfig=$path_AMConfig" \
+                    -D"path.debug=$path_debug" \
+                    -D"path.log=$path_log" \
+                    -cp "$CLASSPATH" com.sun.identity.tools.bundles.Main \
+                    --acceptLicense
+    </pre></li><li class="step"><p>If you connect to OpenAM over HTTPS and the certificate for the container
+    is not signed by a Certificate Authority (CA), then you must configure a
+    trust store with OpenAM's certificate for the <span class="command"><strong>ssoadm</strong></span> tool.
+    Otherwise, the <span class="command"><strong>ssoadm</strong></span> tool cannot trust OpenAM and
+    cannot complete the handshake phase of setting up a secure connection.
+   </p><p>
+    Once you have set up your trust store, you must update the <code class="literal">setup.sh</code>
+    (or <code class="literal">setup.bat</code> on Windows) scripts so that <span class="command"><strong>ssoadm</strong></span>
+    can reference the trust store.
+    The <span class="command"><strong>ssoadm</strong></span> by default tries to trust the certificate
+    based on the CA certificates in the Java <code class="literal">cacerts</code> truststore.
+    The issuer certificate of the
+    configuration data store's server certificate must be included in the
+    truststore.
+   </p><p>To identify the proper trust store,
+    add an additional option to the <span class="command"><strong>java</strong></span> command in
+    the script.
+    The following example points to the key
+    store in which Tomcat holds the certificate that it presents
+    when establishing an HTTPS connection.
+   </p><div class="literallayout"><p><br>
+$&nbsp;JAVA_HOME/bin/java&nbsp;-D"javax.net.ssl.trustStore=/path/to/tomcat/conf/keystore.jks"<br>
+&nbsp;&nbsp;&nbsp;</p></div></li><li class="step"><p>If you use IBM Java, add
+   <code class="literal">-D"amCryptoDescriptor.provider=IBMJCE"</code> and
+   <code class="literal">-D"amKeyGenDescriptor.provider=IBMJCE"</code> options to the
+   <span class="command"><strong>setup</strong></span> or <span class="command"><strong>setup.bat</strong></span> script before
+   you install the tools.</p><p>The options should be set for the <span class="command"><strong>java</strong></span> command
+   at the end of the script.</p><p>You can optionally apply the <code class="literal">--acceptLicense</code> argument
+   to the end of the script if you want to auto-accept the software
+   license agreement and suppress the license acceptance screen to the user.</p><div class="screen"><pre>
+$ <strong>tail setup</strong>
+<em>CLASSPATH="$CLASSPATH:resources"
+
+$JAVA_HOME/bin/java -D"load.config=yes" \
+                    -D"help.print=$help_print" \
+                    -D"path.AMConfig=$path_AMConfig" \
+                    -D"path.debug=$path_debug" \
+                    -D"path.log=$path_log" \
+                    -D"amCryptoDescriptor.provider=IBMJCE" \
+                    -D"amKeyGenDescriptor.provider=IBMJCE" \
+                    -cp "$CLASSPATH" \
+                    com.sun.identity.tools.bundles.Main \
+                    --acceptLicense</em>
+   </pre></div></li><li class="step"><p>Run the <span class="command"><strong>setup</strong></span> utility (<span class="command"><strong>setup.bat</strong></span>
+   on Windows), providing the path to the directory where OpenAM configuration
+   files are located, and where you want debug and log information to be
+   located.</p><div class="screen"><pre>
+$ <strong>./setup</strong>
+<em>Path to config files of OpenAM server [/home/user/openam]:
+Debug Directory [/path/to/openam-tools/admin/debug]:
+Log Directory [/path/to/openam-tools/admin/log]:
+The scripts are properly setup under directory:
+ /path/to/openam-tools/admin/openam
+Debug directory is /path/to/openam-tools/admin/debug.
+Log directory is /path/to/openam-tools/admin/log.
+The version of this tools.zip is: <em><strong>version and date</strong></em>
+The version of your server instance is: OpenAM <em><strong>version and date</strong></em></em>
+   </pre></div><p>After setup, the tools are located under a directory named after the
+   instance of OpenAM. On Windows, these files are .bat scripts.</p><div class="screen"><pre>
+$ <strong>ls openam/bin/</strong>
+<em>ampassword  amverifyarchive  ssoadm</em>
+   </pre></div></li><li class="step"><p>If you use IBM Java, add
+   <code class="literal">-D"amCryptoDescriptor.provider=IBMJCE"</code> and
+   <code class="literal">-D"amKeyGenDescriptor.provider=IBMJCE"</code> options to the
+   <span class="command"><strong>ssoadm</strong></span> or <span class="command"><strong>ssoadm.bat</strong></span> script before
+   using the script.</p><p>The options should be set before the call to
+   <code class="literal">com.sun.identity.cli.CommandManager</code> at the end of the
+   script.</p><div class="screen"><pre>
+$ <strong>tail -3 /path/to/openam-tools/admin/openam/bin/ssoadm</strong>
+<em>    -D"amCryptoDescriptor.provider=IBMJCE" \
+    -D"amKeyGenDescriptor.provider=IBMJCE" \
+    com.sun.identity.cli.CommandManager "$@"</em>
+   </pre></div></li><li class="step"><p>Check that <span class="command"><strong>ssoadm</strong></span> works properly.</p><div class="screen"><pre>
+$ <strong>echo password &gt; /tmp/pwd.txt</strong>
+$ <strong>chmod 400 /tmp/pwd.txt</strong>
+$ <strong>cd /path/to/openam-tools/admin/openam/bin/</strong>
+$ <strong>./ssoadm list-servers -u amadmin -f /tmp/pwd.txt</strong>
+<em>
+http://openam.example.com:8080/openam</em>
+   </pre></div><p>The <span class="command"><strong>ssoadm</strong></span> commands can also be run from
+   <code class="filename">ssoadm.jsp</code> in OpenAM, for example at
+   <code class="literal">http://openam.example.com:8080/openam/ssoadm.jsp</code>,
+   once the page has been enabled as described in the section on <a href="../../admin-guide/index/chap-admin-tools.html#openam-ssoadm-jsp-overview" class="link">OpenAM ssoadm.jsp</a>
+    in the <em class="citetitle">Administration Guide</em>.</p><p>Not all of the sub-commands available through the <span class="command"><strong>ssoadm</strong></span>
+  command are available on the <code class="literal">ssoadm.jsp</code> web page.</p></li><li class="step"><p>If you connect to OpenAM over HTTPS, the <span class="command"><strong>ssoadm</strong></span>
+    by default tries to trust the certificate based on the CA certificates in
+    the Java <code class="literal">cacerts</code> truststore. This might not work for your
+    deployment.</p><p>If the SSL certificate configured for the container where you deployed
+    OpenAM was not signed by a recognized CA then the SSL connection process
+    fails. For example, if you used a self-signed certificate as described in the
+    <em class="citetitle">Administration Guide</em> procedure, <a href="../../admin-guide/index/chap-certs-keystores.html#openam-with-https-on-tomcat" class="link"><em class="citetitle">To Set Up OpenAM
+     With HTTPS on Tomcat</em></a>, then the <span class="command"><strong>ssoadm</strong></span>
+    command cannot trust that certificate by default. To allow the
+    <span class="command"><strong>ssoadm</strong></span> command to trust the certificate, edit the
+    <span class="command"><strong>ssoadm</strong></span> (<span class="command"><strong>ssoadm.bat</strong></span> on Windows)
+    script as follows.</p><p>To identify the proper trust store,
+    add an additional option to the <span class="command"><strong>java</strong></span> command in
+    the script.
+    The following example points to the keystore in which Tomcat holds the
+    self-signed certificate that it presents
+    when establishing an HTTPS connection. The issuer certificate of the configuration
+    data store's server certificate must be included in the truststore.
+   </p><div class="literallayout"><p><br>
+$&nbsp;JAVA_HOME/bin/java&nbsp;-D"javax.net.ssl.trustStore=/path/to/tomcat/conf/keystore.jks"<br>
+&nbsp;&nbsp;&nbsp;</p></div><p>If the <span class="command"><strong>ssoadm</strong></span> command cannot access the server
+    key store in this way, set up your own trust store and import the server
+    certificate using the Java <span class="command"><strong>keytool</strong></span> command.</p></li><li class="step"><p>If you have deployed OpenAM in a site configuration, edit the
+   <span class="command"><strong>ssoadm</strong></span> (<span class="command"><strong>ssoadm.bat</strong></span> on Windows) script
+   to map the site URL to the OpenAM server URL.</p><p>To do this, set a
+   <code class="literal">com.iplanet.am.naming.map.site.to.server</code> system property
+   option of the <span class="command"><strong>java</strong></span> command in the script. The option
+   takes the following form.</p><pre class="literallayout">-D"com.iplanet.am.naming.map.site.to.server=<em class="replaceable"><code>lb-url</code></em>=<em class="replaceable"><code>openam-url</code></em>[,
+ <em class="replaceable"><code>other-lb-url</code></em>=<em class="replaceable"><code>openam-url</code></em> ...]"</pre><p>The property maps each <em class="replaceable"><code>lb-url</code></em> key to an
+   <em class="replaceable"><code>openam-url</code></em> value, where
+   <em class="replaceable"><code>lb-url</code></em> is the URL to a site load balancer and
+   <em class="replaceable"><code>openam-url</code></em> is the URL to the OpenAM server against
+   which you set up the <span class="command"><strong>ssoadm</strong></span> command.</p><p>The <span class="command"><strong>ssoadm</strong></span> command is dependent on the OpenAM server
+   against which you set it up, so always map site load balancer URLs to that
+   server's <em class="replaceable"><code>openam-url</code></em>.</p><p>For example, if your site is behind
+   <code class="literal">https://lb.example.com:443/openam</code>, and the OpenAM server
+   against which you set up the <span class="command"><strong>ssoadm</strong></span> is at
+   <code class="literal">http://openam.example.com:8080/openam</code>, then add the
+   following property to the <span class="command"><strong>java</strong></span> command (all on one line
+   without spaces).</p><pre class="literallayout">-D"com.iplanet.am.naming.map.site.to.server=
+ https://lb.example.com:443/openam=http://openam.example.com:8080/openam"</pre><p>Repeat this step for each OpenAM server in your site configuration.
+   You can install all your instances of <span class="command"><strong>ssoadm</strong></span> on the same
+   host, but in each case the command should manage only one OpenAM
+   server.</p></li></ol></div><div class="procedure"><a name="install-openam-config-tools"></a><div class="procedure-title">Procedure&nbsp;3.2.&nbsp;To Set Up Configuration Tools</div><a class="indexterm" name="d0e2959"></a><a class="indexterm" name="idx-config-tools"></a><ol class="procedure" type="1"><li class="step"><p>Make sure the <code class="literal">JAVA_HOME</code> environment variable
+   is properly set.</p><div class="screen"><pre>
+$ <strong>echo $JAVA_HOME</strong>
+<em>/path/to/jdk</em>
+   </pre></div></li><li class="step"><p>
+    Create a file system directory to unpack the tools.
+   </p><div class="screen"><pre>
+$ <strong>mkdir -p /path/to/openam-tools/config</strong>
+   </pre></div></li><li class="step"><p>Unpack the tools from where you unzipped OpenAM.</p><div class="informalexample"><div class="screen"><pre>
+$ <strong>cd /path/to/openam-tools/config</strong>
+$ <strong>unzip ~/Downloads/openam/SSOConfiguratorTools-12.0.0.zip</strong>
+<em>Archive:  ~/Downloads/openam/SSOConfiguratorTools-12.0.0.zip
+   creating: legal-notices/
+  inflating: legal-notices/LICENSE.DOM-software.html
+  inflating: legal-notices/NOTICE.resolver.txt
+  inflating: legal-notices/LICENSE.DOM-documentation.html
+        ... (more output) ...
+ extracting: lib/xml-apis-2.11.0.jar
+ extracting: openam-configurator-tool-12.0.0.jar
+ extracting: lib/servlet-api-2.5.jar</em>
+   </pre></div></div></li><li class="step"><p>
+    Configure OpenAM server in a silent, unattended manner
+    by using the openam-configurator-tool-12.0.0.jar tool after you deploy the .war.
+   </p><a class="indexterm" name="d0e3009"></a><p>
+    OpenAM server must be deployed and running, but not configured yet,
+    when you use the tool.
+   </p><p>
+    The openam-configurator-tool-12.0.0.jar relies on a properties file
+    to specify the configuration for the OpenAM server.
+    The following example shows the equivalent of a default configuration, which
+    installs OpenAM to run as HTTP.
+   </p><p>
+    If you want implement HTTPS, see the next step.
+   </p><div class="screen"><pre>
+$ <strong>cp sampleconfiguration config.properties</strong>
+$ <strong>vi config.properties</strong>
+$ <strong>$ grep -v "^#" config.properties | grep -v "^$"</strong>
+<em>SERVER_URL=http://openam.example.com:8080
+DEPLOYMENT_URI=/openam
+BASE_DIR=/home/openam/openam
+locale=en_US
+PLATFORM_LOCALE=en_US
+AM_ENC_KEY=
+ADMIN_PWD=password
+AMLDAPUSERPASSWD=secret12
+COOKIE_DOMAIN=.example.com
+ACCEPT_LICENSES=true
+DATA_STORE=embedded
+DIRECTORY_SSL=SIMPLE
+DIRECTORY_SERVER=openam.example.com
+DIRECTORY_PORT=50389
+DIRECTORY_ADMIN_PORT=4444
+DIRECTORY_JMX_PORT=1689
+ROOT_SUFFIX=dc=openam,dc=forgerock,dc=org
+DS_DIRMGRDN=cn=Directory Manager
+DS_DIRMGRPASSWD=password</em>
+   </pre></div><p>
+    When the OpenAM server .war file is deployed and running,
+    you can configure it by using the tool with the properties file.
+   </p><div class="screen"><pre>
+$ <strong>java -jar openam-configurator-tool-12.0.0.jar --file config.properties</strong>
+<em>Checking license acceptance...License terms accepted.
+Checking configuration directory /home/openam/openam....Success.
+Installing OpenAM configuration store...Success RSA/ECB/OAEPWithSHA1AndMGF1...
+Extracting OpenDJ, please wait...Complete
+Running OpenDJ setupSetup command: --cli --adminConnectorPort 4444
+ --baseDN dc=openam,dc=forgerock,dc=org --rootUserDN cn=Directory Manager
+ --ldapPort 50389 --skipPortCheck --rootUserPassword xxxxxxx --jmxPort 1689
+ --no-prompt --doNotStart --hostname openam.example.com ...
+...Success
+Installing OpenAM configuration store in /home/openam/openam/... ...Success.
+Creating OpenAM suffixImport+task+ ... ...Success
+Tag swapping schema files....Success.
+Loading Schema opendj_config_schema.ldif...Success.
+
+...
+
+...Success.
+Reinitializing system properties....Done
+Registering service dashboardService.xml...Success.
+
+...
+
+Configuring system....Done
+Configuring server instance....Done
+Creating demo user....Done
+Creating Web Service Security Agents....Done
+Setting up monitoring authentication file.
+Configuration complete!</em>
+   </pre></div></li><li class="step"><p>
+    To configure HTTPS, you create a properties file and include
+    the <code class="literal">SERVER_URL</code> property with the HTTPS URL
+    and set the <code class="literal">DIRECTORY_SSL</code> to <code class="literal">SSL</code>
+    as follows (the other properties remain the same):
+   </p><div class="screen"><pre>
+$ <strong>cp sampleconfiguration config.properties</strong>
+$ <strong>vi config.properties</strong>
+$ <strong>$ grep -v "^#" config.properties | grep -v "^$"</strong>
+<em>SERVER_URL=https://openam.example.com:1443
+DEPLOYMENT_URI=/openam
+BASE_DIR=/home/openam/openam
+locale=en_US
+PLATFORM_LOCALE=en_US
+AM_ENC_KEY=
+ADMIN_PWD=password
+AMLDAPUSERPASSWD=secret12
+COOKIE_DOMAIN=.example.com
+ACCEPT_LICENSES=true
+DATA_STORE=embedded
+DIRECTORY_SSL=SSL
+DIRECTORY_SERVER=openam.example.com
+DIRECTORY_PORT=50389
+DIRECTORY_ADMIN_PORT=4444
+DIRECTORY_JMX_PORT=1689
+ROOT_SUFFIX=dc=openam,dc=forgerock,dc=org
+DS_DIRMGRDN=cn=Directory Manager
+DS_DIRMGRPASSWD=password</em>
+   </pre></div><p>
+    Then, when the OpenAM .war file is deployed and the server is running, configure the
+    server to use HTTPS using the openam-configurator-tool-12.0.0.jar tool with the properties file
+    as follows:
+   </p><div class="screen"><pre>
+java '-Djavax.net.ssl.trustStore=PATH_TO_JKS_TRUSTSTORE' \
+      -jar openam-configurator-tool-12.0.0.jar \
+      --file config.properties
+   </pre></div></li></ol></div><p>
+    For additional information about the command-line tool,
+    see the reference documentation for
+    <a href="../../reference/index/man-configurator-jar-1.html" class="link"><span class="command"><strong>configurator.jar</strong></span></a>.
+   </p><div class="note"><h3 class="title">Note</h3><p>OpenAM supports two methods to auto-accept the software licensing
+        agreement and suppress the display of the licence acceptance screen to
+        the user: using the configuration file or using a command-line option.
+        You can include an optional <code class="literal">ACCEPT_LICENSES=true</code> property
+        in the openam-configurator-tool-12.0.0.jar configuration file.
+       </p><p>
+        You can also use the <code class="option">--acceptLicense</code> option with the
+        configurator tool on the command line. The configuration file property
+        has precedence over the command-line option. The default value is
+        <code class="literal">false</code>, which always displays the license acceptance screen.
+       </p><div class="screen"><pre>
+$ <strong>java -jar openam-configurator-tool-12.0.0.jar \
+  --file config.properties \
+  --acceptLicense</strong>
+       </pre></div></div><a class="indexterm" name="d0e3099"></a></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-install-core.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-install-multiple.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;2.&nbsp;Installing OpenAM Core Services&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;4.&nbsp;Installing Multiple Servers</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

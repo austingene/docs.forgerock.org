@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;19.&nbsp;Customizing Profile Attributes</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenAM Developer's Guide"><link rel="up" href="index.html" title="OpenAM Developer's Guide"><link rel="prev" href="chap-extending.html" title="Chapter&nbsp;18.&nbsp;Extending OpenAM"><link rel="next" href="chap-oauth2-scopes.html" title="Chapter&nbsp;20.&nbsp;Customizing OAuth 2.0 Scope Handling"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;19.&nbsp;Customizing Profile Attributes</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-extending.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-oauth2-scopes.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-custom-attr"></a>Chapter&nbsp;19.&nbsp;Customizing Profile Attributes</h1></div></div></div><a class="indexterm" name="d0e11117"></a><p>You can extend user profiles by adding custom attributes. This chapter
+ demonstrates how to add a custom attribute to a user profile when storing
+ user profiles in the embedded LDAP directory.</p><p>Adding a custom attribute involves both updating the
+ <code class="literal">iPlanetAMUserService</code>, and also updating the identity
+ repository schema to hold the new attribute. Furthermore, to allow users
+ to update the attribute in their own profiles, you must also update the
+ OpenAM policy configuration stored in the configuration directory.</p><div class="itemizedlist"><p>This chapter includes the following procedures.</p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="xref" href="chap-custom-attr.html#add-attr-to-service-description" title="Procedure&nbsp;19.1.&nbsp;To Update the AMUser Service For the New Attribute">Procedure&nbsp;19.1, &#8220;To Update the AMUser Service For the New Attribute&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-custom-attr.html#add-attr-to-identity-repository" title="Procedure&nbsp;19.2.&nbsp;To Update the Identity Repository For the New Attribute">Procedure&nbsp;19.2, &#8220;To Update the Identity Repository For the New Attribute&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-custom-attr.html#allow-users-to-update-attr" title="Procedure&nbsp;19.3.&nbsp;To Allow Users To Update the New Attribute">Procedure&nbsp;19.3, &#8220;To Allow Users To Update the New Attribute&#8221;</a></p></li></ul></div><div class="procedure"><a name="add-attr-to-service-description"></a><div class="procedure-title">Procedure&nbsp;19.1.&nbsp;To Update the AMUser Service For the New Attribute</div><p>Follow the steps below to create a custom attribute in OpenAM.</p><ol class="procedure" type="1"><li class="step"><p>Create a backup copy of the configuration file for the
+   <code class="literal">iPlanetAmUserService</code>.</p><div class="screen"><pre>
+$ <strong>cp ~/openam/config/xml/amUser.xml ~/openam/config/xml/amUser.xml.orig</strong>
+   </pre></div></li><li class="step"><p>Edit the file to add your attribute as one of the list of
+   <code class="literal">&lt;User&gt;</code> attributes.</p><pre class="brush: xml;">&lt;AttributeSchema name="customAttribute"
+    type="single"
+    syntax="string"
+    any="display"
+    i18nKey="Custom Attribute"&gt;
+&lt;/AttributeSchema&gt;</pre><p>Here, the name refers to the attribute type name used in LDAP. The
+   <code class="literal">i18nKey</code> holds either the reference, or in this case the
+   content, of the text that appears in the user interface.</p></li><li class="step"><p>Delete <code class="literal">iPlanetAMUserService</code>, and then create it
+   from your updated configuration file.</p><div class="screen"><pre>
+$ <strong>cd /path/to/tools/openam/bin/</strong>
+$ <strong>ssoadm \
+ delete-svc \
+ --adminid amadmin \
+ --password-file /tmp/pwd.txt \
+ --servicename iPlanetAMUserService</strong>
+
+<em>Service was deleted.</em>
+$ <strong>ssoadm \
+ create-svc \
+ --adminid amadmin \
+ --password-file /tmp/pwd.txt \
+ --xmlfile $HOME/openam/config/xml/amUser.xml</strong>
+
+<em>Service was added.</em>
+   </pre></div></li></ol></div><div class="procedure"><a name="add-attr-to-identity-repository"></a><div class="procedure-title">Procedure&nbsp;19.2.&nbsp;To Update the Identity Repository For the New Attribute</div><p>Follow the steps below to update the identity repository LDAP schema
+  for the custom attribute, and then update OpenAM to use the custom attribute
+  and object class.</p><p>If you are adding an existing attribute that is already allowed on
+  user profile entries, you can skip this procedure.</p><div class="tip"><h3 class="title">Tip</h3><p>If you are using OpenDJ as the identity repository, you can update the
+   schema through OpenDJ Control Panel &gt; Schema &gt; Manage Schema, as
+   described in the <a class="link" href="http://docs.forgerock.org/en/opendj/2.6.0/admin-guide/#update-schema" target="_blank">OpenDJ documentation</a>.</p></div><ol class="procedure" type="1"><li class="step"><p>Prepare the attribute type object class definitions in LDIF
+   format.</p><div class="screen"><pre>
+$ <strong>cat custom-attr.ldif</strong>
+<em>dn: cn=schema
+changetype: modify
+add: attributeTypes
+attributeTypes: ( temp-custom-attr-oid NAME 'customAttribute' EQUALITY case
+ IgnoreMatch ORDERING caseIgnoreOrderingMatch SUBSTR caseIgnoreSubstrings
+ Match SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 USAGE userApplications )
+-
+add: objectClasses
+objectClasses: ( temp-custom-oc-oid NAME 'customObjectclass' SUP top AUXILIARY
+  MAY customAttribute )</em>
+   </pre></div></li><li class="step"><p>Add the schema definitions to the directory.</p><div class="screen"><pre>
+$ <strong>/path/to/opendj/bin/ldapmodify \
+ --port 1389 \
+ --hostname openam.example.com \
+ --bindDN "cn=Directory Manager" \
+ --bindPassword password \
+ --filename custom-attr.ldif</strong>
+<em>Processing MODIFY request for cn=schema
+MODIFY operation successful for DN cn=schema</em>
+   </pre></div></li><li class="step"><p>In OpenAM console, browse to Access Control &gt; <em class="replaceable"><code>Realm
+   Name</code></em> &gt; Data Stores &gt; <em class="replaceable"><code>Data Store
+   Name</code></em>.</p></li><li class="step"><p>Add the object class, here <code class="literal">customObjectclass</code>, to
+   the LDAP User Object Class list.</p></li><li class="step"><p>Add the attribute type, here <code class="literal">customAttribute</code>, to
+   the LDAP User Attributes list.</p></li><li class="step"><p>Save your work.</p></li></ol></div><div class="procedure"><a name="allow-users-to-update-attr"></a><div class="procedure-title">Procedure&nbsp;19.3.&nbsp;To Allow Users To Update the New Attribute</div><p>Follow these steps to make the new attribute editable by users. The
+  steps imply use of the embedded configuration directory. If you use a
+  different directory server to store the configuration, then adapt them for
+  your tools.</p><ol class="procedure" type="1"><li class="step"><p>Login to the control panel for the embedded configuration
+   directory.</p><div class="screen"><pre>
+$ <strong>./openam/opends/bin/control-panel &amp;</strong>
+   </pre></div><p>Connect using bind DN <code class="literal">cn=Directory Manager</code> and the
+   the password for <code class="literal">amadmin</code>.</p></li><li class="step"><p>Select Manage Entries to open the LDAP browser.</p></li><li class="step"><p>Search with <code class="literal">LDAP Filter:</code> set to
+   <code class="literal">ou=SelfWriteAttributes</code>, and then expand the tree views
+   to see the two entries found.</p></li><li class="step"><p>In the entry under <code class="literal">iPlanetAMPolicyService</code>, edit
+   the <code class="literal">sunKeyValue</code> attribute to add your custom attribute to
+   the list of self-writable attributes, as in
+   <code class="literal">&lt;Value&gt;customAttribute&lt;/Value&gt;</code>.</p></li><li class="step"><p>In the entry under <code class="literal">sunEntitlementIndexes</code>, edit
+   the <code class="literal">sunKeyValue</code> attribute to add your custom attribute to
+   the list of self-writable attributes, as in replacing the last
+   <code class="literal">\n</code> in the list with <code class="literal">,\n
+   \"customAttribute\"\n</code>.</p></li><li class="step"><p>Restart OpenAM or the web container where it runs. The following example applies to Tomcat.</p><div class="screen"><pre>
+$ <strong>/path/to/tomcat/bin/shutdown.sh</strong>
+$ <strong>/path/to/tomcat/bin/startup.sh</strong>
+   </pre></div></li><li class="step"><p>Login to OpenAM console as a user to check that a user can save a
+   value for your new, custom attribute.</p><div class="mediaobject" align="center"><a name="figure-bjensen-with-custom-attribute"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/bjensen-with-custom-attribute.png" align="middle" height="360" alt="Saving Babs Jensen's profile with a custom attribute"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-bjensen-with-custom-attribute.html" target="longdesc">D</a>]</span></div></div></li></ol></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-extending.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-oauth2-scopes.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;18.&nbsp;Extending OpenAM&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;20.&nbsp;Customizing OAuth 2.0 Scope Handling</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

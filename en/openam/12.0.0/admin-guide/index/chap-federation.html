@@ -1,0 +1,1092 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;11.&nbsp;Managing SAML 2.0 Federation</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenAM Administration Guide"><link rel="up" href="index.html" title="OpenAM Administration Guide"><link rel="prev" href="chap-cdsso.html" title="Chapter&nbsp;10.&nbsp;Configuring Cross-Domain Single Sign On"><link rel="next" href="chap-oauth2.html" title="Chapter&nbsp;12.&nbsp;Managing OAuth 2.0 Authorization"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;11.&nbsp;Managing SAML 2.0 Federation</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-cdsso.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-oauth2.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-federation"></a>Chapter&nbsp;11.&nbsp;Managing SAML 2.0 Federation</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-federation.html#about-federation">11.1. About SAML 2.0 SSO &amp; Federation</a></span></dt><dt><span class="section"><a href="chap-federation.html#set-up-federation">11.2. Setting Up SAML 2.0 SSO</a></span></dt><dt><span class="section"><a href="chap-federation.html#configure-idp">11.3. Configuring Identity Providers</a></span></dt><dt><span class="section"><a href="chap-federation.html#configure-sp">11.4. Configuring Service Providers</a></span></dt><dt><span class="section"><a href="chap-federation.html#configure-cot">11.5. Configuring Circles of Trust</a></span></dt><dt><span class="section"><a href="chap-federation.html#saml2-failover">11.6. Configuring Providers for Failover</a></span></dt><dt><span class="section"><a href="chap-federation.html#google-apps-as-sp">11.7. Configuring Google Apps as a Remote Service Provider</a></span></dt><dt><span class="section"><a href="chap-federation.html#salesforce-as-sp">11.8. Configuring Salesforce CRM as a Remote Service Provider</a></span></dt><dt><span class="section"><a href="chap-federation.html#using-saml2-sso-slo">11.9. Using SAML 2.0 Single Sign-On &amp; Single Logout</a></span></dt><dt><span class="section"><a href="chap-federation.html#saml2-ecp-config">11.10. Configuring OpenAM For the ECP Profile</a></span></dt><dt><span class="section"><a href="chap-federation.html#federation-linking-accounts">11.11. Managing Federated Accounts</a></span></dt><dt><span class="section"><a href="chap-federation.html#using-saml2-artifacts">11.12. Using SAML 2.0 Artifacts</a></span></dt><dt><span class="section"><a href="chap-federation.html#using-saml2-with-policy-agents">11.13. SAML 2.0 &amp; Policy Agents</a></span></dt></dl></div><p>This chapter addresses how to set up and manage SAML 2.0 SSO for
+ single sign on and single log out across resources belonging to
+ organizations participating in a circle of trust.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="about-federation"></a>11.1.&nbsp;About SAML 2.0 SSO &amp; Federation</h2></div></div></div><a class="indexterm" name="d0e24076"></a><p>SAML 2.0 SSO is part of federated access management. Federation lets
+  access management cross organizational boundaries. Federation helps
+  organizations share identities and services without giving away their
+  identity information, or the services they provide.</p><p>To bridge heterogeneous systems, federation requires interoperability,
+  and thus depends on standards for orchestrating interaction and exchanging
+  information between providers. OpenAM federation relies on standards such as
+  <a class="link" href="http://saml.xml.org/saml-specifications" target="_top">Security Assertion
+  Markup Language (SAML) 2.0</a>. SAML 2.0 describes the messages, how they
+  are relayed, how they are exchanged, and common use cases.</p><div class="itemizedlist"><p>To achieve SAML 2.0 SSO, OpenAM separates <em class="firstterm">identity
+   providers</em> from <em class="firstterm">service providers</em>,
+   lets you include them them in a <em class="firstterm">circle of trust</em>, and
+   has you configure how the providers in the circle of trust interact.</p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>An identity provider stores and serves identity profiles, and
+    handles authentication.</p></li><li class="listitem"><p>A service provider offers services that access protected
+    resources, and handles authorization.</p></li><li class="listitem"><p>A circle of trust groups at least one identity provider and at least
+    one service provider who agree to share authentication information, with
+    assertions about authenticated users that let service providers make
+    authorization decisions.</p><p>Providers in a circle of trust share <em class="firstterm">metadata</em>,
+    configuration information that federation partners require to access each
+    others' services.</p></li><li class="listitem"><p>SAML 2.0 SSO maps attributes from accounts at the identity provider to
+    attributes on accounts at the service provider. The identity provider makes
+    assertions to the service provider, for example to attest that a user has
+    authenticated with the identity provider. The service provider then
+    consumes assertions from the identity provider to make authorization
+    decisions, for example to let an authenticated user complete a purchase
+    that gets charged to the user's account at the identity provider.</p></li></ul></div><p>In federation deployments where not all providers support SAML 2.0,
+  OpenAM can act as a multi-protocol hub, translating for providers who rely
+  on other and older standards such as SAML 1.x, Liberty Alliance Project
+  frameworks, and WS-Federation (for integration with Active Directory
+  Federation Services, for example).</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="set-up-federation"></a>11.2.&nbsp;Setting Up SAML 2.0 SSO</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-federation.html#deploy-idp-discovery">11.2.1. Deploying the Identity Provider Discovery Service</a></span></dt></dl></div><div class="itemizedlist"><p>Before you set up SAML 2.0 SSO in OpenAM, you must:</p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Know which providers participate in the circle of trust.</p></li><li class="listitem"><p>Know how OpenAM installations act as identity providers, or
+    service providers.</p></li><li class="listitem"><p>Agree with other providers on a synchronized time service.</p></li><li class="listitem"><p>For identity information exchanged with other participants in a
+    circle of trust, define how to map shared user attributes. Local user
+    profile attribute names should map to user profile attribute names at other
+    providers.</p><p>For example, if you exchange user identifiers with your partners, and
+    you call it <code class="literal">uid</code> whereas another partner calls it
+    <code class="literal">userid</code>, then you map your <code class="literal">uid</code> to
+    your partner's <code class="literal">userid</code>.</p></li><li class="listitem"><p>Import the keys used to sign assertions into the JKS key store in
+    your OpenAM configuration directory. You can use the Java
+    <span class="command"><strong>keytool</strong></span> command.</p><p>The OpenAM configuration key store is located at the top level of
+    the configuration directory, such as
+    <code class="filename">$HOME/openam/keystore.jks</code>. The password,
+    stored in <code class="filename">$HOME/openam/.keypass</code>, is
+    <code class="literal">changeit</code> by default. Also by default the only key
+    available is for a self-signed certificate (alias: test) installed with
+    OpenAM.</p></li></ul></div><p>During set up, you must share metadata for providers that you host
+  with other providers in the circle of trust. You must also configure
+  remote providers, connecting to other providers by importing their
+  metadata.</p><p>In OpenAM terms, a hosted provider is one served by the current
+  OpenAM server, whereas a remote provider is one hosted elsewhere.</p><div class="itemizedlist"><p>This section covers the following topics.</p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="xref" href="chap-federation.html#create-hosted-idp" title="Procedure&nbsp;11.1.&nbsp;To Create a Hosted Identity Provider">Procedure&nbsp;11.1, &#8220;To Create a Hosted Identity Provider&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-federation.html#create-hosted-sp" title="Procedure&nbsp;11.2.&nbsp;To Create a Hosted Service Provider">Procedure&nbsp;11.2, &#8220;To Create a Hosted Service Provider&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-federation.html#create-remote-idp" title="Procedure&nbsp;11.3.&nbsp;To Create a Remote Identity Provider">Procedure&nbsp;11.3, &#8220;To Create a Remote Identity Provider&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-federation.html#create-remote-sp" title="Procedure&nbsp;11.4.&nbsp;To Create a Remote Service Provider">Procedure&nbsp;11.4, &#8220;To Create a Remote Service Provider&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-federation.html#create-fedlet" title="Procedure&nbsp;11.5.&nbsp;To Create a Fedlet for Service Providers">Procedure&nbsp;11.5, &#8220;To Create a Fedlet for Service Providers&#8221;</a></p></li><li class="listitem"><p><a class="xref" href="chap-federation.html#deploy-idp-discovery" title="11.2.1.&nbsp;Deploying the Identity Provider Discovery Service">Section&nbsp;11.2.1, &#8220;Deploying the Identity Provider Discovery Service&#8221;</a></p></li></ul></div><div class="procedure"><a name="create-hosted-idp"></a><div class="procedure-title">Procedure&nbsp;11.1.&nbsp;To Create a Hosted Identity Provider</div><a class="indexterm" name="d0e24194"></a><ol class="procedure" type="1"><li class="step"><p>On the OpenAM console Common Tasks page, click Create Hosted Identity
+    Provider.</p></li><li class="step"><p>Unless you already have metadata for the provider, accept the
+    Name for this identity provider in the field provided, or provide your
+    own unique identifier.</p><p>The default name is the URL to the current server which hosts the
+    identity provider.</p></li><li class="step"><p>Select the Signing Key you imported into the OpenAM key store.</p></li><li class="step"><p>Either add the provider to the circle of trust you already created,
+    or select Add to new and provide a New Circle of Trust name.</p></li><li class="step"><p>For the attributes you share, map service provider attribute names
+    (Name in Assertion), to user profile names from your identity repository
+    (Local Attribute Name).</p><p>
+     Use this approach to set up a mapping with all SPs in the Circle of Trust
+     that do not have their own specific mappings configured.
+    </p><div lang="en" class="itemizedlist"><p>
+  The default mapping implementation has additional features
+  beyond simply retrieving string attributes from the user profile.
+ </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+   Add an attribute that takes a static value
+   by enclosing the profile attribute name in double quotes (<code class="literal">"</code>).
+  </p><p>
+   For example, you can add a static SAML attribute
+   called <code class="literal">partnerID</code>
+   with a value of <code class="literal">staticPartnerIDValue</code>
+   by adding <code class="literal">partnerID</code> as the Name in Assertion
+   with <code class="literal">"staticPartnerIDValue"</code> as the Local Attribute Name.
+  </p></li><li class="listitem"><p>
+   Base64 encode binary attributes when adding them to the SAML attributes
+   by adding <code class="literal">;binary</code> to the end of the attribute name,
+   as in the following example:
+  </p><pre class="literallayout">objectGUID=objectGUID;binary</pre><p>
+   This maps the local binary attribute <code class="literal">objectGUID</code>
+   to a SAML attribute called <code class="literal">objectGUID</code>
+   that is Base64 encoded.
+  </p></li><li class="listitem"><p>
+   Use <code class="literal">NameFormatURI</code> format
+   as shown in the following example:
+  </p><pre class="literallayout">urn:oasis:names:tc:SAML:2.0:attrname-format:uri|objectGUID=objectGUID;binary</pre></li></ul></div></li><li class="step"><p>Click Configure to save your configuration.</p></li><li class="step"><p>Export the XML-based metadata from your provider to share
+    with other providers in your circle of trust.</p><div class="screen"><pre>
+$ <strong>curl \
+ --output metadata.xml \
+ "http://www.idp.example:8080/openam/saml2/jsp/exportmetadata.jsp?entityid=\
+http://www.idp.example:8080/openam&amp;realm=/<em><strong>realm-name</strong></em>"</strong>
+    </pre></div><p>When you have configured only the top-level realm,
+    <code class="literal">/</code>, you can omit the query string.</p><p>Alternatively, provide the URL, to other providers so they can load
+    the metadata.</p></li></ol></div><div class="procedure"><a name="create-hosted-sp"></a><div class="procedure-title">Procedure&nbsp;11.2.&nbsp;To Create a Hosted Service Provider</div><a class="indexterm" name="d0e24290"></a><ol class="procedure" type="1"><li class="step"><p>On the OpenAM console Common Tasks page, click Create Hosted Service
+    Provider.</p></li><li class="step"><p>Unless you already have metadata for the provider, accept the
+    Name for this service provider in the field provided, or provide your
+    own unique identifier.</p><p>The default name is the URL to the current server which hosts the
+    service provider.</p></li><li class="step"><p>Either add the provider to the circle of trust you already created,
+    or select Add to new and provide a New Circle of Trust name.</p></li><li class="step"><p>If the identity provider has not already mapped the attributes you
+    share, map identity provider attribute names (Name in Assertion), to user
+    profile names from your identity repository (Local Attribute Name).</p></li><li class="step"><p>Click Configure to save your configuration.</p></li><li class="step"><p>Export the XML-based metadata from your provider to share
+    with other providers in your circle of trust.</p><div class="screen"><pre>
+$ <strong>curl \
+ --output metadata.xml \
+ "http://www.sp.example:8080/openam/saml2/jsp/exportmetadata.jsp?entityid=\
+http://www.sp.example:8080/openam&amp;realm=/<em><strong>realm-name</strong></em>"</strong>
+    </pre></div><p>When you have configured only the top-level realm,
+    <code class="literal">/</code>, you can omit the query string.</p><p>Alternatively, provide the URL, to other providers so they can load
+    the metadata.</p></li></ol></div><div class="procedure"><a name="create-remote-idp"></a><div class="procedure-title">Procedure&nbsp;11.3.&nbsp;To Create a Remote Identity Provider</div><a class="indexterm" name="d0e24333"></a><ol class="procedure" type="1"><li class="step"><p>Obtain the identity provider metadata, or the URL where you can
+    obtain it.</p></li><li class="step"><p>On the OpenAM console Common Tasks page, click Register Remote
+    Identity Provider.</p></li><li class="step"><p>Provide the identity provider metadata or link to obtain
+    metadata.</p></li><li class="step"><p>Either add the provider to the circle of trust you already created,
+    or select Add to new and provide a New Circle of Trust name.</p></li><li class="step"><p>Click Configure to save your configuration.</p></li></ol></div><div class="procedure"><a name="create-remote-sp"></a><div class="procedure-title">Procedure&nbsp;11.4.&nbsp;To Create a Remote Service Provider</div><a class="indexterm" name="d0e24356"></a><ol class="procedure" type="1"><li class="step"><p>Obtain the service provider metadata, or the URL where you can
+    obtain it.</p></li><li class="step"><p>On the OpenAM console Common Tasks page, click Register Remote Service
+    Provider.</p></li><li class="step"><p>Provide the identity provider metadata or link to obtain
+    metadata.</p></li><li class="step"><p>If the identity provider has not already mapped the attributes you
+    share, map identity provider attribute names (Name in Assertion), to user
+    profile names from your identity repository (Local Attribute Name).</p><p>
+     Use this approach to set up a mapping that is specific to this SP.
+    </p><div lang="en" class="itemizedlist"><p>
+  The default mapping implementation has additional features
+  beyond simply retrieving string attributes from the user profile.
+ </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+   Add an attribute that takes a static value
+   by enclosing the profile attribute name in double quotes (<code class="literal">"</code>).
+  </p><p>
+   For example, you can add a static SAML attribute
+   called <code class="literal">partnerID</code>
+   with a value of <code class="literal">staticPartnerIDValue</code>
+   by adding <code class="literal">partnerID</code> as the Name in Assertion
+   with <code class="literal">"staticPartnerIDValue"</code> as the Local Attribute Name.
+  </p></li><li class="listitem"><p>
+   Base64 encode binary attributes when adding them to the SAML attributes
+   by adding <code class="literal">;binary</code> to the end of the attribute name,
+   as in the following example:
+  </p><pre class="literallayout">objectGUID=objectGUID;binary</pre><p>
+   This maps the local binary attribute <code class="literal">objectGUID</code>
+   to a SAML attribute called <code class="literal">objectGUID</code>
+   that is Base64 encoded.
+  </p></li><li class="listitem"><p>
+   Use <code class="literal">NameFormatURI</code> format
+   as shown in the following example:
+  </p><pre class="literallayout">urn:oasis:names:tc:SAML:2.0:attrname-format:uri|objectGUID=objectGUID;binary</pre></li></ul></div></li><li class="step"><p>Either add the provider to the circle of trust you already created,
+    or select Add to new and provide a New Circle of Trust name.</p></li><li class="step"><p>Click Configure to save your configuration.</p></li></ol></div><div class="procedure"><a name="create-fedlet"></a><div class="procedure-title">Procedure&nbsp;11.5.&nbsp;To Create a Fedlet for Service Providers</div><a class="indexterm" name="d0e24432"></a><p>When your organization acts as the identity provider, and you want
+   quickly to enable service providers to federate their services with yours,
+   you can provide them with a <em class="firstterm">fedlet</em>. A fedlet is
+   a small Java or .NET web application that can act as a service provider for
+   a specific identity provider without requiring that you install all of
+   OpenAM.</p><p>Fedlets support the following SAML 2.0 features.</p><div class="table"><a name="fedlet-saml2-features"></a><div class="table-title">Table&nbsp;11.1.&nbsp;Fedlet Support for SAML 2.0 Features</div><div class="table-contents"><table summary="Fedlet Support for SAML 2.0 Features" border="0"><colgroup><col width="66%"><col width="17%"><col width="17%"></colgroup><thead><tr><th>SAML 2.0 Feature</th><th>Java Fedlet</th><th>.NET Fedlet</th></tr></thead><tbody><tr><td>IDP &amp; SP-initiated Single Sign-On (HTTP Artifact)</td><td>Supported</td><td>Supported</td></tr><tr><td>IDP &amp; SP-initiated Single Sign-On (HTTP POST)</td><td>Supported</td><td>Supported</td></tr><tr><td>IDP &amp; SP-initiated Single Logout (HTTP POST)</td><td>Supported</td><td>Supported</td></tr><tr><td>IDP &amp; SP-initiated Single Logout (HTTP Redirect)</td><td>Supported</td><td>Supported</td></tr><tr><td>Sign Requests &amp; Responses</td><td>Supported</td><td>Supported</td></tr><tr><td>Encrypt Assertion, Attribute, &amp; NameID Elements</td><td>Supported</td><td>Supported</td></tr><tr><td>Export SP Metadata</td><td>Supported</td><td>Supported</td></tr><tr><td>Attribute Queries</td><td>Supported</td><td>Supported</td></tr><tr><td>XACML Requests</td><td>Supported</td><td>Not supported</td></tr><tr><td>Multiple IDPs</td><td>Supported</td><td>Supported</td></tr><tr><td>External IDP Discovery Service</td><td>Supported</td><td>Supported</td></tr><tr><td>Bundled IDP Reader Service for Discovery</td><td>Supported</td><td>Not supported</td></tr></tbody></table></div></div><br class="table-break"><p>For more information on using fedlets, see <a href="../../dev-guide/index/chap-fedlet-java.html" class="link"><em class="citetitle">Using Fedlets in
+   Java Web Applications</em></a> and <a href="../../dev-guide/index/chap-fedlet-dotnet.html" class="link"><em class="citetitle">Using Fedlets in
+   .NET Applications</em></a> in the <em class="citetitle">Developer's
+   Guide</em>.</p><p>The following procedure describes how to create a Java Fedlet.</p><ol class="procedure" type="1"><li class="step"><p>If you have not done so already, set up your identity provider.</p></li><li class="step"><p>Enter the URL where the service provider will deploy the fedlet you
+    create, and name the fedlet. If you create multiple fedlets, use the URL
+    as a unique name that shows who has deployed the fedlet.</p></li><li class="step"><p>For the attributes you share, map service provider attribute names
+    (Name in Assertion), to user profile names from your identity repository
+    (Local Attribute Name).</p></li><li class="step"><p>Click Create to generate the <code class="filename">Fedlet.zip</code>
+    file under the OpenAM configuration directory, such as
+    <code class="filename">$HOME/openam/myfedlets/httpwwwexamplecom80myapp/Fedlet.zip</code>.</p></li><li class="step"><p>Give the <code class="filename">Fedlet.zip</code> file to the service
+    provider for deployment.</p></li></ol></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="deploy-idp-discovery"></a>11.2.1.&nbsp;Deploying the Identity Provider Discovery Service</h3></div></div></div><p>When your circle of trust includes multiple identity providers, then
+   service providers must discover which identity provider corresponds to a
+   request. You can deploy the identity provider discovery service for this
+   purpose as a separate web application.</p><p>Browsers only send cookies for the originating domain. Therefore
+   when a browser accesses the service provider in the <code class="literal">www.sp.example</code>
+   domain, the service provider has no way of knowing whether the user has
+   perhaps already authenticated at <code class="literal">www.this-idp.example</code> or at
+   <code class="literal">www.that-idp.example</code>. The providers therefore host an identity
+   provider discovery service in a common domain, such as
+   <code class="literal">www.disco.example</code>, and use that service to discover where
+   the user logged in. The identity provider discover service essentially
+   writes and reads cookies from the common domain. The providers configure
+   their circle of trust to use the identity provider discovery service
+   as part of SAML 2.0 federation.</p><p>Deploying the identity provider discovery service involves the
+   following stages.</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Deploy the .war file into your web application container.</p></li><li class="listitem"><p>Configure the discovery service.</p></li><li class="listitem"><p>Add the identity provider discovery service endpoints for writing
+     cookies to and reading cookies from the common domain to the circle of
+     trust configurations for the providers.</p></li><li class="listitem"><p>Share metadata between identity providers and the service
+     provider.</p></li></ol></div><div class="procedure"><a name="deploy-idpdisco-on-tomcat"></a><div class="procedure-title">Procedure&nbsp;11.6.&nbsp;To Deploy the Discovery Service on Tomcat</div><p>How you deploy the discovery service .war file depends on your web
+    application container. The procedure in this section shows how to deploy
+    on Apache Tomcat.</p><ol class="procedure" type="1"><li class="step"><p>Copy the <code class="filename">IDPDiscovery-12.0.0.war</code> file to
+     the <code class="filename">webapps/</code> directory.</p><div class="screen"><pre>
+$ <strong>cp ~/Downloads/openam/IDPDiscovery-12.0.0.war \
+ /path/to/tomcat/webapps/disco.war</strong>
+     </pre></div></li><li class="step"><p>Access the configuration screen through your browser.</p><p>In this example, Apache Tomcat listens for HTTP requests on
+     <code class="literal">www.disco.example:8080</code>, and Tomcat has unpacked the
+     application under <code class="literal">/disco</code>, so the URL is
+     <code class="literal">http://www.disco.example:8080/disco</code>, which redirects to
+     <code class="filename">Configurator.jsp</code>.</p></li></ol></div><div class="procedure"><a name="configure-idpdisco-deployed"></a><div class="procedure-title">Procedure&nbsp;11.7.&nbsp;To Configure the Discovery Service</div><ol class="procedure" type="1"><li class="step"><p>Configure the identity provider discovery service.</p><div class="mediaobject" align="center"><a name="figure-idp-disco-config"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/idp-disco-config.png" align="middle" height="360" alt="Completed discovery service configuration screen"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-idp-disco-config.html" target="longdesc">D</a>]</span></div></div><p>Hints for discovery service configuration parameters follow.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">Debug Directory</span></dt><dd><p>The discovery service logs to flat files in this directory.</p></dd><dt><span class="term">Debug Level</span></dt><dd><p>Default is <code class="literal">error</code>. Other options include
+        <code class="literal">error</code>, <code class="literal">warning</code>,
+        <code class="literal">message</code>, and <code class="literal">off</code>.</p><p>Set this to <code class="literal">message</code> in order to see the
+        service working when you run your initial tests.</p></dd><dt><span class="term">Cookie Type</span></dt><dd><p>Set to PERSISTENT if you have configured OpenAM to use persistent
+        cookies, meaning single sign on cookies that can continue to be valid
+        after the browser is closed.</p></dd><dt><span class="term">Cookie Domain</span></dt><dd><p>The cookie domain is the common cookie domain used in your circle
+        of trust for identity provider discovery, in this case
+        <code class="literal">.disco.example</code>.</p></dd><dt><span class="term">Secure Cookie</span></dt><dd><p>Set this to true if clients should only return cookies when
+        a secure connection is used.</p></dd><dt><span class="term">Encode Cookie</span></dt><dd><p>Leave this true unless your OpenAM installation requires that you
+        do not encode cookies. Normally cookies are encoded such that cookies
+        remain valid in HTTP.</p></dd><dt><span class="term">HTTP-Only Cookie</span></dt><dd><p>Set to true to use HTTPOnly cookies if needed to help prevent
+        third-party programs and scripts from accessing the cookies.</p></dd></dl></div></li><li class="step"><p>Restrict permissions to the discovery service configuration file in
+     <code class="filename">$HOME/libIDPDiscoveryConfig.properties</code>, where $HOME
+     corresponds to the user who runs the web container where you deployed the
+     service.</p></li></ol></div><div class="procedure"><a name="add-idpdisco-to-circle-of-trust"></a><div class="procedure-title">Procedure&nbsp;11.8.&nbsp;To Add the Discovery Service to Your Circles of Trust</div><p>Each provider has a circle of trust including itself. You configure
+    each of these circles of trust to use the identity provider discovery
+    service as described in the following steps.</p><ol class="procedure" type="1"><li class="step"><p>On the service provider console, login as OpenAM
+     Administrator.</p></li><li class="step"><p>On the service provider console, under Federation &gt; Circle of
+     Trust &gt; <em class="replaceable"><code>Circle of Trust Name</code></em>
+     add SAML2 Writer and Reader Service URLs for the identity provider
+     discovery service endpoints, and Save your work.</p><p>In this example, the writer URL is
+     <code class="literal">http://www.disco.example:8080/disco/saml2writer</code>, and the
+     reader URL is
+     <code class="literal">http://www.disco.example:8080/disco/saml2reader</code>.</p></li><li class="step"><p>On each identity provider console, login as OpenAM
+     Administrator.</p></li><li class="step"><p>On the identity provider console, under Federation &gt; Circle of
+     Trust Configuration &gt; <em class="replaceable"><code>Circle of Trust Name</code></em>
+     also add SAML2 Writer and Reader Service URLs for the identity provider
+     discovery service endpoints, and Save your work.</p></li></ol></div><div class="procedure"><a name="share-idpdisco-sp-metadata"></a><div class="procedure-title">Procedure&nbsp;11.9.&nbsp;To Share Identity &amp; Service Provider Metadata</div><p>Before performing these steps, install the administration tools
+    for each provider as described in <a href="../../install-guide/index/chap-install-tools.html#install-openam-admin-tools" class="link"><em class="citetitle">To Set Up
+    Administration Tools</em></a>. The administration tools include
+    the <span class="command"><strong>ssoadm</strong></span> tool that you need to export metadata.</p><ol class="procedure" type="1"><li class="step"><p>On each identity provider console, register the service provider as
+     a remote service provider adding to the circle of trust you configured
+     to use the identity provider discovery service.</p><p>The URL to the service provider metadata is something like
+     <code class="literal">http://www.sp.example:8080/openam/saml2/jsp/exportmetadata.jsp</code>.</p></li><li class="step"><p>Obtain metadata for each identity provider.</p><div class="screen"><pre>
+$ <strong>ssh www.this-idp.example</strong>
+$ <strong>cd /path/to/openam-tools/admin/openam/bin</strong>
+$ <strong>./ssoadm \
+ create-metadata-templ \
+ --entityid "http://www.this-idp.example:8080/openam" \
+ --adminid amadmin \
+ --password-file /tmp/pwd.txt \
+ --identityprovider /idp \
+ --meta-data-file this-standard.xml \
+ --extended-data-file this-extended.xml</strong>
+<em>Hosted entity configuration was written to this-extended.xml.
+Hosted entity descriptor was written to this-standard.xml.</em>
+
+$ <strong>ssh www.that-idp.example</strong>
+$ <strong>cd /path/to/openam-tools/admin/openam/bin</strong>
+$ <strong>./ssoadm \
+ create-metadata-templ \
+ --entityid "http://www.that-idp.example:8080/openam" \
+ --adminid amadmin \
+ --password-file /tmp/pwd.txt \
+ --identityprovider /idp \
+ --meta-data-file that-standard.xml \
+ --extended-data-file that-extended.xml</strong>
+
+<em>Hosted entity configuration was written to that-extended.xml.
+Hosted entity descriptor was written to that-standard.xml.</em>
+     </pre></div></li><li class="step"><p>For each identity provider extended metadata file, change the value
+     of the <code class="literal">hosted</code> attribute to <code class="literal">0</code>,
+     meaning the identity provider is remote.</p></li><li class="step"><p>On the service provider, add the identity providers to the circle of
+     trust using the identity provider metadata.</p><div class="screen"><pre>
+$ <strong>ssh www.sp.example</strong>
+$ <strong>cd /path/to/openam-tools/admin/openam/bin</strong>
+$ <strong>./ssoadm \
+ import-entity \
+ --cot discocot \
+ --meta-data-file ~/Downloads/this-standard.xml \
+ --extended-data-file ~/Downloads/this-extended.xml \
+ --adminid amadmin \
+ --password-file /tmp/pwd.txt</strong>
+
+<em>Import file, /Users/mark/Downloads/this-standard.xml.
+Import file, /Users/mark/Downloads/this-extended.xml.</em>
+$ <strong>./ssoadm \
+ import-entity \
+ --cot discocot \
+ --meta-data-file ~/Downloads/that-standard.xml \
+ --extended-data-file ~/Downloads/that-extended.xml \
+ --adminid amadmin \
+ --password-file /tmp/pwd.txt</strong>
+
+<em>Import file, /Users/mark/Downloads/that-standard.xml.
+Import file, /Users/mark/Downloads/that-extended.xml.</em>
+     </pre></div></li><li class="step"><p>Test your work by using the Federation Connectivity Test that
+     you start from the service provider console under Common Tasks &gt;
+     Test Federation Connectivity.</p><p>When the test is done, you can see messages from the
+     <code class="literal">CookieWriterServlet</code> in the
+     <code class="filename">libIDPDiscovery</code> log file where you set up
+     logging when you configured the identity provider discovery
+     service, such as <code class="filename">/tmp/debug/libIDPDiscovery</code>.
+     Output generated during a test follows, with some lines folded to fit
+     on the printed page.</p><pre class="brush: plain;">
+08/08/2012 11:43:38:341 AM CEST: Thread[http-bio-8080-exec-4,5,main]
+CookieUtils.init : idpDiscoveryOnlyWar=true
+08/08/2012 11:43:38:341 AM CEST: Thread[http-bio-8080-exec-4,5,main]
+CookieWriterServlet Initializing...
+08/08/2012 11:43:38:341 AM CEST: Thread[http-bio-8080-exec-4,5,main]
+CookieWriterServlet.doGetPost: Preferred Cookie Name is _saml_idp
+08/08/2012 11:43:38:341 AM CEST: Thread[http-bio-8080-exec-4,5,main]
+CookieWriterServlet.doGetPost: URL Scheme is null, set to https.
+08/08/2012 11:43:38:341 AM CEST: Thread[http-bio-8080-exec-4,5,main]
+CookieWriterServlet.doGetPost: Preferred IDP Cookie Not found
+08/08/2012 11:43:38:342 AM CEST: Thread[http-bio-8080-exec-4,5,main]
+CookieWriterServlet.doGetPost: Cookie Type is PERSISTENT
+08/08/2012 11:43:38:342 AM CEST: Thread[http-bio-8080-exec-4,5,main]
+CookieWriterServlet.doGetPost: Cookie value is
+ aHR0cDovL3d3dy50aGF0LWlkcC5jb206ODA4MC9vcGVuYW0=
+08/08/2012 11:43:38:342 AM CEST: Thread[http-bio-8080-exec-4,5,main]
+CookieWriterServlet.doGetPost: Preferred Cookie Name _saml_idp
+08/08/2012 11:43:38:343 AM CEST: Thread[http-bio-8080-exec-4,5,main]
+CookieWriterServlet.doGetPost: Redirect to
+ http://www.that-idp.example:8080/openam/SSORedirect/metaAlias/idp?resInfoID=
+ s28bc4db004f1365d78d07d69846c54a3c850fe801
+08/08/2012 11:43:46:957 AM CEST: Thread[http-bio-8080-exec-4,5,main]
+CookieWriterServlet.doGetPost: Preferred Cookie Name is _saml_idp
+08/08/2012 11:43:46:957 AM CEST: Thread[http-bio-8080-exec-4,5,main]
+CookieUtils:cookieValue=aHR0cDovL3d3dy50aGF0LWlkcC5jb206ODA4MC9vcGVuYW0=,
+ result=aHR0cDovL3d3dy50aGF0LWlkcC5jb206ODA4MC9vcGVuYW0=
+08/08/2012 11:43:46:957 AM CEST: Thread[http-bio-8080-exec-4,5,main]
+CookieWriterServlet.doGetPost: Cookie Type is PERSISTENT
+08/08/2012 11:43:46:957 AM CEST: Thread[http-bio-8080-exec-4,5,main]
+CookieWriterServlet.doGetPost: Cookie value is
+ aHR0cDovL3d3dy50aGF0LWlkcC5jb206ODA4MC9vcGVuYW0=
+08/08/2012 11:43:46:957 AM CEST: Thread[http-bio-8080-exec-4,5,main]
+CookieWriterServlet.doGetPost: Preferred Cookie Name _saml_idp
+08/08/2012 11:43:46:957 AM CEST: Thread[http-bio-8080-exec-4,5,main]
+CookieWriterServlet.doGetPost: Redirect to
+ http://www.that-idp.example:8080/openam/SSORedirect/metaAlias/idp?resInfoID=
+ s2ce9c465cf39c96f31e1dcf009cf9943695d82901
+     </pre></li></ol></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configure-idp"></a>11.3.&nbsp;Configuring Identity Providers</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-federation.html#idp-assertion-content">11.3.1. Hints for Assertion Content</a></span></dt><dt><span class="section"><a href="chap-federation.html#idp-assertion-processing">11.3.2. Hints for Assertion Processing</a></span></dt><dt><span class="section"><a href="chap-federation.html#idp-services">11.3.3. Hints for Services</a></span></dt><dt><span class="section"><a href="chap-federation.html#idp-advanced">11.3.4. Hints for Advanced Settings</a></span></dt></dl></div><a class="indexterm" name="d0e24872"></a><p>Once you have set up an identity provider, you can configure it
+  through the OpenAM console under Federation &gt; Entity Providers &gt;
+  <em class="replaceable"><code>Provider Name</code></em>.</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="idp-assertion-content"></a>11.3.1.&nbsp;Hints for Assertion Content</h3></div></div></div><p>Use the following hints to adjust settings on the Assertion Content
+   tab page.</p><div class="variablelist"><a name="idp-signing-encryption"></a><div class="variablelist-title">Signing and Encryption</div><dl class="variablelist"><dt><span class="term">Request/Response Signing</span></dt><dd><p>Specifies what parts of messages the identity provider requires
+      the service provider to sign digitally.</p></dd><dt><span class="term">Encryption</span></dt><dd><p>When selected, the service provider must encrypt NameID
+      elements.</p></dd><dt><span class="term">Certificate Aliases</span></dt><dd><p>Specifies aliases for certificates in the OpenAM key store that are
+      used to handle digital signatures, and to handle encrypted messages.</p><p>Specify a Key Pass if the private key password is different from
+      the key store password, which is stored encrypted in the
+      <code class="filename">.keypass</code> file for the server. For instructions
+      on working with key pairs, also see <a href="../../admin-guide/index/chap-certs-keystores.html#change-signing-key" class="link"><em class="citetitle">To Change the
+      Signing Key for Federation</em></a>.</p></dd></dl></div><div class="variablelist"><a name="idp-nameid-format"></a><div class="variablelist-title">NameID Format</div><dl class="variablelist"><dt><span class="term">NameID Format List</span></dt><dd><p>Specifies the supported name identifiers for users that are shared
+      between providers for single sign on. If no name identifier is specified
+      when initiating single sign on, then the identity provider uses the first
+      one in the list.</p></dd><dt><span class="term">NameID Value List</span></dt><dd><p>Maps name identifier formats to user profile attributes. The
+      <code class="literal">persistent</code> and <code class="literal">transient</code> name
+      identifiers need not be mapped.</p></dd></dl></div><div class="variablelist"><a name="idp-authentication-context"></a><div class="variablelist-title">Authentication Context</div><dl class="variablelist"><dt><span class="term">Mapper</span></dt><dd><p>Specifies a class that implements the
+      <code class="literal">IDPAuthnContextMapper</code> interface and sets up the
+      authentication context.</p></dd><dt><span class="term">Default Authentication Context</span></dt><dd><p>Specifies the authentication context used if no authentication
+      context specified in the request.</p></dd><dt><span class="term">Supported Contexts</span></dt><dd><p>Specifies the supported authentication contexts, where the Key
+      and Value can specify a corresponding OpenAM authentication method,
+      and the Level corresponds to an authentication module authentication
+      level.</p></dd></dl></div><div class="variablelist"><a name="idp-assertion-time"></a><div class="variablelist-title">Assertion Time</div><dl class="variablelist"><dt><span class="term">Not-Before Time Skew</span></dt><dd><p>Grace period in seconds for the <code class="literal">NotBefore</code> time
+      in assertions.</p></dd><dt><span class="term">Effective Time</span></dt><dd><p>Validity in seconds of an assertion.</p></dd></dl></div><div class="variablelist"><a name="idp-basic-authentication"></a><div class="variablelist-title">Basic Authentication</div><dl class="variablelist"><dt><span class="term">Enabled, User Name, Password</span></dt><dd><p>When enabled, authenticate with the specified user name and
+      password at SOAP end points.</p></dd></dl></div><div class="variablelist"><a name="idp-assertion-cache"></a><div class="variablelist-title">Assertion Cache</div><dl class="variablelist"><dt><span class="term">Enabled</span></dt><dd><p>When enabled, cache assertions.</p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="idp-assertion-processing"></a>11.3.2.&nbsp;Hints for Assertion Processing</h3></div></div></div><p>Use the following hints to adjust settings on the Assertion Processing
+   tab page.</p><div class="variablelist"><a name="idp-attribute-mapper"></a><div class="variablelist-title">Attribute Mapper</div><dl class="variablelist"><dt><span class="term">Attribute Mapper</span></dt><dd><p>Specifies a class that implements the attribute mapping.</p><p>The default implementation attempts to retrieve the mapped attribute
+      values from the user profile first. If the attribute values are not
+      present in the user's profile, then it attempts to retrieve them from the
+      user's session.</p><p>Default: <code class="literal">com.sun.identity.saml2.plugins.DefaultIDPAttributeMapper</code></p></dd><dt><span class="term">Attribute Map</span></dt><dd><p>Maps SAML attributes to user profile attributes.</p><p>The user profile attributes used here must both be allowed in user
+      profiles, and also be specified for the identity repository. See the
+      <em class="citetitle">Developer's Guide</em> chapter, <a href="../../dev-guide/index/chap-custom-attr.html" class="link"><em class="citetitle">Customizing
+      Profile Attributes</em></a>, for instructions on allowing
+      additional attributes in user profiles.</p><p>To specify the list of profile attributes for an LDAP identity
+      repository, login to OpenAM Console as administrator and browse to
+      Access Control &gt; <em class="replaceable"><code>Realm Name</code></em> &gt; Data Stores, and
+      click the data store name to open the configuration page. Scroll down to
+      User Configuration, and edit the LDAP User Attributes list, and then
+      click Save to keep your work.</p><p>The default IDP mapping implementation allows you to add static values
+      in addition to values taken from the user profile. You add a static value
+      by enclosing the profile attribute name in double quotes
+      (<code class="literal">"</code>), as in the following examples.</p><p>To add a static SAML attribute called <code class="literal">nameID</code>
+      with a value of <code class="literal">staticNameIDValue</code> with a name format of
+      <code class="literal">urn:oasis:names:tc:SAML:2.0:attrname-format:uri</code>, add
+      the following mapping.</p><pre class="literallayout">urn:oasis:names:tc:SAML:2.0:attrname-format:uri|nameID="staticNameIDValue"</pre></dd></dl></div><div class="variablelist"><a name="idp-account-mapper"></a><div class="variablelist-title">Account Mapper</div><dl class="variablelist"><dt><span class="term">Account Mapper</span></dt><dd><p>Specifies a class that implements <code class="literal">AccountMapper</code>
+      to map remote users to local user profiles.</p></dd></dl></div><div class="variablelist"><a name="idp-local-configuration"></a><div class="variablelist-title">Local Configuration</div><dl class="variablelist"><dt><span class="term">Auth URL</span></dt><dd><p>URL where users are redirected to authenticate.</p></dd><dt><span class="term">Reverse Proxy URL</span></dt><dd><p>When a reverse proxy is used for SAML endpoints, it is specified here.</p></dd><dt><span class="term">External Application Logout URL</span></dt><dd><p>URL to which to send an HTTP POST including all cookies when
+      receiving a logout request. To add a user session property as a POST
+      parameter, include it in the URL query string as a
+      <code class="literal">appsessionproperty</code> parameter.</p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="idp-services"></a>11.3.3.&nbsp;Hints for Services</h3></div></div></div><p>Use the following hints to adjust settings on the Services tab
+   page.</p><div class="variablelist"><a name="idp-meta-alias"></a><div class="variablelist-title">MetaAlias</div><dl class="variablelist"><dt><span class="term">MetaAlias</span></dt><dd><p>Used to locate the providers entity identifier, specified as
+      <code class="literal">[/<em class="replaceable"><code>realm-name</code></em>]*/<em class="replaceable"><code>provider-name</code></em></code>, where neither
+      <em class="replaceable"><code>realm-name</code></em> nor
+      <em class="replaceable"><code>provider-name</code></em> can contain slash characters
+      (<code class="literal">/</code>). For example:
+      <code class="literal">/myRealm/mySubrealm/idp</code>.</p></dd></dl></div><div class="variablelist"><a name="idp-service-attributes"></a><div class="variablelist-title">IDP Service Attributes</div><dl class="variablelist"><dt><span class="term">Artifact Resolution Service</span></dt><dd><p>Specifies the end point to handle artifact resolution. The Index
+      is a unique number identifier for the end point.</p></dd><dt><span class="term">Single Logout Service</span></dt><dd><p>Specifies the end points to handle single logout, depending on
+      the SAML binding selected.</p></dd><dt><span class="term">Manage NameID Service</span></dt><dd><p>Specifies the end points to handle name identifiers, depending on
+      the SAML binding selected.</p></dd><dt><span class="term">Single SignOn Service</span></dt><dd><p>Specifies the end points to handle single sign on.</p></dd></dl></div><div class="variablelist"><a name="idp-nameid-mapping"></a><div class="variablelist-title">NameID Mapping</div><dl class="variablelist"><dt><span class="term">URL</span></dt><dd><p>Specifies the end point to handle name identifier mapping.</p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="idp-advanced"></a>11.3.4.&nbsp;Hints for Advanced Settings</h3></div></div></div><p>Use the following hints to adjust settings on the Advanced tab
+   page.</p><div class="variablelist"><a name="idp-sae-configuration"></a><div class="variablelist-title">SAE Configuration</div><dl class="variablelist"><dt><span class="term">IDP URL</span></dt><dd><p>Specifies the end point to handle Secure Attribute Exchange
+      requests.</p></dd><dt><span class="term">Application Security Configuration</span></dt><dd><p>Specifies how to handle encryption for Secure Attribute Exchange
+      operations.</p></dd></dl></div><div class="variablelist"><a name="idp-ecp-configuration"></a><div class="variablelist-title">ECP Configuration</div><dl class="variablelist"><dt><span class="term">IDP Session Mapper</span></dt><dd><p>Specifies the class that finds a valid session from an HTTP
+      servlet request to an identity provider with a SAML Enhanced Client or
+      Proxy profile.</p></dd></dl></div><div class="variablelist"><a name="idp-session-synchronization"></a><div class="variablelist-title">Session Synchronization</div><dl class="variablelist"><dt><span class="term">Enabled</span></dt><dd><p>When enabled, the identity provider notifies service providers
+      to log the user out when a session expires.</p></dd></dl></div><div class="variablelist"><a name="idp-finder-implementation"></a><div class="variablelist-title">IDP Finder Implementation</div><dl class="variablelist"><dt><span class="term">IDP Finder Implementation Class</span></dt><dd><p>Specifies a class that finds the preferred identity provider to
+      handle a proxied authentication request.</p></dd><dt><span class="term">IDP Finder JSP</span></dt><dd><p>Specifies a JSP that presents the list of identity providers to
+      the user.</p></dd><dt><span class="term">Enable Proxy IDP Finder For All SPs</span></dt><dd><p>When enabled, apply the finder for all remote service
+      providers.</p></dd></dl></div><div class="variablelist"><a name="idp-relay-state-url-list"></a><div class="variablelist-title">Relay State URL List</div><dl class="variablelist"><dt><span class="term">Relay State URL List</span></dt><dd><p>List of URLs to which to redirect users after the request has
+      been handled. Used if not specified in the service provider extended
+      metadata.</p></dd></dl></div><div class="variablelist"><a name="idp-adapter"></a><div class="variablelist-title">IDP Adapter</div><dl class="variablelist"><dt><span class="term">IDP Adapter Class</span></dt><dd><p>Specifies a class to invoke immediately before sending a
+      SAML 2.0 response.</p></dd></dl></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configure-sp"></a>11.4.&nbsp;Configuring Service Providers</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-federation.html#sp-assertion-content">11.4.1. Hints for Assertion Content</a></span></dt><dt><span class="section"><a href="chap-federation.html#sp-assertion-processing">11.4.2. Hints for Assertion Processing</a></span></dt><dt><span class="section"><a href="chap-federation.html#sp-services">11.4.3. Hints for Services</a></span></dt><dt><span class="section"><a href="chap-federation.html#sp-advanced">11.4.4. Hints for Advanced Settings</a></span></dt></dl></div><a class="indexterm" name="d0e25242"></a><p>Once you have set up a service provider, you can configure it
+  through the OpenAM console under Federation &gt; Entity Providers &gt;
+  <em class="replaceable"><code>Provider Name</code></em>.</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="sp-assertion-content"></a>11.4.1.&nbsp;Hints for Assertion Content</h3></div></div></div><p>Use the following hints to adjust settings on the Assertion Content
+   tab page.</p><div class="variablelist"><a name="sp-signing-encryption"></a><div class="variablelist-title">Signing and Encryption</div><dl class="variablelist"><dt><span class="term">Request/Response Signing</span></dt><dd><p>Specifies what parts of messages the service provider requires
+      the identity provider to sign digitally.</p></dd><dt><span class="term">Encryption</span></dt><dd><p>The identity provider must encrypt selected elements.</p></dd><dt><span class="term">Certificate Aliases</span></dt><dd><p>Specifies aliases for certificates in the OpenAM key store that are
+      used to handle digital signatures, and to handle encrypted messages.</p></dd></dl></div><div class="variablelist"><a name="sp-nameid-format"></a><div class="variablelist-title">NameID Format</div><dl class="variablelist"><dt><span class="term">NameID Format List</span></dt><dd><p>Specifies the supported name identifiers for users that are shared
+      between providers for single sign on. If no name identifier is specified
+      when initiating single sign on, then the service provider uses the first
+      one in the list supported by the identity provider.</p></dd><dt><span class="term">Disable Federation persistence if NameID Format is unspecified</span></dt><dd><p>When enabled, the NameID Format in the authentication response is
+      <code class="literal">urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</code>,
+      and the Account Mapper has identified the local user, the service provider
+      does not persist federation information in the user profile.</p></dd></dl></div><div class="variablelist"><a name="sp-authentication-context"></a><div class="variablelist-title">Authentication Context</div><dl class="variablelist"><dt><span class="term">Mapper</span></dt><dd><p>Specifies a class that implements the
+      <code class="literal">SPAuthnContextMapper</code> interface and sets up the
+      authentication context.</p></dd><dt><span class="term">Default Authentication Context</span></dt><dd><p>Specifies the authentication context used if no authentication
+      context specified in the request.</p></dd><dt><span class="term">Supported Contexts</span></dt><dd><p>Specifies the supported authentication contexts. The Level
+      corresponds to an authentication module authentication level.</p></dd><dt><span class="term">Comparison Type</span></dt><dd><p>How the authentication context in the assertion response must
+      compare to the supported contexts.</p></dd></dl></div><div class="variablelist"><a name="sp-assertion-time"></a><div class="variablelist-title">Assertion Time</div><dl class="variablelist"><dt><span class="term">Assertion Time Skew</span></dt><dd><p>Grace period in seconds for the <code class="literal">NotBefore</code> time
+      in assertions.</p></dd></dl></div><div class="variablelist"><a name="sp-basic-authentication"></a><div class="variablelist-title">Basic Authentication</div><dl class="variablelist"><dt><span class="term">Enabled, User Name, Password</span></dt><dd><p>When enabled, authenticate with the specified user name and
+      password at SOAP end points.</p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="sp-assertion-processing"></a>11.4.2.&nbsp;Hints for Assertion Processing</h3></div></div></div><p>Use the following hints to adjust settings on the Assertion Processing
+   tab page.</p><div class="variablelist"><a name="sp-attribute-mapper"></a><div class="variablelist-title">Attribute Mapper</div><dl class="variablelist"><dt><span class="term">Attribute Mapper</span></dt><dd><p>Specifies a class that implements the attribute mapping.</p></dd><dt><span class="term">Attribute Map</span></dt><dd><p>Maps SAML attributes to user profile attributes.</p></dd></dl></div><div class="variablelist"><a name="sp-auto-federation"></a><div class="variablelist-title">Auto Federation</div><dl class="variablelist"><dt><span class="term">Enabled</span></dt><dd><p>When enabled, automatically federate user's accounts at different
+      providers based on the specified profile attribute.</p></dd><dt><span class="term">Attribute</span></dt><dd><p>Specifies the user profile attribute to match accounts at different
+      providers.</p></dd></dl></div><div class="variablelist"><a name="sp-account-mapper"></a><div class="variablelist-title">Account Mapper</div><dl class="variablelist"><dt><span class="term">Account Mapper</span></dt><dd><p>Specifies a class that implements <code class="literal">AccountMapper</code>
+      to map remote users to local user profiles.</p></dd><dt><span class="term">Use Name ID as User ID</span></dt><dd><p>When selected, fall back to using the name identifier from the
+      assertion to find the user.</p></dd></dl></div><div class="variablelist"><a name="sp-artifact-message-encoding"></a><div class="variablelist-title">Artifact Message Encoding</div><dl class="variablelist"><dt><span class="term">Encoding</span></dt><dd><p>Specifies the message encoding format for artifacts.</p></dd></dl></div><div class="variablelist"><a name="sp-transient-user"></a><div class="variablelist-title">Transient User</div><dl class="variablelist"><dt><span class="term">Transient User</span></dt><dd><p>Specifies the user profile to which to map all identity provider
+      users when sending transient name identifiers.</p></dd></dl></div><div class="variablelist"><a name="sp-url"></a><div class="variablelist-title">URL</div><dl class="variablelist"><dt><span class="term">Local Authentication URL</span></dt><dd><p>Specifies the local login URL.</p></dd><dt><span class="term">Intermediate URL</span></dt><dd><p>Specifies a URL to which the user is redirected after
+      authentication but before the original URL requested.</p></dd><dt><span class="term">External Application Logout URL</span></dt><dd><p>Specifies the URL to which to send an HTTP POST including all
+      cookies when receiving a logout request. To add a user session property
+      as a POST parameter, include it in the URL query string as a
+      <code class="literal">appsessionproperty</code> parameter.</p></dd></dl></div><div class="variablelist"><a name="sp-default-relay-state-url"></a><div class="variablelist-title">Default Relay State URL</div><dl class="variablelist"><dt><span class="term">Default Relay State URL</span></dt><dd><p>Specifies the URL to which to redirect users after the request has
+      been handled. Used if not specified in the response.</p></dd></dl></div><div class="variablelist"><a name="sp-adapter"></a><div class="variablelist-title">Adapter</div><dl class="variablelist"><dt><span class="term">Adapter</span></dt><dd><p>Specifies a class that implements the
+      <code class="literal">FederationSPAdapter</code> interface and performs application
+      specific processing during the federation process.</p></dd><dt><span class="term">Adapter Environment</span></dt><dd><p>Specifies environment variables passed to the adapter class.</p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="sp-services"></a>11.4.3.&nbsp;Hints for Services</h3></div></div></div><p>Use the following hints to adjust settings on the Services tab
+   page.</p><div class="variablelist"><a name="sp-meta-alias"></a><div class="variablelist-title">MetaAlias</div><dl class="variablelist"><dt><span class="term">MetaAlias</span></dt><dd><p>Used to locate the providers entity identifier, specified as
+      <code class="literal">[/<em class="replaceable"><code>realm-name</code></em>]*/<em class="replaceable"><code>provider-name</code></em></code>, where neither
+      <em class="replaceable"><code>realm-name</code></em> nor
+      <em class="replaceable"><code>provider-name</code></em> can contain slash characters
+      (<code class="literal">/</code>). For example:
+      <code class="literal">/myRealm/mySubrealm/sp</code>.</p></dd></dl></div><div class="variablelist"><a name="sp-service-attributes"></a><div class="variablelist-title">SP Service Attributes</div><dl class="variablelist"><dt><span class="term">Single Logout Service</span></dt><dd><p>Specifies the end points to handle single logout, depending on
+      the SAML binding selected.</p></dd><dt><span class="term">Manage NameID Service</span></dt><dd><p>Specifies the end points to handle name identifiers, depending on
+      the SAML binding selected.</p></dd><dt><span class="term">Assertion Consumer Service</span></dt><dd><p>Specifies the end points to consume assertions, with Index
+      corresponding to the index of the URL in the standard metadata.</p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="sp-advanced"></a>11.4.4.&nbsp;Hints for Advanced Settings</h3></div></div></div><p>Use the following hints to adjust settings on the Advanced tab
+   page.</p><div class="variablelist"><a name="sp-sae-configuration"></a><div class="variablelist-title">SAE Configuration</div><dl class="variablelist"><dt><span class="term">SP URL</span></dt><dd><p>Specifies the end point to handle Secure Attribute Exchange
+      requests.</p></dd><dt><span class="term">SP Logout URL</span></dt><dd><p>Specifies the end point of the service provider that can handle
+      global logout requests.</p></dd><dt><span class="term">Application Security Configuration</span></dt><dd><p>Specifies how to handle encryption for Secure Attribute Exchange
+      operations.</p></dd></dl></div><div class="variablelist"><a name="sp-ecp-configuration"></a><div class="variablelist-title">ECP Configuration</div><dl class="variablelist"><dt><span class="term">Request IDP List Finder Implementation</span></dt><dd><p>Specifies a class that returns a list of preferred identity
+      providers trusted by the SAML Enhanced Client or Proxy profile.</p></dd><dt><span class="term">Request IDP List Get Complete</span></dt><dd><p>Specifies a URI reference used to retrieve the complete identity
+      provider list if the <code class="literal">IDPList</code> element is not
+      complete.</p></dd><dt><span class="term">Request IDP List</span></dt><dd><p>Specifies a list of identity providers for the SAML Enhanced Client
+      or Proxy to contact, used by the default implementation of the IDP
+      Finder.</p></dd></dl></div><div class="variablelist"><a name="sp-idp-proxy"></a><div class="variablelist-title">IDP Proxy</div><dl class="variablelist"><dt><span class="term">IDP Proxy</span></dt><dd><p>When enabled, allow proxied authentication for this service
+      provider.</p></dd><dt><span class="term">Introduction</span></dt><dd><p>When enabled, use introductions to find the proxy identity
+      provider.</p></dd><dt><span class="term">Proxy Count</span></dt><dd><p>Specifies the maximum number of proxy identity providers.</p></dd><dt><span class="term">IDP Proxy List</span></dt><dd><p>Specifies a list of URIs identifying preferred proxy identity
+      providers.</p></dd></dl></div><div class="variablelist"><a name="sp-session-synchronization"></a><div class="variablelist-title">Session Synchronization</div><dl class="variablelist"><dt><span class="term">Enabled</span></dt><dd><p>When enabled, the service provider notifies identity providers
+      to log the user out when a session expires.</p></dd></dl></div><div class="variablelist"><a name="sp-relay-state-url-list"></a><div class="variablelist-title">Relay State URL List</div><dl class="variablelist"><dt><span class="term">Relay State URL List</span></dt><dd><p>List of URLs to which to redirect users after the request has
+      been handled. Used if not specified in the service provider extended
+      metadata.</p></dd></dl></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configure-cot"></a>11.5.&nbsp;Configuring Circles of Trust</h2></div></div></div><a class="indexterm" name="d0e25622"></a><p>Once you have set up a circle of trust, you can configure it
+  through the OpenAM console under Federation &gt; Circle of Trust &gt;
+  <em class="replaceable"><code>Circle of Trust Name</code></em>.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">Name</span></dt><dd><p>String to refer to the circle of trust.</p></dd><dt><span class="term">Description</span></dt><dd><p>Short description of the circle of trust.</p></dd><dt><span class="term">IDFF Writer Service URL</span></dt><dd><p>Liberty Identity Federation Framework service that writes identity
+     provider entity identifiers to Common Domain cookies after successful
+     authentication, used in identity provider discovery. Example:
+     <code class="literal">http://www.disco.example:8080/openam/idffwriter</code>.</p></dd><dt><span class="term">IDFF Reader Service URL</span></dt><dd><p>Liberty Identity Federation Framework service that reads identity
+     provider entity identifiers from Common Domain cookies, used in identity
+     provider discovery. Example:
+     <code class="literal">http://www.disco.example:8080/openam/transfer</code>.</p></dd><dt><span class="term">SAML2 Writer Service URL</span></dt><dd><p>SAML 2.0 service that writes identity provider entity identifiers
+     to Common Domain cookies after successful authentication, used in identity
+     provider discovery. Example:
+     <code class="literal">http://www.disco.example:8080/openam/saml2writer</code>.</p></dd><dt><span class="term">SAML2 Reader Service URL</span></dt><dd><p>SAML 2.0 service that reads identity provider entity identifiers
+     from Common Domain cookies, used in identity provider discovery. Example:
+     <code class="literal">http://www.disco.example:8080/openam/saml2reader</code>.</p></dd><dt><span class="term">Status</span></dt><dd><p>Whether this circle of trust is operational.</p></dd><dt><span class="term">Realm</span></dt><dd><p>Name of the realm participating in this circle of trust.</p></dd><dt><span class="term">Entity Providers</span></dt><dd><p>Known hosted and remote identity and service providers participating
+     in this circle of trust.</p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="saml2-failover"></a>11.6.&nbsp;Configuring Providers for Failover</h2></div></div></div><p>
+   OpenAM servers can function in a site configuration behind a load balancer,
+   as described in the <em class="citetitle">Installation Guide</em> chapter,
+   <a href="../../install-guide/index/chap-session-failover.html" class="link"><em class="citetitle">Setting Up OpenAM Session Failover</em></a>.
+  </p><p>
+   When you set up the same SAML 2.0 Provider on multiple servers
+   behind a load balancer, however, you must ensure the metadata
+   points to the load balancer rather than the individual servers.
+  </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>
+     Before configuring the provider, follow the instructions
+     in the <em class="citetitle">Installation Guide</em> mentioned above,
+     and make sure that failover works through the load balancer
+     for normal OpenAM sessions.
+    </p></li><li class="listitem"><p>
+     Configure the provider on one of the servers
+     using the load balancer URL as the entity ID.
+    </p></li><li class="listitem"><p>
+     Export the metadata and extended metadata for the provider.
+     You can export metadata either by using the <span class="command"><strong>ssoadm</strong></span> command,
+     or by using the <code class="filename">ssoadm.jsp</code> page in OpenAM console
+     after setting <code class="literal">ssoadm.disabled</code> to <code class="literal">false</code>
+     under Servers and Sites &gt; <em class="replaceable"><code>Server Name</code></em> &gt; Advanced.
+    </p><p>
+     With the <span class="command"><strong>ssoadm</strong></span> command, you can export the metadata
+     as shown in the following example for an Identity Provider,
+     where the entity ID is <code class="literal">http://lb.example.com:80/openam</code>.
+    </p><div class="screen"><pre>
+$ <strong>ssoadm \
+ export-entity \
+ --entityid "http://lb.example.com:80/openam" \
+ --adminid amadmin \
+ --password-file /tmp/pwd.txt \
+ --meta-data-file idp.xml \
+ --extended-data-file idp-extended.xml</strong>
+    </pre></div></li><li class="listitem"><p>
+     Edit both the metadata and the extended metadata,
+     changing all URLs in both files to use the load balancer URL.
+    </p></li><li class="listitem"><p>
+     Delete the provider configuration in OpenAM Console.
+    </p></li><li class="listitem"><p>
+     Import the edited provider configuration in OpenAM Console.
+    </p></li><li class="listitem"><p>
+     Enable SAMLv2 failover in OpenAM Console.
+    </p><p>
+     Under Configuration &gt; Global, click SAMLv2 Service Configuration.
+    </p><p>
+     Select Enabled next to Enable SAMLv2 failover,
+     and then click Save.
+    </p></li></ol></div><p>
+   At this point failover is operational for the provider you configured.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="google-apps-as-sp"></a>11.7.&nbsp;Configuring Google Apps as a Remote Service Provider</h2></div></div></div><a class="indexterm" name="d0e25775"></a><a class="indexterm" name="d0e25778"></a><p>OpenAM can serve as the identity provider when you use <a class="link" href="http://www.google.com/apps/" target="_blank">Google
+  Apps</a> as a service provider, allowing users to have single sign-on
+  with their Google Apps account.</p><p>In order to use this service, you must have a Google Apps account for
+  at least one of your domains, such as <code class="literal">example.com</code>.</p><div class="procedure"><a name="integrate-google-apps"></a><div class="procedure-title">Procedure&nbsp;11.10.&nbsp;To Integrate With Google Apps</div><ol class="procedure" type="1"><li class="step"><p>If you have not yet done so, set up OpenAM as described in
+    <a class="xref" href="chap-federation.html#create-hosted-idp" title="Procedure&nbsp;11.1.&nbsp;To Create a Hosted Identity Provider">Procedure&nbsp;11.1, &#8220;To Create a Hosted Identity Provider&#8221;</a>, using a signing certificate
+    that is needed by Google Apps.</p><p>See the procedure <a href="../../admin-guide/index/chap-certs-keystores.html#change-signing-key" class="link"><em class="citetitle">To Change the
+    Signing Key for Federation</em></a> for details regarding the
+    signing certificate.</p></li><li class="step"><p>On the OpenAM console Common Tasks page, click Configure Google
+    Apps.</p></li><li class="step"><p>On the first Configure Google Apps for Single Sign-On page, add your
+    domain name(s) such as <code class="literal">example.com</code> to the list, and then
+    click Create.</p></li><li class="step"><p>On the second Configure Google Apps for Single Sign-On page, save
+    the OpenAM verification certificate to a text file, such as
+    <code class="filename">OpenAM.pem</code>.</p></li><li class="step"><p>Follow the instructions under To Enable Access to the Google Apps API
+    before clicking Finish.</p><ol type="a" class="substeps"><li class="step"><p>Access the Google Apps administration page for the first of your
+      domains in a new browser tab or window.</p></li><li class="step"><p>Login as Google Apps administrator.</p></li><li class="step"><p>Select Enable Single Sign-On.</p></li><li class="step"><p>Copy the URLs from the OpenAM page into the Google Apps setup
+      screen.</p></li><li class="step"><p>Upload the certificate file you saved such as
+      <code class="filename">OpenAM.pem</code> as the Google Apps Verification
+      Certificate.</p></li><li class="step"><p>Select Use a domain specific issuer.</p></li><li class="step"><p>Save changes in Google Apps setup.</p></li><li class="step"><p>Repeat the steps above for each domain you have configured.</p></li><li class="step"><p>Click Finish to complete the process.</p></li></ol></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="salesforce-as-sp"></a>11.8.&nbsp;Configuring Salesforce CRM as a Remote Service Provider</h2></div></div></div><a class="indexterm" name="d0e25859"></a><a class="indexterm" name="d0e25862"></a><p>OpenAM can serve as the identity provider when you use <a class="link" href="http://www.salesforce.com/" target="_blank">Salesforce CRM</a>
+  as a service provider, allowing users to have single sign-on with their
+  Salesforce CRM account.</p><p>In order to use this service, you must have Salesforce CRM accounts
+  for your organization.</p><div class="procedure"><a name="integrate-salesforce"></a><div class="procedure-title">Procedure&nbsp;11.11.&nbsp;To Integrate With Salesforce CRM</div><ol class="procedure" type="1"><li class="step"><p>If you have not yet done so, set up OpenAM as described in
+    <a class="xref" href="chap-federation.html#create-hosted-idp" title="Procedure&nbsp;11.1.&nbsp;To Create a Hosted Identity Provider">Procedure&nbsp;11.1, &#8220;To Create a Hosted Identity Provider&#8221;</a>, using a signing certificate
+    that is needed by Salesforce CRM.</p><p>See the procedure <a href="../../admin-guide/index/chap-certs-keystores.html#change-signing-key" class="link"><em class="citetitle">To Change the
+    Signing Key for Federation</em></a> for details regarding the
+    signing certificate.</p></li><li class="step"><p>On the OpenAM console Common Tasks page, click Configure Salesforce
+    CRM.</p></li><li class="step"><p>Enter the EntityID for your Salesforce service provider.</p><p>This ID is used as the persistent EntityDescriptor metadata
+              element so that users can have multiple service provider instances.
+              This field is used for the EntityDescriptor on the next page.</p></li><li class="step"><p>On the first Salesforce CRM Single Sign-On Configuration page,
+    configure attribute mapping to associate the appropriate attribute
+    from Salesforce CRM with the user profile attribute on your IDP.</p><p>For example, add a mapping for <code class="literal">IDPEmail</code> to
+    <code class="literal">mail</code>, and then click Create. Make sure the attribute mapper 
+    is sending the correct attribute to be used for the federated identity.</p></li><li class="step"><p>On the second Salesforce CRM Single Sign-On Configuration page, follow
+    the instructions below before clicking Finish.</p><ol type="a" class="substeps"><li class="step"><p>In a new browser tab or window, login to <a class="link" href="https://login.salesforce.com/" target="_blank">Salesforce CRM</a> with
+      your administrator credentials.</p><p>Create an administrator account if none exists, yet.</p></li><li class="step"><p>If your users go directly to Salesforce to access services, then
+      their single sign-on is SP-initiated from the Salesforce side. Salesforce
+      provides a "My Domain" feature to facilitate SP-initiated single sign-on
+      for desktop and device users.</p><p>When you have completed configuring Salesforce as a service
+      provider, users can then browse to your domain at Salesforce, such as
+      <code class="literal">https://openam.my.salesforce.com</code>, and be redirected to
+      OpenAM to authenticate before being redirected to Salesforce.</p><ol type="i" class="substeps"><li class="step"><p>Select Administration Setup &gt; Company Profile &gt; My
+        Domain.</p></li><li class="step"><p>Choose the domain name, and then register the domain.</p></li><li class="step"><p>Wait until the domain is ready for testing to proceed.</p></li></ol></li><li class="step"><p>In Salesforce CRM, browse to Setup &gt; Administration Setup &gt;
+      Security Controls &gt; Single Sign-On Settings, and then click Edit for
+      Single Sign-On Settings.</p></li><li class="step"><p>Select SAML Enabled.</p></li><li class="step"><p>Set the SAML Version to 2.0.</p></li><li class="step"><p>Copy the issuer name from the OpenAM page to the Issuer field on the
+      Salesforce CRM page.</p></li><li class="step"><p>Copy or download the OpenAM verification certificate to a text file, such 
+      as <code class="filename">OpenAMCert.pem</code> or <code class="filename">OpenAMCert.txt</code>.</p></li><li class="step"><p>Upload the certificate file as Identity Provider Certificate on the
+      Salesforce CRM page.</p></li><li class="step"><p>For SAML Identity Type in Salesforce CRM, choose Assertion contains
+      the Federation ID from the User object.</p></li><li class="step"><p>For SAML Identity Location in Salesforce CRM, choose Identity is in an
+      Attribute element.</p></li><li class="step"><p>If you require specific login or logout pages, enter them in the next
+      two fields.</p></li><li class="step"><p>Enter the URL of your page specific error page if you have a page where
+      you would like users redirected to when they encounter an error.</p></li><li class="step"><a name="sf-as-sp-copy-attr-name"></a><p>Copy the attribute name such as <code class="literal">IDPEmail</code> from
+      the OpenAM page to the Attribute Name field on the Salesforce CRM
+      page.</p></li><li class="step"><p>
+       Salesforce uses an unspecified <code class="literal">nameid-format</code> value;
+       therefore, your IdP configuration in OpenAM should reflect this. In the
+       NameID Value Map setting, enter the following NameID Format user attribute
+       mapping, and then click <span class="guibutton">Add</span>.
+       </p><div class="screen"><pre>
+urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified=<em><strong>attribute</strong></em>
+       </pre></div><p>
+      </p><p>Here the <em class="replaceable"><code>attribute</code></em> is the attribute you
+       copied in <a class="xref" href="chap-federation.html#sf-as-sp-copy-attr-name" title="Step 5.m">Step 5.m</a>.
+      </p></li><li class="step"><p>Select the Entity ID corresponding to the "My Domain" that you set
+      up.</p></li><li class="step"><p>Save your work in Salesforce CRM.</p></li><li class="step"><p>Salesforce CRM displays a Salesforce Login URL.</p><p>Copy the Salesforce Login URL to the field provided on the OpenAM
+      page.</p></li><li class="step"><p>Salesforce CRM returns to the Single Sign-On Settings form.</p></li><li class="step"><p>Click Download Metadata to download the Salesforce CRM SP
+      metadata.</p><p>After you complete the configuration, you must import the
+      SP metadata you download in this step.</p></li><li class="step"><p>In Salesforce CRM, browse to Administration Setup &gt; Manage Users,
+      and then click Users.</p></li><li class="step"><p>Add users as necessary, making sure the attribute chosen as the
+      Federation ID matches the local attribute you mapped to the remote
+      attribute in the previous page in OpenAM.</p></li><li class="step"><p>Click Finish to complete the process.</p></li></ol></li><li class="step"><p>After you finish, import the metadata for Salesforce CRM as SP.</p><ol type="a" class="substeps"><li class="step"><p>Browse in OpenAM console to the Federation tab.</p></li><li class="step"><p>If the remote SP entity for Salesforce CRM is already in the Entity
+      Providers list, delete the existing configuration.</p></li><li class="step"><p>Click Import Entity..., and then use the Import Entity Provider
+      page to import the Salesforce CRM metadata.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Update the <code class="literal">Realm Name</code> to the appropriate realm.</p></li><li class="listitem"><p>Select the location where the metadata file is.</p></li><li class="listitem"><p>Enter the path for the metadata file.</p></li><li class="listitem"><p>If you have an extended data file, select the location where the file
+        is.</p></li><li class="listitem"><p>If you have an extended data file, enter the path for the metadata 
+        file.</p></li></ul></div></li></ol><p>At this point, when a user browses to the Salesforce domain you set
+    up, they should be redirected to OpenAM for authentication. Upon successful
+    authentication, they should be logged in to Salesforce.</p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="using-saml2-sso-slo"></a>11.9.&nbsp;Using SAML 2.0 Single Sign-On &amp; Single Logout</h2></div></div></div><a class="indexterm" name="d0e26066"></a><a class="indexterm" name="d0e26071"></a><p>OpenAM SAML 2.0 Federation provides JSPs where you can direct
+  users to do single sign-on (SSO) and single logout (SLO) across providers
+  in a circle of trust. OpenAM has two JSPs for SSO and two JSPs for
+  SLO, allowing you to initiate both processes either from the identity
+  provider side, or from the service provider side.</p><p>SSO lets users sign in once and remain authenticated as they access
+  services in the circle of trust.</p><p>SLO attempts to log a user out of all providers in the circle of
+  trust.</p><div class="variablelist"><p>The JSP pages are found under the context root where you deployed
+   OpenAM, in <code class="filename">saml2/jsp/</code>.</p><dl class="variablelist"><dt><span class="term"><code class="filename">spSSOInit.jsp</code></span></dt><dd><p>Used to initiate SSO from the service provider side, so call this
+     on the service provider not the identity provider. This is also mapped
+     to the endpoint <code class="literal">spssoinit</code> under the
+     context root.</p><p>Examples:
+     <code class="literal">http://www.sp.example:8080/openam/saml2/jsp/spSSOInit.jsp</code>,
+     <code class="literal">http://www.sp.example:8080/openam/spssoinit</code></p></dd><dt><span class="term"><code class="filename">idpSSOInit.jsp</code></span></dt><dd><p>Used to initiate SSO from the identity provider side, so call this
+     on the identity provider not the service provider. This is also mapped to
+     the endpoint <code class="literal">idpssoinit</code> under the
+     context root.</p><p>Examples:
+     <code class="literal">http://www.idp.example:8080/openam/saml2/jsp/idpSSOInit.jsp</code>,
+     <code class="literal">http://www.idp.example:8080/openam/idpssoinit</code></p></dd><dt><span class="term"><code class="filename">spSingleLogoutInit.jsp</code></span></dt><dd><p>Used to initiate SLO from the service provider side, so call this
+     on the service provider not the identity provider.</p><p>Example:
+     <code class="literal">http://www.sp.example:8080/openam/saml2/jsp/spSingleLogoutInit.jsp</code>,
+     <code class="literal">http://www.sp.example:8080/openam/SPSloInit</code></p></dd><dt><span class="term"><code class="filename">idpSingleLogoutInit.jsp</code></span></dt><dd><p>Used to initiate SLO from the identity provider side, so call this
+     on the identity provider not the service provider.</p><p>Example:
+     <code class="literal">http://www.idp.example:8080/openam/saml2/jsp/idpSingleLogoutInit.jsp</code>,
+     <code class="literal">http://www.idp.example:8080/openam/IDPSloInit</code></p></dd></dl></div><p>When you invoke these JSPs, there are several parameters to
+   specify. Which parameters you can use depends on the JSP.</p><div class="variablelist"><a name="idpssoinit-parameters"></a><div class="variablelist-title"><code class="filename">idpSSOInit.jsp</code> Parameters</div><dl class="variablelist"><dt><span class="term"><code class="literal">metaAlias</code></span></dt><dd><p>(Required) Use this parameter to specify the local alias for the
+     provider, such as <code class="literal">metaAlias=/myRealm/idp</code>. This
+     parameter takes the format
+     <code class="literal">/<em class="replaceable"><code>realm-name</code></em>/<em class="replaceable"><code>provider-name</code></em></code> as described in <a class="xref" href="chap-federation.html#idp-meta-alias" title="MetaAlias">MetaAlias</a>. You do not repeat the slash for
+     the top level realm, for example <code class="literal">metaAlias=/idp</code>.</p></dd><dt><span class="term"><code class="literal">spEntityID</code></span></dt><dd><p>(Required) Use this parameter to indicate the remote service
+     provider. Make sure you URL encode the value. For example, specify
+     <code class="literal">spEntityID=http://www.sp.example:8080/openam</code> as
+     <code class="literal">spEntityID=http%3A%2F%2Fwww.sp.example%3A8080%2Fopenam</code>.</p></dd><dt><span class="term"><code class="literal">affiliationID</code></span></dt><dd><p>(Optional) Use this parameter to specify a SAML affiliation
+     identifier.</p></dd><dt><span class="term"><code class="literal">binding</code></span></dt><dd><p>(Optional) Use this parameter to indicate what binding to use for the
+     operation. For example, specify <code class="literal">binding=HTTP-POST</code> to
+     use HTTP POST binding with a self-submitting form. In addition to
+     <code class="literal">binding=HTTP-POST</code>, you can also use
+     <code class="literal">binding=HTTP-Artifact</code>.</p></dd><dt><span class="term"><code class="literal">NameIDFormat</code></span></dt><dd><p>(Optional) Use this parameter to specify a SAML Name Identifier
+     format identifier such as
+     <code class="literal">urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</code>, or
+     <code class="literal">urn:oasis:names:tc:SAML:2.0:nameid-format:transient</code>.</p></dd><dt><span class="term"><code class="literal">RelayState</code></span></dt><dd><p>(Optional) Use this parameter to specify where to redirect the user
+     when the process is complete. Make sure you URL encode the value. For
+     example, <code class="literal">RelayState=http%3A%2F%2Fforgerock.com</code>
+     takes the user to <code class="literal">http://forgerock.com</code>.</p></dd><dt><span class="term"><code class="literal">RelayStateAlias</code></span></dt><dd><p>(Optional) Use this parameter to specify the parameter to use as the
+     <code class="literal">RelayState</code>. For example, if your query string has
+     <code class="literal">target=http%3A%2F%2Fforgerock.com&amp;RelayStateAlias=target</code>,
+     this is like setting
+     <code class="literal">RelayState=http%3A%2F%2Fforgerock.com</code>.</p></dd></dl></div><div class="variablelist"><a name="spssoinit-parameters"></a><div class="variablelist-title"><code class="filename">spSSOInit.jsp</code> Parameters</div><dl class="variablelist"><dt><span class="term"><code class="literal">idpEntityID</code></span></dt><dd><p>(Required) Use this parameter to indicate the remote identity
+     provider. Make sure you URL encode the value. For example, specify
+     <code class="literal">idpEntityID=http://www.idp.example:8080/openam</code> as
+     <code class="literal">idpEntityID=http%3A%2F%2Fwww.idp.example%3A8080%2Fopenam</code>.</p></dd><dt><span class="term"><code class="literal">metaAlias</code></span></dt><dd><p>(Required) Use this parameter to specify the local alias for the
+     provider, such as <code class="literal">metaAlias=/myRealm/sp</code>. This parameter
+     takes the format <code class="literal">/<em class="replaceable"><code>realm-name</code></em>/<em class="replaceable"><code>provider-name</code></em></code> as described in <a class="xref" href="chap-federation.html#sp-meta-alias" title="MetaAlias">MetaAlias</a>. You do not repeat the slash for the
+     top level realm, <code class="literal">metaAlias=/sp</code>.</p></dd><dt><span class="term"><code class="literal">affiliationID</code></span></dt><dd><p>(Optional) Use this parameter to specify a SAML affiliation
+     identifier.</p></dd><dt><span class="term"><code class="literal">AllowCreate</code></span></dt><dd><p>(Optional) Use this parameter to indicate whether the identity
+     provider can create a new identifier for the principal if none exists
+     (<code class="literal">true</code>) or not (<code class="literal">false</code>).</p></dd><dt><span class="term"><code class="literal">AssertionConsumerServiceIndex</code></span></dt><dd><p>(Optional) Use this parameter to specify an integer that indicates
+     the location to which the Response message should be returned to the
+     requester.</p></dd><dt><span class="term"><code class="literal">AuthComparison</code></span></dt><dd><p>(Optional) Use this parameter to specify a comparison method to
+     evaluate the requested context classes or statements. OpenAM accepts the
+     following values: <code class="literal">better</code>, <code class="literal">exact</code>,
+     <code class="literal">maximum</code>, and <code class="literal">minimum</code>.</p></dd><dt><span class="term"><code class="literal">AuthnContextClassRef</code></span></dt><dd><p>(Optional) Use this parameter to specify authentication context
+     class references. Separate multiple values with pipe characters
+     (<code class="literal">|</code>).</p></dd><dt><span class="term"><code class="literal">AuthnContextDeclRef</code></span></dt><dd><p>(Optional) Use this parameter to specify authentication context
+     declaration references. Separate multiple values with pipe characters
+     (<code class="literal">|</code>).</p></dd><dt><span class="term"><code class="literal">AuthLevel</code></span></dt><dd><p>(Optional) Use this parameter to specify the authentication level
+     of the authentication context that OpenAM should use to authenticate the
+     user.</p></dd><dt><span class="term"><code class="literal">binding</code></span></dt><dd><p>(Optional) Use this parameter to indicate what binding to use for the
+     operation. For example, specify <code class="literal">binding=HTTP-POST</code> to
+     use HTTP POST binding with a self-submitting form. In addition to
+     <code class="literal">binding=HTTP-POST</code>, you can also use
+     <code class="literal">binding=HTTP-Artifact</code>.</p></dd><dt><span class="term"><code class="literal">Destination</code></span></dt><dd><p>(Optional) Use this parameter to specify a URI Reference indicating
+     the address to which the request is sent.</p></dd><dt><span class="term"><code class="literal">ForceAuthn</code></span></dt><dd><p>(Optional) Use this parameter to indicate whether the identity
+     provider should force authentication (<code class="literal">true</code>) or can
+     reuse existing security contexts (<code class="literal">false</code>).</p></dd><dt><span class="term"><code class="literal">isPassive</code></span></dt><dd><p>(Optional) Use this parameter to indicate whether the identity
+     provider should authenticate passively (<code class="literal">true</code>) or not
+     (<code class="literal">false</code>).</p></dd><dt><span class="term"><code class="literal">NameIDFormat</code></span></dt><dd><p>(Optional) Use this parameter to specify a SAML Name Identifier
+     format identifier such as
+     <code class="literal">urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</code>,
+     or <code class="literal">urn:oasis:names:tc:SAML:2.0:nameid-format:transient</code>.</p></dd><dt><span class="term"><code class="literal">RelayState</code></span></dt><dd><p>(Optional) Use this parameter to specify where to redirect the user
+     when the process is complete. Make sure you URL encode the value. For
+     example, <code class="literal">RelayState=http%3A%2F%2Fforgerock.com</code>
+     takes the user to <code class="literal">http://forgerock.com</code>.</p></dd><dt><span class="term"><code class="literal">RelayStateAlias</code></span></dt><dd><p>(Optional) Use this parameter to specify the parameter to use as the
+     <code class="literal">RelayState</code>. For example, if your query string has
+     <code class="literal">target=http%3A%2F%2Fforgerock.com&amp;RelayStateAlias=target</code>,
+     this is like setting
+     <code class="literal">RelayState=http%3A%2F%2Fforgerock.com</code>.</p></dd><dt><span class="term"><code class="literal">reqBinding</code></span></dt><dd><p>(Optional) Use this parameter to indicate what binding to use for the
+     authentication request. Valid values in include
+     <code class="literal">urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect</code>
+     (default) and
+     <code class="literal">urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST</code>.</p></dd><dt><span class="term"><code class="literal">sunamcompositeadvice</code></span></dt><dd><p>(Optional) Use this parameter to specify a URL encoded XML blob that
+     specifies the authentication level advice. For example, the following XML
+     indicates a requested authentication level of 1. Notice the required
+     <code class="literal">:</code> before the 1.</p><pre class="brush: xml;">&lt;Advice&gt;
+ &lt;AttributeValuePair&gt;
+  &lt;Attribute name="AuthLevelConditionAdvice"/&gt;
+  &lt;Value&gt;/:1&lt;/Value&gt;
+ &lt;/AttributeValuePair&gt;
+&lt;/Advice&gt;</pre></dd></dl></div><div class="variablelist"><a name="idpsloinit-parameters"></a><div class="variablelist-title"><code class="filename">idpSingleLogoutInit.jsp</code> Parameters</div><dl class="variablelist"><dt><span class="term"><code class="literal">binding</code></span></dt><dd><p>(Required) Use this parameter to indicate what binding to use for the
+     operation. The full, long name format is required for this parameter to work.</p><div class="itemizedlist"><p>The value must be one of the following.</p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="literal">urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect</code> (default)</p></li><li class="listitem"><p><code class="literal">urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST</code></p></li><li class="listitem"><p><code class="literal">urn:oasis:names:tc:SAML:2.0:bindings:SOAP</code></p></li></ul></div></dd><dt><span class="term"><code class="literal">Consent</code></span></dt><dd><p>(Optional) Use this parameter to specify a URI that is a SAML Consent
+     Identifier.</p></dd><dt><span class="term"><code class="literal">Destination</code></span></dt><dd><p>(Optional) Use this parameter to specify a URI Reference indicating
+     the address to which the request is sent.</p></dd><dt><span class="term"><code class="literal">Extension</code></span></dt><dd><p>(Optional) Use this parameter to specify a list of Extensions as
+     string objects.</p></dd><dt><span class="term"><code class="literal">goto</code></span></dt><dd><p>(Optional) Use this parameter to specify where to redirect the user
+     when the process is complete. <code class="literal">RelayState</code> takes
+     precedence over this parameter.</p></dd><dt><span class="term"><code class="literal">logoutAll</code></span></dt><dd><p>(Optional) Use this parameter to specify that the identity provider
+     should send single logout requests to service providers without indicating
+     a session index.</p></dd><dt><span class="term"><code class="literal">RelayState</code></span></dt><dd><p>(Optional) Use this parameter to specify where to redirect the user
+     when the process is complete. Make sure you URL encode the value. For
+     example, <code class="literal">RelayState=http%3A%2F%2Fforgerock.com</code>
+     takes the user to <code class="literal">http://forgerock.com</code>.</p></dd></dl></div><div class="variablelist"><a name="spsloinit-parameters"></a><div class="variablelist-title"><code class="filename">spSingleLogoutInit.jsp</code> Parameters</div><dl class="variablelist"><dt><span class="term"><code class="literal">binding</code></span></dt><dd><p>(Required) Use this parameter to indicate what binding to use for the
+     operation. The full, long name format is required for this parameter to work.
+     For example, specify <code class="literal">binding=urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST</code> 
+     to use HTTP POST binding with a self-submitting form rather than the default
+     HTTP redirect binding. In addition, you can use 
+     <code class="literal">binding=urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact</code>.</p></dd><dt><span class="term"><code class="literal">idpEntityID</code></span></dt><dd><p>(Required for Fedlets) Use this parameter to indicate the remote
+     identity provider. If the <code class="literal">binding</code> is not set, then
+     OpenAM uses this parameter to find the default binding. Make sure you URL
+     encode the value. For example, specify
+     <code class="literal">idpEntityID=http://www.sp.example:8080/openam</code> as
+     <code class="literal">idpEntityID=http%3A%2F%2Fwww.idp.example%3A8080%2Fopenam</code>.</p></dd><dt><span class="term"><code class="literal">NameIDValue</code></span></dt><dd><p>(Required for Fedlets) Use this parameter to indicate the SAML Name
+     Identifier for the user.</p></dd><dt><span class="term"><code class="literal">SessionIndex</code></span></dt><dd><p>(Required for Fedlets) Use this parameter to indicate the
+     <code class="literal">sessionIndex</code> of the user session to terminate.</p></dd><dt><span class="term"><code class="literal">Consent</code></span></dt><dd><p>(Optional) Use this parameter to specify a URI that is a SAML Consent
+     Identifier.</p></dd><dt><span class="term"><code class="literal">Destination</code></span></dt><dd><p>(Optional) Use this parameter to specify a URI Reference indicating
+     the address to which the request is sent.</p></dd><dt><span class="term"><code class="literal">Extension</code></span></dt><dd><p>(Optional) Use this parameter to specify a list of Extensions as
+     string objects.</p></dd><dt><span class="term"><code class="literal">goto</code></span></dt><dd><p>(Optional) Use this parameter to specify where to redirect the user
+     when the process is complete. <code class="literal">RelayState</code> takes
+     precedence over this parameter.</p></dd><dt><span class="term"><code class="literal">RelayState</code></span></dt><dd><p>(Optional) Use this parameter to specify where to redirect the user
+     when the process is complete. Make sure you URL encode the value. For
+     example, <code class="literal">RelayState=http%3A%2F%2Fforgerock.com</code>
+     takes the user to <code class="literal">http://forgerock.com</code>.</p></dd><dt><span class="term"><code class="literal">spEntityID</code></span></dt><dd><p>(Optional, for Fedlets) Use this parameter to indicate the Fedlet
+     entity ID. When missing, OpenAM uses the first entity ID in the
+     metadata.</p></dd></dl></div><div class="example"><a name="example-saml2-sso-slo"></a><div class="example-title">Example&nbsp;11.1.&nbsp;SSO &amp; SLO From the Service Provider</div><div class="example-contents"><p>The following URL takes the user from the service provider side to
+   authenticate at the identity provider and then come back to the end user
+   profile page at the service provider after successful SSO. Lines are folded
+   to show you the query string parameters.</p><pre class="brush: plain;">http://www.sp.example:8080/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/sp
+&amp;idpEntityID=http%3A%2F%2Fwww.idp.example%3A8080%2Fopenam
+&amp;RelayState=http%3A%2F%2Fwww.sp.example%3A8080%2Fopenam%2Fidm%2FEndUser</pre><p>The following URL initiates SLO from the service provider side,
+   leaving the user at <code class="literal">http://forgerock.com</code>.</p><pre class="brush: plain;">http://www.sp.example:8080/openam/saml2/jsp/spSingleLogoutInit.jsp?
+&amp;idpEntityID=http%3A%2F%2Fwww.idp.example%3A8080%2Fopenam
+&amp;RelayState=http%3A%2F%2Fforgerock.com</pre></div></div><br class="example-break"><div class="procedure"><a name="show-saml2-sso-login-progress"></a><div class="procedure-title">Procedure&nbsp;11.12.&nbsp;To Indicate Progress During SSO</div><p>During SSO log in, OpenAM presents users with a self-submitting form
+   when access has been validated. This page is otherwise blank. If you want to
+   present users with something to indicate that the operation is in progress,
+   then customize the necessary templates.</p><ol class="procedure" type="1"><li class="step"><p>Modify the templates to add a clue that SSO is in progress, such as
+    an image.</p><p>
+     Edit the source of the OpenAM Java Server Page,
+     <code class="filename">saml2/jsp/autosubmitaccessrights.jsp</code>,
+     under the file system directory where the OpenAM .war has been unpacked.
+    </p><p>
+     When you add an image or other presentation element,
+     make sure that you retain the form and Java code as is.
+    </p></li><li class="step"><p>Unpack OpenAM-12.0.0.war, and add your modified template files
+    under <code class="filename">WEB-INF/classes/</code> where you unpacked the .war.</p><p>Also include any images you reference in the page.</p></li><li class="step"><p>Pack up your custom version of OpenAM, and then deploy it in your
+    web container.</p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="saml2-ecp-config"></a>11.10.&nbsp;Configuring OpenAM For the ECP Profile</h2></div></div></div><a class="indexterm" name="d0e26715"></a><p>The SAML 2.0 Enhanced Client or Proxy (ECP) profile is intended for use
+  when accessing services over devices like simple phones, medical devices, and
+  set-top boxes that lack the capabilities needed to use the more widely used
+  SAML 2.0 Web Browser SSO profile.</p><p>The ECP knows which identity provider to contact for the user, and is
+  able to use the reverse SOAP (PAOS) SAML 2.0 binding for the authentication
+  request and response. The PAOS binding uses HTTP and SOAP headers to pass
+  information about processing SOAP requests and responses, starting with a
+  PAOS HTTP header that the ECP sends in its initial request to the server.
+  The PAOS messages continue with a SOAP authentication request in the server's
+  HTTP response to the ECP's request for a resource, followed by a SOAP
+  response in an HTTP request from the ECP.</p><p>An enhanced client, such as a browser with a plugin or an extension,
+  can handle these communications on its own. An enhanced proxy is an HTTP
+  server such as a WAP gateway that can support the ECP profile on behalf of
+  client applications.</p><p>OpenAM supports the SAML 2.0 ECP profile on the server side for
+  identity providers and service providers. You must build the ECP.</p><p>By default an OpenAM identity provider uses the
+  <code class="literal">com.sun.identity.saml2.plugins.DefaultIDPECPSessionMapper</code>
+  class to find a user session for requests to the IDP from the ECP. The
+  default session mapper uses OpenAM cookies as it would for any other client
+  application. If for some reason you must change the mapping after writing
+  and installing your own session mapper, you can change the class under
+  Federation &gt; Entity Providers &gt; <em class="replaceable"><code>idp-name</code></em>
+  &gt; IDP &gt; Advanced &gt; ECP Configuration.</p><p>By default an OpenAM service provider uses the
+  <code class="literal">com.sun.identity.saml2.plugins.ECPIDPFinder</code> class to
+  return identity providers from the list under Federation &gt; Entity
+  Providers &gt; <em class="replaceable"><code>sp-name</code></em> &gt; SP &gt; Advanced
+  &gt; ECP Configuration &gt; Request IDP List. You must populate the list
+  with identity provider entity IDs.</p><div class="variablelist"><p>The endpoint for the ECP to contact on the OpenAM service provider is
+   <code class="literal">/SPECP</code> as in
+   <code class="literal">http://www.sp.example:8080/openam/SPECP</code>. The ECP provides
+   two query string parameters to identify the service provider and to specify
+   the URL of the resource to access.</p><dl class="variablelist"><dt><span class="term"><code class="literal">metaAlias</code></span></dt><dd><p>This specifies the service provider, by default
+     <code class="literal">metaAlias=/<em class="replaceable"><code>realm-name</code></em>/sp</code>,
+     as described in <a class="xref" href="chap-federation.html#sp-meta-alias" title="MetaAlias">MetaAlias</a>.</p></dd><dt><span class="term"><code class="literal">RelayState</code></span></dt><dd><p>This specifies the resource the client aims to access such as
+     <code class="literal">RelayState=http%3A%2F%2Fforgerock.org%2Findex.html</code>.</p></dd></dl></div><p>For example, the URL to access the service provider and finally
+  the resource at <code class="literal">http://forgerock.org/index.html</code>
+  could be
+  <code class="literal">http://www.sp.example:8080/openam/SPECP?metaAlias=/sp&amp;RelayState=http%3A%2F%2Fforgerock.org%2Findex.html</code>.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="federation-linking-accounts"></a>11.11.&nbsp;Managing Federated Accounts</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-federation.html#transient-federation">11.11.1. Using Transient Federation Identifiers</a></span></dt><dt><span class="section"><a href="chap-federation.html#persistent-federation">11.11.2. Using Persistent Federation Identifiers</a></span></dt><dt><span class="section"><a href="chap-federation.html#change-federation">11.11.3. Changing Federation of Persistently Linked Accounts</a></span></dt><dt><span class="section"><a href="chap-federation.html#terminate-federation">11.11.4. Terminating Federation of Persistently Linked Accounts</a></span></dt><dt><span class="section"><a href="chap-federation.html#auto-federation">11.11.5. Configuring How Remote Accounts Map To Local Accounts</a></span></dt><dt><span class="section"><a href="chap-federation.html#bulk-federation">11.11.6. Linking Federated Accounts in Bulk</a></span></dt><dt><span class="section"><a href="chap-federation.html#saml2-authentication">11.11.7. Authentication &amp; Linked Accounts</a></span></dt></dl></div><a class="indexterm" name="d0e26789"></a><p>Identity providers and service providers must be able to communicate
+  about users. Yet in some cases the identity provider can choose to communicate
+  a minimum of information about an authenticated user, with no user account
+  maintained on the service provider side. In other cases the identity provider
+  and service provider can choose to link user accounts in a persistent way, in
+  a more permanent way, or even in automatic fashion by using some shared value
+  in the user's profiles such as an email address or by dynamically creating
+  accounts on the service provider when necessary. OpenAM supports all these
+  alternatives.</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="transient-federation"></a>11.11.1.&nbsp;Using Transient Federation Identifiers</h3></div></div></div><p>OpenAM allows you to link accounts using transient name identifiers,
+   where the identity provider shares a temporary identifier with the service
+   provider for the duration of the user session. Nothing is written to the
+   user profile.</p><p>Transient identifiers are useful where the service is anonymous, and
+   all users have similar access on the service provider side.</p><p>To use transient name identifiers, specify the name ID format
+   <code class="literal">urn:oasis:names:tc:SAML:2.0:nameid-format:transient</code> when
+   initiating single sign on.</p><p>The examples below work in an environment where the identity provider
+   is <code class="literal">www.idp.example</code> and the service provider is
+   <code class="literal">www.sp.example</code>. Both providers have deployed OpenAM on port
+   8080 under deployment URI <code class="literal">/openam</code>.</p><p>To initiate single sign on from the service provider, access the
+   following URL with at least the query parameters shown.</p><pre class="literallayout">http://www.sp.example:8080/openam/saml2/jsp/spSSOInit.jsp?
+ idpEntityID=http%3A%2F%2Fwww.idp.example%3A8080%2Fopenam
+ &amp;metaAlias=/sp
+ &amp;NameIDFormat=urn:oasis:names:tc:SAML:2.0:nameid-format:transient</pre><p>For a complete list of query parameters, see <a class="xref" href="chap-federation.html#spssoinit-parameters" title="spSSOInit.jsp Parameters"><code class="filename">spSSOInit.jsp</code> Parameters</a>.</p><p>To initiate single sign on from the identity provider, access the
+   following URL with at least the query parameters shown.</p><pre class="literallayout">http://www.idp.example:8080/openam/saml2/jsp/idpSSOInit.jsp?
+ spEntityID=http%3A%2F%2Fwww.sp.example%3A8080%2Fopenam
+ &amp;metaAlias=/idp
+ &amp;NameIDFormat=urn:oasis:names:tc:SAML:2.0:nameid-format:transient</pre><p>For a complete list of query parameters, see <a class="xref" href="chap-federation.html#idpssoinit-parameters" title="idpSSOInit.jsp Parameters"><code class="filename">idpSSOInit.jsp</code> Parameters</a>.</p><p>The accounts are only linked for the duration of the session. Once the
+   user logs out for example the accounts are no longer linked.</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="persistent-federation"></a>11.11.2.&nbsp;Using Persistent Federation Identifiers</h3></div></div></div><p>OpenAM lets you use persistent pseudonym identifiers to federate user
+   identities, linking accounts on the identity provider and service provider
+   with a SAML persistent identifier.</p><p>Persistent identifiers are useful for establishing links between
+   otherwise unrelated accounts.</p><p>The examples below work in an environment where the identity provider
+   is <code class="literal">www.idp.example</code> and the service provider is
+   <code class="literal">www.sp.example</code>. Both providers have deployed OpenAM on port
+   8080 under deployment URI <code class="literal">/openam</code>.</p><p>To initiate single sign on from the service provider, access the
+   following URL with at least the query parameters shown.</p><pre class="literallayout">http://www.sp.example:8080/openam/saml2/jsp/spSSOInit.jsp?
+ idpEntityID=http%3A%2F%2Fwww.idp.example%3A8080%2Fopenam
+ &amp;metaAlias=/sp
+ &amp;NameIDFormat=urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</pre><p>For a complete list of query parameters, see <a class="xref" href="chap-federation.html#spssoinit-parameters" title="spSSOInit.jsp Parameters"><code class="filename">spSSOInit.jsp</code> Parameters</a>.</p><p>To initiate single sign on from the identity provider, access the
+   following URL with at least the query parameters shown.</p><pre class="literallayout">http://www.idp.example:8080/openam/saml2/jsp/idpSSOInit.jsp?
+ spEntityID=http%3A%2F%2Fwww.sp.example%3A8080%2Fopenam
+ &amp;metaAlias=/idp
+ &amp;NameIDFormat=urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</pre><p>For a complete list of query parameters, see <a class="xref" href="chap-federation.html#idpssoinit-parameters" title="idpSSOInit.jsp Parameters"><code class="filename">idpSSOInit.jsp</code> Parameters</a>.</p><p>On successful login, the accounts are persistently linked, with
+   persistent identifiers stored in the user's accounts on the identity provider
+   and the service provider.</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="change-federation"></a>11.11.3.&nbsp;Changing Federation of Persistently Linked Accounts</h3></div></div></div><p>OpenAM implements the SAML 2.0 Name Identifier Management profile,
+   allowing you to change a persistent identifier that has been set to federate
+   accounts, and also to terminate federation for an account.</p><p>When user accounts are stored in an LDAP directory server, name
+   identifier information is stored on the
+   <code class="literal">sun-fm-saml2-nameid-info</code> and
+   <code class="literal">sun-fm-saml2-nameid-infokey</code> attributes of a user's
+   entry.<a href="#ftn.d0e26886" class="footnote" name="d0e26886"><sup class="footnote">[8]</sup></a></p><p>
+    You can retrieve the name identifier value on the IDP side
+    by checking the value of <code class="literal">sun-fm-saml2-nameid-infokey</code>.
+    For example, if the user's entry in the directory shows
+    <code class="literal">sun-fm-saml2-nameid-infokey:
+    http://www.idp.example:8080/openam|http://www.sp.example:8080/openam|
+    XyfFEsr6Vixbnt0BSqIglLFMGjR2</code>,
+    then the name identifier on the IDP side is
+    <code class="literal">XyfFEsr6Vixbnt0BSqIglLFMGjR2</code>.
+   </p><p>You can use this identifier to initiate a change request from the
+   service provider as in the following example.</p><pre class="literallayout">http://www.sp.example:8080/openam/saml2/jsp/spMNIRequestInit.jsp?
+ idpEntityID=http%3A%2F%2Fwww.idp.example%3A8080%2Fopenam
+ &amp;metaAlias=/sp
+ &amp;requestType=NewID
+ &amp;IDPProvidedID=XyfFEsr6Vixbnt0BSqIglLFMGjR2</pre><p>If desired, you can substitute <code class="literal">openam/SPMniInit</code>
+   for <code class="literal">openam/saml2/jsp/spMNIRequestInit.jsp</code></p><p>You can also initiate the change request from the identity provider
+   as in the following example.</p><pre class="literallayout">http://www.idp.example:8080/openam/saml2/jsp/idpMNIRequestInit.jsp?
+ spEntityID=http%3A%2F%2Fwww.sp.example%3A8080%2Fopenam
+ &amp;metaAlias=/idp
+ &amp;requestType=NewID
+ &amp;IDPProvidedID=XyfFEsr6Vixbnt0BSqIglLFMGjR2</pre><p>If desired, you can substitute <code class="literal">openam/IDPMniInit</code>
+   for <code class="literal">openam/saml2/jsp/idpMNIRequestInit.jsp</code></p><p>
+    You can retrieve the name identifier value on the SP side
+    by checking the value of <code class="literal">sun-fm-saml2-nameid-info</code>.
+    For example, if the user's entry in the directory shows
+    <code class="literal">sun-fm-saml2-nameid-info:
+     http://www.sp.example:8080/openam|
+     http://www.idp.example:8080/openam|
+     ATo9TSA9Y2Ln7DDrAdO3HFfH5jKD|
+     http://www.idp.example:8080/openam|
+     urn:oasis:names:tc:SAML:2.0:nameid-format:persistent|
+     9B1OPy3m0ejv3fZYhlqxXmiGD24c|
+     http://www.sp.example:8080/openam|
+     SPRole|
+     false</code>,
+    then the name identifier on the SP side is
+    <code class="literal">9B1OPy3m0ejv3fZYhlqxXmiGD24c</code>.
+   </p><div class="variablelist"><a name="idpmnirequestinit-parameters"></a><div class="variablelist-title"><code class="filename">idpMNIRequestInit.jsp</code> Parameters</div><dl class="variablelist"><dt><span class="term"><code class="literal">spEntityID</code></span></dt><dd><p>(Required) Use this parameter to indicate the remote service
+      provider. Make sure you URL encode the value. For example, specify
+      <code class="literal">spEntityID=http://www.sp.example:8080/openam</code> as
+      <code class="literal">spEntityID=http%3A%2F%2Fwww.sp.example%3A8080%2Fopenam</code>.</p></dd><dt><span class="term"><code class="literal">metaAlias</code></span></dt><dd><p>(Required) Use this parameter to specify the local alias for the
+      provider, such as <code class="literal">metaAlias=/myRealm/idp</code>. This
+      parameter takes the format
+      <code class="literal">/<em class="replaceable"><code>realm-name</code></em>/<em class="replaceable"><code>provider-name</code></em></code> as described in <a class="xref" href="chap-federation.html#idp-meta-alias" title="MetaAlias">MetaAlias</a>. You do not repeat the slash for
+      the top level realm, for example <code class="literal">metaAlias=/idp</code>.</p></dd><dt><span class="term"><code class="literal">requestType</code></span></dt><dd><p>(Required) Type of manage name ID request, either
+      <code class="literal">NewID</code> to change the ID, or <code class="literal">Terminate</code>
+      to remove the information that links the accounts on the identity provider
+      and service provider.</p></dd><dt><span class="term"><code class="literal">SPProvidedID</code></span></dt><dd><p>(Required if <code class="literal">requestType=NewID</code>) Name identifier
+      in use as described above.</p></dd><dt><span class="term"><code class="literal">affiliationID</code></span></dt><dd><p>(Optional) Use this parameter to specify a SAML affiliation
+      identifier.</p></dd><dt><span class="term"><code class="literal">binding</code></span></dt><dd><p>(Optional) Use this parameter to indicate what binding to use for
+      the operation. The full, long name format is required for this parameter
+      to work.</p><div class="itemizedlist"><p>The value must be one of the following.</p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="literal">urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST</code></p></li><li class="listitem"><p><code class="literal">urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect</code></p></li><li class="listitem"><p><code class="literal">urn:oasis:names:tc:SAML:2.0:bindings:SOAP</code></p></li></ul></div></dd><dt><span class="term"><code class="literal">relayState</code></span></dt><dd><p>(Optional) Use this parameter to specify where to redirect the user
+      when the process is complete. Make sure you URL encode the value. For
+      example, <code class="literal">relayState=http%3A%2F%2Fforgerock.com</code>
+      takes the user to <code class="literal">http://forgerock.com</code>.</p></dd></dl></div><div class="variablelist"><a name="spmnirequestinit-parameters"></a><div class="variablelist-title"><code class="filename">spMNIRequestInit.jsp</code> Parameters</div><dl class="variablelist"><dt><span class="term"><code class="literal">idpEntityID</code></span></dt><dd><p>(Required) Use this parameter to indicate the remote identity
+      provider. Make sure you URL encode the value. For example, specify
+      <code class="literal">idpEntityID=http://www.idp.example:8080/openam</code> as
+      <code class="literal">idpEntityID=http%3A%2F%2Fwww.idp.example%3A8080%2Fopenam</code>.</p></dd><dt><span class="term"><code class="literal">metaAlias</code></span></dt><dd><p>(Required) Use this parameter to specify the local alias for the
+      provider, such as <code class="literal">metaAlias=/myRealm/sp</code>. This parameter
+      takes the format <code class="literal">/<em class="replaceable"><code>realm-name</code></em>/<em class="replaceable"><code>provider-name</code></em></code> as described in <a class="xref" href="chap-federation.html#sp-meta-alias" title="MetaAlias">MetaAlias</a>. You do not repeat the slash for the
+      top level realm, <code class="literal">metaAlias=/sp</code>.</p></dd><dt><span class="term"><code class="literal">requestType</code></span></dt><dd><p>(Required) Type of manage name ID request, either
+      <code class="literal">NewID</code> to change the ID, or <code class="literal">Terminate</code>
+      to remove the information that links the accounts on the identity provider
+      and service provider.</p></dd><dt><span class="term"><code class="literal">IDPProvidedID</code></span></dt><dd><p>(Required if <code class="literal">requestType=NewID</code>) Name identifier
+      in use as described above.</p></dd><dt><span class="term"><code class="literal">affiliationID</code></span></dt><dd><p>(Optional) Use this parameter to specify a SAML affiliation
+      identifier.</p></dd><dt><span class="term"><code class="literal">binding</code></span></dt><dd><p>(Optional) Use this parameter to indicate what binding to use for
+      the operation. The full, long name format is required for this parameter
+      to work.</p><div class="itemizedlist"><p>The value must be one of the following.</p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="literal">urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST</code></p></li><li class="listitem"><p><code class="literal">urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect</code></p></li><li class="listitem"><p><code class="literal">urn:oasis:names:tc:SAML:2.0:bindings:SOAP</code></p></li></ul></div></dd><dt><span class="term"><code class="literal">relayState</code></span></dt><dd><p>(Optional) Use this parameter to specify where to redirect the user
+      when the process is complete. Make sure you URL encode the value. For
+      example, <code class="literal">relayState=http%3A%2F%2Fforgerock.com</code>
+      takes the user to <code class="literal">http://forgerock.com</code>.</p></dd></dl></div><p>You can terminate federation as described in <a class="xref" href="chap-federation.html#terminate-federation" title="11.11.4.&nbsp;Terminating Federation of Persistently Linked Accounts">Section&nbsp;11.11.4, &#8220;Terminating Federation of Persistently Linked Accounts&#8221;</a>.</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="terminate-federation"></a>11.11.4.&nbsp;Terminating Federation of Persistently Linked Accounts</h3></div></div></div><p>OpenAM lets you terminate account federation, where the accounts have
+   been linked with a persistent identifier as described in <a class="xref" href="chap-federation.html#persistent-federation" title="11.11.2.&nbsp;Using Persistent Federation Identifiers">Section&nbsp;11.11.2, &#8220;Using Persistent Federation Identifiers&#8221;</a>.</p><p>The examples below work in an environment where the identity provider
+   is <code class="literal">www.idp.example</code> and the service provider is
+   <code class="literal">www.sp.example</code>. Both providers have deployed OpenAM on port
+   8080 under deployment URI <code class="literal">/openam</code>.</p><p>To initiate the process of terminating account federation from the
+   service provider, access the following URL with at least the query
+   parameters shown.</p><pre class="literallayout">http://www.sp.example:8080/openam/saml2/jsp/spMNIRequestInit.jsp?
+ idpEntityID=http%3A%2F%2Fwww.idp.example%3A8080%2Fopenam
+ &amp;metaAlias=/sp
+ &amp;requestType=Terminate</pre><p>To initiate the process of terminating account federation from the
+   identity provider, access the following URL with at least the query
+   parameters shown.</p><pre class="literallayout">http://www.idp.example:8080/openam/saml2/jsp/idpMNIRequestInit.jsp?
+ spEntityID=http%3A%2F%2Fwww.sp.example%3A8080%2Fopenam
+ &amp;metaAlias=/idp
+ &amp;requestType=Terminate</pre></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="auto-federation"></a>11.11.5.&nbsp;Configuring How Remote Accounts Map To Local Accounts</h3></div></div></div><p>OpenAM lets you configure the service provider to link an account
+   based on an attribute value from the identity provider. When you know
+   the user accounts on both the identity provider and the service provider
+   share a common attribute value, such as an email address or other unique
+   user identifier, you can use this method to link accounts without user
+   interaction. See <a class="xref" href="chap-federation.html#auto-federate-based-on-attribute" title="Procedure&nbsp;11.13.&nbsp;To Map Accounts Based on an Attribute Value">Procedure&nbsp;11.13, &#8220;To Map Accounts Based on an Attribute Value&#8221;</a>.</p><p>OpenAM also lets you map users on the identity provider temporarily to
+   a single anonymous user account on the service provider, in order to
+   exchange attributes about the user without a user-specific account on the
+   service provider. This approach can be useful when the service provider
+   either needs no user-specific account to provide a service, or when you
+   do not want to retain a user profile on the service provider but instead
+   you make authorization decisions based on attribute values from the identity
+   provider. See <a class="xref" href="chap-federation.html#auto-federate-using-anonymous" title="Procedure&nbsp;11.14.&nbsp;To Map Remote Accounts to a Single Service Provider Account">Procedure&nbsp;11.14, &#8220;To Map Remote Accounts to a Single Service Provider Account&#8221;</a>.</p><p>OpenAM further allows you to use attributes from the identity provider
+   to create accounts dynamically on the service provider. When using this
+   method, you should inform the user and obtain consent to create the account
+   if necessary. See <a class="xref" href="chap-federation.html#auto-federate-with-dynamic-creation" title="Procedure&nbsp;11.15.&nbsp;To Map Accounts With Dynamic Service Provider Account Creation">Procedure&nbsp;11.15, &#8220;To Map Accounts With Dynamic Service Provider Account Creation&#8221;</a>.</p><div class="procedure"><a name="auto-federate-based-on-attribute"></a><div class="procedure-title">Procedure&nbsp;11.13.&nbsp;To Map Accounts Based on an Attribute Value</div><p>The following steps demonstrate how to map accounts based
+    on an attribute value that is the same in both accounts.</p><p>Perform the following steps on the hosted identity provider(s), and
+    again on the hosted service provider(s).</p><ol class="procedure" type="1"><li class="step"><p>Login to the OpenAM console as administrator.</p></li><li class="step"><p>Browse to Federation &gt; <em class="replaceable"><code>hosted-provider-name</code></em> &gt; Assertion Processing.</p></li><li class="step"><p>
+      If the attribute to use when linking accounts is not yet included
+      in the attribute map, add the attribute mapping, and then Save your work.
+     </p></li><li class="step"><p>On the hosted service provider, under Auto Federation, select
+     Enabled and enter the local attribute name in the Attribute field, and
+     then Save your work.</p></li></ol></div><div class="procedure"><a name="auto-federate-using-anonymous"></a><div class="procedure-title">Procedure&nbsp;11.14.&nbsp;To Map Remote Accounts to a Single Service Provider Account</div><p>The following steps demonstrate how to auto-federate using a single
+    anonymous user account on the service provider.</p><p>Perform the following steps on the hosted identity provider(s), and
+    again on the hosted service provider(s).</p><ol class="procedure" type="1"><li class="step"><p>Login to the OpenAM console as administrator.</p></li><li class="step"><p>Browse to Federation &gt; <em class="replaceable"><code>hosted-provider-name</code></em> &gt; Assertion Processing.</p></li><li class="step"><p>If you want to get attributes from the identity provider and the
+     attributes are not yet in the attribute map, add the attribute mappings,
+     and then Save your work.</p></li><li class="step"><p>On the hosted service provider, under Transient User, set the
+     single account to which to map all users, such as
+     <code class="literal">anonymous</code>, and then Save your work.</p></li><li class="step"><p>After completing configuration on the providers, use transient
+     identifiers to federate as described in <a class="xref" href="chap-federation.html#transient-federation" title="11.11.1.&nbsp;Using Transient Federation Identifiers">Section&nbsp;11.11.1, &#8220;Using Transient Federation Identifiers&#8221;</a>.</p></li></ol></div><div class="procedure"><a name="auto-federate-with-dynamic-creation"></a><div class="procedure-title">Procedure&nbsp;11.15.&nbsp;To Map Accounts With Dynamic Service Provider Account Creation</div><p>
+     The following steps demonstrate how to map accounts
+     with dynamic creation of missing accounts on the service provider side.
+    </p><ol class="procedure" type="1"><li class="step"><p>Set up a mapping based on an attribute value as described in <a class="xref" href="chap-federation.html#auto-federate-based-on-attribute" title="Procedure&nbsp;11.13.&nbsp;To Map Accounts Based on an Attribute Value">Procedure&nbsp;11.13, &#8220;To Map Accounts Based on an Attribute Value&#8221;</a>. The attributes you map
+     from the identity provider are those that the service provider sets on
+     the dynamically created accounts.</p></li><li class="step"><p>On the service provider console, browse to Access Control &gt;
+     <em class="replaceable"><code>realm-name</code></em> &gt; Authentication &gt; All Core
+     Settings..., and Dynamic or Dynamic with User Alias, which are described
+     in <a href="../../admin-guide/index/chap-auth-services.html#core-module-conf-hints" class="link"><em class="citetitle">Hints For the
+     Core Authentication Module</em></a>, and then Save your
+     work.</p></li><li class="step"><p>To test your work, create a user on the identity provider, log
+     out of the console, and initiate SSO logging in as the user you
+     created.</p><p>To initiate SSO, browse to one of the OpenAM SAML 2.0 JSPs with the
+     appropriate query parameters. The following is an example URL for service
+     provider initiated SSO.</p><pre class="literallayout">http://www.sp.example:8080/openam/saml2/jsp/spSSOInit.jsp?
+ idpEntityID=http%3A%2F%2Fwww.idp.example%3A8080%2Fopenam
+ &amp;metaAlias=/sp</pre><p>On success, check <code class="literal">http://www.sp.example:8080/openam/idm/EndUser</code> to see the new user
+     account.</p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="bulk-federation"></a>11.11.6.&nbsp;Linking Federated Accounts in Bulk</h3></div></div></div><p>If you manage both the identity provider and service provider, you
+   can link accounts out-of-band, in bulk. You make permanent connections for a
+   list of identity provider and service provider by using the
+   <span class="command"><strong>ssoadm</strong></span> bulk federation commands.</p><p>Before you can run the bulk federation commands, first establish the
+   relationship between accounts, set up the providers as described in
+   <a class="xref" href="chap-federation.html#set-up-federation" title="11.2.&nbsp;Setting Up SAML 2.0 SSO">Section&nbsp;11.2, &#8220;Setting Up SAML 2.0 SSO&#8221;</a>, and install the
+   <span class="command"><strong>ssoadm</strong></span> command as described in <a href="../../install-guide/index/chap-install-tools.html#install-openam-admin-tools" class="link"><em class="citetitle">To Set Up
+   Administration Tools</em></a>.</p><p>To understand the relationships between accounts, consider an example
+   where the identity provider is at <code class="literal">idp.example.org</code> and the
+   service provider is at <code class="literal">sp.example.com</code>. A demo user
+   account has the Universal ID,
+   <code class="literal">id=demo,ou=user,dc=example,dc=org</code>, on the identity
+   provider. That maps to the Universal ID,
+   <code class="literal">id=demo,ou=user,dc=example,dc=com</code>, on the service
+   provider.</p><p>The <span class="command"><strong>ssoadm</strong></span> command then needs a file that maps
+   local user IDs to remote user IDs, one per line, separated by the vertical
+   bar character <code class="literal">|</code>. Each line of the file appears as
+   follows.</p><pre class="literallayout"><em class="replaceable"><code>local-user-ID</code></em>|<em class="replaceable"><code>remote-user-ID</code></em></pre><p>In the example, starting on the service provider side, the line for
+   the demo user reads as follows.</p><pre class="literallayout">id=demo,ou=user,dc=example,dc=com|id=demo,ou=user,dc=example,dc=org</pre><p>All the users&#8217; accounts mapped in your file must exist at the identity
+   provider and the service provider when you run the commands to link
+   them.</p><div class="orderedlist"><p>Link the accounts using the <span class="command"><strong>ssoadm</strong></span> bulk federation
+    commands.</p><ol class="orderedlist" type="1"><li class="listitem"><p>Prepare the data with the
+     <span class="command"><strong>ssoadm do-bulk-federation</strong></span> command.</p><p>The following example starts on the service provider side.</p><div class="screen"><pre>
+$ <strong>cat /tmp/user-map.txt</strong>
+<em>id=demo,ou=user,dc=example,dc=com|id=demo,ou=user,dc=example,dc=org</em>
+$ <strong>ssoadm  \
+ do-bulk-federation \
+ --metaalias /sp \
+ --remoteentityid http://idp.example.org:8080/openam \
+ --useridmapping /tmp/user-map.txt \
+ --nameidmapping /tmp/name-map.txt \
+ --adminid amadmin  \
+ --password-file /tmp/pwd.txt \
+ --spec saml2</strong>
+
+<em>Bulk Federation for this host was completed. To complete the
+federation, name Id mapping file should be loaded to remote
+provider.</em>
+     </pre></div></li><li class="listitem"><p>Copy the name ID mapping output file to the other provider.</p><div class="screen"><pre>
+$ <strong>scp /tmp/name-map.txt openam@idp.example.org:/tmp/name-map.txt</strong>
+<em>openam@idp.example.org's password:
+name-map.txt                     100%  177     0.2KB/s   00:00</em>
+     </pre></div></li><li class="listitem"><p>Import the name ID mapping file with the
+     <span class="command"><strong>ssoadm import-bulk-fed-data</strong></span> command.</p><p>The following example is performed on the identity provider
+     side.</p><div class="screen"><pre>
+$ <strong>ssoadm \
+ import-bulk-fed-data \
+ --adminid amadmin \
+ --password-file /tmp/pwd.txt \
+ --metaalias /idp \
+ --bulk-data-file /tmp/name-map.txt</strong>
+
+<em>Bulk Federation for this host was completed.</em>
+     </pre></div></li></ol></div><p>At this point the accounts are linked.</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="saml2-authentication"></a>11.11.7.&nbsp;Authentication &amp; Linked Accounts</h3></div></div></div><p>
+    In a SAML 2.0 federation where accounts are durably linked,
+    authentication is required only on the identity provider side.
+   </p><p>
+    Authentication is also required however on the service provider side
+    when the OpenAM account mapper on the service provider is not able to map
+    the user identified in the SAML assertion from the identity provider
+    to a local user account.
+   </p><p>
+    This can happen for example the first time accounts are linked
+    as described in <a class="xref" href="chap-federation.html#persistent-federation" title="11.11.2.&nbsp;Using Persistent Federation Identifiers">Section&nbsp;11.11.2, &#8220;Using Persistent Federation Identifiers&#8221;</a>,
+    after which the persistent identifier establishes the mapping.
+   </p><p>
+    This also happens when transient identifiers are used to map accounts.
+    When accounts are linked as described in
+    <a class="xref" href="chap-federation.html#transient-federation" title="11.11.1.&nbsp;Using Transient Federation Identifiers">Section&nbsp;11.11.1, &#8220;Using Transient Federation Identifiers&#8221;</a>,
+    then the service provider must locally authenticate the user
+    for every SAML assertion received.
+    This is because the identifier used to link the accounts is transient:
+    it does not provide a durable means to link the accounts.
+   </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="using-saml2-artifacts"></a>11.12.&nbsp;Using SAML 2.0 Artifacts</h2></div></div></div><p>By default OpenAM transmits SAML messages by value. This makes it
+  possible to access the SAML messages in the user agent. You can instead
+  request that OpenAM transmit SAML messages by reference using SAML artifacts,
+  which are small values that reference a SAML message. Providers then
+  communicate directly to resolve artifacts, rather than sending the messages
+  through the user agent.</p><p>When initiating single sign-on using <code class="filename">idpSSOInit.jsp</code>
+  or <code class="filename">spSSOInit.jsp</code> for example, add
+  <code class="literal">binding=HTTP-Artifact</code> to the list of query parameters.
+  The following example works in an environment where the identity provider is
+  <code class="literal">www.idp.example</code> and the service provider is
+  <code class="literal">www.sp.example</code>. Both providers have deployed OpenAM on port
+  8080 under deployment URI <code class="literal">/openam</code>.</p><pre class="literallayout">http://www.sp.example:8080/openam/saml2/jsp/spSSOInit.jsp?
+   idpEntityID=http%3A%2F%2Fwww.idp.example%3A8080%2Fopenam
+   &amp;metaAlias=/sp
+   &amp;binding=HTTP-Artifact</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="using-saml2-with-policy-agents"></a>11.13.&nbsp;SAML 2.0 &amp; Policy Agents</h2></div></div></div><p>
+   You can use policy agents in a SAML 2.0 Federation deployment.
+  </p><div class="procedure"><a name="policy-agent-with-saml2"></a><div class="procedure-title">Procedure&nbsp;11.16.&nbsp;To Use a Policy Agent with a SAML 2.0 Service Provider</div><p>
+    The following procedure applies
+    when OpenAM is configured as an IDP in one domain,
+    and the desired policy agent protects resources
+    on behalf of a second OpenAM server configured as an SP on a second domain.
+   </p><ol class="procedure" type="1"><li class="step"><p>
+     Install the policy agent.
+    </p><p>
+     The basic process for installing policy agents is available in the
+     <a class="link" href="http://docs.forgerock.org/en/openam-pa/3.3.0/web-users-guide/#web-users-guide" target="_blank"><em class="citetitle">Web Policy Agent User's Guide</em></a>
+     and the
+     <a class="link" href="http://docs.forgerock.org/en/openam-pa/3.3.0/jee-users-guide/#jee-users-guide" target="_blank"><em class="citetitle">Java EE Policy Agent User's Guide</em></a>.
+    </p></li><li class="step"><p>
+     Replace the given OpenAM Login URL and OpenAM Logout URLs
+     with SAML 2.0 URLs described in <a class="xref" href="chap-federation.html#using-saml2-sso-slo" title="11.9.&nbsp;Using SAML 2.0 Single Sign-On &amp; Single Logout">Section&nbsp;11.9, &#8220;Using SAML 2.0 Single Sign-On &amp; Single Logout&#8221;</a>.
+    </p><p>
+     The following steps explain how to do this for web policy agents.
+    </p><ul class="stepalternatives">
+     <li class="step"><p>
+       If you have configured the Web policy agents to store their properties
+       centralized on an OpenAM server, navigate to the URL for the OpenAM console.
+       Select Access Control &gt; <em class="replaceable"><code>Realm Name</code></em> &gt;
+       Agents &gt; Web &gt; <em class="replaceable"><code>Agent Name</code></em> &gt; OpenAM Services.
+      </p><p>
+       For the Web Agent, under the OpenAM Services tab,
+       in the Agent Logout URL section, set up a list of application logout URLs.
+       In the Logout Redirect URL text box,
+       enter an appropriate URL to redirect the user after logout.
+      </p></li>
+
+     <li class="step"><p>
+       Alternatively, if the Web policy agents are set up to store properties
+       on local systems,
+       find the <code class="filename">OpenSSOAgentConfiguration.properties</code> file
+       in the <code class="filename">/path/to/agent/config/</code> directory.
+      </p><p>
+       You can specify OpenAM Login and Logout URLs
+       with the <code class="literal">com.sun.identity.agents.config.login.url</code>
+       and <code class="literal">com.sun.identity.agents.config.logout.url</code>
+       attributes, respectively.
+      </p></li>
+    </ul></li></ol></div></div><div class="footnotes"><br><hr class="footnote-hr"><div id="ftn.d0e26886" class="footnote"><p><a href="#d0e26886" class="para"><sup class="para">[8] </sup></a>These attribute types are configurable in the OpenAM
+   console under Configuration &gt; Global &gt; SAMLv2 Service
+   Configuration.</p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-cdsso.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-oauth2.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;10.&nbsp;Configuring Cross-Domain Single Sign On&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;12.&nbsp;Managing OAuth 2.0 Authorization</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

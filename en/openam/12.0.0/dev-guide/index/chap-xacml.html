@@ -1,0 +1,404 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;13.&nbsp;Requesting a XACML Policy Decision Using OpenAM Java SDK</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenAM Developer's Guide"><link rel="up" href="index.html" title="OpenAM Developer's Guide"><link rel="prev" href="chap-policy-decisions.html" title="Chapter&nbsp;12.&nbsp;Requesting Policy Decisions Using OpenAM Java SDK"><link rel="next" href="chap-fedlet-java.html" title="Chapter&nbsp;14.&nbsp;Using Fedlets in Java Web Applications"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;13.&nbsp;Requesting a XACML Policy Decision Using OpenAM Java SDK</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-policy-decisions.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-fedlet-java.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-xacml"></a>Chapter&nbsp;13.&nbsp;Requesting a XACML Policy Decision Using OpenAM Java SDK</h1></div></div></div><p>This chapter shows how to request a XACML policy decision with OpenAM
+ Java SDK, using the sample client,
+ <code class="filename">source/samples/xacml/XACMLClientSample.java</code>.
+ The sample client relies on an OpenAM server acting as a policy decision point
+ and another OpenAM server acting as a policy enforcement point.</p><p>Before you continue, make sure that the packages described in the
+   <a href="../../dev-guide/index/chap-jdk.html" class="link">Using the OpenAM Java SDK</a>
+   chapter are installed.</p><p>The sample client uses the XACML <code class="literal">ContextFactory</code> to
+ create the XACML request. It then uses the
+ <code class="literal">XACMLRequestProcessor</code> to get a decision as XACML
+ <code class="literal">Response</code> from OpenAM. Most of the work in the sample
+ is done setting up the request.</p><p>The implementation of the <code class="literal">XACMLClientSample</code> class
+ follows.</p><pre class="brush: java;">package samples.xacml;
+
+import com.sun.identity.saml2.common.SAML2Exception;
+
+import com.sun.identity.xacml.client.XACMLRequestProcessor;
+import com.sun.identity.xacml.common.XACMLConstants;
+import com.sun.identity.xacml.common.XACMLException;
+import com.sun.identity.xacml.context.ContextFactory;
+import com.sun.identity.xacml.context.Action;
+import com.sun.identity.xacml.context.Attribute;
+import com.sun.identity.xacml.context.Environment;
+import com.sun.identity.xacml.context.Request;
+import com.sun.identity.xacml.context.Resource;
+import com.sun.identity.xacml.context.Response;
+import com.sun.identity.xacml.context.Subject;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import java.io.PrintWriter;
+
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.MissingResourceException;
+import java.util.Properties;
+import java.util.ResourceBundle;
+
+public class XACMLClientSample {
+
+
+    public XACMLClientSample() {
+    }
+
+    public static void main(String[] args) throws Exception {
+        XACMLClientSample clientSample = new XACMLClientSample();
+        clientSample.runSample(args);
+        System.exit(0);
+    }
+
+    public void runSample(String[] args) throws Exception {
+        if (args.length == 0 || args.length &gt; 1) {
+            System.out.println("Missing argument:"
+                    + "properties file name not specified");
+        } else {
+            System.out.println("Using properties file:" + args[0]);
+            Properties sampleProperties = getProperties(args[0]);
+            testProcessRequest(
+                (String)sampleProperties.get("pdp.entityId"),
+                (String)sampleProperties.get("pep.entityId"),
+                (String)sampleProperties.get("subject.id"),
+                (String)sampleProperties.get("subject.id.datatype"),
+                (String)sampleProperties.get("subject.category"),
+                (String)sampleProperties.get("resource.id"),
+                (String)sampleProperties.get("resource.id.datatype"),
+                (String)sampleProperties.get("resource.servicename"),
+                (String)sampleProperties.get("resource.servicename.datatype"),
+                (String)sampleProperties.get("action.id"),
+                (String)sampleProperties.get("action.id.datatype")
+            );
+        }
+    }
+
+    private void testProcessRequest(
+            String pdpEntityId, String pepEntityId,
+            String subjectId, String subjectIdType,
+            String subjectCategory,
+            String resourceId, String resourceIdType,
+            String serviceName, String serviceNameType,
+            String actionId, String actionIdType) 
+            throws XACMLException, SAML2Exception, 
+            URISyntaxException, Exception {
+
+        Request xacmlRequest = createSampleXacmlRequest(
+            subjectId, subjectIdType,
+            subjectCategory,
+            resourceId, resourceIdType,
+            serviceName, serviceNameType,
+            actionId, actionIdType); 
+
+        System.out.println("\ntestProcessRequest():xacmlRequest:\n" 
+                + xacmlRequest.toXMLString(true, true));
+
+        Response xacmlResponse = XACMLRequestProcessor.getInstance()
+                .processRequest(xacmlRequest, pdpEntityId, pepEntityId);
+
+        System.out.println("testProcessRequest():xacmlResponse:\n"
+                + xacmlResponse.toXMLString(true, true));
+    }
+
+    private Request createSampleXacmlRequest(
+            String subjectId, String subjectIdType,
+            String subjectCategory,
+            String resourceId, String resourceIdType,
+            String serviceName, String serviceNameType,
+            String actionId, String actionIdType) 
+            throws XACMLException, URISyntaxException {
+
+        Request request = ContextFactory.getInstance().createRequest();
+
+        //Subject
+        Subject subject = ContextFactory.getInstance().createSubject();
+        subject.setSubjectCategory(new URI(subjectCategory));
+
+        //set subject id
+        Attribute attribute = ContextFactory.getInstance().createAttribute();
+        attribute.setAttributeId(new URI(XACMLConstants.SUBJECT_ID));
+        attribute.setDataType(new URI(subjectIdType));
+        List valueList = new ArrayList();
+        valueList.add(subjectId); 
+        attribute.setAttributeStringValues(valueList);
+        List attributeList = new ArrayList();
+        attributeList.add(attribute);
+        subject.setAttributes(attributeList);
+
+
+        //set Subject in Request
+        List subjectList = new ArrayList();
+        subjectList.add(subject);
+        request.setSubjects(subjectList);
+
+        //Resource
+        Resource resource = ContextFactory.getInstance().createResource();
+
+        //set resource id
+        attribute = ContextFactory.getInstance().createAttribute();
+        attribute.setAttributeId(new URI(XACMLConstants.RESOURCE_ID));
+        attribute.setDataType( new URI(resourceIdType));
+        valueList = new ArrayList();
+        valueList.add(resourceId);
+        attribute.setAttributeStringValues(valueList);
+        attributeList = new ArrayList();
+        attributeList.add(attribute);
+
+        //set serviceName
+        attribute = ContextFactory.getInstance().createAttribute();
+        attribute.setAttributeId(new URI(XACMLConstants.TARGET_SERVICE));
+        attribute.setDataType(new URI(serviceNameType));
+        valueList = new ArrayList();
+        valueList.add(serviceName);
+        attribute.setAttributeStringValues(valueList);
+        attributeList.add(attribute);
+        resource.setAttributes(attributeList);
+
+        //set Resource in Request
+        List resourceList = new ArrayList();
+        resourceList.add(resource);
+        request.setResources(resourceList);
+
+        //Action
+        Action action = ContextFactory.getInstance().createAction();
+        attribute = ContextFactory.getInstance().createAttribute();
+        attribute.setAttributeId(new URI(XACMLConstants.ACTION_ID));
+        attribute.setDataType(new URI(actionIdType));
+
+        //set actionId
+        valueList = new ArrayList();
+        valueList.add(actionId);
+        attribute.setAttributeStringValues(valueList);
+        attributeList = new ArrayList();
+        attributeList.add(attribute);
+        action.setAttributes(attributeList);
+
+        //set Action in Request
+        request.setAction(action);
+
+        //Environment, our PDP does not use environment now
+        Environment environment = ContextFactory.getInstance()
+            .createEnvironment();
+        request.setEnvironment(environment);
+        return request;
+    }
+
+    private Properties getProperties(String file)
+        throws MissingResourceException {
+        Properties properties = new Properties();
+        ResourceBundle bundle = ResourceBundle.getBundle(file);
+        Enumeration e = bundle.getKeys();
+        System.out.println("sample properties:");
+        while (e.hasMoreElements()) {
+            String key = (String) e.nextElement();
+            String value = bundle.getString(key);
+            properties.put(key, value);
+            System.out.println(key + ":" + value);
+        }
+        return properties;
+    }
+}</pre><p>Before running the sample client, you must set up the configuration as
+ described in the comments at the outset of the
+ <code class="filename">scripts/run-xacml-client-sample.sh</code> script.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+    Check <code class="filename">resources/AMConfig.properties</code>
+    to see which OpenAM server the SDK is configured to use.
+   </p><p>
+    The relevant settings from <code class="filename">resources/AMConfig.properties</code>
+    specify the server protocol, host, port and deployment URI.
+   </p><pre class="brush: ini;">com.iplanet.am.server.protocol=http
+com.iplanet.am.server.host=openam.example.com
+com.iplanet.am.server.port=8080
+com.iplanet.am.services.deploymentDescriptor=openam</pre><p>
+    For the purpose of this example, the XACML policy decision point (PDP)
+    and the XACML policy enforcement point (PEP) are configured on this server.
+   </p></li><li class="listitem"><p>Edit <code class="filename">resources/xacmlClientSample.properties</code>
+   and <code class="filename">resources/policyEvaluationSample.properties</code>
+   to set up the configuration for the sample client.</p><p>The relevant settings from
+   <code class="filename">resources/xacmlClientSample.properties</code> are the
+   following.</p><pre class="brush: ini;">pdp.entityId=xacmlPdpEntity
+pep.entityId=xacmlPepEntity
+subject.id=id=demo,ou=user,dc=openam,dc=forgerock,dc=org
+subject.id.datatype=urn:oasis:names:tc:xacml:1.0:data-type:x500Name
+subject.category=urn:oasis:names:tc:xacml:1.0:subject-category:access-subject
+resource.id=http://www.example.com:80/banner.html
+resource.id.datatype=http://www.w3.org/2001/XMLSchema#string
+resource.servicename=iPlanetAMWebAgentService
+resource.servicename.datatype=http://www.w3.org/2001/XMLSchema#string
+action.id=GET
+action.id.datatype=http://www.w3.org/2001/XMLSchema#string</pre><p>The relevant settings from
+   <code class="filename">resources/policyEvaluationSample.properties</code> are the
+   following.</p><pre class="brush: ini;">user.name=demo
+user.password=changeit
+service.name=iPlanetAMWebAgentService
+resource.name=http://www.example.com:80/banner.html
+action.name=GET</pre><p>
+    These settings use the default <code class="literal">demo</code> user as the subject,
+    who has ID <code class="literal">id=demo,ou=user,dc=openam,dc=forgerock,dc=org</code>,
+    and password <code class="literal">changeit</code>.
+    If you choose a different subject, then change
+    the <code class="literal">subject.id</code> value
+    in <code class="filename">resources/xacmlClientSample.properties</code>,
+    and the <code class="literal">user.name</code> and <code class="literal">user.password</code> values
+    in <code class="filename">resources/policyEvaluationSample.properties</code>.
+   </p></li><li class="listitem"><p>The client accesses an OpenAM server acting as the policy enforcement
+    point, configured in a circle of trust with the OpenAM server acting as the
+    policy decision point. When you set up the sample clients, you pointed them
+    to an OpenAM server. For this example, configure that server to function
+    as a policy enforcement point and also as a policy decision point.</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>In OpenAM console, browse to Configuration &gt; Global &gt; SAMLv2
+      SOAP Binding, and configure a new request handler with Key
+      <code class="literal">/xacmlPdpEntity</code> and Class
+      <code class="literal">com.sun.identity.xacml.plugins.XACMLAuthzDecisionQueryHandler</code>.</p></li><li class="listitem"><p>Set up the circle of trust, and then create and import the metadata
+      for the policy enforcement point and the policy decision point. In the
+      following simplified example, both the policy enforcement point and policy
+      decision point are hosted on the same OpenAM server. You could also set
+      up the policy enforcement point and policy decision point on separate
+      servers, as long as the circles of trust on both servers each include both
+      the policy enforcement point and the policy decision point. You can
+      set up the trust relationship between the two entities either by using
+      the <span class="command"><strong>ssoadm</strong></span> command as shown below, or by using the
+      <code class="literal">ssoadm.jsp</code> page, which you can activate as described in
+      <a href="../../admin-guide/index/chap-admin-tools.html#openam-ssoadm-jsp-overview" class="link"><em class="citetitle">OpenAM
+      ssoadm.jsp</em></a>.</p><div class="screen"><pre>
+$ <strong>ssoadm \
+ create-cot \
+ --adminid amadmin \
+ --password-file /tmp/pwd.txt \
+ --cot cot</strong>
+
+<em>Circle of trust, cot was created.</em>
+$ <strong>ssoadm \
+ create-metadata-templ \
+ --adminid amadmin \
+ --password-file /tmp/pwd.txt \
+ --entityid xacmlPepEntity \
+ --xacmlpep /xacmlPepEntity \
+ --meta-data-file xacmlPep.xml \
+ --extended-data-file xacmlPep-extended.xml</strong>
+
+<em>Hosted entity configuration was written to xacmlPep-extended.xml.
+Hosted entity descriptor was written to xacmlPep.xml.</em>
+$ <strong>ssoadm \
+ import-entity \
+ --adminid amadmin \
+ --password-file /tmp/pwd.txt \
+ --cot cot \
+ --meta-data-file xacmlPep.xml \
+ --extended-data-file xacmlPep-extended.xml</strong>
+
+<em>Import file, xacmlPep.xml.
+Import file, xacmlPep-extended.xml.</em>
+$ <strong>ssoadm \
+ create-metadata-templ \
+ --adminid amadmin \
+ --password-file /tmp/pwd.txt \
+ --entityid xacmlPdpEntity \
+ --xacmlpdp /xacmlPdpEntity \
+ --meta-data-file xacmlPdp.xml \
+ --extended-data-file xacmlPdp-extended.xml</strong>
+
+<em>Hosted entity configuration was written to xacmlPdp-extended.xml.
+Hosted entity descriptor was written to xacmlPdp.xml.</em>
+$ <strong>ssoadm \
+ import-entity \
+ --adminid amadmin \
+ --password-file /tmp/pwd.txt \
+ --cot cot \
+ --meta-data-file xacmlPdp.xml \
+ --extended-data-file xacmlPdp-extended.xml</strong>
+
+<em>Import file, xacmlPdp.xml.
+Import file, xacmlPdp-extended.xml.</em>
+      </pre></div></li></ol></div></li><li class="listitem"><p>Create a policy that allows
+   authenticated users to perform an HTTP <code class="literal">GET</code> on the sample
+   <code class="literal">resource.id</code> URL you configured, such as
+   <code class="literal">http://www.example.com:80/banner.html</code>.</p><p>See <span class="olink"><em class="citetitle">Configuring Policies</em></span> for details.</p></li></ul></div><p>After you have configured OpenAM and the properties files, run the
+ sample client script, and observe the XACML request and response.</p><div class="screen"><pre>
+$ <strong>sh scripts/run-xacml-client-sample.sh</strong>
+<em>Using properties file:xacmlClientSample
+sample properties:
+subject.id.datatype:urn:oasis:names:tc:xacml:1.0:data-type:x500Name
+pdp.entityId:xacmlPdpEntity
+resource.servicename.datatype:http://www.w3.org/2001/XMLSchema#string
+resource.id:http://www.example.com:80/banner.html
+resource.servicename:iPlanetAMWebAgentService
+action.id.datatype:http://www.w3.org/2001/XMLSchema#string
+resource.id.datatype:http://www.w3.org/2001/XMLSchema#string
+action.id:GET
+subject.category:urn:oasis:names:tc:xacml:1.0:subject-category:access-subject
+pep.entityId:xacmlPepEntity
+subject.id:id=demo,ou=user,dc=openam,dc=forgerock,dc=org
+
+testProcessRequest():xacmlRequest:
+
+&lt;xacml-context:Request
+ xmlns:xacml-context="urn:oasis:names:tc:xacml:2.0:context:schema:os"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="urn:oasis:names:tc:xacml:2.0:context:schema:os
+  http://docs.oasis-open.org/xacml/access_control-xacml-2.0-context-schema-os.xsd"&gt;
+&lt;Subject SubjectCategory=
+ "urn:oasis:names:tc:xacml:1.0:subject-category:access-subject"&gt;
+&lt;Attribute
+ AttributeId="urn:oasis:names:tc:xacml:1.0:subject:subject-id"
+ DataType="urn:oasis:names:tc:xacml:1.0:data-type:x500Name" &gt;
+&lt;AttributeValue
+ &gt;id=demo,ou=user,dc=openam,dc=forgerock,dc=org&lt;/AttributeValue&gt;
+&lt;/Attribute&gt;
+&lt;/Subject&gt;
+&lt;xacml-context:Resource&gt;
+&lt;Attribute
+ AttributeId="ResourceId"
+ DataType="http://www.w3.org/2001/XMLSchema#string" &gt;
+&lt;AttributeValue&gt;http://www.example.com:80/banner.html&lt;/AttributeValue&gt;
+&lt;/Attribute&gt;
+&lt;Attribute
+  AttributeId="urn:sun:names:xacml:2.0:resource:target-service"
+  DataType="http://www.w3.org/2001/XMLSchema#string" &gt;
+&lt;AttributeValue&gt;iPlanetAMWebAgentService&lt;/AttributeValue&gt;
+&lt;/Attribute&gt;
+&lt;/xacml-context:Resource&gt;
+&lt;xacml-context:Action&gt;
+&lt;Attribute
+ AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
+ DataType="http://www.w3.org/2001/XMLSchema#string" &gt;
+&lt;AttributeValue&gt;GET&lt;/AttributeValue&gt;
+&lt;/Attribute&gt;
+&lt;/xacml-context:Action&gt;
+&lt;xacml-context:Environment&gt;&lt;/xacml-context:Environment&gt;
+&lt;/xacml-context:Request&gt;
+
+testProcessRequest():xacmlResponse:
+&lt;xacml-context:Response
+ xmlns:xacml-context="urn:oasis:names:tc:xacml:2.0:context:schema:os" &gt;
+&lt;xacml-context:Result ResourceId="http://www.example.com:80/banner.html"&gt;
+&lt;xacml-context:Decision&gt;Permit&lt;/xacml-context:Decision&gt;
+&lt;xacml-context:Status&gt;
+&lt;xacml-context:StatusCode
+ Value="urn:oasis:names:tc:xacml:1.0:status:ok"&gt;
+&lt;/xacml-context:StatusCode&gt;
+&lt;xacml-context:StatusMessage&gt;ok&lt;/xacml-context:StatusMessage&gt;
+&lt;xacml-context:StatusDetail
+ xmlns:xacml-context="urn:oasis:names:tc:xacml:2.0:context:schema:cd:04"&gt;
+&lt;xacml-context:StatusDetail/&gt;&lt;/xacml-context:StatusDetail&gt;
+&lt;/xacml-context:Status&gt;
+&lt;/xacml-context:Result&gt;
+&lt;/xacml-context:Response&gt;</em>
+ </pre></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-policy-decisions.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-fedlet-java.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;12.&nbsp;Requesting Policy Decisions Using OpenAM Java SDK&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;14.&nbsp;Using Fedlets in Java Web Applications</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

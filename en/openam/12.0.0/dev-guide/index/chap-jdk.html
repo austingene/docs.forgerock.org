@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;9.&nbsp;Using the OpenAM Java SDK</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenAM Developer's Guide"><link rel="up" href="index.html" title="OpenAM Developer's Guide"><link rel="prev" href="chap-rest-sts.html" title="Chapter&nbsp;8.&nbsp;RESTful Secure Token Service"><link rel="next" href="chap-authentication.html" title="Chapter&nbsp;10.&nbsp;Authenticating Using OpenAM Java SDK"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;9.&nbsp;Using the OpenAM Java SDK</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-rest-sts.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-authentication.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-jdk"></a>Chapter&nbsp;9.&nbsp;Using the OpenAM Java SDK</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-jdk.html#install-jdk-samples">9.1. Installing OpenAM Client SDK Samples</a></span></dt><dt><span class="section"><a href="chap-jdk.html#about-jdk">9.2. About the OpenAM Java SDK</a></span></dt></dl></div><p>This chapter introduces OpenAM Java SDK. OpenAM Java SDK is delivered
+ with the full version of OpenAM,
+ <code class="filename">OpenAM-12.0.0.zip</code>.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="install-jdk-samples"></a>9.1.&nbsp;Installing OpenAM Client SDK Samples</h2></div></div></div><a class="indexterm" name="d0e7871"></a><p>The full OpenAM download,
+  <code class="filename">OpenAM-12.0.0.zip</code>, contains the Java Client
+  SDK library, <code class="filename">ClientSDK-12.0.0.jar</code>, as well as
+  samples for use on the command line in
+  <code class="filename">ExampleClientSDK-CLI-12.0.0.zip</code>, and samples in a
+  web application, <code class="filename">ExampleClientSDK-WAR-12.0.0.war</code>.
+  The <a class="link" href="http://docs.forgerock.org/en/openam/12.0.0/apidocs/" target="_blank"><em class="citetitle">OpenAM Java
+  SDK API Specification</em></a> provides a reference to the public
+  APIs.</p><div class="procedure"><a name="deploy-client-sdk-war"></a><div class="procedure-title">Procedure&nbsp;9.1.&nbsp;To Deploy the Sample Web Application</div><p>The sample web application deploys in your container to show you
+   the client SDK samples in action.</p><ol class="procedure" type="1"><li class="step"><p>Deploy the .war in your Java web application container such as
+    Apache Tomcat or JBoss.</p><div class="screen"><pre>
+$ <strong>cp ExampleClientSDK-WAR-12.0.0.war /path/to/tomcat/webapps/client.war</strong>
+    </pre></div></li><li class="step"><p>
+     If you have run this procedure before, make sure to deploy a fresh
+     copy of the .war file to a different location, such as
+     <code class="filename">/path/to/tomcat/webapps/client1.war</code>
+    </p></li><li class="step"><p>Browse to the location where you deployed the client, and configure
+    the application to access OpenAM using the application user name,
+    <code class="literal">UrlAccessAgent</code>, and password configured when you set up
+    OpenAM.</p><div class="mediaobject" align="center"><a name="figure-config-client-sdk-war"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/config-client-sdk-war.png" align="middle" height="360" alt="Sample web app configuration screen"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-config-client-sdk-war.html" target="longdesc">D</a>]</span></div></div><div class="variablelist"><p>Use the following hints to complete the configuration.</p><dl class="variablelist"><dt><span class="term">Server Protocol</span></dt><dd><p>Protocol to access OpenAM (<code class="literal">http</code> or
+       <code class="literal">https</code>)</p></dd><dt><span class="term">Server Host</span></dt><dd><p>Fully qualified domain name for OpenAM, such as
+       <code class="literal">openam.example.com</code></p></dd><dt><span class="term">Server Port</span></dt><dd><p>OpenAM port number such as 8080 or 8443</p></dd><dt><span class="term">Server Deployment URI</span></dt><dd><p>URI entry point to OpenAM such as <code class="literal">/openam</code></p></dd><dt><span class="term">Debug directory</span></dt><dd><p>Where to write the debug messages for the client samples</p></dd><dt><span class="term">Application user name</span></dt><dd><p>An user agent configured to access OpenAM, such as
+       <code class="literal">UrlAccessAgent</code> set up when OpenAM was installed</p></dd><dt><span class="term">Application user password</span></dt><dd><p>The user agent password</p></dd></dl></div><p>The sample client writes configuration information under
+    <code class="filename">$HOME/OpenAMClient/</code>, where $HOME is that of the user
+    running the web application container.</p></li><li class="step"><p>Verify that you have properly configured the sample web application.</p><ol type="a" class="substeps"><li class="step"><p>In another browser tab page of the same browser instance, login to
+      OpenAM as the OpenAM Administrator, <code class="literal">amadmin</code>.</p><p>This signs you into OpenAM, storing the cookie in your browser.</p></li><li class="step"><p>On the Samples tab page, click the link under Single Sign On Token
+      Verification Servlet.</p><p>If the sample web application is properly configured, you should
+      see something like the following text in your browser.</p><pre class="brush: plain;">SSOToken host name: 127.0.0.1
+SSOToken Principal name: id=amadmin,ou=user,dc=openam,dc=forgerock,dc=org
+Authentication type used: DataStore
+IPAddress of the host: 127.0.0.1
+SSO Token validation test succeeded
+The token id is AQIC5...CMDEAAlNLABQtODY0Mjc5MDUwNDQzOTA2MzYxNg..*
+...
+User Attributes: {... givenName=[amAdmin], ...roles=[Top-level Admin Role], ...}</pre></li></ol></li></ol></div><div class="procedure"><a name="build-cli-samples"></a><div class="procedure-title">Procedure&nbsp;9.2.&nbsp;To Build the Command-Line Sample Applications</div><p>Follow these steps to set up the command-line examples.</p><ol class="procedure" type="1"><li class="step"><p>Unpack the sample applications and related libraries.</p><div class="screen"><pre>
+$ <strong>mkdir sdk &amp;&amp; cd sdk</strong>
+$ <strong>unzip ~/Downloads/ExampleClientSDK-CLI-12.0.0.zip</strong>
+    </pre></div></li><li class="step"><p>Configure the samples to access OpenAM.</p><div class="screen"><pre>
+$ <strong>sh scripts/setup.sh</strong>
+<em>Debug directory (make sure this directory exists):</em> <strong>/Users/me/openam/openam/debug</strong>
+<em>Application user (e.g. URLAccessAgent) password:</em> <strong>secret12</strong>
+<em>Protocol of the server:</em> <strong>http</strong>
+<em>Host name of the server:</em> <strong>openam.example.com</strong>
+<em>Port of the server:</em> <strong>8080</strong>
+<em>Server's deployment URI:</em> <strong>openam</strong>
+<em>Naming URL (hit enter to accept default value,
+ http://openam.example.com:8080/openam/namingservice):</em>
+$</pre></div></li><li class="step"><p>Verify that you have properly configured the samples.</p><div class="screen"><pre>
+$ <strong>sh scripts/Login.sh</strong>
+<em>Realm (e.g. /):</em> <strong>/</strong>
+<em>Login module name (e.g. DataStore or LDAP):</em> <strong>DataStore</strong>
+<em>Login locale (e.g. en_US or fr_FR):</em> <strong>fr_FR</strong>
+<em>DataStore: Obtained login context</em>
+<em>Nom d'utilisateur&nbsp;:</em><strong>demo</strong>
+<em>Mot de passe&nbsp;:</em><strong>changeit</strong>
+<em>Login succeeded.
+Logged Out!!</em></pre></div></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="about-jdk"></a>9.2.&nbsp;About the OpenAM Java SDK</h2></div></div></div><div class="itemizedlist"><p>After installing the Java SDK command line samples, you see the
+   following content.</p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="filename">lib/</code>: SDK and other libraries</p></li><li class="listitem"><p><code class="filename">resources/</code>: properties configuration files for
+    the SDK and samples</p></li><li class="listitem"><p><code class="filename">scripts/</code>: scripts to run the samples</p></li><li class="listitem"><p><code class="filename">source/</code>: sample code</p></li></ul></div><p>After deploying the Java SDK web application archive, you find the
+  following content where the .war file was unpacked.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="filename">META-INF/</code>: build information</p></li><li class="listitem"><p><code class="filename">WEB-INF/</code>: sample classes and libraries</p></li><li class="listitem"><p><code class="filename">console/</code>: images for sample UI</p></li><li class="listitem"><p><code class="filename">index.html</code>: sample home page</p></li><li class="listitem"><p><code class="filename">keystore.jks</code>: OpenAM test certificate, alias:
+    <code class="literal">test</code>, key store password: <code class="literal">changeit</code></p></li><li class="listitem"><p><code class="filename">policy/</code>: Policy Evaluator Client Sample page</p></li><li class="listitem"><p><code class="filename">saml2/</code>: Secure Attribute Exchange example</p></li><li class="listitem"><p><code class="filename">sample.css</code>: sample styles</p></li><li class="listitem"><p><code class="filename">sm/</code>: Service Configuration sample</p></li><li class="listitem"><p><code class="filename">um/</code>: User Profile sample</p></li></ul></div><div class="itemizedlist"><a name="jdk-shutdown-hooks"></a><div class="itemizedlist-title">Registering Your Java SDK Client to Shut Down Gracefully</div><p>When writing a client using the OpenAM Java SDK, make sure you register
+    hooks to make sure the application can be shut down gracefully. How you
+    register for shutdown depends on the type of application.</p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>For Java EE applications, make sure the OpenAM client SDK shuts down
+    successfully by including the following context listener in your
+    application's <code class="filename">web.xml</code> file.</p><pre class="brush: xml;">&lt;listener&gt;
+ &lt;listener-class&gt;
+  com.sun.identity.common.ShutdownServletContextListener
+ &lt;/listener-class&gt;
+&lt;/listener&gt;</pre></li><li class="listitem"><p>For standalone applications, set the following JVM property.</p><pre class="literallayout">-Dopenam.runtime.shutdown.hook.enabled=true</pre></li></ul></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-rest-sts.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-authentication.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;8.&nbsp;RESTful Secure Token Service&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;10.&nbsp;Authenticating Using OpenAM Java SDK</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-14']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>
