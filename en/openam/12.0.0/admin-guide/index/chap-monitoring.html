@@ -5,7 +5,7 @@
    <title>Chapter&nbsp;20.&nbsp;Monitoring OpenAM Services</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenAM Administration Guide"><link rel="up" href="index.html" title="OpenAM Administration Guide"><link rel="prev" href="chap-certs-keystores.html" title="Chapter&nbsp;19.&nbsp;Managing Certificates"><link rel="next" href="chap-tuning.html" title="Chapter&nbsp;21.&nbsp;Tuning OpenAM"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
 </head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;20.&nbsp;Monitoring OpenAM Services</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-certs-keystores.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-tuning.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-monitoring"></a>Chapter&nbsp;20.&nbsp;Monitoring OpenAM Services</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-monitoring.html#monitoring-interfaces">20.1. Monitoring Interfaces</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#cts-monitoring">20.2. Monitoring CTS Tokens</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#is-openam-alive">20.3. Is OpenAM Running?</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#debug-logging">20.4. Debug Logging</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#session-mgmt">20.5. Session Management</a></span></dt></dl></div><p>This chapter covers how to monitor OpenAM services to ensure
- appropriate performance and service availability.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="monitoring-interfaces"></a>20.1.&nbsp;Monitoring Interfaces</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-monitoring.html#monitoring-web-pages">20.1.1. Web Based Monitoring</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#monitoring-jmx">20.1.2. JMX Monitoring</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#monitoring-snmp">20.1.3. SNMP Monitoring</a></span></dt></dl></div><a class="indexterm" name="d0e32034"></a><p>OpenAM lets you monitor OpenAM over protocol through web pages,
+ appropriate performance and service availability.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="monitoring-interfaces"></a>20.1.&nbsp;Monitoring Interfaces</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-monitoring.html#monitoring-web-pages">20.1.1. Web Based Monitoring</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#monitoring-jmx">20.1.2. JMX Monitoring</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#monitoring-snmp">20.1.3. SNMP Monitoring</a></span></dt></dl></div><a class="indexterm" name="d0e32036"></a><p>OpenAM lets you monitor OpenAM over protocol through web pages,
   Java Management Extensions (JMX), or Simple Network Management Protocol
   (SNMP). The services are based on JMX.</p><p>To configure monitoring services, login to OpenAM console as OpenAM
   administrator, and browse to Configuration &gt; System &gt; Monitoring.
@@ -41,7 +41,7 @@ $ <strong>cat openam/openam/opensso_mon_auth</strong>
 <em>demo AQICvSe+tXEg8TUUT8ekzHb8IRzVSvm1Lc2u</em>
    </pre></div><p>You can encrypt a new password using the <span class="command"><strong>ampassword</strong></span>
    command. After changing the authentication file, you must restart OpenAM
-   for the changes to take effect.</p><div class="mediaobject" align="center"><a name="figure-web-based-monitoring"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/web-based-monitoring.png" align="middle" height="360" alt="OpenAM MBeans in a browser"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-web-based-monitoring.html" target="longdesc">D</a>]</span></div></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="monitoring-jmx"></a>20.1.2.&nbsp;JMX Monitoring</h3></div></div></div><a class="indexterm" name="d0e32109"></a><p>You can configure OpenAM to allow you to listen for Java Management
+   for the changes to take effect.</p><div class="mediaobject" align="center"><a name="figure-web-based-monitoring"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/web-based-monitoring.png" align="middle" height="360" alt="OpenAM MBeans in a browser"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-web-based-monitoring.html" target="longdesc">D</a>]</span></div></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="monitoring-jmx"></a>20.1.2.&nbsp;JMX Monitoring</h3></div></div></div><a class="indexterm" name="d0e32111"></a><p>You can configure OpenAM to allow you to listen for Java Management
    eXtension (JMX) clients, by default on port 9999. Either use the OpenAM
    console page under Configuration &gt; System &gt; Monitoring and make sure
    both Monitoring Status and Monitoring RMI interface status are both set to
@@ -68,7 +68,7 @@ $ <strong>jconsole service:jmx:rmi:///jndi/rmi://localhost:9999/server &amp;</st
    some Operations and CTS tables cannot be properly serialized from OpenAM to JMX.
    As a result, only a portion of OpenAM's monitoring information is available through JMX.
    SNMP is a preferred monitoring option over JMX and exposes all OpenAM tables,
-   especially for CTS, with no serialization limitations.</p></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="monitoring-snmp"></a>20.1.3.&nbsp;SNMP Monitoring</h3></div></div></div><a class="indexterm" name="d0e32164"></a><p>You can configure OpenAM to allow you to listen on port 8085 for SNMP
+   especially for CTS, with no serialization limitations.</p></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="monitoring-snmp"></a>20.1.3.&nbsp;SNMP Monitoring</h3></div></div></div><a class="indexterm" name="d0e32166"></a><p>You can configure OpenAM to allow you to listen on port 8085 for SNMP
    monitoring. Either use the console, or use the <span class="command"><strong>ssoadm</strong></span>
    command.</p><div class="screen"><pre>
 $ <strong>ssoadm \
@@ -78,7 +78,7 @@ $ <strong>ssoadm \
  --adminid amadmin \
  --password-file /tmp/pwd.txt \
  --attributevalues iplanet-am-monitoring-snmp-enabled=true</strong>
-   </pre></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="cts-monitoring"></a>20.2.&nbsp;Monitoring CTS Tokens</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-monitoring.html#cts-monitor-commands">20.2.1. CTS SNMP Monitoring</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#snmp-policy-evaluation">20.2.2. SNMP Monitoring For Policy Evaluation</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#snmp-sessions">20.2.3. SNMP Monitoring For Sessions</a></span></dt></dl></div><a class="indexterm" name="d0e32182"></a><p>
+   </pre></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="cts-monitoring"></a>20.2.&nbsp;Monitoring CTS Tokens</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-monitoring.html#cts-monitor-commands">20.2.1. CTS SNMP Monitoring</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#snmp-policy-evaluation">20.2.2. SNMP Monitoring For Policy Evaluation</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#snmp-sessions">20.2.3. SNMP Monitoring For Sessions</a></span></dt></dl></div><a class="indexterm" name="d0e32184"></a><p>
    The <a href="../../install-guide/index/chap-cts.html" class="link">OpenAM Core
    Token Service</a> (CTS) provides persistent and highly available
    token storage for a several components within OpenAM, including
@@ -139,7 +139,7 @@ $ <strong>ssoadm \
     As defined in <a class="link" href="http://tools.ietf.org/search/rfc2578#section-7.1.10" target="_blank">
     <em class="citetitle">RFC 2578</em>,</a> an OID so configured has a maximum
     value of <code class="literal">2^64 - 1</code>.
-   </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="snmp-policy-evaluation"></a>20.2.2.&nbsp;SNMP Monitoring For Policy Evaluation</h3></div></div></div><a class="indexterm" name="d0e32273"></a><p>
+   </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="snmp-policy-evaluation"></a>20.2.2.&nbsp;SNMP Monitoring For Policy Evaluation</h3></div></div></div><a class="indexterm" name="d0e32275"></a><p>
     You can monitor policy evaluation performance over SNMP.
     OpenAM records statistics for up to
     a number of recent policy evaluation requests.
@@ -322,7 +322,7 @@ $ <strong>ssoadm \
         <p>
          <code class="literal">SnmpAdminString</code>
         </p>
-       </td></tr></tbody></table></div></div><br class="table-break"></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="snmp-sessions"></a>20.2.3.&nbsp;SNMP Monitoring For Sessions</h3></div></div></div><a class="indexterm" name="d0e32611"></a><p>
+       </td></tr></tbody></table></div></div><br class="table-break"></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="snmp-sessions"></a>20.2.3.&nbsp;SNMP Monitoring For Sessions</h3></div></div></div><a class="indexterm" name="d0e32613"></a><p>
     You can monitor session statistics over SNMP.
     OpenAM records statistics for up to
     a configurable number of recent sessions.
@@ -531,18 +531,18 @@ $ <strong>ssoadm \
         <p>
          <code class="literal">Counter64</code>
         </p>
-       </td></tr></tbody></table></div></div><br class="table-break"></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="is-openam-alive"></a>20.3.&nbsp;Is OpenAM Running?</h2></div></div></div><a class="indexterm" name="d0e32993"></a><p>You can check over HTTP whether OpenAM is up, using
+       </td></tr></tbody></table></div></div><br class="table-break"></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="is-openam-alive"></a>20.3.&nbsp;Is OpenAM Running?</h2></div></div></div><a class="indexterm" name="d0e32995"></a><p>You can check over HTTP whether OpenAM is up, using
   <code class="filename">isAlive.jsp</code>. Point your application to the file
   under the OpenAM URL, such as
   <code class="literal">http://openam.example.com:8080/openam/isAlive.jsp</code>.</p><p>If you get a success code (with <code class="literal">Server is ALIVE:</code> in
-  the body of the page returned), then OpenAM is in operation.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="debug-logging"></a>20.4.&nbsp;Debug Logging</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-monitoring.html#log-debug-levels">20.4.1. Setting Debug Logging Levels</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#log-debug-single-file">20.4.2. Debug Logging to a Single File</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#log-debug-selective-capture">20.4.3. Debug Logging by Service</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#log-rotate-debug">20.4.4. Rotating Debug Logs</a></span></dt></dl></div><a class="indexterm" name="d0e33014"></a><p>
+  the body of the page returned), then OpenAM is in operation.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="debug-logging"></a>20.4.&nbsp;Debug Logging</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-monitoring.html#log-debug-levels">20.4.1. Setting Debug Logging Levels</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#log-debug-single-file">20.4.2. Debug Logging to a Single File</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#log-debug-selective-capture">20.4.3. Debug Logging by Service</a></span></dt><dt><span class="section"><a href="chap-monitoring.html#log-rotate-debug">20.4.4. Rotating Debug Logs</a></span></dt></dl></div><a class="indexterm" name="d0e33016"></a><p>
    OpenAM services capture a variety of information in debug logs.
    Unlike audit log records, debug log records are unstructured.
    Debug logs contain a variety of types of information that is useful
    when troubleshooting OpenAM, including stack traces.
    The level of debug log record output is configurable.
    Debug log records are always written to flat files.
-  </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="log-debug-levels"></a>20.4.1.&nbsp;Setting Debug Logging Levels</h3></div></div></div><a class="indexterm" name="d0e33024"></a><p>
+  </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="log-debug-levels"></a>20.4.1.&nbsp;Setting Debug Logging Levels</h3></div></div></div><a class="indexterm" name="d0e33026"></a><p>
     To adjust the debug level while OpenAM is running, login to the OpenAM
     console as OpenAM administrator, and browse to Configuration &gt; Servers
     and Sites &gt; <em class="replaceable"><code>Server Name</code></em> &gt; General, and then
@@ -554,14 +554,14 @@ $ <strong>ssoadm \
     Setting the debug log level to Message dumps detailed trace messages. Unless
     told to do so by qualified support personnel, do not use Warning and Message
     levels in production.
-   </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="log-debug-single-file"></a>20.4.2.&nbsp;Debug Logging to a Single File</h3></div></div></div><a class="indexterm" name="d0e33039"></a><p>
+   </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="log-debug-single-file"></a>20.4.2.&nbsp;Debug Logging to a Single File</h3></div></div></div><a class="indexterm" name="d0e33041"></a><p>
     During development, you might find it useful to log all debug messages
     to a single file. In order to do so, set Merge Debug Files to
     <code class="literal">on</code>.
    </p><p>
     After changing this setting, restart OpenAM or the container in which
     it runs for the change to take effect.
-   </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="log-debug-selective-capture"></a>20.4.3.&nbsp;Debug Logging by Service</h3></div></div></div><a class="indexterm" name="d0e33054"></a><p>OpenAM lets you capture debug log messages selectively for a specific
+   </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="log-debug-selective-capture"></a>20.4.3.&nbsp;Debug Logging by Service</h3></div></div></div><a class="indexterm" name="d0e33056"></a><p>OpenAM lets you capture debug log messages selectively for a specific
    service. This can be useful when you must turn on debugging in a production
    system where you want to avoid excessive logging, but must gather messages
    when you reproduce a problem.</p><div class="orderedlist"><p>Perform these steps to capture debug messages for a specific
@@ -570,7 +570,7 @@ $ <strong>ssoadm \
      <code class="literal">http://openam.example.com:8080/openam/Debug.jsp</code>.</p><p>No links to this page are provided in the console.</p></li><li class="listitem"><p>Select the service to debug and also the level required given the
      hints provided in the <code class="filename">Debug.jsp</code> page.</p><p>The change takes effect immediately.</p></li><li class="listitem"><p>Promptly reproduce the problem you are investigating.</p></li><li class="listitem"><p>After reproducing the problem, immediately return to the
      <code class="filename">Debug.jsp</code> page, and revert to normal log levels
-     to avoid filling up the disk where debug logs are stored.</p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="log-rotate-debug"></a>20.4.4.&nbsp;Rotating Debug Logs</h3></div></div></div><a class="indexterm" name="d0e33101"></a><p>By default OpenAM does not rotate debug logs. To rotate debug logs,
+     to avoid filling up the disk where debug logs are stored.</p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="log-rotate-debug"></a>20.4.4.&nbsp;Rotating Debug Logs</h3></div></div></div><a class="indexterm" name="d0e33103"></a><p>By default OpenAM does not rotate debug logs. To rotate debug logs,
    edit <code class="filename">WEB-INF/classes/debugconfig.properties</code> where
    OpenAM is deployed.</p><div class="variablelist"><p>The <code class="filename">debugconfig.properties</code> file includes
     the following properties.</p><dl class="variablelist"><dt><span class="term"><code class="literal">org.forgerock.openam.debug.prefix</code></span></dt><dd><p>This property specifies the debug log file prefix applied when
@@ -582,7 +582,7 @@ $ <strong>ssoadm \
       log rotations. Set this to a value greater than zero to enable debug
       log rotation.</p></dd></dl></div><p>After you edit the <code class="filename">debugconfig.properties</code> file,
    you must restart OpenAM or the web container where it runs for the changes
-   to take effect.</p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="session-mgmt"></a>20.5.&nbsp;Session Management</h2></div></div></div><a class="indexterm" name="d0e33152"></a><p>OpenAM console lets the administrator view and manage current
+   to take effect.</p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="session-mgmt"></a>20.5.&nbsp;Session Management</h2></div></div></div><a class="indexterm" name="d0e33154"></a><p>OpenAM console lets the administrator view and manage current
   user sessions under the Sessions tab page.</p><div class="mediaobject" align="center"><a name="figure-session-management"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/session-management.png" align="middle" height="360" alt="Session management tab page"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-session-management.html" target="longdesc">D</a>]</span></div></div><p>To end a user session manually, select the user's session, and then
   click the Invalidate Session button. As a result, the user has to
   authenticate again.</p><div class="note"><h3 class="title">Note</h3><p>Deleting a user does not automatically remove any of the user's sessions.

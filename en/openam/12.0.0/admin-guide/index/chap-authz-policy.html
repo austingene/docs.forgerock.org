@@ -246,13 +246,14 @@
                Application icon.</p></li><li class="step"><p>To discard any changes and return to the previous page,
               click Cancel.</p></li></ol></li><li class="step"><p>Provide a name for the application, and optionally a
              description, and then click Next.
-            </p>
-
-         
-           Failed to include para-special-characters
-          
-
-        </li><li class="step"><p>Define resource patterns that policies within this
+            </p><p>
+             Do not use special characters within policy, application or referral names
+             (for example, "my+referral") using the Policy Editor or REST endpoints as
+             OpenAM returns a 400 Bad Request error.
+             The special characters are: double quotes ("), plus sign (+), comma (,),
+             less than (&lt;), equals (=), greater than (&gt;), backslash (\), and
+             null (\u0000).
+            </p></li><li class="step"><p>Define resource patterns that policies within this
       application use as the basis for their rules, by following the steps
       below:</p><ol type="a" class="substeps"><li class="step"><p>In the Available patterns section, click
              the row containing an asterisk (<code class="literal">*</code>) to move the
@@ -283,20 +284,20 @@
      For details see the procedure
      <a href="../../admin-guide/index/chap-authz-policy.html#create-referral-xui" class="link"><em class="citetitle">To Enable Referrals in the Policy Editor</em></a>.
     </p></li></ul></div></div><div lang="en" class="section"><div class="titlepage"><div><div><h3 class="title"><a name="configure-policies-with-console"></a>3.3.2.&nbsp;Configuring Policies by Using the OpenAM Console</h3></div></div></div><p>This section describes the process of configuring policies to
-     protect a web site or web application by using the OpenAM console.</p><div class="procedure"><a name="create-policy-xui"></a><div class="procedure-title">Procedure&nbsp;3.2.&nbsp;To Configure a Policy by Using the OpenAM Console</div><a class="indexterm" name="d0e7718"></a><a class="indexterm" name="d0e7723"></a><ol class="procedure" type="1"><li class="step"><p>In the OpenAM console, select Access Control &gt; <em class="replaceable"><code>Realm
+     protect a web site or web application by using the OpenAM console.</p><div class="procedure"><a name="create-policy-xui"></a><div class="procedure-title">Procedure&nbsp;3.2.&nbsp;To Configure a Policy by Using the OpenAM Console</div><a class="indexterm" name="d0e7719"></a><a class="indexterm" name="d0e7724"></a><ol class="procedure" type="1"><li class="step"><p>In the OpenAM console, select Access Control &gt; <em class="replaceable"><code>Realm
     Name</code></em> &gt; Policies, and then click the name of the
     application to configure a policy in.</p><ol type="a" class="substeps"><li class="step"><p>To create a new policy, click Add New Policy.</p></li><li class="step"><p>To modify an existing policy, click the name of the
     policy.</p></li><li class="step"><p>To discard any changes and return to the previous page,
     click Cancel.</p></li></ol></li><li class="step"><p>Provide a name for the policy, and optionally a
     description, and then click Next.
-   </p><p lang="en">
-  Do not use special characters within policy, application or referral names
-  (for example, "my+referral") using the Policy Editor or REST endpoints as
-  OpenAM returns a 400 Bad Request error.
-  The special characters are: double quotes ("), plus sign (+), comma (,),
-  less than (&lt;), equals (=), greater than (&gt;), backslash (\), and
-  null (\u0000).
- </p></li><li class="step"><p>To define resources that the policy applies to,
+   </p><p>
+    Do not use special characters within policy, application or referral names
+    (for example, "my+referral") using the Policy Editor or REST endpoints as
+    OpenAM returns a 400 Bad Request error.
+    The special characters are: double quotes ("), plus sign (+), comma (,),
+    less than (&lt;), equals (=), greater than (&gt;), backslash (\), and
+    null (\u0000).
+   </p></li><li class="step"><p>To define resources that the policy applies to,
     follow the steps below:</p><ol type="a" class="substeps"><li class="step"><p>In the Available patterns section, click the
       row containing the pattern to use as the template for a resource pattern
       to move it to the Create your resources section.</p><div class="mediaobject" align="center"><a name="figure-resource-patterns-policies-step1"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/resource-pattern-step1.png" align="middle" height="360" alt="Modify the resource patterns to specify the resources the policy applies to."></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-resource-patterns-policies-step1.html" target="longdesc">D</a>]</span></div></div></li><li class="step"><p>Optionally, in the Create your resources
@@ -460,14 +461,14 @@
     Name</code></em> &gt; Policies, and then click the name of the
     application to create a referral in.</p><ol type="a" class="substeps"><li class="step"><p>To create a new referral, click Add New Referral.</p></li><li class="step"><p>To modify an existing referral, click the name of the
      referral.</p></li><li class="step"><p>To discard any changes and return to the previous page,
-     click Cancel.</p></li></ol></li><li class="step"><p>Provide a name for the referral, and then click Next.</p><p lang="en">
-  Do not use special characters within policy, application or referral names
-  (for example, "my+referral") using the Policy Editor or REST endpoints as
-  OpenAM returns a 400 Bad Request error.
-  The special characters are: double quotes ("), plus sign (+), comma (,),
-  less than (&lt;), equals (=), greater than (&gt;), backslash (\), and
-  null (\u0000).
- </p></li><li class="step"><p>To define resources that the referral applies to,
+     click Cancel.</p></li></ol></li><li class="step"><p>Provide a name for the referral, and then click Next.</p><p>
+    Do not use special characters within policy, application or referral names
+    (for example, "my+referral") using the Policy Editor or REST endpoints as
+    OpenAM returns a 400 Bad Request error.
+    The special characters are: double quotes ("), plus sign (+), comma (,),
+    less than (&lt;), equals (=), greater than (&gt;), backslash (\), and
+    null (\u0000).
+   </p></li><li class="step"><p>To define resources that the referral applies to,
     follow the steps below:</p><ol type="a" class="substeps"><li class="step"><p>In the Available patterns section, click the
       row containing the pattern to use as the template for a resource pattern
       to move it to the Create your resources section.</p><div class="mediaobject" align="center"><a name="figure-resource-patterns-referrals-step1"></a><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/resource-pattern-step1.png" align="middle" height="360" alt="Modify the resource patterns to specify the resources the policy applies to."></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="figure-resource-patterns-referrals-step1.html" target="longdesc">D</a>]</span></div></div></li><li class="step"><p>Optionally, in the Create your resources section, replace the
@@ -572,7 +573,7 @@
    The delimiter, wildcards and case sensitivity are configurable.
    To see examples of other configurations, browse in the OpenAM Console to
    Configuration &gt; Global &gt; Policy Configuration &gt; Resource Comparator.
-  </p></li></ul></div></div><div lang="en" class="section"><div class="titlepage"><div><div><h3 class="title"><a name="script-policy"></a>3.3.5.&nbsp;Importing and Exporting Policies</h3></div></div></div><a class="indexterm" name="d0e8539"></a><p>You can import and export policies to and from files.</p><p>You can use these files to backup policies, transfer policies between
+  </p></li></ul></div></div><div lang="en" class="section"><div class="titlepage"><div><div><h3 class="title"><a name="script-policy"></a>3.3.5.&nbsp;Importing and Exporting Policies</h3></div></div></div><a class="indexterm" name="d0e8538"></a><p>You can import and export policies to and from files.</p><p>You can use these files to backup policies, transfer policies between
   OpenAM instances, or store policy configuration in a version
   control system such as Git or Subversion.</p><p>The default, preferred format for importing and
   exporting OpenAM policies is <a class="link" href="http://docs.oasis-open.org/xacml/3.0/xacml-3.0-core-spec-os-en.html" target="_blank">
@@ -795,7 +796,7 @@ $ <strong>ssoadm \
  --xmlfile policy.xml</strong>
 
  <em>Policies were created under realm, /.</em>
-</pre></div></li></ul></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="delegate-policy"></a>3.4.&nbsp;Delegating Policy Management</h2></div></div></div><a class="indexterm" name="d0e8661"></a><p>
+</pre></div></li></ul></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="delegate-policy"></a>3.4.&nbsp;Delegating Policy Management</h2></div></div></div><a class="indexterm" name="d0e8660"></a><p>
    To delegate policy management and other administrative tasks, use privileges.
    You set privileges in OpenAM console on the Privileges page for a realm.
   </p><p>
