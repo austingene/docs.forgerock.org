@@ -175,6 +175,38 @@
      <code class="literal">org.forgerock.openam.authentication.modules.common.mapping.AttributeMapper</code>
      and/or <code class="literal">org.forgerock.openam.authentication.modules.common.mapping.AccountProvider</code>
      as appropriate.
+    </p></li><li class="listitem"><p>
+     The XUI, now the default for end-user pages, handles DNS/realm alias
+     differently from the classic UI, which was the default in previous OpenAM
+     versions.
+     With the classic UI, the realm alias is specified both in the host name and
+     the URI path. With the XUI, the host name alone specifies the realm. The XUI
+     evaluates a realm specified in the path of the URL as a subrealm of the
+     realm specified by the host name alias.
+    </p><p>
+     For example, with the classic UI, you could authenticate to a realm,
+     <code class="literal">realm1</code> using the DNS alias
+     <code class="literal">realm1.example.com:8080</code>
+     and the realm query parameter, <code class="literal">realm=realm1</code>, as follows:
+    </p><pre class="brush: plain;">
+http://realm1.example.com:8080/openam/UI/Login?realm=realm1
+    </pre><p>
+     With XUI, you do not include a realm in the URI if it has already been
+     mapped as now any URI realm is additive and specifies a subrealm of the
+     DNS alias realm.
+     For example, using the following URL indicates that you are attempting
+     to authenticate to <code class="literal">/realm1/realm1</code> (that is, the sub-realm,
+     <code class="literal">realm1</code> under the realm, <code class="literal">realm1</code>).
+    </p><pre class="brush: plain;">
+http://realm1.example.com:8080/openam/XUI/#Login/realm1
+    </pre><p>
+     As another example, if you have a sub-realm called <code class="literal">test</code> under
+     <code class="literal">/realm1</code> and make a request to:
+    </p><pre class="brush: plain;">
+http://realm1.example.com:8080/openam/XUI/#Login/test
+    </pre><p>
+     The request authenticates to <code class="literal">/realm1/test</code>.
+     Note also that the use of URI realm is preferred over realm as a query parameter.
     </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="deprecated"></a>3.2.&nbsp;Deprecated Functionality</h2></div></div></div><p>The following functionality is deprecated in OpenAM
   12.0.0, and is likely to be removed in a future
   release.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
@@ -183,13 +215,13 @@
      Classic UI for end user pages is likely to be removed in a future release.
     </p></li><li class="listitem"><p>Older REST services relying on the following endpoints are
      deprecated.</p><table border="0" summary="Simple list" class="simplelist"><tr><td>/identity/attributes</td><td>/identity/read</td></tr><tr><td>/identity/authenticate</td><td>/identity/search</td></tr><tr><td>/identity/authorize</td><td>/identity/update</td></tr><tr><td>/identity/create</td><td>/ws/1/entitlement/decision</td></tr><tr><td>/identity/delete</td><td>/ws/1/entitlement/decisions</td></tr><tr><td>/identity/isTokenValid</td><td>/ws/1/entitlement/entitlement</td></tr><tr><td>/identity/logout</td><td>/ws/1/entitlement/entitlements</td></tr></table><p>The following table shows how legacy and newer endpoints
-     correspond.</p><div class="table"><a name="d0e1320"></a><div class="table-title">Table&nbsp;3.2.&nbsp;REST Endpoints</div><div class="table-contents"><table summary="REST Endpoints" width="100%" border="0"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th><a href="../../admin-guide/index/appendix-interface-stability.html#interface-stability" class="link">Deprecated</a> URIs</th><th>Newer <a href="../../admin-guide/index/appendix-interface-stability.html#interface-stability" class="link">Evolving</a> URIs</th></tr></thead><tbody><tr><td>/identity/attributes</td><td>/json/users</td></tr><tr><td>/identity/authenticate</td><td>/json/authenticate</td></tr><tr><td>/identity/authorize</td><td>/json/policies?_action=evaluate, /json/policies?_evaluateTree</td></tr><tr><td>/identity/create, /identity/delete, /identity/read,
+     correspond.</p><div class="table"><a name="d0e1364"></a><div class="table-title">Table&nbsp;3.2.&nbsp;REST Endpoints</div><div class="table-contents"><table summary="REST Endpoints" width="100%" border="0"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th><a href="../../admin-guide/index/appendix-interface-stability.html#interface-stability" class="link">Deprecated</a> URIs</th><th>Newer <a href="../../admin-guide/index/appendix-interface-stability.html#interface-stability" class="link">Evolving</a> URIs</th></tr></thead><tbody><tr><td>/identity/attributes</td><td>/json/users</td></tr><tr><td>/identity/authenticate</td><td>/json/authenticate</td></tr><tr><td>/identity/authorize</td><td>/json/policies?_action=evaluate, /json/policies?_evaluateTree</td></tr><tr><td>/identity/create, /identity/delete, /identity/read,
          /identity/search, /identity/update</td><td>/json/agents, /json/groups, /json/realms, /json/users</td></tr><tr><td>/identity/isTokenValid</td><td>/json/sessions/<em class="replaceable"><code>tokenId</code></em>?_action=validate</td></tr><tr><td>/identity/logout</td><td>/json/sessions/?_action=logout</td></tr><tr><td>/ws/1/entitlement/decision, /ws/1/entitlement/decisions,
          /ws/1/entitlement/entitlement, /ws/1/entitlement/entitlements</td><td>/json/policies?_action=evaluate, /json/policies?_evaluateTree</td></tr><tr><td>N/A</td><td>/json/applications</td></tr><tr><td>N/A</td><td>/json/applicationtypes</td></tr><tr><td>N/A</td><td>/json/conditiontypes</td></tr><tr><td>N/A</td><td>/json/dashboard</td></tr><tr><td>N/A</td><td>/json/decisionscombiners</td></tr><tr><td>N/A</td><td>/json/policies</td></tr><tr><td>N/A</td><td>/json/referrals</td></tr><tr><td>N/A</td><td>/json/serverinfo</td></tr><tr><td>N/A</td><td>/json/subjectattributes</td></tr><tr><td>N/A</td><td>/json/subjecttypes</td></tr><tr><td>N/A</td><td>/xacml/policies</td></tr></tbody></table></div></div><br class="table-break"><p>Find examples in the <em class="citetitle">Developer Guide</em> chapter <a href="../../dev-guide/index/chap-rest.html" class="link"><em class="citetitle">Using RESTful Web Services</em></a>.</p><p>Support for the older REST services is likely to be removed in a
      future release in favor of the newer REST services. Older REST services
      will be removed only after replacement REST services are introduced.</p></li><li class="listitem"><p>With the implementation of XACML 3.0 support when importing and
     exporting policies the following <code class="option">ssoadm</code> commands
-     have been replaced:</p><div class="table"><a name="d0e1450"></a><div class="table-title">Table&nbsp;3.3.&nbsp;Policy Import and Export with ssoadm</div><div class="table-contents"><table summary="Policy Import and Export with ssoadm" border="0"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th><a href="../../admin-guide/index/appendix-interface-stability.html#interface-stability" class="link">
+     have been replaced:</p><div class="table"><a name="d0e1494"></a><div class="table-title">Table&nbsp;3.3.&nbsp;Policy Import and Export with ssoadm</div><div class="table-contents"><table summary="Policy Import and Export with ssoadm" border="0"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th><a href="../../admin-guide/index/appendix-interface-stability.html#interface-stability" class="link">
        Deprecated</a> Command</th><th>Newer <a href="../../admin-guide/index/appendix-interface-stability.html#interface-stability" class="link">
        Evolving</a> Command</th></tr></thead><tbody><tr><td><code class="literal">create-policies</code></td><td><code class="literal">create-xacml</code></td></tr><tr><td><code class="literal">delete-policies</code></td><td><code class="literal">delete-xacml</code></td></tr><tr><td><code class="literal">list-policies</code></td><td><code class="literal">list-xacml</code></td></tr><tr><td><code class="literal">update-policies</code></td><td><code class="literal">create-xacml</code></td></tr></tbody></table></div></div><br class="table-break"><p>For more information, see the <em class="citetitle">OpenAM
      Reference</em> section <a href="../../reference/index/ssoadm-1.html" class="link">
