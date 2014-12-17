@@ -110,103 +110,131 @@ $ <strong>curl https://openam.example.com:8443/openam/oauth2/tokeninfo\
 $ <strong>curl \
  --request POST \
  --user "myClientID:password" \
- --data "grant_type=password&amp;username=demo&amp;password=changeit&amp;scope=cn%20mail" \
+ --data "grant_type=password&amp;username=demo&amp;password=changeit&amp;scope=cn" \
  https://openam.example.com:8443/openam/oauth2/access_token</strong>
 <em>{
-    "expires_in": 599,
+    "scope": "cn",
+    "expires_in": 60,
     "token_type": "Bearer",
-    "refresh_token": "f838e7d4-7e84-4743-af7c-9a9c42c2969e",
-    "access_token": "9c6a48fc-44b1-4a0c-b4f0-672fba468b0f"
+    "access_token": "f5fb4833-ba3d-41c8-bba4-833b49c3fe2c"
 }</em>
 
 $ <strong>curl \
  --header "iplanetDirectoryPro: AQIC5wM2LY4Sfcxs...EwNDU2NjE0*" \
  https://openam.example.com:8443/openam/frrest/oauth2/token/9c6a48fc...fba468b0f</strong>
 <em>{
-    "scope": [
-        "mail",
-        "cn"
+    "expireTime": [
+        "1418818601396"
     ],
-    "type": [
+    "tokenName": [
         "access_token"
     ],
-    "username": [
-        "demo"
+    "scope": [
+        "cn"
     ],
+    "grant_type": [
+        "password"
+    ],
+    "clientID": [
+        "myClientID"
+    ],
+    "parent": [],
+    "id": [
+        "f5fb4833-ba3d-41c8-bba4-833b49c3fe2c"
+    ],
+    "tokenType": [
+        "Bearer"
+    ],
+    "redirectURI": [],
+    "nonce": [],
     "realm": [
         "/"
     ],
-    "id": [
-        "9c6a48fc-44b1-4a0c-b4f0-672fba468b0f"
-    ],
-    "parent": [
-        "f838e7d4-7e84-4743-af7c-9a9c42c2969e"
-    ],
-    "expiry_time": [
-        "1355741494888"
-    ],
-    "client_id": [
-        "myClientID"
+    "userName": [
+        "demo"
     ]
 }</em>
-   </pre></div><p>To list tokens, perform an HTTP GET on
-   <code class="literal">/frrest/oauth2/token/?_query_id=<em class="replaceable"><code>conditions</code></em></code>,
-   where <em class="replaceable"><code>conditions</code></em> is a comma-separated list of
-   <code class="literal"><em class="replaceable"><code>field</code></em>=<em class="replaceable"><code>value</code></em></code>
-   conditions. The <em class="replaceable"><code>field</code></em>s are taken from the fields
-   returned in the token object through this endpoint.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">"expiry_time"</code></span></dt><dd><p>Token expiration time in milliseconds since 00:00:00 UTC, January 1,
-      1970.</p></dd><dt><span class="term"><code class="literal">"type"</code></span></dt><dd><p>Either <code class="literal">"access_token"</code> or
-      <code class="literal">"refresh_token"</code>.</p></dd><dt><span class="term"><code class="literal">"username"</code></span></dt><dd><p>OAuth 2.0 client to whom the token was issued.</p></dd><dt><span class="term"><code class="literal">"realm"</code></span></dt><dd><p>The realm for which the token was issued.</p></dd><dt><span class="term"><code class="literal">"id"</code></span></dt><dd><p>Unique ID of the token.</p></dd></dl></div><p>The following example shows a search for current access tokens that
-   were issued to <code class="literal">myClientID</code>.</p><div class="screen"><pre>
+   </pre></div><p>
+    To list tokens, perform an HTTP GET on
+    <code class="literal">/frrest/oauth2/token/?_queryId=<em class="replaceable"><code>string</code></em></code>,
+    where <em class="replaceable"><code>string</code></em> is
+    either <code class="literal">access_token</code> to request the list of access tokens
+    for the current user or all users if requested by <code class="literal">amAdmin</code>,
+    or any other string to request the list of access tokens and refresh tokens.
+   </p><p>
+    The following example shows a search for the demo user's access tokens.
+   </p><div class="screen"><pre>
 $ <strong>curl \
- --header "iplanetDirectoryPro: AQIC5wM2LY4Sfcxs...EwNDU2NjE0*" \
- https://openam.example.com:8443/openam/frrest/oauth2/token/?_queryID\
-=username%3DmyClientID%2Ctype%3Daccess_token</strong>
+ --header "iplanetDirectoryPro: AQIC5wM2LY4Sfcw..." \
+ https://openam.example.com:8443/openam/frrest/oauth2/token/?_queryId=access_token</strong>
 <em>{
     "result": [
         {
-            "scope": [
-                "mail",
-                "cn"
-            ],
-            "id": [
-                "1b836369-4fcf-4fb2-b819-ee4b1314d4f1"
-            ],
-            "type": [
+            "expireTime": "Dec 17, 2014 1:02 PM",
+            "tokenName": [
                 "access_token"
             ],
-            "username": [
+            "scope": [
+                "cn"
+            ],
+            "grant_type": [
+                "password"
+            ],
+            "clientID": [
                 "myClientID"
             ],
+            "parent": [],
+            "id": [
+                "d2bbd4f9-955f-4683-bb83-bc0d7523b0f9"
+            ],
+            "tokenType": [
+                "Bearer"
+            ],
+            "redirectURI": [],
+            "nonce": [],
             "realm": [
                 "/"
             ],
-            "expiry_time": [
-                "1355741986154"
-            ]
+            "userName": [
+                "demo"
+            ],
+            "display_name": "",
+            "scopes": "cn"
         },
         {
-            "scope": [
-                "mail",
-                "cn"
-            ],
-            "type": [
+            "expireTime": "Dec 17, 2014 1:02 PM",
+            "tokenName": [
                 "access_token"
             ],
-            "username": [
+            "scope": [
+                "cn"
+            ],
+            "grant_type": [
+                "password"
+            ],
+            "clientID": [
                 "myClientID"
             ],
+            "parent": [],
+            "id": [
+                "12f9907f-dbfb-4c4c-a231-2b24964fee8b"
+            ],
+            "tokenType": [
+                "Bearer"
+            ],
+            "redirectURI": [],
+            "nonce": [],
             "realm": [
                 "/"
             ],
-            "id": [
-                "5f1763fc-37ae-4698-9e84-d301d49e1f7e"
+            "userName": [
+                "demo"
             ],
-            "expiry_time": [
-                "1355741982091"
-            ]
+            "display_name": "",
+            "scopes": "cn"
         }
     ],
+    "resultCount": 2,
     "pagedResultsCookie": null,
     "remainingPagedResults": -1
 }</em>
@@ -288,7 +316,7 @@ $ <strong>curl \
  --request DELETE \
  --header "iplanetDirectoryPro: AQIC5wM...3MTYxOA..*" \
  https://openam.example.com:8443/openam/frrest/oauth2/client/myClient?realm=myRealm</strong>
-<em>{"success":"true"}</em></pre></div></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="rest-api-openid-connect"></a>5.2.&nbsp;OpenID Connect 1.0</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-rest-oauth2-oidc.html#rest-api-openid-connect-discovery">5.2.1. Discovering OpenID Connect 1.0 Configuration</a></span></dt><dt><span class="section"><a href="chap-rest-oauth2-oidc.html#rest-api-openid-connect-dynamic-registration">5.2.2. Registering OpenID Connect 1.0 Clients</a></span></dt><dt><span class="section"><a href="chap-rest-oauth2-oidc.html#rest-api-openid-connect-authorization">5.2.3. Performing OpenID Connect 1.0 Client Authorization</a></span></dt><dt><span class="section"><a href="chap-rest-oauth2-oidc.html#rest-api-openid-connect-session">5.2.4. Managing OpenID Connect 1.0 Sessions</a></span></dt></dl></div><a class="indexterm" name="d0e6028"></a><p>OpenID Connect 1.0 extends OAuth 2.0 so the client can verify claims
+<em>{"success":"true"}</em></pre></div></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="rest-api-openid-connect"></a>5.2.&nbsp;OpenID Connect 1.0</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-rest-oauth2-oidc.html#rest-api-openid-connect-discovery">5.2.1. Discovering OpenID Connect 1.0 Configuration</a></span></dt><dt><span class="section"><a href="chap-rest-oauth2-oidc.html#rest-api-openid-connect-dynamic-registration">5.2.2. Registering OpenID Connect 1.0 Clients</a></span></dt><dt><span class="section"><a href="chap-rest-oauth2-oidc.html#rest-api-openid-connect-authorization">5.2.3. Performing OpenID Connect 1.0 Client Authorization</a></span></dt><dt><span class="section"><a href="chap-rest-oauth2-oidc.html#rest-api-openid-connect-session">5.2.4. Managing OpenID Connect 1.0 Sessions</a></span></dt></dl></div><a class="indexterm" name="d0e5979"></a><p>OpenID Connect 1.0 extends OAuth 2.0 so the client can verify claims
   about the identity of the end user, get profile information about the end
   user, and log the user out at the end of the OpenAM session.</p><div class="itemizedlist"><p>OpenAM exposes the following REST endpoints for <a class="link" href="http://openid.net/connect/" target="_blank">OpenID Connect 1.0</a>
    purposes.</p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Endpoints for <a class="link" href="chap-rest-oauth2-oidc.html#rest-api-openid-connect-discovery" title="5.2.1.&nbsp;Discovering OpenID Connect 1.0 Configuration">discovering information</a>.</p></li><li class="listitem"><p>An endpoint for <a class="link" href="chap-rest-oauth2-oidc.html#rest-api-openid-connect-dynamic-registration" title="5.2.2.&nbsp;Registering OpenID Connect 1.0 Clients">registering client applications</a>.</p></li><li class="listitem"><p>Endpoints for <a class="link" href="chap-rest-oauth2-oidc.html#rest-api-openid-connect-authorization" title="5.2.3.&nbsp;Performing OpenID Connect 1.0 Client Authorization">client authorization</a>.</p></li><li class="listitem"><p>Endpoints for <a class="link" href="chap-rest-oauth2-oidc.html#rest-api-openid-connect-session" title="5.2.4.&nbsp;Managing OpenID Connect 1.0 Sessions">session management</a>.</p></li></ul></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="rest-api-openid-connect-discovery"></a>5.2.1.&nbsp;Discovering OpenID Connect 1.0 Configuration</h3></div></div></div><p>OpenAM exposes endpoints for discovering information about the provider
