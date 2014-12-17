@@ -11,7 +11,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="country">USA</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="phone">+1&nbsp;415-599-1100&nbsp;(US)</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<code class="uri">www.forgerock.com</code><br>
-&nbsp;&nbsp;&nbsp;</p></div></div></div></div></div><div><p class="releaseinfo">Software release date: December 18, 2014</p></div><div><p class="copyright">Copyright &copy; 2011-2014 ForgeRock AS</p></div><div><a href="legalnotice.html">Legal Notice</a></div><div><p class="pubdate">Publication date: December 18, 2014</p></div><div><div class="abstract"><div class="abstract-title">Abstract</div><p>Notes covering OpenAM prerequisites, fixes, known issues. OpenAM
+&nbsp;&nbsp;&nbsp;</p></div></div></div></div></div><div><p class="releaseinfo">Software release date: December 17, 2014</p></div><div><p class="copyright">Copyright &copy; 2011-2014 ForgeRock AS</p></div><div><a href="legalnotice.html">Legal Notice</a></div><div><p class="pubdate">Publication date: December 17, 2014</p></div><div><div class="abstract"><div class="abstract-title">Abstract</div><p>Notes covering OpenAM prerequisites, fixes, known issues. OpenAM
    provides open source Authentication, Authorization, Entitlement and
    Federation software.</p></div></div></div><hr></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="chapter"><a href="#chap-whats-new">1. What's New in OpenAM 12.0.0</a></span></dt><dt><span class="chapter"><a href="#chap-before-you-install">2. Before You Install OpenAM 12.0.0 Software</a></span></dt><dt><span class="chapter"><a href="#chap-compatibility">3. OpenAM Changes &amp; Deprecated Functionality</a></span></dt><dt><span class="chapter"><a href="#chap-issues">4. OpenAM Fixes, Limitations, &amp; Known Issues</a></span></dt><dt><span class="chapter"><a href="#chap-feedback">5. How to Report Problems &amp; Provide Feedback</a></span></dt><dt><span class="chapter"><a href="#chap-support">6. Support</a></span></dt></dl></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-whats-new"></a>Chapter&nbsp;1.&nbsp;What's New in OpenAM 12.0.0</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="#major-new-features">1.1. Major New Features</a></span></dt><dt><span class="section"><a href="#additional-new-features">1.2. Additional New Features</a></span></dt></dl></div><p>OpenAM 12.0.0 fixes a number of issues, and
  provides the following additional features.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="major-new-features"></a>1.1.&nbsp;Major New Features</h2></div></div></div><div class="itemizedlist"><div class="itemizedlist-title">New Features for Users</div><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
@@ -481,6 +481,48 @@
        but does not let you fix them directly.
        Instead you must create equivalent, corrected policies
        in order to use them in OpenAM.
+      </p></li><li class="listitem"><p>
+       It is strongly recommended <span class="emphasis"><em>not</em></span> to use the
+       forward slash character
+       in policy names. Users running OpenAM servers on Tomcat
+       and JBoss web containers will not be able to manipulate policies
+       with the forward slash character in their names without setting the
+       <code class="literal">&#8209;Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true</code>
+       argument in the <code class="literal">CATALINA_OPTS</code> environment variable
+       before starting the OpenAM web container.
+      </p><p>
+       It is also strongly recommended not to enable
+       the <code class="literal">ALLOW_ENCODED_SLASH=true</code> setting while running
+       OpenAM in production. Using this option introduces a security risk.
+       See
+       <a class="link" href="http://tomcat.apache.org/security-6.html#Fixed_in_Apache_Tomcat_6.0.10         " target="_top">Apache Tomcat 6.x Vulnerabilities</a>
+       and
+       <a class="link" href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2007-0450         " target="_top">the related CVE</a>
+       for more information.
+      </p><p>
+       If you have policy names with forward slashes after
+       migration to OpenAM 12, rename the policies so that they
+       do not have forward slashes. Perform the following steps
+       if you use Tomcat or JBoss as your OpenAM web container:
+       </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>
+           Stop the OpenAM web container.
+         </p></li><li class="listitem"><p>
+          Add the
+          <code class="literal">&#8209;Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true</code>
+          setting to the <code class="literal">CATALINA_OPTS</code> environment variable.
+         </p></li><li class="listitem"><p>
+          Restart the OpenAM web container.
+         </p></li><li class="listitem"><p>
+          Rename any policies with forward slashes in their names.
+         </p></li><li class="listitem"><p>
+          Stop the OpenAM web container.
+         </p></li><li class="listitem"><p>
+          Remove the
+          <code class="literal">&#8209;Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true</code>
+          setting from the <code class="literal">CATALINA_OPTS</code> environment variable.
+         </p></li><li class="listitem"><p>
+          Restart the OpenAM web container.
+         </p></li></ol></div><p>
       </p></li></ul></div><div class="itemizedlist"><p>
       OpenAM configuration has changed in several ways to accommodate
       the changes to the way policies are managed:
@@ -538,7 +580,7 @@
      supported.</p><p>Use a POST request to
      <code class="literal">/json/<em class="replaceable"><code>subrealm</code></em>/users/<em class="replaceable"><code>username</code></em>?_action=changePassword</code>
      to change a password.</p></li><li class="listitem"><p>The response returned when submitting incorrect credentials to
-     <code class="literal">/json/authenticate</code> has changed.</p><div class="table"><a name="d208e1199"></a><div class="table-title">Table&nbsp;3.1.&nbsp;Failed Authentication Message</div><div class="table-contents"><table summary="Failed Authentication Message" width="100%" border="0"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>OpenAM 11.0.1</th><th>OpenAM 12.0.0</th></tr></thead><tbody><tr><td>
+     <code class="literal">/json/authenticate</code> has changed.</p><div class="table"><a name="d208e1259"></a><div class="table-title">Table&nbsp;3.1.&nbsp;Failed Authentication Message</div><div class="table-contents"><table summary="Failed Authentication Message" width="100%" border="0"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>OpenAM 11.0.1</th><th>OpenAM 12.0.0</th></tr></thead><tbody><tr><td>
 <pre class="brush: javascript;">{
  "errorMessage": "Authentication Failed!!",
  "failureUrl": "https://openam.example.com:8443"
@@ -627,13 +669,13 @@ http://realm1.example.com:8080/openam/XUI/#Login/test
      Classic UI for end user pages is likely to be removed in a future release.
     </p></li><li class="listitem"><p>Older REST services relying on the following endpoints are
      deprecated.</p><table border="0" summary="Simple list" class="simplelist"><tr><td>/identity/attributes</td><td>/identity/read</td></tr><tr><td>/identity/authenticate</td><td>/identity/search</td></tr><tr><td>/identity/authorize</td><td>/identity/update</td></tr><tr><td>/identity/create</td><td>/ws/1/entitlement/decision</td></tr><tr><td>/identity/delete</td><td>/ws/1/entitlement/decisions</td></tr><tr><td>/identity/isTokenValid</td><td>/ws/1/entitlement/entitlement</td></tr><tr><td>/identity/logout</td><td>/ws/1/entitlement/entitlements</td></tr></table><p>The following table shows how legacy and newer endpoints
-     correspond.</p><div class="table"><a name="d208e1364"></a><div class="table-title">Table&nbsp;3.2.&nbsp;REST Endpoints</div><div class="table-contents"><table summary="REST Endpoints" width="100%" border="0"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th><a href="../admin-guide/index.html#interface-stability" class="link">Deprecated</a> URIs</th><th>Newer <a href="../admin-guide/index.html#interface-stability" class="link">Evolving</a> URIs</th></tr></thead><tbody><tr><td>/identity/attributes</td><td>/json/users</td></tr><tr><td>/identity/authenticate</td><td>/json/authenticate</td></tr><tr><td>/identity/authorize</td><td>/json/policies?_action=evaluate, /json/policies?_evaluateTree</td></tr><tr><td>/identity/create, /identity/delete, /identity/read,
+     correspond.</p><div class="table"><a name="d208e1424"></a><div class="table-title">Table&nbsp;3.2.&nbsp;REST Endpoints</div><div class="table-contents"><table summary="REST Endpoints" width="100%" border="0"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th><a href="../admin-guide/index.html#interface-stability" class="link">Deprecated</a> URIs</th><th>Newer <a href="../admin-guide/index.html#interface-stability" class="link">Evolving</a> URIs</th></tr></thead><tbody><tr><td>/identity/attributes</td><td>/json/users</td></tr><tr><td>/identity/authenticate</td><td>/json/authenticate</td></tr><tr><td>/identity/authorize</td><td>/json/policies?_action=evaluate, /json/policies?_evaluateTree</td></tr><tr><td>/identity/create, /identity/delete, /identity/read,
          /identity/search, /identity/update</td><td>/json/agents, /json/groups, /json/realms, /json/users</td></tr><tr><td>/identity/isTokenValid</td><td>/json/sessions/<em class="replaceable"><code>tokenId</code></em>?_action=validate</td></tr><tr><td>/identity/logout</td><td>/json/sessions/?_action=logout</td></tr><tr><td>/ws/1/entitlement/decision, /ws/1/entitlement/decisions,
          /ws/1/entitlement/entitlement, /ws/1/entitlement/entitlements</td><td>/json/policies?_action=evaluate, /json/policies?_evaluateTree</td></tr><tr><td>N/A</td><td>/json/applications</td></tr><tr><td>N/A</td><td>/json/applicationtypes</td></tr><tr><td>N/A</td><td>/json/conditiontypes</td></tr><tr><td>N/A</td><td>/json/dashboard</td></tr><tr><td>N/A</td><td>/json/decisionscombiners</td></tr><tr><td>N/A</td><td>/json/policies</td></tr><tr><td>N/A</td><td>/json/referrals</td></tr><tr><td>N/A</td><td>/json/serverinfo</td></tr><tr><td>N/A</td><td>/json/subjectattributes</td></tr><tr><td>N/A</td><td>/json/subjecttypes</td></tr><tr><td>N/A</td><td>/xacml/policies</td></tr></tbody></table></div></div><br class="table-break"><p>Find examples in the <em class="citetitle">Developer Guide</em> chapter <a href="../dev-guide/index.html#chap-rest" class="link"><em class="citetitle">Using RESTful Web Services</em></a>.</p><p>Support for the older REST services is likely to be removed in a
      future release in favor of the newer REST services. Older REST services
      will be removed only after replacement REST services are introduced.</p></li><li class="listitem"><p>With the implementation of XACML 3.0 support when importing and
     exporting policies the following <code class="option">ssoadm</code> commands
-     have been replaced:</p><div class="table"><a name="d208e1494"></a><div class="table-title">Table&nbsp;3.3.&nbsp;Policy Import and Export with ssoadm</div><div class="table-contents"><table summary="Policy Import and Export with ssoadm" border="0"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th><a href="../admin-guide/index.html#interface-stability" class="link">
+     have been replaced:</p><div class="table"><a name="d208e1554"></a><div class="table-title">Table&nbsp;3.3.&nbsp;Policy Import and Export with ssoadm</div><div class="table-contents"><table summary="Policy Import and Export with ssoadm" border="0"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th><a href="../admin-guide/index.html#interface-stability" class="link">
        Deprecated</a> Command</th><th>Newer <a href="../admin-guide/index.html#interface-stability" class="link">
        Evolving</a> Command</th></tr></thead><tbody><tr><td><code class="literal">create-policies</code></td><td><code class="literal">create-xacml</code></td></tr><tr><td><code class="literal">delete-policies</code></td><td><code class="literal">delete-xacml</code></td></tr><tr><td><code class="literal">list-policies</code></td><td><code class="literal">list-xacml</code></td></tr><tr><td><code class="literal">update-policies</code></td><td><code class="literal">create-xacml</code></td></tr></tbody></table></div></div><br class="table-break"><p>For more information, see the <em class="citetitle">OpenAM
      Reference</em> section <a href="../reference/index.html#ssoadm-1" class="link">
