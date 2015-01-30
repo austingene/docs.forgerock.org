@@ -17,7 +17,7 @@
  *
  * CCPL HEADER END
  *
- *     Copyright 2011-2014 ForgeRock AS
+ *     Copyright 2011-2015 ForgeRock AS.
  *
  */
 
