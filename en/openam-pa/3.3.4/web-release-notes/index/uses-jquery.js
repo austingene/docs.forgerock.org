@@ -142,7 +142,7 @@ $(document).ready(function () {
      */
     var project = "openam-pa";       // E.g. "OpenAM"
     var version = "11.0.1";    // E.g. "11.0.0"
-    var jsonUrl = "http://docs.forgerock.org/latest.json";        // E.g. "http://docs.forgerock.org/latest.php"
+    var jsonUrl = "http://mcraig.org/fr/latest.php";        // E.g. "http://docs.forgerock.org/latest.php"
     var language = "en";
     var latestUrl, latest;
 
