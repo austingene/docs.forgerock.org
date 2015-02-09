@@ -17,7 +17,7 @@
  *
  * CCPL HEADER END
  *
- *     Copyright 2011-2014 ForgeRock AS
+ *     Copyright 2011-2015 ForgeRock AS.
  *
  */
 
@@ -37,7 +37,6 @@ var products = {
         "10.0.0"
     ],
     "openam-pa": [
-        "3.5.0",
 	    "3.3.4",
         "3.3.3",
         "3.3.1",
@@ -62,7 +61,7 @@ var products = {
     "openidm": [
         "3.1.0",
         "3.0.0",
-		"2.1.2",
+        "2.1.2",
         "2.1.1",
         "2.1.0",
         "2.0.3",

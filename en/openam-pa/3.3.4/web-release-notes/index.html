@@ -23,8 +23,22 @@
   </p><p>
    ForgeRock customers can contact support for help and further information.
   </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="what-new-web-agents"></a>1.1.&nbsp;New in Web Policy Agents 3.3.4</h2></div></div></div><p>
-   No new features have been added since the release of 3.3.0.
-  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="product-documentation"></a>1.2.&nbsp;OpenAM Web Policy Agent Documentation</h2></div></div></div><div class="itemizedlist"><p>
+   The following new settings have been added to this release:
+  </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><span class="bold"><strong>OPENAM-4265</strong></span>.
+     Improved IIS site support.
+     If the agent module is enabled for a site that does not have a corresponding
+     <code class="literal">Instance_{siteid}</code> directory, the request will not be interrupted
+     by the agent and will continue to other IIS modules, including <code class="literal">.net</code>.
+     For more information, see
+     <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-4265" target="_blank">OPENAM-4265</a>.
+    </p></li><li class="listitem"><p><span class="bold"><strong>OPENAM-4888</strong></span>.
+     Introduces one new setting in
+     the bootstrap file: <code class="literal">com.forgerock.agents.nss.shutdown = on | off</code>.
+     Default is <code class="literal">on</code> (not set) and indicates that the agent tries
+     to close NSS connections.
+     For more information, see
+     <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-4888" target="_blank">OPENAM-4888</a>.
+    </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="product-documentation"></a>1.2.&nbsp;OpenAM Web Policy Agent Documentation</h2></div></div></div><div class="itemizedlist"><p>
      You can read the following additional
      <a class="link" href="http://docs.forgerock.org/en/openam-pa/3.3.0/" target="_blank">product documentation for OpenAM policy agents 3.3.0</a>
      online at <a class="link" href="http://docs.forgerock.org/" target="_blank">http://docs.forgerock.org/</a>.
@@ -34,14 +48,12 @@
       <a class="link" href="http://docs.forgerock.org/en/openam-pa/3.3.0/web-install-guide/" target="_blank">OpenAM Web Policy Agent 3.3.0 Installation Guide</a></p></li><li class="listitem"><p>
       <a class="link" href="http://docs.forgerock.org/en/openam-pa/3.3.0/web-reference/" target="_blank">OpenAM Web Policy Agent 3.3.0 Reference</a>
      </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="before-you-start-web-agents"></a>1.3.&nbsp;Before You Install OpenAM Web Policy Agents</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="#java-requirements-web-agents">1.3.1. Web Agents Java Requirements</a></span></dt><dt><span class="section"><a href="#browser-requirements-web-agents">1.3.2. Web Agents Browsers Tested</a></span></dt><dt><span class="section"><a href="#web-server-requirements-web-agents">1.3.3. Web Server Requirements</a></span></dt><dt><span class="section"><a href="#platform-requirements-web-agents">1.3.4. Web Agents Platform Requirements</a></span></dt><dt><span class="section"><a href="#hardware-requirements-web-agents">1.3.5. Web Agents Hardware Requirements</a></span></dt><dt><span class="section"><a href="#special-requests">1.3.6. Special Requests</a></span></dt></dl></div><p>This section covers software and hardware prerequisites for installing
-  and running OpenAM web policy agents.</p><div class="note"><h3 class="title">Note</h3><p>
-    The content of this section has not changed since the 3.3.0 release.
-   </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="java-requirements-web-agents"></a>1.3.1.&nbsp;Web Agents Java Requirements</h3></div></div></div><p> ForgeRock recommends the most recent update of the supported version of
+  and running OpenAM web policy agents.</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="java-requirements-web-agents"></a>1.3.1.&nbsp;Web Agents Java Requirements</h3></div></div></div><p> ForgeRock recommends the most recent update of the supported version of
    Java to ensure you have the latest security fixes.</p><p>All web policy agents except those associated with 
    Microsoft IIS require a Java 6 or 7 runtime environment for installation.
    ForgeRock recommends the most recent update of Java 6 or 7 to ensure you
    have the latest security fixes.</p><p>ForgeRock has tested this release with Oracle Java SE JDK.</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="browser-requirements-web-agents"></a>1.3.2.&nbsp;Web Agents Browsers Tested</h3></div></div></div><div class="itemizedlist"><p>ForgeRock has tested this web policy agent release with the following
-    web browsers.</p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Chrome release 16 and later</p></li><li class="listitem"><p>Firefox 3.6 and later</p></li><li class="listitem"><p>Internet Explorer 7 and later</p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="web-server-requirements-web-agents"></a>1.3.3.&nbsp;Web Server Requirements</h3></div></div></div><div class="itemizedlist"><p>Web policy agents support the following web servers.</p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Apache HTTP Server 2.2, 2.4</p></li><li class="listitem"><p>Microsoft IIS 6, 7, 8</p></li><li class="listitem"><p>Oracle iPlanet Web Server 7.0 (also known as Sun Web Server)</p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="platform-requirements-web-agents"></a>1.3.4.&nbsp;Web Agents Platform Requirements</h3></div></div></div><p>Apache HTTP web policy agents run on Linux 2.6.18 or later,
+    web browsers.</p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Chrome release 16 and later</p></li><li class="listitem"><p>Firefox 3.6 and later</p></li><li class="listitem"><p>Internet Explorer 7 and later</p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="web-server-requirements-web-agents"></a>1.3.3.&nbsp;Web Server Requirements</h3></div></div></div><div class="itemizedlist"><p>Web policy agents support the following web servers.</p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Apache HTTP Server 2.2, 2.4</p></li><li class="listitem"><p>Microsoft IIS 7, 8</p></li><li class="listitem"><p>Oracle iPlanet Web Server 7.0 (also known as Sun Web Server)</p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="platform-requirements-web-agents"></a>1.3.4.&nbsp;Web Agents Platform Requirements</h3></div></div></div><p>Apache HTTP web policy agents run on Linux 2.6.18 or later,
     and on Oracle Solaris 10 or later.</p><p>The Microsoft IIS 6 web policy agent has been tested on Windows Server
     2003.</p><p>The Microsoft IIS 7 web policy agent has been tested on Windows Server
     2008 R2.</p><p>The Microsoft IIS 8 web policy agent has been tested on Windows Server
@@ -107,7 +119,38 @@
     </p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="web-agent-compatibility"></a>1.5.&nbsp;Web Policy Agent Compatibility</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="#web-agent-major-changes">1.5.1. Important Changes to Web Policy Agent Functionality</a></span></dt><dt><span class="section"><a href="#web-agent-deprecated">1.5.2. Deprecated Functionality</a></span></dt><dt><span class="section"><a href="#web-agent-removed">1.5.3. Removed Functionality</a></span></dt></dl></div><p>
     This section concerns OpenAM Web Policy Agents 3.3.4.
    </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="web-agent-major-changes"></a>1.5.1.&nbsp;Important Changes to Web Policy Agent Functionality</h3></div></div></div><div class="itemizedlist"><p>
-      This change is new in OpenAM web policy agents 3.3.3.
+      The following changes are new in OpenAM Web Policy Agents 3.3.4.
+     </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-4265" target="_blank">OPENAM-4265</a>
+       introduces improved IIS site support.
+       If the agent module is enabled for a site that does not have a corresponding
+       <code class="literal">Instance_{siteid}</code> directory, the request will not be interrupted
+       by the agent and will continue to other IIS modules, including <code class="literal">.net</code>.
+      </p><p>
+       This change however does not add support for multiple sites and/or multiple
+       processes in IIS. We only support one configuration/site per agent dll (instance).
+       Also, directories should be removed from the <code class="literal">web_agents</code>
+       directory.
+      </p></li><li class="listitem"><p>
+       <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-4629" target="_blank">OPENAM-4629</a>
+       introduces two net settings. The first is
+       <code class="literal">com.forgerock.agents.init.retry.wait</code>, which
+       sets the wait time (in seconds) between retries.
+       Default (not set) value is 0.
+      </p><p>
+       The second setting is
+       <code class="literal">com.forgerock.agents.init.retry.wait</code>, which
+       sets the wait time (in seconds) between retries.
+       Default (not set) value is 0.
+      </p><p>
+       If <code class="literal">Hot-Swap Enabled = no</code>, then
+       both properties have no value.
+      </p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-4888" target="_blank">OPENAM-4888</a>
+        introduces one new setting in
+        the bootstrap file: <code class="literal">com.forgerock.agents.nss.shutdown = on | off</code>.
+        Default is <code class="literal">on</code> (not set) and indicates that the agent tries
+        to close NSS connections.
+       </p></li></ul></div><div class="itemizedlist"><p>
+      The following change was listed in OpenAM Web Policy Agents 3.3.3.
      </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
        On Linux, library requirements have changed.
        Make sure the system can run <span class="command"><strong>gcc</strong></span> 4.4.7.
@@ -121,7 +164,7 @@
        <span class="command"><strong>strings libstdc++.so.6 | grep GLIBCXX_3</strong></span>
        and <span class="command"><strong>strings libstdc++.so.6 | grep CXXABI_1</strong></span>.
       </p></li></ul></div><div class="itemizedlist"><p>
-      These changes are new in OpenAM web policy agents 3.3.1 and later.
+      The following changes were listed in OpenAM web policy agents 3.3.1 and later.
      </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
        Consistency has been improved in how OpenAM policy rules match resources.
        Policy rules are now interpreted more consistently
@@ -181,7 +224,7 @@
         </p></li></ul></div><p>
        This is the only compatibility change since release 3.3.0.
       </p></li></ul></div><div class="itemizedlist"><p>
-      These changes were listed for OpenAM Web Policy Agents 3.3.0.
+      The following changes were listed for OpenAM Web Policy Agents 3.3.0.
      </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>IIS web policy agents no longer rely on the Windows registry to
       determine where to find configuration settings. Instead, IIS agents
       determine the relative location of their configuration properties files
@@ -205,7 +248,7 @@
       introduced in release 3.1.0 has been superseded by the bootstrap property
       <code class="literal">com.forgerock.agents.ext.url.validation.level</code>.</p></li><li class="listitem"><p>Web policy agent support for Apache HTTP Server 2.0 is no longer
       provided in this release.</p></li><li class="listitem"><p>Web policy agent support for Oracle iPlanet Web Proxy Server
-      (formerly Sun Java System Web Sun Proxy Server) is no longer provided
+      (formerly Sun Java System Web Proxy Server) is no longer provided
       in this release.</p></li></ul></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="web-agent-issues"></a>1.6.&nbsp;Web Policy Agents Fixes, Limitations, &amp; Known Issues</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="#web-agent-fixes">1.6.1. Key Fixes</a></span></dt><dt><span class="section"><a href="#web-agent-limitations">1.6.2. Limitations</a></span></dt><dt><span class="section"><a href="#web-agent-known-issues">1.6.3. Known Issues</a></span></dt></dl></div><p>
    OpenAM web policy agent issues are tracked at
    <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM" target="_blank">https://bugster.forgerock.org/jira/browse/OPENAM</a>.
