@@ -1,0 +1,263 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;5.&nbsp;Installing the Oracle WebLogic Policy Agent</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenAM Java EE Policy Agent User's Guide"><link rel="up" href="index.html" title="OpenAM Java EE Policy Agent User's Guide"><link rel="prev" href="chap-jetty.html" title="Chapter&nbsp;4.&nbsp;Installing the Jetty Server Policy Agent"><link rel="next" href="chap-websphere.html" title="Chapter&nbsp;6.&nbsp;Installing the IBM WebSphere Policy Agent"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;5.&nbsp;Installing the Oracle WebLogic Policy Agent</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-jetty.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-websphere.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-weblogic"></a>Chapter&nbsp;5.&nbsp;Installing the Oracle WebLogic Policy Agent</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-weblogic.html#before-weblogic-agent-install">5.1. Before You Install</a></span></dt><dt><span class="section"><a href="chap-weblogic.html#install-weblogic-agent">5.2. Installing the WebLogic Policy Agent</a></span></dt><dt><span class="section"><a href="chap-weblogic.html#silent-weblogic-agent-installation">5.3. Silent WebLogic Policy Agent Installation</a></span></dt><dt><span class="section"><a href="chap-weblogic.html#post-weblogic-agent-installation">5.4. Post Installation of WebLogic Policy Agent</a></span></dt><dt><span class="section"><a href="chap-weblogic.html#weblogic-agents-multi-server">5.5. Installing WebLogic Policy Agents in Multi-Server Domains</a></span></dt><dt><span class="section"><a href="chap-weblogic.html#uninstall-weblogic-agent">5.6. Removing WebLogic Policy Agent Software</a></span></dt></dl></div><a class="indexterm" name="d0e2421"></a><p>This chapter covers installation of the policy agent for Oracle
+ WebLogic.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="before-weblogic-agent-install"></a>5.1.&nbsp;Before You Install</h2></div></div></div><a class="indexterm" name="d0e2429"></a><p>Make sure OpenAM is installed and running, and that you can contact OpenAM
+  from the system running the policy agent. Next, create a profile for your
+  policy agent as described in the <em class="citetitle">Administration Guide</em>
+  section on <a class="link" href="http://openam.forgerock.org/doc/admin-guide/#create-agent-profiles" target="_blank"><em class="citetitle">Creating Agent
+  Profiles</em></a>. To protect resources with the agent also create
+  at least one policy as described in the section on <a class="link" href="http://openam.forgerock.org/doc/admin-guide/#configure-authz-policy" target="_blank"><em class="citetitle">Configuring
+  Policies</em></a>. Consider creating a simple policy, such as a
+  policy that allows only authenticated users to access your resources, in order
+  to test your policy agent after installation.</p><p>You must install WebLogic before you install the policy agent, and you
+  must stop the server during installation.</p><p lang="en">
+ You must install a supported version of the Java runtime environment.
+ See the <em class="citetitle">Release Notes</em> section,
+ <a href="../../jee-release-notes/index/chap-javaee-agents.html#java-requirements-javaee-agents" class="link"><em class="citetitle">Java EE Agents Java Requirements</em></a>,
+ and set the <code class="literal">JAVA_HOME</code> environment variable accordingly.
+ The policy agent installer requires Java.
+</p><div class="screen"><pre>
+$ <strong>echo $JAVA_HOME</strong>
+<em>/path/to/java</em>
+      </pre></div><p lang="en">
+ See the OpenAM <em class="citetitle">Installation Guide</em> section,
+ <a class="link" href="http://openam.forgerock.org/doc/install-guide/#download-openam-software" target="_blank"><em class="citetitle">Obtaining OpenAM Software</em></a>
+ to determine which version of the agent to download, and download the agent.
+ Also verify the checksum of the file you download
+ against the checksum posted on the download page.
+</p><p>Unzip the file in the directory where you plan to install the J2EE
+  policy agent. The agent you install stores its configuration and logs
+  under this directory.</p><p>When you unzip the policy agent, you find the following directories
+   under the <code class="filename">j2ee_agents/weblogic_v10_agent</code> directory.</p><p lang="en">
+ Despite the directory name,
+ the policy agent supports multiple container versions.
+ For details, see the <em class="citetitle">Release Notes</em> section,
+ <a href="../../jee-release-notes/index/chap-javaee-agents.html#jee-pa-platform-requirements" class="link"><em class="citetitle">Java EE Agents Platform Requirements</em></a>.
+</p><div lang="en" class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="filename">bin</code></span></dt><dd><p>The installation and configuration program
+    <span class="command"><strong>agentadmin</strong></span> and a password hashing tool
+    <span class="command"><strong>crypt_util</strong></span>.</p></dd><dt><span class="term"><code class="filename">config</code></span></dt><dd><p>Configuration templates used by the <span class="command"><strong>agentadmin</strong></span>
+   command during installation</p></dd><dt><span class="term"><code class="filename">data</code></span></dt><dd><p>Not used</p></dd><dt><span class="term"><code class="filename">etc</code></span></dt><dd><p>Configuration templates used during installation</p></dd><dt><span class="term"><code class="filename">installer-logs</code></span></dt><dd><p>Location for log files written during installation</p></dd><dt><span class="term"><code class="filename">legal-notices</code></span></dt><dd><p>Contains licensing information including third-party licenses</p></dd><dt><span class="term"><code class="filename">lib</code></span></dt><dd><p>Shared libraries used by the Java EE policy agent</p></dd><dt><span class="term"><code class="filename">locale</code></span></dt><dd><p>Property files used by the installation program</p></dd><dt><span class="term"><code class="filename">README</code></span></dt><dd><p>README file containing platform and install information for the agent</p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="install-weblogic-agent"></a>5.2.&nbsp;Installing the WebLogic Policy Agent</h2></div></div></div><a class="indexterm" name="d0e2575"></a><p>Complete the following procedures to install the policy agent.</p><div lang="en" class="procedure"><a name="d0e2583"></a><div class="procedure-title">Procedure&nbsp;5.1.&nbsp;To Create the Agent Profile</div><p>Regardless of whether you store configurations centrally in OpenAM
+        or locally with your agents, the agent requires a profile so that it can
+        connect to and communicate with OpenAM.</p><ol class="procedure" type="1"><li class="step"><p>In the OpenAM console, browse to Access Control &gt;
+            <em class="replaceable"><code>Realm Name</code></em> &gt; Agents &gt; J2EE,
+            and then click the New... button in the Agent table.</p></li><li class="step"><p>Complete the web form using the following hints.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">Name</span></dt><dd><p>The name for the agent profile used when you install the
+                        agent</p></dd><dt><span class="term">Password</span></dt><dd><p>Password the agent uses to authenticate to OpenAM</p></dd><dt><span class="term">Configuration</span></dt><dd><p>Centralized configurations are stored in the OpenAM configuration
+                        store. You can manage the centralized configuration through the OpenAM
+                        console. Local configurations are stored in a file alongside the
+                        agent.</p></dd><dt><span class="term">Server URL</span></dt><dd><p>The full URL to an OpenAM instance, or if OpenAM is deployed in
+                        a site configuration (behind a load balancer) then the site URL</p><p>In centralized configuration mode, the Server URL is used to
+                        populate the agent profile for services such as Login, Logout, Naming,
+                        and Cross Domain SSO.</p></dd><dt><span class="term">Agent URL</span></dt><dd><p>The URL to the J2EE agent application, such as
+                        <code class="literal">http://www.example.com:8080/agentapp</code></p><p>In centralized configuration mode, the Agent URL is used to
+                        populate the Agent Profile for services such as notifications.</p></dd></dl></div></li></ol></div><div lang="en" class="procedure"><a name="d0e2635"></a><div class="procedure-title">Procedure&nbsp;5.2.&nbsp;To Create the Password File</div><a class="indexterm" name="d0e2638"></a><ol class="procedure" type="1"><li class="step"><p>
+   Create a text file containing only the password.
+  </p><div class="screen"><pre>
+$ <strong>echo password &gt; /tmp/pwd.txt</strong>
+  </pre></div></li><li class="step"><p>
+   Protect the password file you create as appropriate for your operating system.
+  </p><div class="screen"><pre>
+$ <strong>chmod 400 /tmp/pwd.txt</strong>
+ </pre></div></li></ol></div><div class="procedure"><a name="install-agent-into-weblogic"></a><div class="procedure-title">Procedure&nbsp;5.3.&nbsp;To Install the Policy Agent into WebLogic</div><ol class="procedure" type="1"><li class="step"><p>Shut down the WebLogic server where you plan to install the
+    agent.</p></li><li class="step"><p>Make sure OpenAM is running.</p></li><li class="step"><p>Run <span class="command"><strong>agentadmin --install</strong></span> to install the agent.</p><p lang="en">When you run the command, you will be prompted to read and accept the
+  software license agreement for the agent installation.
+  You can suppress the license agreement prompt by including the
+  <code class="option">--acceptLicense</code> option on the command line.
+  The inclusion of the option indicates that you have read and accepted
+  the terms stated in the license.
+  To view the license agreement, open <code class="filename">&lt;server-root&gt;/legal-notices/license.txt</code>.
+ </p><div class="screen"><pre>
+$ <strong>/path/to/j2ee_agents/weblogic_v10_agent/bin/agentadmin --install --acceptLicense</strong>
+<em>...
+-----------------------------------------------
+SUMMARY OF YOUR RESPONSES
+-----------------------------------------------
+Startup script location :
+/path/to/domain/mydomain/bin/startWebLogic.sh
+WebLogic Server instance name : AdminServer
+WebLogic home directory : /path/to/wlserver
+OpenAM server URL : http://openam.example.com:8080/openam
+Agent URL : http://www.example.com:7001/agentapp
+Agent Profile name : WebLogic Agent
+Agent Profile Password file name : /tmp/pwd.txt
+
+...
+SUMMARY OF AGENT INSTALLATION
+-----------------------------
+Agent instance name: Agent_001
+Agent Bootstrap file location:
+/path/to/j2ee_agents/weblogic_v10_agent/Agent_001/config/
+ OpenSSOAgentBootstrap.properties
+Agent Configuration file location
+/path/to/j2ee_agents/weblogic_v10_agent/Agent_001/config/
+ OpenSSOAgentConfiguration.properties
+Agent Audit directory location:
+/path/to/j2ee_agents/weblogic_v10_agent/Agent_001/logs/audit
+Agent Debug directory location:
+/path/to/j2ee_agents/weblogic_v10_agent/Agent_001/logs/debug
+
+
+Install log file location:
+/path/to/j2ee_agents/weblogic_v10_agent/installer-logs/audit/install.log
+...</em>
+    </pre></div><p>Upon successful completion, the installer has updated the WebLogic
+    configuration, copied the agent libraries to WebLogic's library directory,
+    and also set up configuration and log directories for the agent.</p><div class="note"><h3 class="title">Note</h3><p>If the agent is in a different domain than the server, refer to
+      the <em class="citetitle">Administration Guide</em> procedure, <a class="link" href="http://openam.forgerock.org/doc/admin-guide/#chap-cdsso" target="_blank"><em class="citetitle">Configuring Cross-Domain
+   Single Sign On</em></a>.</p></div></li><li class="step"><p>Take note of the configuration files and log locations.</p><p>Each agent instance that you install on the system has its own
+    numbered configuration and logs directory. The first agent's configuration
+    and logs are thus located under the directory
+    <code class="filename">j2ee_agents/weblogic_v10_agent/Agent_001/</code>.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="filename">config/OpenSSOAgentBootstrap.properties</code></span></dt><dd><p>Used to bootstrap the Java EE policy agent, allowing the agent to
+       connect to OpenAM and download its configuration</p></dd><dt><span class="term"><code class="filename">config/OpenSSOAgentConfiguration.properties</code></span></dt><dd><p>Only used if you configured the Java EE policy agent to use local
+       configuration</p></dd><dt><span class="term"><code class="filename">logs/audit/</code></span></dt><dd><p>Operational audit log directory, only used if remote logging
+       to OpenAM is disabled</p></dd><dt><span class="term"><code class="filename">logs/debug/</code></span></dt><dd><p>Debug directory where the debug file resides. Useful in
+       troubleshooting policy agent issues.</p></dd></dl></div></li><li class="step"><p>If your policy agent configuration is not in the top-level realm (/),
+       then you must edit config/OpenSSOAgentBootstrap.properties to identify
+       the sub-realm that has your policy agent configuration.
+       Find com.sun.identity.agents.config.organization.name and change
+       the / to the path to your policy agent profile. This allows the policy agent
+       to properly identify itself to the OpenAM server. </p></li><li class="step"><p>The agent requires sourcing before it will work properly. There are two 
+    ways to source.</p><ul class="stepalternatives">
+     <li class="step"><p>Manually source the file containing the policy agent environment settings for 
+      WebLogic before starting the application server. </p><div class="screen"><pre>
+$ <strong>. /path/to/setAgentEnv_AdminServer.sh</strong>
+      </pre></div></li>
+     <li class="step"><p>Or edit the <code class="filename">startWebLogic.sh</code> script to set the sourcing
+      needed for the agent, by adding these lines after the code block shown. Add the
+      setAgentEnv_AdminServer.sh line to the following location in the file. The drawback 
+      to this approach is that it could be overwritten, as noted in the file.</p><div class="screen"><pre>
+$ <strong>cat /path/to/startWebLogic.sh</strong>
+<em>...
+# Any changes to this script may be lost when adding extensions to this
+# configuration.
+DOMAIN_HOME="/opt/Oracle/Middleware/user_projects/domains/base_domain"
+ . /path/to/setAgentEnv_AdminServer.sh
+${DOMAIN_HOME}/bin/startWebLogic.sh $*</em>
+      </pre></div></li>
+    </ul><div class="note"><h3 class="title">Note</h3><p>If the sourcing is not properly set, the following message appears.</p><div class="screen"><pre>
+<em>&lt;Error&gt; &lt;HTTP&gt; &lt;cent.example.com&gt;
+&lt;AdminServer&gt; &lt;[STANDBY] ExecuteThread: '5' for queue: 'weblogic.kernel.
+Default (self-tuning)'&gt; &lt;&lt;WLS Kernel&gt;&gt; &lt;&gt;&lt;&gt; &lt;&gt; &lt;1360800613441&gt;
+&lt;BEA-101165&gt; &lt;Could not load user defined filter in web.xml:
+ServletContext@1761850405[app:agentapp module:agentapp.war path:null
+spec-version:null] com.sun.identity.agents.filter.AmAgentFilter.
+java.lang.ClassNotFoundException:
+com.sun.identity.agents.filter.AmAgentFilter</em>
+     </pre></div></div></li><li class="step"><p>Start the WebLogic server.</p></li></ol></div><div class="procedure"><a name="protect-weblogic-apps-after-agent-installation"></a><div class="procedure-title">Procedure&nbsp;5.4.&nbsp;To Protect Applications After Agent Installation</div><ol class="procedure" type="1"><li class="step"><p>Deploy the
+    <code class="filename">/path/to/j2ee_agents/weblogic_v10_agent/etc/agentapp.war</code>
+    agent application in WebLogic.</p></li><li class="step"><p>For each web application to protect, add the following filter
+    to the application's <code class="filename">WEB-INF/web.xml</code> deployment descriptor,
+    following the opening &lt;web-app&gt; tag.</p><pre class="brush: xml;"> &lt;filter&gt;
+  &lt;filter-name&gt;Agent&lt;/filter-name&gt;
+  &lt;display-name&gt;Agent&lt;/display-name&gt;
+  &lt;description&gt;OpenAM Policy Agent Filter&lt;/description&gt;
+ &lt;filter-class&gt;com.sun.identity.agents.filter.AmAgentFilter&lt;/filter-class&gt;
+ &lt;/filter&gt;
+ &lt;filter-mapping&gt;
+  &lt;filter-name&gt;Agent&lt;/filter-name&gt;
+  &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+  &lt;dispatcher&gt;REQUEST&lt;/dispatcher&gt;
+  &lt;dispatcher&gt;INCLUDE&lt;/dispatcher&gt;
+  &lt;dispatcher&gt;FORWARD&lt;/dispatcher&gt;
+  &lt;dispatcher&gt;ERROR&lt;/dispatcher&gt;
+ &lt;/filter-mapping&gt;</pre><p>You might also have to update additional configuration files. See
+    the sample application located under
+    <code class="filename">/path/to/j2ee_agents/weblogic_v10_agent/sampleapp</code>
+    for examples.</p></li><li class="step"><p>If you have a policy configured, you can test your policy agent.
+    For example, try to browse to a resource that your policy agent protects.
+    You should be redirected to OpenAM to authenticate, for example as user
+    <code class="literal">demo</code>, password <code class="literal">changeit</code>. After
+    you authenticate, OpenAM then redirects you back to the resource you tried
+    to access.</p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="silent-weblogic-agent-installation"></a>5.3.&nbsp;Silent WebLogic Policy Agent Installation</h2></div></div></div><a class="indexterm" name="d0e2817"></a><p>When performing a scripted, silent installation, use
+  <span class="command"><strong>agentadmin --install --saveResponse
+  <em class="replaceable"><code>response-file</code></em></strong></span>
+  to create a response file for scripted installation. Then install silently
+  using <span class="command"><strong>agentadmin --install --acceptLicense --useResponse
+  <em class="replaceable"><code>response-file</code></em></strong></span>.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="post-weblogic-agent-installation"></a>5.4.&nbsp;Post Installation of WebLogic Policy Agent</h2></div></div></div><a class="indexterm" name="d0e2837"></a><p>After installing WebLogic, some configuration is required before
+  the policy agent will work.</p><div class="procedure"><a name="configure-weblogic-agent"></a><div class="procedure-title">Procedure&nbsp;5.5.&nbsp;To Configure the WebLogic Policy Agent</div><p>WebLogic is unique in that it requires additional configuration
+   after the installation is complete.</p><ol class="procedure" type="1"><li class="step"><p>Go to the WebLogic Server Administration Console and login.</p></li><li class="step"><p>Click <code class="literal">Security realms</code>.</p></li><li class="step"><p>Click the name of the realm to use for OpenAM.</p></li><li class="step"><p>Click <code class="literal">Providers</code> &gt; <code class="literal">Authentication</code>.</p></li><li class="step"><p>Click <code class="literal">Lock &amp; Edit</code> &gt; <code class="literal">New</code>.</p></li><li class="step"><p>Enter the desired type in <code class="literal">Type as AgentAuthenticator</code>,
+    provide a name, and click <code class="literal">OK</code>.</p></li><li class="step"><p>Click on the name of the agent authenticator you just created.</p></li><li class="step"><p>Use <code class="literal">OPTIONAL</code> for the control flag and save.</p></li><li class="step"><p>Click on <code class="literal">Providers</code> to display the Authentication
+    Providers Table.</p></li><li class="step"><p>Click on <code class="literal">Default Authenticator</code>, use <code class="literal">OPTIONAL</code>
+    for the control flag, and save.</p></li><li class="step"><p>Activate the changes once the default authenticator is done saving.</p><p>You will need to restart the WebLogic Server to implement the changes.</p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="weblogic-agents-multi-server"></a>5.5.&nbsp;Installing WebLogic Policy Agents in Multi-Server Domains</h2></div></div></div><a class="indexterm" name="d0e2920"></a><p>
+   In many WebLogic domains, the administration server provides
+   a central point for controlling and managing the configuration of
+   the managed servers that host protected applications.
+  </p><p>
+   If WebLogic managed servers run on different hosts,
+   you must create separate agent profiles
+   and perform separate installations for each
+   so that OpenAM can send notifications to the appropriate addresses.
+  </p><div class="procedure"><a name="web-logic-agents-for-admin-and-managed-servers"></a><div class="procedure-title">Procedure&nbsp;5.6.&nbsp;To Install the Policy Agent on Administration &amp; Managed Servers</div><p>
+    For multi-server WebLogic domains, install policy agent as follows.
+   </p><ol class="procedure" type="1"><li class="step"><p>
+     If servers are on different hosts, create agent profiles for each server
+     where you plan to install the policy agent.
+    </p><p>
+     The steps are described under <a class="xref" href="chap-weblogic.html#install-weblogic-agent" title="5.2.&nbsp;Installing the WebLogic Policy Agent">Section&nbsp;5.2, &#8220;Installing the WebLogic Policy Agent&#8221;</a>.
+    </p></li><li class="step"><p>
+     Prepare your protected web applications
+     by adding the policy agent filter configuration as described in
+     <a class="xref" href="chap-weblogic.html#protect-weblogic-apps-after-agent-installation" title="Procedure&nbsp;5.4.&nbsp;To Protect Applications After Agent Installation">Procedure&nbsp;5.4, &#8220;To Protect Applications After Agent Installation&#8221;</a>.
+    </p></li><li class="step"><p>
+     Use the <span class="command"><strong>agentadmin</strong></span> command to install
+     the policy agent either interactively, or silently
+     on each server in the domain.
+    </p><ul class="stepalternatives">
+     <li class="step"><p>
+       For interactive installation,
+       prepare password files for the servers as described under
+       <a class="xref" href="chap-weblogic.html#install-weblogic-agent" title="5.2.&nbsp;Installing the WebLogic Policy Agent">Section&nbsp;5.2, &#8220;Installing the WebLogic Policy Agent&#8221;</a>.
+      </p><p>
+       Then install the policy agent on the servers as described in
+       <a class="xref" href="chap-weblogic.html#install-agent-into-weblogic" title="Procedure&nbsp;5.3.&nbsp;To Install the Policy Agent into WebLogic">Procedure&nbsp;5.3, &#8220;To Install the Policy Agent into WebLogic&#8221;</a>.
+     </p></li>
+
+     <li class="step"><p>
+       For silent installation, follow the instructions in
+       <a class="xref" href="chap-weblogic.html#silent-weblogic-agent-installation" title="5.3.&nbsp;Silent WebLogic Policy Agent Installation">Section&nbsp;5.3, &#8220;Silent WebLogic Policy Agent Installation&#8221;</a>.
+      </p></li>
+    </ul></li><li class="step"><p>
+     Start WebLogic, and then set up an authentication provider
+     as described in <a class="xref" href="chap-weblogic.html#configure-weblogic-agent" title="Procedure&nbsp;5.5.&nbsp;To Configure the WebLogic Policy Agent">Procedure&nbsp;5.5, &#8220;To Configure the WebLogic Policy Agent&#8221;</a>.
+    </p></li><li class="step"><p>
+     On each server in the domain, deploy the policy agent
+     <code class="filename">agentapp.war</code>.
+    </p></li><li class="step"><p>
+     On each managed server in the domain,
+     update the classpath to include policy agent .jar files.
+    </p><p>
+     In WebLogic Node Manager console, browse to
+     Environment &gt; Servers &gt; <em class="replaceable"><code>server</code></em>
+     &gt; Server Start &gt; Class Path,
+     and then edit the classpath as in the following example,
+     but all on a single line.
+    </p><pre class="brush: shell;">/path/to/j2ee_agents/weblogic_v10_agent/lib/agent.jar:
+/path/to/j2ee_agents/weblogic_v10_agent/lib/openssoclientsdk.jar:
+/path/to/j2ee_agents/weblogic_v10_agent/locale:
+/path/to/j2ee_agents/weblogic_v10_agent/Agent_001/config:
+$CLASSPATH</pre><p>
+     Replace the paths in the example with the actual paths for your domain.
+    </p></li><li class="step"><p>
+     Restart the managed servers.
+    </p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="uninstall-weblogic-agent"></a>5.6.&nbsp;Removing WebLogic Policy Agent Software</h2></div></div></div><a class="indexterm" name="d0e2999"></a><p>Shut down the WebLogic server before you uninstall the
+    policy agent.</p><p>To remove the Java EE policy agent, use <span class="command"><strong>agentadmin
+  --uninstall</strong></span>. You must provide the WebLogic configuration directory
+  location.</p><p>Uninstall does not remove the agent instance directory, but you can
+  do so manually after removing the agent configuration from WebLogic.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-jetty.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-websphere.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;4.&nbsp;Installing the Jetty Server Policy Agent&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;6.&nbsp;Installing the IBM WebSphere Policy Agent</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-7']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

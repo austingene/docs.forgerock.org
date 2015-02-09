@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>OpenAM Java EE Policy Agent Release Notes</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><meta name="description" content="Notes covering prerequisites, fixes, known issues for OpenAM Java EE policy agents. OpenAM provides open source Authentication, Authorization, Entitlement and Federation software."><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div lang="en" class="book"><div class="titlepage"><div><div><h1 class="title"><a name="jee-release-notes"></a>OpenAM Java EE Policy Agent Release Notes</h1></div><div><h2 class="subtitle">Version 3.5.0</h2></div><div><div class="authorgroup"><div class="author"><h3 class="author"><span class="firstname">Mark </span> <span class="surname">Craig</span></h3></div><div class="author"><h3 class="author"><span class="firstname">Gene </span> <span class="surname">Hirayama</span></h3></div><div class="author"><h3 class="author"><span class="firstname">Mike </span> <span class="surname">Jang</span></h3><div lang="en" class="affiliation"><span class="orgname">ForgeRock AS<br></span><div class="address"><p><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="street">33&nbsp;New&nbsp;Montgomery&nbsp;St.</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="otheraddr">Suite&nbsp;1500</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="city">San&nbsp;Francisco</span>,&nbsp;<span class="state">CA</span>&nbsp;<span class="postcode">94105</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="country">USA</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="phone">+1&nbsp;415-599-1100&nbsp;(US)</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<code class="uri">www.forgerock.com</code><br>
+&nbsp;&nbsp;&nbsp;</p></div></div></div></div></div><div><p class="releaseinfo">Software release date: February 12, 2015</p></div><div><p class="copyright">Copyright &copy; 2011-2015 ForgeRock AS</p></div><div><a href="legalnotice.html">Legal Notice</a></div><div><p class="pubdate">Publication date: February 12, 2015</p></div><div><div class="abstract"><div class="abstract-title">Abstract</div><p>Notes covering prerequisites, fixes, known issues for OpenAM Java EE 
+   policy agents. OpenAM provides open source Authentication, Authorization,
+   Entitlement and Federation software.</p></div></div></div><hr></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="chapter"><a href="#chap-javaee-agents">1. Java EE Policy Agents 3.5.0</a></span></dt><dt><span class="chapter"><a href="#chap-feedback">2. How to Report Problems &amp; Provide Feedback</a></span></dt><dt><span class="chapter"><a href="#chap-support">3. Support</a></span></dt></dl></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-javaee-agents"></a>Chapter&nbsp;1.&nbsp;Java EE Policy Agents 3.5.0</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="#what-new-javaee-agents">1.1. New in JavaEE Policy Agents 3.5.0</a></span></dt><dt><span class="section"><a href="#before-you-start-javaee-agents">1.2. Before You Install OpenAM Java EE Policy Agents</a></span></dt><dt><span class="section"><a href="#javaee-agent-compatibility">1.3. Java EE Policy Agent Compatibility</a></span></dt><dt><span class="section"><a href="#javaee-agent-issues">1.4. Java EE Policy Agents Fixes, Limitations, &amp; Known Issues</a></span></dt></dl></div><p>This chapter concerns OpenAM Java EE policy agents. Java EE policy
+ agents run in web application containers and protect Java EE
+ applications.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="what-new-javaee-agents"></a>1.1.&nbsp;New in JavaEE Policy Agents 3.5.0</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><span class="bold"><strong>Java 8 Support</strong></span>. Java EE policy agents
+     now fully support Java 8 environments.
+    </p></li><li class="listitem"><p><span class="bold"><strong>Redhat Support</strong></span>. Java EE policy agents
+     can now be installed on Redhat Linux servers.
+     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-2801" target="_blank">OPENAM-2801</a>).
+    </p></li><li class="listitem"><p><span class="bold"><strong>Reintroduce installing agent.war during Tomcat agent installation</strong></span>.
+     The manual step to add the <code class="literal">agentapp.war</code> file is no longer
+     required as the Java agent installers now automatically install the
+     <code class="literal">.war</code> file
+     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-4514" target="_blank">OPENAM-4514</a>).</p></li><li class="listitem"><p><span class="bold"><strong>Tomcat 8 Support</strong></span>.
+     The Apache Tomcat policy agent now supports Tomcat 8
+     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-5407" target="_blank">OPENAM-5407</a>).</p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="before-you-start-javaee-agents"></a>1.2.&nbsp;Before You Install OpenAM Java EE Policy Agents</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="#java-requirements-javaee-agents">1.2.1. Java EE Agents Java Requirements</a></span></dt><dt><span class="section"><a href="#browser-requirements">1.2.2. Browser Requirements</a></span></dt><dt><span class="section"><a href="#native-application-platforms">1.2.3. Native Application Platform Requirements</a></span></dt><dt><span class="section"><a href="#jee-pa-platform-requirements">1.2.4. Java EE Agents Platform Requirements</a></span></dt><dt><span class="section"><a href="#special-requests">1.2.5. Special Requests</a></span></dt></dl></div><p>
+   This section covers software and hardware prerequisites
+   for installing and running OpenAM Java EE Policy Agents.
+  </p><p lang="en">
+ <span class="emphasis"><em>
+  ForgeRock supports customers using the versions specified here.
+  Other versions and alternative environments might work as well.
+  When opening a support ticket for an issue, however,
+  make sure you can also reproduce the problem
+  on a combination covered here.
+ </em></span>
+</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="java-requirements-javaee-agents"></a>1.2.1.&nbsp;Java EE Agents Java Requirements</h3></div></div></div><p>
+    Java EE policy agents run in a Java EE Web container,
+    and require a Java Development Kit.
+   </p><div lang="en" class="itemizedlist"><p>
+  ForgeRock supports customers using the following Java versions.
+  ForgeRock recommends the most recent Java update,
+  with the latest security fixes.
+ </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+   Oracle Java Development Kit 6, 7, or 8
+  </p></li><li class="listitem"><p>
+   IBM Java Development Kit 6 or 7 (when deploying in WebSphere only)
+  </p></li></ul></div></div><div lang="en" class="section"><div class="titlepage"><div><div><h3 class="title"><a name="browser-requirements"></a>1.2.2.&nbsp;Browser Requirements</h3></div></div></div><p>
+  The following table summarizes browser support.
+ </p><div class="table"><a name="d1112e222"></a><div class="table-title">Table&nbsp;1.1.&nbsp;Supported Platforms &amp; Browsers</div><div class="table-contents"><table summary="Supported Platforms &amp; Browsers" width="100%" border="0"><colgroup><col width="20%"><col width="20%"><col width="20%"><col width="20%"><col width="20%"></colgroup><thead><tr><th>Client Platform</th><th>Chrome 16 or later</th><th>Internet Explorer 9 or later</th><th>Firefox 3.6 or later</th><th>Safari 5 or later</th></tr></thead><tbody><tr><td>Apple iOS 7 or later</td><td>Supported</td><td> </td><td> </td><td>Supported</td></tr><tr><td>Apple Mac OS X 10.8 or later</td><td>Supported</td><td> </td><td>Supported</td><td>Supported</td></tr><tr><td>Google Android 4.3 or later</td><td>Supported</td><td> </td><td> </td><td> </td></tr><tr><td>Microsoft Windows 7 or later</td><td>Supported</td><td>Supported</td><td>Supported</td><td>Supported</td></tr><tr><td>Ubuntu Linux 12.04 LTS or later</td><td>Supported</td><td> </td><td>Supported</td><td> </td></tr></tbody></table></div></div><br class="table-break"></div><div lang="en" class="section"><div class="titlepage"><div><div><h3 class="title"><a name="native-application-platforms"></a>1.2.3.&nbsp;Native Application Platform Requirements</h3></div></div></div><p>
+  ForgeRock supports customers' use of OpenAM REST and other client APIs
+  in native applications on the following platforms.
+ </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+    Apple iOS 7 or later
+   </p></li><li class="listitem"><p>
+    Apple Mac OS X 10.8 or later
+   </p></li><li class="listitem"><p>
+    Google Android 4.3 or later
+   </p></li><li class="listitem"><p>
+    Microsoft Windows 7 or later
+   </p></li><li class="listitem"><p>
+    Ubuntu Linux 12.04 LTS or later
+   </p></li></ul></div><p>
+  Other combinations might work as well.
+  When opening a support ticket for an issue, however,
+  make sure you can also reproduce the problem on one of these platforms.
+ </p></div><div lang="en" class="section"><div class="titlepage"><div><div><h3 class="title"><a name="jee-pa-platform-requirements"></a>1.2.4.&nbsp;Java EE Agents Platform Requirements</h3></div></div></div><p>
+  The following table summarizes platform support.
+ </p><div class="table"><a name="table-jee-pa-platform-requirements"></a><div class="table-title">Table&nbsp;1.2.&nbsp;Supported Operating Systems &amp; Web Application Containers</div><div class="table-contents"><table summary="Supported Operating Systems &amp; Web Application Containers" width="100%" border="0"><colgroup><col width="33%"><col width="16%"><col width="51%"></colgroup><thead><tr><th>Operating Systems (OS)</th><th>OS Versions</th><th>Web Application Containers &amp; Versions</th></tr></thead><tbody><tr><td>
+      <table border="0" summary="Simple list" class="simplelist"><tr><td>CentOS</td></tr><tr><td>Red Hat Enterprise Linux</td></tr><tr><td>Oracle Linux</td></tr></table>
+     </td><td>
+      <table border="0" summary="Simple list" class="simplelist"><tr><td>5, 6, 7</td></tr></table>
+     </td><td>
+      <table border="0" summary="Simple list" class="simplelist"><tr><td>Apache Tomcat 6, 7, 8</td></tr><tr><td>IBM Web Sphere Application Server 8, 8.5</td></tr><tr><td>JBoss Enterprise Application Platform 6</td></tr><tr><td>JBoss Application Server 7</td></tr><tr><td>Jetty 8 (at least 8.1.13), 9</td></tr><tr><td>Oracle WebLogic Server 11g, 12c</td></tr><tr><td>WildFly 8</td></tr></table>
+     </td></tr><tr><td>
+      <table border="0" summary="Simple list" class="simplelist"><tr><td>Microsoft Windows Server</td></tr></table>
+     </td><td>
+      <table border="0" summary="Simple list" class="simplelist"><tr><td>2008, 2008 R2, 2012, 2012 R2</td></tr></table>
+     </td><td>
+      <table border="0" summary="Simple list" class="simplelist"><tr><td>Apache Tomcat 6, 7, 8</td></tr></table>
+     </td></tr><tr><td>
+      <table border="0" summary="Simple list" class="simplelist"><tr><td>Oracle Solaris x64</td></tr><tr><td>Oracle Solaris SPARC</td></tr></table>
+     </td><td>
+      <table border="0" summary="Simple list" class="simplelist"><tr><td>10, 11</td></tr></table>
+     </td><td>
+      <table border="0" summary="Simple list" class="simplelist"><tr><td>Apache Tomcat 6, 7, 8</td></tr><tr><td>Oracle WebLogic Server 11g, 12c</td></tr></table>
+     </td></tr><tr><td>
+      <table border="0" summary="Simple list" class="simplelist"><tr><td>Ubuntu Linux</td></tr></table>
+     </td><td>
+      <table border="0" summary="Simple list" class="simplelist"><tr><td>12.04 LTS, 14.04 LTS</td></tr></table>
+     </td><td>
+      <table border="0" summary="Simple list" class="simplelist"><tr><td>Apache Tomcat 6, 7, 8</td></tr><tr><td>IBM Web Sphere Application Server 8, 8.5</td></tr><tr><td>JBoss Enterprise Application Platform 6</td></tr><tr><td>JBoss Application Server 7</td></tr><tr><td>Jetty 8 (at least 8.1.13), 9</td></tr><tr><td>Oracle WebLogic Server 11g, 12c</td></tr><tr><td>WildFly 8</td></tr></table>
+     </td></tr></tbody></table></div></div><br class="table-break"></div><div lang="en" class="section"><div class="titlepage"><div><div><h3 class="title"><a name="special-requests"></a>1.2.5.&nbsp;Special Requests</h3></div></div></div><p>
+  <span class="strong"><strong>
+   If you have a special request regarding support
+   for a combination not listed here, contact ForgeRock at
+   <a class="link" href="mailto:info@forgerock.com" target="_top">info@forgerock.com</a>.
+  </strong></span>
+ </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="javaee-agent-compatibility"></a>1.3.&nbsp;Java EE Policy Agent Compatibility</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="#javaee-agent-major-changes">1.3.1. Important Changes to Java EE Policy Agent Functionality</a></span></dt><dt><span class="section"><a href="#javaee-agent-deprecated">1.3.2. Deprecated Functionality</a></span></dt><dt><span class="section"><a href="#javaee-agent-removed">1.3.3. Removed Functionality</a></span></dt></dl></div><p>
+   This section concerns OpenAM Java EE Policy Agents 3.5.0.
+  </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="javaee-agent-major-changes"></a>1.3.1.&nbsp;Important Changes to Java EE Policy Agent Functionality</h3></div></div></div><p>The default policy evaluation mode for new policy agent profiles is
+   now self rather than subtree, in order to better scale for large numbers of
+   policy rules.</p><p>Upgrade does not change existing policy agent profile configurations,
+   however. If you want to adopt the new default setting for existing policy
+   agents, you must change the setting manually.</p><p>To do so for Java EE policy agents, set
+   <code class="literal">com.sun.identity.policy.client.cacheMode=self</code>.</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="javaee-agent-deprecated"></a>1.3.2.&nbsp;Deprecated Functionality</h3></div></div></div><p>Support for Oracle WebLogic 10g is deprecated and is likely to be
+   removed in a future release.</p><p>Support for the following containers is deprecated:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+      IBM WebSphere Application Server 7
+     </p></li><li class="listitem"><p>
+     Jetty 7
+    </p></li><li class="listitem"><p>
+      Oracle WebLogic Server 10g
+     </p></li><li class="listitem"><p>
+      GlassFish 2 &amp; 3
+     </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="javaee-agent-removed"></a>1.3.3.&nbsp;Removed Functionality</h3></div></div></div><p>No functionality has been removed in this release.</p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="javaee-agent-issues"></a>1.4.&nbsp;Java EE Policy Agents Fixes, Limitations, &amp; Known Issues</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="#javaee-agent-fixes">1.4.1. Key Fixes</a></span></dt><dt><span class="section"><a href="#javaee-agent-limitations">1.4.2. Limitations</a></span></dt><dt><span class="section"><a href="#javaee-agent-known-issues">1.4.3. Known Issues</a></span></dt></dl></div><p>OpenAM Java EE policy agent issues are tracked at <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM" target="_blank">https://bugster.forgerock.org/jira/browse/OPENAM</a>.</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="javaee-agent-fixes"></a>1.4.1.&nbsp;Key Fixes</h3></div></div></div><p>
+     The following issues were fixed in release 3.5.0.
+     For details, see the
+     <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM" target="_blank">OpenAM issue tracker</a>.
+    </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-2726" target="_blank">OPENAM-2726</a>: Installer must not offer option to apply agent filter in global web.xml for Apache Tomcat Version 7</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-2732" target="_blank">OPENAM-2732</a>: Agent responds with HTTP 500 when not enforced ip is set to 127.0.0.1</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-2747" target="_blank">OPENAM-2747</a>: JEE Policy Agent Installer fails on all version of VMware tc Server except 2.7.1</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-2752" target="_blank">OPENAM-2752</a>: agentapp from JBoss 7 agent loses its MANIFEST file upon installation</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-2782" target="_blank">OPENAM-2782</a>: Bootstrap and Configuration files refer to incorrect PA version</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-2801" target="_blank">OPENAM-2801</a>: Tomcat agent fails to install on Redhat</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-3209" target="_blank">OPENAM-3209</a>: Tomcat 6 agent custom-install does not modify global web.xml</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-3228" target="_blank">OPENAM-3228</a>: Configuration for FQDN checking required even when FQDN checking is disabled</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-3255" target="_blank">OPENAM-3255</a>: J2EE Agent cannot handle doublequote in POSTed value in PDP</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-3492" target="_blank">OPENAM-3492</a>: Clean up the JavaEE Agent Maven build process to improve the handling of dependencies and their versions</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-3650" target="_blank">OPENAM-3650</a>: JPA removes a trailing '?' from a resource URL being evaluated</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-3817" target="_blank">OPENAM-3817</a>: com.sun.identity.agents.common.URLFailoverHelper is missing 'toString()' method</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-4084" target="_blank">OPENAM-4084</a>: JBoss agent fails to install on AS 7.0.0.Final due to incorrect module namespace version</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-4416" target="_blank">OPENAM-4416</a>: AgentException's details thrown during AmFilter.initialize are not logged in enough detail to help with diagnosis.</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-4451" target="_blank">OPENAM-4451</a>: Java EE agents can't be compiled using Maven 3.1.0+</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-4514" target="_blank">OPENAM-4514</a>: Reintroduce installing agentapp.war during Tomcat agent installation</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-5407" target="_blank">OPENAM-5407</a>: Provide Java Policy Agent support for Tomcat 8</p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="javaee-agent-limitations"></a>1.4.2.&nbsp;Limitations</h3></div></div></div><p>
+    No particular limitations are identified for this release.
+   </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="javaee-agent-known-issues"></a>1.4.3.&nbsp;Known Issues</h3></div></div></div><p>
+    The following important known issues
+    remained open at the time release 3.5.0 became available.
+    For details and information on other issues, see the
+    <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM" target="_blank">OpenAM issue tracker</a>.
+   </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-211" target="_blank">OPENAM-211</a>: J2EE agents are unable to work, if the container was started prior to OpenAM</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-1279" target="_blank">OPENAM-1279</a>: Policy Agent fail-over error when the first naming service host is unavailable</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-3294" target="_blank">OPENAM-3294</a>: Agents should not probe the loginURL / logoutURL before redirecting by default</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-4849" target="_blank">OPENAM-4849</a>: FormLoginTaskHandler is only called if URI listed as 'Form Login URI' is a protected resource</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-5358" target="_blank">OPENAM-5358</a>: Support is missing for installing JBoss Policy Agent against a specific profile when there are multiple defined.</p></li><li class="listitem"><p><a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-5448" target="_blank">OPENAM-5448</a>: CompositeAdviceForm.txt does not allow advice submission when javascript is disabled</p></li></ul></div></div></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-feedback"></a>Chapter&nbsp;2.&nbsp;How to Report Problems &amp; Provide Feedback</h1></div></div></div><p>If you have questions regarding OpenAM policy agents which are not
+ answered by the documentation, there is a mailing list which can be found at
+ <a class="link" href="https://lists.forgerock.org/mailman/listinfo/openam" target="_blank">https://lists.forgerock.org/mailman/listinfo/openam</a>
+ where you are likely to find an answer.</p><p>If you have found issues or reproducible bugs within OpenAM
+ 3.5.0 policy agents, report them in <a class="link" href="https://bugster.forgerock.org" target="_blank">https://bugster.forgerock.org</a>.</p><div class="itemizedlist"><p>When requesting help with a problem, include the following
+  information:</p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Description of the problem, including when the problem occurs and
+   its impact on your operation</p></li><li class="listitem"><div class="itemizedlist"><p>Description of the environment, including the following
+    information:</p><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>Machine type</p></li><li class="listitem"><p>Operating system and version</p></li><li class="listitem"><p>Web server or container and version</p></li><li class="listitem"><p>Java version</p></li><li class="listitem"><p>OpenAM policy agent and version</p></li><li class="listitem"><p>Any patches or other software that might be affecting the problem</p></li></ul></div></li><li class="listitem"><p>Steps to reproduce the problem</p></li><li class="listitem"><p>Any relevant access and error logs, stack traces, or core dumps</p></li></ul></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-support"></a>Chapter&nbsp;3.&nbsp;Support</h1></div></div></div><p>You can purchase OpenAM support subscriptions and training courses
+ from ForgeRock and from consulting partners around the world and in your
+ area. To contact ForgeRock, send mail to <a class="link" href="mailto:info@forgerock.com" target="_top">info@forgerock.com</a>. To find a
+ partner in your area, see <a class="link" href="http://forgerock.com/partners/find-a-partner/" target="_blank">http://forgerock.com/partners/find-a-partner/</a>.</p></div></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-7']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>
