@@ -1,0 +1,391 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;1.&nbsp;About OpenAM Java EE Policy Agents</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenAM Java EE Policy Agent User's Guide"><link rel="up" href="index.html" title="OpenAM Java EE Policy Agent User's Guide"><link rel="prev" href="preface.html" title="Preface"><link rel="next" href="chap-apache-tomcat.html" title="Chapter&nbsp;2.&nbsp;Installing the Apache Tomcat Policy Agent"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;1.&nbsp;About OpenAM Java EE Policy Agents</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="preface.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-apache-tomcat.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-about-jee-agents"></a>Chapter&nbsp;1.&nbsp;About OpenAM Java EE Policy Agents</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-about-jee-agents.html#example-j2ee-agent-components">1.1. Java EE Policy Agent Components</a></span></dt><dt><span class="section"><a href="chap-about-jee-agents.html#policy-agent-properties">1.2. About Policy Agent Properties</a></span></dt><dt><span class="section"><a href="chap-about-jee-agents.html#filter-modes">1.3. Java EE Agent Filter Modes of Operation</a></span></dt><dt><span class="section"><a href="chap-about-jee-agents.html#jee-agent-not-enforced-list">1.4. Not-Enforced URI and Client IP Lists</a></span></dt><dt><span class="section"><a href="chap-about-jee-agents.html#j2ee-process-flow">1.5. Java EE Process Flow</a></span></dt><dt><span class="section"><a href="chap-about-jee-agents.html#j2ee-agent-features">1.6. Java EE Policy Agent Features</a></span></dt><dt><span class="section"><a href="chap-about-jee-agents.html#j2ee-agent-configuration">1.7. How Java EE Policy Agents are Configured</a></span></dt></dl></div><a class="indexterm" name="d0e282"></a><p>
+  A <em class="firstterm">Java EE policy agent</em> is an OpenAM add-on component that
+  functions as a Policy Enforcement Point (PEP) for applications
+  deployed on a Java EE-based servlet container or application server.
+  The policy agent protects web-based applications
+  and implements single sign-on (SSO) capabilities
+  for the applications deployed in the container.
+ </p><p>
+  OpenAM Java EE policy agents provide medium touch integration
+  and run on a wide variety of servlet containers and
+  application servers.
+
+  The installation process for Java EE policy agents differ slightly for each
+  container type and may
+  require some configuration and code changes to the configuration files.
+  The installation procedures for each container type are presented later in this
+  guide.
+ </p><p>
+  This chapter covers what Java EE policy agents do, their key features,
+  and how they work.</p><div class="note"><h3 class="title"><a name="one-agent-per-container"></a>Note</h3><p>
+   A single policy agent can work with multiple applications.
+   You therefore install only one policy agent per application server.
+  </p><p>
+   Installing more than one policy agent in an application server is not supported.
+  </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="example-j2ee-agent-components"></a>1.1.&nbsp;Java EE Policy Agent Components</h2></div></div></div><a class="indexterm" name="d0e305"></a><p>The OpenAM Java EE policy agent is comprised
+   of five main components: the <em class="firstterm">policy agent filter</em>,
+   a container-specific <em class="firstterm">Java Authentication and Authorization Server (JAAS) realm
+   implementation</em>, an agent application war file,
+   <em class="firstterm">agent installer</em>, and client SDK.</p><p>
+   The installer integrates the other components within the
+   container, after which the components run transparently,
+   connecting to OpenAM through its client SDK.
+  </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><span class="bold"><strong>Java EE Policy Agent Filter</strong></span>.
+     The Java EE Policy Agent filter is a
+     servlet filter referenced within the deployment descriptor file,
+     <code class="filename">web.xml</code> of each protected application in the
+     container. Applications that do not have their deployment descriptor file
+     updated to use the agent servlet filter will not be protected.
+     The filter's main function is to intercept an inbound client access request
+     for a protected resource and run through a set of task handlers, including
+     determining if the user has a session ID or token.
+     If the user does not have a session token in the browser cookie,
+     <code class="literal">iPlanetDirectoryPro</code>,
+     then the policy agent immediately
+     redirects the user to OpenAM for authentication.
+     Once the user has a session token, the agent retrieves the agent profile from
+     OpenAM and continues to process the request based on the property settings
+     defined in the agent profile.
+    </p></li><li class="listitem"><p><span class="bold"><strong>Agent Realm</strong></span>. The Agent
+     <span class="emphasis"><em>realm</em></span> is not strictly a "component," but is a container-specific
+     integration to allow support for Java Authentication and Authorization Service
+     (JAAS).
+     The Agent Realm, or more accurately the <span class="emphasis"><em>JAAS Realm</em></span>,
+     leverages the underlying
+     Java EE container's ability to retrieve the user's identity and populate the
+     principal in the <code class="literal">HTTPServletRequest</code> object.
+
+     The realm also allows you to take advantage of the Java EE container's declarative and programmatic
+     security settings that define role-based access control over the web resources.
+     You can define the roles in the descriptor files and then define
+     the user's roles within OpenAM, allowing the application to check authorization.
+     JAAS support provides another powerful feature in that you can implement
+     Java EE permissions-related annotations, such as @RolesAllowed and @DeclareRoles,
+     which are specifically designed to secure Enterprise Java Bean (EJB) modules
+     for authenticated users.
+    </p></li><li class="listitem"><p><span class="bold"><strong>Agent Application</strong></span>.
+     The Agent application, deployed as <code class="literal">agentapp.war</code>,
+     processes notifications from OpenAM, refreshes the caches, and runs
+     processes for cross-domain single sign-on (CDSSO). The <code class="literal">agentapp.war</code>
+     file also displays error messages if the cross site scripting (XSS) detector is enabled.
+
+     Note that there are some subtle container-dependent configuration differences
+     that may affect the installation of <code class="literal">agentapp.war</code>.
+     For certain containers, the installer installs the <code class="literal">agentapp.war</code>
+     file; for others, you must manually install the file as part of the
+     agent installation.
+    </p><div class="note"><h3 class="title">Note</h3><p>Technically,
+     the <code class="literal">agentapp.war</code> is not a required component if you have no
+     plans to use CDSSO and notifications, but
+     it is strongly recommended that you deploy this <code class="literal">agentapp.war</code>
+     as notifications from OpenAM are extremely useful.
+    </p></div></li><li class="listitem"><p><span class="bold"><strong>Agent Installer</strong></span>.
+     The agent installer, invoked by the <span class="command"><strong>agentadmin</strong></span> tool,
+     automates the policy agent installation within a container.
+     The agent installer's configuration is set in an XML descriptor file,
+     (<code class="filename">config/configure.xml</code>), defining the user interactions
+     when the install, custom-install, migrate, and uninstall subcommands are
+     run, and the tasks needed to complete installation process, such as
+     creating the agent directory layout, creating backups for the container's
+     configuration files, and encrypting the agent profile's password and saving it
+     in the agent bootstrap configuration file plus other tasks.
+    </p></li><li class="listitem"><p><span class="bold"><strong>openssoclientsdk.jar</strong></span>.
+     Although not technically
+     a part of the Java EE policy agent, the Java EE agent
+     bundles the OpenAM Client SDK for the
+     container. The SDK provides the set of APIs that are designed
+     to work with OpenAM's service and security infrastructure.
+    </p></li></ul></div><div class="figure"><a name="figure-j2ee-policy-agent"></a><div class="figure-title">Figure&nbsp;1.1.&nbsp;Java EE Policy Agent</div><div class="figure-contents"><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/j2ee-policy-agent.png" align="middle" height="360" alt="Java EE Policy Agent"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="ld-d0e395.html" target="longdesc">D</a>]</span></div></div></div></div><br class="figure-break"></div><div lang="en" class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="policy-agent-properties"></a>1.2.&nbsp;About Policy Agent Properties</h2></div></div></div><a class="indexterm" name="d0e407"></a><p>All policy agent configuration settings are stored centrally by default
+  in the OpenAM configuration store, which allows you
+  to configure your policy agents on the OpenAM console for easier management and
+  convenience.
+  Any property change made
+  in OpenAM using the console or the <span class="command"><strong>ssoadm</strong></span> command-line tool is
+  immediately communicated to the agent via a notification.
+  Many policy agent properties are hot-swap enabled, allowing the change
+  to take effect immediately without a server restart.
+ </p><p>Policy agent configuration settings can also be stored locally in a
+  Java properties flat-file, such as
+  <code class="filename">Agent_001/config/OpenSSOAgentConfiguration.properties</code>,
+  which is created when you install the agent.
+  If you implement a local properties file, you must make all
+  configuration changes by modifying property values in the file.
+ </p><p>While the majority of agent properties are hot swap-enabled, there are
+  a number that are not. These non-hot swappable properties are indicated in the
+  OpenAM console or local properties file as such. Any changes to these non-hot swappable
+  properties require a container restart. To avoid any configuration errors that
+  could take effect immediately, you can lock the properties by setting the
+  <code class="literal">com.sun.identity.agents.config.lock.enable</code> to <code class="literal">true</code>
+  in the OpenAM bootstrap file, <code class="filename">OpenSSOAgentBootstrap.properties</code>,
+  and then re-start the container.
+ </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="filter-modes"></a>1.3.&nbsp;Java EE Agent Filter Modes of Operation</h2></div></div></div><a class="indexterm" name="d0e434"></a><a class="indexterm" name="d0e439"></a><p>The agent filter intercepts all inbound client requests
+    to access a protected resource and processes the request based on
+    a global configuration property,
+    <code class="literal">com.sun.identity.agents.config.filter.mode</code>, set in
+    the policy agent profile on OpenAM.
+    The configuration setting determines the
+    filter mode of operation that should be carried out on the intercepted
+    inbound request.
+   </p><p>The filter mode property can be set to one of the following values:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><span class="bold"><strong>NONE</strong></span>.
+      Specifies that nothing should be done with the inbound request.
+      This mode is primarily used in development or testing environments and
+      should never be used in production.
+
+      If logging is enabled, the agent filter
+      logs all intercepted requests for auditing purposes.</p></li><li class="listitem"><p><span class="bold"><strong>SSO_ONLY</strong></span>.
+      Specifies that authentication should be enforced to all users who try
+      to access protected web resources. The filter invokes the OpenAM
+      Authentication service to verify the identity of the user.
+      If the user's identity is verified, the user is issued a session token
+      through OpenAM's Session service.
+     </p></li><li class="listitem"><p><span class="bold"><strong>J2EE_POLICY</strong></span>.
+      Specifies that authorization should be enforced through the
+      container's Java EE security
+      policies, which may be configured declaratively by means of the
+      XML deployment descriptor files using <code class="literal">auth-constraint</code>,
+      <code class="literal">security-constraint</code> and other <code class="literal">web.xml</code>
+      elements, or programmatically through methods calls to the Security APIs.
+      The user identity is determined exactly in the same way as SSO_ONLY, but
+      is additionally authenticated into the specific container realm, where
+      authorization will be run from the container.
+
+      When the filter mode is <code class="literal">J2EE_POLICY</code>,
+      no OpenAM-based URL policies will be enforced.
+      </p></li><li class="listitem"><p><span class="bold"><strong>URL_POLICY</strong></span>.
+      Specifies that authorization should be enforced only
+      by OpenAM's URL resource-based policies.
+      When the filter mode is <code class="literal">URL_POLICY</code>,
+      no Java EE policies will be enforced.
+
+      The <code class="literal">URL_POLICY</code> mode is commonly used
+      in production deployments.
+     </p></li><li class="listitem"><p><span class="bold"><strong>ALL</strong></span>.
+      Specifies that SSO_ONLY, J2EE_POLICY, and URL_POLICY should be
+      enforced. This setting ensures that the user gets properly authenticated
+      with a valid session token ID and then authorized through the Java EE container's
+      declarative or programmatic security settings and OpenAM's URL-based
+      policies to access the web resource.
+     </p></li></ul></div><p>For more information, see
+    <a href="../../jee-users-guide/index/chap-j2ee-agents.html#j2ee-agent-general-properties" class="link"><em class="citetitle">Configuring J2EE Policy Agent Global Properties</em></a>.
+   </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="jee-agent-not-enforced-list"></a>1.4.&nbsp;Not-Enforced URI and Client IP Lists</h2></div></div></div><a class="indexterm" name="d0e502"></a><a class="indexterm" name="d0e507"></a><a class="indexterm" name="d0e510"></a><a class="indexterm" name="d0e515"></a><p>The Java EE policy agent supports properties to bypass authentication
+    and grant immediate access to resources not requiring protection, such
+    as images, stylesheets, or static HTML pages.</p><p>
+    You can configure a Not-Enforced URI List using the
+    <code class="literal">com.sun.identity.agents.config.notenforced.uri</code> property
+    that grants the user access to resources whose URIs match those in the list.
+   </p><p>
+    For example, you can set URI patterns with wildcards in the OpenAM console
+    using the following patterns:</p><div class="screen"><pre>
+     /logout.html
+     /images/*
+     /css/-*-
+     /*.jsp?locale=*
+    </pre></div><p>For more information on wildcard usage, see
+    <a class="link" href="http://openam.forgerock.org/doc/admin-guide/#wildcard-syntax" target="_blank">Wildcard Usage</a>.</p><p>The Java EE policy agent also supports a Not-Enforced Client IP List, which
+      specifies the client IP addresses that can be excluded from authentication
+      and authorization. This property is useful to allow administrators access
+      to the web site from a certain IP address or allow a search engine access
+      to the web resources.
+    </p><p>For more information on the Not-Enforced URI and Not-Enforced Client IP
+    Lists and other related properties, see
+    <a href="../../jee-users-guide/index/chap-j2ee-agents.html#j2ee-agent-not-enforced-uri-properties" class="link"><em class="citetitle">Not Enforced URI Processing Properties</em></a>.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="j2ee-process-flow"></a>1.5.&nbsp;Java EE Process Flow</h2></div></div></div><a class="indexterm" name="d0e545"></a><p>To illustrate how Java EE policy agents work, it is first instructive to understand
+   a simplified and generic web application example with OpenAM. While the specific
+   configuration settings differ depending on the container or application server,
+   the architectural components that make up the OpenAM Java EE policy agent are the
+   same.</p><p>
+   Imagine a web application, such as an e-commerce site,
+   deployed in multiple containers: a client application server (not fully displayed),
+   a web container and an Enterprise Java Bean
+   (EJB) container for the business logic.
+   After the user is granted access to a resource through the Java EE policy agent
+   and OpenAM,
+   the servlet instance processes the request and
+   determines which business logic objects or Java bean classes to invoke
+   from the Enterprise Java Beans (EJB) container.
+   The EJB container may have dedicated EJB components that provide specific transactions,
+   such as sales order creation or processing.
+   The EJB processes the transactions and retrieves any data from the database.
+   The servlet constructs a response and then forwards a JavaServer Page (JSP)
+   or JavaServer Face page to the client.
+  </p><div class="figure"><a name="figure-j2ee-components"></a><div class="figure-title">Figure&nbsp;1.2.&nbsp;Java EE Policy Agent</div><div class="figure-contents"><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/j2ee-components.png" align="middle" height="360" alt="Java EE Policy Agent"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="ld-d0e557.html" target="longdesc">D</a>]</span></div></div></div></div><br class="figure-break"><div class="important"><h3 class="title">Important</h3><p>Do not install the Java EE policy agent in the same container as OpenAM.
+
+    OpenAM must be up and running before the Java EE policy agent starts.
+    This cannot be guaranteed when both run in the same container.
+
+    ForgeRock does not support configurations where
+    OpenAM and the Java EE policy agent are installed in the same container.
+   </p></div><p>The following sequence diagram shows how the pieces fit together when a Java
+   EE client accesses a resource protected by a policy agent. This diagram is
+   simplified to show only the Java EE policy agent steps rather than to describe
+   every possible case.</p><div class="figure"><a name="figure-jee-agent-process-flow"></a><div class="figure-title">Figure&nbsp;1.3.&nbsp;Java EE Policy Agent Process Flow</div><div class="figure-contents"><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td align="center"><img src="images/jee-agent-process-flow.png" align="middle" height="360" alt="Java EE Policy Agent Process Flow"></td></tr></table><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="ld-d0e573.html" target="longdesc">D</a>]</span></div></div></div></div><br class="figure-break"><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>The web client or user attempts to access a protected resource
+     at <code class="literal">www.example.com</code> by pointing her browser to a page
+     in a protected application. The agent filter intercepts the inbound
+     request to the server.
+    </p></li><li class="listitem"><p>The agent filter authenticates the agent account and retrieves the
+     agent profile from OpenAM.
+    </p></li><li class="listitem"><p>The agent profile is returned. For this example, we assume that the
+     filter mode is set to <code class="literal">ALL</code>.</p></li><li class="listitem"><p>The agent filter checks if the requested resource is on the Not-Enforced
+     URI list. If yes, skip to step 18.
+    </p></li><li class="listitem"><p>The agent filter checks if the session cookie, <code class="literal">iPlanetDirectoryPro</code>,
+     is present. If yes, skip to step 11.
+    </p></li><li class="listitem"><p>The filter redirects the client browser to the OpenAM Authentication
+     Service, which displays a login page.</p></li><li class="listitem"><p>The client must input her credentials.</p></li><li class="listitem"><p>Once the client has been authenticated, create a session ID.
+     Re-direct back to the web server with a newly issued session ID,
+     contained in the <code class="literal">iPlanetDirectoryPro</code> browser cookie.</p></li><li class="listitem"><p>The request is once again intercepted by the servlet filter.
+    </p></li><li class="listitem"><p>The agent filter checks for the session cookie, which is found.</p></li><li class="listitem"><p>The session cookie gets validated by OpenAM's Session Service. If not valid,
+     go back to step 5.</p></li><li class="listitem"><p>OpenAM validates the session cookie.</p></li><li class="listitem"><p>The agent filter authenticates into the container's security realm
+     and has the correct roles assigned, the container determines if the
+     user's role has authorization to access the resource.
+    </p></li><li class="listitem"><p>Internal authentication is successful.</p></li><li class="listitem"><p>The agent filter checks the URL_BASED policy in OpenAM.
+    </p></li><li class="listitem"><p>OpenAM's Policy Service
+     is called to return an authorization decision to allow the client or user
+     access to the protected resource. The Policy Service returns an
+     <code class="literal">ALLOW</code>.
+    </p></li><li class="listitem"><p>The agent filter writes the policy decision to an audit log.</p></li><li class="listitem"><p>Pass through to the web resource.
+    </p></li><li class="listitem"><p>The web resource performs the Java EE security checks.</p></li><li class="listitem"><p>Response returns the resource from <code class="literal">www.example.com</code></p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="j2ee-agent-features"></a>1.6.&nbsp;Java EE Policy Agent Features</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="chap-about-jee-agents.html#jee-agent-attribute-fetching">1.6.1. Attribute Fetch Modes</a></span></dt><dt><span class="section"><a href="chap-about-jee-agents.html#agent-login-attempt-limits">1.6.2. Login Attempt Limits</a></span></dt><dt><span class="section"><a href="chap-about-jee-agents.html#fqdn-checking">1.6.3. FQDN Checking</a></span></dt><dt><span class="section"><a href="chap-about-jee-agents.html#cookie-reset">1.6.4. Cookie Reset Properties</a></span></dt><dt><span class="section"><a href="chap-about-jee-agents.html#agent-cdsso">1.6.5. Cross Domain Single Sign-On</a></span></dt></dl></div><a class="indexterm" name="d0e663"></a><p>The Java EE policy agent provides a number of additional features
+   useful for your deployment.
+  </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="jee-agent-attribute-fetching"></a>1.6.1.&nbsp;Attribute Fetch Modes</h3></div></div></div><p>Java EE policy agents provides the capability
+    to fetch and inject user information into HTTP headers, request objects, and
+    cookies and pass them on to the protected client applications.
+    The client applications can then personalize content using these attributes
+    in their web pages or responses.
+   </p><p>Specifically, you can configure the type of
+    attributes to be fetched and the associated mappings for the attributes
+    names used on OpenAM to those values used in the containers. The Java EE
+    policy agent securely fetches the user and session data from the
+    authenticated user as well as policy response attributes.
+   </p><p>For more details, see
+    <a href="../../jee-users-guide/index/chap-j2ee-agents.html" class="link">
+     <em class="citetitle">Configuring Java EE Policy Agents</em></a>.</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="agent-login-attempt-limits"></a>1.6.2.&nbsp;Login Attempt Limits</h3></div></div></div><a class="indexterm" name="d0e688"></a><a class="indexterm" name="d0e693"></a><p>When the user-agent does not present a valid SSO token, the agent
+    will redirect the user to the login URL configured in OpenAM.
+
+    The Java EE policy agent can be configured to limit the login attempts
+    made to the policy agent to mitigate against any redirect loops that may result
+    in an error page presented to the end-user.</p><p>
+    You can use the <code class="literal">com.sun.identity.agents.config.login.attempt.limit</code>
+    property to specify a non-zero value for the number of login attempts.
+    For example, if the property is set to 3, then the agent will block the access
+    request to the protected resource on the fourth login request.
+   </p><p>
+    You can also limit the number of redirections the agent can take for a single
+    browser session by setting the
+    <code class="literal">com.sun.identity.agents.config.redirect.attempt.limit</code>.
+   </p><p>For more details, see
+    <a href="../../jee-users-guide/index/chap-j2ee-agents.html#j2ee-agent-general-properties" class="link">
+     <em class="citetitle">General Properties</em></a>.</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="fqdn-checking"></a>1.6.3.&nbsp;FQDN Checking</h3></div></div></div><a class="indexterm" name="d0e718"></a><a class="indexterm" name="d0e723"></a><p>The Java EE policy agent requires that clients accessing
+    protected resources use valid URLs with fully qualified domain names (FQDNs).
+    If invalid URLs are referenced, policy evaluation can
+    fail as the fully qualified domain name (FQDN) will not match the requested
+    URL, leading to blocked access to the resource.
+    Misconfigured URLs can also result in incorrect policy evaluation for
+    subsequent access requests.
+   </p><p>There are cases where clients may specify resource URLs that differ from
+    the FQDNs stored in OpenAM policies, for example, in load
+    balanced and virtual host environments. To handle these cases,
+    the Java EE policy agent supports FQDN Checking properties:
+    <code class="literal">FQDN Default</code>
+    and <code class="literal">FQDN Virtual Host Map</code> properties.
+   </p><p>The <code class="literal">FQDN Default</code> property specifies the default URL
+    with valid hostname.
+    The property ensures that the policy agent can redirect to
+    a URL with a valid hostname should it discover an invalid URL in the client request.</p><p>The <code class="literal">FQDN Virtual Host Map</code> property stores map keys
+    and their corresponding values, allowing invalid URLs, load balanced URLs,
+    and virtual host URLs to be correctly mapped to valid URLs.
+    Each entry in the Map has precedence over the <code class="literal">FQDN Default</code>
+    setting, so that if no valid URLs exist in the <code class="literal">FQDN Virtual Host Map</code>
+    property, the agent redirects to
+    the value specified in the <code class="literal">FQDN Default</code> property.
+   </p><p>If you want the agent to redirect to a URL other than the one specified
+    in the <code class="literal">FQDN Default</code> property, then it is good practice to
+    include any anticipated invalid URLs in the <code class="literal">FQDN Virtual Host Map</code> property
+    and map it to a valid URL.
+   </p><p>For more details, see
+    <a href="../../jee-users-guide/index/chap-j2ee-agents.html#j2ee-agent-fqdn-properties" class="link">
+     <em class="citetitle">Fully Qualified Domain Name Checking Properties</em></a>.</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="cookie-reset"></a>1.6.4.&nbsp;Cookie Reset Properties</h3></div></div></div><a class="indexterm" name="d0e773"></a><a class="indexterm" name="d0e778"></a><p>OpenAM provides cookie reset properties that the agent carries out
+    prior to redirecting the client to a login page for authentication.
+   </p><p>Cookie reset is typically used when multiple parallel authentication
+    mechanisms are in play with the policy agent and another authentication system.
+    The policy agent can reset the cookies set by the other mechanism before
+    redirecting the client to a login page.
+   </p><p>The cookie reset properties include a name list specifying all of the
+    cookies that will reset, a domain map specifying the domains set for each cookie,
+    and a path map specifying the path from which the cookie will be reset.
+   </p><p>If you have enabled attribute fetching using cookies to retrieve user
+    data, it is good practice to use cookie reset, which will reset once you want
+    to access an enforced URL without a valid session.
+   </p><p>For more details, see
+    <a href="../../jee-users-guide/index/chap-j2ee-agents.html#j2ee-agent-cookie-reset-properties" class="link">
+     <em class="citetitle">Cookie Reset Properties</em></a>.</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="agent-cdsso"></a>1.6.5.&nbsp;Cross Domain Single Sign-On</h3></div></div></div><a class="indexterm" name="d0e800"></a><a class="indexterm" name="d0e805"></a><p>Cross domain single sign-on (CDSSO) allows the Java EE policy agent
+    to transfer a validated session ID between an OpenAM domain and an application
+    domain using a proprietary OpenAM mechanism.
+    Normally, single sign-on cannot be implemented across domains as the session
+    cookie from one domain (for example, website.com) is not accessible from
+    another domain (for example, website.net).
+   </p><p>
+    OpenAM's CDSSO solves this cross-domain problem and is best implemented in environments
+    where all the domains are managed ultimately by the same organization.
+   </p><p>
+    The Java EE policy agent works with an OpenAM component called
+    a <code class="literal">CDCServlet</code> that generates a
+    self-submitting form containing
+    the valid session token from one domain.
+    The form gets auto-submitted to the policy agent endpoint via a POST
+    operation.
+    The policy agent processes the request and extracts the session ID, which is
+    again validated by OpenAM. If validation is successful,
+    the policy agent sets the cookie in alternate domain. The
+    client can then access a resource in that domain.
+   </p><p>For more details, see
+    <a class="link" href="http://openam.forgerock.org/doc/admin-guide/#chap-cdsso" target="_blank">
+     <em class="citetitle">Configuring Cross Domain Single Sign-On</em></a>.</p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="j2ee-agent-configuration"></a>1.7.&nbsp;How Java EE Policy Agents are Configured</h2></div></div></div><a class="indexterm" name="d0e827"></a><p>You install Java EE policy agents in the web application containers
+   serving web applications that you want to protect. Java EE policy agents are
+   themselves web applications running in the container whose applications you
+   configure OpenAM to protect. By default, the Java EE policy agent has only
+   enough configuration at installation time to connect to OpenAM in order to
+   get the rest of its configuration from the OpenAM configuration store. With
+   nearly all configuration stored centrally, you can manage policy agents
+   centrally from the OpenAM console.<a href="#ftn.d0e834" class="footnote" name="d0e834"><sup class="footnote">[1]</sup></a></p><p>
+   For each web application that you protect,
+   you also configure at least the deployment descriptor
+   to filter requests through the policy agent.
+   ForgeRock delivers the Java EE policy agents with a sample application .war file
+   under
+   <code class="filename">j2ee_agents/<em class="replaceable"><code>container</code></em>_agent/sampleapp/</code>
+   demonstrating the configuration to use to protect your web application.
+   In the <code class="filename">WEB-INF/web.xml</code> deployment descriptor file
+   for the sample application,
+   you find an example of the filter configuration
+   that you must add to the deployment descriptors of your applications.
+  </p><p>You configure Java EE policy agents per OpenAM realm. Thus to access
+   centralized configuration, you select Access Control &gt; <em class="replaceable"><code>Realm
+    Name</code></em> &gt; Agents &gt; Java EE &gt; <em class="replaceable"><code>Agent
+    Name</code></em>. Java EE policy agent configuration is distinct from
+   policy configuration. The only policy-like configuration that you apply to
+   Java EE policy agents is indicating which URLs in the web server can be
+   ignored (<em class="firstterm">not enforced URLs</em>) and which client IP
+   address are exempt from policy enforcement (<em class="firstterm">not enforced
+    IPs</em>).</p><p>For each aspect of Java EE policy agent configuration, you can configure
+   the policy agent through the OpenAM console during testing, and then
+   export the resulting configuration in order to script configuration in
+   your production environment.</p></div><div class="footnotes"><br><hr class="footnote-hr"><div id="ftn.d0e834" class="footnote"><p><a href="#d0e834" class="para"><sup class="para">[1] </sup></a>You can opt to store the
+    agent configuration locally if necessary.</p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="preface.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-apache-tomcat.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Preface&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;2.&nbsp;Installing the Apache Tomcat Policy Agent</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-7']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

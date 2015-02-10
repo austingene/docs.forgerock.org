@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>Chapter&nbsp;4.&nbsp;Installing the Jetty Server Policy Agent</title><link rel="stylesheet" type="text/css" href="coredoc.css"><link rel="stylesheet" type="text/css" href="css/coredoc.css"><link rel="stylesheet" type="text/css" href="sh/shCore.css"><link rel="stylesheet" type="text/css" href="sh/shCoreEclipse.css"><link rel="stylesheet" type="text/css" href="sh/shThemeEclipse.css"><script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script><script src="uses-jquery.js" type="text/javascript"></script><script src="sh/shCore.js" type="text/javascript"></script><script src="sh/shBrushAci.js" type="text/javascript"></script><script src="sh/shBrushBash.js" type="text/javascript"></script><script src="sh/shBrushCsv.js" type="text/javascript"></script><script src="sh/shBrushHttp.js" type="text/javascript"></script><script src="sh/shBrushJava.js" type="text/javascript"></script><script src="sh/shBrushJScript.js" type="text/javascript"></script><script src="sh/shBrushLDIF.js" type="text/javascript"></script><script src="sh/shBrushPlain.js" type="text/javascript"></script><script src="sh/shBrushProperties.js" type="text/javascript"></script><script src="sh/shBrushXml.js" type="text/javascript"></script><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenAM Java EE Policy Agent User's Guide"><link rel="up" href="index.html" title="OpenAM Java EE Policy Agent User's Guide"><link rel="prev" href="chap-jboss-7.html" title="Chapter&nbsp;3.&nbsp;Installing the JBoss 7 Application Server Policy Agent"><link rel="next" href="chap-weblogic.html" title="Chapter&nbsp;5.&nbsp;Installing the Oracle WebLogic Policy Agent"><link rel="copyright" href="legalnotice.html" title="Legal Notice"><script type="text/javascript">SyntaxHighlighter.all();</script>
+<link rel="shortcut icon" href="http://forgerock.org/favicon.ico">
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;4.&nbsp;Installing the Jetty Server Policy Agent</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="chap-jboss-7.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="chap-weblogic.html">Next</a></td></tr></table><hr></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-jetty"></a>Chapter&nbsp;4.&nbsp;Installing the Jetty Server Policy Agent</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="chap-jetty.html#before-jetty-agent-install">4.1. Before You Install</a></span></dt><dt><span class="section"><a href="chap-jetty.html#install-jetty-agent">4.2. Installing the Jetty Policy Agent</a></span></dt><dt><span class="section"><a href="chap-jetty.html#silent-jetty-agent-installation">4.3. Silent Jetty Policy Agent Installation</a></span></dt><dt><span class="section"><a href="chap-jetty.html#uninstall-jetty-agent">4.4. Removing Jetty Policy Agent Software</a></span></dt></dl></div><a class="indexterm" name="d0e2011"></a><a class="indexterm" name="d0e2016"></a><p>This chapter covers installation of the policy agent for Jetty.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="before-jetty-agent-install"></a>4.1.&nbsp;Before You Install</h2></div></div></div><a class="indexterm" name="d0e2024"></a><p>Make sure OpenAM is installed and running, and that you can contact OpenAM
+  from the system running the policy agent. Next, create a profile for your
+  policy agent as described in the <em class="citetitle">Administration Guide</em>
+  section on <a class="link" href="http://openam.forgerock.org/doc/admin-guide/#create-agent-profiles" target="_blank"><em class="citetitle">Creating Agent
+  Profiles</em></a>. To protect resources with the agent also create
+  at least one policy as described in the section on <a class="link" href="http://openam.forgerock.org/doc/admin-guide/#configure-authz-policy" target="_blank"><em class="citetitle">Configuring
+  Policies</em></a>. Consider creating a simple policy, such as a
+  policy that allows only authenticated users to access your resources, in order
+  to test your policy agent after installation.</p><p>You must install Jetty before you install the policy agent, and you
+  must stop the server during installation.</p><p lang="en">
+ You must install a supported version of the Java runtime environment.
+ See the <em class="citetitle">Release Notes</em> section,
+ <a href="../../jee-release-notes/index/chap-javaee-agents.html#java-requirements-javaee-agents" class="link"><em class="citetitle">Java EE Agents Java Requirements</em></a>,
+ and set the <code class="literal">JAVA_HOME</code> environment variable accordingly.
+ The policy agent installer requires Java.
+</p><div class="screen"><pre>
+$ <strong>echo $JAVA_HOME</strong>
+<em>/path/to/java</em>
+      </pre></div><p lang="en">
+ See the OpenAM <em class="citetitle">Installation Guide</em> section,
+ <a class="link" href="http://openam.forgerock.org/doc/install-guide/#download-openam-software" target="_blank"><em class="citetitle">Obtaining OpenAM Software</em></a>
+ to determine which version of the agent to download, and download the agent.
+ Also verify the checksum of the file you download
+ against the checksum posted on the download page.
+</p><div class="note"><h3 class="title">Note</h3><p>
+    Command line examples in this chapter show Jetty accessed remotely. If
+    you are following the examples and have issues accessing Jetty remotely,
+    you might have to change filter settings in the deployment descriptor file,
+    such as <code class="filename">/path/to/jetty/webapps/test/WEB-INF/web.xml</code>,
+    as shown in the following example.
+   </p><pre class="brush: xml;">&lt;filter&gt;
+ &lt;filter-name&gt;TestFilter&lt;/filter-name&gt;
+ &lt;filter-class&gt;com.acme.TestFilter&lt;/filter-class&gt;
+ &lt;init-param&gt;
+  &lt;param-name&gt;remote&lt;/param-name&gt;
+  &lt;param-value&gt;true&lt;/param-value&gt; &lt;!-- default: false --&gt;
+ &lt;/init-param&gt;
+&lt;/filter&gt;</pre></div><p>Unzip the file in the directory where you plan to install the J2EE
+  policy agent. The agent you install stores its configuration and logs
+  under this directory.</p><p>When you unzip the policy agent, you find the following directories
+   under the <code class="filename">j2ee_agents/jetty_v61_agent</code> directory.</p><p lang="en">
+ Despite the directory name,
+ the policy agent supports multiple container versions.
+ For details, see the <em class="citetitle">Release Notes</em> section,
+ <a href="../../jee-release-notes/index/chap-javaee-agents.html#jee-pa-platform-requirements" class="link"><em class="citetitle">Java EE Agents Platform Requirements</em></a>.
+</p><div lang="en" class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="filename">bin</code></span></dt><dd><p>The installation and configuration program
+    <span class="command"><strong>agentadmin</strong></span> and a password hashing tool
+    <span class="command"><strong>crypt_util</strong></span>.</p></dd><dt><span class="term"><code class="filename">config</code></span></dt><dd><p>Configuration templates used by the <span class="command"><strong>agentadmin</strong></span>
+   command during installation</p></dd><dt><span class="term"><code class="filename">data</code></span></dt><dd><p>Not used</p></dd><dt><span class="term"><code class="filename">etc</code></span></dt><dd><p>Configuration templates used during installation</p></dd><dt><span class="term"><code class="filename">installer-logs</code></span></dt><dd><p>Location for log files written during installation</p></dd><dt><span class="term"><code class="filename">legal-notices</code></span></dt><dd><p>Contains licensing information including third-party licenses</p></dd><dt><span class="term"><code class="filename">lib</code></span></dt><dd><p>Shared libraries used by the Java EE policy agent</p></dd><dt><span class="term"><code class="filename">locale</code></span></dt><dd><p>Property files used by the installation program</p></dd><dt><span class="term"><code class="filename">README</code></span></dt><dd><p>README file containing platform and install information for the agent</p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="install-jetty-agent"></a>4.2.&nbsp;Installing the Jetty Policy Agent</h2></div></div></div><a class="indexterm" name="d0e2178"></a><p>Complete the following procedures to install the policy agent.</p><div lang="en" class="procedure"><a name="d0e2186"></a><div class="procedure-title">Procedure&nbsp;4.1.&nbsp;To Create the Agent Profile</div><p>Regardless of whether you store configurations centrally in OpenAM
+        or locally with your agents, the agent requires a profile so that it can
+        connect to and communicate with OpenAM.</p><ol class="procedure" type="1"><li class="step"><p>In the OpenAM console, browse to Access Control &gt;
+            <em class="replaceable"><code>Realm Name</code></em> &gt; Agents &gt; J2EE,
+            and then click the New... button in the Agent table.</p></li><li class="step"><p>Complete the web form using the following hints.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">Name</span></dt><dd><p>The name for the agent profile used when you install the
+                        agent</p></dd><dt><span class="term">Password</span></dt><dd><p>Password the agent uses to authenticate to OpenAM</p></dd><dt><span class="term">Configuration</span></dt><dd><p>Centralized configurations are stored in the OpenAM configuration
+                        store. You can manage the centralized configuration through the OpenAM
+                        console. Local configurations are stored in a file alongside the
+                        agent.</p></dd><dt><span class="term">Server URL</span></dt><dd><p>The full URL to an OpenAM instance, or if OpenAM is deployed in
+                        a site configuration (behind a load balancer) then the site URL</p><p>In centralized configuration mode, the Server URL is used to
+                        populate the agent profile for services such as Login, Logout, Naming,
+                        and Cross Domain SSO.</p></dd><dt><span class="term">Agent URL</span></dt><dd><p>The URL to the J2EE agent application, such as
+                        <code class="literal">http://www.example.com:8080/agentapp</code></p><p>In centralized configuration mode, the Agent URL is used to
+                        populate the Agent Profile for services such as notifications.</p></dd></dl></div></li></ol></div><div lang="en" class="procedure"><a name="d0e2238"></a><div class="procedure-title">Procedure&nbsp;4.2.&nbsp;To Create the Password File</div><a class="indexterm" name="d0e2241"></a><ol class="procedure" type="1"><li class="step"><p>
+   Create a text file containing only the password.
+  </p><div class="screen"><pre>
+$ <strong>echo password &gt; /tmp/pwd.txt</strong>
+  </pre></div></li><li class="step"><p>
+   Protect the password file you create as appropriate for your operating system.
+  </p><div class="screen"><pre>
+$ <strong>chmod 400 /tmp/pwd.txt</strong>
+ </pre></div></li></ol></div><div class="procedure"><a name="install-agent-into-jetty"></a><div class="procedure-title">Procedure&nbsp;4.3.&nbsp;To Install the Policy Agent into Jetty</div><ol class="procedure" type="1"><li class="step"><p>Shut down the Jetty server where you plan to install the
+    agent.</p></li><li class="step"><p>Make sure OpenAM is running.</p></li><li class="step"><p>Run <span class="command"><strong>agentadmin --install</strong></span> to install the agent.</p><p lang="en">When you run the command, you will be prompted to read and accept the
+  software license agreement for the agent installation.
+  You can suppress the license agreement prompt by including the
+  <code class="option">--acceptLicense</code> option on the command line.
+  The inclusion of the option indicates that you have read and accepted
+  the terms stated in the license.
+  To view the license agreement, open <code class="filename">&lt;server-root&gt;/legal-notices/license.txt</code>.
+ </p><div class="screen"><pre>
+$ <strong>/path/to/j2ee_agents/jetty_v61_agent/bin/agentadmin --install --acceptLicense</strong>
+<em>...
+-----------------------------------------------
+SUMMARY OF YOUR RESPONSES
+-----------------------------------------------
+Jetty Server Config Directory : /path/to/jetty/etc
+OpenAM server URL : http://openam.example.com:8080/openam
+Jetty installation directory. : /path/to/jetty
+Agent URL : http://www.example.com:8080/agentapp
+Agent Profile name : Jetty Agent
+Agent Profile Password file name : /tmp/pwd.txt
+
+...
+SUMMARY OF AGENT INSTALLATION
+-----------------------------
+Agent instance name: Agent_001
+Agent Bootstrap file location:
+/path/to/j2ee_agents/jetty_v61_agent/Agent_001/config/
+ OpenSSOAgentBootstrap.properties
+Agent Configuration file location
+/path/to/j2ee_agents/jetty_v61_agent/Agent_001/config/
+ OpenSSOAgentConfiguration.properties
+Agent Audit directory location:
+/path/to/j2ee_agents/jetty_v61_agent/Agent_001/logs/audit
+Agent Debug directory location:
+/path/to/j2ee_agents/jetty_v61_agent/Agent_001/logs/debug
+
+
+Install log file location:
+/path/to/j2ee_agents/jetty_v61_agent/installer-logs/audit/install.log
+...</em>
+    </pre></div><p>Upon successful completion, the installer has updated Jetty's
+    <code class="filename">start.jar</code> to reference the agent, set up the agent
+    web application, and also set up configuration and log directories for the
+    agent.</p><div class="note"><h3 class="title">Note</h3><p>If the agent is in a different domain than the server, refer to
+      <em class="citetitle">Administration Guide</em> procedure, <a class="link" href="http://openam.forgerock.org/doc/admin-guide/#chap-cdsso" target="_blank"><em class="citetitle">Configuring Cross-Domain
+   Single Sign On</em></a>.</p></div></li><li class="step"><p>Take note of the configuration files and log locations.</p><p>Each agent instance that you install on the system has its own
+    numbered configuration and logs directory. The first agent's configuration
+    and logs are thus located under the directory
+    <code class="filename">j2ee_agents/jetty_v61_agent/Agent_001/</code>.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="filename">config/OpenSSOAgentBootstrap.properties</code></span></dt><dd><p>Used to bootstrap the Java EE policy agent, allowing the agent to
+       connect to OpenAM and download its configuration</p></dd><dt><span class="term"><code class="filename">config/OpenSSOAgentConfiguration.properties</code></span></dt><dd><p>Only used if you configured the Java EE policy agent to use local
+       configuration</p></dd><dt><span class="term"><code class="filename">logs/audit/</code></span></dt><dd><p>Operational audit log directory, only used if remote logging
+       to OpenAM is disabled</p></dd><dt><span class="term"><code class="filename">logs/debug/</code></span></dt><dd><p>Debug directory where the <code class="filename">debug.out</code> debug
+       file resides. Useful in troubleshooting policy agent issues.</p></dd></dl></div></li><li class="step"><p>If your policy agent configuration is not in the top-level realm (/),
+       then you must edit config/OpenSSOAgentBootstrap.properties to identify
+       the sub-realm that has your policy agent configuration.
+       Find com.sun.identity.agents.config.organization.name and change
+       the / to the path to your policy agent profile. This allows the policy agent
+       to properly identify itself to the OpenAM server. </p></li><li class="step"><p>To protect a web application, you must add the following filter
+    to the application's <code class="filename">WEB-INF/web.xml</code> deployment descriptor,
+    following the opening &lt;web-app&gt; tag.</p><pre class="brush: xml;"> &lt;filter&gt;
+  &lt;filter-name&gt;Agent&lt;/filter-name&gt;
+  &lt;display-name&gt;Agent&lt;/display-name&gt;
+  &lt;description&gt;OpenAM Policy Agent Filter&lt;/description&gt;
+ &lt;filter-class&gt;com.sun.identity.agents.filter.AmAgentFilter&lt;/filter-class&gt;
+ &lt;/filter&gt;
+ &lt;filter-mapping&gt;
+  &lt;filter-name&gt;Agent&lt;/filter-name&gt;
+  &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+  &lt;dispatcher&gt;REQUEST&lt;/dispatcher&gt;
+  &lt;dispatcher&gt;INCLUDE&lt;/dispatcher&gt;
+  &lt;dispatcher&gt;FORWARD&lt;/dispatcher&gt;
+  &lt;dispatcher&gt;ERROR&lt;/dispatcher&gt;
+ &lt;/filter-mapping&gt;</pre></li><li class="step"><p>Start the Jetty server where you installed the agent.</p><div class="screen"><pre>
+$ <strong>cd /path/to/jetty ; java -jar start.jar</strong>
+<em>...
+2011-09-15 12:49:55.469:INFO::Extract file:/path/to/jetty/webapps/agentapp.war
+...
+2011-09-15 12:50:14.163:INFO::Started SelectChannelConnector@0.0.0.0:8080</em>
+    </pre></div></li><li class="step"><p>If you have a policy configured, you can test your policy agent.
+    For example, try to browse to a resource that your policy agent protects.
+    You should be redirected to OpenAM to authenticate, for example as user
+    <code class="literal">demo</code>, password <code class="literal">changeit</code>. After
+    you authenticate, OpenAM then redirects you back to the resource you tried
+    to access.</p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="silent-jetty-agent-installation"></a>4.3.&nbsp;Silent Jetty Policy Agent Installation</h2></div></div></div><a class="indexterm" name="d0e2383"></a><p>When performing a scripted, silent installation, use
+  <span class="command"><strong>agentadmin --acceptLicense --saveResponse
+  <em class="replaceable"><code>response-file</code></em></strong></span>
+  to create a response file for scripted installation. Then install silently
+  using <span class="command"><strong>agentadmin --install --acceptLicense --useResponse
+  <em class="replaceable"><code>response-file</code></em></strong></span>.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="uninstall-jetty-agent"></a>4.4.&nbsp;Removing Jetty Policy Agent Software</h2></div></div></div><a class="indexterm" name="d0e2403"></a><p>Shut down the Jetty server before you uninstall the
+    policy agent.</p><p>To remove the Java EE policy agent, use <span class="command"><strong>agentadmin
+  --uninstall</strong></span>. You must provide the Jetty configuration directory
+  location.</p><p>Uninstall does not remove the agent instance directory, but you can
+  do so manually after removing the agent configuration from Jetty.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="chap-jboss-7.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="chap-weblogic.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;3.&nbsp;Installing the JBoss 7 Application Server Policy Agent&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;5.&nbsp;Installing the Oracle WebLogic Policy Agent</td></tr></table></div><p>&nbsp;</p><div id="footer"><p>Something wrong on this page? <a href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&components=10007&issuetype=1">Log a documentation bug.</a></p></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23412190-7']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>
