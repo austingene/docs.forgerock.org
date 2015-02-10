@@ -140,7 +140,7 @@ $(document).ready(function () {
      * the latest published projectName/projectVersion,
      * then show a link.
      */
-    var project = "openam-pa";       // E.g. "OpenAM"
+    var project = "openam";       // E.g. "OpenAM"
     var version = "3.5.0";    // E.g. "11.0.0"
     var jsonUrl = "http://docs.forgerock.org/latest.json";        // E.g. "http://docs.forgerock.org/latest.php"
     var language = "en";
