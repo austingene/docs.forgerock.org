@@ -11,11 +11,11 @@
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="country">USA</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="phone">+1&nbsp;415-599-1100&nbsp;(US)</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<code class="uri">www.forgerock.com</code><br>
-&nbsp;&nbsp;&nbsp;</p></div></div></div></div></div><div><p class="releaseinfo">Software release date: February 12, 2015</p></div><div><p class="copyright">Copyright &copy; 2011-2015 ForgeRock AS.</p></div><div><a href="legalnotice.html">Legal Notice</a></div><div><p class="pubdate">Publication date: February 12, 2015</p></div><div><div class="abstract"><div class="abstract-title">Abstract</div><p>Guide to installing and managing OpenAM Java EE policy agents.
+&nbsp;&nbsp;&nbsp;</p></div></div></div></div></div><div><p class="releaseinfo">Software release date: February 25, 2015</p></div><div><p class="copyright">Copyright &copy; 2011-2015 ForgeRock AS.</p></div><div><a href="legalnotice.html">Legal Notice</a></div><div><p class="pubdate">Publication date: February 25, 2015</p></div><div><div class="abstract"><div class="abstract-title">Abstract</div><p>Guide to installing and managing OpenAM Java EE policy agents.
     OpenAM provides open source Authentication, Authorization, Entitlement and
-    Federation software.</p></div></div></div><hr></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="preface"><a href="#preface">Preface</a></span></dt><dt><span class="chapter"><a href="#chap-about-jee-agents">1. About OpenAM Java EE Policy Agents</a></span></dt><dt><span class="chapter"><a href="#chap-apache-tomcat">2. Installing the Apache Tomcat Policy Agent</a></span></dt><dt><span class="chapter"><a href="#chap-jboss-7">3. Installing the JBoss 7 Application Server Policy Agent</a></span></dt><dt><span class="chapter"><a href="#chap-jetty">4. Installing the Jetty Server Policy Agent</a></span></dt><dt><span class="chapter"><a href="#chap-weblogic">5. Installing the Oracle WebLogic Policy Agent</a></span></dt><dt><span class="chapter"><a href="#chap-websphere">6. Installing the IBM WebSphere Policy Agent</a></span></dt><dt><span class="chapter"><a href="#chap-j2ee-agents">7. Configuring Java EE Policy Agents</a></span></dt><dt><span class="chapter"><a href="#chap-lb">8. Configuring Java EE Policy Agents Behind Load Balancers</a></span></dt><dt><span class="chapter"><a href="#chap-troubleshooting">9. Troubleshooting</a></span></dt><dt><span class="index"><a href="#d0e6510">Index</a></span></dt></dl></div><div lang="en" class="preface"><div class="titlepage"><div><div><h1 class="title"><a name="preface"></a>Preface</h1></div></div></div><p>This guide shows you how to install OpenAM Java EE policy agents, as well as 
- how to integrate with other access management software. Read the 
- <em class="citetitle">Release Notes</em> before you get started.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e155"></a>1.&nbsp;Who Should Use this Guide</h2></div></div></div><p>This guide is written for anyone installing OpenAM policy agents to 
+    Federation software.</p></div></div></div><hr></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="preface"><a href="#preface">Preface</a></span></dt><dt><span class="chapter"><a href="#chap-about-jee-agents">1. About OpenAM Java EE Policy Agents</a></span></dt><dt><span class="chapter"><a href="#chap-apache-tomcat">2. Installing the Apache Tomcat Policy Agent</a></span></dt><dt><span class="chapter"><a href="#chap-jboss-7">3. Installing the JBoss 7 Application Server Policy Agent</a></span></dt><dt><span class="chapter"><a href="#chap-jetty">4. Installing the Jetty Server Policy Agent</a></span></dt><dt><span class="chapter"><a href="#chap-weblogic">5. Installing the Oracle WebLogic Policy Agent</a></span></dt><dt><span class="chapter"><a href="#chap-websphere">6. Installing the IBM WebSphere Policy Agent</a></span></dt><dt><span class="chapter"><a href="#chap-j2ee-agents">7. Configuring Java EE Policy Agents</a></span></dt><dt><span class="chapter"><a href="#chap-lb">8. Configuring Java EE Policy Agents Behind Load Balancers</a></span></dt><dt><span class="chapter"><a href="#chap-troubleshooting">9. Troubleshooting</a></span></dt><dt><span class="index"><a href="#d0e6510">Index</a></span></dt></dl></div><div lang="en" class="preface"><div class="titlepage"><div><div><h1 class="title"><a name="preface"></a>Preface</h1></div></div></div><p>This guide shows you how to install OpenAM Java EE policy agents, as well as
+ how to integrate with other access management software. Read the
+ <em class="citetitle">Release Notes</em> before you get started.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e155"></a>1.&nbsp;Who Should Use this Guide</h2></div></div></div><p>This guide is written for anyone installing OpenAM policy agents to
   interface with supported Java EE application containers.</p><p>This guide covers procedures that you theoretically perform only
   once per version. This guide aims to provide you with at least some idea
   of what happens behind the scenes when you perform the steps.</p><p>You do not need to be an OpenAM wizard to learn something from
@@ -1294,15 +1294,15 @@ Install log file location:
        the sub-realm that has your policy agent configuration.
        Find com.sun.identity.agents.config.organization.name and change
        the / to the path to your policy agent profile. This allows the policy agent
-       to properly identify itself to the OpenAM server. </p></li><li class="step"><p>The agent requires sourcing before it will work properly. There are two 
+       to properly identify itself to the OpenAM server. </p></li><li class="step"><p>The agent requires sourcing before it will work properly. There are two
     ways to source.</p><ul class="stepalternatives">
-     <li class="step"><p>Manually source the file containing the policy agent environment settings for 
+     <li class="step"><p>Manually source the file containing the policy agent environment settings for
       WebLogic before starting the application server. </p><div class="screen"><pre>
 $ <strong>. /path/to/setAgentEnv_AdminServer.sh</strong>
       </pre></div></li>
      <li class="step"><p>Or edit the <code class="filename">startWebLogic.sh</code> script to set the sourcing
       needed for the agent, by adding these lines after the code block shown. Add the
-      setAgentEnv_AdminServer.sh line to the following location in the file. The drawback 
+      setAgentEnv_AdminServer.sh line to the following location in the file. The drawback
       to this approach is that it could be overwritten, as noted in the file.</p><div class="screen"><pre>
 $ <strong>cat /path/to/startWebLogic.sh</strong>
 <em>...
@@ -1507,11 +1507,11 @@ Instance Config Directory :
 /path/to/WebSphere/AppServer/profiles/AppSrv01/config/cells/wwwNode01Cell/
  nodes/wwwNode01/servers/server1
 
-Instance Server name : server1 
-WebSphere Install Root Directory : /path/to/WebSphere/AppServer 
-OpenAM server URL : http://openam.example.com:8080/openam 
-Agent URL : http://www.example.com:9080/agentapp 
-Agent Profile name : WebSphere Agent 
+Instance Server name : server1
+WebSphere Install Root Directory : /path/to/WebSphere/AppServer
+OpenAM server URL : http://openam.example.com:8080/openam
+Agent URL : http://www.example.com:9080/agentapp
+Agent Profile name : WebSphere Agent
 Agent Profile Password file name : /tmp/pwd.txt
 
 ...
@@ -1645,7 +1645,7 @@ Install log file location:
    protect.</p><ol class="procedure" type="1"><li class="step"><p>On the Access Control tab page of the OpenAM console, click the link
     for the realm in which you manage agents.</p></li><li class="step"><p>Click the Agents tab, click the tab page for the kind of agent you
     want to create, and then click the New... button in the Agent table.</p></li><li class="step"><p>Provide a name for the agent, and also the URLs to OpenAM and to
-    the application to protect, then click Create. 
+    the application to protect, then click Create.
     Note that for Java EE policy agents, an example URL must include
     the <code class="literal">agentapp</code> context:
     <code class="uri">http://www.example.com:8080/agentapp</code>.
@@ -2278,7 +2278,7 @@ userpassword=password
     </p></li><li class="step"><p>
      Save your work, and then restart the agent or the protected server.
     </p></li></ol></div></div></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-troubleshooting"></a>Chapter&nbsp;9.&nbsp;Troubleshooting</h1></div></div></div><a class="indexterm" name="d0e6379"></a><a class="indexterm" name="d0e6384"></a><p>This chapter offers solutions to issues during installation of OpenAM
-  policy agents.</p><div class="qandaset"><h2 class="title"><a name="solutions-to-common-issues"></a>Solutions to Common Issues</h2><a class="indexterm" name="d0e6392"></a><p>This section offers solutions to common problems when installing 
+  policy agents.</p><div class="qandaset"><h2 class="title"><a name="solutions-to-common-issues"></a>Solutions to Common Issues</h2><a class="indexterm" name="d0e6392"></a><p>This section offers solutions to common problems when installing
    OpenAM policy agents.</p><table border="0" style="width: 100%;"><colgroup><col align="left" width="1%"><col></colgroup><tbody><tr class="question"><td align="left" valign="top"><a name="cannot-install-over-https"></a><a name="d0e6400"></a><p><b>Q:</b></p></td><td align="left" valign="top"><p>I am trying to install a policy agent, connecting to OpenAM over
     HTTPS, and seeing the following error.</p><div class="screen"><pre>OpenAM server URL: https://openam.example.com:8443/openam
 
