@@ -24,7 +24,7 @@
      (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-1631" target="_blank">OPENAM-1631</a>).
     </p></li><li class="listitem"><p>
      <span class="bold"><strong>Support for Auth Context Classes Extensibility</strong></span>.
-     OpenAM now supports the extensibility of auth context classes as described
+     OpenAM supports the extensibility of auth context classes as described
      in the SAMLv2 specification.
     </p><p>
      Custom contexts are also now shown in console if included in the extended
@@ -34,51 +34,25 @@
      (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-2238" target="_blank">OPENAM-2238</a>).
     </p></li><li class="listitem"><p>
      <span class="bold"><strong>Password Reset Token Validation REST API</strong></span>.
-     OpenAM now supports a REST API to check if the token for password reset is
+     OpenAM supports a single REST API action to check if the token for password reset is
      valid or not: <code class="literal">/json/users?_action=confirm</code>.
      (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-3748" target="_blank">OPENAM-3748</a>).
-    </p></li><li class="listitem"><p>
-     <span class="bold"><strong>Support for OAuth2Provider Debug Log</strong></span>.
-     OpenAM now provides debug logs for OAuth2 OAuth2Provider
-     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-4269" target="_blank">OPENAM-4269</a>).
-    </p></li><li class="listitem"><p>
-     <span class="bold"><strong>Alphabetical List of Agent Properties using ssoadm</strong></span>.
-     The <code class="literal">ssoadm show-agent</code> and <code class="literal">ssoadm show-agent-grp</code>
-     are now sorted and alphabeticalized
-     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-4602" target="_blank">OPENAM-4602</a>).
     </p></li><li class="listitem"><p>
      <span class="bold"><strong>Default Timelimit using Netscape SDK is Configurable</strong></span>.
      The default timelimit for LDAP operations performed using the Netscape SDK
      is now configurable
      (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-5311" target="_blank">OPENAM-5311</a>).
     </p><p>
-     To set the property, use <code class="literal">org.forgerock.openam.ldap.default.time=integer</code>.
+     To set the property, use <code class="literal">org.forgerock.openam.ldap.default.time=
+     &lt;time limit in milliseconds&gt;</code>.
     </p></li><li class="listitem"><p>
-     <span class="bold"><strong>DAUI Supports goto URL Validation</strong></span>.
-     The valid goto URL domain setting has been moved to a new service,
-     <code class="literal">validationService</code> with a new property:
-     <code class="literal">openam-auth-valid-goto-resources</code>
+     <span class="bold"><strong>DAS Supports goto URL Validation</strong></span>.
+     DAS now validates <code class="literal">goto</code> and <code class="literal">gotoOnFail</code>
+     URLs
      (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-1773" target="_blank">OPENAM-1773</a>).
-    </p><p>
-     Also, a new delegation policy has been created that allows agent accounts
-     to read the <code class="literal">validationService</code> settings.
-     Upgrade has been updated that migrates existing valid goto domains to the
-     new <code class="literal">validationService</code> and removes the old domains. This further ensures
-     that the new delegation policy is added to the system.
-    </p><p>
-     The Goto URL validation logic has been extracted out to a separate class
-     called <code class="literal">RedirectUrlValidator</code>, which now can be used from
-     both <code class="literal">openam-core</code> and <code class="literal">openam-federation-library</code>
-     (for Relaystate evaluations).
     </p></li></ul></div><div class="itemizedlist"><p>
-    The following changes were listed for OpenAM 11.0.1.
+    The following changes were listed for OpenAM 11.0.2
    </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
-     OpenAM provides a debug logging option to decrypt SAML assertions when
-     OpenAM runs as a service provider and assertion encryption is enabled.
-    </p><p>
-     For details, see the explanation in
-     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-1631" target="_blank">OPENAM-1631</a>).
-    </p></li><li class="listitem"><p>
      Attributes names in responses to REST API calls now
      preserve the original case used in the request (
      <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-3159" target="_blank">OPENAM-3159</a>).
@@ -96,7 +70,9 @@
      the configured SP attribute mapper to map received attributes
      in the same way as they come as part of an assertion (
      <a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-1655" target="_blank">OPENAM-1655</a>).
-    </p></li><li class="listitem"><p>
+    </p></li></ul></div><div class="itemizedlist"><p>
+    The following changes were listed for OpenAM 11.0.1.
+   </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
      Consistency has been improved in how OpenAM policy rules match resources.
      Policy rules are now interpreted more consistently
      in line with the documentation,
@@ -252,7 +228,7 @@
     Core Authentication module persistent cookie options are deprecated and are
     likely to be removed in a future release.</p></li><li class="listitem"><p>Older REST services relying on the following end points are
     deprecated.</p><table border="0" summary="Simple list" class="simplelist"><tr><td>/identity/attributes</td><td>/identity/logout</td></tr><tr><td>/identity/authenticate</td><td>/identity/read</td></tr><tr><td>/identity/create</td><td>/identity/search</td></tr><tr><td>/identity/delete</td><td>/identity/update</td></tr></table><p>The following table shows how legacy and newer end points
-    correspond.</p><div class="table"><a name="d0e1059"></a><div class="table-title">Table&nbsp;4.1.&nbsp;REST End Points</div><div class="table-contents"><table summary="REST End Points" border="0"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Deprecated URIs</th><th>Newer Evolving URIs</th></tr></thead><tbody><tr><td>/identity/attributes</td><td>/json/users</td></tr><tr><td>/identity/authenticate</td><td>/json/authenticate</td></tr><tr><td>/identity/create, /identity/delete, /identity/read,
+    correspond.</p><div class="table"><a name="d0e961"></a><div class="table-title">Table&nbsp;4.1.&nbsp;REST End Points</div><div class="table-contents"><table summary="REST End Points" border="0"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Deprecated URIs</th><th>Newer Evolving URIs</th></tr></thead><tbody><tr><td>/identity/attributes</td><td>/json/users</td></tr><tr><td>/identity/authenticate</td><td>/json/authenticate</td></tr><tr><td>/identity/create, /identity/delete, /identity/read,
         /identity/search, /identity/update</td><td>/json/agents, /json/groups, /json/realms, /json/users</td></tr><tr><td>/identity/logout</td><td>/json/sessions/?_action=logout</td></tr><tr><td>N/A</td><td>/json/dashboard</td></tr><tr><td>N/A</td><td>/json/serverinfo</td></tr></tbody></table></div></div><br class="table-break"><p>Find examples in the <em class="citetitle">Developer Guide</em> chapter on
     <em class="citetitle">Using RESTful Web Services</em> OpenAM.</p><p>Support for the older REST services is likely to be removed in a
     future release in favor of the newer REST services. Older REST services
@@ -271,7 +247,7 @@
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'US-23412190-7']);
+  _gaq.push(['_setAccount', 'UA-23412190-7']);
   _gaq.push(['_trackPageview']);
 
   (function() {

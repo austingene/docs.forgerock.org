@@ -34,40 +34,23 @@
       OpenAM runs as a service provider and assertion encryption is enabled
       (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-1631" target="_blank">OPENAM-1631</a>).
     </p></li><li class="listitem"><p>
-     <span class="bold"><strong>DAUI Supports goto URL Validation</strong></span>.
-     The valid goto URL domain setting has been moved to a new service,
-     <code class="literal">validationService</code> with a new property:
-     <code class="literal">openam-auth-valid-goto-resources</code>
+     <span class="bold"><strong>DAS Supports goto URL Validation</strong></span>.
+     DAS now validates <code class="literal">goto</code> and <code class="literal">gotoOnFail</code>
+     URLs
      (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-1773" target="_blank">OPENAM-1773</a>).
+    </p><p>
+     When performing an upgrade, the old values are migrated across to the new
+     settings. New installations should use the new settings.
     </p></li><li class="listitem"><p>
      <span class="bold"><strong>Authentication Context extensibility support</strong></span>.
-     OpenAM now supports extensibility of authentication context classes as described
+     OpenAM supports the extensibility of authentication context classes as described
      in the SAMLv2 specification.
      (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-2238" target="_blank">OPENAM-2238</a>).
     </p></li><li class="listitem"><p>
      <span class="bold"><strong>Password Reset Token Validation REST API</strong></span>.
-     OpenAM now supports a REST API to check if the token for password reset is
-     valid or not
+     OpenAM supports a single REST API action to check if the token for password
+     reset is valid or not
      (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-3748" target="_blank">OPENAM-3748</a>).
-    </p></li><li class="listitem"><p>
-     <span class="bold"><strong>Support for OAuth2Provider Debug Log</strong></span>.
-     OpenAM now provides debug logs for OAuth2 OAuth2Provider
-     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-4269" target="_blank">OPENAM-4269</a>).
-    </p></li><li class="listitem"><p>
-     <span class="bold"><strong>Alphabetical List of Agent Properties using ssoadm</strong></span>.
-     The <code class="literal">ssoadm show-agent</code> and <code class="literal">ssoadm show-agent-grp</code>
-     are now sorted and alphabeticalized
-     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-4602" target="_blank">OPENAM-4602</a>).
-    </p></li><li class="listitem"><p>
-     <span class="bold"><strong>REST JSON Response Set to UTF-8</strong></span>.
-     The character encoding for REST JSON responses is set to UTF-8
-     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-4764" target="_blank">OPENAM-4764</a>).
-    </p></li><li class="listitem"><p>
-     <span class="bold"><strong>PLLClient Calls getErrorStream() to GET Response Body
-     on IOException</strong></span>. <code class="literal">PLLClient.send()</code> calls
-     <code class="literal">getErrorStream()</code> to get response body, if any,
-     on <code class="literal">IOException</code>, so that Keep-Alive connections are not abandoned.
-     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-5065" target="_blank">OPENAM-5065</a>).
     </p></li><li class="listitem"><p>
      <span class="bold"><strong>Default Timelimit using Netscape SDK is Configurable</strong></span>.
      The default timelimit for LDAP operations performed using the Netscape SDK
@@ -93,7 +76,7 @@
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'US-23412190-7']);
+  _gaq.push(['_setAccount', 'UA-23412190-7']);
   _gaq.push(['_trackPageview']);
 
   (function() {
