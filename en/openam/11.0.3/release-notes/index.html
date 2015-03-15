@@ -11,7 +11,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="country">USA</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="phone">+1&nbsp;415-599-1100&nbsp;(US)</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<code class="uri">www.forgerock.com</code><br>
-&nbsp;&nbsp;&nbsp;</p></div></div></div></div></div><div><p class="releaseinfo">Software release date: March 20, 2015</p></div><div><p class="copyright">Copyright &copy; 2011-2015 ForgeRock AS</p></div><div><a href="legalnotice.html">Legal Notice</a></div><div><p class="pubdate">Publication date: March 20, 2015</p></div><div><div class="abstract"><div class="abstract-title">Abstract</div><p>Notes covering OpenAM prerequisites, fixes, known issues. OpenAM
+&nbsp;&nbsp;&nbsp;</p></div></div></div></div></div><div><p class="releaseinfo">Software release date: March 16, 2015</p></div><div><p class="copyright">Copyright &copy; 2011-2015 ForgeRock AS</p></div><div><a href="legalnotice.html">Legal Notice</a></div><div><p class="pubdate">Publication date: March 16, 2015</p></div><div><div class="abstract"><div class="abstract-title">Abstract</div><p>Notes covering OpenAM prerequisites, fixes, known issues. OpenAM
    provides open source Authentication, Authorization, Entitlement and
    Federation software.</p></div></div></div><hr></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="chapter"><a href="#chap-whats-new">1. What's New in OpenAM 11.0.3</a></span></dt><dt><span class="chapter"><a href="#chap-before-you-install">2. Before You Install OpenAM 11.0.3 Software</a></span></dt><dt><span class="chapter"><a href="#chap-update-install">3. Updating &amp; Installing OpenAM</a></span></dt><dt><span class="chapter"><a href="#chap-compatibility">4. OpenAM Changes &amp; Deprecated Functionality</a></span></dt><dt><span class="chapter"><a href="#chap-issues">5. OpenAM Fixes, Limitations, &amp; Known Issues</a></span></dt><dt><span class="chapter"><a href="#chap-feedback">6. How to Report Problems &amp; Provide Feedback</a></span></dt><dt><span class="chapter"><a href="#chap-support">7. Support</a></span></dt></dl></div><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="chap-whats-new"></a>Chapter&nbsp;1.&nbsp;What's New in OpenAM 11.0.3</h1></div></div></div><div class="toc"><div class="toc-title">Table of Contents</div><dl class="toc"><dt><span class="section"><a href="#product-enhancements">1.1. Product Enhancements</a></span></dt><dt><span class="section"><a href="#product-documentation">1.2. OpenAM Documentation</a></span></dt></dl></div><div class="important"><h3 class="title">Important</h3><p>
    OpenAM 11.0.3 is a maintenance release
@@ -48,8 +48,11 @@
      URLs
      (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-1773" target="_blank">OPENAM-1773</a>).
     </p><p>
-     When performing an upgrade, the old values are migrated across to the new
-     settings. New installations should use the new settings.
+     The list of valid <code class="literal">goto/gotoOnFail</code> resources has moved to
+     the newly created "Validation Service" under the
+     <code class="literal">openam-auth-valid-goto-resources</code> property. New installations
+     should use the new setting; for existing deployments, the upgrade wizard
+     ensures the migration of the existing configuration.
     </p></li><li class="listitem"><p>
      <span class="bold"><strong>Authentication Context extensibility support</strong></span>.
      OpenAM supports the extensibility of authentication context classes as described
@@ -57,8 +60,8 @@
      (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-2238" target="_blank">OPENAM-2238</a>).
     </p></li><li class="listitem"><p>
      <span class="bold"><strong>Password Reset Token Validation REST API</strong></span>.
-     OpenAM supports a single REST API action to check if the token for password
-     reset is valid or not
+     OpenAM now allows for the verification of password reset tokens through the
+     REST API. For more information, see
      (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-3748" target="_blank">OPENAM-3748</a>).
     </p></li><li class="listitem"><p>
      <span class="bold"><strong>Default Timelimit using Netscape SDK is Configurable</strong></span>.
@@ -159,6 +162,14 @@
  also deprecated and removed functionality.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="changes"></a>4.1.&nbsp;Important Changes to Existing Functionality</h2></div></div></div><div class="itemizedlist"><p>
     These changes are new in OpenAM 11.0.3.
    </p><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+     <span class="bold"><strong>Agent Group Membership Information</strong></span>.
+     The agent group membership information is now stored in the agent's
+     <code class="literal">agentgroup</code> attribute. When configuring agents, make sure
+     that the referenced agent group already exists in the configuration.
+    </p><p>
+     For details, see the explanation in
+     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-718" target="_blank">OPENAM-718</a>).
+    </p></li><li class="listitem"><p>
      <span class="bold"><strong>Debug Logging Option to Decrypt SAML Assertions</strong></span>.
      OpenAM now provides a debug logging option to decrypt SAML assertions when
      OpenAM runs as a service provider and assertion encryption is enabled.
@@ -185,9 +196,21 @@
      (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-2238" target="_blank">OPENAM-2238</a>).
     </p></li><li class="listitem"><p>
      <span class="bold"><strong>Password Reset Token Validation REST API</strong></span>.
-     OpenAM supports a single REST API action to check if the token for password reset is
-     valid or not: <code class="literal">/json/users?_action=confirm</code>.
+     OpenAM now allows for the verification of password reset tokens through the
+     REST API using the single REST API action:
+     <code class="literal">/json/users?_action=confirm</code>.
      (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-3748" target="_blank">OPENAM-3748</a>).
+    </p></li><li class="listitem"><p>
+     <span class="bold"><strong>Proxying Passive SAML Authentication Requests</strong></span>.
+     OpenAM acting as an IdP proxy is now able to proxy passive SAML
+     authentication requests and replay <code class="literal">NoPassive</code> responses.
+     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-4248" target="_blank">OPENAM-4248</a>).
+    </p></li><li class="listitem"><p>
+     <span class="bold"><strong>Specifying Trusted Realms using the WindowsDesktopSSO Authentication Module</strong></span>.
+     The WindowsDesktopSSO authentication module now allows you to specify a list
+     of trusted realms. When the setting is specified, Kerberos tokens issued by
+     those realms will only be accepted.
+     (<a class="link" href="https://bugster.forgerock.org/jira/browse/OPENAM-4248" target="_blank">OPENAM-4248</a>).
     </p></li><li class="listitem"><p>
      <span class="bold"><strong>Default Timelimit using Netscape SDK is Configurable</strong></span>.
      The default timelimit for LDAP operations performed using the Netscape SDK
@@ -379,7 +402,7 @@
     Core Authentication module persistent cookie options are deprecated and are
     likely to be removed in a future release.</p></li><li class="listitem"><p>Older REST services relying on the following end points are
     deprecated.</p><table border="0" summary="Simple list" class="simplelist"><tr><td>/identity/attributes</td><td>/identity/logout</td></tr><tr><td>/identity/authenticate</td><td>/identity/read</td></tr><tr><td>/identity/create</td><td>/identity/search</td></tr><tr><td>/identity/delete</td><td>/identity/update</td></tr></table><p>The following table shows how legacy and newer end points
-    correspond.</p><div class="table"><a name="d203e961"></a><div class="table-title">Table&nbsp;4.1.&nbsp;REST End Points</div><div class="table-contents"><table summary="REST End Points" border="0"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Deprecated URIs</th><th>Newer Evolving URIs</th></tr></thead><tbody><tr><td>/identity/attributes</td><td>/json/users</td></tr><tr><td>/identity/authenticate</td><td>/json/authenticate</td></tr><tr><td>/identity/create, /identity/delete, /identity/read,
+    correspond.</p><div class="table"><a name="d203e1002"></a><div class="table-title">Table&nbsp;4.1.&nbsp;REST End Points</div><div class="table-contents"><table summary="REST End Points" border="0"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Deprecated URIs</th><th>Newer Evolving URIs</th></tr></thead><tbody><tr><td>/identity/attributes</td><td>/json/users</td></tr><tr><td>/identity/authenticate</td><td>/json/authenticate</td></tr><tr><td>/identity/create, /identity/delete, /identity/read,
         /identity/search, /identity/update</td><td>/json/agents, /json/groups, /json/realms, /json/users</td></tr><tr><td>/identity/logout</td><td>/json/sessions/?_action=logout</td></tr><tr><td>N/A</td><td>/json/dashboard</td></tr><tr><td>N/A</td><td>/json/serverinfo</td></tr></tbody></table></div></div><br class="table-break"><p>Find examples in the <em class="citetitle">Developer Guide</em> chapter on
     <em class="citetitle">Using RESTful Web Services</em> OpenAM.</p><p>Support for the older REST services is likely to be removed in a
     future release in favor of the newer REST services. Older REST services
